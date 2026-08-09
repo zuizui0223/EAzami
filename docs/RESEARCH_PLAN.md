@@ -1,127 +1,122 @@
-# Chapter 2 Research Plan
+# Chapter 2 research plan — repeated flower-colour transitions in East Asian Cirsium
 
-## Working title
+## Central problem
 
-**Repeated loss and reactivation of floral anthocyanin pigmentation in East Asian *Cirsium***
+East Asian *Cirsium* contains repeated white, pink and purple flower states, including white/coloured sister lineages and within-lineage colour polymorphism. The project asks whether floral anthocyanin pigmentation has been repeatedly lost and, in some lineages, regained or reactivated, and whether repeated transitions use homologous molecular mechanisms.
 
-## Biological problem
+A second linked objective is to improve the nuclear phylogenetic framework required to test these transitions. Existing phylogenomic studies are used as starting backbones, but the project explicitly identifies taxa/populations whose absence or weak placement prevents reliable ancestral-state reconstruction. These gaps become priorities for RAD-seq.
 
-Flower-colour evolution is often described as repeated gain or loss of pigmentation, but apparent reversals can be produced by ancestral polymorphism, introgression or misidentified phylogenetic direction. This chapter asks whether floral anthocyanin pigmentation has genuinely been lost and later re-expressed in East Asian *Cirsium*, and whether repeated transitions use the same molecular machinery.
+## Aim 1 — Build a population-aware East Asian flower-colour atlas
 
-## Scope
+Scope: Japan, Ryukyu Islands, Taiwan and China.
 
-Primary geographic scope: Japan, Ryukyu Islands, Taiwan and China.
+For each evidence record retain:
 
-Primary biological scope: *Cirsium* lineages for which flower colour can be scored with explicit evidence and placed on an existing molecular/phylogenomic backbone.
+- accepted taxon and source name;
+- population/locality;
+- country/region;
+- individual-level colour state where possible;
+- continuous image/spectral colour where available;
+- evidence type and source;
+- whether colour is directly observed or literature-reported;
+- confidence and assessability.
 
-This chapter does **not** rebuild the complete East Asian species phylogeny from scratch. Published phylogenomic backbones, including Chang et al. for the Taiwanese *C. japonicum* complex and Arenicola, are treated as starting hypotheses and augmented only where transition-focused sampling requires finer population resolution.
+Primary output: a vetted atlas that distinguishes fixed white, fixed coloured and polymorphic taxa/populations.
 
-## Aim 1 — Build a flower-colour transition atlas
+## Aim 2 — Audit the existing phylogenetic framework and build a targeted nuclear RAD-seq panel
 
-Compile observation-level evidence for flower colour across East Asian *Cirsium*.
+The project does not assume that current trees are complete enough for colour-transition inference. For every accepted taxon and transition-critical population, record:
 
-Each record must preserve:
+- representation in published nuclear phylogenomic trees;
+- representation only in plastid phylogenies;
+- support/resolution of placement;
+- nuclear–plastid conflict;
+- ploidy information;
+- suspected hybridization/reticulation;
+- whether missing placement changes a colour-history hypothesis.
 
-- accepted and source taxon names;
-- population/locality and country;
-- evidence source and source identifier;
-- qualitative colour state;
-- whether the observation is assessable;
-- life stage;
-- whether colour is directly observed or only reported at taxon level;
-- optional continuous colour measurements when calibrated/usable imagery is available.
+RAD-seq priorities follow three tiers:
 
-Do not collapse literature descriptions, image observations and field measurements into a single undifferentiated value.
+- Tier A: placement directly distinguishes alternative loss/regain histories;
+- Tier B: fills a major East Asian nuclear-backbone gap or unstable placement;
+- Tier C: adds replication or lower marginal-information coverage.
 
-### Primary states for screening
+The nuclear phylogeny itself is a project objective because polyploidy, young divergence, hybridization and potential chloroplast capture can make plastid-only history inadequate.
 
-`white`, `near_white`, `pale_pink`, `pink`, `purple`, `blue_purple`, `polymorphic`, `unknown`.
+## Aim 3 — Reconstruct repeated loss and candidate regain
 
-For the first phylogenetic screen, these can be collapsed under explicit sensitivity analyses to:
+Map population-aware colour states onto a topology set rather than one fixed tree.
 
-- anthocyanin-absent/very-low (`white`, optionally `near_white`);
-- anthocyanin-visible (`pale_pink` through `blue_purple`);
-- polymorphic;
-- unknown.
+Test:
 
-## Aim 2 — Reconstruct repeated losses and candidate regains
+- number of independent white-flower origins;
+- transitions between coloured and white states;
+- whether any coloured tips require a white ancestor/intermediate with meaningful posterior support;
+- sensitivity of transition counts to uncertain nodes, missing taxa and reticulation;
+- whether ancestral polymorphism or introgression provides a more plausible explanation than simple regain.
 
-Map population/taxon colour states onto one or more existing East Asian *Cirsium* phylogenies.
+A candidate `regain` must survive phylogenetic sensitivity analysis. A molecular `reactivation` claim additionally requires evidence that the anthocyanin pathway was retained but suppressed in the white lineage and restored in the descendant coloured lineage.
 
-Core analyses:
+## Aim 4 — Identify the molecular mechanism of replicated transitions
 
-1. stochastic character mapping or Bayesian/ML ancestral-state reconstruction;
-2. comparison of equal-rates, all-rates-different and constrained irreversible/reversible transition models;
-3. tree/topology sensitivity across credible published backbones;
-4. state-definition sensitivity (`near_white` grouped with white vs coloured);
-5. sampling sensitivity for polymorphic taxa;
-6. explicit flagging of branches whose apparent regain is not robust to topology or coding.
+Select 3–5 phylogenetically independent or otherwise highly informative systems after Aims 1–3.
 
-### A candidate regain is not accepted from ancestral-state reconstruction alone
+For the same biological individuals whenever possible collect:
 
-A branch enters the mechanistic-regain tier only when all of the following are plausible:
+- standardized flower-colour measurement;
+- anthocyanin/flavonoid chemistry;
+- floral tissue for RNA-seq;
+- high-quality leaf DNA;
+- voucher material.
 
-- an ancestral/intermediate white state has strong posterior/model support;
-- the descendant coloured population/lineage is well sampled;
-- ancestral polymorphism is not a simpler explanation;
-- introgression from a coloured lineage is evaluated;
-- molecular data show restored anthocyanin production rather than an unrelated visible pigment mechanism.
+Mechanistic questions:
 
-## Aim 3 — Identify the molecular route of repeated transitions
+- structural-gene loss versus regulatory suppression;
+- repeated use of MYB/bHLH/WD40 or other regulatory nodes;
+- cis versus trans changes;
+- retention of functional ancestral haplotypes;
+- introgression of pigmentation alleles;
+- whether independent white/regain events use homologous or distinct molecular routes.
 
-Choose 3–5 independent, strongly supported transition systems after Aim 2.
+Genome resequencing/WGS is targeted to these transitions rather than applied to all atlas taxa.
 
-Priority systems include:
+## Aim 5 — Selection is downstream, not assumed
 
-- *C. brevicaule* ↔ *C. irumtiense* in the Ryukyus;
-- *C. japonicum* var. *albescens* and colour-polymorphic var. *takaoense* in Taiwan;
-- additional Japanese or Chinese within-taxon colour polymorphisms or white/coloured sister lineages discovered by the atlas.
+Pollinator preference, UV, temperature, drought, herbivory and pigment-production costs are candidate selective agents. They are not used to infer evolutionary direction.
 
-For each selected system, combine:
+Selection-pressure tests should be designed after the responsible transition and molecular phenotype are sufficiently resolved, so allele/haplotype state, pigment phenotype and fitness can be linked explicitly.
 
-### Pigment chemistry
+## Primary hypotheses
 
-- total anthocyanin;
-- anthocyanin composition;
-- major flavonoid intermediates where feasible.
+- H1: anthocyanin loss evolved independently multiple times in East Asian *Cirsium*.
+- H2: at least one coloured lineage represents a credible regain/reactivation candidate after accounting for missing taxa and topology uncertainty.
+- H3: repeated white-flower evolution disproportionately involves regulatory suppression of a conserved pathway rather than repeated irreversible structural-gene loss.
+- H4: independent regain candidates reuse homologous regulatory modules or ancestral functional haplotypes more often than expected under unconstrained molecular routes.
+- H5: adding transition-critical taxa with nuclear RAD-seq changes at least some inferred flower-colour histories relative to current incomplete/plastid-biased backbones.
+- H6: some apparent repeated transitions are better explained by ancestral polymorphism or introgression than by independent mutation/reversal.
 
-### Floral transcriptomics
+## Current priority order
 
-Sample matched floral developmental stages and test the anthocyanin pathway and its regulatory network, including structural genes and MYB-bHLH-WD40 regulators/repressors.
+1. Complete taxon list for Japan–Ryukyu–Taiwan–China.
+2. Populate flower-colour evidence and identify white/coloured polymorphism.
+3. Audit existing nuclear/plastid phylogenetic coverage at every focal taxon/population.
+4. Rank the first RAD-seq sampling panel using the gap audit.
+5. Reconstruct transitions across existing and newly generated nuclear topologies.
+6. Choose mechanistic focal systems.
+7. Conduct pigment chemistry + floral RNA-seq.
+8. Add targeted resequencing/WGS for causal-region and population-history tests.
+9. Design selection-pressure experiments around resolved molecular variants/phenotypes.
 
-### Genomics
+## Initial focal systems
 
-Use population resequencing / WGS only after candidate transitions are prioritized. Test:
+- Ryukyu *C. brevicaule* / *C. irumtiense*.
+- Taiwan *C. japonicum* complex, especially fixed-white *var. albescens* and colour-polymorphic *var. takaoense*.
+- Additional Japanese and Chinese systems are discovered by the atlas rather than assumed in advance.
 
-- coding loss-of-function;
-- cis-regulatory divergence;
-- structural variants / TE insertions;
-- candidate-gene haplotypes;
-- local ancestry and introgression;
-- population differentiation around candidate loci.
+## Claims deliberately not made yet
 
-## Aim 4 — Distinguish molecular scenarios
-
-The chapter should explicitly discriminate among at least four models:
-
-1. **Independent irreversible loss** — different white lineages lose structural pathway function.
-2. **Repeated regulatory silencing** — pathway remains intact but is repeatedly switched off.
-3. **True reactivation/regain** — a previously silenced but functional pathway is switched back on.
-4. **Apparent regain by introgression/ancestral polymorphism** — colour returns without de novo reactivation.
-
-## Separation from the next chapter
-
-Pollinator choice, UV, drought, temperature and other selective agents are not the primary causal tests here. They can be retained as metadata and candidate hypotheses, but formal selection-pressure identification belongs after the transition direction and molecular mechanism are established.
-
-## Deliverables
-
-1. East Asian *Cirsium* flower-colour evidence atlas.
-2. Taxon/population phylogeny table with provenance.
-3. Ancestral-state and transition-count sensitivity report.
-4. Ranked list of mechanistic focal systems.
-5. Matched field/molecular sampling plan.
-6. Pigment + RNA-seq + genomic comparison for replicated transitions.
-
-## Decision gate before expensive sequencing
-
-Do not launch broad WGS across all taxa. First complete the colour atlas and phylogenetic transition screen. WGS/resequencing should target branches that maximize information about repeated loss, true regain, and shared vs distinct molecular mechanisms.
+- that *C. irumtiense* definitively represents re-expression after a white ancestor;
+- that white-flower evolution is caused by pollinator shifts;
+- that plastid and nuclear histories are concordant;
+- that RAD-seq fully resolves allopolyploid or reticulate history;
+- that visible white flowers have complete loss of anthocyanin synthesis.
