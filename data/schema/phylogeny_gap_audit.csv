@@ -1,0 +1,5 @@
+accepted_taxon,population_id,country_region,flower_colour_state,flower_colour_evidence_n,existing_backbone,backbone_tip_present,nuclear_data_available,plastid_data_available,node_support_status,nuclear_plastid_conflict,ploidy_status,hybridization_or_reticulation_suspected,transition_critical,transition_information_score,phylogeny_gap_score,reticulation_ploidy_score,geographic_backbone_score,replication_need_score,radseq_tier,priority_total,priority_rationale,notes
+Cirsium brevicaule,,Ryukyu,white,,,,,,,,,true,2,1,1,2,2,A,8,"Core white lineage; replicate populations and test nuclear placement/gene flow",
+Cirsium irumtiense,,Ryukyu,coloured,,,,,,,,,true,2,1,1,2,2,A,8,"Core coloured sister lineage; required for transition direction and introgression tests",
+Cirsium japonicum var. albescens,,Taiwan,white,,,,,,,,,true,2,1,1,2,1,A,7,"Independent white-flower candidate in Taiwanese complex",
+Cirsium japonicum var. takaoense,,Taiwan,polymorphic,,,,,,,,,true,2,1,1,2,2,A,8,"Within-lineage white/coloured polymorphism; highest-value mechanistic and phylogenetic target",
