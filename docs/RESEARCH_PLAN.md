@@ -6,6 +6,8 @@ East Asian *Cirsium* contains repeated white, pink and purple flower states, inc
 
 A second linked objective is to improve the nuclear phylogenetic framework required to test these transitions. Existing phylogenomic studies are used as starting backbones, but the project explicitly identifies taxa/populations whose absence or weak placement prevents reliable ancestral-state reconstruction. These gaps become priorities for RAD-seq.
 
+Recent phylotranscriptomic work already resolves important local backbones. Chang et al. (2026; DOI 10.1186/s12870-026-08097-6) analysed 12 *Cirsium* taxa and 33 *Cirsium* samples across the *C. japonicum* complex, Arenicola and selected related taxa. Chang et al. (2025; DOI 10.1186/s40529-025-00454-2) analysed seven *Cirsium* species in Nipponocirsium/related sampling and documented strong ploidy/chromosome-number structure. Therefore RAD-seq is not justified as a simple repeat of those species placements. It is justified to (i) fill the much larger Japan–China regional taxon gap, (ii) add population replication around flower-colour transitions, and (iii) test reticulation/ploidy-sensitive histories that a single plastid tree cannot resolve.
+
 ## Aim 1 — Build a population-aware East Asian flower-colour atlas
 
 Scope: Japan, Ryukyu Islands, Taiwan and China.
@@ -37,11 +39,13 @@ The project does not assume that current trees are complete enough for colour-tr
 
 RAD-seq priorities follow three tiers:
 
-- Tier A: placement directly distinguishes alternative loss/regain histories;
+- Tier A: placement or population history directly distinguishes alternative loss/regain histories;
 - Tier B: fills a major East Asian nuclear-backbone gap or unstable placement;
 - Tier C: adds replication or lower marginal-information coverage.
 
-The nuclear phylogeny itself is a project objective because polyploidy, young divergence, hybridization and potential chloroplast capture can make plastid-only history inadequate.
+Within Tier A, population-level sampling is prioritized even when the species-level placement is already well resolved. This applies especially to *C. brevicaule*, *C. irumtiense*, *C. japonicum* var. *takaoense* and var. *albescens*.
+
+The nuclear phylogeny itself is a project objective because polyploidy, young divergence, hybridization and potential chloroplast capture can make plastid-only history inadequate. However, RAD-seq outputs will be interpreted with explicit ploidy-aware filtering and network/gene-flow analyses rather than forced into one bifurcating species tree.
 
 ## Aim 3 — Reconstruct repeated loss and candidate regain
 
@@ -80,6 +84,8 @@ Mechanistic questions:
 
 Genome resequencing/WGS is targeted to these transitions rather than applied to all atlas taxa.
 
+Important existing evidence: Chang et al. (2026) explicitly reports an experimental linkage between the white/bluish-purple polymorphism of var. *takaoense*, anthocyanin expression and pollinator preference. EAzami therefore treats *takaoense* as a replication/causal-genomics system, not as an untouched first demonstration of expression differences.
+
 ## Aim 5 — Selection is downstream, not assumed
 
 Pollinator preference, UV, temperature, drought, herbivory and pigment-production costs are candidate selective agents. They are not used to infer evolutionary direction.
@@ -92,15 +98,15 @@ Selection-pressure tests should be designed after the responsible transition and
 - H2: at least one coloured lineage represents a credible regain/reactivation candidate after accounting for missing taxa and topology uncertainty.
 - H3: repeated white-flower evolution disproportionately involves regulatory suppression of a conserved pathway rather than repeated irreversible structural-gene loss.
 - H4: independent regain candidates reuse homologous regulatory modules or ancestral functional haplotypes more often than expected under unconstrained molecular routes.
-- H5: adding transition-critical taxa with nuclear RAD-seq changes at least some inferred flower-colour histories relative to current incomplete/plastid-biased backbones.
+- H5: adding transition-critical taxa and populations with nuclear RAD-seq changes at least some inferred flower-colour histories relative to current incomplete/plastid-biased backbones.
 - H6: some apparent repeated transitions are better explained by ancestral polymorphism or introgression than by independent mutation/reversal.
 
 ## Current priority order
 
 1. Complete taxon list for Japan–Ryukyu–Taiwan–China.
 2. Populate flower-colour evidence and identify white/coloured polymorphism.
-3. Audit existing nuclear/plastid phylogenetic coverage at every focal taxon/population.
-4. Rank the first RAD-seq sampling panel using the gap audit.
+3. Join the atlas to the published nuclear-coverage seed table and identify genuinely missing taxa/populations.
+4. Rank the first RAD-seq sampling panel using transition information gain + phylogeny gap + ploidy/reticulation + geographic backbone value.
 5. Reconstruct transitions across existing and newly generated nuclear topologies.
 6. Choose mechanistic focal systems.
 7. Conduct pigment chemistry + floral RNA-seq.
@@ -109,8 +115,9 @@ Selection-pressure tests should be designed after the responsible transition and
 
 ## Initial focal systems
 
-- Ryukyu *C. brevicaule* / *C. irumtiense*.
-- Taiwan *C. japonicum* complex, especially fixed-white *var. albescens* and colour-polymorphic *var. takaoense*.
+- Ryukyu *C. brevicaule* / *C. irumtiense*: already resolved at species level, so RAD-seq emphasis is population structure, gene flow and transition history.
+- Taiwan *C. japonicum* complex: especially fixed-white var. *albescens* and colour-polymorphic var. *takaoense*; species-lineage placement is already strong, so emphasis is paired colour morph/population sampling and causal variation.
+- Nipponocirsium: existing nuclear transcriptomic anchor plus known diploid/tetraploid/dysploid structure; use primarily as a ploidy-aware backbone/test case unless the colour atlas discovers informative transitions.
 - Additional Japanese and Chinese systems are discovered by the atlas rather than assumed in advance.
 
 ## Claims deliberately not made yet
