@@ -1,0 +1,7 @@
+scenario,root_state,minimum_total_changes,minimum_C_to_W_losses,minimum_W_to_C_regains
+Nipponocirsium_published_topology,C,1,1,0
+Nipponocirsium_published_topology,W,2,0,2
+Sinocirsium_population_aware_takaoense,C,2,2,0
+Sinocirsium_population_aware_takaoense,W,2,0,2
+Arenicola_pair,C,1,1,0
+Arenicola_pair,W,1,0,1
