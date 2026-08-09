@@ -1,37 +1,45 @@
 # EAzami — East Asian *Cirsium* flower-colour evolution
 
-Chapter 2 project for reconstructing repeated loss and possible re-expression of floral anthocyanin pigmentation in East Asian *Cirsium* while improving the nuclear phylogenetic framework needed to test those transitions.
+Chapter 2 project for reconstructing repeated loss and possible re-expression of floral anthocyanin pigmentation in East Asian *Cirsium*, while building the nuclear phylogenetic framework needed to test those transitions.
 
-## Core questions
+## Core question
 
 > How repeatedly has floral anthocyanin pigmentation been lost and regained in East Asian *Cirsium*, and do repeated transitions use the same molecular mechanisms?
 
-> Which gaps or uncertainties in existing East Asian *Cirsium* phylogenies prevent those flower-colour histories from being tested, and which taxa/populations should be prioritized for nuclear RAD-seq?
-
 The project focuses initially on Japan, the Ryukyu Islands, Taiwan and China. It is the fine-scale evolutionary follow-up to the global image-derived trait work in `zuizui0223/azami`.
+
+## Two linked objectives
+
+1. **Flower-colour evolution:** discover repeated white-flower origins, within-lineage polymorphism and credible coloured -> white -> coloured histories.
+2. **East Asian nuclear phylogeny:** use existing phylotranscriptomic backbones where they are strong, identify missing/unstable taxa and populations, and fill transition-critical gaps with RAD-seq.
+
+RAD-seq is therefore not a generic re-sequencing of taxa already resolved by transcriptomics. Sampling priority is based on information gain for colour-transition history, missing nuclear placement, ploidy/reticulation, geographic backbone value and population replication.
 
 ## Chapter logic
 
 1. Build a population-aware flower-colour atlas from literature, herbarium material, public photographs and field observations.
-2. Audit existing East Asian phylogenomic backbones at the exact taxa/populations needed for colour-transition inference.
-3. Prioritize missing or weakly resolved lineages for nuclear RAD-seq, with flower-colour transition information as the first priority and broader East Asian backbone completion as the second.
-4. Reconstruct independent pigment-loss events, within-lineage polymorphisms and candidate regain/reactivation branches across a phylogenetic sensitivity set.
-5. Select replicated transition systems for pigment chemistry, floral transcriptomics and population genomics/WGS.
-6. Test selection only after evolutionary direction and molecular mechanism are sufficiently resolved.
+2. Audit every atlas taxon against published nuclear phylogenomics, plastid-only evidence and chromosome/ploidy information.
+3. Rank RAD-seq targets: transition-critical gaps first, major East Asian backbone gaps second, replication third.
+4. Reconstruct flower-colour history across a topology set rather than one assumed tree.
+5. Identify independent pigment-loss events, within-lineage polymorphisms and candidate regain/reactivation branches.
+6. Select replicated transition systems for pigment chemistry, floral transcriptomics and targeted population genomics/WGS.
+7. Test selection only after evolutionary direction and molecular mechanism are sufficiently resolved.
 
-## Why RAD-seq is part of Chapter 2
+## Current published nuclear anchors
 
-Existing phylogenies are backbones, not automatically complete answers. East Asian *Cirsium* includes young, polyploid and potentially reticulate lineages; plastid DNA represents one inherited history and can have limited resolution or disagree with nuclear history. Broad nuclear RAD-seq is therefore a parallel project goal, not merely a downstream technique.
+### Chang et al. 2026 — Sinocirsium/Arenicola framework
 
-RAD-seq sampling is hypothesis-driven. The project does **not** sequence every taxon equally. Missing taxa/populations are ranked by:
+The study sampled 12 *Cirsium* taxa and 33 *Cirsium* samples, resolving the *C. japonicum* complex, *C. brevicaule*, *C. irumtiense* and related lineages with thousands of orthogroups. Raw reads are under BioProject `PRJNA1311153`.
 
-1. whether their placement distinguishes alternative flower-colour histories;
-2. whether they fill an important nuclear-backbone gap;
-3. ploidy/reticulation risk;
-4. geographic backbone value across Japan–Ryukyu–Taiwan–China; and
-5. need for population replication.
+Important consequence: species-level placement of the core Ryukyu pair and Taiwanese *C. japonicum* varieties should not be unnecessarily repeated. RAD-seq effort moves to population structure, gene flow, missing sister/bridge taxa and causal colour-associated variation.
 
-A candidate lineage that distinguishes `coloured -> white` from `coloured -> white -> coloured` is automatically Tier A.
+### Chang et al. 2025 — Nipponocirsium framework
+
+The study sampled seven *Cirsium* species across Taiwan and Japan and documented diploid/tetraploid/dysploid structure. Raw reads are under BioProject `PRJNA1158676`.
+
+Important consequence: Nipponocirsium is an existing nuclear anchor and a ploidy-aware test case, not an unstructured phylogeny gap.
+
+See `docs/EVIDENCE_AUDIT_2026-08-09.md` and `data/evidence/published_nuclear_phylogeny_coverage_seed.csv`.
 
 ## Primary hypotheses
 
@@ -39,56 +47,38 @@ A candidate lineage that distinguishes `coloured -> white` from `coloured -> whi
 - **H2 — regain/reactivation:** at least some coloured lineages descend from an inferred white ancestor or white intermediate.
 - **H3 — regulatory reuse:** repeated white-flower transitions disproportionately involve regulatory suppression of a conserved anthocyanin pathway rather than repeated irreversible loss of structural genes.
 - **H4 — repeated molecular route:** independent regain events, if present, reactivate homologous regulatory modules or ancestral functional haplotypes.
-- **H5 — phylogenetic incompleteness matters:** some apparent colour transitions will change when transition-critical taxa/populations are added to a nuclear backbone.
-- **H6 — reticulate history matters:** at least some flower-colour patterns are better explained by introgression/ancestral polymorphism than by simple repeated mutation on a single bifurcating tree.
+- **H5 — phylogeny matters:** targeted nuclear RAD-seq changes some colour-history inferences by resolving taxa/populations missing from current regional backbones.
 
 `Regain` and `reactivation` are hypotheses, not assumed states. They require concordant support from ancestral-state reconstruction, population history and molecular evidence.
 
 ## Initial focal systems
 
-- Ryukyu Arenicola: *C. brevicaule* (white) and *C. irumtiense* (coloured)
-- Taiwan *C. japonicum* complex: especially *var. albescens* and colour-polymorphic *var. takaoense*
-- Additional Japanese and Chinese white/coloured sister-lineage or within-taxon polymorphism candidates discovered by the atlas
+- Ryukyu Arenicola: *C. brevicaule* (white) and *C. irumtiense* (coloured) — population-level history/gene flow rather than repeating species delimitation.
+- Taiwan *C. japonicum* complex: fixed-white var. *albescens* and colour-polymorphic var. *takaoense* — paired morph/population sampling and causal genomics.
+- Additional Japanese and Chinese white/coloured sister-lineage or within-taxon polymorphism candidates discovered by the atlas.
 
 ## Repository structure
 
 - `docs/RESEARCH_PLAN.md` — aims, hypotheses, analyses and decision rules
-- `docs/PHYLOGENY_GAP_AND_RADSEQ_PLAN.md` — nuclear-backbone gap audit and RAD-seq strategy
+- `docs/EVIDENCE_AUDIT_2026-08-09.md` — source-backed audit of current nuclear phylogenomics and priorities
+- `docs/PHYLOGENY_GAP_AND_RADSEQ_PLAN.md` — RAD-seq gap logic
 - `data/schema/flower_colour_records.csv` — observation-level flower-colour schema
 - `data/schema/taxon_transition_candidates.csv` — transition-screening schema
-- `data/schema/phylogeny_gap_audit.csv` — existing-phylogeny coverage and sequencing-priority ledger
+- `data/schema/phylogeny_gap_audit.csv` — taxon/population gap and priority schema
+- `data/evidence/published_nuclear_phylogeny_coverage_seed.csv` — published nuclear coverage seed
 - `sampling/SAMPLING_DESIGN.md` — field and molecular sampling logic
 - `analysis/validate_colour_atlas.py` — atlas schema/QC validator
-- `analysis/prioritize_radseq_sampling.py` — deterministic RAD-seq priority ranking
+- `analysis/build_phylogeny_gap_from_evidence.py` — joins colour atlas to published nuclear coverage
+- `analysis/prioritize_radseq_sampling.py` — ranks RAD-seq candidates
 - `molecular/` — pigment, RNA-seq and genomic workflows
 - `manuscript/` — Chapter 2 manuscript materials
 
 ## First executable milestones
 
-### Milestone A — colour atlas
+1. Complete a vetted Japan–Ryukyu–Taiwan–China *Cirsium* master taxon table.
+2. Attach population-aware flower-colour evidence to every taxon.
+3. Join the atlas to published nuclear/ploidy coverage.
+4. Estimate where missing taxa can change the number or direction of white/coloured transitions.
+5. Freeze the first RAD-seq panel from those information-critical gaps.
 
-Create a vetted East Asian *Cirsium* table in which every flower-colour claim has taxonomic, geographic and evidence provenance.
-
-### Milestone B — phylogeny-gap audit
-
-For every accepted taxon and transition-critical population, record whether it is represented by adequate nuclear data, only plastid data, weak/uncertain placement, or no usable placement.
-
-### Milestone C — first RAD-seq panel
-
-Rank samples into:
-
-- **Tier A:** directly tests a loss/regain hypothesis;
-- **Tier B:** fills major East Asian nuclear-backbone gaps;
-- **Tier C:** replication and lower marginal-information samples.
-
-### Milestone D — transition reconstruction
-
-Estimate:
-
-- supported independent white-flower origins;
-- white/coloured polymorphism within lineages;
-- candidate coloured → white → coloured reversals;
-- transitions sensitive to topology or reticulation;
-- the 3–5 best replicated systems for mechanistic follow-up.
-
-No expensive WGS/mechanistic cohort should be finalized before the colour-transition screen and phylogeny-gap audit are complete.
+No large WGS cohort should be finalized before this transition/gap screen is complete.
