@@ -1,0 +1,7 @@
+artifact_id,artifact_type,analysis_context,expected_tip_count,rooting,branch_lengths,support_metric,locus_set,source_url,repository,license,recovery_status,sha256,notes
+moreyra2025_concatenated_tree,tree,maximum_likelihood_all_loci,,,,,350_retained_nuclear_loci,,,unknown,search_required,,Do not reconstruct from a figure while a machine-readable file may still exist
+moreyra2025_coalescent_tree,tree,astral_or_species_tree,,,,,350_retained_nuclear_loci,,,unknown,search_required,,Primary topology ensemble member needed for ancestral-state sensitivity
+moreyra2025_dated_tree,tree,time_calibrated_biogeography,,,,,350_retained_nuclear_loci,,,unknown,search_required,,Required if branch lengths in time are used for transition-rate interpretation
+moreyra2025_retained_loci,locus_list,orthology_filtered_matrix,,not_applicable,not_applicable,not_applicable,350_of_Compositae1061,,,unknown,search_required,,Needed to reproduce compatibility filtering for new target-capture taxa
+moreyra2025_gene_trees,tree_collection,coalescent_input,,unrooted_or_mixed,yes,per_gene,350_retained_nuclear_loci,,,unknown,search_required,,Needed for ASTRAL and discordance analyses
+moreyra2025_sample_name_map,name_map,tree_code_to_voucher_biosample_current_name,299,not_applicable,not_applicable,not_applicable,not_applicable,Supplementary_Data_1,Elsevier,article_license,recovered,34d15286b4ba0952932c55df3a03a286a0d3dc5fb26ead204e6a1ea16a35f4f1,Recovered and joined to PRJNA957074; this row is complete
