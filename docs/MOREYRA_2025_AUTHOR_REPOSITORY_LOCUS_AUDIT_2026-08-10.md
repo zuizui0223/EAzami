@@ -158,7 +158,7 @@ This audit does not change the main sampling conclusion:
 - RAD-seq or resequencing remains the first new genomic data type for `takaoense`, `pendulum`, `sieboldii`, Arenicola and the Taiwanese polyploid comparison;
 - Compositae1061 target capture is reserved for verified transition-critical taxa absent from modern nuclear data.
 
-The original research logic also remains valid: two contrasting focal taxa alone cannot orient a flower-colour transition, so near relatives and population-level states are required. fileciteturn197file0
+The original research logic also remains valid: two contrasting focal taxa alone cannot orient a flower-colour transition, so near relatives and population-level states are required.
 
 ## Validation
 
