@@ -84,8 +84,25 @@ jobs:
           python analysis/recover_published_phylogeny_artifacts.py \
             --manifest data/evidence/published_phylogeny_artifact_manifest_2026-08-10.csv \
             --outdir published_artifact_output \
-            --force \
-            --fail-on-download-error
+            --force
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          summary = Path("published_artifact_output/artifact_recovery_summary.csv")
+          with summary.open(encoding="utf-8-sig", newline="") as handle:
+              rows = {row["artifact_key"]: row for row in csv.DictReader(handle)}
+          row = rows["moreyra2025_supplement"]
+          expected_hash = "34d15286b4ba0952932c55df3a03a286a0d3dc5fb26ead204e6a1ea16a35f4f1"
+          if row["status"] != "downloaded":
+              raise SystemExit(f"Moreyra supplement was not downloaded: {row}")
+          if row["sha256"] != expected_hash:
+              raise SystemExit(f"Moreyra supplement hash changed: {row['sha256']}")
+          if row["size_bytes"] != "10761775":
+              raise SystemExit(f"Moreyra supplement size changed: {row['size_bytes']}")
+          if row["extracted_table_count"] != "3":
+              raise SystemExit(f"Expected three extracted tables: {row['extracted_table_count']}")
+          PY
           test -s published_artifact_output/moreyra2025_supplement/extracted/table_001.csv
 
       - name: Join supplement sample table to project runinfo
@@ -149,6 +166,10 @@ jobs:
               raise SystemExit("Moreyra Supplementary Table S1 no longer has 299 rows")
           if summary["supplement_samples_with_runinfo"] != 286:
               raise SystemExit("Supplement-to-runinfo linkage count changed unexpectedly")
+          if summary["core_east_asia_sample_rows"] != 43:
+              raise SystemExit("Core East Asia sample count changed unexpectedly")
+          if summary["northeast_asia_bridge_sample_rows"] != 7:
+              raise SystemExit("Northeast Asia bridge sample count changed unexpectedly")
           if len(exact) != 10:
               raise SystemExit(f"Expected 10 exact focal matches, observed {len(exact)}")
           if joined_rows != committed_rows:
