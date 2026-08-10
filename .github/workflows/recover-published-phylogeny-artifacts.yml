@@ -58,7 +58,11 @@ jobs:
           PY
 
   recover-artifacts:
-    if: github.event_name == 'workflow_dispatch'
+    # Public direct-download artifacts are also recovered on PRs so that the
+    # extracted tables/text can be inspected before merge. Manual dispatch may
+    # opt into strict failure; PR runs record partial failures without blocking
+    # the offline validator when a publisher endpoint is temporarily unstable.
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request'
     needs: test-artifact-recovery
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -74,7 +78,7 @@ jobs:
 
       - name: Download and extract verified public artifacts
         env:
-          FAIL_FLAG: ${{ inputs.fail_on_download_error && '--fail-on-download-error' || '' }}
+          FAIL_FLAG: ${{ github.event_name == 'workflow_dispatch' && inputs.fail_on_download_error && '--fail-on-download-error' || '' }}
         run: |
           python analysis/recover_published_phylogeny_artifacts.py \
             --manifest data/evidence/published_phylogeny_artifact_manifest_2026-08-10.csv \
