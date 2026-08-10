@@ -4,7 +4,7 @@ Date: 2026-08-10
 
 ## Purpose
 
-The Moreyra nuclear phylogeny is already a major species-level backbone, but the exact sample/tip list is still partly hidden behind Supplementary Data 1 and unrecovered tree files. The practical problem is therefore not simply "missing phylogeny". It has three distinct parts:
+The Moreyra nuclear phylogeny is already a major species-level backbone, but the exact sample/tip list is still partly hidden behind Supplementary Data 1 and unrecovered tree files. The practical problem is therefore not simply “missing phylogeny”. It has three distinct parts:
 
 1. **file-recovery gap** — the taxon is already present in a published/deposited dataset but the local project has not yet recovered its exact accession or tree tip;
 2. **population-level gap** — species placement exists, but the white/coloured populations required for the flower-colour question were never sampled;
@@ -25,7 +25,7 @@ One exact Moreyra-project record is now fully anchored:
 - library: `Cirsium-domonii_FJ318`
 - locality: Japan: Honshu
 
-This proves that the public SRA metadata can reconstruct the actual target-capture tips at sample/run resolution.
+This proves that public SRA metadata can reconstruct actual target-capture tips at sample/run resolution.
 
 ## Why ordinary web search is insufficient
 
@@ -55,6 +55,12 @@ Expected generated files:
 - `data/evidence/generated/PRJNA957074_runinfo.csv`
 - `data/evidence/generated/PRJNA957074_taxon_summary.csv`
 - `data/evidence/generated/PRJNA957074_focal_taxon_audit.csv`
+
+A manual workflow, `.github/workflows/recover-ncbi-project-metadata.yml`, runs the same recovery after the workflow is available to GitHub Actions and uploads the results as an artifact.
+
+## Verification and current execution limit
+
+The offline parser, summarizer and focal-audit functions were tested with the exact *C. domonii* SRA record. The active execution environment used to prepare this branch did not provide outbound DNS access to NCBI, so the full 299-plant project table has **not yet been claimed as recovered**. The code/workflow is in place; the complete generated artifact remains an explicit pending result.
 
 ## Related 2023 source
 
