@@ -8,6 +8,10 @@ on:
       - "tests/test_recover_ncbi_project_runs.py"
       - "tests/test_audit_chang2026_biosample_morph_metadata.py"
       - "data/evidence/chang2026_east_asia_accession_audit_*.csv"
+      - "data/evidence/chang2026_takaoense_ncbi_voucher_morph_audit_*.csv"
+      - "data/evidence/chang2026_takaoense_ncbi_public_sample_context_*.csv"
+      - "data/evidence/chang2026_takaoense_ncbi_morph_audit_summary_*.json"
+      - "docs/CHANG_2026_TAKAOENSE_NCBI_MORPH_AUDIT_*.md"
       - ".github/workflows/audit-chang2026-biosample-morph.yml"
   workflow_dispatch:
 
@@ -65,7 +69,6 @@ jobs:
           python - <<'PY'
           import csv
           import json
-          import re
           from pathlib import Path
 
           outdir = Path("data/evidence/generated/chang2026_biosample_morph_audit")
@@ -73,13 +76,21 @@ jobs:
               (outdir / "biosample_morph_audit_summary.json").read_text(encoding="utf-8")
           )
 
-          def rows(name):
-              with (outdir / name).open(encoding="utf-8-sig", newline="") as handle:
+          def rows(path):
+              with Path(path).open(encoding="utf-8-sig", newline="") as handle:
                   return list(csv.DictReader(handle))
 
-          audit = rows("takaoense_biosample_morph_audit.csv")
-          attributes = rows("takaoense_biosample_attributes_long.csv")
-          ambiguities = rows("takaoense_run_match_ambiguities.csv")
+          audit = rows(outdir / "takaoense_biosample_morph_audit.csv")
+          attributes = rows(outdir / "takaoense_biosample_attributes_long.csv")
+          ambiguities = rows(outdir / "takaoense_run_match_ambiguities.csv")
+          frozen_audit = rows(
+              "data/evidence/chang2026_takaoense_ncbi_voucher_morph_audit_2026-08-11.csv"
+          )
+          frozen_summary = json.loads(
+              Path(
+                  "data/evidence/chang2026_takaoense_ncbi_morph_audit_summary_2026-08-11.json"
+              ).read_text(encoding="utf-8")
+          )
 
           print(f"project_runinfo_rows={summary['project_runinfo_rows']}")
           print(f"candidate_takaoense_run_rows={summary['candidate_takaoense_run_rows']}")
@@ -151,6 +162,33 @@ jobs:
           relevant = [row for row in attributes if row['morph_relevant'] == 'yes']
           if relevant:
               raise SystemExit("No NCBI attribute should directly describe flower colour")
+
+          if audit != frozen_audit:
+              raise SystemExit(
+                  "Live NCBI voucher/morph audit differs from the frozen evidence table"
+              )
+          stable_summary_keys = (
+              'bioproject',
+              'seed_vouchers',
+              'project_runinfo_rows',
+              'candidate_takaoense_run_rows',
+              'voucher_run_matches',
+              'ambiguous_voucher_run_matches',
+              'biosamples_with_attribute_records',
+              'attribute_rows',
+              'morph_relevant_attribute_rows',
+              'direct_sample_colour_assignments',
+              'assigned_vouchers',
+              'unresolved_vouchers',
+          )
+          for key in stable_summary_keys:
+              if summary[key] != frozen_summary[key]:
+                  raise SystemExit(
+                      f"Live NCBI summary differs from frozen evidence for {key}: "
+                      f"{summary[key]!r} != {frozen_summary[key]!r}"
+                  )
+          print("frozen_evidence_rows=6")
+          print("frozen_summary_match=yes")
           PY
 
       - name: Upload official metadata audit
