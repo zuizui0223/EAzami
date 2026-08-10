@@ -7,6 +7,7 @@ import importlib.util
 import sys
 import unittest
 from pathlib import Path
+from urllib.parse import urlparse
 
 MODULE_PATH = (
     Path(__file__).resolve().parents[1]
@@ -37,9 +38,21 @@ class ChangFigureImageTests(unittest.TestCase):
 
     def test_official_urls_are_figure_one(self) -> None:
         self.assertTrue(mod.DEFAULT_URLS)
+        allowed_hosts = {
+            "media.springernature.com",
+            "static-content.springer.com",
+        }
         for url in mod.DEFAULT_URLS:
+            parsed = urlparse(url)
+            self.assertEqual(parsed.scheme, "https")
+            self.assertIn(parsed.netloc, allowed_hosts)
             self.assertIn("12870_2026_8097_Fig1_HTML.png", url)
-            self.assertIn("media.springernature.com", url)
+            self.assertIn("10.1186%2Fs12870-026-08097-6", url)
+
+    def test_static_content_fallback_is_present(self) -> None:
+        hosts = {urlparse(url).netloc for url in mod.DEFAULT_URLS}
+        self.assertIn("static-content.springer.com", hosts)
+        self.assertIn("media.springernature.com", hosts)
 
 
 if __name__ == "__main__":
