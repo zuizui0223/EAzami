@@ -65,6 +65,7 @@ jobs:
           python - <<'PY'
           import csv
           import json
+          import re
           from pathlib import Path
 
           outdir = Path("data/evidence/generated/chang2026_biosample_morph_audit")
@@ -100,25 +101,48 @@ jobs:
               raise SystemExit("Expected six published takaoense voucher rows")
           if {row['voucher'] for row in audit} != expected_vouchers:
               raise SystemExit("Published takaoense voucher membership changed")
-          if summary['project_runinfo_rows'] < 25:
-              raise SystemExit("Unexpectedly few PRJNA1311153 runinfo rows")
-          if summary['candidate_takaoense_run_rows'] < 6:
-              raise SystemExit("Fewer than six takaoense SRA run rows were recovered")
+          if summary['project_runinfo_rows'] != 25:
+              raise SystemExit("Expected 25 PRJNA1311153 runinfo rows")
+          if summary['candidate_takaoense_run_rows'] != 6:
+              raise SystemExit("Expected six takaoense SRA run rows")
+          if summary['voucher_run_matches'] != 6:
+              raise SystemExit("All six vouchers must link to explicit SampleName/isolate IDs")
+          if summary['ambiguous_voucher_run_matches'] != 0 or ambiguities:
+              raise SystemExit("Voucher-to-run mapping must be one-to-one")
+          if summary['biosamples_with_attribute_records'] != 6:
+              raise SystemExit("Expected six BioSample attribute dictionaries")
+          if summary['attribute_rows'] != 36:
+              raise SystemExit("Expected six attributes for each of six BioSamples")
+          if summary['morph_relevant_attribute_rows'] != 0:
+              raise SystemExit("NCBI unexpectedly gained a morph-relevant attribute; review it")
+          if summary['direct_sample_colour_assignments'] != 0:
+              raise SystemExit("NCBI unexpectedly gained an explicit W/BP label; review it")
+
+          expected_basis = "exact_voucher_numeric_suffix_in_takaoense_sample_name"
           for row in audit:
+              numeric = re.sub(r"^ccy", "", row['voucher'], flags=re.I)
+              if row['run_match_basis'] != expected_basis:
+                  raise SystemExit(
+                      f"{row['voucher']} lacks the explicit SampleName suffix match"
+                  )
+              if not row['run'] or not row['biosample'] or not row['sample_name']:
+                  raise SystemExit(f"{row['voucher']} lacks public accession provenance")
+              if not row['sample_name'].endswith("-" + numeric):
+                  raise SystemExit(f"{row['voucher']} SampleName suffix mismatch")
+              if row['biosample_isolate'] != numeric:
+                  raise SystemExit(f"{row['voucher']} BioSample isolate mismatch")
               if row['direct_ncbi_colour_label']:
-                  if not row['morph_relevant_attributes']:
-                      raise SystemExit(
-                          f"{row['voucher']} received a colour label without direct attributes"
-                      )
-                  if row['review_status'] != 'assigned_from_explicit_ncbi_attribute':
-                      raise SystemExit(
-                          f"{row['voucher']} has an inconsistent assignment status"
-                      )
-              if 'No assignment from locality' not in row['notes']:
+                  raise SystemExit(f"{row['voucher']} received an unsupported colour label")
+              if row['binary_colour_code'] or row['flower_colour_state']:
+                  raise SystemExit(f"{row['voucher']} received an inferred colour state")
+              if row['review_status'] != 'no_explicit_ncbi_colour_attribute':
+                  raise SystemExit(f"{row['voucher']} has an unexpected review status")
+              if 'No colour assignment from locality' not in row['notes']:
                   raise SystemExit("Geographic-inference guard is missing")
+
           relevant = [row for row in attributes if row['morph_relevant'] == 'yes']
-          if len(relevant) != summary['morph_relevant_attribute_rows']:
-              raise SystemExit("Long attribute table and summary disagree")
+          if relevant:
+              raise SystemExit("The long attribute table contains unexpected morph evidence")
           PY
 
       - name: Upload official metadata audit
