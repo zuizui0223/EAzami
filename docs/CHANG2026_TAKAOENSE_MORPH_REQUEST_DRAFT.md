@@ -1,46 +1,57 @@
-# Draft request: sample-level flower-colour identity of published var. *takaoense* transcriptomes
+# Draft follow-up request: machine-readable tree files and ccy3839 herbarium record
 
 Status: draft only — not sent
 
-## Purpose
+## What no longer needs confirmation
 
-Request the direct white-corolla `(W)` versus bluish-purple-corolla `(BP)` mapping for the six *Cirsium japonicum* var. *takaoense* samples used by Chang et al. 2026, and clarify one herbarium discrepancy.
+The official Figure 1 image has now been recovered at high resolution. Panels B and C directly and concordantly label the six *Cirsium japonicum* var. *takaoense* samples as:
 
-The request is deliberately narrow. The six public runs and BioSamples have already been matched unambiguously to the published vouchers; only the flower-colour labels and the repository of collector number 3839 remain unresolved.
+- FC / `ccy3559` — BP
+- TJ / `ccy3807` — BP
+- NH / `ccy3835` — BP
+- WY / `ccy3560` — W
+- FB / `ccy3629` — W
+- LT / `ccy3839` — W
+
+Therefore an author request is no longer needed to recover the W/BP mapping.
+
+## Remaining purpose
+
+A short follow-up request may still be useful for:
+
+1. the machine-readable Figure 1/sample tree with branch lengths and support values;
+2. the underlying Neighbor-Net or distance matrix, if available;
+3. the exact orthogroup/gene-tree inputs used for the displayed sample topology;
+4. clarification of the herbarium repository for collector number `ccy3839`.
 
 ## English email draft
 
-**Subject:** Clarification of W/BP labels for six *Cirsium japonicum* var. *takaoense* transcriptome samples
+**Subject:** Request for machine-readable sample tree and clarification of voucher ccy3839
 
 Dear Dr. Chang and colleagues,
 
-I am studying the evolutionary history of white and coloured flowers in East Asian *Cirsium* and am reusing the public transcriptome data from your 2026 paper:
+I am studying flower-colour evolution in East Asian *Cirsium* and am reusing the public transcriptome data from your 2026 paper:
 
 “Phylotranscriptomics and genome-size evidence clarify the Taiwanese *Cirsium japonicum* complex and delimit *C. brevicaule* and allied East Asian thistles.”
 
-Your Figure 1 caption defines `(W)` as the white-corolla morph and `(BP)` as the bluish-purple-corolla morph of *C. japonicum* var. *takaoense*. Supplementary Table S1 lists six var. *takaoense* samples, but I could not locate the sample-level W/BP mapping in the supplementary tables or NCBI BioSample attributes.
+I have reconciled the six *C. japonicum* var. *takaoense* vouchers to PRJNA1311153 runs and BioSamples and recovered the W/BP labels directly from Figure 1. The existing sample set contains three bluish-purple samples—FC-3559, TJ-3807 and NH-3835—and three white samples—WY-3560, FB-3629 and LT-3839.
 
-Could you please confirm the Figure 1 morph label for each of the following samples?
+The displayed ASTRAL tree and Neighbor-Net show informative sample-level structure. Could you please share any machine-readable files available for these analyses, especially:
 
-| Code | Locality | Voucher | Public run | BioSample | W or BP? |
-|---|---|---|---|---|---|
-| FC | Fenchihu, Chiayi | ccy3559 | SRR35152718 | SAMN50798021 |  |
-| WY | Wutai, Pingtung | ccy3560 | SRR35152717 | SAMN50798022 |  |
-| FB | Fengbin, Hualien | ccy3629 | SRR35152738 | SAMN50798024 |  |
-| TJ | Tengji, Kaohsiung | ccy3807 | SRR35152736 | SAMN50798026 |  |
-| NH | Nanheng, Taitung | ccy3835 | SRR35152735 | SAMN50798027 |  |
-| LT | Ludao, Taitung | ccy3839 | SRR35152734 | SAMN50798028 |  |
+- the Figure 1 species/sample tree in Newick or Nexus format;
+- branch lengths and the definitions of displayed support values;
+- the Neighbor-Net input distance matrix or exported network;
+- retained orthogroup alignments or gene trees used for the sample topology;
+- a tip-name key if labels differ from Supplementary Table S1.
 
-A screenshot or the original high-resolution Figure 1/source tree with readable tip labels would also be very helpful.
-
-I also noticed a possible herbarium discrepancy for collector number ccy3839:
+I also noticed a possible herbarium discrepancy for collector number `ccy3839`:
 
 - Supplementary Table S1 lists TCF;
 - Supplementary Table S6 lists TNM.
 
 Could you confirm whether material is deposited at TCF, TNM, or both?
 
-I will preserve your exact sample terminology and cite the paper and public accessions. I will not infer colour from locality or topology. This clarification would allow me to determine whether the published sample tree already contains both flower-colour morphs before planning new population genomic sampling.
+I will preserve the published sample terminology, public accessions and the distinction between direct phenotype labels and evolutionary interpretation. The requested tree files would allow topology and branch-length sensitivity analyses without reconstructing numerical information from the published figure.
 
 Thank you very much for your help.
 
@@ -50,37 +61,32 @@ Ruiqi Zhang / 張瑞琪
 
 ## Traditional Chinese draft
 
-**主旨：請教六份玉山薊白花／藍紫花轉錄體樣本的對應標記**
+**主旨：請教Figure 1系統樹原始檔及ccy3839標本館資訊**
 
 張先生／女士及共同作者您好：
 
-我目前正在研究東亞薊屬植物白花與有色花的演化歷史，並希望重用貴團隊2026年論文中公開的轉錄體資料：
+我目前正在研究東亞薊屬植物花色的演化，並希望重用貴團隊2026年論文中公開的轉錄體資料：
 
 “Phylotranscriptomics and genome-size evidence clarify the Taiwanese *Cirsium japonicum* complex and delimit *C. brevicaule* and allied East Asian thistles.”
 
-論文Figure 1的圖說將玉山薊 *Cirsium japonicum* var. *takaoense* 的 `(W)` 定義為白色花冠型、`(BP)` 定義為藍紫色花冠型。Supplementary Table S1列出六份玉山薊樣本，但我在補充表格及NCBI BioSample metadata中尚未找到各樣本所對應的W／BP標記。
+我已將六份玉山薊 *Cirsium japonicum* var. *takaoense* 憑證標本與PRJNA1311153的run及BioSample完成一對一對應，也從Figure 1直接確認花色標記：FC-3559、TJ-3807及NH-3835為BP；WY-3560、FB-3629及LT-3839為W。
 
-想請教以下六份樣本在Figure 1中分別屬於W或BP：
+Figure 1中的ASTRAL樹與Neighbor-Net具有重要的樣本層級資訊。若方便，想請教是否能提供以下機器可讀原始檔：
 
-| 代碼 | 採集地 | 憑證標本 | Public run | BioSample | W或BP |
-|---|---|---|---|---|---|
-| FC | 嘉義奮起湖 | ccy3559 | SRR35152718 | SAMN50798021 |  |
-| WY | 屏東霧臺 | ccy3560 | SRR35152717 | SAMN50798022 |  |
-| FB | 花蓮豐濱 | ccy3629 | SRR35152738 | SAMN50798024 |  |
-| TJ | 高雄藤枝 | ccy3807 | SRR35152736 | SAMN50798026 |  |
-| NH | 臺東南橫 | ccy3835 | SRR35152735 | SAMN50798027 |  |
-| LT | 臺東綠島 | ccy3839 | SRR35152734 | SAMN50798028 |  |
+- Figure 1樣本／物種樹的Newick或Nexus檔；
+- branch length及圖中support value的定義；
+- Neighbor-Net使用的distance matrix或匯出的network檔；
+- 建立樣本樹所使用的orthogroup alignment或gene tree；
+- 若tree tip名稱與Supplementary Table S1不同，對應的tip-name key。
 
-若方便提供可清楚辨識tip label的Figure 1高解析圖、原始樹檔或截圖，也非常有幫助。
-
-另外，ccy3839的標本館資訊似乎有一處不一致：
+另外，collector number `ccy3839`的標本館資訊似乎不一致：
 
 - Supplementary Table S1記為TCF；
 - Supplementary Table S6記為TNM。
 
 想請教該標本實際保存於TCF、TNM，或兩館皆有複份？
 
-我會保留論文原本的樣本名稱並引用論文及公開accession，不會根據採集地或系統樹位置推測花色。這項確認能幫助我先判斷既有樣本樹是否已同時包含兩種花色型，再決定是否需要新的族群基因體採樣。
+我會保留論文原本的樣本名稱、公開accession，以及直接花色標記與演化解釋之間的區別。若能取得原始樹檔，就不必從論文圖片反推branch length或support。
 
 非常感謝您的協助。
 
@@ -90,27 +96,20 @@ Ruiqi Zhang / 張瑞琪
 
 ## Minimal response form
 
-The authors could answer with only this block:
-
 ```text
-FC / ccy3559 = W or BP:
-WY / ccy3560 = W or BP:
-FB / ccy3629 = W or BP:
-TJ / ccy3807 = W or BP:
-NH / ccy3835 = W or BP:
-LT / ccy3839 = W or BP:
-ccy3839 herbarium = TCF / TNM / both / other:
+Figure 1 Newick/Nexus available: yes / no
+Branch lengths represent:
+Support values represent:
+Neighbor-Net distance/network file available: yes / no
+Orthogroup alignments or gene trees available: yes / no
+ccy3839 herbarium: TCF / TNM / both / other
+File or repository link:
 ```
 
-## Herbarium request variant
+## Herbarium-only request variant
 
-For TNM or TCF staff, replace the first paragraphs with:
+For TNM or TCF staff:
 
-> I am trying to verify the corolla colour of six vouchers used for public transcriptome sequencing in Chang et al. 2026. Could you confirm whether a specimen image, label note, field photograph, collector notebook entry or duplicate sheet records white versus bluish-purple corollas for the collector numbers below?
+> Chang et al. 2026 Supplementary Table S1 records collector number ccy3839 at TCF, whereas Supplementary Table S6 records the same collector number at TNM. Could you confirm whether a sheet or duplicate is held in your collection and provide the accession/barcode or specimen image if available?
 
-Prioritize:
-
-- TNM: ccy3559, ccy3560, ccy3629 and the S6 record of ccy3839;
-- TCF: ccy3807, ccy3835 and the S1 record of ccy3839.
-
-Do not ask the herbarium to infer colour from dried petal colour unless the sheet label or associated field record explicitly records the living corolla state.
+The living corolla state is already directly documented as white in Figure 1; it should not be inferred from dried petal colour.
