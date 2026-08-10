@@ -1,6 +1,7 @@
 # Sequencing panel v0.3: decisions after exact Moreyra–Chang coverage integration
 
-Date: 2026-08-10
+Date: 2026-08-10  
+Updated: 2026-08-11 after exact var. *takaoense* voucher–NCBI reconciliation
 
 ## Why the panel changed
 
@@ -16,7 +17,7 @@ The reproducible integrated screen currently covers **33 master-table taxa** aft
 
 > use target capture to close a genuine transition-critical species gap; use RAD-seq or resequencing to resolve morph/population history after species placement is known.
 
-The machine-generated table is produced by:
+The machine-generated coverage table is produced by:
 
 - `analysis/build_east_asia_nuclear_coverage.py`
 
@@ -30,7 +31,7 @@ For the currently active Tier-A systems, modern species-level nuclear placement 
 
 | System | Existing nuclear evidence | Remaining problem |
 |---|---|---|
-| `var. takaoense` | Chang 2026 phylotranscriptomics | six published tips lack morph labels; population ancestry unresolved |
+| `var. takaoense` | Chang 2026 phylotranscriptomics; six public transcriptomes now linked exactly to vouchers | W/BP labels and population ancestry unresolved |
 | `C. brevicaule–C. irumtiense` | Chang 2026 | gene flow, local ancestry and repeated mechanism |
 | `C. kawakamii–C. tatakaense–C. pengii` | Chang 2025 and 2026 | population ancestry, cytotype/homeolog and mechanism |
 | `C. pendulum` | exact Moreyra target-capture tip | Japanese white/purple and continental bridge history |
@@ -43,16 +44,55 @@ Therefore, the first sequencing wave should not spend samples on rebuilding thes
 
 ### var. takaoense voucher morphs
 
-The highest-information immediate action is not sequencing. It is identifying the flower colour of the six published transcriptome vouchers:
+The highest-information immediate action is still not sequencing. It is recovering the flower colour of the six existing transcriptome vouchers.
 
-- Fenchihu `ccy3559`
-- Tengji `ccy3807`
-- Nanheng `ccy3835`
-- Wutai `ccy3560`
-- Fengbin `ccy3629`
-- Ludao `ccy3839`
+The accession identity problem is now solved:
 
-If both morphs are already represented, the published sample topology may immediately provide a first morph-history test. If only one morph is represented, new paired sampling remains mandatory.
+| Code | Voucher | Run | BioSample | BioSample isolate | Morph |
+|---|---|---|---|---|---|
+| FC | `ccy3559` | `SRR35152718` | `SAMN50798021` | `3559` | unresolved |
+| WY | `ccy3560` | `SRR35152717` | `SAMN50798022` | `3560` | unresolved |
+| FB | `ccy3629` | `SRR35152738` | `SAMN50798024` | `3629` | unresolved |
+| TJ | `ccy3807` | `SRR35152736` | `SAMN50798026` | `3807` | unresolved |
+| NH | `ccy3835` | `SRR35152735` | `SAMN50798027` | `3835` | unresolved |
+| LT | `ccy3839` | `SRR35152734` | `SAMN50798028` | `3839` | unresolved |
+
+Each link is supported by the collector-number suffix in NCBI `SampleName` and the matching BioSample `isolate`. There are no ambiguous voucher-to-run matches.
+
+However, official NCBI runinfo and BioSample metadata contain no flower-colour, corolla, phenotype, morph, pigment or anthocyanin attribute for these samples. They therefore resolve accession provenance but do not resolve `(W)` versus `(BP)`.
+
+Supplementary Table S6 independently contains collector records for:
+
+- `ccy3559`;
+- `ccy3560`;
+- `ccy3629`;
+- `ccy3839`.
+
+It does not expose a sample-level colour state. Collector number `ccy3839` also has a repository conflict:
+
+- Supplementary Table S1: TCF;
+- Supplementary Table S6: TNM.
+
+This conflict must be resolved before requesting the correct voucher image or label.
+
+The direct-evidence order is now:
+
+1. read FC, TJ, NH, WY, FB and LT `(W)` / `(BP)` suffixes from a high-resolution Figure 1 or source tree;
+2. obtain author confirmation;
+3. inspect TNM/TCF voucher images, labels or collector field records;
+4. resolve whether `ccy3839` is held at TCF, TNM or both.
+
+Do not infer colour from locality, elevation, herbarium, library number, NCBI submitted scientific name or topology.
+
+Files:
+
+- `docs/CHANG2026_TAKAOENSE_MORPH_EVIDENCE_AUDIT_2026-08-11.md`
+- `docs/CHANG2026_TAKAOENSE_MORPH_REQUEST_DRAFT.md`
+- `data/evidence/chang2026_takaoense_ncbi_voucher_morph_audit_2026-08-11.csv`
+- `data/evidence/chang2026_takaoense_ncbi_morph_audit_summary_2026-08-11.json`
+- `data/evidence/chang2026_takaoense_voucher_morph_evidence_2026-08-10.csv`
+
+If both morphs are already represented, the published sample topology may provide a first morph-history test. If only one morph is represented, new paired sampling remains mandatory. If both are represented but geography or reticulation dominates the six-tip pattern, dense population genomics is still required.
 
 Tracked in Issue #11.
 
@@ -60,7 +100,9 @@ Tracked in Issue #11.
 
 ### 1. var. takaoense
 
-Use morph-linked RAD-seq or low-coverage resequencing after voucher recovery. Sample multiple populations for each morph, and prioritize mixed populations if they exist because within-population contrasts reduce background geographic differentiation.
+Use morph-linked RAD-seq or low-coverage resequencing after voucher recovery. The six existing transcriptomes should be reused as labelled anchors whenever their W/BP states can be verified, but one plant per locality cannot by itself distinguish population-demographic alternatives.
+
+Sample multiple populations for each morph, prioritizing mixed populations because within-population contrasts reduce background geographic differentiation.
 
 Competing models:
 
@@ -128,6 +170,7 @@ The yellow 2n=32 lineage may become important if Chapter 2 expands from white/an
 
 | Evidence state | New data |
 |---|---|
+| accession identity resolved; morph label missing | figure/voucher/author evidence before new sequencing |
 | species placement verified; morph/population missing | RAD-seq or resequencing |
 | species placement verified; colour mechanism missing | pigment chemistry + floral RNA + candidate-region analysis |
 | extant white morph unverified | voucher/field verification before sequencing |
@@ -140,9 +183,10 @@ The yellow 2n=32 lineage may become important if Chapter 2 expands from white/an
 The project has moved away from a generic goal of “constructing an East Asian RAD-seq tree.” The sharper design is:
 
 1. reuse the existing Compositae1061/phylotranscriptomic species backbone;
-2. close only verified transition-critical taxon gaps with compatible target capture;
-3. use population genomics to identify the ancestry of white and coloured alleles;
-4. use pigment chemistry and floral expression to identify the molecular switch;
-5. claim regain only after introgression and ancestral standing variation are disfavoured.
+2. recover missing sample metadata before generating redundant sequence data;
+3. close only verified transition-critical taxon gaps with compatible target capture;
+4. use population genomics to identify the ancestry of white and coloured alleles;
+5. use pigment chemistry and floral expression to identify the molecular switch;
+6. claim regain only after introgression and ancestral standing variation are disfavoured.
 
 This design uses the available phylogenetic information rather than paying to rediscover it.
