@@ -1,0 +1,189 @@
+"""Chang 2026 Sinocirsium transcriptome gene-tree workflow.
+
+Run from the repository root, for example:
+
+    snakemake -s workflow/chang2026_gene_trees/Snakefile \
+      --configfile workflow/chang2026_gene_trees/config.json \
+      --use-conda --cores 32
+
+The config must point to the generated 19-sample panel and eight-hypothesis CSV.
+Heavy external computation is never run in CI; CI validates scripts, command
+plans, schemas, and synthetic topology scoring.
+"""
+
+from pathlib import Path
+
+shell.executable("/bin/bash")
+
+WORKFLOW_DIR = Path(workflow.basedir)
+REPO_ROOT = WORKFLOW_DIR.parents[1]
+ANALYSIS = REPO_ROOT / "analysis"
+
+PANEL = Path(config["panel_csv"])
+HYPOTHESES = Path(config["hypotheses_csv"])
+RESULTS = Path(config.get("results_dir", "results/chang2026_gene_tree_workflow"))
+
+ASSEMBLY = RESULTS / "01_transcriptomes"
+ORTHOFINDER = RESULTS / "02_orthofinder"
+SINGLE_COPY = RESULTS / "03_single_copy"
+GENE_TREES = RESULTS / "04_gene_trees"
+SCORING = RESULTS / "05_hypothesis_scoring"
+
+RESOURCES = config.get("resources", {})
+ASSEMBLY_JOBS = int(RESOURCES.get("assembly_jobs", 1))
+FASTERQ_THREADS = int(RESOURCES.get("fasterq_threads", 8))
+FASTP_THREADS = int(RESOURCES.get("fastp_threads", 8))
+TRINITY_THREADS = int(RESOURCES.get("trinity_threads", 16))
+TRINITY_MEMORY_GB = int(RESOURCES.get("trinity_memory_gb", 96))
+ORTHOFINDER_THREADS = int(RESOURCES.get("orthofinder_threads", 24))
+ORTHOFINDER_SEARCH_THREADS = int(RESOURCES.get("orthofinder_search_threads", 24))
+GENE_TREE_JOBS = int(RESOURCES.get("gene_tree_jobs", 8))
+GENE_TREE_THREADS = int(RESOURCES.get("gene_tree_threads_per_job", 1))
+BOOTSTRAP_REPLICATES = int(config.get("bootstrap_replicates", 1000))
+ALRT_REPLICATES = int(config.get("alrt_replicates", 1000))
+SUPPORT_THRESHOLDS = ",".join(
+    str(value) for value in config.get("support_thresholds", [0, 50, 70, 90])
+)
+KEEP_RAW = bool(config.get("keep_raw_reads", False))
+
+
+rule all:
+    input:
+        SCORING / "gene_tree_hypothesis_summary.json",
+        SCORING / "gene_tree_hypothesis_summary.csv",
+        SCORING / "gene_tree_hypothesis_details.csv",
+        SCORING / "gene_tree_per_hypothesis_details.csv",
+        GENE_TREES / "gene_tree_run_summary.json",
+        SINGLE_COPY / "single_copy_orthogroup_summary.json",
+        ASSEMBLY / "transcriptome_assembly_run_summary.json",
+
+
+rule assemble_transcriptomes:
+    input:
+        panel=PANEL,
+        runner=ANALYSIS / "run_chang2026_transcriptome_assembly.py",
+        prefixer=ANALYSIS / "prefix_fasta_headers.py",
+    output:
+        summary=ASSEMBLY / "transcriptome_assembly_run_summary.json",
+        manifest=ASSEMBLY / "transcriptome_assembly_run_manifest.csv",
+    threads: max(
+        FASTERQ_THREADS,
+        FASTP_THREADS,
+        TRINITY_THREADS,
+    )
+    conda:
+        "envs/assembly.yml"
+    params:
+        jobs=ASSEMBLY_JOBS,
+        keep_raw="--keep-raw-reads" if KEEP_RAW else "",
+    shell:
+        r"""
+        python {input.runner} \
+          --panel {input.panel} \
+          --outdir {ASSEMBLY} \
+          --jobs {params.jobs} \
+          --fasterq-threads {FASTERQ_THREADS} \
+          --fastp-threads {FASTP_THREADS} \
+          --trinity-threads {TRINITY_THREADS} \
+          --trinity-memory-gb {TRINITY_MEMORY_GB} \
+          --prefix-script {input.prefixer} \
+          {params.keep_raw}
+        """
+
+
+rule orthofinder:
+    input:
+        assembly_summary=rules.assemble_transcriptomes.output.summary,
+        assembly_manifest=rules.assemble_transcriptomes.output.manifest,
+    output:
+        done=touch(ORTHOFINDER / ".done"),
+    threads: ORTHOFINDER_THREADS
+    conda:
+        "envs/orthofinder.yml"
+    params:
+        proteomes=ASSEMBLY / "prefixed_proteomes",
+        run_dir=ORTHOFINDER / "run",
+    shell:
+        r"""
+        test -s {input.assembly_summary}
+        test -d {params.proteomes}
+        rm -rf {params.run_dir}
+        mkdir -p {ORTHOFINDER}
+        orthofinder \
+          -f {params.proteomes} \
+          -t {ORTHOFINDER_THREADS} \
+          -a {ORTHOFINDER_SEARCH_THREADS} \
+          -o {params.run_dir}
+        test -n "$(find {params.run_dir} -name Orthogroups_SingleCopyOrthologues.txt -print -quit)"
+        """
+
+
+rule prepare_single_copy_orthogroups:
+    input:
+        orthofinder_done=rules.orthofinder.output.done,
+        panel=PANEL,
+        script=ANALYSIS / "prepare_chang2026_single_copy_orthogroups.py",
+    output:
+        manifest=SINGLE_COPY / "single_copy_orthogroup_manifest.csv",
+        summary=SINGLE_COPY / "single_copy_orthogroup_summary.json",
+    conda:
+        "envs/scoring.yml"
+    shell:
+        r"""
+        python {input.script} \
+          --orthofinder-root {ORTHOFINDER}/run \
+          --panel {input.panel} \
+          --outdir {SINGLE_COPY}
+        """
+
+
+rule infer_rooted_gene_trees:
+    input:
+        manifest=rules.prepare_single_copy_orthogroups.output.manifest,
+        panel=PANEL,
+        script=ANALYSIS / "run_chang2026_single_copy_gene_trees.py",
+    output:
+        manifest=GENE_TREES / "gene_tree_run_manifest.csv",
+        summary=GENE_TREES / "gene_tree_run_summary.json",
+    threads: max(1, GENE_TREE_JOBS * GENE_TREE_THREADS)
+    conda:
+        "envs/gene_trees.yml"
+    shell:
+        r"""
+        python {input.script} \
+          --manifest {input.manifest} \
+          --panel {input.panel} \
+          --outdir {GENE_TREES} \
+          --jobs {GENE_TREE_JOBS} \
+          --threads-per-gene {GENE_TREE_THREADS} \
+          --bootstrap-replicates {BOOTSTRAP_REPLICATES} \
+          --alrt-replicates {ALRT_REPLICATES}
+        """
+
+
+rule score_competing_takaoense_histories:
+    input:
+        gene_tree_summary=rules.infer_rooted_gene_trees.output.summary,
+        panel=PANEL,
+        hypotheses=HYPOTHESES,
+        script=ANALYSIS / "score_chang2026_gene_tree_hypotheses.py",
+    output:
+        details=SCORING / "gene_tree_hypothesis_details.csv",
+        hypothesis_details=SCORING / "gene_tree_per_hypothesis_details.csv",
+        summary=SCORING / "gene_tree_hypothesis_summary.csv",
+        summary_json=SCORING / "gene_tree_hypothesis_summary.json",
+    conda:
+        "envs/scoring.yml"
+    shell:
+        r"""
+        python {input.script} \
+          --panel {input.panel} \
+          --hypotheses {input.hypotheses} \
+          --trees-dir {GENE_TREES}/trees \
+          --pattern '*.treefile' \
+          --thresholds '{SUPPORT_THRESHOLDS}' \
+          --output {output.details} \
+          --hypothesis-output {output.hypothesis_details} \
+          --summary-output {output.summary} \
+          --summary-json {output.summary_json}
+        """
