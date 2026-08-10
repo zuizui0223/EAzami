@@ -1,0 +1,119 @@
+name: Analyze published Chang 2026 takaoense morphs
+
+on:
+  pull_request:
+    paths:
+      - "analysis/takaoense_published_morph_metadata_screen.py"
+      - "tests/test_takaoense_published_morph_metadata_screen.py"
+      - "data/evidence/chang2026_takaoense_figure1_morph_assignments_*.csv"
+      - "data/evidence/chang2026_takaoense_ncbi_voucher_morph_audit_*.csv"
+      - "data/evidence/chang2026_takaoense_morph_linked_public_samples_*.csv"
+      - "analysis/takaoense_published_morph_altitude_*.csv"
+      - "analysis/takaoense_published_morph_metadata_screen_summary.json"
+      - ".github/workflows/analyze-chang2026-takaoense-published-morphs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile analysis/takaoense_published_morph_metadata_screen.py
+          python -m unittest tests/test_takaoense_published_morph_metadata_screen.py -v
+
+      - name: Rebuild and compare frozen outputs
+        run: |
+          mkdir -p /tmp/takaoense_morph_screen
+          python analysis/takaoense_published_morph_metadata_screen.py \
+            --sample-output /tmp/takaoense_morph_screen/samples.csv \
+            --metric-output /tmp/takaoense_morph_screen/metrics.csv \
+            --permutation-output /tmp/takaoense_morph_screen/permutations.csv \
+            --loo-output /tmp/takaoense_morph_screen/leave_one_out.csv \
+            --summary-output /tmp/takaoense_morph_screen/summary.json
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          def rows(path):
+              with Path(path).open(encoding="utf-8-sig", newline="") as handle:
+                  return list(csv.DictReader(handle))
+
+          comparisons = (
+              (
+                  "/tmp/takaoense_morph_screen/samples.csv",
+                  "data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv",
+                  "sample manifest",
+              ),
+              (
+                  "/tmp/takaoense_morph_screen/metrics.csv",
+                  "analysis/takaoense_published_morph_altitude_screen.csv",
+                  "metric table",
+              ),
+              (
+                  "/tmp/takaoense_morph_screen/permutations.csv",
+                  "analysis/takaoense_published_morph_altitude_permutations.csv",
+                  "permutation table",
+              ),
+              (
+                  "/tmp/takaoense_morph_screen/leave_one_out.csv",
+                  "analysis/takaoense_published_morph_altitude_leave_one_out.csv",
+                  "leave-one-out table",
+              ),
+          )
+          for observed_path, frozen_path, label in comparisons:
+              observed = rows(observed_path)
+              frozen = rows(frozen_path)
+              if observed != frozen:
+                  raise SystemExit(f"Rebuilt {label} differs from frozen evidence")
+              print(f"validated_{label.replace('-', '_').replace(' ', '_')}_rows={len(observed)}")
+
+          observed = json.loads(
+              Path("/tmp/takaoense_morph_screen/summary.json").read_text(encoding="utf-8")
+          )
+          frozen = json.loads(
+              Path("analysis/takaoense_published_morph_metadata_screen_summary.json")
+              .read_text(encoding="utf-8")
+          )
+          if observed != frozen:
+              raise SystemExit("Rebuilt summary differs from frozen summary")
+
+          if observed["published_samples"] != 6:
+              raise SystemExit("Expected six published morph-labelled samples")
+          if observed["morph_counts"] != {"W": 3, "BP": 3}:
+              raise SystemExit(f"Unexpected morph counts: {observed['morph_counts']}")
+          if not observed["complete_rank_separation"]:
+              raise SystemExit("Expected complete altitude-rank separation in the published six")
+          if observed["exact_allocation_count"] != 20:
+              raise SystemExit("Expected all choose(6,3)=20 label allocations")
+          if abs(observed["exact_one_sided_p"] - 0.05) > 1e-12:
+              raise SystemExit("Unexpected one-sided exact permutation result")
+          if abs(observed["exact_two_sided_p"] - 0.10) > 1e-12:
+              raise SystemExit("Unexpected two-sided exact permutation result")
+          if observed["leave_one_out_difference_range_m"] != [635.666667, 1113.666667]:
+              raise SystemExit("Leave-one-out range changed")
+
+          print(f"mean_altitude_bp_m={observed['mean_altitude_bp_m']:.6f}")
+          print(f"mean_altitude_w_m={observed['mean_altitude_w_m']:.6f}")
+          print(
+              "mean_difference_bp_minus_w_m="
+              f"{observed['mean_difference_bp_minus_w_m']:.6f}"
+          )
+          print(f"exact_one_sided_p={observed['exact_one_sided_p']:.6f}")
+          print(f"exact_two_sided_p={observed['exact_two_sided_p']:.6f}")
+          print("frozen_summary_match=yes")
+          PY
