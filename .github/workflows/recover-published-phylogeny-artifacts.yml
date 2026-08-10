@@ -1,0 +1,115 @@
+name: Recover published phylogeny artifacts
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_published_phylogeny_artifacts.py"
+      - "tests/test_recover_published_phylogeny_artifacts.py"
+      - "data/evidence/published_phylogeny_artifact_manifest_*.csv"
+      - ".github/workflows/recover-published-phylogeny-artifacts.yml"
+  workflow_dispatch:
+    inputs:
+      fail_on_download_error:
+        description: Fail if any verified direct artifact cannot be downloaded
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  test-artifact-recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile analysis/recover_published_phylogeny_artifacts.py
+          python -m unittest tests/test_recover_published_phylogeny_artifacts.py -v
+
+      - name: Validate current artifact manifest without network
+        run: |
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+
+          path = Path("analysis/recover_published_phylogeny_artifacts.py")
+          spec = importlib.util.spec_from_file_location("recover_artifacts", path)
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+          rows = module.read_manifest(
+              Path("data/evidence/published_phylogeny_artifact_manifest_2026-08-10.csv")
+          )
+          print(f"manifest_records={len(rows)}")
+          direct = [row for row in rows if row["download_url"] and row["requires_auth"].lower() != "true"]
+          print(f"direct_unauthenticated_records={len(direct)}")
+          if len(rows) < 8 or len(direct) < 3:
+              raise SystemExit("Artifact manifest unexpectedly lost records")
+          PY
+
+  recover-artifacts:
+    if: github.event_name == 'workflow_dispatch'
+    needs: test-artifact-recovery
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Download and extract verified public artifacts
+        env:
+          FAIL_FLAG: ${{ inputs.fail_on_download_error && '--fail-on-download-error' || '' }}
+        run: |
+          python analysis/recover_published_phylogeny_artifacts.py \
+            --manifest data/evidence/published_phylogeny_artifact_manifest_2026-08-10.csv \
+            --outdir data/evidence/generated/published_phylogeny_artifacts \
+            --force \
+            $FAIL_FLAG
+
+      - name: Summarize recovery
+        run: |
+          python - <<'PY'
+          import csv
+          from collections import Counter
+          from pathlib import Path
+
+          path = Path("data/evidence/generated/published_phylogeny_artifacts/artifact_recovery_summary.csv")
+          with path.open(encoding="utf-8", newline="") as handle:
+              rows = list(csv.DictReader(handle))
+          counts = Counter(row["status"] for row in rows)
+          print(f"records={len(rows)}")
+          for status, count in sorted(counts.items()):
+              print(f"{status}={count}")
+          for row in rows:
+              if row["status"] == "downloaded":
+                  print(
+                      f"DOWNLOADED {row['artifact_key']} size={row['size_bytes']} "
+                      f"sha256={row['sha256']} tables={row['extracted_table_count']}"
+                  )
+              elif row["status"] == "failed":
+                  print(f"FAILED {row['artifact_key']}: {row['error']}")
+          PY
+
+      - name: Upload recovered artifacts and extraction summaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-phylogeny-artifacts-${{ github.run_id }}
+          path: data/evidence/generated/published_phylogeny_artifacts
+          if-no-files-found: error
+          retention-days: 90
