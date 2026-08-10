@@ -1,6 +1,12 @@
 name: Recover NCBI project metadata
 
 on:
+  pull_request:
+    paths:
+      - "analysis/recover_ncbi_project_runs.py"
+      - "tests/test_recover_ncbi_project_runs.py"
+      - "data/evidence/focal_taxa_prjna957074.txt"
+      - ".github/workflows/recover-ncbi-project-metadata.yml"
   workflow_dispatch:
     inputs:
       bioproject:
@@ -19,7 +25,7 @@ permissions:
 jobs:
   recover:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -29,37 +35,80 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Recover public SRA metadata
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile analysis/recover_ncbi_project_runs.py
+          python -m unittest tests/test_recover_ncbi_project_runs.py -v
+
+      - name: Recover public SRA and BioSample metadata
         env:
           NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
           NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_PROJECT: ${{ inputs.bioproject }}
+          DISPATCH_ENRICH: ${{ inputs.enrich_biosample }}
         shell: bash
         run: |
           set -euo pipefail
+          project="${DISPATCH_PROJECT:-PRJNA957074}"
+          if [[ -z "$project" ]]; then
+            project="PRJNA957074"
+          fi
           args=(
-            --bioproject "${{ inputs.bioproject }}"
+            --bioproject "$project"
             --outdir ncbi_metadata_output
             --focal-taxa data/evidence/focal_taxa_prjna957074.txt
           )
-          if [[ "${{ inputs.enrich_biosample }}" == "true" ]]; then
+          if [[ "$EVENT_NAME" == "pull_request" || "${DISPATCH_ENRICH:-true}" == "true" ]]; then
             args+=(--enrich-biosample)
           fi
           python analysis/recover_ncbi_project_runs.py "${args[@]}"
 
-      - name: Show recovery summary
+      - name: Validate and summarize recovery
         shell: bash
         run: |
           set -euo pipefail
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          outdir = Path("ncbi_metadata_output")
+          runinfo = next(outdir.glob("*_runinfo.csv"))
+          taxa = next(outdir.glob("*_unique_taxa.csv"))
+          audit = next(outdir.glob("*_focal_taxon_audit.csv"))
+
+          def rows(path):
+              with path.open(encoding="utf-8-sig", newline="") as handle:
+                  return list(csv.DictReader(handle))
+
+          run_rows = rows(runinfo)
+          taxon_rows = rows(taxa)
+          audit_rows = rows(audit)
+          exact = [r for r in audit_rows if r["project_tip_status"] == "exact_sra_project_tip_verified"]
+          east_asia = [
+              r for r in run_rows
+              if any(token in (r.get("geographic_location") or "").casefold()
+                     for token in ("japan", "china", "korea", "taiwan", "russia", "mongolia"))
+          ]
+
+          print(f"run_records={len(run_rows)}")
+          print(f"unique_scientific_names={len(taxon_rows)}")
+          print(f"focal_taxa={len(audit_rows)}")
+          print(f"exact_focal_matches={len(exact)}")
+          print(f"east_asia_locality_runs={len(east_asia)}")
+          if len(run_rows) < 100:
+              raise SystemExit("Project recovery returned unexpectedly fewer than 100 runs")
+          if not exact:
+              raise SystemExit("No focal taxon was recovered exactly from project runinfo")
+          for row in exact:
+              print(f"EXACT {row['query_taxon']} runs={row['runs']} biosamples={row['biosamples']}")
+          PY
           ls -lh ncbi_metadata_output
-          for file in ncbi_metadata_output/*_focal_taxon_audit.csv; do
-            echo "--- ${file}"
-            cat "${file}"
-          done
 
       - name: Upload metadata tables
         uses: actions/upload-artifact@v4
         with:
-          name: ncbi-${{ inputs.bioproject }}-metadata
+          name: ncbi-${{ inputs.bioproject || 'PRJNA957074' }}-metadata-${{ github.run_id }}
           path: ncbi_metadata_output/
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 90
