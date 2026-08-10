@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Validate and merge curated Cirsium phylogeny evidence registries.
 
-The curated core and regional-addition files remain human-reviewable source files.
-This script creates one current registry while preserving evidence tiers and failing
-on duplicate citation keys or DOI conflicts instead of silently overwriting them.
+The curated source files remain human-reviewable evidence batches. This script
+creates one current registry while preserving evidence tiers and failing on
+duplicate citation keys or DOI conflicts instead of silently overwriting them.
 """
 
 from __future__ import annotations
@@ -33,6 +33,7 @@ EXPECTED_FIELDS = (
 DEFAULT_INPUTS = (
     Path("data/evidence/cirsium_phylogeny_literature_registry_2026-08-10.csv"),
     Path("data/evidence/cirsium_phylogeny_literature_registry_additions_2026-08-10.csv"),
+    Path("data/evidence/cirsium_phylogeny_literature_registry_batch02b_2026-08-10.csv"),
 )
 DEFAULT_OUTPUT = Path(
     "data/evidence/generated/cirsium_phylogeny_literature_registry_current.csv"
