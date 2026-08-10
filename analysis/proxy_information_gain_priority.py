@@ -27,7 +27,6 @@ WEIGHTS = {
     "technical_penalty": -1.0,
 }
 
-# Values are ordinal 0, 0.5, or 1 and are justified in the notes column.
 CANDIDATES = [
     {
         "candidate": "takaoense_white_vs_coloured_population_sampling",
@@ -36,14 +35,6 @@ CANDIDATES = [
         "cross_region": 0, "replicate": 1, "technical_penalty": 0,
         "action": "sample paired white and bluish-purple populations/individuals",
         "notes": "Population-aware coding changes minimum transition count; same-lineage contrast is best causal design and can distinguish mutation vs ancestral polymorphism/introgression.",
-    },
-    {
-        "candidate": "Arenicola_flanking_nuclear_lineage",
-        "direction": 1, "transition_count": 0.5, "within_lineage": 0,
-        "introgression": 0.5, "mechanism": 0, "nuclear_gap": 1,
-        "cross_region": 0.5, "replicate": 0.5, "technical_penalty": 0,
-        "action": "recover or sample the closest nuclear flanking lineage(s) around brevicaule-irumtiense",
-        "notes": "Current two-tip pair is directionally unresolved; a flanking coloured vs white state can flip the inferred direction directly.",
     },
     {
         "candidate": "C_pendulum_Japan_white_vs_purple",
@@ -76,6 +67,14 @@ CANDIDATES = [
         "cross_region": 1, "replicate": 0.5, "technical_penalty": 0,
         "action": "verify taxonomy/locality and sample Zhejiang populations",
         "notes": "Can convert a Japan-only story into a transregional within-species history and test whether white is geographically derived.",
+    },
+    {
+        "candidate": "Arenicola_brevicaule_irumtiense_population_genomics",
+        "direction": 0.25, "transition_count": 0.25, "within_lineage": 0,
+        "introgression": 1, "mechanism": 1, "nuclear_gap": 0,
+        "cross_region": 0.25, "replicate": 1, "technical_penalty": 0,
+        "action": "sample multiple brevicaule and irumtiense populations for gene flow, colour haplotypes and mechanistic comparison",
+        "notes": "Published sister-clade context (Nipponocirsium) already favours a coloured ancestral context, so Arenicola is no longer a high-value topology-gap target. Its remaining value is population history, introgression and replicated white-mechanism tests.",
     },
     {
         "candidate": "C_kawakamii_vs_C_tatakaense_population_genomics",
