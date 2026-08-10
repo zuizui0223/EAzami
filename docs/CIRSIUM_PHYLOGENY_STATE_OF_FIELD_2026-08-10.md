@@ -9,7 +9,7 @@ This document replaces the earlier practice of treating a few regional papers as
 3. global and regional species-level radiations;
 4. population history, hybridization, polyploidy and organelle capture.
 
-The underlying curated records are in `data/evidence/cirsium_phylogeny_literature_registry_2026-08-10.csv`. The registry is deliberately evidence-typed: a plastome paper is not counted as equivalent to a multilocus nuclear species tree, and cytology is not converted into a topology.
+The curated source records are split into a core registry and regional additions and are validated/merged by `analysis/build_cirsium_phylogeny_registry.py`. A plastome paper is not counted as equivalent to a multilocus nuclear species tree, and cytology is not converted into a topology.
 
 ## 1. Evidence hierarchy used by EAzami
 
@@ -32,7 +32,7 @@ Tier B remains informative for nomenclature, candidate sister relationships and 
 
 ### Tier C — supporting reticulation or cytotype evidence
 
-- AFLP, flow cytometry, chromosome counts, pollen fertility, local hybrid confirmation;
+- AFLP, flow cytometry, chromosome counts, pollen fertility and local hybrid confirmation;
 - critical taxonomic arguments that interpret existing trees.
 
 Tier C determines which alternative histories must be tested, especially introgression, allopolyploidy and mixed cytotypes.
@@ -57,7 +57,9 @@ Early ITS/plastid studies established the broad tribal framework but left diffic
 
 ### 2.2 A broad global *Cirsium* nuclear backbone now exists
 
-Moreyra et al. (2025; DOI `10.1016/j.ympev.2025.108285`) sampled 299 plants representing 251 taxa and inferred phylogenies from 350 nuclear loci. The study contains 266 *Cirsium* accessions representing 248 species, making it the largest species-level nuclear framework for the genus to date. It supports a Western Palearctic origin of the Carduus–*Cirsium* group and identifies Pleistocene radiations following dispersal to Japan and North America.
+Moreyra et al. (2025; DOI `10.1016/j.ympev.2025.108285`) sampled 299 plants representing 251 taxa, including 266 *Cirsium* accessions representing 248 species. The study used the **Compositae1061 target-enrichment probe set** and retained 350 nuclear loci after orthology assessment and filtering. It is therefore not a separate “350-locus bait panel”; it is a Compositae1061-compatible analysis framework whose final retained locus set and filtering decisions should be recovered from the published artifacts.
+
+The resulting concatenated and coalescent trees provide the largest species-level nuclear framework for the genus to date. The study supports a Western Palearctic origin of the Carduus–*Cirsium* group and identifies Pleistocene radiations following dispersal to Japan and North America.
 
 **Consensus:** it is no longer defensible to describe the global *Cirsium* nuclear backbone as almost wholly unknown.
 
@@ -66,7 +68,7 @@ Moreyra et al. (2025; DOI `10.1016/j.ympev.2025.108285`) sampled 299 plants repr
 - the study covers roughly 60% of the genus rather than all accepted taxa;
 - many taxa are represented by one or very few individuals;
 - accession-level population structure, colour polymorphism and local introgression are largely outside its design;
-- the exact Supplementary Table S1 and machine-readable final tree remain recovery targets in this repository;
+- the exact Supplementary Table S1 and machine-readable final trees remain recovery targets in this repository;
 - a missing accepted-name hit in PRJNA957074 is not proof that a taxon is absent from the published tree until synonyms and unsequenced supplement-only tips are checked.
 
 ## 3. Generic boundaries are still actively debated
@@ -77,7 +79,7 @@ Ackerfield et al. (2020; DOI `10.1002/tax.12288`) showed that the Carduus–*Cir
 
 Del Guacchio et al. (2022; DOI `10.1080/11263504.2022.2131924`) restored *Lophiolepis* from *Cirsium* sect. *Eriolepis* and segregated *Epitrachys*. Bureš et al. (2023; DOI `10.23855/preslia.2023.185`) found genomic, cytological and marker-phylogenetic support for *Lophiolepis*. Moreyra et al. (2023; DOI `10.3390/plants12173083`) used Hyb-Seq to revise African Carduinae and described *Afrocarduus*, *Afrocirsium* and *Nuriaea*, but did not accept every earlier segregation. Del Guacchio et al. (2024; DOI `10.3390/plants13233399`) and Moreyra & Susanna (2024; DOI `10.3390/plants13233400`) then published an explicit comment–reply exchange over *Lophiolepis* and monophyly criteria.
 
-Bureš et al. (2024; DOI `10.1111/plb.13653`) added decisive biological complexity: tetraploid *C. vulgare* has approximately equal nuclear ancestry from *Cirsium* and *Lophiolepis*, while its organellar signal groups with *Cirsium*. A strictly bifurcating generic classification cannot make a hybrid origin disappear.
+Moreyra et al. (2025) recovered two major subgenera in a broadly treated *Cirsium* and argued that most apparent generic instability is concentrated in suspected hybridogenic taxa such as *C. vulgare* and *C. italicum*. Bureš et al. (2024; DOI `10.1111/plb.13653`) demonstrated that tetraploid *C. vulgare* has approximately equal nuclear ancestry from *Cirsium* and *Lophiolepis*, while its organellar signal groups with *Cirsium*. A strictly bifurcating generic classification cannot make a hybrid origin disappear.
 
 **EAzami policy:**
 
@@ -93,7 +95,7 @@ Bureš et al. (2024; DOI `10.1111/plb.13653`) added decisive biological complexi
 
 Kelch & Baldwin (2003; DOI `10.1046/j.1365-294X.2003.01710.x`) detected very low ITS/ETS divergence and proposed either rapid ecological radiation or unusually conservative rDNA evolution. Ackerfield et al. (2020; DOI `10.1111/jse.12692`) demonstrated polyphyly in multiple species–variety complexes and attributed the taxonomic difficulty to convergence, hybridization and incipient speciation among other factors.
 
-Siniscalchi et al. (2023; DOI `10.1086/724310`) moved the region to target-capture scale with 64 taxa and Compositae1061. They inferred a North American origin around 2 Ma and several Pleistocene diversification bursts.
+Siniscalchi et al. (2023; DOI `10.1086/724310`) moved the region to Compositae1061 target-capture scale with 64 taxa. They inferred a North American origin around 2 Ma and several Pleistocene diversification bursts.
 
 **Status:** North America has both a modern regional phylogenomic tree and an explicit diversification analysis. Population histories and difficult species complexes remain local rather than continent-wide gaps.
 
@@ -128,24 +130,29 @@ Taiwanese karyotype work (DOI `10.1508/cytologia.90.207`) shows that most taxa a
 - causal colour haplotypes and their ancestry are unknown;
 - several Taiwanese taxa outside the focal clades lack equivalent transcriptomic coverage.
 
-### 4.4 Korea, eastern China and the Russian Far East
+### 4.4 China, Korea and the Russian Far East
+
+Recent Chinese literature is rich in taxonomic revision, local species delimitation and isolated organelle records. For example, *C. medogense* (2026; DOI `10.11646/phytotaxa.760.1.2`) was placed locally in sect. Epitrachys using ITS plus `matK`, `ndhF` and `trnL–trnF`; *Lamyropsis macracantha* was reassigned using morphology plus ITS/ETS; and several revisions have changed the accepted concepts of *C. japonicum*, *C. sieboldii*, *C. yezoense*, *C. lipskyi* and allied names.
+
+These studies are essential for taxon-name harmonization and local relationships, but they do not yet constitute one dense China-wide nuclear phylogenomic framework.
 
 Korean chromosome work (DOI `10.1508/cytologia.86.375`) documents diploidy, tetraploidy, aneuploidy and B chromosomes across nine *Cirsium* taxa. Morphological revisions record historical white-flowered forms in several taxa, but those names are not evidence that extant natural populations still exist.
 
 The literature is rich in complete plastomes for Korean and Chinese taxa, including *C. rhinoceros*, *C. setosum* and *C. shansiense*. These are useful maternal-lineage records but usually involve one focal accession and small plastome trees.
 
-**Status:** this is the weakest major geographic sector for a modern, dense, multi-locus nuclear framework linked to vouchers, colour states and cytotypes.
+**Status:** China–Korea–Russian-Far-East coverage is the weakest major geographic sector for a modern, dense, multi-locus nuclear framework linked to vouchers, colour states, populations and cytotypes.
 
-**Critical distinction:** some apparent gaps may vanish once Moreyra Supplementary Table S1 and PRJNA957074 synonyms are fully recovered. Only after this audit should new species-level RAD/target-capture sequencing be justified.
+**Critical distinction:** some apparent gaps may vanish once Moreyra Supplementary Table S1 and PRJNA957074 synonyms are fully recovered. Only after this audit should new species-level target capture be justified.
 
 ## 5. Reticulation and cytogenetics are central, not side issues
 
-Central European studies show that natural *Cirsium* hybridization is frequent and can remain reproductively consequential:
+European and western Asian studies show that natural *Cirsium* hybridization is recurrent and can remain reproductively consequential:
 
 - genome-size surveys documented diploid hybrids, triploidy, B-chromosome-associated variation and tetraploid *C. vulgare*;
 - pollen and AFLP analyses found viable pollen in many natural hybrids and evidence consistent with backcrossing/introgression;
 - *Cirsium × sudae* was confirmed as homoploid F1s plus a backcross;
-- *C. vulgare* was demonstrated to be an intergeneric allotetraploid using RAD-seq.
+- *C. vulgare* was demonstrated to be an intergeneric allotetraploid using RAD-seq;
+- Turkish studies continue to document ITS-polymorphic and morphologically intermediate natural hybrids.
 
 Therefore, discordant colour-associated haplotypes may reflect:
 
@@ -163,6 +170,7 @@ EAzami must compare a nuclear species-tree ensemble with local ancestry/network 
 
 - Cardueae deep relationships are now well resolved with Hyb-Seq.
 - A broad global *Cirsium* nuclear backbone exists and is substantially better than older barcode trees.
+- Compositae1061 provides a reusable bridge across the deep Cardueae, North American and global *Cirsium* studies.
 - Japan and North America each contain young Pleistocene radiations.
 - Taiwan/Ryukyu focal clades have useful phylotranscriptomic backbones.
 - hybridization, ILS and polyploidy are empirically real and can create strong cytonuclear conflict.
@@ -182,7 +190,15 @@ EAzami must compare a nuclear species-tree ensemble with local ancestry/network 
 
 ### Species-level backbone
 
-Use target capture or a compatible high-copy nuclear framework for taxa genuinely missing from modern nuclear trees. Compositae1061 is attractive because it connects to the Cardueae and North American studies; the 350-locus Moreyra panel is attractive because it directly connects to the current global *Cirsium* tree. The exact bait/locus choice should be decided after recovering the Moreyra tree files and assessing overlap/data reuse.
+Use **Compositae1061-compatible target capture** for taxa genuinely missing from modern nuclear trees. This directly connects to Herrando-Moraira 2019, Siniscalchi 2023 and Moreyra 2025. After recovering the Moreyra artifacts, the analysis should reproduce or intersect its orthology assessment and final 350 retained nuclear loci rather than treating those loci as a separate bait kit.
+
+Before ordering new capture libraries:
+
+1. recover the exact Moreyra locus/sample/tree files;
+2. identify which Compositae1061 loci were retained under its orthology filters;
+3. quantify locus overlap with the Herrando and North American datasets;
+4. test whether existing raw reads can fill focal taxa through reanalysis;
+5. sequence only genuine transition-critical missing taxa.
 
 ### Population-level focal systems
 
@@ -209,10 +225,10 @@ Every focal population should carry:
 ## 8. Immediate repository actions
 
 1. Run the PRJNA957074 metadata recovery and harmonize all public tips.
-2. Recover Moreyra Supplementary Data 1 and exact nuclear trees.
+2. Recover Moreyra Supplementary Data 1, exact nuclear trees and retained-locus information.
 3. Download the openly archived Herrando-Moraira Cardueae tree set for deep outgroups.
 4. Recover Chang 2025/2026 machine-readable trees or reconstruct versioned topology files from published outputs if none were deposited.
-5. Expand the curated literature registry by backward/forward citation snowballing.
+5. Complete automated candidate screening plus backward/forward citation snowballing.
 6. Build one unified table:
 
 ```text
@@ -236,6 +252,6 @@ sampling_gap_class
 
 The present field is neither “phylogeny already solved” nor “almost nothing is known.” The accurate formulation is:
 
-> Deep and global species-level *Cirsium* phylogeny has advanced rapidly through Hyb-Seq and target capture, but the taxonomic treatment of major lineages remains debated, and East Asian colour evolution depends on unresolved population history, reticulation and cytotype variation within a young regional radiation.
+> Deep and global species-level *Cirsium* phylogeny has advanced rapidly through Hyb-Seq and Compositae1061 target capture, but the taxonomic treatment of major lineages remains debated, and East Asian colour evolution depends on unresolved population history, reticulation and cytotype variation within young regional radiations.
 
-That formulation determines the role of new data: **target capture closes genuine species-level gaps; RAD-seq/resequencing resolves morph and population history; cytogenetics and transcriptomics identify the mechanism.**
+That formulation determines the role of new data: **Compositae1061 target capture closes genuine species-level gaps; RAD-seq/resequencing resolves morph and population history; cytogenetics and transcriptomics identify the mechanism.**
