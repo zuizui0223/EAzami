@@ -5,9 +5,12 @@ on:
     paths:
       - "analysis/recover_cirsium_phylogeny_literature.py"
       - "analysis/build_cirsium_phylogeny_registry.py"
+      - "analysis/validate_cirsium_population_history_registry.py"
       - "tests/test_recover_cirsium_phylogeny_literature.py"
       - "tests/test_build_cirsium_phylogeny_registry.py"
+      - "tests/test_validate_cirsium_population_history_registry.py"
       - "data/evidence/cirsium_phylogeny_literature_registry_*.csv"
+      - "data/evidence/cirsium_population_history_literature_*.csv"
       - "data/evidence/cirsium_phylogeny_search_queries.txt"
       - ".github/workflows/recover-cirsium-phylogeny-literature.yml"
   workflow_dispatch:
@@ -40,16 +43,19 @@ jobs:
         run: |
           python -m py_compile \
             analysis/recover_cirsium_phylogeny_literature.py \
-            analysis/build_cirsium_phylogeny_registry.py
+            analysis/build_cirsium_phylogeny_registry.py \
+            analysis/validate_cirsium_population_history_registry.py
           python -m unittest \
             tests/test_recover_cirsium_phylogeny_literature.py \
             tests/test_build_cirsium_phylogeny_registry.py \
+            tests/test_validate_cirsium_population_history_registry.py \
             -v
 
       - name: Validate curated evidence registries
         run: |
           python analysis/build_cirsium_phylogeny_registry.py \
             --output /tmp/cirsium_phylogeny_literature_registry_current.csv
+          python analysis/validate_cirsium_population_history_registry.py
           python - <<'PY'
           import csv
           from pathlib import Path
@@ -58,8 +64,8 @@ jobs:
           with path.open(encoding="utf-8", newline="") as handle:
               rows = list(csv.DictReader(handle))
           print(f"validated_curated_records={len(rows)}")
-          if len(rows) < 30:
-              raise SystemExit("Curated evidence registry unexpectedly contains fewer than 30 records")
+          if len(rows) < 50:
+              raise SystemExit("Curated phylogeny registry unexpectedly contains fewer than 50 records")
           PY
 
   recover-literature:
@@ -79,9 +85,10 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Build current curated registry
+      - name: Build and validate current curated registries
         run: |
           python analysis/build_cirsium_phylogeny_registry.py
+          python analysis/validate_cirsium_population_history_registry.py
 
       - name: Recover Crossref and Europe PMC candidates
         env:
@@ -110,7 +117,7 @@ jobs:
               curated = list(csv.DictReader(handle))
           errors = [row for row in logs if row["status"] != "ok"]
           high = [row for row in rows if float(row["relevance_score"]) >= 8.0]
-          print(f"curated_records={len(curated)}")
+          print(f"curated_phylogeny_records={len(curated)}")
           print(f"unique_candidates={len(rows)}")
           print(f"high_priority_candidates={len(high)}")
           print(f"query_errors={len(errors)}")
@@ -125,6 +132,7 @@ jobs:
           name: cirsium-phylogeny-evidence-map-${{ github.run_id }}
           path: |
             data/evidence/generated/cirsium_phylogeny_literature_registry_current.csv
+            data/evidence/cirsium_population_history_literature_2026-08-10.csv
             data/evidence/generated/cirsium_phylogeny_literature_candidates.csv
             data/evidence/generated/cirsium_phylogeny_search_log.csv
           if-no-files-found: error
