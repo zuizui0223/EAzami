@@ -1,0 +1,78 @@
+name: Recover Cirsium phylogeny literature candidates
+
+on:
+  workflow_dispatch:
+    inputs:
+      rows_per_query:
+        description: Maximum records requested per query and source
+        required: false
+        default: "50"
+  schedule:
+    - cron: "17 3 1 * *"
+
+permissions:
+  contents: read
+
+jobs:
+  recover-literature:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CROSSREF_MAILTO: ${{ vars.CROSSREF_MAILTO }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Compile and test recovery code
+        run: |
+          python -m py_compile analysis/recover_cirsium_phylogeny_literature.py
+          python -m unittest tests/test_recover_cirsium_phylogeny_literature.py -v
+
+      - name: Recover Crossref and Europe PMC candidates
+        env:
+          ROWS_PER_QUERY: ${{ github.event.inputs.rows_per_query || '50' }}
+        run: |
+          python analysis/recover_cirsium_phylogeny_literature.py \
+            --queries data/evidence/cirsium_phylogeny_search_queries.txt \
+            --outdir data/evidence/generated \
+            --rows-per-query "$ROWS_PER_QUERY" \
+            --source both
+
+      - name: Summarize generated evidence candidates
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          candidates = Path("data/evidence/generated/cirsium_phylogeny_literature_candidates.csv")
+          log = Path("data/evidence/generated/cirsium_phylogeny_search_log.csv")
+          with candidates.open(encoding="utf-8", newline="") as handle:
+              rows = list(csv.DictReader(handle))
+          with log.open(encoding="utf-8", newline="") as handle:
+              logs = list(csv.DictReader(handle))
+          errors = [row for row in logs if row["status"] != "ok"]
+          high = [row for row in rows if float(row["relevance_score"]) >= 8.0]
+          print(f"unique_candidates={len(rows)}")
+          print(f"high_priority_candidates={len(high)}")
+          print(f"query_errors={len(errors)}")
+          if errors:
+              for row in errors[:20]:
+                  print(f"ERROR {row['source']} :: {row['query']} :: {row['error']}")
+          PY
+
+      - name: Upload unreviewed candidate evidence map
+        uses: actions/upload-artifact@v4
+        with:
+          name: cirsium-phylogeny-literature-candidates-${{ github.run_id }}
+          path: |
+            data/evidence/generated/cirsium_phylogeny_literature_candidates.csv
+            data/evidence/generated/cirsium_phylogeny_search_log.csv
+          if-no-files-found: error
+          retention-days: 90
