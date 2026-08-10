@@ -1,0 +1,86 @@
+name: Recover Moreyra author repository
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_moreyra_author_repository.py"
+      - "tests/test_recover_moreyra_author_repository.py"
+      - ".github/workflows/recover-moreyra-author-repository.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile analysis/recover_moreyra_author_repository.py
+          python -m unittest tests/test_recover_moreyra_author_repository.py -v
+
+      - name: Recover and audit public author-repository files
+        run: |
+          python analysis/recover_moreyra_author_repository.py \
+            --outdir data/evidence/generated/moreyra_author_repository \
+            --force
+
+      - name: Validate recovery invariants
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          outdir = Path("data/evidence/generated/moreyra_author_repository")
+          summary = json.loads(
+              (outdir / "author_repository_audit_summary.json").read_text(encoding="utf-8")
+          )
+          with (outdir / "source_provenance.csv").open(encoding="utf-8", newline="") as handle:
+              provenance = list(csv.DictReader(handle))
+          with (outdir / "locus_occupancy.csv").open(encoding="utf-8", newline="") as handle:
+              loci = list(csv.DictReader(handle))
+          with (outdir / "paralog_report_sheets.csv").open(encoding="utf-8", newline="") as handle:
+              sheets = list(csv.DictReader(handle))
+
+          print(f"source_files={len(provenance)}")
+          print(f"hybpiper_sample_rows={summary['hybpiper_stats']['sample_rows']}")
+          print(f"target_locus_columns={summary['seq_lengths']['target_locus_columns']}")
+          print(
+              "loci_occupancy_ge_0_80="
+              + str(summary['seq_lengths']['occupancy_threshold_counts']['ge_0_80'])
+          )
+          print(f"paralog_report_sheets={len(sheets)}")
+          print(f"locus_rows={len(loci)}")
+
+          if len(provenance) != 3:
+              raise SystemExit("Expected exactly three author-repository files")
+          if summary['hybpiper_stats']['sample_rows'] < 295:
+              raise SystemExit("Unexpectedly few HybPiper sample rows")
+          if summary['seq_lengths']['target_locus_columns'] < 1060:
+              raise SystemExit("Unexpectedly few target-locus columns")
+          if len(loci) != summary['seq_lengths']['target_locus_columns']:
+              raise SystemExit("Locus table and summary disagree")
+          if not sheets:
+              raise SystemExit("No XLSX sheets were extracted")
+          if summary['paper_filtering_context']['exact_350_locus_list_recovered']:
+              raise SystemExit("The exact final locus list must not be claimed without explicit evidence")
+          PY
+
+      - name: Upload author-repository audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: moreyra-author-repository-audit-${{ github.run_id }}
+          path: data/evidence/generated/moreyra_author_repository
+          if-no-files-found: error
+          retention-days: 90
