@@ -1,0 +1,11 @@
+stage,count,reproducibility_status,interpretation
+paper_reported_initially_mapped_loci,1064,paper_reported,"Paper total; three more than the 1061 named public matrix columns"
+public_named_locus_universe,1061,directly_recovered,"Named loci shared by the public sequence-length and paralog matrices"
+paralog_warning_gt10,478,directly_reconstructed,"Automatic discard class under the paper's warning-count rule"
+paralog_warning_1_to_10,307,directly_reconstructed,"Manual gene-tree review class; retention outcome unavailable"
+paralog_warning_zero,276,directly_reconstructed,"No warning in the public paralog matrix"
+raw_sequence_occupancy_ge_0_80,1001,directly_reconstructed,"Positive sequence length in at least 80 percent of 302 biological rows"
+warning_le10_and_raw_occupancy_ge_0_80,531,directly_reconstructed,"Reproducible pre-manual candidate set"
+no_warning_and_raw_occupancy_ge_0_80,241,directly_reconstructed,"Conservative high-occupancy no-warning subset"
+manual_review_and_raw_occupancy_ge_0_80,290,directly_reconstructed,"High-occupancy loci still requiring unavailable manual orthology decisions"
+paper_reported_final_alignments,350,paper_reported_not_exactly_reconstructed,"Exact locus identities unavailable without manual gene-tree and final alignment records"
