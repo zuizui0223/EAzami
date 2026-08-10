@@ -1,6 +1,12 @@
 name: Recover Cirsium phylogeny literature candidates
 
 on:
+  pull_request:
+    paths:
+      - "analysis/recover_cirsium_phylogeny_literature.py"
+      - "tests/test_recover_cirsium_phylogeny_literature.py"
+      - "data/evidence/cirsium_phylogeny_search_queries.txt"
+      - ".github/workflows/recover-cirsium-phylogeny-literature.yml"
   workflow_dispatch:
     inputs:
       rows_per_query:
@@ -14,7 +20,27 @@ permissions:
   contents: read
 
 jobs:
+  test-literature-recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compile and test recovery code
+        run: |
+          python -m py_compile analysis/recover_cirsium_phylogeny_literature.py
+          python -m unittest tests/test_recover_cirsium_phylogeny_literature.py -v
+
   recover-literature:
+    if: github.event_name != 'pull_request'
+    needs: test-literature-recovery
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
@@ -28,12 +54,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: pip
-
-      - name: Compile and test recovery code
-        run: |
-          python -m py_compile analysis/recover_cirsium_phylogeny_literature.py
-          python -m unittest tests/test_recover_cirsium_phylogeny_literature.py -v
 
       - name: Recover Crossref and Europe PMC candidates
         env:
