@@ -6,9 +6,12 @@ on:
       - "analysis/recover_chang2026_takaoense_figure.py"
       - "analysis/download_chang2026_figure1_image.py"
       - "analysis/recover_chang2026_takaoense_preprint.py"
+      - "analysis/validate_chang2026_takaoense_voucher_evidence.py"
       - "tests/test_recover_chang2026_takaoense_figure.py"
       - "tests/test_download_chang2026_figure1_image.py"
       - "tests/test_recover_chang2026_takaoense_preprint.py"
+      - "tests/test_validate_chang2026_takaoense_voucher_evidence.py"
+      - "data/evidence/chang2026_takaoense_voucher_morph_evidence_*.csv"
       - ".github/workflows/recover-chang2026-takaoense-figure.yml"
   workflow_dispatch:
 
@@ -33,14 +36,49 @@ jobs:
           python -m py_compile \
             analysis/recover_chang2026_takaoense_figure.py \
             analysis/download_chang2026_figure1_image.py \
-            analysis/recover_chang2026_takaoense_preprint.py
+            analysis/recover_chang2026_takaoense_preprint.py \
+            analysis/validate_chang2026_takaoense_voucher_evidence.py
           python -m unittest \
             tests/test_recover_chang2026_takaoense_figure.py \
             tests/test_download_chang2026_figure1_image.py \
             tests/test_recover_chang2026_takaoense_preprint.py \
+            tests/test_validate_chang2026_takaoense_voucher_evidence.py \
             -v
 
-      - name: Validate unresolved six-voucher evidence ledger
+      - name: Validate frozen voucher and source evidence
+        run: |
+          python analysis/validate_chang2026_takaoense_voucher_evidence.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path(
+              "data/evidence/generated/"
+              "chang2026_takaoense_voucher_evidence_summary.json"
+          )
+          summary = json.loads(path.read_text(encoding="utf-8"))
+          print(f"voucher_rows={summary['voucher_rows']}")
+          print(f"supplement_s6_exact_records={summary['supplement_s6_exact_records']}")
+          print(f"supplement_s6_not_recovered={summary['supplement_s6_not_recovered']}")
+          print(
+              "s1_s6_herbarium_conflicts="
+              + "|".join(summary['s1_s6_herbarium_conflicts'])
+          )
+          print(f"direct_sample_morph_assignments={summary['direct_sample_morph_assignments']}")
+
+          if summary['voucher_rows'] != 6:
+              raise SystemExit("Expected six voucher rows")
+          if summary['supplement_s6_exact_records'] != 4:
+              raise SystemExit("Expected four exact S6 collector records")
+          if summary['supplement_s6_not_recovered'] != 2:
+              raise SystemExit("Expected two collector numbers absent from S6")
+          if summary['s1_s6_herbarium_conflicts'] != ['ccy3839']:
+              raise SystemExit("Expected only the ccy3839 TCF/TNM conflict")
+          if summary['direct_sample_morph_assignments'] != 0:
+              raise SystemExit("No sample-level W/BP label is directly recovered yet")
+          PY
+
+      - name: Validate unresolved six-voucher figure ledger
         run: |
           python - <<'PY'
           import csv
@@ -123,7 +161,8 @@ jobs:
               ),
               "next_evidence": (
                   "Recover Figure 1 through an allowed browser/manual route, "
-                  "NCBI BioSample metadata, herbarium vouchers, or author confirmation."
+                  "herbarium vouchers, or author confirmation. NCBI metadata have "
+                  "already been audited and contain no W/BP attribute."
               )
           }
           (outdir / "live_recovery_status.json").write_text(
