@@ -37,6 +37,19 @@ Implemented:
 
 The local offline parser/audit path was tested with the verified *C. domonii* SRA record. Full online project recovery awaits execution in an environment with NCBI access; the workflow is designed to produce and upload the complete tables after the branch is available to GitHub Actions.
 
+### Directly verified project anchor
+
+The exact public SRA metadata recovered for *C. domonii* are:
+
+- `SAMN34240283`
+- `SRS18284452`
+- `SRX21011499`
+- `SRR25265717`
+- library `Cirsium-domonii_FJ318`
+- Japan: Honshu
+
+This validates the accession-level data model and offline tests, but it is not represented as completion of the full project recovery.
+
 ## B. Existing-data tasks still open
 
 1. Execute full `PRJNA957074` runinfo recovery.
