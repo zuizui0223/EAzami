@@ -1,0 +1,29 @@
+{
+  "analysis": "Chang 2026 var. takaoense six-tip topology robustness",
+  "root_assumption": "Sinocirsium root fixed coloured",
+  "branch_lengths_used": false,
+  "tip_count": 6,
+  "rooted_binary_topology_count": 945,
+  "published_topology_id": "T0297",
+  "published_topology_newick": "(((((NH_3835_BP,TJ_3807_BP),FC_3559_BP),LT_3839_W),FB_3629_W),WY_3560_W);",
+  "published_minimum_changes": 2,
+  "published_optimal_histories": "1L+1R",
+  "published_no_regain_minimum_changes": 4,
+  "published_no_regain_penalty": 2,
+  "minimum_rf_distance_to_no_regain_optimum": 4,
+  "nearest_no_regain_topology_count": 7,
+  "all_topologies_regain_required_count": 270,
+  "all_topologies_regain_required_fraction": 0.285714,
+  "bp_monophyletic_regain_required_count": 36,
+  "bp_monophyletic_topology_count": 45,
+  "w_monophyletic_regain_required_count": 0,
+  "w_monophyletic_topology_count": 45,
+  "single_split_perturbation_regain_required_count": 9,
+  "single_split_perturbation_topology_count": 9,
+  "interpretation": {
+    "local_robustness": "Every topology at rooted RF distance <=2 from Figure 1 still requires a regain in all minimum-change histories.",
+    "global_sensitivity": "Across all 945 rooted binary resolutions, only 270 require a regain; the inference is supported by the published local ordering, not by the 3 BP / 3 W counts alone.",
+    "critical_structure": "BP monophyly strongly enriches regain support (36/45), whereas W monophyly always permits a loss-only optimum (0/45 require regain).",
+    "claim_limit": "This remains a topology-supported candidate regain. Introgression, ancestral polymorphism and molecular pathway reactivation are untested."
+  }
+}
