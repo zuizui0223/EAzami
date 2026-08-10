@@ -123,7 +123,11 @@ class LiteratureRecoveryTests(unittest.TestCase):
         rows = lit.dedupe(records)
         self.assertEqual(len(rows), 1)
         row = rows[0]
-        self.assertEqual(row["doi"], "10.1000/same")
+        # Source text is preserved for generic dedupe input, while matching and
+        # record identity use a canonical DOI. Real API parsers already emit a
+        # canonical DOI before reaching this function.
+        self.assertEqual(row["doi"], "10.1000/SAME")
+        self.assertEqual(row["record_key"], "doi:10.1000/same")
         self.assertEqual(row["source"], "crossref|europepmc")
         self.assertEqual(
             row["query"],
