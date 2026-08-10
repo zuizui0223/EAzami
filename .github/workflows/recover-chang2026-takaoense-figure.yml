@@ -138,6 +138,7 @@ jobs:
         id: official_image
         continue-on-error: true
         run: |
+          set -o pipefail
           mkdir -p data/evidence/generated/chang2026_takaoense_figure
           python analysis/download_chang2026_figure1_image.py \
             --outdir data/evidence/generated/chang2026_takaoense_figure \
@@ -149,6 +150,7 @@ jobs:
         if: steps.official_image.outcome != 'success'
         continue-on-error: true
         run: |
+          set -o pipefail
           python analysis/recover_chang2026_takaoense_preprint.py \
             --outdir data/evidence/generated/chang2026_takaoense_figure \
             --force \
