@@ -53,6 +53,20 @@ The 350-nuclear-locus Carduus–Cirsium phylogeny includes 38 Japanese *Cirsium*
 
 Important consequence: new RAD-seq in Japan should focus on white/coloured population polymorphism, unsampled species, introgression and bridge populations rather than rebuilding the species-level tree blindly.
 
+### Reproducible recovery of deposited project tips
+
+`analysis/recover_ncbi_project_runs.py` reconstructs the public sample set directly from official NCBI SRA metadata. It produces a run-level table, a unique-taxon summary and an exact-match audit for 32 focal East Asian taxa. This distinguishes:
+
+- an exact public project tip;
+- a paper/tree placement whose accession is still pending;
+- a project-tip status that is unresolved rather than absent;
+- a true modern nuclear gap after synonyms and supplements are checked;
+- a species already resolved by a separate Chang nuclear dataset.
+
+The directly verified anchor is *C. domonii* (`SAMN34240283`, `SRX21011499`, `SRR25265717`). A manual workflow at `.github/workflows/recover-ncbi-project-metadata.yml` runs the same recovery and uploads the generated tables without modifying the repository.
+
+See `docs/PRJNA957074_RECOVERY_UPDATE_2026-08-10.md`.
+
 ## Primary hypotheses
 
 - **H1 — repeated loss:** floral anthocyanin loss evolved independently multiple times in East Asian *Cirsium*.
@@ -70,7 +84,8 @@ Important consequence: new RAD-seq in Japan should focus on white/coloured popul
 - Taiwan Nipponocirsium: white *C. kawakamii* vs coloured *C. tatakaense* / *C. pengii*
 - Japan: within-species white/coloured *C. pendulum* and *C. sieboldii*
 - Japan–China bridge populations of widespread focal species where available
-- additional Japanese and Chinese transition systems discovered by the atlas
+- Korea–NE Asia: historical white-form candidates whose extant status and nuclear placement are being audited
+- additional East Asian transition systems discovered by the atlas
 
 ## Work that requires new data
 
@@ -81,6 +96,8 @@ Tracked as GitHub issues so it does not block current analytical work:
 - #4 — RAD-seq + ploidy sampling and reticulation tests
 - #5 — downstream selection tests after mechanism/history is resolved
 - #6 — completion of the flower-colour atlas and literature-backed coding
+- #7 — exact published tree files and branch lengths
+- #8 — exact Japanese placements and Korea/NE Asia expansion
 
 ## Repository structure
 
@@ -88,23 +105,30 @@ Tracked as GitHub issues so it does not block current analytical work:
 - `docs/PRELIMINARY_HYPOTHESES_2026-08-09.md` — hypotheses from existing evidence only
 - `docs/EVIDENCE_AUDIT_2026-08-09.md` — source-backed audit of current nuclear phylogenomics and priorities
 - `docs/PHYLOGENY_GAP_AND_RADSEQ_PLAN.md` — RAD-seq gap logic
+- `docs/PRJNA957074_RECOVERY_UPDATE_2026-08-10.md` — project-tip recovery and evidence-state rules
 - `data/regional_master_taxa_seed.csv` — current source-backed East Asian master table
+- `data/evidence/focal_taxa_prjna957074.txt` — focal accepted names for project recovery
+- `data/evidence/prjna957074_focal_tip_recovery_2026-08-10.csv` — current accession-level audit
 - `data/schema/flower_colour_records.csv` — observation-level flower-colour schema
 - `data/schema/taxon_transition_candidates.csv` — transition-screening schema
 - `sampling/RADSEQ_PANEL_V0_1.csv` — first hypothesis-driven RAD sampling panel
-- `analysis/fitch_transition_sensitivity.py` — minimal transition-count sensitivity screen
-- `analysis/fitch_transition_sensitivity.csv` — current parsimony results
-- `analysis/preliminary_hypothesis_screen.py` — qualitative evidence-ranking analysis
+- `sampling/RADSEQ_PANEL_V0_2_EIG.csv` — proxy-information-gain-ranked panel
+- `analysis/fitch_transition_sensitivity.py` — minimum transition-count sensitivity
+- `analysis/directional_transition_sensitivity.py` — root-dependent loss/regain counts
+- `analysis/mk_rate_sensitivity.py` — exploratory ER/ARD Mk sensitivity
+- `analysis/proxy_information_gain_priority.py` — transparent decision-priority scoring
+- `analysis/recover_ncbi_project_runs.py` — complete public SRA/BioSample project recovery
 - `analysis/prioritize_radseq_sampling.py` — ranks RAD-seq candidates
+- `tests/test_recover_ncbi_project_runs.py` — offline recovery-helper tests
 - `molecular/` — pigment, RNA-seq and genomic workflows
 - `manuscript/` — Chapter 2 manuscript materials
 
 ## Analyses that should continue before new field data arrive
 
 1. Complete the source-backed East Asian colour-state atlas.
-2. Recover all usable modern nuclear tip coverage and topologies.
+2. Recover all usable modern nuclear tip coverage and exact deposited sample metadata.
 3. Run population-aware vs species-level transition sensitivity.
-4. Run formal ML/stochastic ancestral-state reconstruction when enough tips are coded.
+4. Run formal ML/stochastic ancestral-state reconstruction when exact trees and enough tips are coded.
 5. Repeat across alternative published nuclear topologies / network-informed scenarios.
 6. Quantify which missing taxon or population changes transition count/direction most strongly.
 7. Freeze RAD-seq panel v1.0 from expected information gain rather than raw taxon count.
