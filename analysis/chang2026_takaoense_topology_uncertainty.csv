@@ -1,0 +1,7 @@
+bp_monophyletic,w_monophyletic,regain_required_at_minimum,no_regain_change_penalty,n_topologies,proportion_of_945,interpretation
+no,no,no,0,630,0.666666667,"At least one minimum-change coloured-root history contains no W->C"
+no,no,yes,1,234,0.247619048,"Every minimum-change coloured-root history contains W->C; best no-regain history costs +1 change(s)"
+no,yes,no,0,36,0.038095238,"At least one minimum-change coloured-root history contains no W->C"
+yes,no,yes,1,18,0.019047619,"Every minimum-change coloured-root history contains W->C; best no-regain history costs +1 change(s)"
+yes,no,yes,2,18,0.019047619,"Every minimum-change coloured-root history contains W->C; best no-regain history costs +2 change(s)"
+yes,yes,no,0,9,0.009523810,"At least one minimum-change coloured-root history contains no W->C"
