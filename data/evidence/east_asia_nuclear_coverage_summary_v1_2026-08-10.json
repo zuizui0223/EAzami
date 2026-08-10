@@ -1,0 +1,43 @@
+{
+  "taxa": 33,
+  "best_species_level_nuclear_status": {
+    "phylotranscriptomic_local_backbone": 9,
+    "multiple_modern_nuclear_sources": 5,
+    "global_target_capture_tip_verified": 7,
+    "no_modern_nuclear_tip_in_integrated_sources": 12
+  },
+  "species_backbone_gap_class": {
+    "species_placement_resolved_in_modern_nuclear_data": 21,
+    "candidate_species_gap_pending_synonym_and_other_dataset_audit": 12
+  },
+  "recommended_next_data": {
+    "population_RAD_or_resequencing_plus_ploidy": 11,
+    "recover_published_morph_identity_then_population_RAD_or_resequencing": 1,
+    "verify_synonyms_and_transition_value_before_target_capture": 9,
+    "reuse_existing_species_backbone_and_complete_trait_evidence": 9,
+    "verify_synonyms_then_Compositae1061_target_capture_then_population_genomics": 3
+  },
+  "priority_A_taxa": [
+    "Cirsium brevicaule",
+    "Cirsium irumtiense",
+    "Cirsium japonicum var. albescens",
+    "Cirsium japonicum var. fukienense",
+    "Cirsium japonicum var. takaoense",
+    "Cirsium kawakamii",
+    "Cirsium pendulum",
+    "Cirsium pengii",
+    "Cirsium sieboldii",
+    "Cirsium tatakaense"
+  ],
+  "priority_A_species_gap_candidates": [],
+  "provenance": {
+    "workflow_run": 31402494609,
+    "artifact_id": 9068244214,
+    "artifact_sha256": "8880a924a32f45014e84e04c896f87b16e4d4666c62c0f5c91230a61cf3c9417",
+    "moreyra_supplement_sha256": "34d15286b4ba0952932c55df3a03a286a0d3dc5fb26ead204e6a1ea16a35f4f1",
+    "moreyra_project_runs": 455,
+    "moreyra_supplement_samples": 299,
+    "moreyra_supplement_samples_linked_to_runinfo": 286,
+    "exact_focal_moreyra_matches": 10
+  }
+}
