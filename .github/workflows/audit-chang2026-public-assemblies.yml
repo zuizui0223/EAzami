@@ -1,0 +1,142 @@
+name: Audit Chang 2026 public transcriptome assemblies
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_ncbi_project_runs.py"
+      - "analysis/reconcile_chang2026_ncbi_runs.py"
+      - "analysis/audit_chang2026_public_transcriptome_assemblies.py"
+      - "tests/test_reconcile_chang2026_ncbi_runs.py"
+      - "tests/test_audit_chang2026_public_transcriptome_assemblies.py"
+      - "data/evidence/chang2026_east_asia_accession_audit_*.csv"
+      - "data/evidence/chang2026_takaoense_figure1_morph_assignments_*.csv"
+      - ".github/workflows/audit-chang2026-public-assemblies.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile \
+            analysis/recover_ncbi_project_runs.py \
+            analysis/reconcile_chang2026_ncbi_runs.py \
+            analysis/audit_chang2026_public_transcriptome_assemblies.py
+          python -m unittest \
+            tests/test_reconcile_chang2026_ncbi_runs.py \
+            tests/test_audit_chang2026_public_transcriptome_assemblies.py \
+            -v
+
+      - name: Recover and reconcile official PRJNA1311153 records
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        run: |
+          python analysis/recover_ncbi_project_runs.py \
+            --bioproject PRJNA1311153 \
+            --outdir /tmp/chang2026_ncbi \
+            --enrich-biosample
+          runinfo=$(find /tmp/chang2026_ncbi -name '*_runinfo.csv' -print -quit)
+          python analysis/reconcile_chang2026_ncbi_runs.py \
+            --runinfo "$runinfo" \
+            --outdir /tmp/chang2026_reconciliation
+
+      - name: Audit NCBI TSA and Assembly links
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        run: |
+          python analysis/audit_chang2026_public_transcriptome_assemblies.py \
+            --manifest /tmp/chang2026_reconciliation/chang2026_sample_run_reconciliation.csv \
+            --outdir /tmp/chang2026_public_assemblies
+
+      - name: Validate audit package
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          outdir = Path("/tmp/chang2026_public_assemblies")
+          summary = json.loads(
+              (outdir / "chang2026_public_assembly_audit_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          def rows(name):
+              with (outdir / name).open(encoding="utf-8-sig", newline="") as handle:
+                  return list(csv.DictReader(handle))
+
+          all_rows = rows("chang2026_public_transcriptome_assembly_audit.csv")
+          takaoense = rows("chang2026_takaoense_public_assembly_audit.csv")
+          errors = [row for row in all_rows if row["query_error"]]
+
+          print(f"sample_rows={len(all_rows)}")
+          print(f"samples_with_public_tsa={summary['samples_with_public_tsa']}")
+          print(
+              "samples_with_public_assembly_without_tsa="
+              f"{summary['samples_with_public_assembly_without_tsa']}"
+          )
+          print(
+              "samples_requiring_de_novo_sra_fallback="
+              f"{summary['samples_requiring_de_novo_sra_fallback']}"
+          )
+          print(f"takaoense_rows={len(takaoense)}")
+          print(f"takaoense_public_tsa_rows={summary['takaoense_public_tsa_rows']}")
+          print(
+              "takaoense_de_novo_sra_fallback_rows="
+              f"{summary['takaoense_de_novo_sra_fallback_rows']}"
+          )
+          print(f"query_error_rows={len(errors)}")
+          for row in takaoense:
+              print(
+                  "TAKAOENSE_ASSEMBLY "
+                  f"{row['code']} {row['voucher']} {row['published_figure_label']} "
+                  f"{row['matched_run']} {row['public_transcriptome_status']} "
+                  f"{row['tsa_accessions'] or row['assembly_accessions'] or 'SRA_FALLBACK'}"
+              )
+
+          if len(all_rows) != 33:
+              raise SystemExit(f"Expected 33 rows, observed {len(all_rows)}")
+          if len(takaoense) != 6:
+              raise SystemExit(f"Expected six takaoense rows, observed {len(takaoense)}")
+          if errors:
+              raise SystemExit(
+                  "One or more NCBI queries failed: "
+                  + "; ".join(f"{row['voucher']}={row['query_error']}" for row in errors)
+              )
+          if any(not row["preferred_public_source"] for row in all_rows):
+              raise SystemExit("One or more rows lack a preferred public source decision")
+          if (
+              summary["samples_with_public_tsa"]
+              + summary["samples_with_public_assembly_without_tsa"]
+              + summary["samples_requiring_de_novo_sra_fallback"]
+              != 33
+          ):
+              raise SystemExit("Public-source decision counts do not sum to 33")
+          PY
+
+      - name: Upload reconciliation and assembly audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: chang2026-public-assembly-audit-${{ github.run_id }}
+          path: |
+            /tmp/chang2026_ncbi/
+            /tmp/chang2026_reconciliation/
+            /tmp/chang2026_public_assemblies/
+          if-no-files-found: error
+          retention-days: 90
