@@ -1,0 +1,7 @@
+study_id,artifact_class,artifact_name,source_url,source_status,sha256,software_or_format,rooting,branch_lengths,node_support,tip_count,locus_count,occupancy_available,public_reads_project,reconstruction_status,provenance_note,review_status
+Moreyra2025,final_species_tree,,,,,,,,,,,,PRJNA957074,not_started,"Prefer deposited authors' final artifact; label any EAzami reanalysis explicitly",pending
+Moreyra2025,retained_locus_list,,,,,,,,,,350,,PRJNA957074,not_started,"Recover exact post-orthology/QC locus identifiers rather than assuming an independent 350-bait panel",pending
+Moreyra2025,locus_occupancy_matrix,,,,,,,,,,,,PRJNA957074,not_started,"Needed to diagnose missing data and East Asian tip comparability",pending
+Moreyra2025,gene_tree_set,,,,,,,,,,,,PRJNA957074,not_started,"Required for reproducible ASTRAL and discordance analysis",pending
+Moreyra2025,concatenated_alignment,,,,,,,,,,,,PRJNA957074,not_started,"Required to reproduce concatenated topology and support",pending
+Moreyra2025,orthology_filter_log,,,,,,,,,,,,PRJNA957074,not_started,"Record paralog exclusion and retained-locus criteria",pending
