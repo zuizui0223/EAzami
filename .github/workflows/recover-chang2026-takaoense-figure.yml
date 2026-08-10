@@ -12,6 +12,7 @@ on:
       - "tests/test_recover_chang2026_takaoense_preprint.py"
       - "tests/test_validate_chang2026_takaoense_voucher_evidence.py"
       - "data/evidence/chang2026_takaoense_voucher_morph_evidence_*.csv"
+      - "data/evidence/chang2026_takaoense_ncbi_*"
       - ".github/workflows/recover-chang2026-takaoense-figure.yml"
   workflow_dispatch:
 
@@ -119,9 +120,8 @@ jobs:
           PY
 
   recover-live:
-    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -134,43 +134,79 @@ jobs:
       - name: Install PDF and image readers
         run: python -m pip install --disable-pip-version-check PyMuPDF Pillow
 
-      - name: Attempt Research Square preprint and Figure 1 recovery
-        id: live_recovery
+      - name: Attempt official Springer Figure 1 PNG recovery
+        id: official_image
         continue-on-error: true
         run: |
           mkdir -p data/evidence/generated/chang2026_takaoense_figure
+          python analysis/download_chang2026_figure1_image.py \
+            --outdir data/evidence/generated/chang2026_takaoense_figure \
+            --force \
+            2>&1 | tee data/evidence/generated/chang2026_takaoense_figure/official_image_recovery.log
+
+      - name: Attempt Research Square/preprint fallback
+        id: preprint_recovery
+        if: steps.official_image.outcome != 'success'
+        continue-on-error: true
+        run: |
           python analysis/recover_chang2026_takaoense_preprint.py \
             --outdir data/evidence/generated/chang2026_takaoense_figure \
             --force \
-            2>&1 | tee data/evidence/generated/chang2026_takaoense_figure/live_recovery.log
+            2>&1 | tee data/evidence/generated/chang2026_takaoense_figure/preprint_recovery.log
 
-      - name: Record unavailable external source without failing the audit
-        if: steps.live_recovery.outcome != 'success'
+      - name: Record live-recovery status
+        if: always()
+        env:
+          OFFICIAL_OUTCOME: ${{ steps.official_image.outcome }}
+          PREPRINT_OUTCOME: ${{ steps.preprint_recovery.outcome }}
         run: |
           python - <<'PY'
           import json
+          import os
           from pathlib import Path
 
           outdir = Path("data/evidence/generated/chang2026_takaoense_figure")
           outdir.mkdir(parents=True, exist_ok=True)
+          official = os.environ.get("OFFICIAL_OUTCOME", "not_run")
+          preprint = os.environ.get("PREPRINT_OUTCOME", "not_run")
+          image = outdir / "chang2026_figure1.png"
+          if image.exists():
+              status = "official_figure1_image_recovered"
+              interpretation = (
+                  "The official Springer Nature Figure 1 image was recovered. "
+                  "Tip labels must be reviewed directly; no locality-based morph "
+                  "assignment is permitted."
+              )
+          elif preprint == "success":
+              status = "preprint_recovery_succeeded"
+              interpretation = (
+                  "The preprint/PDF fallback was recovered for direct figure review."
+              )
+          else:
+              status = "external_source_unavailable_from_github_actions"
+              interpretation = (
+                  "Official Springer image/PDF and preprint endpoints rejected or "
+                  "failed automated GitHub Actions recovery. No morph assignment was made."
+              )
           payload = {
-              "status": "external_source_unavailable_from_github_actions",
-              "interpretation": (
-                  "Springer media/PDF and ResearchGate preprint endpoints rejected "
-                  "automated GitHub Actions clients. No morph assignment was made."
-              ),
+              "status": status,
+              "official_image_outcome": official,
+              "preprint_outcome": preprint,
+              "official_image_exists": image.exists(),
+              "interpretation": interpretation,
               "next_evidence": (
-                  "Recover Figure 1 through an allowed browser/manual route, "
-                  "herbarium vouchers, or author confirmation. NCBI metadata have "
-                  "already been audited and contain no W/BP attribute."
+                  "Review the recovered Figure 1 image when present; otherwise use "
+                  "herbarium vouchers or author confirmation. NCBI identities are "
+                  "already linked one-to-one but contain no W/BP attribute."
               )
           }
           (outdir / "live_recovery_status.json").write_text(
               json.dumps(payload, indent=2) + "\n", encoding="utf-8"
           )
+          print(json.dumps(payload, indent=2))
           PY
 
-      - name: Upload live-recovery diagnostics
+      - name: Upload live-recovery evidence and diagnostics
         uses: actions/upload-artifact@v4
         with:
           name: chang2026-takaoense-figure-evidence-${{ github.run_id }}
