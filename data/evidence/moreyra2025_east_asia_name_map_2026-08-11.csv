@@ -1,0 +1,36 @@
+accepted_taxon,aliases,focal_region,priority_class,reason
+Cirsium domonii,,Japan,B_backbone,Verified Moreyra public-project anchor and Japanese radiation reference
+Cirsium dipsacolepis,,Japan,B_backbone,Independent Japanese arrival/context taxon reported in the broad nuclear tree
+Cirsium pendulum,Cirsium pendulum f. albiflorum;Cirsium pendulum forma albiflorum,Japan_Korea_China_Russian_Far_East,A_population_colour,Documented white/coloured polymorphism and transregional standing-variation test
+Cirsium sieboldii,Cirsium paludigenum;Cirsium sieboldii f. albiflorum,Japan_China_Zhejiang,A_population_colour,Japanese white/coloured comparison plus Chinese synonym bridge
+Cirsium yezoense,Cirsium zhejiangense,Japan_China_Zhejiang,B_coloured_control,Source-backed coloured control and synonym bridge
+Cirsium nipponicum,Cirsium nipponicum var. nipponicum,Korea_Japan,B_reference_genome,Korean island nuclear-genome and plastome resource
+Cirsium nipponicum var. incomptum,Cirsium incomptum,Japan_Taiwan,B_nipponocirsium,Japanese Nipponocirsium coloured reference
+Cirsium kujuense,,Japan,B_nipponocirsium,Japanese Nipponocirsium coloured reference
+Cirsium suffultum,,Japan,B_nipponocirsium,Japanese Nipponocirsium coloured reference
+Cirsium japonicum,Cirsium japonicum var. japonicum,Japan_China_Korea,B_sinocirsium,Continental/Japanese coloured reference and broad taxonomic complex
+Cirsium japonicum var. albescens,,Taiwan,A_transition,Fixed-white Sinocirsium transition candidate
+Cirsium japonicum var. takaoense,,Taiwan,A_transition,Within-variety white/bluish-purple polymorphism and strongest regain candidate
+Cirsium japonicum var. australe,,Taiwan,B_coloured_control,Coloured Sinocirsium sister-lineage control
+Cirsium japonicum var. fukienense,,Taiwan_China_Fujian,B_coloured_control,Coloured/pale-purple island-continent bridge and introgression context
+Cirsium brevicaule,,Ryukyu_Japan,A_transition,White Arenicola lineage and repeated-loss mechanism target
+Cirsium irumtiense,,Ryukyu_Japan,A_transition,Coloured Arenicola sister and population-history target
+Cirsium kawakamii,,Taiwan,A_transition,Strong independent white-loss replicate
+Cirsium tatakaense,,Taiwan,A_transition,Coloured tetraploid sister/control to C. kawakamii
+Cirsium pengii,,Taiwan,B_coloured_control,Coloured Nipponocirsium reference and local rooting context
+Cirsium morii,,Taiwan,B_coloured_control,Pink basal Taiwanese Nipponocirsium reference
+Cirsium taiwanense,,Taiwan,A_screen,Yellow-flowered dysploid candidate outside best-sampled focal clades
+Cirsium lineare,,Taiwan_China_Korea,B_backbone,Coloured regional root/reference and cytotype anchor
+Cirsium setidens,Cirsium setidens f. albiflorum,Korea,A2_white_form_screen,Historical white-form candidate requiring extant-voucher verification
+Cirsium rhinoceros,Cirsium rhinoceros f. albiflorum,Korea_Jeju,A2_white_form_screen,Jeju endemic historical white-form candidate with plastome but uncertain modern nuclear placement
+Cirsium schantarense,Cirsium schantarense f. albiflorum,Korea_Manchuria_Russian_Far_East,A2_population_bridge,Historical white form and broad continental standing-variation test
+Cirsium vlassovianum,Cirsium vlassovianum f. album,Korea_China_Russian_Far_East,A2_population_bridge,Historical white form and aneuploid continental bridge
+Cirsium setosum,Cirsium arvense var. setosum,China_Northeast_Asia,B_backbone,Chinese organelle/reference taxon requiring exact nuclear audit
+Cirsium shansiense,,China,B_backbone,Chinese coloured taxon with plastome but uncertain dense nuclear placement
+Cirsium leducii,,China,B_backbone,Chinese coloured taxon used in regional backbone screening
+Cirsium lipskyi,Cirsium interpositum,China_Himalaya,B_taxonomy,Reinstated Chinese/Himalayan name and sect. Epitrachys placement target
+Cirsium nishiokae,Cirsium chrysolepis,China_Himalaya,B_taxonomy,Synonym-sensitive Chinese/Himalayan target
+Cirsium belingschanicum,,Southwest_China,A2_transition_gap,Recently reinstated from broad C. japonicum and potentially transition-relevant continental lineage
+Cirsium medogense,,Southeastern_Tibet_China,B_taxonomy,Recent molecularly supported local species placement
+Cirsium arvense,,Eurasia_Broad,B_population_reference,Well-studied population-history and invasion/admixture reference
+Cirsium vulgare,Lophiolepis vulgare,Western_Palearctic_Global,B_reticulation_reference,Known allotetraploid/hybrid-origin warning for tree interpretation
