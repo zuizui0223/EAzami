@@ -1,0 +1,2 @@
+index,extension,url,status,content_type,content_length,final_url,magic_hex,magic_class,validation,error
+1,docx,https://ars.els-cdn.com/content/image/1-s2.0-S1055790325000028-mmc1.docx,200,application/vnd.openxmlformats-officedocument.wordprocessingml.document,10761775,https://ars.els-cdn.com/content/image/1-s2.0-S1055790325000028-mmc1.docx,,zip_container,candidate_exists,
