@@ -24,7 +24,9 @@ Hyb-Seq work has produced a strongly supported Cardueae/Carduinae backbone with 
 
 ### 2. A global species-level *Cirsium* tree exists but is not a population tree
 
-The Moreyra 2025 350-locus study is the current broad nuclear backbone. It substantially changes the earlier assumption that Japan or the genus as a whole lacks nuclear coverage. Its main limitations for EAzami are incomplete taxon coverage, sparse accessions within most species, and incomplete recovery of exact supplementary tips/tree files in the current repository.
+Moreyra et al. (2025) used the **Compositae1061 target-enrichment probe set** and retained 350 nuclear loci after orthology assessment and filtering. The resulting tree is the current broad nuclear backbone. The 350 loci are therefore an analysed subset of Compositae1061—not a separate Moreyra bait panel.
+
+This substantially changes the earlier assumption that Japan or the genus as a whole lacks nuclear coverage. Its main limitations for EAzami are incomplete taxon coverage, sparse accessions within most species, and incomplete recovery of exact supplementary tips, retained loci and tree files in the current repository.
 
 ### 3. Generic circumscription remains a genuine dispute
 
@@ -82,7 +84,7 @@ A single plastid tree or one concatenated species tree cannot distinguish all si
 
 ### File/data recovery gaps
 
-- Moreyra Supplementary Data 1 and exact tree artifacts;
+- Moreyra Supplementary Data 1, exact tree artifacts and retained-locus information;
 - Chang 2025/2026 machine-readable trees and branch lengths;
 - exact accepted-name/synonym match for focal Japanese, Korean and Chinese tips;
 - reusable topology ensemble with nuclear, plastid and network alternatives.
@@ -102,7 +104,7 @@ A single plastid tree or one concatenated species tree cannot distinguish all si
 
 ### Target capture
 
-Use a locus set compatible with an existing species backbone to fill genuine transition-critical missing taxa. Candidate frameworks are Compositae1061 and the Moreyra 350-locus panel; final choice requires recovery and overlap comparison of their tree/data artifacts.
+Use **Compositae1061-compatible target capture** to fill genuine transition-critical missing species. This connects directly to the deep Cardueae, North American and global *Cirsium* studies. After the Moreyra artifacts are recovered, reproduce or intersect its orthology filtering and final 350 retained loci rather than treating those loci as a distinct capture kit.
 
 ### RAD-seq or resequencing
 
