@@ -2,9 +2,9 @@
 """Recover Figure 1 evidence for the six published var. takaoense tips.
 
 Chang et al. (2026) Supplementary Table S1 identifies six transcriptome
-vouchers but omits their white versus bluish-purple morph identity.  The main
+vouchers but omits their white versus bluish-purple morph identity. The main
 article's Figure 1 caption explicitly states that tip suffixes ``(W)`` and
-``(BP)`` identify the two corolla morphs.  This script downloads the open-access
+``(BP)`` identify the two corolla morphs. This script downloads the open-access
 article PDF, preserves provenance, extracts page text/words and embedded images,
 and renders the Figure 1 pages at high resolution for an auditable manual or
 machine-assisted tip-label recovery.
@@ -21,7 +21,6 @@ import csv
 import hashlib
 import json
 import re
-import shutil
 import time
 import urllib.error
 import urllib.request
@@ -199,32 +198,43 @@ def normalize_label_text(value: str) -> str:
 
 
 def parse_direct_tip_labels(text: str) -> dict[str, str]:
-    """Parse only explicit code/voucher + (W)/(BP) co-occurrences.
+    """Parse only explicit identifier + (W)/(BP) labels on the same text line.
 
-    This intentionally avoids locality-only inference.  It accepts labels such as
-    ``var. takaoense FC (W)`` or ``ccy3559 (BP)`` when both the identifier and
-    state occur within the same compact text window.
+    Restricting a match to one extracted line prevents a short locality code from
+    borrowing the state attached to the next tree tip. If the figure is rasterized
+    and its labels are therefore absent from PDF text, all six rows remain
+    unresolved for high-resolution figure review.
     """
-    compact = normalize_label_text(text)
-    output: dict[str, str] = {}
+    lines = [
+        normalize_label_text(line)
+        for line in text.splitlines()
+        if normalize_label_text(line)
+    ]
     identifiers: dict[str, str] = {}
     for row in VOUCHERS:
         identifiers[row["code"]] = row["voucher"]
         identifiers[row["voucher"]] = row["voucher"]
 
-    for identifier, voucher in identifiers.items():
-        escaped = re.escape(identifier)
-        patterns = (
-            rf"(?<![A-Za-z0-9]){escaped}(?![A-Za-z0-9]).{{0,90}}?\((W|BP)\)",
-            rf"\((W|BP)\).{{0,90}}?(?<![A-Za-z0-9]){escaped}(?![A-Za-z0-9])",
-        )
-        states = {
-            match.group(1)
-            for pattern in patterns
-            for match in re.finditer(pattern, compact, flags=re.IGNORECASE)
+    states_by_voucher: dict[str, set[str]] = {}
+    for line in lines:
+        line_states = {
+            match.upper()
+            for match in re.findall(r"\((W|BP)\)", line, flags=re.IGNORECASE)
         }
+        if not line_states:
+            continue
+        for identifier, voucher in identifiers.items():
+            if re.search(
+                rf"(?<![A-Za-z0-9]){re.escape(identifier)}(?![A-Za-z0-9])",
+                line,
+                flags=re.IGNORECASE,
+            ):
+                states_by_voucher.setdefault(voucher, set()).update(line_states)
+
+    output: dict[str, str] = {}
+    for voucher, states in states_by_voucher.items():
         if len(states) == 1:
-            output[voucher] = states.pop().upper()
+            output[voucher] = next(iter(states))
         elif len(states) > 1:
             output[voucher] = "CONFLICT"
     return output
@@ -270,9 +280,7 @@ def build_tip_rows(assignments: Mapping[str, str]) -> list[dict[str, str]]:
                 ),
                 "morph_assignment_confidence": confidence,
                 "review_status": status,
-                "notes": (
-                    "No assignment from geography or taxon-level colour assumptions."
-                ),
+                "notes": "No assignment from geography or taxon-level colour assumptions.",
             }
         )
     return rows
@@ -353,12 +361,26 @@ def recover_pdf_evidence(
     write_csv(
         outdir / "figure1_page_words.csv",
         word_rows,
-        ("pdf_page", "x0", "y0", "x1", "y1", "token", "block", "line", "word_index"),
+        (
+            "pdf_page",
+            "x0",
+            "y0",
+            "x1",
+            "y1",
+            "token",
+            "block",
+            "line",
+            "word_index",
+        ),
     )
 
     caption_has_definition = bool(
         re.search(r"\(W\).*white-corolla morph", full_text, flags=re.I | re.S)
-        and re.search(r"\(BP\).*bluish-purple-corolla morph", full_text, flags=re.I | re.S)
+        and re.search(
+            r"\(BP\).*bluish-purple-corolla morph",
+            full_text,
+            flags=re.I | re.S,
+        )
     )
     assignments = parse_direct_tip_labels(full_text)
     write_csv(
