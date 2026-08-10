@@ -4,7 +4,9 @@ on:
   pull_request:
     paths:
       - "analysis/recover_cirsium_phylogeny_literature.py"
+      - "analysis/build_cirsium_phylogeny_registry.py"
       - "tests/test_recover_cirsium_phylogeny_literature.py"
+      - "data/evidence/cirsium_phylogeny_literature_registry_*.csv"
       - "data/evidence/cirsium_phylogeny_search_queries.txt"
       - ".github/workflows/recover-cirsium-phylogeny-literature.yml"
   workflow_dispatch:
@@ -35,8 +37,26 @@ jobs:
 
       - name: Compile and test recovery code
         run: |
-          python -m py_compile analysis/recover_cirsium_phylogeny_literature.py
+          python -m py_compile \
+            analysis/recover_cirsium_phylogeny_literature.py \
+            analysis/build_cirsium_phylogeny_registry.py
           python -m unittest tests/test_recover_cirsium_phylogeny_literature.py -v
+
+      - name: Validate curated evidence registries
+        run: |
+          python analysis/build_cirsium_phylogeny_registry.py \
+            --output /tmp/cirsium_phylogeny_literature_registry_current.csv
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          path = Path("/tmp/cirsium_phylogeny_literature_registry_current.csv")
+          with path.open(encoding="utf-8", newline="") as handle:
+              rows = list(csv.DictReader(handle))
+          print(f"validated_curated_records={len(rows)}")
+          if len(rows) < 30:
+              raise SystemExit("Curated evidence registry unexpectedly contains fewer than 30 records")
+          PY
 
   recover-literature:
     if: github.event_name != 'pull_request'
@@ -54,6 +74,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
+      - name: Build current curated registry
+        run: |
+          python analysis/build_cirsium_phylogeny_registry.py
 
       - name: Recover Crossref and Europe PMC candidates
         env:
@@ -73,12 +97,16 @@ jobs:
 
           candidates = Path("data/evidence/generated/cirsium_phylogeny_literature_candidates.csv")
           log = Path("data/evidence/generated/cirsium_phylogeny_search_log.csv")
+          registry = Path("data/evidence/generated/cirsium_phylogeny_literature_registry_current.csv")
           with candidates.open(encoding="utf-8", newline="") as handle:
               rows = list(csv.DictReader(handle))
           with log.open(encoding="utf-8", newline="") as handle:
               logs = list(csv.DictReader(handle))
+          with registry.open(encoding="utf-8", newline="") as handle:
+              curated = list(csv.DictReader(handle))
           errors = [row for row in logs if row["status"] != "ok"]
           high = [row for row in rows if float(row["relevance_score"]) >= 8.0]
+          print(f"curated_records={len(curated)}")
           print(f"unique_candidates={len(rows)}")
           print(f"high_priority_candidates={len(high)}")
           print(f"query_errors={len(errors)}")
@@ -87,11 +115,12 @@ jobs:
                   print(f"ERROR {row['source']} :: {row['query']} :: {row['error']}")
           PY
 
-      - name: Upload unreviewed candidate evidence map
+      - name: Upload curated registry and unreviewed candidate map
         uses: actions/upload-artifact@v4
         with:
-          name: cirsium-phylogeny-literature-candidates-${{ github.run_id }}
+          name: cirsium-phylogeny-evidence-map-${{ github.run_id }}
           path: |
+            data/evidence/generated/cirsium_phylogeny_literature_registry_current.csv
             data/evidence/generated/cirsium_phylogeny_literature_candidates.csv
             data/evidence/generated/cirsium_phylogeny_search_log.csv
           if-no-files-found: error
