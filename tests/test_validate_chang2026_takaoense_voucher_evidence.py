@@ -30,11 +30,21 @@ class ChangVoucherEvidenceTests(unittest.TestCase):
         code: str,
         s1: str,
         s6_status: str,
+        label: str,
+        state: str,
+        binary: str,
         s6_herbarium: str = "",
         s6_text: str = "",
         main_text: str = "",
-        notes: str = "no colour inferred from locality",
+        notes_extra: str = "",
     ) -> dict[str, str]:
+        notes = (
+            f"Panels B and C both print {code}-{voucher.removeprefix('ccy')}({label}); "
+            f"official Figure 1 image SHA256 {mod.EXPECTED_FIGURE_IMAGE_HASH}; "
+            "no colour inferred from locality"
+        )
+        if notes_extra:
+            notes += "; " + notes_extra
         return {
             "accepted_taxon": "Cirsium japonicum var. takaoense",
             "location": "Taiwan",
@@ -46,12 +56,12 @@ class ChangVoucherEvidenceTests(unittest.TestCase):
             "supplement_s6_herbarium": s6_herbarium,
             "main_text_voucher_evidence": main_text,
             "figure1_state_definition": mod.EXPECTED_FIGURE_DEFINITION,
-            "direct_sample_morph_label": "",
-            "flower_colour_state": "",
-            "binary_colour_code": "",
-            "review_status": "unresolved_figure_or_direct_record_required",
-            "next_action": "recover direct evidence",
-            "source_artifact_sha256": mod.EXPECTED_SOURCE_HASH,
+            "direct_sample_morph_label": label,
+            "flower_colour_state": state,
+            "binary_colour_code": binary,
+            "review_status": mod.EXPECTED_REVIEW_STATUS,
+            "next_action": "reuse labelled transcriptome",
+            "source_artifact_sha256": mod.EXPECTED_SUPPLEMENT_HASH,
             "notes": notes,
         }
 
@@ -59,29 +69,35 @@ class ChangVoucherEvidenceTests(unittest.TestCase):
         return [
             self.row(
                 "ccy3559", "FC", "TNM", "exact_collector_number_found",
+                "BP", "bluish-purple", "C",
                 "TNM", "C.Y.Chang 3559 (TNM)"
             ),
             self.row(
                 "ccy3807", "TJ", "TCF", "collector_number_not_found_in_s6",
-                notes="Absence from S6; no colour inferred"
+                "BP", "bluish-purple", "C",
+                notes_extra="S6 non-recovery retained"
             ),
             self.row(
                 "ccy3835", "NH", "TCF", "collector_number_not_found_in_s6",
+                "BP", "bluish-purple", "C",
                 main_text="Specimen 3835 is mentioned in the taxonomic treatment",
-                notes="Main text does not state corolla colour"
+                notes_extra="main text contains no independent colour statement"
             ),
             self.row(
                 "ccy3560", "WY", "TNM", "exact_collector_number_found",
+                "W", "white", "W",
                 "TNM", "C.Y.Chang 3560 (TNM)"
             ),
             self.row(
                 "ccy3629", "FB", "TNM", "exact_collector_number_found",
+                "W", "white", "W",
                 "TNM", "C.Y.Chang 3629 (TNM)"
             ),
             self.row(
                 "ccy3839", "LT", "TCF", "exact_collector_number_found",
+                "W", "white", "W",
                 "TNM", "C.Y.Chang 3839 (TNM)",
-                notes="Direct conflict; no colour inferred"
+                notes_extra="direct S1/S6 herbarium conflict remains TCF versus TNM"
             ),
         ]
 
@@ -91,14 +107,38 @@ class ChangVoucherEvidenceTests(unittest.TestCase):
         self.assertEqual(summary["supplement_s6_exact_records"], 4)
         self.assertEqual(summary["supplement_s6_not_recovered"], 2)
         self.assertEqual(summary["s1_s6_herbarium_conflicts"], ["ccy3839"])
-        self.assertEqual(summary["direct_sample_morph_assignments"], 0)
+        self.assertEqual(summary["direct_sample_morph_assignments"], 6)
+        self.assertEqual(summary["morph_counts"], {"W": 3, "BP": 3})
+        self.assertEqual(
+            summary["white_vouchers"], ["ccy3560", "ccy3629", "ccy3839"]
+        )
+        self.assertEqual(
+            summary["bluish_purple_vouchers"],
+            ["ccy3559", "ccy3807", "ccy3835"],
+        )
+        self.assertEqual(summary["unresolved_vouchers"], [])
 
-    def test_morph_assignment_fails(self) -> None:
+    def test_wrong_morph_assignment_fails(self) -> None:
         rows = self.valid_rows()
         rows[0]["direct_sample_morph_label"] = "W"
         rows[0]["flower_colour_state"] = "white"
         rows[0]["binary_colour_code"] = "W"
-        with self.assertRaisesRegex(ValueError, "unsupported sample-level morph"):
+        with self.assertRaisesRegex(ValueError, "Figure 1 morph mismatch"):
+            mod.validate(rows)
+
+    def test_missing_figure_hash_fails(self) -> None:
+        rows = self.valid_rows()
+        rows[0]["notes"] = "Panels B and C both print FC-3559(BP); no colour inferred from locality"
+        with self.assertRaisesRegex(ValueError, "image hash"):
+            mod.validate(rows)
+
+    def test_single_panel_claim_fails(self) -> None:
+        rows = self.valid_rows()
+        rows[0]["notes"] = (
+            f"Panel C prints FC-3559(BP); official Figure 1 image SHA256 "
+            f"{mod.EXPECTED_FIGURE_IMAGE_HASH}; no colour inferred from locality"
+        )
+        with self.assertRaisesRegex(ValueError, "two-panel transcription"):
             mod.validate(rows)
 
     def test_silent_herbarium_harmonization_fails(self) -> None:
