@@ -34,6 +34,7 @@ DEFAULT_INPUTS = (
     Path("data/evidence/cirsium_phylogeny_literature_registry_2026-08-10.csv"),
     Path("data/evidence/cirsium_phylogeny_literature_registry_additions_2026-08-10.csv"),
     Path("data/evidence/cirsium_phylogeny_literature_registry_batch02b_2026-08-10.csv"),
+    Path("data/evidence/cirsium_phylogeny_literature_registry_batch03_2026-08-10.csv"),
 )
 DEFAULT_OUTPUT = Path(
     "data/evidence/generated/cirsium_phylogeny_literature_registry_current.csv"
