@@ -5,7 +5,11 @@ on:
     paths:
       - "analysis/chang2026_takaoense_sample_colour_history.py"
       - "analysis/chang2026_takaoense_sample_colour_history.csv"
+      - "analysis/chang2026_takaoense_topology_uncertainty.py"
+      - "analysis/chang2026_takaoense_topology_uncertainty.csv"
+      - "analysis/chang2026_takaoense_topology_uncertainty_summary.json"
       - "tests/test_chang2026_takaoense_sample_colour_history.py"
+      - "tests/test_chang2026_takaoense_topology_uncertainty.py"
       - "data/evidence/chang2026_takaoense_figure1_morph_assignments_*.csv"
       - "data/evidence/chang2026_takaoense_sample_colour_history_summary_*.json"
       - ".github/workflows/validate-chang2026-takaoense-colour-history.yml"
@@ -27,20 +31,27 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Compile and run exact-topology tests
+      - name: Compile and run topology tests
         run: |
-          python -m py_compile analysis/chang2026_takaoense_sample_colour_history.py
+          python -m py_compile \
+            analysis/chang2026_takaoense_sample_colour_history.py \
+            analysis/chang2026_takaoense_topology_uncertainty.py
           python -m unittest \
             tests/test_chang2026_takaoense_sample_colour_history.py \
+            tests/test_chang2026_takaoense_topology_uncertainty.py \
             -v
 
-      - name: Generate topology-only colour-history outputs
+      - name: Generate exact-topology and exhaustive-sensitivity outputs
         run: |
           python analysis/chang2026_takaoense_sample_colour_history.py \
             --output /tmp/chang2026_takaoense_sample_colour_history.csv \
             --summary /tmp/chang2026_takaoense_sample_colour_history_summary.json
+          python analysis/chang2026_takaoense_topology_uncertainty.py \
+            --output /tmp/chang2026_takaoense_topology_uncertainty.csv \
+            --summary /tmp/chang2026_takaoense_topology_uncertainty_summary.json \
+            --full-output /tmp/chang2026_takaoense_all_945_topologies.csv
 
-      - name: Compare generated outputs and validate directional conclusions
+      - name: Compare frozen outputs and validate directional conclusions
         run: |
           python - <<'PY'
           import csv
@@ -51,75 +62,49 @@ jobs:
               with Path(path).open(encoding="utf-8-sig", newline="") as handle:
                   return list(csv.DictReader(handle))
 
-          generated_rows = csv_rows(
+          exact_generated = csv_rows(
               "/tmp/chang2026_takaoense_sample_colour_history.csv"
           )
-          frozen_rows = csv_rows(
+          exact_frozen = csv_rows(
               "analysis/chang2026_takaoense_sample_colour_history.csv"
           )
-          if generated_rows != frozen_rows:
+          if exact_generated != exact_frozen:
               raise SystemExit(
                   "Generated exact-topology rows differ from the frozen CSV"
               )
 
-          generated_summary = json.loads(
+          exact_summary = json.loads(
               Path("/tmp/chang2026_takaoense_sample_colour_history_summary.json")
               .read_text(encoding="utf-8")
           )
-          frozen_summary = json.loads(
+          exact_frozen_summary = json.loads(
               Path(
                   "data/evidence/"
                   "chang2026_takaoense_sample_colour_history_summary_2026-08-11.json"
               ).read_text(encoding="utf-8")
           )
-          for key, value in generated_summary.items():
-              if frozen_summary.get(key) != value:
+          for key, value in exact_summary.items():
+              if exact_frozen_summary.get(key) != value:
                   raise SystemExit(
-                      f"Frozen summary differs for {key}: "
-                      f"{frozen_summary.get(key)!r} != {value!r}"
+                      f"Frozen exact-topology summary differs for {key}: "
+                      f"{exact_frozen_summary.get(key)!r} != {value!r}"
                   )
 
-          by = {row["scenario"]: row for row in generated_rows}
-          print(f"scenario_rows={len(generated_rows)}")
-          print(
-              "six_sample_fitch_changes="
-              + str(generated_summary['six_sample_unconstrained_fitch_changes'])
-          )
-          print(
-              "six_sample_fitch_root_states="
-              + generated_summary['six_sample_fitch_root_states']
-          )
-          print(
-              "sinocirsium_coloured_root_minimum="
-              + generated_summary['sinocirsium_coloured_root_minimum']
-          )
-          print(
-              "sinocirsium_no_regain_minimum_changes="
-              + str(generated_summary['sinocirsium_no_regain_minimum_changes'])
-          )
-          print(
-              "full_east_asia_coloured_root_minimum="
-              + generated_summary['full_east_asia_coloured_root_minimum']
-          )
-          print(
-              "full_east_asia_no_regain_minimum_changes="
-              + str(generated_summary['full_east_asia_no_regain_minimum_changes'])
-          )
-
-          if len(generated_rows) != 5:
+          by = {row["scenario"]: row for row in exact_generated}
+          if len(exact_generated) != 5:
               raise SystemExit("Expected five exact-topology scenarios")
-          if generated_summary['figure1_six_sample_topology'] != (
+          if exact_summary['figure1_six_sample_topology'] != (
               "(((((NH_BP,TJ_BP),FC_BP),LT_W),FB_W),WY_W)"
           ):
               raise SystemExit("Exact Figure 1 sample topology changed")
-          if generated_summary['direct_labels'] != {
+          if exact_summary['direct_labels'] != {
               'BP': ['FC-3559', 'TJ-3807', 'NH-3835'],
               'W': ['WY-3560', 'FB-3629', 'LT-3839'],
           }:
               raise SystemExit("Direct W/BP labels changed")
-          if generated_summary['six_sample_unconstrained_fitch_changes'] != 1:
+          if exact_summary['six_sample_unconstrained_fitch_changes'] != 1:
               raise SystemExit("Expected one unconstrained change within takaoense")
-          if generated_summary['six_sample_fitch_root_states'] != 'W':
+          if exact_summary['six_sample_fitch_root_states'] != 'W':
               raise SystemExit("Expected a white Fitch root for the exact six-tip tree")
 
           sinocirsium = by['sinocirsium_exact_sample_topology_root_C']
@@ -128,13 +113,11 @@ jobs:
           if sinocirsium['optimal_directional_combinations'] != 'losses=1;regains=1':
               raise SystemExit("Expected one loss and one regain in Sinocirsium")
           if sinocirsium['regain_required_at_global_minimum'] != 'yes':
-              raise SystemExit("Regain should be required at the Sinocirsium minimum")
+              raise SystemExit("Regain should be required at the displayed-tree minimum")
           if sinocirsium['minimum_no_regain_changes'] != '4':
-              raise SystemExit(
-                  "Expected four changes for the best no-regain Sinocirsium history"
-              )
+              raise SystemExit("Expected four changes for the displayed no-regain history")
           if sinocirsium['no_regain_change_penalty'] != '2':
-              raise SystemExit("Expected a +2 no-regain penalty in Sinocirsium")
+              raise SystemExit("Expected a +2 no-regain penalty on the displayed tree")
 
           full = by['full_east_asia_exact_takaoense_root_C']
           if full['minimum_changes_fixed_root'] != '4':
@@ -142,18 +125,70 @@ jobs:
           if full['optimal_directional_combinations'] != 'losses=3;regains=1':
               raise SystemExit("Expected three losses and one regain in the full minimum")
           if full['regain_required_at_global_minimum'] != 'yes':
-              raise SystemExit("Regain should be required at the full focal minimum")
+              raise SystemExit("Regain should be required at the full displayed minimum")
           if full['minimum_no_regain_changes'] != '6':
               raise SystemExit("Expected six changes for the best no-regain full history")
           if full['no_regain_change_penalty'] != '2':
               raise SystemExit("Expected a +2 no-regain penalty in the full topology")
 
+          aggregate_generated = csv_rows(
+              "/tmp/chang2026_takaoense_topology_uncertainty.csv"
+          )
+          aggregate_frozen = csv_rows(
+              "analysis/chang2026_takaoense_topology_uncertainty.csv"
+          )
+          if aggregate_generated != aggregate_frozen:
+              raise SystemExit(
+                  "Generated topology-sensitivity rows differ from the frozen CSV"
+              )
+
+          topology_summary = json.loads(
+              Path("/tmp/chang2026_takaoense_topology_uncertainty_summary.json")
+              .read_text(encoding="utf-8")
+          )
+          topology_frozen = json.loads(
+              Path("analysis/chang2026_takaoense_topology_uncertainty_summary.json")
+              .read_text(encoding="utf-8")
+          )
+          if topology_summary != topology_frozen:
+              raise SystemExit(
+                  "Generated topology-sensitivity summary differs from the frozen JSON"
+              )
+
+          all_topologies = csv_rows(
+              "/tmp/chang2026_takaoense_all_945_topologies.csv"
+          )
+          if topology_summary['rooted_binary_topologies_enumerated'] != 945:
+              raise SystemExit("Expected all 945 rooted six-tip bifurcating topologies")
+          if len(all_topologies) != 945:
+              raise SystemExit("Full topology ledger does not contain 945 rows")
+          if topology_summary['regain_required_topologies'] != 270:
+              raise SystemExit("Expected 270 resolutions requiring regain")
+          if topology_summary['no_regain_allowed_at_minimum_topologies'] != 675:
+              raise SystemExit("Expected 675 resolutions allowing no-regain")
+          if topology_summary['bp_monophyletic_topologies'] != 45:
+              raise SystemExit("Expected 45 BP-monophyletic resolutions")
+          if topology_summary['w_monophyletic_topologies'] != 45:
+              raise SystemExit("Expected 45 W-monophyletic resolutions")
+          if topology_summary['both_morphs_monophyletic_topologies'] != 9:
+              raise SystemExit("Expected nine reciprocal-morph-monophyly resolutions")
+          if topology_summary['no_regain_penalty_counts_among_required'] != {
+              '1': 252,
+              '2': 18,
+          }:
+              raise SystemExit("Topology no-regain penalty distribution changed")
+          if topology_summary['uniform_topology_enumeration_is_probability']:
+              raise SystemExit("Uniform topology enumeration must not be called probability")
+
+          exact_topology = topology_summary['exact_displayed_topology']
+          if exact_topology['regain_required_at_minimum'] != 'yes':
+              raise SystemExit("Displayed topology must retain candidate-regain support")
+          if exact_topology['no_regain_change_penalty'] != 2:
+              raise SystemExit("Displayed topology must retain the +2 no-regain penalty")
+
           generic = Path("analysis/published_east_asia_colour_history.csv")
           if generic.exists():
-              older = {
-                  row['scenario']: row
-                  for row in csv_rows(generic)
-              }
+              older = {row['scenario']: row for row in csv_rows(generic)}
               previous = older.get('chang2026_full_population_aware_takaoense')
               if previous:
                   combinations = set(
@@ -163,22 +198,45 @@ jobs:
                       'losses=4;regains=0',
                       'losses=3;regains=1',
                   }:
-                      raise SystemExit(
-                          "Previous generic-topology sensitivity changed"
-                      )
-                  print(
-                      "comparison=generic topology allowed no-regain; "
-                      "exact sample topology requires regain at minimum"
-                  )
+                      raise SystemExit("Previous generic-topology sensitivity changed")
+
+          print(f"exact_scenario_rows={len(exact_generated)}")
+          print(
+              "displayed_sinocirsium_minimum="
+              + exact_summary['sinocirsium_coloured_root_minimum']
+          )
+          print(
+              "displayed_no_regain_penalty="
+              + str(exact_topology['no_regain_change_penalty'])
+          )
+          print(
+              "rooted_binary_topologies="
+              + str(topology_summary['rooted_binary_topologies_enumerated'])
+          )
+          print(
+              "regain_required_topologies="
+              + str(topology_summary['regain_required_topologies'])
+          )
+          print(
+              "no_regain_allowed_topologies="
+              + str(topology_summary['no_regain_allowed_at_minimum_topologies'])
+          )
+          print(
+              "regain_required_fraction="
+              + f"{topology_summary['regain_required_proportion']:.9f}"
+          )
           print("frozen_output_comparison=passed")
           PY
 
-      - name: Upload exact-topology outputs
+      - name: Upload exact-topology and uncertainty outputs
         uses: actions/upload-artifact@v4
         with:
           name: chang2026-takaoense-colour-history-${{ github.run_id }}
           path: |
             /tmp/chang2026_takaoense_sample_colour_history.csv
             /tmp/chang2026_takaoense_sample_colour_history_summary.json
+            /tmp/chang2026_takaoense_topology_uncertainty.csv
+            /tmp/chang2026_takaoense_topology_uncertainty_summary.json
+            /tmp/chang2026_takaoense_all_945_topologies.csv
           if-no-files-found: error
           retention-days: 90
