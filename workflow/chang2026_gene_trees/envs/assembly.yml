@@ -1,0 +1,12 @@
+name: eazami-chang2026-assembly
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.11
+  - sra-tools
+  - pigz
+  - fastp
+  - trinity
+  - transdecoder
