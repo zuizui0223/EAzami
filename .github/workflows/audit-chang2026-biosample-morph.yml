@@ -1,0 +1,132 @@
+name: Audit Chang 2026 BioSample morph metadata
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_ncbi_project_runs.py"
+      - "analysis/audit_chang2026_biosample_morph_metadata.py"
+      - "tests/test_recover_ncbi_project_runs.py"
+      - "tests/test_audit_chang2026_biosample_morph_metadata.py"
+      - "data/evidence/chang2026_east_asia_accession_audit_*.csv"
+      - ".github/workflows/audit-chang2026-biosample-morph.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile \
+            analysis/recover_ncbi_project_runs.py \
+            analysis/audit_chang2026_biosample_morph_metadata.py
+          python -m unittest \
+            tests/test_recover_ncbi_project_runs.py \
+            tests/test_audit_chang2026_biosample_morph_metadata.py \
+            -v
+
+      - name: Recover official PRJNA1311153 SRA runinfo
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        run: |
+          : > /tmp/no_focal_taxa.txt
+          python analysis/recover_ncbi_project_runs.py \
+            --bioproject PRJNA1311153 \
+            --outdir ncbi_chang2026 \
+            --focal-taxa /tmp/no_focal_taxa.txt
+
+      - name: Fetch full BioSample attribute dictionaries and audit morph evidence
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        run: |
+          runinfo=$(find ncbi_chang2026 -name '*_runinfo.csv' -print -quit)
+          test -n "$runinfo"
+          python analysis/audit_chang2026_biosample_morph_metadata.py \
+            --runinfo "$runinfo" \
+            --outdir data/evidence/generated/chang2026_biosample_morph_audit
+          cp "$runinfo" data/evidence/generated/chang2026_biosample_morph_audit/
+
+      - name: Validate conservative evidence rules
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          outdir = Path("data/evidence/generated/chang2026_biosample_morph_audit")
+          summary = json.loads(
+              (outdir / "biosample_morph_audit_summary.json").read_text(encoding="utf-8")
+          )
+
+          def rows(name):
+              with (outdir / name).open(encoding="utf-8-sig", newline="") as handle:
+                  return list(csv.DictReader(handle))
+
+          audit = rows("takaoense_biosample_morph_audit.csv")
+          attributes = rows("takaoense_biosample_attributes_long.csv")
+          ambiguities = rows("takaoense_run_match_ambiguities.csv")
+
+          print(f"project_runinfo_rows={summary['project_runinfo_rows']}")
+          print(f"candidate_takaoense_run_rows={summary['candidate_takaoense_run_rows']}")
+          print(f"voucher_run_matches={summary['voucher_run_matches']}")
+          print(f"ambiguous_voucher_run_matches={summary['ambiguous_voucher_run_matches']}")
+          print(f"biosamples_with_attribute_records={summary['biosamples_with_attribute_records']}")
+          print(f"attribute_rows={summary['attribute_rows']}")
+          print(f"morph_relevant_attribute_rows={summary['morph_relevant_attribute_rows']}")
+          print(f"direct_sample_colour_assignments={summary['direct_sample_colour_assignments']}")
+          print("assigned_vouchers=" + "|".join(summary['assigned_vouchers']))
+          print("unresolved_vouchers=" + "|".join(summary['unresolved_vouchers']))
+          print(f"ambiguity_rows={len(ambiguities)}")
+
+          expected_vouchers = {
+              'ccy3559', 'ccy3807', 'ccy3835',
+              'ccy3560', 'ccy3629', 'ccy3839'
+          }
+          if summary['seed_vouchers'] != 6 or len(audit) != 6:
+              raise SystemExit("Expected six published takaoense voucher rows")
+          if {row['voucher'] for row in audit} != expected_vouchers:
+              raise SystemExit("Published takaoense voucher membership changed")
+          if summary['project_runinfo_rows'] < 25:
+              raise SystemExit("Unexpectedly few PRJNA1311153 runinfo rows")
+          if summary['candidate_takaoense_run_rows'] < 6:
+              raise SystemExit("Fewer than six takaoense SRA run rows were recovered")
+          for row in audit:
+              if row['direct_ncbi_colour_label']:
+                  if not row['morph_relevant_attributes']:
+                      raise SystemExit(
+                          f"{row['voucher']} received a colour label without direct attributes"
+                      )
+                  if row['review_status'] != 'assigned_from_explicit_ncbi_attribute':
+                      raise SystemExit(
+                          f"{row['voucher']} has an inconsistent assignment status"
+                      )
+              if 'No assignment from locality' not in row['notes']:
+                  raise SystemExit("Geographic-inference guard is missing")
+          relevant = [row for row in attributes if row['morph_relevant'] == 'yes']
+          if len(relevant) != summary['morph_relevant_attribute_rows']:
+              raise SystemExit("Long attribute table and summary disagree")
+          PY
+
+      - name: Upload official metadata audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: chang2026-prjna1311153-morph-audit-${{ github.run_id }}
+          path: |
+            ncbi_chang2026/
+            data/evidence/generated/chang2026_biosample_morph_audit/
+          if-no-files-found: error
+          retention-days: 90
