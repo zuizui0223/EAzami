@@ -7,6 +7,7 @@ on:
       - "analysis/chang2026_takaoense_sample_colour_history.csv"
       - "tests/test_chang2026_takaoense_sample_colour_history.py"
       - "data/evidence/chang2026_takaoense_figure1_morph_assignments_*.csv"
+      - "data/evidence/chang2026_takaoense_sample_colour_history_summary_*.json"
       - ".github/workflows/validate-chang2026-takaoense-colour-history.yml"
   workflow_dispatch:
 
@@ -39,57 +40,86 @@ jobs:
             --output /tmp/chang2026_takaoense_sample_colour_history.csv \
             --summary /tmp/chang2026_takaoense_sample_colour_history_summary.json
 
-      - name: Validate directional-history conclusions
+      - name: Compare generated outputs and validate directional conclusions
         run: |
           python - <<'PY'
           import csv
           import json
           from pathlib import Path
 
-          with Path("/tmp/chang2026_takaoense_sample_colour_history.csv").open(
-              encoding="utf-8-sig", newline=""
-          ) as handle:
-              rows = list(csv.DictReader(handle))
-          summary = json.loads(
+          def csv_rows(path):
+              with Path(path).open(encoding="utf-8-sig", newline="") as handle:
+                  return list(csv.DictReader(handle))
+
+          generated_rows = csv_rows(
+              "/tmp/chang2026_takaoense_sample_colour_history.csv"
+          )
+          frozen_rows = csv_rows(
+              "analysis/chang2026_takaoense_sample_colour_history.csv"
+          )
+          if generated_rows != frozen_rows:
+              raise SystemExit(
+                  "Generated exact-topology rows differ from the frozen CSV"
+              )
+
+          generated_summary = json.loads(
               Path("/tmp/chang2026_takaoense_sample_colour_history_summary.json")
               .read_text(encoding="utf-8")
           )
-          by = {row["scenario"]: row for row in rows}
+          frozen_summary = json.loads(
+              Path(
+                  "data/evidence/"
+                  "chang2026_takaoense_sample_colour_history_summary_2026-08-11.json"
+              ).read_text(encoding="utf-8")
+          )
+          for key, value in generated_summary.items():
+              if frozen_summary.get(key) != value:
+                  raise SystemExit(
+                      f"Frozen summary differs for {key}: "
+                      f"{frozen_summary.get(key)!r} != {value!r}"
+                  )
 
-          print(f"scenario_rows={len(rows)}")
-          print(f"six_sample_fitch_changes={summary['six_sample_unconstrained_fitch_changes']}")
-          print(f"six_sample_fitch_root_states={summary['six_sample_fitch_root_states']}")
+          by = {row["scenario"]: row for row in generated_rows}
+          print(f"scenario_rows={len(generated_rows)}")
+          print(
+              "six_sample_fitch_changes="
+              + str(generated_summary['six_sample_unconstrained_fitch_changes'])
+          )
+          print(
+              "six_sample_fitch_root_states="
+              + generated_summary['six_sample_fitch_root_states']
+          )
           print(
               "sinocirsium_coloured_root_minimum="
-              + summary['sinocirsium_coloured_root_minimum']
+              + generated_summary['sinocirsium_coloured_root_minimum']
           )
           print(
               "sinocirsium_no_regain_minimum_changes="
-              + str(summary['sinocirsium_no_regain_minimum_changes'])
+              + str(generated_summary['sinocirsium_no_regain_minimum_changes'])
           )
           print(
               "full_east_asia_coloured_root_minimum="
-              + summary['full_east_asia_coloured_root_minimum']
+              + generated_summary['full_east_asia_coloured_root_minimum']
           )
           print(
               "full_east_asia_no_regain_minimum_changes="
-              + str(summary['full_east_asia_no_regain_minimum_changes'])
+              + str(generated_summary['full_east_asia_no_regain_minimum_changes'])
           )
 
-          if len(rows) != 5:
+          if len(generated_rows) != 5:
               raise SystemExit("Expected five exact-topology scenarios")
-          if summary['figure1_six_sample_topology'] != (
+          if generated_summary['figure1_six_sample_topology'] != (
               "(((((NH_BP,TJ_BP),FC_BP),LT_W),FB_W),WY_W)"
           ):
               raise SystemExit("Exact Figure 1 sample topology changed")
-          if summary['direct_labels'] != {
+          if generated_summary['direct_labels'] != {
               'BP': ['FC-3559', 'TJ-3807', 'NH-3835'],
               'W': ['WY-3560', 'FB-3629', 'LT-3839'],
           }:
               raise SystemExit("Direct W/BP labels changed")
-          if summary['six_sample_unconstrained_fitch_changes'] != 1:
+          if generated_summary['six_sample_unconstrained_fitch_changes'] != 1:
               raise SystemExit("Expected one unconstrained change within takaoense")
-          if summary['six_sample_fitch_root_states'] != 'W':
+          if generated_summary['six_sample_fitch_root_states'] != 'W':
               raise SystemExit("Expected a white Fitch root for the exact six-tip tree")
 
           sinocirsium = by['sinocirsium_exact_sample_topology_root_C']
@@ -100,7 +130,9 @@ jobs:
           if sinocirsium['regain_required_at_global_minimum'] != 'yes':
               raise SystemExit("Regain should be required at the Sinocirsium minimum")
           if sinocirsium['minimum_no_regain_changes'] != '4':
-              raise SystemExit("Expected four changes for the best no-regain Sinocirsium history")
+              raise SystemExit(
+                  "Expected four changes for the best no-regain Sinocirsium history"
+              )
           if sinocirsium['no_regain_change_penalty'] != '2':
               raise SystemExit("Expected a +2 no-regain penalty in Sinocirsium")
 
@@ -118,8 +150,10 @@ jobs:
 
           generic = Path("analysis/published_east_asia_colour_history.csv")
           if generic.exists():
-              with generic.open(encoding="utf-8-sig", newline="") as handle:
-                  older = {row['scenario']: row for row in csv.DictReader(handle)}
+              older = {
+                  row['scenario']: row
+                  for row in csv_rows(generic)
+              }
               previous = older.get('chang2026_full_population_aware_takaoense')
               if previous:
                   combinations = set(
@@ -129,11 +163,14 @@ jobs:
                       'losses=4;regains=0',
                       'losses=3;regains=1',
                   }:
-                      raise SystemExit("Previous generic-topology sensitivity changed")
+                      raise SystemExit(
+                          "Previous generic-topology sensitivity changed"
+                      )
                   print(
                       "comparison=generic topology allowed no-regain; "
                       "exact sample topology requires regain at minimum"
                   )
+          print("frozen_output_comparison=passed")
           PY
 
       - name: Upload exact-topology outputs
