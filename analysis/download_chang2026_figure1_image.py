@@ -2,9 +2,9 @@
 """Download the official Chang et al. 2026 Figure 1 image.
 
 The Springer article PDF endpoint can reject automated clients even though the
-article is open access. The article HTML exposes an official media.springernature
-Figure 1 image, so this downloader preserves that source directly and records its
-hash, dimensions, content type and endpoint history.
+article is open access. The article HTML exposes an official Figure 1 image.
+This downloader tries both Springer static-content and media delivery hosts,
+preserves the exact successful source, and records every failed endpoint.
 """
 
 from __future__ import annotations
@@ -20,10 +20,15 @@ from typing import Sequence
 
 DOI = "10.1186/s12870-026-08097-6"
 ARTICLE_URL = "https://link.springer.com/article/10.1186/s12870-026-08097-6"
+IMAGE_OBJECT = (
+    "art%3A10.1186%2Fs12870-026-08097-6/"
+    "MediaObjects/12870_2026_8097_Fig1_HTML.png"
+)
 DEFAULT_URLS = (
-    "https://media.springernature.com/full/springer-static/image/art%3A10.1186%2Fs12870-026-08097-6/MediaObjects/12870_2026_8097_Fig1_HTML.png",
-    "https://media.springernature.com/lw1200/springer-static/image/art%3A10.1186%2Fs12870-026-08097-6/MediaObjects/12870_2026_8097_Fig1_HTML.png",
-    "https://media.springernature.com/lw685/springer-static/image/art%3A10.1186%2Fs12870-026-08097-6/MediaObjects/12870_2026_8097_Fig1_HTML.png",
+    f"https://static-content.springer.com/image/{IMAGE_OBJECT}",
+    f"https://media.springernature.com/full/springer-static/image/{IMAGE_OBJECT}",
+    f"https://media.springernature.com/lw1200/springer-static/image/{IMAGE_OBJECT}",
+    f"https://media.springernature.com/lw685/springer-static/image/{IMAGE_OBJECT}",
 )
 DEFAULT_OUTDIR = Path("data/evidence/generated/chang2026_takaoense_figure")
 
@@ -48,6 +53,14 @@ def image_kind(payload: bytes) -> str:
     return "unknown"
 
 
+def write_attempts(path: Path, attempts: Sequence[dict[str, str]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(list(attempts), indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+
 def download_first_image(
     urls: Sequence[str],
     output: Path,
@@ -56,6 +69,7 @@ def download_first_image(
 ) -> tuple[str, list[dict[str, str]]]:
     output.parent.mkdir(parents=True, exist_ok=True)
     attempts: list[dict[str, str]] = []
+    attempts_path = output.parent / "figure1_download_attempts.json"
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
@@ -91,6 +105,7 @@ def download_first_image(
                         "error": "",
                     }
                 )
+                write_attempts(attempts_path, attempts)
                 return url, attempts
             except (
                 urllib.error.HTTPError,
@@ -109,9 +124,13 @@ def download_first_image(
                         "error": f"{type(exc).__name__}: {exc}",
                     }
                 )
+                write_attempts(attempts_path, attempts)
                 if attempt < retries:
                     time.sleep(2 ** (attempt - 1))
-    raise RuntimeError("No configured official Figure 1 endpoint returned an image")
+    raise RuntimeError(
+        "No configured official Figure 1 endpoint returned an image; "
+        f"see {attempts_path}"
+    )
 
 
 def image_dimensions(path: Path) -> tuple[int, int, str]:
