@@ -1,0 +1,71 @@
+{
+  "study": "Moreyra et al. 2025, A thorny tale",
+  "audit_date": "2026-08-10",
+  "public_author_repository": "ldmoreyra/A-thorny-tale",
+  "source_files": [
+    {
+      "filename": "hybpiper_stats_exonerate.tsv",
+      "github_blob_sha": "e3680fc9dc49dbbcc3219d38b97759f339f0e139",
+      "sha256": "deb845dbaef8f3d40155f69f29b7bb590b07af14f915c3937afdff5b00a39bd7",
+      "size_bytes": 28241
+    },
+    {
+      "filename": "seq_lengths_exonerate.tsv",
+      "github_blob_sha": "9fba52328882d34cfde35f558b5ce3527bdf7411",
+      "sha256": "d98168c1fcc204a491a2f4a804635488c748e0a7a7fed1272f8c04e220285eda",
+      "size_bytes": 1272484
+    },
+    {
+      "filename": "paralog_report.xlsx",
+      "github_blob_sha": "bc8856784eabc0b81c5fdddab23f085c907a6f36",
+      "sha256": "e3cfbfc28c91fa7cd23a2a942865327a9a3dd2f3b25154b9c2872a9af3c08e5d",
+      "size_bytes": 1045621
+    }
+  ],
+  "sample_matrices": {
+    "hybpiper_stats_sample_rows": 295,
+    "sequence_length_biological_sample_rows": 302,
+    "sequence_length_reference_meanlength_rows": 1,
+    "paralog_report_sample_rows": 280,
+    "sequence_length_samples_not_in_hybpiper_stats": [
+      "Cirsium-cosmelii_MA425",
+      "Cirsium-kiotoense_FJ333",
+      "Cirsium-montanum_WG150",
+      "Cirsium-scabrum_MA420",
+      "Cirsium-valdespinulosum_MA421",
+      "Cirsium-vulgare_R114",
+      "Echinops-karatavicus_S142"
+    ],
+    "hybpiper_stats_samples_not_in_sequence_lengths": []
+  },
+  "locus_universe": {
+    "paper_reported_mapped_loci": 1064,
+    "public_named_loci": 1061,
+    "paper_minus_public_named_loci": 3,
+    "interpretation": "The public matrices expose 1061 named locus columns. The paper reports 1064 initially mapped loci. The three-locus difference is preserved rather than silently reconciled."
+  },
+  "paralog_warning_screen": {
+    "discard_gt10_warning_samples": 478,
+    "manual_gene_tree_review_1_to_10_warning_samples": 307,
+    "no_paralog_warning": 276,
+    "total_named_loci": 1061
+  },
+  "raw_sequence_occupancy_screen": {
+    "loci_occupancy_ge_0_80": 1001,
+    "warning_le_10_and_occupancy_ge_0_80": 531,
+    "no_warning_and_occupancy_ge_0_80": 241,
+    "manual_review_class_and_occupancy_ge_0_80": 290
+  },
+  "paper_reported_final_alignments": 350,
+  "exact_final_350_locus_names_recovered": false,
+  "why_exact_350_remains_unresolved": "The public files reproduce raw HybPiper warning counts and sequence-recovery occupancy. The paper additionally used manual gene-tree orthology decisions for loci with 1-10 warnings and final alignment-level missingness/species-presence filtering. The public author repository contains no explicit final 350-locus list, retained alignments, per-locus gene-tree archive or final Newick tree.",
+  "allowed_claim": "The public summaries reproduce a 531-locus pre-manual candidate set under the warning-count and raw occupancy criteria; they do not reproduce the exact retained 350 loci.",
+  "disallowed_claim": "EAzami must not label any inferred 350-locus subset as the exact Moreyra-compatible panel without the original retained-locus list or full gene-tree/alignment archive.",
+  "workflow_provenance": {
+    "workflow_name": "Recover Moreyra author repository",
+    "workflow_run": 31405513598,
+    "artifact_id": 9069417959,
+    "artifact_sha256": "ce149e2740216ad13038ae89ec159d75790146a952a416129908b1e32b5befa2",
+    "offline_tests_passed": 11
+  }
+}
