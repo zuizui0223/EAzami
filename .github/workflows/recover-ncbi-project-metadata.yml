@@ -74,7 +74,7 @@ jobs:
 
           outdir = Path("ncbi_metadata_output")
           runinfo = next(outdir.glob("*_runinfo.csv"))
-          taxa = next(outdir.glob("*_unique_taxa.csv"))
+          taxa = next(outdir.glob("*_taxon_summary.csv"))
           audit = next(outdir.glob("*_focal_taxon_audit.csv"))
 
           def rows(path):
