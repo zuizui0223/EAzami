@@ -33,7 +33,7 @@ class ChangBioSampleMorphAuditTests(unittest.TestCase):
             "herbarium_supplement_s1": "TNM",
         }
 
-    def run(self, **updates: str) -> dict[str, str]:
+    def run_row(self, **updates: str) -> dict[str, str]:
         row = {
             "Run": "SRR1",
             "Experiment": "SRX1",
@@ -63,18 +63,18 @@ class ChangBioSampleMorphAuditTests(unittest.TestCase):
         self.assertEqual(selected[0]["voucher"], "ccy3559")
 
     def test_exact_voucher_match_has_priority(self) -> None:
-        score, basis = mod.score_seed_run(self.seed(), self.run())
+        score, basis = mod.score_seed_run(self.seed(), self.run_row())
         self.assertEqual(score, 100)
         self.assertEqual(basis, "exact_voucher_in_runinfo")
 
     def test_sample_code_match_is_allowed_for_identity_not_colour(self) -> None:
-        run = self.run(LibraryName="FC", SampleName="unknown")
+        run = self.run_row(LibraryName="FC", SampleName="unknown")
         score, basis = mod.score_seed_run(self.seed(), run)
         self.assertEqual(score, 80)
         self.assertEqual(basis, "exact_sample_code_in_runinfo")
 
     def test_locality_can_link_metadata_but_does_not_assign_morph(self) -> None:
-        run = self.run(LibraryName="unknown", SampleName="Fenchihu")
+        run = self.run_row(LibraryName="unknown", SampleName="Fenchihu")
         score, basis = mod.score_seed_run(self.seed(), run)
         self.assertEqual(score, 50)
         self.assertIn("explicit_locality_in_runinfo", basis)
@@ -119,8 +119,8 @@ class ChangBioSampleMorphAuditTests(unittest.TestCase):
     def test_ambiguous_run_matches_are_not_silently_chosen(self) -> None:
         seed = self.seed(voucher="ccy9999", code="FC")
         runs = [
-            self.run(Run="SRR1", BioSample="SAMN1", LibraryName="FC"),
-            self.run(Run="SRR2", BioSample="SAMN2", LibraryName="FC"),
+            self.run_row(Run="SRR1", BioSample="SAMN1", LibraryName="FC"),
+            self.run_row(Run="SRR2", BioSample="SAMN2", LibraryName="FC"),
         ]
         matches, ambiguous = mod.match_runs_to_seeds([seed], runs)
         self.assertEqual(matches, {})
@@ -130,7 +130,7 @@ class ChangBioSampleMorphAuditTests(unittest.TestCase):
     def test_build_audit_requires_direct_attribute_for_assignment(self) -> None:
         rows = mod.build_audit_rows(
             [self.seed()],
-            {"ccy3559": (self.run(), "exact_voucher_in_runinfo")},
+            {"ccy3559": (self.run_row(), "exact_voucher_in_runinfo")},
             {
                 "SAMN1": {
                     "geo_loc_name": "Taiwan: Fenchihu",
