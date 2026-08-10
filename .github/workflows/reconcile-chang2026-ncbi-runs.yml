@@ -1,0 +1,143 @@
+name: Reconcile Chang 2026 transcriptomes with NCBI
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_ncbi_project_runs.py"
+      - "analysis/reconcile_chang2026_ncbi_runs.py"
+      - "tests/test_reconcile_chang2026_ncbi_runs.py"
+      - "data/evidence/chang2026_east_asia_accession_audit_*.csv"
+      - "data/evidence/chang2026_takaoense_figure1_morph_assignments_*.csv"
+      - ".github/workflows/reconcile-chang2026-ncbi-runs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile \
+            analysis/recover_ncbi_project_runs.py \
+            analysis/reconcile_chang2026_ncbi_runs.py
+          python -m unittest tests/test_reconcile_chang2026_ncbi_runs.py -v
+
+      - name: Recover official PRJNA1311153 runinfo
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        run: |
+          python analysis/recover_ncbi_project_runs.py \
+            --bioproject PRJNA1311153 \
+            --outdir /tmp/chang2026_ncbi \
+            --enrich-biosample
+
+      - name: Reconcile supplement samples to official runs
+        run: |
+          runinfo=$(find /tmp/chang2026_ncbi -name '*_runinfo.csv' -print -quit)
+          if [[ -z "$runinfo" ]]; then
+            echo "No runinfo file recovered" >&2
+            exit 1
+          fi
+          python analysis/reconcile_chang2026_ncbi_runs.py \
+            --runinfo "$runinfo" \
+            --outdir /tmp/chang2026_reconciliation
+
+      - name: Validate evidence package
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          outdir = Path("/tmp/chang2026_reconciliation")
+          summary = json.loads(
+              (outdir / "chang2026_ncbi_reconciliation_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          def rows(name):
+              with (outdir / name).open(encoding="utf-8-sig", newline="") as handle:
+                  return list(csv.DictReader(handle))
+
+          reconciled = rows("chang2026_sample_run_reconciliation.csv")
+          takaoense = rows("chang2026_takaoense_sra_manifest.csv")
+          candidates = rows("chang2026_run_candidates.csv")
+
+          embedded = [
+              row for row in reconciled if row["embedded_public_accession"]
+          ]
+          exact_embedded = [
+              row for row in embedded
+              if row["match_status"] == "verified_exact_run_accession"
+              and row["matched_run"] == row["embedded_public_accession"]
+          ]
+
+          print(f"official_runinfo_rows={summary['official_runinfo_rows']}")
+          print(f"supplement_sample_rows={len(reconciled)}")
+          print(f"verified_or_probable_rows={summary['verified_or_probable_rows']}")
+          print(f"takaoense_sample_rows={len(takaoense)}")
+          print(
+              "takaoense_verified_or_probable_rows="
+              f"{summary['takaoense_verified_or_probable_rows']}"
+          )
+          print(f"embedded_accession_rows={len(embedded)}")
+          print(f"exact_embedded_matches={len(exact_embedded)}")
+          print(f"candidate_rows={len(candidates)}")
+          print(
+              "confidence_counts="
+              + json.dumps(summary["match_confidence_counts"], sort_keys=True)
+          )
+          for row in takaoense:
+              print(
+                  "TAKAOENSE "
+                  f"{row['code']} {row['voucher']} {row['published_figure_label']} "
+                  f"{row['matched_run'] or 'UNRESOLVED'} {row['match_status']}"
+              )
+
+          if summary["official_runinfo_rows"] <= 0:
+              raise SystemExit("No official PRJNA1311153 runinfo rows recovered")
+          if len(reconciled) != 33:
+              raise SystemExit(
+                  f"Expected 33 Chang supplement samples, observed {len(reconciled)}"
+              )
+          if len(takaoense) != 6:
+              raise SystemExit(
+                  f"Expected six takaoense samples, observed {len(takaoense)}"
+              )
+          if {row["published_figure_label"] for row in takaoense} != {"W", "BP"}:
+              raise SystemExit("Takaoense morph labels were not joined correctly")
+          if not embedded:
+              raise SystemExit("Expected at least one supplement-embedded SRR accession")
+          if len(exact_embedded) != len(embedded):
+              raise SystemExit(
+                  "One or more supplement-embedded accessions did not reconcile exactly"
+              )
+          if summary["verified_or_probable_rows"] < len(embedded):
+              raise SystemExit("Verified/probable count is smaller than direct accessions")
+          if not candidates:
+              raise SystemExit("No candidate audit rows were written")
+          PY
+
+      - name: Upload reconciliation evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: chang2026-ncbi-reconciliation-${{ github.run_id }}
+          path: |
+            /tmp/chang2026_ncbi/
+            /tmp/chang2026_reconciliation/
+          if-no-files-found: error
+          retention-days: 90
