@@ -1,0 +1,217 @@
+name: Audit Compositae1061 target FASTA — expanded
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_moreyra_author_repository.py"
+      - "analysis/summarize_moreyra_locus_filter.py"
+      - "analysis/export_moreyra_locus_manifests.py"
+      - "analysis/recover_compositae1061_target.py"
+      - "analysis/recover_compositae1061_target_expanded.py"
+      - "tests/test_recover_moreyra_author_repository.py"
+      - "tests/test_summarize_moreyra_locus_filter.py"
+      - "tests/test_export_moreyra_locus_manifests.py"
+      - "tests/test_recover_compositae1061_target.py"
+      - "tests/test_recover_compositae1061_target_expanded.py"
+      - ".github/workflows/audit-compositae1061-target-expanded.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  audit-expanded:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile \
+            analysis/recover_moreyra_author_repository.py \
+            analysis/summarize_moreyra_locus_filter.py \
+            analysis/export_moreyra_locus_manifests.py \
+            analysis/recover_compositae1061_target.py \
+            analysis/recover_compositae1061_target_expanded.py
+          python -m unittest \
+            tests/test_recover_moreyra_author_repository.py \
+            tests/test_summarize_moreyra_locus_filter.py \
+            tests/test_export_moreyra_locus_manifests.py \
+            tests/test_recover_compositae1061_target.py \
+            tests/test_recover_compositae1061_target_expanded.py \
+            -v
+
+      - name: Rebuild Moreyra public locus manifests
+        run: |
+          python analysis/recover_moreyra_author_repository.py \
+            --outdir data/evidence/generated/moreyra_author_repository \
+            --force
+          python analysis/summarize_moreyra_locus_filter.py \
+            --audit-dir data/evidence/generated/moreyra_author_repository
+          python analysis/export_moreyra_locus_manifests.py \
+            --input data/evidence/generated/moreyra_author_repository/paralog_locus_filter_reconstruction.csv \
+            --outdir data/evidence/generated/moreyra_author_repository/locus_sets
+
+      - name: Run metadata-aware repository audit
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python analysis/recover_compositae1061_target_expanded.py \
+            --moreyra-loci data/evidence/generated/moreyra_author_repository/locus_sets/moreyra_public_1061_loci.txt \
+            --outdir data/evidence/generated/compositae1061_target_audit_expanded
+
+      - name: Validate expanded audit contract
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          outdir = Path("data/evidence/generated/compositae1061_target_audit_expanded")
+          summary = json.loads((outdir / "audit_summary.json").read_text(encoding="utf-8"))
+
+          def rows(name):
+              with (outdir / name).open(encoding="utf-8-sig", newline="") as handle:
+                  return list(csv.DictReader(handle))
+
+          requests = rows("source_request_log.csv")
+          discovered = rows("metadata_paired_files.csv")
+          downloads = rows("download_log.csv")
+          fasta = rows("fasta_candidate_audit.csv")
+
+          print(f"audit_status={summary['audit_status']}")
+          print(f"source_requests={summary['source_requests']}")
+          print(f"successful_source_requests={summary['successful_source_requests']}")
+          print(f"metadata_paired_file_candidates={summary['metadata_paired_file_candidates']}")
+          print(f"download_attempts={summary['download_attempts']}")
+          print(f"successful_downloads={summary['successful_downloads']}")
+          print(f"fasta_candidates={summary['fasta_candidates']}")
+          print(f"high_confidence_candidates={summary['high_confidence_candidates']}")
+          print(f"compatible_candidates={summary['compatible_candidates']}")
+          if summary.get("best_candidate"):
+              best = summary["best_candidate"]
+              print(
+                  "best=" + best["container_filename"]
+                  + ("::" + best["archive_member"] if best["archive_member"] else "")
+                  + " overlap=" + best["normalized_overlap_fraction"]
+                  + " sha256=" + best["sha256"]
+              )
+
+          if summary["moreyra_locus_ids"] != 1061:
+              raise SystemExit("Expected 1,061 Moreyra public locus IDs")
+          if not requests:
+              raise SystemExit("No repository/API requests were recorded")
+          source_keys = {row["source_key"] for row in requests}
+          for dataset_id in ("bhvv6rmyt6", "hgpn6g27c6"):
+              if not any(dataset_id in key for key in source_keys):
+                  raise SystemExit(f"Mendeley dataset was not audited: {dataset_id}")
+          if not any(key.startswith("dryad") for key in source_keys):
+              raise SystemExit("Dryad source class was not audited")
+          if not any(key.startswith("github_search") for key in source_keys):
+              raise SystemExit("GitHub code search was not audited")
+          if summary["metadata_paired_file_candidates"] != len(discovered):
+              raise SystemExit("Discovered candidate count mismatch")
+          if summary["download_attempts"] != len(downloads):
+              raise SystemExit("Download count mismatch")
+          if summary["fasta_candidates"] != len(fasta):
+              raise SystemExit("FASTA count mismatch")
+          if summary["exact_target_frozen"]:
+              raise SystemExit(
+                  "Exact target cannot be frozen without source/method confirmation"
+              )
+          for row in discovered:
+              if not row["filename"] or not row["download_url"]:
+                  raise SystemExit("Metadata-paired candidate lacks filename or URL")
+          for row in fasta:
+              if len(row["sha256"]) != 64:
+                  raise SystemExit("FASTA candidate lacks SHA256")
+              overlap = float(row["normalized_overlap_fraction"])
+              if not 0 <= overlap <= 1:
+                  raise SystemExit("Invalid locus-overlap fraction")
+          PY
+
+      - name: Update target-audit issue with expanded result
+        uses: actions/github-script@v7
+        env:
+          SUMMARY_PATH: data/evidence/generated/compositae1061_target_audit_expanded/audit_summary.json
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- compositae1061-target-audit-expanded -->';
+            const summary = JSON.parse(fs.readFileSync(process.env.SUMMARY_PATH, 'utf8'));
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const issue = issues.find(item =>
+              !item.pull_request &&
+              item.title === 'Recover, validate and freeze the exact Compositae1061 HybPiper target FASTA'
+            );
+            if (!issue) {
+              core.warning('Target-audit issue not found');
+              return;
+            }
+            let best = 'none recovered';
+            if (summary.best_candidate) {
+              const b = summary.best_candidate;
+              best = `\`${b.container_filename}${b.archive_member ? ' :: ' + b.archive_member : ''}\` — records ${b.record_count}, normalized Moreyra overlap ${b.normalized_overlap_fraction}, SHA256 \`${b.sha256}\`, status \`${b.candidate_status}\``;
+            }
+            const body = `${marker}
+            ## Expanded metadata-aware target audit
+
+            - status: \`${summary.audit_status}\`
+            - successful source requests: **${summary.successful_source_requests} / ${summary.source_requests}**
+            - filename/download-URL pairs recovered: **${summary.metadata_paired_file_candidates}**
+            - download attempts / successes: **${summary.download_attempts} / ${summary.successful_downloads}**
+            - FASTA candidates audited: **${summary.fasta_candidates}**
+            - high-confidence candidates needing method confirmation: **${summary.high_confidence_candidates}**
+            - compatible non-exact candidates: **${summary.compatible_candidates}**
+            - best candidate: ${best}
+            - exact target frozen: **${summary.exact_target_frozen}**
+
+            This expanded run pairs file names with nested download URLs/IDs from Mendeley and Dryad and follows GitHub contents-API records. Sequence overlap alone is still not accepted as exact target provenance.
+
+            Workflow run: \`${context.runId}\`.`;
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              per_page: 100,
+            });
+            const existing = comments.find(comment => comment.body && comment.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body,
+              });
+            }
+
+      - name: Upload expanded target audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: compositae1061-target-audit-expanded-${{ github.run_id }}
+          path: |
+            data/evidence/generated/compositae1061_target_audit_expanded/
+            data/evidence/generated/moreyra_author_repository/locus_sets/locus_set_manifest.csv
+            data/evidence/generated/moreyra_author_repository/locus_sets/locus_set_manifest.json
+          if-no-files-found: error
+          retention-days: 90
