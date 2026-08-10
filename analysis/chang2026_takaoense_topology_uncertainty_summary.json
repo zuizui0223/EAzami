@@ -1,0 +1,30 @@
+{
+  "tip_count": 6,
+  "rooted_binary_topologies_enumerated": 945,
+  "uniform_topology_enumeration_is_probability": false,
+  "regain_required_topologies": 270,
+  "regain_required_proportion": 0.2857142857142857,
+  "no_regain_allowed_at_minimum_topologies": 675,
+  "no_regain_allowed_at_minimum_proportion": 0.7142857142857143,
+  "bp_monophyletic_topologies": 45,
+  "w_monophyletic_topologies": 45,
+  "both_morphs_monophyletic_topologies": 9,
+  "bp_monophyletic_w_nonmonophyletic_topologies": 36,
+  "bp_monophyletic_w_nonmonophyletic_regain_required": 36,
+  "no_regain_penalty_counts_among_required": {
+    "1": 252,
+    "2": 18
+  },
+  "exact_displayed_topology": {
+    "newick": "(((((NH_3835_BP,TJ_3807_BP),FC_3559_BP),LT_3839_W),FB_3629_W),WY_3560_W)",
+    "bp_monophyletic": "yes",
+    "w_monophyletic": "no",
+    "minimum_changes_coloured_sinocirsium_root": 2,
+    "optimal_directional_combinations": "losses=1;regains=1",
+    "regain_required_at_minimum": "yes",
+    "minimum_no_regain_changes": 4,
+    "no_regain_change_penalty": 2
+  },
+  "current_inference": "The exact displayed pectinate topology requires W->C at the coloured-root Sinocirsium minimum, but 675 of 945 alternative rooted binary resolutions allow a no-regain history at the same minimum. Regain support is therefore topology-sensitive until weak internodes are resolved or modelled.",
+  "interpretation_limit": "Uniform enumeration assigns no empirical weight to alternative topologies; it is a robustness boundary, not a posterior probability of regain."
+}
