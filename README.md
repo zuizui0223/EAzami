@@ -63,9 +63,9 @@ Important consequence: new RAD-seq in Japan should focus on white/coloured popul
 - a true modern nuclear gap after synonyms and supplements are checked;
 - a species already resolved by a separate Chang nuclear dataset.
 
-The directly verified anchor is *C. domonii* (`SAMN34240283`, `SRX21011499`, `SRR25265717`). A manual workflow at `.github/workflows/recover-ncbi-project-metadata.yml` runs the same recovery and uploads the generated tables without modifying the repository.
+The directly verified anchor is *C. domonii* (`SAMN34240283`, `SRS18284452`, `SRX21011499`, `SRR25265717`). A manual workflow at `.github/workflows/recover-ncbi-project-metadata.yml` runs the same recovery and uploads the generated tables without modifying the repository.
 
-See `docs/PRJNA957074_RECOVERY_UPDATE_2026-08-10.md`.
+See `docs/PRJNA957074_RECOVERY_UPDATE_2026-08-10.md` and `docs/PRJNA957074_RECOVERY_RUNBOOK.md`.
 
 ## Primary hypotheses
 
@@ -106,6 +106,8 @@ Tracked as GitHub issues so it does not block current analytical work:
 - `docs/EVIDENCE_AUDIT_2026-08-09.md` — source-backed audit of current nuclear phylogenomics and priorities
 - `docs/PHYLOGENY_GAP_AND_RADSEQ_PLAN.md` — RAD-seq gap logic
 - `docs/PRJNA957074_RECOVERY_UPDATE_2026-08-10.md` — project-tip recovery and evidence-state rules
+- `docs/PRJNA957074_RECOVERY_RUNBOOK.md` — operational recovery/validation procedure
+- `docs/EXISTING_DATA_WORKSTREAM_STATUS_2026-08-10.md` — existing-data work vs new-data blockers
 - `data/regional_master_taxa_seed.csv` — current source-backed East Asian master table
 - `data/evidence/focal_taxa_prjna957074.txt` — focal accepted names for project recovery
 - `data/evidence/prjna957074_focal_tip_recovery_2026-08-10.csv` — current accession-level audit
