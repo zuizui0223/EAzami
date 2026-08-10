@@ -1,289 +1,267 @@
 # East Asian *Cirsium* phylogenomics implementation plan
 
-Date: 2026-08-10
+Date: 2026-08-10  
+Revision: v0.2 after exact Moreyra sample and public locus-filter audit
 
 ## Decision summary
 
-The East Asian phylogeny should **not** be built as one giant RAD-seq experiment across all taxa. The most defensible design is a linked two-layer framework:
+The East Asian phylogeny should **not** be built as one giant RAD-seq experiment across all taxa. The defensible architecture has two linked layers:
 
-1. **Species-level backbone:** Compositae1061-compatible target capture, merged with the existing Herrando-Moraira, Siniscalchi and Moreyra datasets.
-2. **Population/morph history:** RAD-seq or resequencing within selected white/coloured systems after their species-level placement is known.
+1. **Species-level backbone:** Compositae1061-compatible target capture only for genuine transition-critical taxa missing from modern nuclear data.
+2. **Population/morph history:** RAD-seq or resequencing within selected white/coloured systems whose species placement is already known.
 
-This separation follows directly from the current literature map. Deep and broad species relationships already have reusable target-capture data, whereas the unresolved flower-colour questions concern within-species polymorphism, local ancestry, introgression and cytotypes.
+The integrated Moreyra–Chang audit currently contains 33 transition-relevant taxa. Twenty-one have modern species-level nuclear placement, and no active Tier-A focal taxon remains a species-placement gap. The main unresolved questions concern morph identity, local ancestry, gene flow, standing variation, introgression, cytotype and molecular mechanism.
 
-## 1. Species-level East Asian backbone
+## 1. Existing data that should be reused
 
-### 1.1 Geographic scope
+### 1.1 Deep and global backbone
 
-Build one explicit East Asian sampling frame covering:
+Use:
 
-- Japan and the Ryukyu Islands;
-- Taiwan;
-- China, including southeastern, northeastern and southwestern sectors;
-- Korea;
-- Sakhalin and the Russian Far East;
-- Mongolia where it supplies the continental sister/bridge context;
-- a small number of western Eurasian and North American anchors already present in the global tree.
+- Herrando-Moraira et al. Cardueae Hyb-Seq matrices and trees;
+- Moreyra et al. 2025 PRJNA957074 reads and Supplementary Table S1;
+- Siniscalchi et al. North American Compositae target-capture data as a regional compatibility check;
+- existing high-quality outgroups from the same target system.
 
-The first target is not every named *Cirsium*, but every lineage needed to:
+### 1.2 Focal East Asian regional frameworks
 
-- connect the regional trees under one marker framework;
-- orient a white/coloured transition;
-- test whether a candidate white form is independent;
-- provide parental/sister context for an introgression test;
-- represent a distinct cytotype or disputed taxonomic entity.
+Use the full Chang 2025/2026 phylotranscriptomic trees as regional topology constraints. Their non-Compositae orthogroups should not be discarded merely because they do not overlap the target-capture panel.
 
-### 1.2 Marker choice
+Current focal sample coverage includes:
 
-Use **Compositae1061-compatible target enrichment**.
+- Sinocirsium and Arenicola in Chang 2026;
+- Taiwanese and Japanese Nipponocirsium in Chang 2025;
+- exact Moreyra target-capture tips for `C. pendulum`, `C. sieboldii`, `C. yezoense`, `C. dipsacolepis`, `C. domonii`, `C. lineare`, `C. nipponicum` and `C. vlassovianum`.
+
+## 2. Marker choice
+
+Use **Compositae1061-compatible target enrichment** for verified missing species-level lineages.
 
 Reasons:
 
-- it generated the deep Cardueae Hyb-Seq framework;
-- it was used in the North American *Cirsium* radiation study;
-- Moreyra et al. 2025 also used Compositae1061 and retained 350 loci after orthology assessment/filtering;
-- the family-specific panel recovers more loci in Asteraceae than Angiosperms353, although paralogy is correspondingly more frequent;
-- a documented 30-locus overlap permits limited integration with Angiosperms353 data if useful.
+- it connects family-, tribe-, regional- and global-scale nuclear datasets;
+- it was the capture framework used by Moreyra et al. 2025;
+- it is more appropriate for cross-species backbone construction than one RAD panel across highly divergent taxa and cytotypes;
+- it permits explicit paralog/homeolog analysis rather than treating all multi-copy recovery as missing data.
 
-Do **not** refer to a separate “Moreyra 350-locus bait set” unless an actual distinct probe design is recovered. The 350 loci are the filtered analysis subset, not currently evidence of an independent capture kit.
+The paper's 350 loci are a filtered analysis subset, not a separate bait kit.
 
-### 1.3 Sampling density
+## 3. Correction from the Moreyra public locus audit
 
-#### Existing, well-placed taxa
+The corresponding author's public repository contains:
 
-- one high-quality representative may be sufficient for backbone reuse;
-- add a second representative when taxonomic identification, geography or cytotype is uncertain;
-- add three representatives for broad, morphologically variable or suspected hybrid taxa.
+- `hybpiper_stats_exonerate.tsv`;
+- `seq_lengths_exonerate.tsv`;
+- `paralog_report.xlsx`.
 
-#### Genuine missing taxa that affect colour history
+It does not contain the final Newick trees, retained 350 alignments, per-locus gene trees or an explicit final 350-locus list.
 
-- 2–3 individuals from separate populations;
-- include one fresh high-molecular-weight DNA sample where possible;
-- retain voucher, locality, flower colour and ploidy metadata.
+The public files expose 1,061 named loci, whereas the paper reports 1,064 initially mapped loci. The three-locus difference remains unresolved.
 
-#### Known/suspected polyploids
+The reproducible public screen yields:
 
-- minimum three individuals per cytotype/population class;
-- fresh material for flow cytometry is mandatory where feasible;
-- avoid pooling cytotypes under one species tip.
+| Stage | Loci |
+|---|---:|
+| Public named locus universe | 1,061 |
+| More than 10 paralog-warning samples; automatic discard class | 478 |
+| One to ten warnings; manual gene-tree review class | 307 |
+| No warning | 276 |
+| Raw sequence occupancy at least 0.80 | 1,001 |
+| Warning count no more than 10 and occupancy at least 0.80 | 531 |
+| No-warning and occupancy at least 0.80 | 241 |
+| Paper-reported final alignments | 350 |
 
-### 1.4 Existing data to integrate before new sequencing
+The exact reduction from 531 candidates to 350 cannot be reproduced because manual gene-tree orthology decisions and final alignment-level missingness are not publicly encoded.
 
-1. Herrando-Moraira et al. 2019 archived Cardueae matrices, gene trees and species trees.
-2. Moreyra et al. 2025 PRJNA957074 Compositae1061 raw reads and exact Supplementary Table S1/tree artifacts.
-3. Siniscalchi et al. 2023 North American Compositae1061 data as an independent regional compatibility check.
-4. Chang 2025/2026 transcriptome reads/orthogroups for focal Taiwan–Ryukyu–Japan taxa.
-5. Angiosperms353 samples only through explicitly shared/recoverable loci or as a separate sensitivity matrix.
+Consequently, **`exact Moreyra 350 matrix` is a reserved, currently unavailable label.** No inferred 350-locus subset should be presented as the original set.
 
-For Chang transcriptomes, identify orthologs that map to Compositae1061 targets. Retain the full phylotranscriptomic trees as separate high-information regional topology constraints rather than discarding non-overlapping orthogroups.
+See:
 
-## 2. Raw-read and locus-recovery workflow
+- `docs/MOREYRA_2025_AUTHOR_REPOSITORY_LOCUS_AUDIT_2026-08-10.md`
+- `data/evidence/moreyra2025_public_locus_filter_summary_2026-08-10.json`
+- `analysis/recover_moreyra_author_repository.py`
+- `analysis/summarize_moreyra_locus_filter.py`
 
-### 2.1 Primary assembly
+## 4. Nuclear matrices to generate
 
-Use HybPiper with:
+For existing and new target-capture samples, generate at least four explicitly named matrices.
 
-- versioned target file;
-- per-sample read and assembly statistics;
-- intronerate output where informative;
+### 4.1 Public-universe matrix
+
+Recover all usable loci from the public 1,061-locus universe. This maximizes overlap with the author-repository summaries and retains the broadest possible starting point.
+
+### 4.2 Reproducible 531-candidate matrix
+
+Apply the public-data screen:
+
+- no more than ten paralog-warning samples in the Moreyra public matrix;
+- raw sequence occupancy at least 0.80 in the public sequence-length matrix.
+
+This is a reproducible pre-manual candidate set, not the final published matrix.
+
+### 4.3 Conservative no-warning matrix
+
+Use the no-warning, high-occupancy loci as a stringent primary/sensitivity set. The public Moreyra screen identifies 241 such loci.
+
+For the expanded East Asian matrix, re-evaluate copy number and occupancy rather than assuming that a locus remains single-copy after adding polyploid taxa.
+
+### 4.4 Paralog/homeolog-aware matrix
+
+Retain labelled copies and homeolog evidence for:
+
+- ASTRAL-Pro-style analyses;
+- HybPhaser or related phasing diagnostics;
+- topology weighting;
+- network tests;
+- identifying polyploid or introgressed histories hidden by one-copy filtering.
+
+## 5. Primary assembly and QC
+
+Use HybPiper or an equivalent versioned pipeline with:
+
+- exact target-file version;
+- read, mapping and assembly statistics per sample;
 - all paralog warnings retained;
-- no silent choice of a single sequence for a locus with multiple strong copies.
+- sequence-length and occupancy summaries;
+- no silent selection of one sequence when multiple strong copies exist;
+- explicit sample inclusion and missingness rules;
+- reproducible gene-tree and alignment archives for every retained locus.
 
-Run a second pipeline or a controlled subset through HybPhyloMaker/Captus as a robustness check if topology-sensitive discrepancies appear.
+A second pipeline such as Captus or HybPhyloMaker can be used on a controlled subset when topology-sensitive discrepancies occur.
 
-### 2.2 Orthology and paralogy matrices
+## 6. Species-tree and network ensemble
 
-Generate at least three nuclear datasets:
+Create and version:
 
-1. **Conservative single-copy matrix**
-   - remove loci/samples with strong paralog conflict;
-   - suitable for the primary ASTRAL and concatenated trees.
+1. concatenated maximum-likelihood tree from a conservative matrix;
+2. ASTRAL tree from conservative single-copy gene trees;
+3. multi-copy/paralog-aware species tree;
+4. tree from the reproducible public 531-candidate set;
+5. tree from the stringent no-warning set;
+6. Chang regional phylotranscriptomic topologies;
+7. separate plastid maternal topology;
+8. reduced-taxon network analyses for specific reticulation hypotheses.
 
-2. **Moreyra-compatible retained-locus matrix**
-   - intersect with the recovered 350-locus set and comparable filtering;
-   - maximizes direct reuse of the global tree.
+Use quartet/local posterior support, gene and site concordance factors, and polytomy tests. Weak internodes should remain unresolved when the data do not reject a polytomy.
 
-3. **Multi-copy/paralog-aware matrix**
-   - retain labeled copies/homeologs;
-   - analyse with ASTRAL-Pro 2 and hybrid/phasing workflows.
+Do not infer branch lengths from published figures. Formal Mk and stochastic mapping require a documented branch-length source.
 
-Use PPD-style criteria and explicit sensitivity thresholds rather than treating every HybPiper paralog warning as either automatically fatal or automatically harmless.
+## 7. Plastid layer
 
-### 2.3 Plastid data
-
-Recover off-target plastid reads or existing plastomes, but store them as an independent maternal-history analysis.
+Recover off-target plastid reads and existing plastomes as a separate maternal-history layer.
 
 Outputs:
 
-- plastid tree/haplotype network;
+- plastid tree or haplotype network;
 - nuclear–plastid discordance table;
 - candidate chloroplast-capture events.
 
-Never substitute the plastid topology for the nuclear species tree in ancestral flower-colour reconstruction.
+The plastid topology must not substitute for the nuclear species tree in flower-colour ancestral-state reconstruction.
 
-## 3. Tree and network analyses
+## 8. Population layer for flower-colour history
 
-### 3.1 Gene-tree estimation
+### 8.1 var. *takaoense*
 
-For every locus:
+First recover the white/coloured identity of the six published transcriptome vouchers. Then sample multiple populations per morph, prioritizing mixed populations when present.
 
-- alignment QC and trimming;
-- model selection and maximum-likelihood gene tree;
-- branch support and informative-site summary;
-- collapse very weak gene-tree branches before coalescent analysis as a sensitivity;
-- flag samples/loci with unusual copy number or long branches.
+Distinguish:
 
-### 3.2 Primary species-tree set
+- parallel white losses;
+- shared white origin plus coloured reactivation;
+- ancestral white/coloured polymorphism;
+- coloured-haplotype introgression from related Sinocirsium ancestry.
 
-Create a versioned topology ensemble:
+### 8.2 *C. pendulum*
 
-1. concatenated maximum-likelihood tree;
-2. ASTRAL species tree from conservative single-copy loci;
-3. ASTRAL-Pro 2 tree from labeled multi-copy gene families;
-4. Moreyra-compatible 350-locus tree;
-5. regional Chang transcriptome trees;
-6. plastid tree as a separate maternal topology.
+Reuse the Moreyra Trans-Baikal tip as a continental species anchor. New data should cover Japanese white and purple populations plus Korea, Northeast China and Primorye bridges.
 
-Use quartet support/local posterior probabilities, gene concordance factors and polytomy tests. Weak rapid-radiation internodes should remain unresolved when the data do not reject a polytomy.
+### 8.3 *C. sieboldii*
 
-### 3.3 Reticulation tests
+The exact Moreyra tip was cultivated and has unresolved wild provenance. Sample Japanese white/purple populations and the Zhejiang bridge explicitly.
 
-Use different tools for different scales:
+### 8.4 *C. kawakamii–C. tatakaense*
 
-- HybPhaser or related allele-phasing diagnostics for target-capture hybrid detection;
-- PhyloNetworks/SNaQ on a reduced, biologically justified taxon set;
-- D/f-statistics or local ancestry on population-level RAD/resequencing data;
-- topology weighting/gene-tree discordance around specific candidate hybrid branches.
+Both are 2n=64 and have modern phylotranscriptomic placement. Use ploidy-aware population genomics, floral RNA and pigment chemistry to test independent regulatory loss, homeolog sorting and introgression.
 
-Do not search an unrestricted network with every East Asian taxon and many hybrid nodes. Start from hypotheses generated by geography, cytotype, nuclear–plastid discordance and the colour-associated region.
+### 8.5 *C. brevicaule–C. irumtiense*
 
-## 4. Population layer for flower-colour evolution
+The published sister context favours white loss in `C. brevicaule`. Test gene flow, ancestral polymorphism and whether its white mechanism is homologous to other independent white lineages.
 
-### 4.1 Highest-priority systems
+### 8.6 Conditional Korean and Northeast Asian systems
 
-1. var. *takaoense*: white versus bluish-purple populations/individuals.
-2. *C. pendulum*: Japanese white/purple plus Korean–Chinese–Russian-Far-East bridge populations.
-3. *C. sieboldii*: Japanese white/purple plus Zhejiang populations.
-4. *C. kawakamii* versus *C. tatakaense*: matched tetraploid white/coloured comparison.
-5. *C. brevicaule* versus *C. irumtiense*: independent white-loss mechanism, structure and gene flow.
-6. verified Korean white forms of *C. setidens*, *C. rhinoceros*, *C. schantarense* or *C. vlassovianum*.
+Do not promote a historical white-form name to sequencing priority until extant natural material or repeated voucher-backed occurrence is verified.
 
-### 4.2 RAD-seq role
+- `C. vlassovianum`: species placement exists; use population genomics if white populations are verified.
+- `C. setidens` and `C. rhinoceros`: obtain Compositae1061 placement only if white material is verified and no other modern nuclear data exist.
+- `C. schantarense`: verify white records and taxonomy before target capture or population genomics.
 
-RAD-seq is used to estimate:
+## 9. Ploidy-aware field and bioinformatic policy
 
-- population structure and admixture;
-- whether colour morphs form genomic clusters;
-- local versus genome-wide ancestry;
-- FST, dXY and diversity around candidate regions after those regions are known;
-- demographic alternatives such as retained polymorphism versus secondary introgression.
+For every focal population:
 
-RAD-seq is **not** the preferred tool for merging every divergent East Asian species into one backbone because restriction-site dropout and non-homologous locus sets can increase with divergence.
-
-### 4.3 When resequencing is preferable
-
-Escalate a focal system from RAD-seq to low/medium-coverage whole-genome resequencing when:
-
-- a reference-quality or good draft genome exists;
-- structural or promoter variants are plausible;
-- local ancestry must be resolved at fine scale;
-- polyploid allele dosage can be modelled;
-- a RAD locus cannot span the causal region.
-
-## 5. Ploidy-aware handling
-
-### 5.1 Field metadata
-
-For each population:
-
-- flow-cytometric genome size/ploidy from fresh leaf;
-- literature chromosome count with voucher/cytotype provenance;
-- mixed cytotypes recorded as separate population strata;
-- standardized DNA concentration and quality;
-- no pooling of cytotypes before genotype calling.
-
-### 5.2 Bioinformatics
-
-- retain allele balance and read-depth distributions;
+- retain voucher and source/accepted names;
+- obtain fresh-leaf flow cytometry where feasible;
+- store chromosome and cytotype provenance;
+- separate mixed cytotypes before genotype calling;
+- link standardized colour, pigment, floral RNA and leaf DNA to the same plant;
+- retain allele balance, depth and excess-heterozygosity diagnostics;
 - compare diploid and ploidy-aware genotype models;
-- identify collapsed homeologs and loci with excess heterozygosity;
-- run single-copy and multi-copy trees separately;
-- use ASTRAL-Pro 2 and HybPhaser-style analyses as sensitivities;
-- avoid interpreting an apparent heterozygous colour allele as simple diploid variation before cytotype checks.
+- analyse single-copy and multi-copy matrices separately.
 
-## 6. Connection to the molecular flower-colour mechanism
+## 10. Mechanism layer
 
-The species/population trees determine **where** the colour transition occurred. They do not identify **how** it occurred.
+The phylogeny determines **where** a transition occurred. It does not identify **how**.
 
-For the same individuals, link:
+For matched individuals, collect:
 
-- standardized visible and UV reflectance;
+- visible and UV reflectance;
 - anthocyanin/flavonoid chemistry;
 - floral RNA-seq at matched developmental stages;
 - leaf DNA;
 - candidate regulatory and structural loci;
-- voucher and population ID.
+- ploidy and voucher metadata.
 
-The mechanistic comparison should test:
+Test:
 
 1. independent disruptive mutations;
-2. repeated regulatory suppression of homologous MBW-network nodes;
-3. shared ancestral white haplotype;
-4. introgressed white or coloured haplotype;
-5. derived restoration/reactivation on a white background.
+2. repeated suppression of homologous MBW-network nodes;
+3. shared ancestral white haplotypes;
+4. introgressed white or coloured haplotypes;
+5. derived functional restoration on a white genetic background.
 
-## 7. Deliverables before ordering new libraries
+## 11. Deliverables before ordering species-backbone libraries
 
-### Required existing-data deliverables
+Required:
 
-- exact Moreyra sample/tip table;
-- exact Moreyra concatenated and coalescent trees;
-- retained 350-locus names and orthology/filtering rules;
-- Herrando-Moraira archived tree set downloaded and versioned;
-- Chang 2025/2026 exact sample/tree files;
-- accepted-name/synonym mapping for all candidate taxa;
-- verified nuclear-coverage matrix;
-- ploidy/cytotype evidence matrix;
-- population-aware flower-colour atlas.
+- frozen East Asian accepted-name/synonym table;
+- integrated nuclear-coverage table;
+- transition information-gain classification;
+- exact vouchers and cytotypes for proposed samples;
+- recovered public 1,061-locus universe;
+- reproducible 531-candidate and conservative no-warning definitions;
+- Herrando-Moraira tree/data archive;
+- Chang sample/topology provenance;
+- explicit statement that the original final 350 list and final Moreyra trees are unavailable unless subsequently recovered.
 
-### Pilot target-capture decision
+Select a 24–48-sample pilot only from taxa that remain genuine, transition-critical species gaps after this audit.
 
-Only after those deliverables, select approximately 24–48 samples that maximize:
+## 12. Pilot population decision
 
-- true missing-lineage coverage;
-- taxonomic/cytotype uncertainty resolution;
-- bridge connectivity among regional trees;
-- ability to orient a colour transition.
+The first population pilot should include:
 
-Pilot success criteria:
+- one within-lineage white/coloured system: `var. takaoense`, after morph-linked sampling;
+- one polyploid interspecific replicate: `C. kawakamii–C. tatakaense`.
 
-- high target recovery across regions and cytotypes;
-- sufficient overlap with existing Compositae1061 data;
-- manageable paralog/homeolog rates;
-- stable placement of technical or biological replicates;
-- no major batch-specific topology.
+Success criteria include:
 
-### Pilot population decision
-
-Run the first RAD/resequencing panel on **one diploid within-lineage white/coloured system** and **one polyploid interspecific replicate**. The strongest current pair is:
-
-- var. *takaoense* for the high-information same-lineage comparison;
-- *C. kawakamii*–*C. tatakaense* for ploidy-aware replicated white loss.
-
-## 8. Decision table
-
-| Question | Primary data | Main analysis | Why |
-|---|---|---|---|
-| Where is an unsampled East Asian species placed? | Compositae1061 target capture | IQ-TREE + ASTRAL | Compatible with existing global/regional backbones |
-| Are short internodes truly resolved? | hundreds of gene trees | quartet support + polytomy tests | Avoids false certainty in rapid radiations |
-| Does polyploidy change placement? | multi-copy target loci + ploidy | ASTRAL-Pro 2 + phased/homeolog sensitivity | One-copy matrices can erase parental histories |
-| Is the lineage reticulate? | target capture or population SNPs | HybPhaser/SNaQ/local ancestry | A tree alone cannot represent introgression |
-| Is a colour morph derived or ancestral? | dense population SNPs | structure + demographic/local ancestry models | Requires within-taxon history, not one species tip |
-| Is coloured *takaoense* a regain? | population SNPs + RNA/pigment + candidate locus | topology/history + functional restoration test | Must reject parallel loss and introgression first |
-| Did independent white lineages use the same mechanism? | replicated RNA/chemistry/genomics | orthologous candidate comparison | Tests molecular parallelism rather than phenotype alone |
+- adequate loci after ploidy-aware QC;
+- stable technical/biological replicate placement;
+- interpretable population structure;
+- ability to distinguish local from genome-wide ancestry;
+- matched pigment and floral expression for mechanism.
 
 ## Final implementation decision
 
-> **Compositae1061 target capture is the backbone technology; RAD-seq/resequencing is the focal population technology; transcriptomics and pigment chemistry establish the colour mechanism; cytogenetics determines how all genomic analyses are interpreted.**
+> **Compositae1061 target capture is the conditional species-backbone technology; RAD-seq or resequencing is the core morph/population technology; transcriptomics and pigment chemistry establish mechanism; cytogenetics determines how all genomic results are interpreted.**
 
-This architecture reuses the strongest existing data, avoids wasting RAD libraries on already resolved species placement, and keeps true regain as a falsifiable hypothesis rather than a narrative assumption.
+The project will reuse the strongest available phylogenetic evidence, avoid paying to rediscover resolved species placements, and will not label a reconstructed locus set or a coloured lineage as `exact Moreyra 350` or `true regain` without the required evidence.
