@@ -6,12 +6,18 @@ on:
       - "analysis/recover_cirsium_phylogeny_literature.py"
       - "analysis/build_cirsium_phylogeny_registry.py"
       - "analysis/validate_cirsium_population_history_registry.py"
+      - "analysis/published_east_asia_colour_history.py"
+      - "analysis/published_east_asia_colour_history.csv"
       - "tests/test_recover_cirsium_phylogeny_literature.py"
       - "tests/test_build_cirsium_phylogeny_registry.py"
       - "tests/test_validate_cirsium_population_history_registry.py"
+      - "tests/test_published_east_asia_colour_history.py"
       - "data/evidence/cirsium_phylogeny_literature_registry_*.csv"
       - "data/evidence/cirsium_population_history_literature_*.csv"
       - "data/evidence/cirsium_phylogeny_search_queries.txt"
+      - "data/evidence/chang2025_nipponocirsium_accession_audit_*.csv"
+      - "data/evidence/chang2026_flower_colour_claim_audit_*.csv"
+      - "data/phylogeny/published_topology_fragments_*.csv"
       - ".github/workflows/recover-cirsium-phylogeny-literature.yml"
   workflow_dispatch:
     inputs:
@@ -44,18 +50,23 @@ jobs:
           python -m py_compile \
             analysis/recover_cirsium_phylogeny_literature.py \
             analysis/build_cirsium_phylogeny_registry.py \
-            analysis/validate_cirsium_population_history_registry.py
+            analysis/validate_cirsium_population_history_registry.py \
+            analysis/published_east_asia_colour_history.py
           python -m unittest \
             tests/test_recover_cirsium_phylogeny_literature.py \
             tests/test_build_cirsium_phylogeny_registry.py \
             tests/test_validate_cirsium_population_history_registry.py \
+            tests/test_published_east_asia_colour_history.py \
             -v
 
-      - name: Validate curated evidence registries
+      - name: Validate curated evidence and deterministic colour-history results
         run: |
           python analysis/build_cirsium_phylogeny_registry.py \
             --output /tmp/cirsium_phylogeny_literature_registry_current.csv
           python analysis/validate_cirsium_population_history_registry.py
+          cp analysis/published_east_asia_colour_history.csv /tmp/published_east_asia_colour_history.expected.csv
+          python analysis/published_east_asia_colour_history.py
+          diff -u /tmp/published_east_asia_colour_history.expected.csv analysis/published_east_asia_colour_history.csv
           python - <<'PY'
           import csv
           from pathlib import Path
@@ -85,10 +96,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Build and validate current curated registries
+      - name: Build and validate current curated registries and analyses
         run: |
           python analysis/build_cirsium_phylogeny_registry.py
           python analysis/validate_cirsium_population_history_registry.py
+          python analysis/published_east_asia_colour_history.py
 
       - name: Recover Crossref and Europe PMC candidates
         env:
@@ -135,5 +147,6 @@ jobs:
             data/evidence/cirsium_population_history_literature_2026-08-10.csv
             data/evidence/generated/cirsium_phylogeny_literature_candidates.csv
             data/evidence/generated/cirsium_phylogeny_search_log.csv
+            analysis/published_east_asia_colour_history.csv
           if-no-files-found: error
           retention-days: 90
