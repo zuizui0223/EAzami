@@ -1,0 +1,49 @@
+{
+  "study": "Chang et al. 2026",
+  "doi": "10.1186/s12870-026-08097-6",
+  "bioproject": "PRJNA1311153",
+  "audit_date": "2026-08-11",
+  "seed_vouchers": 6,
+  "project_runinfo_rows": 25,
+  "candidate_takaoense_run_rows": 6,
+  "voucher_run_matches": 6,
+  "ambiguous_voucher_run_matches": 0,
+  "biosamples_with_attribute_records": 6,
+  "attribute_rows": 36,
+  "attributes_per_biosample": [
+    "biosample_organism",
+    "collection_date",
+    "dev_stage",
+    "geo_loc_name",
+    "isolate",
+    "tissue"
+  ],
+  "morph_relevant_attribute_rows": 0,
+  "direct_sample_colour_assignments": 0,
+  "assigned_vouchers": [],
+  "unresolved_vouchers": [
+    "ccy3559",
+    "ccy3560",
+    "ccy3629",
+    "ccy3807",
+    "ccy3835",
+    "ccy3839"
+  ],
+  "identity_result": "All six Supplementary Table S1 voucher identifiers map one-to-one to six public runs and BioSamples through the exact numeric suffix in SampleName and the matching BioSample isolate attribute.",
+  "morph_result": "Official NCBI runinfo and BioSample metadata contain no flower-colour, corolla, phenotype, morph, pigment or anthocyanin attribute for these six samples. No W/BP state is assigned.",
+  "interpretation": "The public sequence accessions are now linked to the published vouchers, but the white-corolla versus bluish-purple-corolla mapping remains unavailable outside the labelled phylogenetic figure or other voucher/author evidence.",
+  "prohibited_inference": "Do not infer W/BP from locality, elevation, herbarium, library number, read count, topology or the broad NCBI submitted name Cirsium japonicum var. japonicum.",
+  "next_direct_evidence": [
+    "high-resolution official Figure 1 with readable tip labels",
+    "figure source file or author confirmation",
+    "TNM/TCF voucher image, label or collector field record",
+    "new morph-linked sampling if published voucher states cannot be recovered"
+  ],
+  "workflow_provenance": {
+    "workflow_name": "Audit Chang 2026 BioSample morph metadata",
+    "workflow_run": 31427871328,
+    "artifact_id": 9077891898,
+    "artifact_sha256": "e00d724f51c7d6fe0286a083d80b578ab0511e0b0fc65016918fbf14c0d209e0",
+    "tests_passed": 16
+  }
+}
