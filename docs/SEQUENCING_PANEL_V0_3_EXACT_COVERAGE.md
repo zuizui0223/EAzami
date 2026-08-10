@@ -1,177 +1,156 @@
 # Sequencing panel v0.3: decisions after exact Moreyra–Chang coverage integration
 
 Date: 2026-08-10  
-Updated: 2026-08-11 after exact var. *takaoense* voucher–NCBI reconciliation
+Updated: 2026-08-11 after direct recovery of all six var. *takaoense* W/BP labels
 
-## Why the panel changed
+## Decision rule
 
-Earlier panel versions mixed three different situations:
+The East Asian design distinguishes:
 
-1. a species genuinely absent from modern nuclear trees;
-2. a species already placed, but its white/coloured populations were not sampled;
-3. a historical white-form name whose extant natural population had not been verified.
+1. genuine species-level nuclear gaps;
+2. species already placed but lacking population or morph history;
+3. published samples whose provenance or phenotype metadata must be recovered;
+4. historical white-form names whose extant natural populations remain unverified.
 
-The exact recovery of Moreyra et al. 2025 Supplementary Table S1 and PRJNA957074, combined with the Chang 2025/2026 sample audits, now allows those situations to be separated.
+The central rule is:
 
-The reproducible integrated screen currently covers **33 master-table taxa** after adding the Korean and Northeast Asian candidates. The central rule is:
+> use target capture only for a genuine transition-critical species gap; use RAD-seq or resequencing to resolve morph/population history after species placement is known; recover missing metadata before generating redundant sequences.
 
-> use target capture to close a genuine transition-critical species gap; use RAD-seq or resequencing to resolve morph/population history after species placement is known.
+The integrated screen currently covers 33 master-table taxa. No active Tier-A focal taxon remains a species-placement gap.
 
-The machine-generated coverage table is produced by:
+Files:
 
 - `analysis/build_east_asia_nuclear_coverage.py`
-
-The frozen sampling decision table is:
-
 - `sampling/SEQUENCING_PANEL_V0_3_EXACT_COVERAGE.csv`
 
-## Major correction: no active Tier-A species-placement gap
+## Stage 0 — completed for var. takaoense
 
-For the currently active Tier-A systems, modern species-level nuclear placement is already available from at least one source:
+### Accession identity
 
-| System | Existing nuclear evidence | Remaining problem |
-|---|---|---|
-| `var. takaoense` | Chang 2026 phylotranscriptomics; six public transcriptomes now linked exactly to vouchers | W/BP labels and population ancestry unresolved |
-| `C. brevicaule–C. irumtiense` | Chang 2026 | gene flow, local ancestry and repeated mechanism |
-| `C. kawakamii–C. tatakaense–C. pengii` | Chang 2025 and 2026 | population ancestry, cytotype/homeolog and mechanism |
-| `C. pendulum` | exact Moreyra target-capture tip | Japanese white/purple and continental bridge history |
-| `C. sieboldii` | exact Moreyra target-capture tip | existing sample is cultivated; Japan/Zhejiang population history |
-| `var. albescens/fukienense` | Chang 2026 | white-haplotype sharing and coloured-ancestry controls |
+All six published transcriptome vouchers map one-to-one to official PRJNA1311153 runs and BioSamples.
 
-Therefore, the first sequencing wave should not spend samples on rebuilding these species placements.
+| Code | Voucher | Run | BioSample | Figure 1 morph |
+|---|---|---|---|---|
+| FC | `ccy3559` | `SRR35152718` | `SAMN50798021` | BP |
+| WY | `ccy3560` | `SRR35152717` | `SAMN50798022` | W |
+| FB | `ccy3629` | `SRR35152738` | `SAMN50798024` | W |
+| TJ | `ccy3807` | `SRR35152736` | `SAMN50798026` | BP |
+| NH | `ccy3835` | `SRR35152735` | `SAMN50798027` | BP |
+| LT | `ccy3839` | `SRR35152734` | `SAMN50798028` | W |
 
-## Stage 0: recover information before sequencing
+NCBI `SampleName` and BioSample `isolate` independently preserve the collector numbers. NCBI itself contains no colour attribute.
 
-### var. takaoense voucher morphs
+### Direct morph evidence
 
-The highest-information immediate action is still not sequencing. It is recovering the flower colour of the six existing transcriptome vouchers.
+The official Figure 1 PNG was recovered and frozen by hash. Panels B and C print the same six labels:
 
-The accession identity problem is now solved:
+- BP: FC-3559, TJ-3807, NH-3835;
+- W: WY-3560, FB-3629, LT-3839.
 
-| Code | Voucher | Run | BioSample | BioSample isolate | Morph |
-|---|---|---|---|---|---|
-| FC | `ccy3559` | `SRR35152718` | `SAMN50798021` | `3559` | unresolved |
-| WY | `ccy3560` | `SRR35152717` | `SAMN50798022` | `3560` | unresolved |
-| FB | `ccy3629` | `SRR35152738` | `SAMN50798024` | `3629` | unresolved |
-| TJ | `ccy3807` | `SRR35152736` | `SAMN50798026` | `3807` | unresolved |
-| NH | `ccy3835` | `SRR35152735` | `SAMN50798027` | `3835` | unresolved |
-| LT | `ccy3839` | `SRR35152734` | `SAMN50798028` | `3839` | unresolved |
+Thus the published transcriptome sample contains both morphs in equal numbers.
 
-Each link is supported by the collector-number suffix in NCBI `SampleName` and the matching BioSample `isolate`. There are no ambiguous voucher-to-run matches.
+The displayed ASTRAL sample topology and Neighbor-Net both show morph-associated structure. The three BP samples group together, while the three W samples occupy the other side or successive outside branches. This makes a one-transition model within the sampled variety plausible under some root-state assumptions, but it does not establish direction, causal restoration or absence of introgression.
 
-However, official NCBI runinfo and BioSample metadata contain no flower-colour, corolla, phenotype, morph, pigment or anthocyanin attribute for these samples. They therefore resolve accession provenance but do not resolve `(W)` versus `(BP)`.
+### Remaining non-sequencing gaps
 
-Supplementary Table S6 independently contains collector records for:
+- exact machine-readable tree and branch lengths;
+- Neighbor-Net distance/network file;
+- orthogroup/gene-tree inputs;
+- S1 TCF versus S6 TNM herbarium conflict for `ccy3839`.
 
-- `ccy3559`;
-- `ccy3560`;
-- `ccy3629`;
-- `ccy3839`.
-
-It does not expose a sample-level colour state. Collector number `ccy3839` also has a repository conflict:
-
-- Supplementary Table S1: TCF;
-- Supplementary Table S6: TNM.
-
-This conflict must be resolved before requesting the correct voucher image or label.
-
-The direct-evidence order is now:
-
-1. read FC, TJ, NH, WY, FB and LT `(W)` / `(BP)` suffixes from a high-resolution Figure 1 or source tree;
-2. obtain author confirmation;
-3. inspect TNM/TCF voucher images, labels or collector field records;
-4. resolve whether `ccy3839` is held at TCF, TNM or both.
-
-Do not infer colour from locality, elevation, herbarium, library number, NCBI submitted scientific name or topology.
+These are secondary to the now-complete W/BP mapping.
 
 Files:
 
 - `docs/CHANG2026_TAKAOENSE_MORPH_EVIDENCE_AUDIT_2026-08-11.md`
 - `docs/CHANG2026_TAKAOENSE_MORPH_REQUEST_DRAFT.md`
-- `data/evidence/chang2026_takaoense_ncbi_voucher_morph_audit_2026-08-11.csv`
-- `data/evidence/chang2026_takaoense_ncbi_morph_audit_summary_2026-08-11.json`
+- `data/evidence/chang2026_takaoense_figure1_morph_assignments_2026-08-11.csv`
 - `data/evidence/chang2026_takaoense_voucher_morph_evidence_2026-08-10.csv`
+- `data/evidence/chang2026_takaoense_ncbi_voucher_morph_audit_2026-08-11.csv`
 
-If both morphs are already represented, the published sample topology may provide a first morph-history test. If only one morph is represented, new paired sampling remains mandatory. If both are represented but geography or reticulation dominates the six-tip pattern, dense population genomics is still required.
-
-Tracked in Issue #11.
-
-## Stage 1: population genomic core
+## Stage 1 — population genomic core
 
 ### 1. var. takaoense
 
-Use morph-linked RAD-seq or low-coverage resequencing after voucher recovery. The six existing transcriptomes should be reused as labelled anchors whenever their W/BP states can be verified, but one plant per locality cannot by itself distinguish population-demographic alternatives.
+The existing data now support an immediate sample-topology reanalysis before new sequencing.
 
-Sample multiple populations for each morph, prioritizing mixed populations because within-population contrasts reduce background geographic differentiation.
+Use the six labelled transcriptomes to:
+
+1. test whether BP monophyly and W paraphyly persist across available tree methods;
+2. quantify support and gene-tree discordance at the W/BP boundary;
+3. compare the sample tree with Neighbor-Net reticulation;
+4. include white var. *albescens* and coloured var. *fukienense*, var. *australe* and var. *japonicum* as root/state context.
+
+These six individuals remain one plant per locality. They cannot distinguish morph ancestry from geography, population structure or reticulation. New population genomics should therefore sample:
+
+- 20–30 white and 20–30 bluish-purple plants;
+- at least two populations per state;
+- mixed populations where they exist;
+- nearby paired populations when mixed populations are absent;
+- flow-cytometrically verified cytotypes;
+- matched flower reflectance, pigment chemistry, floral RNA and leaf DNA.
 
 Competing models:
 
-- two or more independent white losses;
-- one shared white origin plus coloured reactivation;
-- ancestral white/coloured polymorphism;
-- coloured-haplotype introgression from `australe/fukienense` ancestry.
+- parallel white losses;
+- a shared white origin followed by derived BP restoration;
+- ancestral W/BP polymorphism;
+- introgression of a coloured haplotype;
+- geography-associated structure unrelated to causal colour loci.
 
 ### 2. C. pendulum
 
-The exact Moreyra sample is from Trans-Baikal and supplies a continental nuclear anchor. It does not replace:
+The exact Moreyra sample is from Trans-Baikal and supplies a continental nuclear anchor. It does not replace Japanese white populations, nearby Japanese purple controls or Korea–Northeast China–Primorye bridges.
 
-- Japanese white populations;
-- nearby Japanese purple controls;
-- Korea, Northeast China or Primorye bridge populations.
-
-The required new data are therefore population genomic, not species-level target capture.
+Use population RAD-seq or resequencing, not another species-placement sample.
 
 ### 3. C. sieboldii
 
-The Moreyra tip is exact at the submitted-name level but was cultivated at the Botanical Garden of Barcelona, with wild provenance unresolved. The Japanese white/purple comparison and Zhejiang bridge remain open.
+The Moreyra tip is exact at the submitted-name level but was cultivated at the Botanical Garden of Barcelona, with wild provenance unresolved. Sample Japanese white/purple populations and Zhejiang explicitly.
 
 ### 4. C. kawakamii–C. tatakaense
 
-Both species are 2n=64 and represented in two modern phylotranscriptomic studies. This is one of the cleanest replicated loss/mechanism systems, but requires ploidy-aware local ancestry and matched floral expression/pigment data.
+Both species are 2n=64 and represented in two modern phylotranscriptomic studies. Use ploidy-aware local ancestry plus matched floral expression and pigment data to distinguish independent regulatory loss, homeolog sorting and introgression.
 
 ### 5. C. brevicaule–C. irumtiense
 
-The existing sister context favours a white loss in `C. brevicaule`, not a regain in `C. irumtiense`. New population data should test gene flow, ancestral polymorphism and whether the white mechanism is homologous to independent white lineages.
+The existing sister context favours white loss in `C. brevicaule`, not regain in `C. irumtiense`. New population data should test gene flow, ancestral polymorphism and whether the white mechanism is homologous to independent white lineages.
 
-## Stage 2: conditional Korean and Northeast Asian systems
+## Stage 2 — conditional Korean and Northeast Asian systems
 
 Historical white-form names are candidate-discovery evidence, not proof of extant polymorphism.
 
 ### C. vlassovianum
 
-Species-level nuclear evidence is already present from Sikhote-Alin and Mongolia. Therefore, if white populations are verified, proceed directly to geographically stratified population genomics after resolving the `C. coryletorum` name relationship.
+Species-level nuclear evidence exists from Sikhote-Alin and Mongolia. If white populations are verified, proceed directly to geographically stratified population genomics after resolving the `C. coryletorum` relationship.
 
 ### C. setidens and C. rhinoceros
 
-These remain candidate species-level nuclear gaps, but they are not active sequencing priorities until extant natural white material is confirmed. If confirmed and no other modern nuclear dataset is found:
+These remain candidate species-level gaps, but not active sequencing priorities until extant natural white material is confirmed. If confirmed and no other modern nuclear dataset is found:
 
 1. obtain Compositae1061 placement;
-2. then sample white/coloured populations densely.
+2. then sample W/coloured populations densely.
 
 ### C. schantarense
 
-An older ITS placement exists, but no exact modern Moreyra/Chang tip was recovered. Its broad range makes it valuable for standing-variation questions only after white records and taxonomy are verified.
+An older ITS placement exists, but no exact modern Moreyra/Chang tip was recovered. Verify white records and taxonomy before target capture or regional population genomics.
 
-## Stage 3: broader colour and backbone candidates
+## Stage 3 — broader colour and backbone candidates
 
 ### C. taiwanense
 
-The yellow 2n=32 lineage may become important if Chapter 2 expands from white/anthocyanin loss to broader pigment-pathway evolution. Its target-capture placement is conditional on that expanded role.
+The yellow 2n=32 lineage becomes relevant only if Chapter 2 expands from white/anthocyanin loss to broader pigment-pathway evolution.
 
 ### Chinese coloured taxa and other Taiwan gaps
 
-`C. shansiense`, `C. leducii`, `C. ferum`, `C. suzukii`, `C. hosokawae` and the `C. arisanense` forms should not be sequenced merely because a current integrated-source tip is absent. First establish:
-
-- accepted-name and synonym status;
-- direct flower-colour evidence;
-- whether placement changes a loss/regain count or anchors a focal branch.
+`C. shansiense`, `C. leducii`, `C. ferum`, `C. suzukii`, `C. hosokawae` and the `C. arisanense` forms should not be sequenced merely because an exact integrated-source tip is absent. First establish accepted-name status, direct colour evidence and whether placement changes a transition inference.
 
 ## Modality decision rule
 
-| Evidence state | New data |
+| Evidence state | Next data or action |
 |---|---|
-| accession identity resolved; morph label missing | figure/voucher/author evidence before new sequencing |
-| species placement verified; morph/population missing | RAD-seq or resequencing |
+| accession and morph identity resolved; sample topology available | reuse existing reads and test topology before sequencing |
+| species placement verified; population history missing | RAD-seq or resequencing |
 | species placement verified; colour mechanism missing | pigment chemistry + floral RNA + candidate-region analysis |
 | extant white morph unverified | voucher/field verification before sequencing |
 | transition-critical modern nuclear tip genuinely absent | Compositae1061 target capture |
@@ -180,13 +159,14 @@ The yellow 2n=32 lineage may become important if Chapter 2 expands from white/an
 
 ## Implication for Chapter 2
 
-The project has moved away from a generic goal of “constructing an East Asian RAD-seq tree.” The sharper design is:
+The project is no longer an attempt to construct one East Asian RAD tree. The working architecture is:
 
-1. reuse the existing Compositae1061/phylotranscriptomic species backbone;
-2. recover missing sample metadata before generating redundant sequence data;
-3. close only verified transition-critical taxon gaps with compatible target capture;
-4. use population genomics to identify the ancestry of white and coloured alleles;
-5. use pigment chemistry and floral expression to identify the molecular switch;
-6. claim regain only after introgression and ancestral standing variation are disfavoured.
+1. reuse existing Compositae1061 and phylotranscriptomic species backbones;
+2. recover accession and phenotype metadata before generating new data;
+3. close only verified transition-critical species gaps with compatible target capture;
+4. use labelled existing samples as anchors;
+5. use dense population genomics to identify W/BP ancestry and gene flow;
+6. use pigment chemistry and floral expression to identify the molecular switch;
+7. claim regain only after ancestral standing variation, geography and introgression are disfavoured.
 
-This design uses the available phylogenetic information rather than paying to rediscover it.
+This design spends new sequencing on unresolved biological history rather than rediscovering known sample identities.
