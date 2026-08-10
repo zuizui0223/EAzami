@@ -5,10 +5,8 @@ on:
     paths:
       - "analysis/recover_ncbi_project_runs.py"
       - "analysis/audit_chang2026_biosample_morph_metadata.py"
-      - "analysis/audit_chang2026_biosample_morph_metadata_v2.py"
       - "tests/test_recover_ncbi_project_runs.py"
       - "tests/test_audit_chang2026_biosample_morph_metadata.py"
-      - "tests/test_audit_chang2026_biosample_morph_metadata_v2.py"
       - "data/evidence/chang2026_east_asia_accession_audit_*.csv"
       - ".github/workflows/audit-chang2026-biosample-morph.yml"
   workflow_dispatch:
@@ -33,12 +31,10 @@ jobs:
         run: |
           python -m py_compile \
             analysis/recover_ncbi_project_runs.py \
-            analysis/audit_chang2026_biosample_morph_metadata.py \
-            analysis/audit_chang2026_biosample_morph_metadata_v2.py
+            analysis/audit_chang2026_biosample_morph_metadata.py
           python -m unittest \
             tests/test_recover_ncbi_project_runs.py \
             tests/test_audit_chang2026_biosample_morph_metadata.py \
-            tests/test_audit_chang2026_biosample_morph_metadata_v2.py \
             -v
 
       - name: Recover official PRJNA1311153 SRA runinfo
@@ -59,7 +55,7 @@ jobs:
         run: |
           runinfo=$(find ncbi_chang2026 -name '*_runinfo.csv' -print -quit)
           test -n "$runinfo"
-          python analysis/audit_chang2026_biosample_morph_metadata_v2.py \
+          python analysis/audit_chang2026_biosample_morph_metadata.py \
             --runinfo "$runinfo" \
             --outdir data/evidence/generated/chang2026_biosample_morph_audit
           cp "$runinfo" data/evidence/generated/chang2026_biosample_morph_audit/
@@ -69,6 +65,7 @@ jobs:
           python - <<'PY'
           import csv
           import json
+          import re
           from pathlib import Path
 
           outdir = Path("data/evidence/generated/chang2026_biosample_morph_audit")
@@ -99,12 +96,12 @@ jobs:
               'ccy3560', 'ccy3629', 'ccy3839'
           }
           expected_pairs = {
-              'ccy3559': ('SRR35152718', 'SAMN50798021'),
-              'ccy3560': ('SRR35152717', 'SAMN50798022'),
-              'ccy3629': ('SRR35152738', 'SAMN50798024'),
-              'ccy3807': ('SRR35152736', 'SAMN50798026'),
-              'ccy3835': ('SRR35152735', 'SAMN50798027'),
-              'ccy3839': ('SRR35152734', 'SAMN50798028'),
+              'ccy3559': ('SRR35152718', 'SAMN50798021', '3559'),
+              'ccy3560': ('SRR35152717', 'SAMN50798022', '3560'),
+              'ccy3629': ('SRR35152738', 'SAMN50798024', '3629'),
+              'ccy3807': ('SRR35152736', 'SAMN50798026', '3807'),
+              'ccy3835': ('SRR35152735', 'SAMN50798027', '3835'),
+              'ccy3839': ('SRR35152734', 'SAMN50798028', '3839'),
           }
 
           if summary['seed_vouchers'] != 6 or len(audit) != 6:
@@ -130,20 +127,25 @@ jobs:
           if set(summary['unresolved_vouchers']) != expected_vouchers:
               raise SystemExit("All six morph labels should remain unresolved")
 
+          expected_basis = "exact_voucher_numeric_suffix_in_takaoense_sample_name"
           for row in audit:
-              expected_run, expected_biosample = expected_pairs[row['voucher']]
+              expected_run, expected_biosample, numeric = expected_pairs[row['voucher']]
               if (row['run'], row['biosample']) != (expected_run, expected_biosample):
                   raise SystemExit(
                       f"Unexpected run/BioSample for {row['voucher']}: "
                       f"{row['run']}/{row['biosample']}"
                   )
-              if row['run_match_basis'] != 'exact_takaoense_collector_number_in_sample_name':
+              if row['run_match_basis'] != expected_basis:
                   raise SystemExit(f"Unexpected match basis for {row['voucher']}")
+              if not row['sample_name'].endswith("-" + numeric):
+                  raise SystemExit(f"SampleName suffix mismatch for {row['voucher']}")
+              if row['biosample_isolate'] != numeric:
+                  raise SystemExit(f"BioSample isolate mismatch for {row['voucher']}")
               if row['direct_ncbi_colour_label'] or row['flower_colour_state']:
                   raise SystemExit(f"{row['voucher']} received an unsupported morph label")
               if row['review_status'] != 'no_explicit_ncbi_colour_attribute':
                   raise SystemExit(f"Unexpected review status for {row['voucher']}")
-              if 'No assignment from locality' not in row['notes']:
+              if 'No colour assignment from locality' not in row['notes']:
                   raise SystemExit("Geographic-inference guard is missing")
 
           relevant = [row for row in attributes if row['morph_relevant'] == 'yes']
