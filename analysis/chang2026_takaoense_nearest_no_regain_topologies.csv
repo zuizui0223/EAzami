@@ -1,0 +1,8 @@
+topology_id,sample_topology_newick,rooted_rf_distance_from_published,bp_monophyletic,w_monophyletic,nh_tj_cherry_preserved,sinocirsium_coloured_root_minimum_changes,sinocirsium_coloured_root_optimal_histories,minimum_no_regain_changes,no_regain_penalty,interpretation
+T0064,"(((((FB_3629_W,WY_3560_W),LT_3839_W),FC_3559_BP),TJ_3807_BP),NH_3835_BP);",4,false,true,false,2,2L+0R,2,0,Nearest rooted resolution in which a no-regain history is globally optimal.
+T0066,"(((((FB_3629_W,WY_3560_W),LT_3839_W),TJ_3807_BP),FC_3559_BP),NH_3835_BP);",4,false,true,false,2,2L+0R,2,0,Nearest rooted resolution in which a no-regain history is globally optimal.
+T0070,"(((((FB_3629_W,WY_3560_W),LT_3839_W),TJ_3807_BP),NH_3835_BP),FC_3559_BP);",4,false,true,false,2,2L+0R,2,0,Nearest rooted resolution in which a no-regain history is globally optimal.
+T0079,"(((((FB_3629_W,WY_3560_W),LT_3839_W),NH_3835_BP),FC_3559_BP),TJ_3807_BP);",4,false,true,false,2,2L+0R,2,0,Nearest rooted resolution in which a no-regain history is globally optimal.
+T0083,"(((((FB_3629_W,WY_3560_W),LT_3839_W),NH_3835_BP),TJ_3807_BP),FC_3559_BP);",4,false,true,false,2,2L+0R,2,0,Nearest rooted resolution in which a no-regain history is globally optimal.
+T0102,"(((((FB_3629_W,WY_3560_W),LT_3839_W),FC_3559_BP),(NH_3835_BP,TJ_3807_BP)));",4,false,true,true,2,2L+0R,2,0,Nearest rooted resolution in which a no-regain history is globally optimal.
+T0375,"((((FB_3629_W,WY_3560_W),LT_3839_W),((NH_3835_BP,TJ_3807_BP),FC_3559_BP)));",4,true,true,true,2,2L+0R,2,0,Nearest rooted resolution in which a no-regain history is globally optimal.
