@@ -4,7 +4,9 @@ on:
   pull_request:
     paths:
       - "analysis/recover_chang2026_takaoense_figure.py"
+      - "analysis/download_chang2026_figure1_image.py"
       - "tests/test_recover_chang2026_takaoense_figure.py"
+      - "tests/test_download_chang2026_figure1_image.py"
       - ".github/workflows/recover-chang2026-takaoense-figure.yml"
   workflow_dispatch:
 
@@ -24,19 +26,42 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install PDF renderer
-        run: python -m pip install --disable-pip-version-check PyMuPDF
+      - name: Install image reader
+        run: python -m pip install --disable-pip-version-check Pillow
 
       - name: Compile and run offline tests
         run: |
-          python -m py_compile analysis/recover_chang2026_takaoense_figure.py
-          python -m unittest tests/test_recover_chang2026_takaoense_figure.py -v
+          python -m py_compile \
+            analysis/recover_chang2026_takaoense_figure.py \
+            analysis/download_chang2026_figure1_image.py
+          python -m unittest \
+            tests/test_recover_chang2026_takaoense_figure.py \
+            tests/test_download_chang2026_figure1_image.py \
+            -v
 
-      - name: Recover open-access article and Figure 1 evidence
+      - name: Recover official full-size Figure 1 image
         run: |
-          python analysis/recover_chang2026_takaoense_figure.py \
+          python analysis/download_chang2026_figure1_image.py \
             --outdir data/evidence/generated/chang2026_takaoense_figure \
             --force
+
+      - name: Create six-voucher review table without geographic inference
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from analysis.recover_chang2026_takaoense_figure import (
+              OUTPUT_FIELDS,
+              build_tip_rows,
+              write_csv,
+          )
+
+          outdir = Path("data/evidence/generated/chang2026_takaoense_figure")
+          write_csv(
+              outdir / "takaoense_tip_morph_recovery.csv",
+              build_tip_rows({}),
+              OUTPUT_FIELDS,
+          )
+          PY
 
       - name: Validate evidence package
         run: |
@@ -46,42 +71,39 @@ jobs:
           from pathlib import Path
 
           outdir = Path("data/evidence/generated/chang2026_takaoense_figure")
-          summary = json.loads((outdir / "recovery_summary.json").read_text(encoding="utf-8"))
+          summary = json.loads(
+              (outdir / "figure1_image_summary.json").read_text(encoding="utf-8")
+          )
+          image = Path(summary["image_path"])
           with (outdir / "takaoense_tip_morph_recovery.csv").open(
               encoding="utf-8-sig", newline=""
           ) as handle:
               rows = list(csv.DictReader(handle))
 
-          print(f"pdf_pages={summary['pdf_page_count']}")
-          print(f"pdf_sha256={summary['pdf_sha256']}")
-          print(f"caption_defines_W_and_BP={summary['caption_defines_W_and_BP']}")
-          print(f"rendered_pages={len(summary['rendered_pages'])}")
-          print(f"embedded_images={len(summary['embedded_images'])}")
-          print(f"direct_assignment_count={summary['direct_assignment_count']}")
+          print(f"image_width_px={summary['image_width_px']}")
+          print(f"image_height_px={summary['image_height_px']}")
+          print(f"image_size_bytes={summary['image_size_bytes']}")
+          print(f"image_sha256={summary['image_sha256']}")
+          print(f"selected_url={summary['selected_url']}")
           print(f"tip_rows={len(rows)}")
           print("review_statuses=" + "|".join(sorted({row['review_status'] for row in rows})))
 
-          if summary['pdf_page_count'] != 26:
-              raise SystemExit(f"Expected 26-page article PDF, observed {summary['pdf_page_count']}")
-          if not summary['caption_defines_W_and_BP']:
-              raise SystemExit("Figure 1 caption no longer exposes the W/BP morph definition")
-          if len(summary['rendered_pages']) != 2:
-              raise SystemExit("Expected two high-resolution rendered pages")
-          for filename in summary['rendered_pages']:
-              if not Path(filename).is_file() or Path(filename).stat().st_size == 0:
-                  raise SystemExit(f"Missing rendered page: {filename}")
+          if not image.is_file() or image.stat().st_size == 0:
+              raise SystemExit("Official Figure 1 image was not recovered")
+          if image.read_bytes()[:8] != b'\x89PNG\r\n\x1a\n':
+              raise SystemExit("Recovered Figure 1 is not a PNG")
+          if summary['image_width_px'] < 600 or summary['image_height_px'] < 400:
+              raise SystemExit("Recovered Figure 1 resolution is unexpectedly small")
           if len(rows) != 6:
               raise SystemExit(f"Expected six takaoense vouchers, observed {len(rows)}")
           if {row['voucher'] for row in rows} != {
               'ccy3559', 'ccy3807', 'ccy3835', 'ccy3560', 'ccy3629', 'ccy3839'
           }:
               raise SystemExit("Voucher membership changed")
-          if any(
-              row['review_status'] == 'assigned_from_explicit_figure_label'
-              and not row['published_figure_label']
-              for row in rows
-          ):
-              raise SystemExit("Assigned row lacks a direct figure label")
+          if any(row['published_figure_label'] for row in rows):
+              raise SystemExit(
+                  "Pre-review table must remain unresolved until the recovered figure is read"
+              )
           PY
 
       - name: Upload Figure 1 evidence package
