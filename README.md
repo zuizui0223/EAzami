@@ -10,27 +10,43 @@ The project starts with Japan, the Ryukyu Islands, Taiwan and China and expands 
 
 ## Current biological inference
 
-Existing nuclear phylogenies and source-backed flower-colour states support **repeated white-flower evolution** as the leading hypothesis. **True coloured regain/reactivation is not yet demonstrated.**
+Existing nuclear phylogenies and source-backed flower-colour states support **repeated white-flower evolution** as the general pattern. Taiwanese var. *takaoense* is now a stronger and more precisely defined exception candidate:
 
 - Taiwanese Nipponocirsium supports an independent white loss in *C. kawakamii*.
-- The published sister context around Arenicola favours white loss in *C. brevicaule*, not regain in *C. irumtiense*.
-- Bluish-purple var. *takaoense* is the strongest current regain candidate, but parallel white losses remain equally parsimonious with one shared loss plus one regain.
-- Collapsing polymorphic *takaoense* to one ambiguous taxon tip undercounts transitions.
-- The six published *takaoense* transcriptome vouchers are not labelled as white versus bluish-purple, so the published sample tree cannot yet be recoded as a morph-specific tree.
+- The published Arenicola sister context favours white loss in *C. brevicaule*, not regain in *C. irumtiense*.
+- All six published var. *takaoense* transcriptomes are now linked exactly to vouchers, SRA runs and BioSamples.
+- The official Chang et al. 2026 Figure 1 directly labels three samples as bluish-purple—FC-3559, TJ-3807 and NH-3835—and three as white—WY-3560, FB-3629 and LT-3839.
+- Figure 1 panel C displays the six-sample topology as `(((((NH_BP,TJ_BP),FC_BP),LT_W),FB_W),WY_W)`; panel B independently shows the same morph grouping in the Neighbor-Net.
+- With the exact sample topology embedded in a coloured-root Sinocirsium context, the unique minimum-change history contains one white loss and one W-to-coloured transition. A no-regain history requires two additional changes.
+- In the full focal East Asian topology, the minimum is three losses plus one regain; the best no-regain history again costs two extra changes.
 
-A regain claim requires:
+The appropriate claim is therefore:
 
-1. a population-aware nuclear history that reconstructs a white ancestor or intermediate;
+> **var. takaoense is a topology-supported candidate regain: a W-to-coloured transition is required by minimum-change reconstruction under the displayed exact sample topology and coloured-root model.**
+
+This is not yet proof that an anthocyanin pathway was functionally lost and molecularly restored. Introgression, retention of ancestral coloured variation, geographic structure, weak short internodes and reticulation remain viable historical explanations.
+
+A demonstrated regain still requires:
+
+1. stable population-aware nuclear history across tree and network methods;
 2. explicit tests of introgression and ancestral standing variation;
-3. evidence that the white lineage retains a recoverable anthocyanin pathway;
-4. a derived functional or regulatory restoration linked to genotype, expression, pigment and phenotype in the same plants.
+3. evidence that a white lineage retained or lost a recoverable anthocyanin pathway;
+4. a derived functional or regulatory change linked to genotype, floral expression, pigment and phenotype in the same plants.
+
+Key result files:
+
+- `docs/CHANG2026_TAKAOENSE_MORPH_EVIDENCE_AUDIT_2026-08-11.md`
+- `docs/CHANG2026_TAKAOENSE_SAMPLE_COLOUR_HISTORY_2026-08-11.md`
+- `data/evidence/chang2026_takaoense_figure1_morph_assignments_2026-08-11.csv`
+- `analysis/chang2026_takaoense_sample_colour_history.csv`
+- `data/evidence/chang2026_takaoense_sample_colour_history_summary_2026-08-11.json`
 
 ## Linked objectives
 
 1. **Flower-colour atlas:** retain population/morph-level states instead of collapsing every taxon to one species mean.
 2. **Evolutionary history:** distinguish independent loss, ancestral polymorphism, introgression and candidate regain across a topology ensemble.
 3. **East Asian species backbone:** reuse existing nuclear phylogenomics and fill only genuine transition-critical gaps.
-4. **Population history:** resolve white/coloured morphs and geographic bridges with RAD-seq or resequencing.
+4. **Population history:** resolve white/coloured ancestry and geographic bridges with RAD-seq or resequencing.
 5. **Molecular mechanism:** combine pigment chemistry, floral RNA-seq and causal-region genomics.
 6. **Selection:** test pollinator and abiotic fitness effects only after history and mechanism are sufficiently resolved.
 
@@ -43,7 +59,7 @@ The accurate summary is neither “the phylogeny is solved” nor “almost noth
 - deep Asteraceae/Cardueae/Carduinae nuclear backbones from target capture and Hyb-Seq;
 - a broad, incomplete global species-level *Cirsium* nuclear tree;
 - modern regional frameworks for North America, Japan and focal Taiwan/Ryukyu clades;
-- empirical evidence for hybridization, ILS, allopolyploidy, cytomixis and cytonuclear discordance;
+- empirical evidence for hybridization, incomplete lineage sorting, allopolyploidy, cytomixis and cytonuclear discordance;
 - public reads, sample tables, target-recovery summaries, genomes, transcriptomes and plastomes.
 
 ### Still incomplete
@@ -52,8 +68,8 @@ The accurate summary is neither “the phylogeny is solved” nor “almost noth
 - complete machine-readable final trees and branch lengths for key studies;
 - the exact final 350-locus Moreyra matrix;
 - one densely sampled, compatible nuclear framework across all East Asian regions;
-- white/coloured population ancestry, introgression and cytotype/homeolog history;
-- the existence of any rigorously supported white-to-coloured regain.
+- population ancestry, local introgression and cytotype/homeolog history within focal colour systems;
+- molecular evidence for true anthocyanin loss and restoration.
 
 Plastid evidence is retained as a separate maternal-history layer, not substituted for a nuclear species tree.
 
@@ -68,9 +84,7 @@ Release v0.3 validates **54 manually curated phylogeny/systematics studies or pu
 | C | 18 | cytogenetics, population hybridization, morphology and lower-locus evidence constraining alternative histories |
 | D | 9 | organelle-only, type-based and nomenclatural evidence used for maternal history and name reconciliation |
 
-A separate **seven-study population-history registry** covers range-edge structure, fragmentation, invasion/admixture, expression divergence, landscape genetics and recurrent hybridization.
-
-Automated Crossref/Europe PMC results remain unreviewed candidates and never enter the curated registry without manual primary-source screening.
+A separate seven-study population-history registry covers range-edge structure, fragmentation, invasion/admixture, expression divergence, landscape genetics and recurrent hybridization. Automated Crossref/Europe PMC results remain unreviewed candidates and never enter the curated registry without manual primary-source screening.
 
 Key files:
 
@@ -95,18 +109,81 @@ Official supplements were recovered, checksummed and table-extracted.
 
 - 33 *Cirsium* samples from 12 taxa;
 - exact voucher, coordinate, altitude, assembly and genome-size provenance;
-- six *takaoense* tips, but no sample-level white/bluish-purple labels;
+- six var. *takaoense* public transcriptomes linked one-to-one to collector vouchers, runs and BioSamples;
+- direct W/BP labels recovered from the official Figure 1 image;
 - no machine-readable Newick in the supplement.
 
-The accessible article and official supplement do not contain located methods/results for the abstract/conclusion claims about anthocyanin expression or pollinator preference. Same-variety colour polymorphism and reticulation alternatives are supported; the causal pigment mechanism and pollinator preference remain open unless a separate primary experiment is identified.
+The six var. *takaoense* accessions are:
+
+| Code | Voucher | Run | BioSample | Morph |
+|---|---|---|---|---|
+| FC | `ccy3559` | `SRR35152718` | `SAMN50798021` | BP |
+| WY | `ccy3560` | `SRR35152717` | `SAMN50798022` | W |
+| FB | `ccy3629` | `SRR35152738` | `SAMN50798024` | W |
+| TJ | `ccy3807` | `SRR35152736` | `SAMN50798026` | BP |
+| NH | `ccy3835` | `SRR35152735` | `SAMN50798027` | BP |
+| LT | `ccy3839` | `SRR35152734` | `SAMN50798028` | W |
+
+NCBI metadata preserve collector numbers but contain no colour, corolla, phenotype, morph, pigment or anthocyanin attribute. The phenotype evidence comes directly from Figure 1 panels B and C.
+
+The official Figure 1 PNG is frozen by provenance:
+
+- dimensions: `1945 × 2400`;
+- SHA256: `10375f1d79a4799babdebffca84301f602adfa0aabc825b852de84177bbb878c`;
+- Actions run: `31429139819`;
+- artifact: `9078372622`.
+
+A source conflict remains for collector `ccy3839`: Supplementary Table S1 lists TCF, whereas Table S6 lists TNM.
+
+The accessible article and official supplement do not contain located methods/results supporting a completed anthocyanin-expression or pollinator-preference experiment. Same-variety colour polymorphism and reticulation alternatives are supported; causal pigment regulation and pollinator preference remain open unless a separate primary experiment is identified.
 
 Files:
 
 - `data/evidence/chang2025_nipponocirsium_accession_audit_2026-08-10.csv`
 - `data/evidence/chang2026_east_asia_accession_audit_2026-08-10.csv`
 - `data/evidence/chang2026_flower_colour_claim_audit_2026-08-10.csv`
+- `data/evidence/chang2026_takaoense_ncbi_voucher_morph_audit_2026-08-11.csv`
+- `data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv`
 - `data/phylogeny/published_topology_fragments_v0_1.csv`
 - `docs/CHANG_PHYLOGENY_ARTIFACT_AUDIT_2026-08-10.md`
+
+## Exact sample-topology colour-history analysis
+
+The old generic sensitivity represented one W and one coloured var. *takaoense* tip as an unresolved sister pair. Under a coloured root it allowed equal-parsimony histories:
+
+- four losses and no regain;
+- three losses and one regain.
+
+The exact Figure 1 sample topology changes that result.
+
+| Scope | Fixed root | Minimum history | No-regain minimum | Penalty |
+|---|---|---|---:|---:|
+| six var. *takaoense* samples | W | 0 losses + 1 regain | impossible | — |
+| six var. *takaoense* samples | C | 3 losses, or 2 losses + 1 regain | 3 | 0 |
+| white var. *albescens* + exact var. *takaoense* | C | 2 losses + 1 regain | 4 | +1 |
+| sample-aware Sinocirsium | C | 1 loss + 1 regain | 4 | +2 |
+| full focal East Asian topology | C | 3 losses + 1 regain | 6 | +2 |
+
+This is a topology-only diagnostic with no invented branch lengths. Formal Mk and stochastic mapping require exact machine-readable trees and branch lengths.
+
+## Published-sample metadata screen
+
+The six morph-labelled samples are also strongly altitude stratified:
+
+- BP mean altitude: `1160.67 m`;
+- W mean altitude: `357.00 m`;
+- difference: `803.67 m`;
+- complete rank separation;
+- exact one-sided allocation probability: `0.05`;
+- exact two-sided probability: `0.10`.
+
+This does not establish altitude-dependent selection. There is one plant per non-random locality, and morph, altitude, geography and ancestry are confounded. It does determine the design requirement for future sampling: mixed populations or geographically matched W/BP populations are substantially more informative than adding more unbalanced high-versus-low localities.
+
+Files:
+
+- `analysis/takaoense_published_morph_metadata_screen.py`
+- `analysis/takaoense_published_morph_metadata_screen_summary.json`
+- `analysis/takaoense_published_morph_altitude_screen.csv`
 
 ## Exact Moreyra 2025 sample coverage
 
@@ -122,7 +199,7 @@ The official Elsevier supplement and PRJNA957074 were reconciled reproducibly.
 
 Important corrections:
 
-- *C. pendulum* has an exact Trans-Baikal target-capture tip; its species placement is resolved, but Japanese white/purple history is not.
+- *C. pendulum* has an exact Trans-Baikal target-capture tip; species placement is resolved, but Japanese W/purple history is not.
 - *C. sieboldii* has an exact target-capture tip, but it was cultivated in Barcelona and wild provenance is unresolved.
 - *C. vlassovianum* has Sikhote-Alin and Mongolian tips; one published tree code is `C. coryletorum`.
 - *C. dipsacolepis*, *C. yezoense*, *C. lineare* and the broad *C. nipponicum* complex have modern nuclear evidence requiring varying levels of name/provenance reconciliation.
@@ -137,13 +214,13 @@ Files:
 
 ## Integrated East Asian nuclear coverage
 
-The current master screen evaluates **33 transition-relevant taxa**:
+The current master screen evaluates 33 transition-relevant taxa:
 
 - 21 have species placement resolved in modern nuclear data;
 - 12 remain candidate gaps pending synonym and other-dataset audit;
-- **no active Tier-A focal taxon is currently a species-placement gap**.
+- no active Tier-A focal taxon is currently a species-placement gap.
 
-Therefore, the first new genomic wave should emphasize morph/population history rather than rebuild known species placements.
+The first new genomic wave should therefore emphasize morph/population history rather than rebuild known species placements.
 
 Files:
 
@@ -163,7 +240,7 @@ The corresponding author's public repository contains:
 
 It does not contain the final Newick trees, retained alignments, per-locus gene-tree archive or explicit final 350-locus list.
 
-The public summaries expose 1,061 named loci, compared with 1,064 initially mapped loci reported in the paper. Reproducible counts are:
+The public summaries expose 1,061 named loci, compared with 1,064 initially mapped loci reported in the paper.
 
 | Stage | Loci |
 |---|---:|
@@ -175,7 +252,7 @@ The public summaries expose 1,061 named loci, compared with 1,064 initially mapp
 | No-warning and occupancy at least 0.80 | 241 |
 | Paper-reported final alignments | 350 |
 
-The 531-locus set is a reproducible **pre-manual candidate screen**. It is not the final published 350. Manual gene-tree decisions and final alignment-level filtering are not encoded in the located public files.
+The 531-locus set is a reproducible pre-manual candidate screen. It is not the final published 350. Manual gene-tree decisions and final alignment-level filtering are not encoded in the located public files.
 
 Allowed downstream matrix names:
 
@@ -216,7 +293,7 @@ Do not claim an exact Moreyra 350 matrix unless the original retained list or fu
 
 Use RAD-seq or resequencing for:
 
-1. white versus coloured var. *takaoense*, after morph-linked voucher or new sampling;
+1. var. *takaoense*: reuse the six morph-labelled transcriptomes as anchors and densely sample geographically matched or mixed W/BP populations;
 2. Japanese and continental *C. pendulum*;
 3. Japanese and Zhejiang *C. sieboldii*;
 4. *C. kawakamii* versus *C. tatakaense*;
@@ -229,18 +306,19 @@ See `docs/EAST_ASIA_CIRSIUM_PHYLOGENOMICS_IMPLEMENTATION_PLAN.md`.
 
 ## Current focal priority
 
-1. recover or newly obtain morph-linked white/bluish-purple *takaoense* material;
-2. sample *C. pendulum* Japanese white/purple populations plus continental bridges;
-3. sample *C. sieboldii* Japanese white/purple populations plus Zhejiang;
-4. use *C. kawakamii–C. tatakaense* as a matched polyploid loss/mechanism replicate;
-5. test population history and repeated mechanism in *C. brevicaule–C. irumtiense*;
-6. verify Korean white morphs before species-placement or population sequencing;
-7. promote residual China/Korea/Russian-Far-East gaps only when their placement changes a colour-transition inference.
+1. reanalyse the six public var. *takaoense* transcriptomes with exact W/BP labels, gene-tree concordance and network/local-ancestry sensitivities;
+2. collect mixed or geographically matched var. *takaoense* populations with linked DNA/RNA/pigment/ploidy data;
+3. sample *C. pendulum* Japanese W/purple populations plus continental bridges;
+4. sample *C. sieboldii* Japanese W/purple populations plus Zhejiang;
+5. use *C. kawakamii–C. tatakaense* as a matched polyploid loss/mechanism replicate;
+6. test population history and repeated mechanism in *C. brevicaule–C. irumtiense*;
+7. verify Korean white morphs before species-placement or population sequencing;
+8. promote residual China/Korea/Russian-Far-East gaps only when placement changes a transition inference.
 
 ## Primary hypotheses
 
 - **H1 — repeated loss:** floral anthocyanin loss evolved independently multiple times.
-- **H2 — regain/reactivation:** at least one coloured lineage descends from a white ancestor or intermediate.
+- **H2 — regain/reactivation:** at least one coloured lineage descends from a white ancestor or intermediate; exact var. *takaoense* topology now supports this as the minimum-change hypothesis under a coloured-root Sinocirsium model.
 - **H3 — regulatory reuse:** independent white transitions repeatedly suppress a conserved anthocyanin regulatory network.
 - **H4 — molecular parallelism:** independent transitions target homologous regulatory modules even when exact mutations differ.
 - **H5 — historical alternatives:** some apparent losses/regains reflect standing variation, introgression or polyploid/reticulate history.
@@ -252,16 +330,19 @@ Core automated components include:
 - literature candidate recovery and curated-registry validation;
 - public supplement and NCBI metadata recovery;
 - Chang and Moreyra sample/voucher audits;
+- direct Figure 1 phenotype and topology validation;
+- var. *takaoense* published-sample metadata/permutation screening;
+- exact sample-topology directional-history reconstruction;
 - Moreyra Japan-38 reconstruction;
 - integrated 33-taxon East Asian coverage validation;
 - author-repository and locus-filter audit;
-- deterministic published-topology colour-history tests.
+- generic and exact-topology colour-history sensitivity tests.
 
 Publisher/source files are retained in versioned Actions artifacts when licensing and size make repository commits inappropriate. Derived tables, hashes, scripts and decision rules are versioned.
 
 ## Work tracked as GitHub issues
 
-- #2 — paired white/coloured field sampling
+- #2 — paired W/coloured field sampling
 - #3 — pigment chemistry, floral RNA-seq and causal-region genotyping
 - #4 — RAD-seq, ploidy and reticulation tests
 - #5 — downstream selection tests
@@ -270,16 +351,17 @@ Publisher/source files are retained in versioned Actions artifacts when licensin
 - #8 — Japan/Korea/Northeast Asia expansion
 - #9 — systematic phylogeny, reticulation and cytogenetics evidence map
 - #10 — population-history and demographic-model design
-- #11 — morph identity of six published *takaoense* vouchers
-- #12 — Moreyra final trees, gene trees and exact retained 350 loci
+- #11 — six published var. *takaoense* morph identities — **completed**
+- #12 — Moreyra/Chang final trees, gene trees and exact retained-locus artifacts
 
 ## Next existing-data milestone
 
-1. exhaust public repositories and author-linked resources for the final Moreyra trees and retained-locus decisions;
-2. recover and version the Herrando-Moraira tree/data archive;
-3. finish accepted-name, synonym and voucher reconciliation;
-4. join colour and cytotypes to the topology ensemble;
-5. run formal ancestral-state and stochastic-mapping analyses only with documented branch lengths;
-6. freeze the first population and conditional target-capture panels from information gain rather than raw taxon count.
+1. obtain or reconstruct machine-readable Chang Figure 1 trees, branch lengths, support definitions and Neighbor-Net inputs;
+2. reanalyse the six labelled public transcriptomes for gene-tree concordance, coding variation, ancestry and reticulation;
+3. exhaust public repositories and author-linked resources for the final Moreyra trees and retained-locus decisions;
+4. recover and version the Herrando-Moraira tree/data archive;
+5. finish accepted-name, synonym and voucher reconciliation;
+6. run branch-length-aware ancestral-state and stochastic-mapping analyses only with documented trees;
+7. freeze the first population and conditional target-capture panels from information gain rather than raw taxon count.
 
-No large WGS cohort should be finalized before the morph/population-history screen is complete.
+No large WGS cohort should be finalized before the morph/population-history and ploidy sampling design is complete.
