@@ -6,12 +6,17 @@ on:
       - "analysis/recover_ncbi_project_runs.py"
       - "analysis/recover_published_phylogeny_artifacts.py"
       - "analysis/build_moreyra2025_sample_audit.py"
+      - "analysis/build_east_asia_nuclear_coverage.py"
       - "tests/test_recover_ncbi_project_runs.py"
       - "tests/test_recover_published_phylogeny_artifacts.py"
       - "tests/test_build_moreyra2025_sample_audit.py"
+      - "tests/test_build_east_asia_nuclear_coverage.py"
+      - "data/regional_master_taxa_seed.csv"
       - "data/evidence/focal_taxa_prjna957074.txt"
       - "data/evidence/published_phylogeny_artifact_manifest_*.csv"
       - "data/evidence/prjna957074_focal_tip_recovery_*.csv"
+      - "data/evidence/chang2025_nipponocirsium_accession_audit_*.csv"
+      - "data/evidence/chang2026_east_asia_accession_audit_*.csv"
       - ".github/workflows/recover-ncbi-project-metadata.yml"
   workflow_dispatch:
     inputs:
@@ -46,11 +51,13 @@ jobs:
           python -m py_compile \
             analysis/recover_ncbi_project_runs.py \
             analysis/recover_published_phylogeny_artifacts.py \
-            analysis/build_moreyra2025_sample_audit.py
+            analysis/build_moreyra2025_sample_audit.py \
+            analysis/build_east_asia_nuclear_coverage.py
           python -m unittest \
             tests/test_recover_ncbi_project_runs.py \
             tests/test_recover_published_phylogeny_artifacts.py \
             tests/test_build_moreyra2025_sample_audit.py \
+            tests/test_build_east_asia_nuclear_coverage.py \
             -v
 
       - name: Recover public SRA and BioSample metadata
@@ -116,6 +123,14 @@ jobs:
             --focal-taxa data/evidence/focal_taxa_prjna957074.txt \
             --outdir moreyra_sample_audit_output
 
+      - name: Integrate Moreyra and Chang nuclear coverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python analysis/build_east_asia_nuclear_coverage.py
+          test -s data/evidence/generated/east_asia_nuclear_coverage_current.csv
+          test -s data/evidence/generated/east_asia_nuclear_coverage_summary.json
+
       - name: Validate and summarize recovery
         shell: bash
         run: |
@@ -132,6 +147,8 @@ jobs:
           joined_audit = Path("moreyra_sample_audit_output/moreyra2025_focal_taxon_audit.csv")
           committed_audit = Path("data/evidence/prjna957074_focal_tip_recovery_2026-08-10.csv")
           summary_path = Path("moreyra_sample_audit_output/moreyra2025_sample_audit_summary.json")
+          coverage_path = Path("data/evidence/generated/east_asia_nuclear_coverage_current.csv")
+          coverage_summary_path = Path("data/evidence/generated/east_asia_nuclear_coverage_summary.json")
 
           def rows(path):
               with path.open(encoding="utf-8-sig", newline="") as handle:
@@ -142,12 +159,21 @@ jobs:
           raw_audit_rows = rows(raw_audit)
           joined_rows = rows(joined_audit)
           committed_rows = rows(committed_audit)
+          coverage_rows = rows(coverage_path)
           summary = json.loads(summary_path.read_text(encoding="utf-8"))
+          coverage_summary = json.loads(coverage_summary_path.read_text(encoding="utf-8"))
 
           exact = [
               row for row in joined_rows
               if row["project_tip_status"] == "exact_sra_project_tip_verified"
           ]
+          resolved = [
+              row for row in coverage_rows
+              if row["species_backbone_gap_class"]
+              == "species_placement_resolved_in_modern_nuclear_data"
+          ]
+          gap_candidates = coverage_summary["priority_A_species_gap_candidates"]
+
           print(f"run_records={len(run_rows)}")
           print(f"unique_scientific_names={len(taxon_rows)}")
           print(f"raw_focal_taxa={len(raw_audit_rows)}")
@@ -157,6 +183,11 @@ jobs:
           print(f"linked_supplement_samples={summary['supplement_samples_with_runinfo']}")
           print(f"core_east_asia_samples={summary['core_east_asia_sample_rows']}")
           print(f"northeast_asia_bridge_samples={summary['northeast_asia_bridge_sample_rows']}")
+          print(f"integrated_master_taxa={len(coverage_rows)}")
+          print(f"resolved_integrated_taxa={len(resolved)}")
+          print(f"priority_A_species_gap_candidates={len(gap_candidates)}")
+          if gap_candidates:
+              print("priority_A_gap_taxa=" + "|".join(gap_candidates))
 
           if len(run_rows) != 455:
               raise SystemExit(f"Expected 455 project runs, observed {len(run_rows)}")
@@ -174,8 +205,10 @@ jobs:
               raise SystemExit(f"Expected 10 exact focal matches, observed {len(exact)}")
           if joined_rows != committed_rows:
               raise SystemExit("Generated focal audit differs from committed evidence table")
+          if len(coverage_rows) != coverage_summary["taxa"]:
+              raise SystemExit("Integrated coverage table and summary disagree")
           PY
-          ls -lh ncbi_metadata_output moreyra_sample_audit_output
+          ls -lh ncbi_metadata_output moreyra_sample_audit_output data/evidence/generated
 
       - name: Upload metadata and reconciliation tables
         uses: actions/upload-artifact@v4
@@ -185,5 +218,7 @@ jobs:
             ncbi_metadata_output/
             moreyra_sample_audit_output/
             published_artifact_output/artifact_recovery_summary.csv
+            data/evidence/generated/east_asia_nuclear_coverage_current.csv
+            data/evidence/generated/east_asia_nuclear_coverage_summary.json
           if-no-files-found: error
           retention-days: 90
