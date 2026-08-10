@@ -1,6 +1,7 @@
 # Chang et al. 2026 var. *takaoense* voucher and morph-evidence audit
 
-Date: 2026-08-11
+Date: 2026-08-11  
+Status: six of six sample-level W/BP labels recovered
 
 ## Question
 
@@ -9,36 +10,71 @@ Chang et al. 2026 sampled six transcriptomes of *Cirsium japonicum* var. *takaoe
 - `(W)` — white-corolla morph;
 - `(BP)` — bluish-purple-corolla morph.
 
-Supplementary Table S1 gives locality, coordinate, altitude, voucher and herbarium for the six samples, but does not provide the sample-level W/BP mapping. Recovering that mapping is potentially high information because it determines whether the published transcriptome topology already includes both morphs.
-
-This audit separates three questions:
-
-1. Which public run and BioSample belong to each published voucher?
-2. Do Supplementary Table S6, the main text or NCBI metadata directly state the flower-colour morph?
-3. What direct evidence is still required before the published tree can be treated as morph specific?
+Supplementary Table S1 gives locality, coordinate, altitude, voucher and herbarium for the six samples but does not provide the sample-level W/BP mapping. This audit reconciles the supplement, official PRJNA1311153 metadata and the official Figure 1 image.
 
 ## Result in one sentence
 
-> All six published vouchers now map one-to-one to public PRJNA1311153 runs and BioSamples, but none of the official NCBI attributes or accessible supplementary text provides the sample-level W/BP state; therefore all six morph identities remain unresolved.
+> All six published vouchers map one-to-one to public runs and BioSamples, and direct labels printed concordantly in Figure 1 panels B and C identify FC/TJ/NH as bluish-purple and WY/FB/LT as white.
 
-## Six exact voucher-to-accession links
+## Exact voucher, accession and morph mapping
 
-| Figure/locality code | Locality | Published voucher | S1 herbarium | SRA run | BioSample | NCBI SampleName | BioSample isolate |
-|---|---|---|---|---|---|---|---|
-| FC | Fenchihu, Chiayi | `ccy3559` | TNM | `SRR35152718` | `SAMN50798021` | `Cirsium japonicum var. takaoense-3559` | `3559` |
-| WY | Wutai, Pingtung | `ccy3560` | TNM | `SRR35152717` | `SAMN50798022` | `Cirsium japonicum var. takaoense-3560` | `3560` |
-| FB | Fengbin, Hualien | `ccy3629` | TNM | `SRR35152738` | `SAMN50798024` | `Cirsium japonicum var. takaoense-3629` | `3629` |
-| TJ | Tengji, Kaohsiung | `ccy3807` | TCF | `SRR35152736` | `SAMN50798026` | `Cirsium japonicum var. takaoense-3807` | `3807` |
-| NH | Nanheng, Taitung | `ccy3835` | TCF | `SRR35152735` | `SAMN50798027` | `Cirsium japonicum var. takaoense-3835` | `3835` |
-| LT | Ludao, Taitung | `ccy3839` | TCF | `SRR35152734` | `SAMN50798028` | `Cirsium japonicum var. takaoense-3839` | `3839` |
+| Code | Locality | Voucher | S1 herbarium | SRA run | BioSample | Figure 1 morph |
+|---|---|---|---|---|---|---|
+| FC | Fenchihu, Chiayi | `ccy3559` | TNM | `SRR35152718` | `SAMN50798021` | `BP` — bluish-purple |
+| WY | Wutai, Pingtung | `ccy3560` | TNM | `SRR35152717` | `SAMN50798022` | `W` — white |
+| FB | Fengbin, Hualien | `ccy3629` | TNM | `SRR35152738` | `SAMN50798024` | `W` — white |
+| TJ | Tengji, Kaohsiung | `ccy3807` | TCF | `SRR35152736` | `SAMN50798026` | `BP` — bluish-purple |
+| NH | Nanheng, Taitung | `ccy3835` | TCF | `SRR35152735` | `SAMN50798027` | `BP` — bluish-purple |
+| LT | Ludao, Taitung | `ccy3839` | TCF | `SRR35152734` | `SAMN50798028` | `W` — white |
 
-The match is supported independently by:
+The accession match is supported independently by:
 
-- the exact collector-number suffix in `SampleName`;
+- the exact collector-number suffix in NCBI `SampleName`;
 - the same number in the BioSample `isolate` attribute;
 - one unique public run and BioSample per published voucher.
 
-No match relies on geography or an assumed flower colour.
+The morph assignment is supported independently within the published figure by two printed occurrences per sample:
+
+### Figure 1 panel B — Neighbor-Net
+
+- `var. takaoense_FC-3559(BP)`
+- `var. takaoense_TJ-3807(BP)`
+- `var. takaoense_NH-3835(BP)`
+- `var. takaoense_WY-3560(W)`
+- `var. takaoense_FB-3629(W)`
+- `var. takaoense_LT-3839(W)`
+
+### Figure 1 panel C — species-delimitation tree
+
+- `C. japonicum var. takaoense_FC-3559(BP)`
+- `C. japonicum var. takaoense_TJ-3807(BP)`
+- `C. japonicum var. takaoense_NH-3835(BP)`
+- `C. japonicum var. takaoense_WY-3560(W)`
+- `C. japonicum var. takaoense_FB-3629(W)`
+- `C. japonicum var. takaoense_LT-3839(W)`
+
+No match or morph assignment relies on geography, altitude or an assumed evolutionary history.
+
+## Official Figure 1 provenance
+
+The full official Springer Nature Figure 1 PNG was recovered through the static-content endpoint.
+
+- dimensions: `1945 × 2400` pixels;
+- image size: 2,465,127 bytes;
+- image SHA256: `10375f1d79a4799babdebffca84301f602adfa0aabc825b852de84177bbb878c`;
+- Actions run: `31429139819`;
+- artifact: `9078372622`;
+- artifact SHA256: `6d5f8f4e1e059122629acce751adb8eb57cd3e5fa95ff9dfa92fcc72bb4ea68f`.
+
+The image itself remains in the versioned Actions artifact. Repository tables retain the direct transcription, hash and provenance.
+
+Frozen assignment table:
+
+- `data/evidence/chang2026_takaoense_figure1_morph_assignments_2026-08-11.csv`
+
+Validator:
+
+- `analysis/validate_chang2026_takaoense_figure1_assignments.py`
 
 ## Important NCBI naming distinction
 
@@ -50,13 +86,14 @@ However, their `SampleName` values explicitly contain:
 
 `Cirsium japonicum var. takaoense-<collector number>`
 
-The broad submitted scientific name should therefore not replace the more specific published voucher identity. The project retains all three fields separately:
+The broad submitted scientific name should therefore not replace the more specific published voucher identity. The project retains:
 
-- published taxon/voucher;
+- published taxon and voucher;
 - NCBI submitted scientific name;
-- NCBI SampleName/isolate.
+- NCBI SampleName and isolate;
+- direct Figure 1 morph label.
 
-## NCBI morph-evidence result
+## NCBI metadata result
 
 The complete BioSample attribute dictionaries contain six attributes per sample:
 
@@ -70,12 +107,12 @@ The complete BioSample attribute dictionaries contain six attributes per sample:
 Across the six BioSamples:
 
 - morph-relevant attribute rows: **0**;
-- direct white or bluish-purple assignments: **0**;
+- direct NCBI white or bluish-purple assignments: **0**;
 - ambiguous voucher-to-run matches: **0**.
 
-No attribute mentions flower colour, corolla, phenotype, morph, pigment or anthocyanin. Consequently, NCBI resolves accession provenance but not the W/BP mapping.
+NCBI resolves accession provenance but not colour. The W/BP evidence comes from the published Figure 1 labels, not from NCBI metadata.
 
-Frozen outputs:
+Frozen NCBI outputs:
 
 - `data/evidence/chang2026_takaoense_ncbi_voucher_morph_audit_2026-08-11.csv`
 - `data/evidence/chang2026_takaoense_ncbi_morph_audit_summary_2026-08-11.json`
@@ -84,18 +121,16 @@ Frozen outputs:
 
 ## Supplementary Table S6 and main-text evidence
 
-A separate source audit preserves evidence outside NCBI:
-
-| Voucher | S6 result | Main-text result | Morph result |
+| Voucher | S6 result | Main-text result | Direct Figure 1 morph |
 |---|---|---|---|
-| `ccy3559` | exact collector record, TNM | none located | unresolved |
-| `ccy3560` | exact collector record, TNM | none located | unresolved |
-| `ccy3629` | exact collector record, TNM | none located | unresolved |
-| `ccy3807` | collector number not recovered in S6 | none located | unresolved |
-| `ccy3835` | collector number not recovered in S6 | specimen 3835 explicitly discussed near the *C. lidaoense* type locality | unresolved |
-| `ccy3839` | exact collector record, TNM | none located | unresolved |
+| `ccy3559` | exact collector record, TNM | none located | BP |
+| `ccy3560` | exact collector record, TNM | none located | W |
+| `ccy3629` | exact collector record, TNM | none located | W |
+| `ccy3807` | collector number not recovered in S6 | none located | BP |
+| `ccy3835` | collector number not recovered in S6 | specimen 3835 explicitly discussed near the *C. lidaoense* type locality | BP |
+| `ccy3839` | exact collector record, TNM | none located | W |
 
-The main-text mention of specimen 3835 confirms its taxonomic relevance but does not state its corolla colour.
+The main-text mention of specimen 3835 confirms its taxonomic relevance but is not the source of its BP state.
 
 Frozen source ledger:
 
@@ -109,98 +144,85 @@ The source documents disagree on the repository of collector number 3839:
 - Supplementary Table S1: `TCF`;
 - Supplementary Table S6: `TNM`.
 
-This is retained as a direct source conflict. It must not be silently harmonized. It may reflect:
+This conflict remains unresolved and is independent of the W assignment. It may reflect a transcription error, duplicate sheets, a repository change or different voucher/examined-specimen material. Do not silently harmonize it.
 
-- a transcription error;
-- duplicate material deposited in more than one herbarium;
-- a later repository change;
-- different voucher and examined-specimen sheets.
+## Sample-topology observation
 
-The conflict does not provide flower-colour evidence, but it changes where the voucher image or label should be requested.
+Figure 1 adds more than labels.
 
-## Figure 1 recovery attempts
+### Panel C
 
-The article caption establishes that W/BP are sample-level tip labels. Parsers and recovery workflows were implemented for:
+The three BP samples—NH, TJ and FC—form the terminal morph-homogeneous portion of the displayed var. *takaoense* sample topology. The three W samples—LT, FB and WY—occur on successive branches outside that BP grouping in the displayed tree.
 
-- the open-access Springer PDF;
-- the official Springer Nature Figure 1 image endpoint;
-- a Research Square preprint mirror.
+### Panel B
 
-Those live endpoints rejected automated GitHub Actions clients during the audit. The failure is treated as external-source unavailability, not as absence of a figure or absence of morph labels. Pull-request CI therefore validates the parser and unresolved evidence ledger offline, while live recovery remains a manual workflow.
+The Neighbor-Net likewise places the three BP-labelled samples together and the three W-labelled samples together without cross-morph interspersion among the six labelled tips.
 
-No OCR-derived or locality-derived morph state has been committed.
+This is direct evidence of morph-associated genomic structure in the published sample set. It is **not yet proof of evolutionary regain**.
+
+The displayed topology is compatible with a single transition separating the sampled W and BP groups under some root-state assumptions, but direction remains dependent on:
+
+- the placement and ancestral state of white var. *albescens*;
+- coloured var. *fukienense*, var. *australe* and var. *japonicum* context;
+- uncertain/weak short internodes within the sample cluster;
+- reticulation highlighted by the paper;
+- geographic population structure;
+- the distinction between a derived regulatory reactivation and retention or introgression of a coloured haplotype.
+
+Therefore the valid new conclusion is:
+
+> The six existing transcriptomes contain both morphs and show morph-associated clustering; they make a regain model more directly testable but do not by themselves demonstrate regain.
 
 ## What is now solved
-
-The following are no longer uncertain:
 
 1. all six Supplementary Table S1 samples have public transcriptome reads;
 2. every voucher maps one-to-one to a run and BioSample;
 3. the exact run/BioSample identities are reproducible from official metadata;
-4. NCBI contains no direct W/BP attribute;
-5. the S1/S6 repository conflict is limited to `ccy3839` in the current ledger;
-6. no sample-level morph assignment is currently supported outside the labelled figure or direct voucher/author evidence.
-
-## What remains unresolved
-
-For each of the six samples, the following field remains blank:
-
-- `direct_sample_morph_label` — `W` or `BP`.
-
-Until those values are recovered, the published sample tree cannot answer:
-
-- whether white and bluish-purple morphs are each monophyletic;
-- whether one morph is nested within the other;
-- whether multiple independent colour transitions are visible among the six tips;
-- whether the current transcriptomes already remove the need for a first morph-linked pilot.
+4. all six sample-level W/BP labels are directly recovered;
+5. the existing transcriptome set contains three W and three BP samples;
+6. panels B and C repeat the same six labels;
+7. NCBI contains no competing sample-level colour attribute;
+8. the S1/S6 repository conflict remains limited to `ccy3839`.
 
 ## Prohibited inferences
 
-Do not infer W/BP from:
+Do not infer evolutionary direction solely from:
 
+- the order of tips in a single rendered tree;
+- white var. *albescens* alone;
 - locality or altitude;
 - mainland versus island occurrence;
 - herbarium repository;
-- NCBI library number;
-- read count or assembly quality;
-- tree position;
-- the broad NCBI `ScientificName`;
-- taxon-level statements that the variety is polymorphic.
+- NCBI submitted scientific name;
+- visual morph clustering without demographic or introgression tests.
 
-A taxon-level colour range is not a sample-level morph label.
+Direct W/BP labels solve phenotype identity, not causal history.
 
-## Direct evidence required next
+## Next analysis
 
-Use the following order:
+1. encode the six W/BP states on the published sample topology;
+2. quantify morph monophyly/clustering and topology sensitivity;
+3. include var. *albescens*, var. *fukienense*, var. *australe* and var. *japonicum* as state/root context;
+4. retain the Neighbor-Net as reticulation evidence rather than forcing every relation into one tree;
+5. reuse the six transcriptomes as labelled anchors in new population sampling;
+6. test whether the coloured group carries a derived restoration, retained ancestral haplotype or introgressed ancestry;
+7. resolve the `ccy3839` TCF/TNM repository conflict separately.
 
-1. read the `(W)` / `(BP)` suffix attached to FC, TJ, NH, WY, FB and LT in a high-resolution Figure 1 or figure source file;
-2. obtain author confirmation of the six code/voucher assignments;
-3. inspect TNM/TCF voucher images, labels or collector field records;
-4. resolve whether `ccy3839` is deposited at TCF, TNM or both;
-5. if published morph states cannot be recovered, collect new morph-linked DNA/RNA/pigment material.
+The prepared author request remains useful for machine-readable trees, branch lengths and the herbarium discrepancy, but it is no longer needed to obtain the six W/BP labels.
 
 ## Consequence for sequencing priority
 
-The current result does **not** justify resequencing these same six individuals merely to identify their accession provenance; that provenance is already solved.
+Do not resequence these same six individuals merely to determine their morph identity or accession provenance. Both are now known.
 
-The immediate high-information action remains morph recovery. After W/BP assignment:
+The existing samples are geographically sparse—one plant per locality—so they do not replace population genomics. The next sequencing phase should:
 
-- if both morphs are represented and their sample topology is informative, reuse the existing transcriptomes first;
-- if only one morph is represented, proceed to paired morph-linked population sampling;
-- if both morphs are represented but reticulation or geography dominates the sample topology, proceed to population RAD-seq or resequencing with explicit morph, ploidy, pigment and floral-RNA metadata.
+- retain the six transcriptomes as labelled anchors;
+- prioritize mixed or geographically matched W/BP populations;
+- collect multiple plants per population;
+- link leaf DNA, floral RNA, pigment chemistry, reflectance and ploidy to the same individuals;
+- fit standing-variation, introgression, parallel-loss and restoration models explicitly.
 
 ## Validation status
-
-### Voucher/source ledger
-
-GitHub Actions run `31428532236`:
-
-- 23 tests passed;
-- six vouchers validated;
-- four exact S6 collector records;
-- two S6 non-recoveries;
-- one retained S1/S6 herbarium conflict (`ccy3839`);
-- zero invented morph assignments.
 
 ### NCBI accession audit
 
@@ -211,10 +233,20 @@ GitHub Actions run `31428532005`:
 - six *takaoense* candidate rows;
 - six one-to-one voucher/run/BioSample links;
 - 36 BioSample attribute rows;
-- zero morph-relevant attributes;
-- zero direct sample-colour assignments.
+- zero morph-relevant NCBI attributes.
 
 Artifact:
 
 - ID: `9078151170`
 - SHA256: `8d319dadbe50696d142ec770777437312b5c73f4360be5420723d46b3ec69cbd`
+
+### Official Figure 1 recovery
+
+GitHub Actions run `31429139819`:
+
+- official `1945 × 2400` PNG recovered;
+- image hash frozen;
+- panels B and C visually reconciled;
+- six direct assignments recovered;
+- W = `ccy3560`, `ccy3629`, `ccy3839`;
+- BP = `ccy3559`, `ccy3807`, `ccy3835`.
