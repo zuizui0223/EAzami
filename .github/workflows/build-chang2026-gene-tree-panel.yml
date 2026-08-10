@@ -1,0 +1,153 @@
+name: Build Chang 2026 gene-tree panel
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_ncbi_project_runs.py"
+      - "analysis/reconcile_chang2026_ncbi_runs.py"
+      - "analysis/audit_chang2026_public_transcriptome_assemblies.py"
+      - "analysis/build_chang2026_gene_tree_panel.py"
+      - "tests/test_reconcile_chang2026_ncbi_runs.py"
+      - "tests/test_audit_chang2026_public_transcriptome_assemblies.py"
+      - "tests/test_build_chang2026_gene_tree_panel.py"
+      - "data/evidence/chang2026_east_asia_accession_audit_*.csv"
+      - "data/evidence/chang2026_takaoense_figure1_morph_assignments_*.csv"
+      - "analysis/chang2026_takaoense_nearest_no_regain_topologies.csv"
+      - "analysis/chang2026_takaoense_topology_robustness_summary.json"
+      - ".github/workflows/build-chang2026-gene-tree-panel.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile \
+            analysis/recover_ncbi_project_runs.py \
+            analysis/reconcile_chang2026_ncbi_runs.py \
+            analysis/audit_chang2026_public_transcriptome_assemblies.py \
+            analysis/build_chang2026_gene_tree_panel.py
+          python -m unittest \
+            tests/test_reconcile_chang2026_ncbi_runs.py \
+            tests/test_audit_chang2026_public_transcriptome_assemblies.py \
+            tests/test_build_chang2026_gene_tree_panel.py \
+            -v
+
+      - name: Recover official runs and public assembly links
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        run: |
+          python analysis/recover_ncbi_project_runs.py \
+            --bioproject PRJNA1311153 \
+            --outdir /tmp/chang2026_ncbi \
+            --enrich-biosample
+          runinfo=$(find /tmp/chang2026_ncbi -name '*_runinfo.csv' -print -quit)
+          python analysis/reconcile_chang2026_ncbi_runs.py \
+            --runinfo "$runinfo" \
+            --outdir /tmp/chang2026_reconciliation
+          python analysis/audit_chang2026_public_transcriptome_assemblies.py \
+            --manifest /tmp/chang2026_reconciliation/chang2026_sample_run_reconciliation.csv \
+            --outdir /tmp/chang2026_public_assemblies
+
+      - name: Build analysis panel and competing hypotheses
+        run: |
+          python analysis/build_chang2026_gene_tree_panel.py \
+            --reconciliation /tmp/chang2026_reconciliation/chang2026_sample_run_reconciliation.csv \
+            --assembly-audit /tmp/chang2026_public_assemblies/chang2026_public_transcriptome_assembly_audit.csv \
+            --outdir /tmp/chang2026_gene_tree_panel
+
+      - name: Validate frozen biological design
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          outdir = Path("/tmp/chang2026_gene_tree_panel")
+          summary = json.loads(
+              (outdir / "chang2026_gene_tree_panel_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          def rows(name):
+              with (outdir / name).open(encoding="utf-8-sig", newline="") as handle:
+                  return list(csv.DictReader(handle))
+
+          panel = rows("chang2026_sinocirsium_gene_tree_panel.csv")
+          pilot = rows("chang2026_takaoense6_assembly_pilot.csv")
+          hypotheses = rows("chang2026_takaoense_gene_tree_hypotheses.csv")
+          roles = Counter(row["panel_role"] for row in panel)
+
+          print(f"panel_samples={len(panel)}")
+          print(f"unique_runs={len({row['matched_run'] for row in panel})}")
+          print(f"takaoense_pilot_samples={len(pilot)}")
+          print(f"hypotheses={len(hypotheses)}")
+          print("roles=" + json.dumps(dict(sorted(roles.items())), sort_keys=True))
+          for row in pilot:
+              print(
+                  "PILOT "
+                  f"{row['sample_id']} {row['morph']} {row['matched_run']} "
+                  f"de_novo={row['de_novo_required']}"
+              )
+
+          expected_taxa = {
+              "cirsium japonicum": 2,
+              "cirsium japonicum var. albescens": 2,
+              "cirsium japonicum var. takaoense": 6,
+              "cirsium japonicum var. australe": 3,
+              "cirsium japonicum var. fukienense": 4,
+              "cirsium lineare": 2,
+          }
+          if summary["sample_count"] != 19 or len(panel) != 19:
+              raise SystemExit("Expected 19 analysis-panel samples")
+          if summary["taxon_counts"] != expected_taxa:
+              raise SystemExit(f"Unexpected taxon counts: {summary['taxon_counts']}")
+          if summary["unique_official_run_count"] != 19:
+              raise SystemExit("Expected 19 unique official SRA runs")
+          if len(pilot) != 6:
+              raise SystemExit("Expected six takaoense pilot samples")
+          if {row["morph"] for row in pilot} != {"W", "BP"}:
+              raise SystemExit("Pilot does not contain both published morphs")
+          if sum(row["morph"] == "W" for row in pilot) != 3:
+              raise SystemExit("Expected three white takaoense samples")
+          if sum(row["morph"] == "BP" for row in pilot) != 3:
+              raise SystemExit("Expected three bluish-purple takaoense samples")
+          if summary["de_novo_required_count"] != 19:
+              raise SystemExit("Expected de novo assembly for all 19 panel samples")
+          if any(row["de_novo_required"] != "true" for row in panel):
+              raise SystemExit("A panel row unexpectedly has a public assembly source")
+          if len(hypotheses) != 8:
+              raise SystemExit("Expected one regain and seven nearest loss-only hypotheses")
+          if hypotheses[0]["hypothesis_id"] != "H_REG_PUBLISHED":
+              raise SystemExit("Primary published topology is not first")
+          if sum(row["history_class"] == "nearest_loss_only_topology" for row in hypotheses) != 7:
+              raise SystemExit("Expected seven nearest loss-only alternatives")
+          PY
+
+      - name: Upload complete gene-tree input package
+        uses: actions/upload-artifact@v4
+        with:
+          name: chang2026-gene-tree-panel-${{ github.run_id }}
+          path: |
+            /tmp/chang2026_ncbi/
+            /tmp/chang2026_reconciliation/
+            /tmp/chang2026_public_assemblies/
+            /tmp/chang2026_gene_tree_panel/
+          if-no-files-found: error
+          retention-days: 90
