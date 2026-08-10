@@ -1,0 +1,116 @@
+name: Validate Moreyra target FASTA contract
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_moreyra_author_repository.py"
+      - "analysis/summarize_moreyra_locus_filter.py"
+      - "analysis/export_moreyra_locus_manifests.py"
+      - "analysis/recover_compositae1061_target.py"
+      - "analysis/validate_moreyra_target_contract.py"
+      - "tests/test_validate_moreyra_target_contract.py"
+      - "config/moreyra_target_contract*.json"
+      - ".github/workflows/validate-moreyra-target-contract.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile \
+            analysis/recover_moreyra_author_repository.py \
+            analysis/summarize_moreyra_locus_filter.py \
+            analysis/export_moreyra_locus_manifests.py \
+            analysis/recover_compositae1061_target.py \
+            analysis/validate_moreyra_target_contract.py
+          python -m unittest tests/test_validate_moreyra_target_contract.py -v
+
+      - name: Rebuild public Moreyra locus manifest
+        run: |
+          python analysis/recover_moreyra_author_repository.py \
+            --outdir data/evidence/generated/moreyra_author_repository \
+            --force
+          python analysis/summarize_moreyra_locus_filter.py \
+            --audit-dir data/evidence/generated/moreyra_author_repository
+          python analysis/export_moreyra_locus_manifests.py \
+            --input data/evidence/generated/moreyra_author_repository/paralog_locus_filter_reconstruction.csv \
+            --outdir data/evidence/generated/moreyra_author_repository/locus_sets
+
+      - name: Validate unresolved template without allowing execution
+        run: |
+          python analysis/validate_moreyra_target_contract.py \
+            --contract config/moreyra_target_contract.template.json \
+            --moreyra-loci data/evidence/generated/moreyra_author_repository/locus_sets/moreyra_public_1061_loci.txt \
+            --report data/evidence/generated/moreyra_target_contract_template_validation.json \
+            --allow-unapproved
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(
+              Path(
+                  "data/evidence/generated/moreyra_target_contract_template_validation.json"
+              ).read_text(encoding="utf-8")
+          )
+          print(f"template_contract_valid={report['contract_valid']}")
+          print(f"template_execution_allowed={report['execution_allowed']}")
+          print(f"template_warnings={len(report['warnings'])}")
+          if not report["contract_valid"]:
+              raise SystemExit("Unresolved contract template is structurally invalid")
+          if report["execution_allowed"]:
+              raise SystemExit("Unresolved template must never allow pilot execution")
+          if report["identity_status"] != "unresolved":
+              raise SystemExit("Template identity must remain unresolved")
+          PY
+
+      - name: Validate approved contract when present
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f config/moreyra_target_contract.json ]]; then
+            python analysis/validate_moreyra_target_contract.py \
+              --contract config/moreyra_target_contract.json \
+              --moreyra-loci data/evidence/generated/moreyra_author_repository/locus_sets/moreyra_public_1061_loci.txt \
+              --report data/evidence/generated/moreyra_target_contract_validation.json
+            python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(
+              Path("data/evidence/generated/moreyra_target_contract_validation.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          print(f"approved_contract_valid={report['contract_valid']}")
+          print(f"approved_execution_allowed={report['execution_allowed']}")
+          if not report["execution_allowed"]:
+              raise SystemExit("Committed approved contract does not permit pilot execution")
+          PY
+          else
+            echo "No approved config/moreyra_target_contract.json committed; pilot remains blocked."
+          fi
+
+      - name: Upload contract validation reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: moreyra-target-contract-validation-${{ github.run_id }}
+          path: |
+            data/evidence/generated/moreyra_target_contract_template_validation.json
+            data/evidence/generated/moreyra_target_contract_validation.json
+            data/evidence/generated/moreyra_author_repository/locus_sets/locus_set_manifest.csv
+            data/evidence/generated/moreyra_author_repository/locus_sets/locus_set_manifest.json
+          if-no-files-found: warn
+          retention-days: 90
