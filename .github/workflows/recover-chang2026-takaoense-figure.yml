@@ -1,0 +1,93 @@
+name: Recover Chang 2026 takaoense Figure 1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_chang2026_takaoense_figure.py"
+      - "tests/test_recover_chang2026_takaoense_figure.py"
+      - ".github/workflows/recover-chang2026-takaoense-figure.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PDF renderer
+        run: python -m pip install --disable-pip-version-check PyMuPDF
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile analysis/recover_chang2026_takaoense_figure.py
+          python -m unittest tests/test_recover_chang2026_takaoense_figure.py -v
+
+      - name: Recover open-access article and Figure 1 evidence
+        run: |
+          python analysis/recover_chang2026_takaoense_figure.py \
+            --outdir data/evidence/generated/chang2026_takaoense_figure \
+            --force
+
+      - name: Validate evidence package
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          outdir = Path("data/evidence/generated/chang2026_takaoense_figure")
+          summary = json.loads((outdir / "recovery_summary.json").read_text(encoding="utf-8"))
+          with (outdir / "takaoense_tip_morph_recovery.csv").open(
+              encoding="utf-8-sig", newline=""
+          ) as handle:
+              rows = list(csv.DictReader(handle))
+
+          print(f"pdf_pages={summary['pdf_page_count']}")
+          print(f"pdf_sha256={summary['pdf_sha256']}")
+          print(f"caption_defines_W_and_BP={summary['caption_defines_W_and_BP']}")
+          print(f"rendered_pages={len(summary['rendered_pages'])}")
+          print(f"embedded_images={len(summary['embedded_images'])}")
+          print(f"direct_assignment_count={summary['direct_assignment_count']}")
+          print(f"tip_rows={len(rows)}")
+          print("review_statuses=" + "|".join(sorted({row['review_status'] for row in rows})))
+
+          if summary['pdf_page_count'] != 26:
+              raise SystemExit(f"Expected 26-page article PDF, observed {summary['pdf_page_count']}")
+          if not summary['caption_defines_W_and_BP']:
+              raise SystemExit("Figure 1 caption no longer exposes the W/BP morph definition")
+          if len(summary['rendered_pages']) != 2:
+              raise SystemExit("Expected two high-resolution rendered pages")
+          for filename in summary['rendered_pages']:
+              if not Path(filename).is_file() or Path(filename).stat().st_size == 0:
+                  raise SystemExit(f"Missing rendered page: {filename}")
+          if len(rows) != 6:
+              raise SystemExit(f"Expected six takaoense vouchers, observed {len(rows)}")
+          if {row['voucher'] for row in rows} != {
+              'ccy3559', 'ccy3807', 'ccy3835', 'ccy3560', 'ccy3629', 'ccy3839'
+          }:
+              raise SystemExit("Voucher membership changed")
+          if any(
+              row['review_status'] == 'assigned_from_explicit_figure_label'
+              and not row['published_figure_label']
+              for row in rows
+          ):
+              raise SystemExit("Assigned row lacks a direct figure label")
+          PY
+
+      - name: Upload Figure 1 evidence package
+        uses: actions/upload-artifact@v4
+        with:
+          name: chang2026-takaoense-figure-evidence-${{ github.run_id }}
+          path: data/evidence/generated/chang2026_takaoense_figure
+          if-no-files-found: error
+          retention-days: 90
