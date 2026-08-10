@@ -66,13 +66,22 @@ jobs:
           python analysis/validate_cirsium_population_history_registry.py
           cp analysis/published_east_asia_colour_history.csv /tmp/published_east_asia_colour_history.expected.csv
           python analysis/published_east_asia_colour_history.py
-          diff -u /tmp/published_east_asia_colour_history.expected.csv analysis/published_east_asia_colour_history.csv
           python - <<'PY'
           import csv
           from pathlib import Path
 
-          path = Path("/tmp/cirsium_phylogeny_literature_registry_current.csv")
-          with path.open(encoding="utf-8", newline="") as handle:
+          def csv_rows(path: str):
+              with Path(path).open(encoding="utf-8-sig", newline="") as handle:
+                  return list(csv.DictReader(handle))
+
+          expected = csv_rows("/tmp/published_east_asia_colour_history.expected.csv")
+          observed = csv_rows("analysis/published_east_asia_colour_history.csv")
+          if expected != observed:
+              raise SystemExit("Generated colour-history rows differ from the committed result")
+          print(f"validated_colour_history_rows={len(observed)}")
+
+          registry_path = Path("/tmp/cirsium_phylogeny_literature_registry_current.csv")
+          with registry_path.open(encoding="utf-8", newline="") as handle:
               rows = list(csv.DictReader(handle))
           print(f"validated_curated_records={len(rows)}")
           if len(rows) < 50:
