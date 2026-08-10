@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """Validate the frozen Chang 2026 var. takaoense voucher evidence ledger.
 
-The ledger separates four evidence layers that must not be collapsed:
+The ledger separates four evidence layers:
 
 1. Supplementary Table S1 transcriptome voucher/locality records;
 2. Supplementary Table S6 specimens-examined records;
 3. main-text references to individual specimens;
-4. Figure 1's definition of W and BP, without inventing the six tip labels.
+4. direct W/BP suffixes printed in Figure 1 panels B and C.
 
-The validator fails if an unresolved voucher is assigned a flower colour, if the
-known S1/S6 herbarium conflict is silently harmonized, or if the six-voucher
-membership changes.
+The validator requires the exact six Figure 1 assignments, rejects any locality-
+derived replacement, preserves the known S1/S6 herbarium conflict, and fails if
+the six-voucher membership changes.
 """
 
 from __future__ import annotations
@@ -57,15 +57,27 @@ EXPECTED_CODES = {
     "ccy3629": "FB",
     "ccy3839": "LT",
 }
+EXPECTED_MORPHS = {
+    "ccy3559": ("BP", "bluish-purple", "C"),
+    "ccy3807": ("BP", "bluish-purple", "C"),
+    "ccy3835": ("BP", "bluish-purple", "C"),
+    "ccy3560": ("W", "white", "W"),
+    "ccy3629": ("W", "white", "W"),
+    "ccy3839": ("W", "white", "W"),
+}
 EXACT_S6 = {"ccy3559", "ccy3560", "ccy3629", "ccy3839"}
 NOT_IN_S6 = {"ccy3807", "ccy3835"}
 KNOWN_HERBARIUM_CONFLICT = "ccy3839"
-EXPECTED_SOURCE_HASH = (
+EXPECTED_SUPPLEMENT_HASH = (
     "650f42cb876e0a7b68aac61b127cb9d7586a3ea0bac4e3070adf204b852251a9"
+)
+EXPECTED_FIGURE_IMAGE_HASH = (
+    "10375f1d79a4799babdebffca84301f602adfa0aabc825b852de84177bbb878c"
 )
 EXPECTED_FIGURE_DEFINITION = (
     "Figure 1 caption defines W=white-corolla and BP=bluish-purple-corolla"
 )
+EXPECTED_REVIEW_STATUS = "assigned_from_direct_figure1_tip_labels"
 
 
 def clean(value: object) -> str:
@@ -103,9 +115,7 @@ def validate(rows: Sequence[Mapping[str, str]]) -> dict[str, object]:
     if duplicates:
         raise ValueError(f"Duplicate/missing voucher rows: {duplicates}")
     if set(vouchers) != set(EXPECTED_CODES):
-        raise ValueError(
-            f"Voucher membership changed: {sorted(set(vouchers))}"
-        )
+        raise ValueError(f"Voucher membership changed: {sorted(set(vouchers))}")
 
     by_voucher = {row["voucher"]: row for row in rows}
     for voucher, expected_code in EXPECTED_CODES.items():
@@ -116,23 +126,30 @@ def validate(rows: Sequence[Mapping[str, str]]) -> dict[str, object]:
             raise ValueError(
                 f"{voucher}: expected code {expected_code}, observed {row['code']}"
             )
-        if row["source_artifact_sha256"] != EXPECTED_SOURCE_HASH:
+        if row["source_artifact_sha256"] != EXPECTED_SUPPLEMENT_HASH:
             raise ValueError(f"{voucher}: supplement artifact hash changed")
         if row["figure1_state_definition"] != EXPECTED_FIGURE_DEFINITION:
             raise ValueError(f"{voucher}: Figure 1 state definition changed")
-        if any(
-            row[field]
-            for field in (
-                "direct_sample_morph_label",
-                "flower_colour_state",
-                "binary_colour_code",
+
+        expected_label, expected_state, expected_binary = EXPECTED_MORPHS[voucher]
+        observed = (
+            row["direct_sample_morph_label"],
+            row["flower_colour_state"],
+            row["binary_colour_code"],
+        )
+        expected = (expected_label, expected_state, expected_binary)
+        if observed != expected:
+            raise ValueError(
+                f"{voucher}: Figure 1 morph mismatch expected={expected!r} observed={observed!r}"
             )
-        ):
-            raise ValueError(f"{voucher}: unsupported sample-level morph assignment")
-        if row["review_status"] != "unresolved_figure_or_direct_record_required":
-            raise ValueError(f"{voucher}: unresolved review status changed")
-        if "no colour inferred" not in row["notes"].casefold() and voucher != "ccy3835":
-            raise ValueError(f"{voucher}: no-inference note is missing")
+        if row["review_status"] != EXPECTED_REVIEW_STATUS:
+            raise ValueError(f"{voucher}: direct Figure 1 review status changed")
+        if EXPECTED_FIGURE_IMAGE_HASH not in row["notes"]:
+            raise ValueError(f"{voucher}: Figure 1 image hash is missing")
+        if "panels b and c both print" not in row["notes"].casefold():
+            raise ValueError(f"{voucher}: two-panel transcription note is missing")
+        if "inferred from locality" in row["notes"].casefold() and "no colour" not in row["notes"].casefold():
+            raise ValueError(f"{voucher}: locality inference guard is ambiguous")
 
     for voucher in EXACT_S6:
         row = by_voucher[voucher]
@@ -173,6 +190,12 @@ def validate(rows: Sequence[Mapping[str, str]]) -> dict[str, object]:
         if by_voucher[voucher]["main_text_voucher_evidence"]:
             raise ValueError(f"{voucher}: unexpected main-text evidence")
 
+    white = sorted(
+        voucher for voucher, values in EXPECTED_MORPHS.items() if values[0] == "W"
+    )
+    bluish_purple = sorted(
+        voucher for voucher, values in EXPECTED_MORPHS.items() if values[0] == "BP"
+    )
     return {
         "accepted_taxon": "Cirsium japonicum var. takaoense",
         "voucher_rows": len(rows),
@@ -183,11 +206,16 @@ def validate(rows: Sequence[Mapping[str, str]]) -> dict[str, object]:
         "s1_s6_herbarium_conflicts": conflicts,
         "main_text_individual_specimen_evidence": ["ccy3835"],
         "figure1_state_definition_available": True,
-        "direct_sample_morph_assignments": 0,
-        "unresolved_vouchers": sorted(vouchers),
-        "next_evidence": (
-            "Read the W/BP suffixes from Figure 1, inspect linked TNM/TCF voucher "
-            "images or labels, or obtain author confirmation."
+        "figure1_image_sha256": EXPECTED_FIGURE_IMAGE_HASH,
+        "direct_sample_morph_assignments": 6,
+        "white_vouchers": white,
+        "bluish_purple_vouchers": bluish_purple,
+        "morph_counts": {"W": len(white), "BP": len(bluish_purple)},
+        "unresolved_vouchers": [],
+        "next_analysis": (
+            "Recode the published sample topology with three W and three BP tips, "
+            "test morph clustering/topology sensitivity, and reuse the six transcriptomes "
+            "as labelled anchors for population sampling."
         ),
     }
 
@@ -213,6 +241,8 @@ def main() -> int:
     print(f"supplement_s6_not_recovered={summary['supplement_s6_not_recovered']}")
     print("s1_s6_herbarium_conflicts=" + "|".join(summary["s1_s6_herbarium_conflicts"]))
     print(f"direct_sample_morph_assignments={summary['direct_sample_morph_assignments']}")
+    print("white_vouchers=" + "|".join(summary["white_vouchers"]))
+    print("bluish_purple_vouchers=" + "|".join(summary["bluish_purple_vouchers"]))
     print(args.summary)
     return 0
 
