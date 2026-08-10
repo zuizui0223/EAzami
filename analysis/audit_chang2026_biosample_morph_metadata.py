@@ -13,7 +13,10 @@ Assignments are deliberately conservative:
   position;
 * a colour state is accepted only from an explicit NCBI attribute containing a
   white or purple/bluish-purple expression;
-* conflicting or generic colour-polymorphism text remains unresolved.
+* conflicting or generic colour-polymorphism text remains unresolved;
+* a published voucher is linked to a public run only through an explicit
+  voucher/sample identifier or an unambiguous exact SampleName suffix, never
+  through locality alone when a stronger identifier is available.
 """
 
 from __future__ import annotations
@@ -50,7 +53,9 @@ AUDIT_FIELDS = (
     "experiment",
     "biosample",
     "sra_scientific_name",
+    "sample_name",
     "library_name",
+    "biosample_isolate",
     "run_match_basis",
     "biosample_attribute_count",
     "morph_relevant_attributes",
@@ -68,6 +73,7 @@ LONG_FIELDS = (
     "run",
     "experiment",
     "scientific_name",
+    "sample_name",
     "library_name",
     "attribute_name",
     "attribute_value",
@@ -154,6 +160,21 @@ def token_present(token: str, text: str) -> bool:
     )
 
 
+def voucher_numeric_id(value: object) -> str:
+    """Extract the numeric collector/isolate identifier from values such as ccy3559."""
+    match = re.fullmatch(r"(?:ccy)?\s*[-_ ]?(\d+)", clean(value), flags=re.IGNORECASE)
+    return match.group(1) if match else ""
+
+
+def exact_takaoense_sample_suffix(voucher: object, sample_name: object) -> bool:
+    """Match ``ccy3559`` only to an explicit ``...takaoense-3559`` SampleName."""
+    numeric = voucher_numeric_id(voucher)
+    sample = compact(sample_name)
+    if not numeric or "takaoense" not in sample.casefold():
+        return False
+    return bool(re.search(rf"(?:^|[-_ ]){re.escape(numeric)}$", sample, flags=re.IGNORECASE))
+
+
 def locality_tokens(location: str) -> list[str]:
     """Return only explicit named localities, never coordinates or regions."""
     value = compact(location)
@@ -183,6 +204,8 @@ def score_seed_run(seed: Mapping[str, str], run: Mapping[str, str]) -> tuple[int
     text = run_search_text(run)
     if token_present(seed.get("voucher", ""), text):
         return 100, "exact_voucher_in_runinfo"
+    if exact_takaoense_sample_suffix(seed.get("voucher", ""), run.get("SampleName", "")):
+        return 95, "exact_voucher_numeric_suffix_in_takaoense_sample_name"
     if token_present(seed.get("code", ""), text):
         return 80, "exact_sample_code_in_runinfo"
     locations = locality_tokens(seed.get("location", ""))
@@ -261,6 +284,7 @@ def flatten_attributes(
                     "run": clean(run.get("Run")),
                     "experiment": clean(run.get("Experiment")),
                     "scientific_name": clean(run.get("ScientificName")),
+                    "sample_name": clean(run.get("SampleName")),
                     "library_name": clean(run.get("LibraryName")),
                     "attribute_name": name,
                     "attribute_value": value,
@@ -303,7 +327,9 @@ def build_audit_rows(
                 "experiment": clean(run.get("Experiment")),
                 "biosample": biosample,
                 "sra_scientific_name": clean(run.get("ScientificName")),
+                "sample_name": clean(run.get("SampleName")),
                 "library_name": clean(run.get("LibraryName")),
+                "biosample_isolate": clean(record.get("isolate")),
                 "run_match_basis": basis,
                 "biosample_attribute_count": str(len(record)),
                 "morph_relevant_attributes": " | ".join(
@@ -318,7 +344,8 @@ def build_audit_rows(
                     "NCBI BioSample XML and SRA runinfo for PRJNA1311153"
                 ),
                 "notes": (
-                    "No assignment from locality, elevation, herbarium, read count, "
+                    "Voucher identity may use an explicit SampleName/isolate identifier. "
+                    "No colour assignment from locality, elevation, herbarium, read count, "
                     "or inferred phylogenetic position."
                 ),
             }
@@ -391,8 +418,10 @@ def main() -> int:
             row["voucher"] for row in audit_rows if not row["direct_ncbi_colour_label"]
         ],
         "interpretation": (
-            "A zero assignment count means that official NCBI metadata do not expose "
-            "sample-level W/BP labels; it does not imply that Figure 1 lacks them."
+            "The six published voucher identifiers can be linked to six public runs through "
+            "explicit SampleName/isolate identifiers. A zero colour-assignment count means "
+            "that official NCBI metadata do not expose sample-level W/BP labels; it does "
+            "not imply that Figure 1 lacks them."
         ),
     }
     summary_path = args.outdir / "biosample_morph_audit_summary.json"
