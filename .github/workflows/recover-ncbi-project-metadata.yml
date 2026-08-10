@@ -1,0 +1,65 @@
+name: Recover NCBI project metadata
+
+on:
+  workflow_dispatch:
+    inputs:
+      bioproject:
+        description: NCBI BioProject accession
+        required: true
+        default: PRJNA957074
+      enrich_biosample:
+        description: Fetch BioSample locality/date metadata
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Recover public SRA metadata
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(
+            --bioproject "${{ inputs.bioproject }}"
+            --outdir ncbi_metadata_output
+            --focal-taxa data/evidence/focal_taxa_prjna957074.txt
+          )
+          if [[ "${{ inputs.enrich_biosample }}" == "true" ]]; then
+            args+=(--enrich-biosample)
+          fi
+          python analysis/recover_ncbi_project_runs.py "${args[@]}"
+
+      - name: Show recovery summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          ls -lh ncbi_metadata_output
+          for file in ncbi_metadata_output/*_focal_taxon_audit.csv; do
+            echo "--- ${file}"
+            cat "${file}"
+          done
+
+      - name: Upload metadata tables
+        uses: actions/upload-artifact@v4
+        with:
+          name: ncbi-${{ inputs.bioproject }}-metadata
+          path: ncbi_metadata_output/
+          if-no-files-found: error
+          retention-days: 30
