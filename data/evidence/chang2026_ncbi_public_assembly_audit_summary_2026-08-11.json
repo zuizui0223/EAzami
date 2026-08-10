@@ -1,0 +1,71 @@
+{
+  "audit_date": "2026-08-11",
+  "study": "Chang et al. 2026 Taiwan-Ryukyu Cirsium phylotranscriptomics",
+  "bioproject": "PRJNA1311153",
+  "supplement_sample_rows": 33,
+  "official_run_reconciliation": {
+    "verified_or_probable_rows": 33,
+    "unique_official_run_assignments": 33,
+    "run_assignment_collision_rows": 0,
+    "takaoense_sample_rows": 6,
+    "takaoense_verified_or_probable_rows": 6,
+    "takaoense_white_rows": 3,
+    "takaoense_bluish_purple_rows": 3,
+    "reconciliation_evidence_channels": [
+      "exact supplement-embedded SRR accession",
+      "exact voucher token",
+      "exact paired- or single-end raw-read to SRA-spot relation",
+      "taxon agreement",
+      "short-code and locality corroboration"
+    ],
+    "verification_rule": "Short code or locality alone never verifies a run. Exact accession, exact voucher, or a unique exact read-count plus taxon combination is required."
+  },
+  "public_transcriptome_assembly_audit": {
+    "biosample_or_voucher_linked_tsa_rows": 0,
+    "biosample_linked_assembly_without_tsa_rows": 0,
+    "de_novo_from_official_sra_rows": 33,
+    "takaoense_public_tsa_rows": 0,
+    "takaoense_public_assembly_rows": 0,
+    "takaoense_de_novo_from_official_sra_rows": 6,
+    "query_scope": [
+      "NCBI nuccore BioSample AND tsa filter",
+      "NCBI nuccore voucher fallback AND tsa filter",
+      "NCBI Assembly BioSample search"
+    ],
+    "interpretation_limit": "No hit means that the current official BioSample/voucher-linked queries did not recover a reusable public assembly. It does not exclude an unlinked repository or author-held assembly."
+  },
+  "gene_tree_panel": {
+    "panel_name": "Sinocirsium17_plus_Cirsium_lineare2",
+    "sample_count": 19,
+    "taxon_counts": {
+      "Cirsium japonicum": 2,
+      "Cirsium japonicum var. albescens": 2,
+      "Cirsium japonicum var. takaoense": 6,
+      "Cirsium japonicum var. australe": 3,
+      "Cirsium japonicum var. fukienense": 4,
+      "Cirsium lineare": 2
+    },
+    "de_novo_assembly_required_count": 19,
+    "unique_official_sra_runs": 19,
+    "competing_six_tip_topology_hypotheses": 8,
+    "published_regain_candidate_hypotheses": 1,
+    "nearest_loss_only_hypotheses": 7
+  },
+  "reproducible_components": [
+    "analysis/reconcile_chang2026_ncbi_runs.py",
+    "analysis/audit_chang2026_public_transcriptome_assemblies.py",
+    "analysis/build_chang2026_gene_tree_panel.py",
+    ".github/workflows/reconcile-chang2026-ncbi-runs.yml",
+    ".github/workflows/audit-chang2026-public-assemblies.yml",
+    ".github/workflows/build-chang2026-gene-tree-panel.yml"
+  ],
+  "next_analysis": [
+    "de novo assemble the reconciled official SRA runs",
+    "predict proteins and infer orthogroups across the 19-sample panel",
+    "infer per-orthogroup gene trees and root on Cirsium lineare",
+    "score the published nested bluish-purple topology against seven nearest loss-only alternatives",
+    "quantify gene and quartet concordance",
+    "test whether coloured takaoense samples show excess affinity to var. australe or var. fukienense"
+  ],
+  "claim_limit": "The public-run and topology audits strengthen a candidate regain history but do not establish molecular anthocyanin reactivation or exclude introgression and ancestral polymorphism."
+}
