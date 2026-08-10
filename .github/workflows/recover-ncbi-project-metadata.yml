@@ -4,8 +4,14 @@ on:
   pull_request:
     paths:
       - "analysis/recover_ncbi_project_runs.py"
+      - "analysis/recover_published_phylogeny_artifacts.py"
+      - "analysis/build_moreyra2025_sample_audit.py"
       - "tests/test_recover_ncbi_project_runs.py"
+      - "tests/test_recover_published_phylogeny_artifacts.py"
+      - "tests/test_build_moreyra2025_sample_audit.py"
       - "data/evidence/focal_taxa_prjna957074.txt"
+      - "data/evidence/published_phylogeny_artifact_manifest_*.csv"
+      - "data/evidence/prjna957074_focal_tip_recovery_*.csv"
       - ".github/workflows/recover-ncbi-project-metadata.yml"
   workflow_dispatch:
     inputs:
@@ -25,7 +31,7 @@ permissions:
 jobs:
   recover:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -37,8 +43,15 @@ jobs:
 
       - name: Compile and run offline tests
         run: |
-          python -m py_compile analysis/recover_ncbi_project_runs.py
-          python -m unittest tests/test_recover_ncbi_project_runs.py -v
+          python -m py_compile \
+            analysis/recover_ncbi_project_runs.py \
+            analysis/recover_published_phylogeny_artifacts.py \
+            analysis/build_moreyra2025_sample_audit.py
+          python -m unittest \
+            tests/test_recover_ncbi_project_runs.py \
+            tests/test_recover_published_phylogeny_artifacts.py \
+            tests/test_build_moreyra2025_sample_audit.py \
+            -v
 
       - name: Recover public SRA and BioSample metadata
         env:
@@ -64,18 +77,44 @@ jobs:
           fi
           python analysis/recover_ncbi_project_runs.py "${args[@]}"
 
+      - name: Recover Moreyra Supplementary Data 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          python analysis/recover_published_phylogeny_artifacts.py \
+            --manifest data/evidence/published_phylogeny_artifact_manifest_2026-08-10.csv \
+            --outdir published_artifact_output \
+            --force \
+            --fail-on-download-error
+          test -s published_artifact_output/moreyra2025_supplement/extracted/table_001.csv
+
+      - name: Join supplement sample table to project runinfo
+        shell: bash
+        run: |
+          set -euo pipefail
+          runinfo=$(find ncbi_metadata_output -name '*_runinfo.csv' -print -quit)
+          python analysis/build_moreyra2025_sample_audit.py \
+            --supplement-table published_artifact_output/moreyra2025_supplement/extracted/table_001.csv \
+            --runinfo "$runinfo" \
+            --focal-taxa data/evidence/focal_taxa_prjna957074.txt \
+            --outdir moreyra_sample_audit_output
+
       - name: Validate and summarize recovery
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           import csv
+          import json
           from pathlib import Path
 
           outdir = Path("ncbi_metadata_output")
           runinfo = next(outdir.glob("*_runinfo.csv"))
           taxa = next(outdir.glob("*_taxon_summary.csv"))
-          audit = next(outdir.glob("*_focal_taxon_audit.csv"))
+          raw_audit = next(outdir.glob("*_focal_taxon_audit.csv"))
+          joined_audit = Path("moreyra_sample_audit_output/moreyra2025_focal_taxon_audit.csv")
+          committed_audit = Path("data/evidence/prjna957074_focal_tip_recovery_2026-08-10.csv")
+          summary_path = Path("moreyra_sample_audit_output/moreyra2025_sample_audit_summary.json")
 
           def rows(path):
               with path.open(encoding="utf-8-sig", newline="") as handle:
@@ -83,32 +122,47 @@ jobs:
 
           run_rows = rows(runinfo)
           taxon_rows = rows(taxa)
-          audit_rows = rows(audit)
-          exact = [r for r in audit_rows if r["project_tip_status"] == "exact_sra_project_tip_verified"]
-          east_asia = [
-              r for r in run_rows
-              if any(token in (r.get("geographic_location") or "").casefold()
-                     for token in ("japan", "china", "korea", "taiwan", "russia", "mongolia"))
-          ]
+          raw_audit_rows = rows(raw_audit)
+          joined_rows = rows(joined_audit)
+          committed_rows = rows(committed_audit)
+          summary = json.loads(summary_path.read_text(encoding="utf-8"))
 
+          exact = [
+              row for row in joined_rows
+              if row["project_tip_status"] == "exact_sra_project_tip_verified"
+          ]
           print(f"run_records={len(run_rows)}")
           print(f"unique_scientific_names={len(taxon_rows)}")
-          print(f"focal_taxa={len(audit_rows)}")
+          print(f"raw_focal_taxa={len(raw_audit_rows)}")
+          print(f"joined_focal_taxa={len(joined_rows)}")
           print(f"exact_focal_matches={len(exact)}")
-          print(f"east_asia_locality_runs={len(east_asia)}")
-          if len(run_rows) < 100:
-              raise SystemExit("Project recovery returned unexpectedly fewer than 100 runs")
-          if not exact:
-              raise SystemExit("No focal taxon was recovered exactly from project runinfo")
-          for row in exact:
-              print(f"EXACT {row['query_taxon']} runs={row['runs']} biosamples={row['biosamples']}")
-          PY
-          ls -lh ncbi_metadata_output
+          print(f"supplement_sample_rows={summary['supplement_sample_rows']}")
+          print(f"linked_supplement_samples={summary['supplement_samples_with_runinfo']}")
+          print(f"core_east_asia_samples={summary['core_east_asia_sample_rows']}")
+          print(f"northeast_asia_bridge_samples={summary['northeast_asia_bridge_sample_rows']}")
 
-      - name: Upload metadata tables
+          if len(run_rows) != 455:
+              raise SystemExit(f"Expected 455 project runs, observed {len(run_rows)}")
+          if len(taxon_rows) != 327:
+              raise SystemExit(f"Expected 327 submitted scientific names, observed {len(taxon_rows)}")
+          if summary["supplement_sample_rows"] != 299:
+              raise SystemExit("Moreyra Supplementary Table S1 no longer has 299 rows")
+          if summary["supplement_samples_with_runinfo"] != 286:
+              raise SystemExit("Supplement-to-runinfo linkage count changed unexpectedly")
+          if len(exact) != 10:
+              raise SystemExit(f"Expected 10 exact focal matches, observed {len(exact)}")
+          if joined_rows != committed_rows:
+              raise SystemExit("Generated focal audit differs from committed evidence table")
+          PY
+          ls -lh ncbi_metadata_output moreyra_sample_audit_output
+
+      - name: Upload metadata and reconciliation tables
         uses: actions/upload-artifact@v4
         with:
           name: ncbi-${{ inputs.bioproject || 'PRJNA957074' }}-metadata-${{ github.run_id }}
-          path: ncbi_metadata_output/
+          path: |
+            ncbi_metadata_output/
+            moreyra_sample_audit_output/
+            published_artifact_output/artifact_recovery_summary.csv
           if-no-files-found: error
           retention-days: 90
