@@ -6,6 +6,7 @@ on:
       - "analysis/recover_cirsium_phylogeny_literature.py"
       - "analysis/build_cirsium_phylogeny_registry.py"
       - "tests/test_recover_cirsium_phylogeny_literature.py"
+      - "tests/test_build_cirsium_phylogeny_registry.py"
       - "data/evidence/cirsium_phylogeny_literature_registry_*.csv"
       - "data/evidence/cirsium_phylogeny_search_queries.txt"
       - ".github/workflows/recover-cirsium-phylogeny-literature.yml"
@@ -40,7 +41,10 @@ jobs:
           python -m py_compile \
             analysis/recover_cirsium_phylogeny_literature.py \
             analysis/build_cirsium_phylogeny_registry.py
-          python -m unittest tests/test_recover_cirsium_phylogeny_literature.py -v
+          python -m unittest \
+            tests/test_recover_cirsium_phylogeny_literature.py \
+            tests/test_build_cirsium_phylogeny_registry.py \
+            -v
 
       - name: Validate curated evidence registries
         run: |
