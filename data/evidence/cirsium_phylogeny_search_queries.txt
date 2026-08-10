@@ -1,0 +1,36 @@
+# Backbone and generic delimitation
+Cirsium phylogeny
+Cirsium phylogenomics
+Carduus Cirsium phylogeny
+Carduinae Hyb-Seq
+Cirsium Lophiolepis phylogeny
+Cirsium generic delimitation
+
+# Regional nuclear phylogeny
+Cirsium Japan phylogeny
+Cirsium Ryukyu phylogeny
+Cirsium Taiwan phylogeny
+Cirsium China phylogeny
+Cirsium Korea phylogeny
+Cirsium Russian Far East phylogeny
+Cirsium North America target capture
+Cirsium Europe phylogeny
+Cirsium Southwest Asia phylogeny
+
+# Reticulation and cytogenetics
+Cirsium hybridization
+Cirsium introgression
+Cirsium allopolyploid
+Cirsium polyploidy
+Cirsium chromosome
+Cirsium genome size
+Cirsium RADseq
+Cirsium chloroplast capture
+Cirsium cytonuclear discordance
+
+# Public data and tree artifacts
+Cirsium phylogeny dataset Newick
+Cirsium TreeBASE
+Cirsium Dryad phylogeny
+Cirsium Mendeley Data phylogeny
+Cirsium BioProject target capture
