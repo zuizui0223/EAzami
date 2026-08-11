@@ -19,7 +19,7 @@ if str(ANALYSIS_DIR) not in sys.path:
 import build_chang2026_gene_tree_panel as panel_builder  # noqa: E402
 import prepare_chang2026_single_copy_orthogroups as prepare_ogs  # noqa: E402
 import run_chang2026_single_copy_gene_trees as gene_runner  # noqa: E402
-import run_chang2026_transcriptome_assembly as assembly_runner  # noqa: E402
+import run_chang2026_layout_aware_transcriptome_assembly as assembly_runner  # noqa: E402
 import score_chang2026_gene_tree_hypotheses as scorer  # noqa: E402
 
 
@@ -100,8 +100,13 @@ class ChangGeneTreeWorkflowIntegrationTests(unittest.TestCase):
                         "matched_run": run,
                         "matched_experiment": f"SRX{counter:06d}",
                         "matched_biosample": f"SAMN{counter:06d}",
+                        "library_layout": "PAIRED",
                         "matched_spots": str(counter * 1000),
-                        "read_count_relation": "exact_paired_end_raw_reads_equals_2x_spots",
+                        "read_count_relation": (
+                            "exact_paired_end_raw_reads_equals_2x_spots"
+                            if counter <= 9
+                            else "not_matching_reported_raw_reads"
+                        ),
                         "run_match_status": "verified_unique_read_count_and_taxon",
                         "run_match_confidence": "verified",
                         "public_transcriptome_status": "not_recovered_by_current_ncbi_query",
@@ -131,9 +136,10 @@ class ChangGeneTreeWorkflowIntegrationTests(unittest.TestCase):
         return panel_builder.build_hypotheses(nearest, robustness)
 
     def test_end_to_end_offline_interfaces(self) -> None:
-        # 1. Validate the 19-sample official-SRA assembly panel and produce plans.
+        # 1. Validate the 19-sample official-layout SRA panel and produce plans.
         validated = assembly_runner.validate_panel(self.panel_path)
         self.assertEqual(len(validated), 19)
+        self.assertEqual({row["library_layout"] for row in validated}, {"PAIRED"})
         assembly_plans = [
             assembly_runner.command_plan(
                 row,
@@ -164,6 +170,10 @@ class ChangGeneTreeWorkflowIntegrationTests(unittest.TestCase):
         self.assertEqual(
             Counter(row["status"] for row in assembly_results),
             Counter({"planned_dry_run": 19}),
+        )
+        self.assertEqual(
+            Counter(row["library_layout"] for row in assembly_results),
+            Counter({"PAIRED": 19}),
         )
 
         # 2. Synthesize one complete OrthoFinder candidate and revalidate it.
