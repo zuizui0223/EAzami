@@ -4,12 +4,15 @@
 The paper's 33 transcriptome samples are split across two provenance layers:
 
 1. runs deposited directly under PRJNA1311153; and
-2. exact SRR accessions printed in the supplement and reused from earlier data.
+2. exact public identifiers printed in the supplement and reused from earlier
+   data.
 
-A BioProject-only query therefore returns an incomplete set.  This script
-recovers the union, records the source layer for every run, enriches runinfo with
-BioSample attributes needed for voucher reconciliation, and never infers sample
-identity from geography.
+The supplement's accession column is heterogeneous: it can contain an SRA run
+(``SRR``), experiment (``SRX``), or BioSample (``SAMN``) accession.  A
+BioProject-only query therefore returns an incomplete set.  This script
+recovers every identifier according to its accession type, records provenance
+for each run, enriches runinfo with explicit BioSample attributes needed for
+voucher reconciliation, and never infers sample identity from geography.
 """
 
 from __future__ import annotations
@@ -41,6 +44,8 @@ DEFAULT_SUPPLEMENT = Path(
 )
 DEFAULT_OUTDIR = Path("data/evidence/generated/chang2026_published_runinfo")
 RUN_PATTERN = re.compile(r"SRR\d+", flags=re.IGNORECASE)
+EXPERIMENT_PATTERN = re.compile(r"SRX\d+", flags=re.IGNORECASE)
+BIOSAMPLE_PATTERN = re.compile(r"SAM[A-Z]+\d+", flags=re.IGNORECASE)
 SUMMARY_FIELDS = ("metric", "value")
 
 
@@ -57,52 +62,115 @@ def read_csv(path: Path) -> list[dict[str, str]]:
         ]
 
 
+def identifier_kind(value: object) -> str:
+    accession = clean(value).upper()
+    if RUN_PATTERN.fullmatch(accession):
+        return "run"
+    if EXPERIMENT_PATTERN.fullmatch(accession):
+        return "experiment"
+    if BIOSAMPLE_PATTERN.fullmatch(accession):
+        return "biosample"
+    return ""
+
+
 def embedded_accessions(
     rows: Sequence[Mapping[str, str]],
     field: str = "embedded_public_accession",
 ) -> list[str]:
-    """Extract unique exact SRR accessions explicitly printed in the supplement."""
+    """Extract unique supported identifiers explicitly printed in the supplement."""
     output: set[str] = set()
     for row in rows:
         value = clean(row.get(field)).upper()
         if not value:
             continue
-        if not RUN_PATTERN.fullmatch(value):
-            raise ValueError(f"Invalid embedded run accession: {value!r}")
+        if not identifier_kind(value):
+            raise ValueError(f"Invalid embedded public accession: {value!r}")
         output.add(value)
     return sorted(output)
 
 
-def fetch_exact_run_row(client: NCBIClient, accession: str) -> dict[str, str]:
-    """Fetch one exact run by accession and reject non-exact or duplicated results."""
-    accession = clean(accession).upper()
-    if not RUN_PATTERN.fullmatch(accession):
-        raise ValueError(f"Invalid run accession: {accession!r}")
+def identifier_query(identifier: str) -> tuple[str, str]:
+    kind = identifier_kind(identifier)
+    if kind in {"run", "experiment"}:
+        return kind, f"{identifier}[Accession]"
+    if kind == "biosample":
+        return kind, f"{identifier}[BioSample]"
+    raise ValueError(f"Unsupported embedded identifier: {identifier!r}")
+
+
+def row_matches_identifier(row: Mapping[str, str], identifier: str) -> bool:
+    kind = identifier_kind(identifier)
+    field = {
+        "run": "Run",
+        "experiment": "Experiment",
+        "biosample": "BioSample",
+    }.get(kind)
+    return bool(field and clean(row.get(field)).upper() == identifier.upper())
+
+
+def fetch_exact_identifier_rows(
+    client: NCBIClient, identifier: str
+) -> list[dict[str, str]]:
+    """Fetch every runinfo row carrying the exact run/experiment/BioSample ID."""
+    identifier = clean(identifier).upper()
+    kind, term = identifier_query(identifier)
     payload = client.get(
         ESEARCH_URL,
         {
             "db": "sra",
-            "term": f"{accession}[Accession]",
-            "retmax": 20,
+            "term": term,
+            "retmax": 100,
             "retmode": "json",
         },
     )
     result = json.loads(payload.decode("utf-8"))
     ids = [str(item) for item in result.get("esearchresult", {}).get("idlist", [])]
     if not ids:
-        raise RuntimeError(f"No SRA record found for supplement accession {accession}")
+        # Some NCBI index configurations do not expose every field alias in the
+        # same way.  A literal fallback remains exact because returned rows are
+        # still filtered against the requested accession below.
+        payload = client.get(
+            ESEARCH_URL,
+            {
+                "db": "sra",
+                "term": identifier,
+                "retmax": 100,
+                "retmode": "json",
+            },
+        )
+        result = json.loads(payload.decode("utf-8"))
+        ids = [
+            str(item)
+            for item in result.get("esearchresult", {}).get("idlist", [])
+        ]
+    if not ids:
+        raise RuntimeError(
+            f"No SRA record found for embedded {kind} identifier {identifier}"
+        )
     rows = fetch_runinfo(client, ids)
     exact = [
         {key: clean(value) for key, value in row.items()}
         for row in rows
-        if clean(row.get("Run")).upper() == accession
+        if row_matches_identifier(row, identifier)
     ]
-    if len(exact) != 1:
-        returned = sorted(clean(row.get("Run")) for row in rows)
-        raise RuntimeError(
-            f"Expected one exact runinfo row for {accession}; returned={returned}"
+    if not exact:
+        returned = sorted(
+            {
+                clean(row.get("Run"))
+                + "/"
+                + clean(row.get("Experiment"))
+                + "/"
+                + clean(row.get("BioSample"))
+                for row in rows
+            }
         )
-    return exact[0]
+        raise RuntimeError(
+            f"No exact runinfo row for {identifier}; returned={returned}"
+        )
+    by_run = {clean(row.get("Run")): row for row in exact if row.get("Run")}
+    if len(by_run) != len(exact):
+        raise RuntimeError(f"Duplicate runinfo rows returned for {identifier}")
+    return [by_run[run] for run in sorted(by_run)]
 
 
 def merge_layers(
@@ -198,21 +266,25 @@ def build_summary(
     supplement_rows: Sequence[Mapping[str, str]],
     project_rows: Sequence[Mapping[str, str]],
     embedded: Sequence[str],
+    identifier_rows: Mapping[str, Sequence[Mapping[str, str]]],
     complete_rows: Sequence[Mapping[str, str]],
 ) -> dict[str, object]:
     runs = {clean(row.get("Run")).upper() for row in complete_rows if row.get("Run")}
     project_runs = {
         clean(row.get("Run")).upper() for row in project_rows if row.get("Run")
     }
-    missing = sorted(set(embedded) - runs)
+    missing = sorted(identifier for identifier in embedded if not identifier_rows.get(identifier))
+    type_counts = Counter(identifier_kind(identifier) for identifier in embedded)
     scope_counts = Counter(clean(row.get("recovery_scope")) for row in complete_rows)
     return {
         "supplement_sample_rows": len(supplement_rows),
         "primary_bioproject_run_count": len(project_runs),
-        "supplement_embedded_accession_count": len(embedded),
-        "embedded_accessions_already_in_primary_project": len(
-            set(embedded) & project_runs
-        ),
+        "supplement_embedded_identifier_count": len(embedded),
+        "embedded_identifier_type_counts": dict(sorted(type_counts.items())),
+        "embedded_identifier_run_counts": {
+            identifier: len(identifier_rows.get(identifier, []))
+            for identifier in embedded
+        },
         "complete_unique_run_count": len(runs),
         "unique_biosample_count": len(
             {
@@ -226,12 +298,12 @@ def build_summary(
             for row in complete_rows
         ),
         "recovery_scope_counts": dict(sorted(scope_counts.items())),
-        "embedded_accessions": list(embedded),
-        "missing_embedded_accessions": missing,
+        "embedded_identifiers": list(embedded),
+        "missing_embedded_identifiers": missing,
         "interpretation": (
             "The published run universe is the union of the primary "
-            "PRJNA1311153 deposit and exact SRR accessions explicitly reused "
-            "in the supplement."
+            "PRJNA1311153 deposit and exact run, experiment, or BioSample "
+            "identifiers explicitly reused in the supplement."
         ),
     }
 
@@ -284,21 +356,31 @@ def main() -> int:
         for row in fetch_runinfo(client, project_uids)
         if clean(row.get("BioProject")) == project
     ]
-    project_runs = {clean(row.get("Run")).upper() for row in project_rows}
-    missing_from_project = [run for run in embedded if run not in project_runs]
-    reused_rows = [fetch_exact_run_row(client, run) for run in missing_from_project]
+
+    identifier_rows: dict[str, list[dict[str, str]]] = {}
+    reused_rows: list[dict[str, str]] = []
+    for identifier in embedded:
+        rows = fetch_exact_identifier_rows(client, identifier)
+        identifier_rows[identifier] = rows
+        reused_rows.extend(rows)
 
     complete = merge_layers(project_rows, reused_rows)
     attributes = biosample_attributes(
         client, [clean(row.get("BioSample")) for row in complete]
     )
     complete = enrich_with_biosample(complete, attributes)
-    summary = build_summary(supplement, project_rows, embedded, complete)
+    summary = build_summary(
+        supplement,
+        project_rows,
+        embedded,
+        identifier_rows,
+        complete,
+    )
 
-    if summary["missing_embedded_accessions"]:
+    if summary["missing_embedded_identifiers"]:
         raise SystemExit(
-            "Embedded runs not recovered: "
-            + "|".join(summary["missing_embedded_accessions"])
+            "Embedded identifiers not recovered: "
+            + "|".join(summary["missing_embedded_identifiers"])
         )
     if summary["complete_unique_run_count"] < len(supplement):
         raise SystemExit(
@@ -336,8 +418,12 @@ def main() -> int:
     print(f"supplement_sample_rows={summary['supplement_sample_rows']}")
     print(f"primary_bioproject_run_count={summary['primary_bioproject_run_count']}")
     print(
-        "supplement_embedded_accession_count="
-        f"{summary['supplement_embedded_accession_count']}"
+        "supplement_embedded_identifier_count="
+        f"{summary['supplement_embedded_identifier_count']}"
+    )
+    print(
+        "embedded_identifier_type_counts="
+        + json.dumps(summary["embedded_identifier_type_counts"], sort_keys=True)
     )
     print(f"complete_unique_run_count={summary['complete_unique_run_count']}")
     print(f"unique_biosample_count={summary['unique_biosample_count']}")
