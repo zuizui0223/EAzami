@@ -10,7 +10,15 @@ This workflow is a lightweight, reference-guided topology sensitivity analysis f
 4. Build commands with `analysis/build_chang2026_read2tree_pilot.py`; this builder refuses an uncontracted marker directory.
 5. Run Read2Tree using the environment pinned in `envs/read2tree.yml`.
 6. Infer the concatenated nucleotide tree.
-7. Score it with `analysis/score_chang2026_read2tree_topology.py` against `analysis/chang2026_takaoense_gene_tree_hypotheses_v1.csv`.
+7. Score it through `analysis/run_chang2026_read2tree_scoring_contract.py`.
+
+The final step first verifies that `analysis/chang2026_takaoense_gene_tree_hypotheses_v1.csv` still matches the current source-derived hypotheses and has exact SHA256:
+
+```text
+5dbd081b5c360f73d824221f2dbc09892666f23ecc74a706620943f4c881692f
+```
+
+Only after that gate does it invoke `analysis/score_chang2026_read2tree_topology.py`, and the scoring JSON is annotated with the frozen-input provenance and exact invocation.
 
 ## Scientific gates
 
