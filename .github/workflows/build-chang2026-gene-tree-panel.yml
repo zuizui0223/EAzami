@@ -315,7 +315,7 @@ jobs:
               raise SystemExit("Snakemake DAG rule order changed")
           if contract["heavy_computation_executed"]:
               raise SystemExit("CI contract must not claim heavy computation")
-          if contract["contract_version"] != "chang2026_gene_tree_workflow_v2_official_layout":
+          if contract["contract_version"] != "chang2026_gene_tree_workflow_v3_restartable_sra":
               raise SystemExit("Unexpected workflow contract version")
           if snakemake_version != "9.23.1":
               raise SystemExit(f"Unexpected Snakemake version: {snakemake_version}")
