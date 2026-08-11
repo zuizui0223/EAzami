@@ -1,0 +1,28 @@
+name: Test Chang 2026 orthogroup copy audit
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_chang2026_orthogroup_copy_number.py"
+      - "tests/test_audit_chang2026_orthogroup_copy_number.py"
+      - ".github/workflows/test-chang2026-copy-audit.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: test-chang2026-copy-audit-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: |
+          python -m py_compile analysis/audit_chang2026_orthogroup_copy_number.py
+          python -m unittest tests/test_audit_chang2026_orthogroup_copy_number.py -v
