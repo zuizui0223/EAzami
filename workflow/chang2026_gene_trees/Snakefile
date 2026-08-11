@@ -1,25 +1,11 @@
 """Chang 2026 Sinocirsium transcriptome gene-tree workflow.
 
-First generate and validate a config from the frozen panel package:
-
-    python analysis/validate_chang2026_gene_tree_workflow_contract.py \
-      --panel /path/to/chang2026_sinocirsium_gene_tree_panel.csv \
-      --hypotheses /path/to/chang2026_takaoense_gene_tree_hypotheses.csv \
-      --config-output /path/to/config.json \
-      --summary-output /path/to/contract.json
-
-Then execute, for example:
-
-    snakemake -s workflow/chang2026_gene_trees/Snakefile \
-      --configfile /path/to/config.json \
-      --use-conda --cores 32
-
-The config must point to the validated 19-sample panel and eight-hypothesis CSV.
-The assembly stage uses official NCBI SRA LibraryLayout; supplement raw-read
-count discrepancies remain reconciliation diagnostics and never select the read
-layout. Heavy external computation is never run in pull-request CI; CI validates
-scripts, input hashes, conda specifications, command plans, the complete DAG and
-synthetic topology scoring, then runs a true Snakemake dry-run.
+Generate and validate a config from the frozen 19-sample panel and eight
+predeclared hypotheses, then execute with ``--use-conda`` on a workstation/HPC.
+The assembly rule uses the restartable SRA contract: prefetch, vdb-validate,
+fasterq-dump with explicit scratch, fastp, Trinity without ``--full_cleanup``,
+TransDecoder and stable sample-ID protein headers. Pull-request CI only dry-runs
+the heavy DAG; it never downloads or assembles the RNA-seq cohort.
 """
 
 from pathlib import Path
@@ -29,11 +15,9 @@ shell.executable("/bin/bash")
 WORKFLOW_DIR = Path(workflow.basedir)
 REPO_ROOT = WORKFLOW_DIR.parents[1]
 ANALYSIS = REPO_ROOT / "analysis"
-
 PANEL = Path(config["panel_csv"])
 HYPOTHESES = Path(config["hypotheses_csv"])
 RESULTS = Path(config.get("results_dir", "results/chang2026_gene_tree_workflow"))
-
 ASSEMBLY = RESULTS / "01_transcriptomes"
 ORTHOFINDER = RESULTS / "02_orthofinder"
 SINGLE_COPY = RESULTS / "03_single_copy"
@@ -46,15 +30,14 @@ FASTERQ_THREADS = int(RESOURCES.get("fasterq_threads", 8))
 FASTP_THREADS = int(RESOURCES.get("fastp_threads", 8))
 TRINITY_THREADS = int(RESOURCES.get("trinity_threads", 16))
 TRINITY_MEMORY_GB = int(RESOURCES.get("trinity_memory_gb", 96))
+MIN_FREE_DISK_GIB = int(RESOURCES.get("min_free_disk_gib", 0))
 ORTHOFINDER_THREADS = int(RESOURCES.get("orthofinder_threads", 24))
 ORTHOFINDER_SEARCH_THREADS = int(RESOURCES.get("orthofinder_search_threads", 24))
 GENE_TREE_JOBS = int(RESOURCES.get("gene_tree_jobs", 8))
 GENE_TREE_THREADS = int(RESOURCES.get("gene_tree_threads_per_job", 1))
 BOOTSTRAP_REPLICATES = int(config.get("bootstrap_replicates", 1000))
 ALRT_REPLICATES = int(config.get("alrt_replicates", 1000))
-SUPPORT_THRESHOLDS = ",".join(
-    str(value) for value in config.get("support_thresholds", [0, 50, 70, 90])
-)
+SUPPORT_THRESHOLDS = ",".join(str(value) for value in config.get("support_thresholds", [0, 50, 70, 90]))
 KEEP_RAW = bool(config.get("keep_raw_reads", False))
 
 
@@ -66,35 +49,38 @@ rule all:
         SCORING / "gene_tree_per_hypothesis_details.csv",
         GENE_TREES / "gene_tree_run_summary.json",
         SINGLE_COPY / "single_copy_orthogroup_summary.json",
-        ASSEMBLY / "transcriptome_assembly_run_summary.json",
+        ASSEMBLY / "restartable_run_summary.json",
 
 
 rule assemble_transcriptomes:
     input:
         panel=PANEL,
-        runner=ANALYSIS / "run_chang2026_layout_aware_transcriptome_assembly.py",
+        runner=ANALYSIS / "run_chang2026_restartable_transcriptome_assembly.py",
         prefixer=ANALYSIS / "prefix_fasta_headers.py",
     output:
-        summary=ASSEMBLY / "transcriptome_assembly_run_summary.json",
-        manifest=ASSEMBLY / "transcriptome_assembly_run_manifest.csv",
+        summary=ASSEMBLY / "restartable_run_summary.json",
+        manifest=ASSEMBLY / "restartable_run_manifest.csv",
     threads: max(FASTERQ_THREADS, FASTP_THREADS, TRINITY_THREADS)
     conda:
         "envs/assembly.yml"
     params:
         jobs=ASSEMBLY_JOBS,
-        keep_raw="--keep-raw-reads" if KEEP_RAW else "",
+        min_disk=MIN_FREE_DISK_GIB,
+        cleanup="" if KEEP_RAW else "--delete-raw-after-success --delete-sra-after-success",
     shell:
         r"""
         python {input.runner} \
           --panel {input.panel} \
+          --expected-panel-samples 19 \
           --outdir {ASSEMBLY} \
           --jobs {params.jobs} \
           --fasterq-threads {FASTERQ_THREADS} \
           --fastp-threads {FASTP_THREADS} \
           --trinity-threads {TRINITY_THREADS} \
           --trinity-memory-gb {TRINITY_MEMORY_GB} \
+          --min-free-disk-gib {params.min_disk} \
           --prefix-script {input.prefixer} \
-          {params.keep_raw}
+          {params.cleanup}
         """
 
 
