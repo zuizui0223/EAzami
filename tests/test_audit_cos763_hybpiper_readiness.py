@@ -39,7 +39,7 @@ class Cos763ReadinessTests(unittest.TestCase):
                 locus = f"COS_{index}"
                 if index == 1:
                     # Gap removal must recover a direct 90-nt candidate.
-                    aligned = ("ATG-" * 30)
+                    aligned = "ATG-" * 30
                 elif index == 2:
                     # Mapping-compatible but not divisible by three.
                     aligned = ("ATG" * 30) + "A"
@@ -108,11 +108,12 @@ class Cos763ReadinessTests(unittest.TestCase):
         self.assertIn("not the exact Moreyra", summary["claim_limit"])
 
     def test_locates_one_nested_alignment_archive(self) -> None:
+        expected = self.alignment_zip()
         outer = self.root / "downloaded_dryad_candidate.zip"
         with zipfile.ZipFile(outer, "w") as archive:
             archive.writestr(
                 "nested/COS_alignment_files_NEW.zip",
-                self.alignment_zip(),
+                expected,
             )
             archive.writestr("README.txt", "provenance")
 
@@ -122,7 +123,7 @@ class Cos763ReadinessTests(unittest.TestCase):
         )
         self.assertEqual(source, outer)
         self.assertEqual(member, "nested/COS_alignment_files_NEW.zip")
-        self.assertEqual(payload, self.alignment_zip())
+        self.assertEqual(payload, expected)
 
     def test_requires_exactly_763_alignment_files(self) -> None:
         payload = io.BytesIO()
