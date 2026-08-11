@@ -1,0 +1,37 @@
+{
+  "analysis_version": "arenicola_colour_history_sensitivity_v1",
+  "evidence_file": "data/evidence/arenicola_flower_colour_history_evidence_v1.csv",
+  "state_coding": {
+    "C": "coloured (light purple/bluish-purple/purple)",
+    "W": "white"
+  },
+  "pair_only": {
+    "minimum_changes": 1,
+    "optimal_arenicola_mrca_states": "C|W",
+    "conclusion": "brevicaule-irumtiense alone is directionally unresolved: one loss and one regain are tied"
+  },
+  "published_sister_context": {
+    "unconstrained_minimum_changes": 2,
+    "unconstrained_arenicola_mrca": "C",
+    "force_coloured_arenicola_cost": 2,
+    "force_white_arenicola_cost": 3,
+    "white_ancestor_penalty_changes": 1,
+    "force_white_deep_root_arenicola_mrca": "W"
+  },
+  "nipp_core_resolution_sensitivity": {
+    "variants_tested": [
+      "published_pengii_basal",
+      "alternative_kawakamii_basal",
+      "alternative_tatakaense_basal"
+    ],
+    "unconstrained_arenicola_states": [
+      "C"
+    ],
+    "unconstrained_minimum_changes": [
+      2
+    ]
+  },
+  "classification_history_rule": "Historical treatment as C. brevicaule var. irumtiense is not encoded as ancestry. Reciprocal monophyly implies both extant species descend from an unsampled MRCA.",
+  "working_inference": "Equal-cost parsimony on the current published sister context prefers a coloured Arenicola MRCA and a white loss in C. brevicaule by one change over forcing a white Arenicola MRCA. However, the pair alone is exactly ambiguous, and a white deep-root prior reverses the preferred Arenicola state. Therefore irumtiense colour regain remains an explicit competing hypothesis rather than a rejected one.",
+  "claim_limit": "No machine-readable published branch-length tree is yet used here. Do not convert these parsimony costs into posterior probabilities or claim anthocyanin reactivation. A full Mk/stochastic-mapping analysis requires recovered branch lengths/topology and a broader source-backed flower-colour atlas; population ancestry and floral molecular data are required for demonstrated regain."
+}
