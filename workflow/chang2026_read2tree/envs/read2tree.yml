@@ -1,0 +1,14 @@
+name: eazami-read2tree-fast-screen
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.10.8
+  - pip
+  - mafft
+  - iqtree
+  - minimap2>=2.30
+  - samtools
+  - pip:
+      - git+https://github.com/DessimozLab/read2tree.git@e19ad8f32a438ff7a38d9ee1d41832e1fc326a3c
