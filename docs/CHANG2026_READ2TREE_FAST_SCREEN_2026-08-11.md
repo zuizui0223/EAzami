@@ -1,107 +1,136 @@
-# Chang 2026 Read2Tree fast screen
+# Chang 2026 var. *takaoense* Read2Tree fast topology screen
 
 Date: 2026-08-11
 
-## Why add this layer
+## Goal
 
-The full public-data workflow reconstructs the six morph-labelled *Cirsium japonicum* var. *takaoense* transcriptomes by de novo Trinity assembly, protein prediction, OrthoFinder and per-gene trees. That remains the principal reusable gene-tree route, but it is computationally expensive.
+Use the six published morph-labelled *Cirsium japonicum* var. *takaoense* RNA-seq datasets for an assembly-free, reference-guided topology sensitivity screen before committing to the heavier Trinity/TransDecoder/OrthoFinder workflow.
 
-Read2Tree provides an independent reference-guided route from raw sequencing reads directly to ortholog alignments and a species tree, bypassing whole-transcriptome assembly, annotation and all-versus-all orthology inference. Its published benchmarks explicitly include Illumina RNA-seq and show that RNA reads can recover phylogenetic signal without de novo assembly.
+This is an **independent sensitivity analysis**, not a replacement for the de novo gene-tree workflow.
 
-For Chapter 2 this is useful as a **fast topology screen**: ask whether the six W/BP samples recover the same nested-BP ordering before spending substantial CPU/RAM on all 19 de novo transcriptomes.
+## Frozen six samples
 
-This is a sensitivity layer, not a replacement for Trinity/OrthoFinder.
+The input remains the exact Figure 1 morph-linked SRA set:
 
-## Reference set
+- FC `ccy3559` — BP — `SRR35152718`
+- TJ `ccy3807` — BP — `SRR35152736`
+- NH `ccy3835` — BP — `SRR35152735`
+- WY `ccy3560` — W — `SRR35152717`
+- FB `ccy3629` — W — `SRR35152738`
+- LT `ccy3839` — W — `SRR35152734`
 
-The first source-backed OMA seed contains:
+All six are official paired-end runs.
 
-| OMA code | Species | Role |
-|---|---|---|
-| `CYNCS` | *Cynara cardunculus* var. *scolymus* | closest verified Cardueae reference in the seed |
-| `HELAN` | *Helianthus annuus* | Asteraceae reference |
-| `DAUCS` | *Daucus carota* subsp. *sativus* | campanulid outgroup |
+## Read2Tree method
 
-Use the OMA marker-gene export to obtain a 200- or preferably 400-marker pack from these verified references. The downloaded marker archive must be retained with its date, OMA release/version if exposed by the export, SHA256 and the exact selected genome codes.
+Read2Tree maps sequencing reads directly to reference orthologous groups, reconstructs sample sequences, aligns the marker genes and can infer a species tree without the normal sequence of de novo transcriptome assembly, gene prediction and all-vs-all orthology inference.
 
-Do not substitute an unrecorded marker pack.
+For this screen:
 
-## Input samples
-
-Use the same six exact Chang 2026 vouchers already fixed in the gene-tree panel:
-
-- BP: `FC_ccy3559`, `TJ_ccy3807`, `NH_ccy3835`
-- W: `WY_ccy3560`, `FB_ccy3629`, `LT_ccy3839`
-
-All six official SRA runs are paired-end. Reuse trimmed reads from the restartable transcriptome pilot when available. This makes the fast screen an additional analysis of the same frozen input material rather than a separately preprocessed dataset.
-
-## Planned execution
-
-Generate a plan with:
-
-```bash
-python analysis/build_chang2026_read2tree_pilot.py \
-  --panel /path/to/chang2026_takaoense6_assembly_pilot.csv \
-  --reference-manifest sampling/read2tree_oma_reference_set_v0_1.csv \
-  --reads-root /path/to/chang2026_takaoense_pilot \
-  --reads-stage trimmed \
-  --marker-dir /path/to/marker_genes \
-  --dna-reference /path/to/dna_ref.fa \
-  --output-dir /path/to/read2tree_output \
-  --plan-outdir /path/to/read2tree_plan \
-  --threads 8
+```text
+trimmed paired RNA-seq reads
+→ Read2Tree marker mapping
+→ reconstructed marker sequences
+→ concatenated nucleotide alignment
+→ IQ-TREE
+→ focal-monophyly gate
+→ corrected frozen 8-topology scoring
 ```
 
-The generated shell plan runs:
+Nucleotide inference is used because the focal samples are very closely related.
 
-1. Read2Tree `1marker` to prepare the reference marker set;
-2. one independent `2map` job for each W/BP sample, with stable `sample_id` supplied explicitly;
-3. `3combine` to build the merged alignments;
-4. IQ-TREE on `concat_merge_dna.phy` with model selection, ultrafast bootstrap and SH-aLRT.
+## OMA reference set
 
-The nucleotide alignment is primary because the six focal samples are extremely closely related; an amino-acid tree can be retained as a secondary sensitivity analysis.
+The active reference manifest is:
 
-## Decision rule
+- `sampling/read2tree_oma_reference_set_v0_2.csv`
 
-### If the DNA tree recovers the displayed nested-BP topology
+It is pinned to the **May 2026 OMA release** and exactly three reference genomes:
 
-Proceed immediately to the full Trinity/OrthoFinder gene-tree workflow. Read2Tree then provides independent raw-read support that the displayed topology is not solely an assembly/orthology artefact.
+- `CYNCS` — *Cynara cardunculus* var. *scolymus* — Cardueae anchor;
+- `HELAN` — *Helianthus annuus* — Asteraceae reference;
+- `DAUCS` — *Daucus carota* subsp. *sativus* — intended external root.
 
-### If Read2Tree instead places W as monophyletic or matches one of the nearest loss-only alternatives
+The older `v0_1` seed is superseded and must not be used for a new run.
 
-Do not call regain. Prioritize full per-gene analysis and reticulation tests before interpreting the published displayed tree.
+## Marker export is now contract-gated
 
-### If the six samples are weakly resolved
+Do not pass an arbitrary marker directory to Read2Tree.
 
-Treat this as insufficient marker/reference coverage rather than as evidence for a polytomy. Inspect per-marker completeness, reference distance and RNA-expression coverage, then enlarge the OMA reference set or proceed to de novo gene trees.
+Export from the OMA Browser with:
 
-## Claim limits
+```text
+minimum fraction of covered species = 1.0
+maximum number of markers = 400
+```
 
-Read2Tree is reference guided. Therefore:
+Then validate the downloaded archive using:
 
-- marker recovery depends on which genes are expressed in the leaf RNA libraries;
-- missing sequence is not gene loss;
-- the method does not test floral anthocyanin expression;
-- a concatenated tree cannot by itself distinguish introgression from ancestral polymorphism;
-- reference choice can influence which marker sequence is reconstructed;
-- the result must be compared against the de novo and copy-aware analyses.
+- `analysis/validate_read2tree_oma_marker_pack.py`
+- `docs/READ2TREE_OMA_MARKER_CONTRACT_2026-08-11.md`
 
-The valid claim is limited to **independent raw-read support, or lack of support, for the six-sample topology**.
+A successful pack must contain exactly 400 paired AA/DNA marker groups, one sequence from each of the three reference genomes per marker, frame-compatible coding DNA, deterministic hashes and `execution_allowed: true` in `marker_pack_contract.json`.
 
-## Why not use Mash/k-mer distance as the main shortcut
+The plan builder now **requires** that contract:
 
-Alignment-free read distances are attractive computationally, but the Read2Tree benchmark found Mash trees less accurate than Read2Tree and conventional ortholog-based approaches. RNA-seq additionally has strong expression/composition heterogeneity. EAzami therefore uses an ortholog-guided raw-read shortcut rather than treating raw k-mer distance as the primary phylogenetic result.
+```text
+analysis/build_chang2026_read2tree_pilot.py
+```
 
-## Reproducibility
+It rechecks the contract version, OMA release, reference codes, export settings, marker count, normalized file counts and `dna_ref.fa` SHA256 before generating any mapping command.
 
-- Read2Tree source is pinned to Git commit `e19ad8f32a438ff7a38d9ee1d41832e1fc326a3c` in the conda environment.
-- Current Read2Tree v2 defaults to minimap2 short-read mapping with `-ax sr`; the plan records the preset explicitly.
-- The OMA genome codes are frozen in `sampling/read2tree_oma_reference_set_v0_1.csv`.
-- No GitHub Actions workflow is added at this stage because PR #1 currently has a large backlog of queued historical workflow runs.
+## Corrected hypothesis set
 
-## Files
+The output tree is compared with the frozen current scientific input:
 
-- `analysis/build_chang2026_read2tree_pilot.py`
-- `tests/test_build_chang2026_read2tree_pilot.py`
-- `sampling/read2tree_oma_reference_set_v0_1.csv`
-- `workflow/chang2026_read2tree/envs/read2tree.yml`
+- `analysis/chang2026_takaoense_gene_tree_hypotheses_v1.csv`
+
+This contains:
+
+1. `H_REG_PUBLISHED`, the exact displayed Figure 1 candidate-regain topology;
+2. the **corrected** seven nearest rooted RF=4 no-regain alternatives.
+
+The previous stale T0064/T0066/T0070/T0079/T0083/T0102/T0375 set is superseded and must not be used.
+
+## Focal-monophyly gate
+
+The Read2Tree tree contains the OMA reference taxa. It is not legitimate to delete them first and then ask which six-tip topology looks best.
+
+The scorer therefore requires:
+
+1. all six focal samples appear exactly once;
+2. the six focal samples form a clade relative to the OMA references in the raw tree;
+3. after support collapse, focal monophyly is retained;
+4. only then may the reference tips be pruned and the six-tip topology compared with the eight frozen hypotheses.
+
+If an OMA reference enters the focal clade, the result is `focal_not_monophyletic_raw_tree` and the colour-history hypotheses are **not scored**.
+
+## Support sensitivity
+
+Evaluate the topology at support thresholds:
+
+```text
+0 / 50 / 70 / 90
+```
+
+A topology that supports the candidate regain only when weak branches are retained is weaker evidence than one that remains candidate-regain-best after support collapse.
+
+## Relationship to the heavier analysis
+
+### If Read2Tree supports the displayed topology
+
+Proceed to the 19-sample de novo workflow to ask whether the same result is distributed across independent gene trees and whether particular loci or flanking Sinocirsium lineages drive discordance.
+
+### If Read2Tree supports a nearest no-regain topology
+
+The displayed-tree candidate regain becomes substantially weaker and the heavy workflow should prioritize the conflict rather than assuming the displayed order.
+
+### If Read2Tree is unresolved or focal samples are not monophyletic
+
+Do not force a regain/loss classification. Continue with de novo orthogroup/gene-tree and network analyses because the reference-guided concatenated screen is insufficient.
+
+## Claim limit
+
+This screen does **not** test flower-specific anthocyanin expression because Chang 2026 RNA was sampled from leaves. It also does not distinguish introgression from incomplete lineage sorting or ancestral polymorphism, and it cannot establish functional reactivation of the anthocyanin pathway.
+
+Its purpose is narrower: obtain a fast, reproducible, independently constructed empirical weight on the six-tip topology before spending more computation on full transcriptome reconstruction.
