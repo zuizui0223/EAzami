@@ -1,0 +1,116 @@
+name: Validate Cirsium flower-colour atlas
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_cirsium_flower_colour_atlas_v0_1.py"
+      - "analysis/validate_colour_atlas.py"
+      - "data/schema/flower_colour_records.csv"
+      - "data/evidence/arenicola_flower_colour_history_evidence_v1.csv"
+      - "data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv"
+      - "data/japan_colour_evidence_seed.csv"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_1.csv"
+      - "analysis/cirsium_flower_colour_atlas_v0_1_readiness.json"
+      - "tests/test_cirsium_flower_colour_atlas_v0_1.py"
+      - "docs/CIRSIUM_FLOWER_COLOUR_ATLAS_V0_1.md"
+      - ".github/workflows/validate-cirsium-flower-colour-atlas.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: validate-cirsium-flower-colour-atlas-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and test atlas contract
+        run: |
+          python -m py_compile \
+            analysis/build_cirsium_flower_colour_atlas_v0_1.py \
+            analysis/validate_colour_atlas.py
+          python -m unittest tests/test_cirsium_flower_colour_atlas_v0_1.py -v
+
+      - name: Rebuild atlas from frozen evidence streams
+        run: |
+          mkdir -p /tmp/cirsium_colour_atlas
+          python analysis/build_cirsium_flower_colour_atlas_v0_1.py \
+            --arenicola data/evidence/arenicola_flower_colour_history_evidence_v1.csv \
+            --takaoense data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv \
+            --japan-seed data/japan_colour_evidence_seed.csv \
+            --output /tmp/cirsium_colour_atlas/cirsium_flower_colour_atlas_v0_1.csv
+          python analysis/validate_colour_atlas.py \
+            /tmp/cirsium_colour_atlas/cirsium_flower_colour_atlas_v0_1.csv \
+            --summary /tmp/cirsium_colour_atlas/cirsium_flower_colour_atlas_v0_1_readiness.json
+
+      - name: Assert v0.1 claim boundaries and readiness gate
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+
+          atlas = list(csv.DictReader(Path('/tmp/cirsium_colour_atlas/cirsium_flower_colour_atlas_v0_1.csv').open()))
+          summary = json.loads(Path('/tmp/cirsium_colour_atlas/cirsium_flower_colour_atlas_v0_1_readiness.json').read_text())
+
+          if len(atlas) != 15:
+              raise SystemExit(f'Unexpected v0.1 record count: {len(atlas)}')
+          if summary['reviewed_record_count'] != 12:
+              raise SystemExit('Expected 12 reviewed focal records')
+          if summary['rate_fit_eligible_unique_taxa'] != 6:
+              raise SystemExit('Only six source-backed species-tree tips should be rate-fit eligible in v0.1')
+          if summary['rate_fit_eligible_state_counts'] != {'C': 4, 'W': 2}:
+              raise SystemExit(f"Unexpected eligible state counts: {summary['rate_fit_eligible_state_counts']}")
+          if summary['transition_rate_fit_ready'] is not False:
+              raise SystemExit('v0.1 must not be promoted to transition-rate fitting')
+
+          takaoense = [row for row in atlas if row['accepted_taxon'] == 'Cirsium japonicum var. takaoense']
+          if len(takaoense) != 6:
+              raise SystemExit('Lost direct six-sample takaoense evidence')
+          if sum(row['binary_colour_code'] == 'W' for row in takaoense) != 3 or sum(row['binary_colour_code'] == 'C' for row in takaoense) != 3:
+              raise SystemExit('takaoense 3W/3C morph balance changed')
+          if any(row['rate_fit_eligible'] != 'no' for row in takaoense):
+              raise SystemExit('Sample-level takaoense observations leaked into species-level rate fitting')
+
+          pendulum = next(row for row in atlas if row['accepted_taxon'] == 'Cirsium pendulum')
+          if pendulum['binary_colour_code'] != 'P' or pendulum['rate_fit_eligible'] != 'no':
+              raise SystemExit('C. pendulum polymorphism was silently collapsed')
+
+          print('atlas_records=15')
+          print('reviewed_records=12')
+          print('rate_fit_eligible_taxa=6')
+          print('eligible_states=C4_W2')
+          print('takaoense_sample_records=6_direct_but_excluded_from_species_rate_fit')
+          print('pendulum_polymorphism_preserved=P')
+          print('transition_rate_fit_ready=false')
+          print('blockers=' + '|'.join(summary['readiness_blockers']))
+          PY
+
+      - name: Check frozen outputs when present
+        run: |
+          if [[ -f data/evidence/cirsium_flower_colour_atlas_v0_1.csv ]]; then
+            cmp \
+              <(tr -d '\r' < data/evidence/cirsium_flower_colour_atlas_v0_1.csv) \
+              <(tr -d '\r' < /tmp/cirsium_colour_atlas/cirsium_flower_colour_atlas_v0_1.csv)
+          fi
+          if [[ -f analysis/cirsium_flower_colour_atlas_v0_1_readiness.json ]]; then
+            cmp \
+              analysis/cirsium_flower_colour_atlas_v0_1_readiness.json \
+              /tmp/cirsium_colour_atlas/cirsium_flower_colour_atlas_v0_1_readiness.json
+          fi
+
+      - name: Upload atlas and readiness report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cirsium-flower-colour-atlas-v0-1-${{ github.run_id }}
+          path: /tmp/cirsium_colour_atlas/
+          if-no-files-found: error
+          retention-days: 90
