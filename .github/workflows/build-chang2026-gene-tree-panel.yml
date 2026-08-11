@@ -4,10 +4,14 @@ on:
   pull_request:
     paths:
       - "analysis/recover_ncbi_project_runs.py"
+      - "analysis/recover_chang2026_published_runinfo.py"
       - "analysis/reconcile_chang2026_ncbi_runs.py"
+      - "analysis/reconcile_chang2026_complete_runs.py"
       - "analysis/audit_chang2026_public_transcriptome_assemblies.py"
       - "analysis/build_chang2026_gene_tree_panel.py"
+      - "tests/test_recover_chang2026_published_runinfo.py"
       - "tests/test_reconcile_chang2026_ncbi_runs.py"
+      - "tests/test_reconcile_chang2026_complete_runs.py"
       - "tests/test_audit_chang2026_public_transcriptome_assemblies.py"
       - "tests/test_build_chang2026_gene_tree_panel.py"
       - "data/evidence/chang2026_east_asia_accession_audit_*.csv"
@@ -23,7 +27,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 55
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -37,26 +41,34 @@ jobs:
         run: |
           python -m py_compile \
             analysis/recover_ncbi_project_runs.py \
+            analysis/recover_chang2026_published_runinfo.py \
             analysis/reconcile_chang2026_ncbi_runs.py \
+            analysis/reconcile_chang2026_complete_runs.py \
             analysis/audit_chang2026_public_transcriptome_assemblies.py \
             analysis/build_chang2026_gene_tree_panel.py
           python -m unittest \
+            tests/test_recover_chang2026_published_runinfo.py \
             tests/test_reconcile_chang2026_ncbi_runs.py \
+            tests/test_reconcile_chang2026_complete_runs.py \
             tests/test_audit_chang2026_public_transcriptome_assemblies.py \
             tests/test_build_chang2026_gene_tree_panel.py \
             -v
 
-      - name: Recover official runs and public assembly links
+      - name: Recover complete runs and public assembly links
         env:
           NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
           NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
         run: |
-          python analysis/recover_ncbi_project_runs.py \
+          python analysis/recover_chang2026_published_runinfo.py \
             --bioproject PRJNA1311153 \
-            --outdir /tmp/chang2026_ncbi \
-            --enrich-biosample
-          runinfo=$(find /tmp/chang2026_ncbi -name '*_runinfo.csv' -print -quit)
-          python analysis/reconcile_chang2026_ncbi_runs.py \
+            --supplement data/evidence/chang2026_east_asia_accession_audit_2026-08-10.csv \
+            --outdir /tmp/chang2026_ncbi
+          runinfo=$(find /tmp/chang2026_ncbi -name '*_published_complete_runinfo.csv' -print -quit)
+          if [[ -z "$runinfo" ]]; then
+            echo "No complete published runinfo recovered" >&2
+            exit 1
+          fi
+          python analysis/reconcile_chang2026_complete_runs.py \
             --runinfo "$runinfo" \
             --outdir /tmp/chang2026_reconciliation
           python analysis/audit_chang2026_public_transcriptome_assemblies.py \
@@ -78,6 +90,18 @@ jobs:
           from collections import Counter
           from pathlib import Path
 
+          reconciliation = json.loads(
+              Path(
+                  "/tmp/chang2026_reconciliation/"
+                  "chang2026_ncbi_reconciliation_summary.json"
+              ).read_text(encoding="utf-8")
+          )
+          assembly = json.loads(
+              Path(
+                  "/tmp/chang2026_public_assemblies/"
+                  "chang2026_public_assembly_audit_summary.json"
+              ).read_text(encoding="utf-8")
+          )
           outdir = Path("/tmp/chang2026_gene_tree_panel")
           summary = json.loads(
               (outdir / "chang2026_gene_tree_panel_summary.json").read_text(
@@ -94,6 +118,8 @@ jobs:
           hypotheses = rows("chang2026_takaoense_gene_tree_hypotheses.csv")
           roles = Counter(row["panel_role"] for row in panel)
 
+          print(f"reconciled_samples={reconciliation['verified_or_probable_rows']}")
+          print(f"assembly_audit_samples={assembly['sample_rows']}")
           print(f"panel_samples={len(panel)}")
           print(f"unique_runs={len({row['matched_run'] for row in panel})}")
           print(f"takaoense_pilot_samples={len(pilot)}")
@@ -114,6 +140,12 @@ jobs:
               "cirsium japonicum var. fukienense": 4,
               "cirsium lineare": 2,
           }
+          if reconciliation["verified_or_probable_rows"] != 33:
+              raise SystemExit("Expected complete 33-sample reconciliation")
+          if reconciliation["unique_matched_runs"] != 33:
+              raise SystemExit("Expected 33 unique reconciled runs")
+          if assembly["sample_rows"] != 33:
+              raise SystemExit("Expected 33 public-assembly audit rows")
           if summary["sample_count"] != 19 or len(panel) != 19:
               raise SystemExit("Expected 19 analysis-panel samples")
           if summary["taxon_counts"] != expected_taxa:
@@ -136,14 +168,17 @@ jobs:
               raise SystemExit("Expected one regain and seven nearest loss-only hypotheses")
           if hypotheses[0]["hypothesis_id"] != "H_REG_PUBLISHED":
               raise SystemExit("Primary published topology is not first")
-          if sum(row["history_class"] == "nearest_loss_only_topology" for row in hypotheses) != 7:
+          if sum(
+              row["history_class"] == "nearest_loss_only_topology"
+              for row in hypotheses
+          ) != 7:
               raise SystemExit("Expected seven nearest loss-only alternatives")
           PY
 
       - name: Upload complete gene-tree input package
         uses: actions/upload-artifact@v4
         with:
-          name: chang2026-gene-tree-panel-${{ github.run_id }}
+          name: chang2026-complete-gene-tree-panel-${{ github.run_id }}
           path: |
             /tmp/chang2026_ncbi/
             /tmp/chang2026_reconciliation/
