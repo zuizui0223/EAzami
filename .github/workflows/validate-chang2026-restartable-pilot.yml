@@ -4,13 +4,17 @@ on:
   pull_request:
     paths:
       - "analysis/run_chang2026_restartable_transcriptome_assembly.py"
+      - "analysis/prepare_chang2026_read2tree_reads.py"
       - "analysis/summarize_chang2026_transcriptome_qc.py"
       - "analysis/build_chang2026_hpc_pilot_bundle.py"
       - "analysis/run_chang2026_layout_aware_transcriptome_assembly.py"
       - "analysis/build_chang2026_resource_plan.py"
       - "tests/test_run_chang2026_restartable_transcriptome_assembly.py"
+      - "tests/test_prepare_chang2026_read2tree_reads.py"
       - "tests/test_summarize_chang2026_transcriptome_qc.py"
       - "tests/test_build_chang2026_hpc_pilot_bundle.py"
+      - "workflow/chang2026_read2tree/prepare_six_trimmed_reads.sh"
+      - "workflow/chang2026_read2tree/prepare_browser_profile.sh"
       - ".github/workflows/validate-chang2026-restartable-pilot.yml"
   workflow_dispatch:
 
@@ -35,13 +39,17 @@ jobs:
         run: |
           python -m py_compile \
             analysis/run_chang2026_restartable_transcriptome_assembly.py \
+            analysis/prepare_chang2026_read2tree_reads.py \
             analysis/summarize_chang2026_transcriptome_qc.py \
             analysis/build_chang2026_hpc_pilot_bundle.py
           python -m unittest \
             tests/test_run_chang2026_restartable_transcriptome_assembly.py \
+            tests/test_prepare_chang2026_read2tree_reads.py \
             tests/test_summarize_chang2026_transcriptome_qc.py \
             tests/test_build_chang2026_hpc_pilot_bundle.py \
             -v
+          bash -n workflow/chang2026_read2tree/prepare_six_trimmed_reads.sh
+          bash -n workflow/chang2026_read2tree/prepare_browser_profile.sh
 
       - name: Rebuild source-backed panel and resource plan
         env:
@@ -89,6 +97,12 @@ jobs:
             --outdir /tmp/chang2026_restartable_NH \
             --jobs 1 \
             --dry-run
+          python analysis/prepare_chang2026_read2tree_reads.py \
+            --panel sampling/chang2026_takaoense6_read2tree_panel_v1.csv \
+            --evidence data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv \
+            --outdir /tmp/chang2026_read2tree_reads \
+            --jobs 1 \
+            --dry-run
           python analysis/build_chang2026_hpc_pilot_bundle.py \
             --pilot-panel /tmp/chang2026_gene_tree_panel/chang2026_takaoense6_assembly_pilot.csv \
             --resource-plan /tmp/chang2026_resource_plan/chang2026_sample_resource_plan.csv \
@@ -102,12 +116,18 @@ jobs:
 
           six = list(csv.DictReader(Path('/tmp/chang2026_restartable_six/restartable_command_plan.csv').open()))
           one = list(csv.DictReader(Path('/tmp/chang2026_restartable_NH/restartable_command_plan.csv').open()))
+          readprep = list(csv.DictReader(Path('/tmp/chang2026_read2tree_reads/read2tree_read_command_plan.csv').open()))
+          readprep_summary = json.loads(Path('/tmp/chang2026_read2tree_reads/read2tree_read_summary.json').read_text())
           bundle = json.loads(Path('/tmp/chang2026_hpc_bundle/pilot_execution_manifest.json').read_text())
           resources = list(csv.DictReader(Path('/tmp/chang2026_resource_plan/chang2026_sample_resource_plan.csv').open()))
           focal = [r for r in resources if r['execution_group'] == 'takaoense6_pilot']
 
           if len(six) != 6 or len(one) != 1:
               raise SystemExit('Unexpected dry-run sample count')
+          if len(readprep) != 6 or readprep_summary['selected_sample_count'] != 6:
+              raise SystemExit('Read2Tree fastp-only prep lost the six-sample contract')
+          if readprep_summary['last_allowed_stage'] != 'fastp' or readprep_summary['trinity_executed'] is not False:
+              raise SystemExit('Read2Tree read preparation is no longer fastp-only')
           if one[0]['sample_id'] != 'NH_ccy3835' or one[0]['run'] != 'SRR35152735':
               raise SystemExit(f"Unexpected first sample: {one[0]}")
           if bundle['selected_sample']['sample_id'] != 'NH_ccy3835':
@@ -132,6 +152,14 @@ jobs:
               raise SystemExit('Trinity full_cleanup would break restart/output-path contract')
           if '--output' not in cmd['trinity_command'] or '/trinity' not in cmd['trinity_command']:
               raise SystemExit('Trinity output directory missing')
+
+          for row in readprep:
+              if any(key.startswith('trinity') for key in row):
+                  raise SystemExit('Trinity command leaked into Read2Tree fastp-only plan')
+              sid = row['sample_id']
+              if sid not in row['fastp_command']:
+                  raise SystemExit(f'fastp output does not retain stable sample ID: {sid}')
+
           local = Path('/tmp/chang2026_hpc_bundle/run_first_sample_local.sh').read_text()
           if '--preflight-only' not in local or 'summarize_chang2026_transcriptome_qc.py' not in local:
               raise SystemExit('Execution bundle lost preflight/QC')
@@ -144,6 +172,8 @@ jobs:
           print('restartable_prefetch=true')
           print('vdb_validate=true')
           print('fasterq_explicit_scratch=true')
+          print('read2tree_fastp_only_samples=6')
+          print('read2tree_trinity_executed=false')
           print('trinity_full_cleanup=false')
           PY
 
@@ -155,6 +185,7 @@ jobs:
             /tmp/chang2026_hpc_bundle/
             /tmp/chang2026_restartable_NH/
             /tmp/chang2026_restartable_six/
+            /tmp/chang2026_read2tree_reads/
             /tmp/chang2026_resource_plan/
           if-no-files-found: error
           retention-days: 90
