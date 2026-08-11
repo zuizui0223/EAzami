@@ -25,6 +25,7 @@ class RunTranscriptomeAssemblyTests(unittest.TestCase):
             "sample_id",
             "taxon",
             "morph",
+            "panel_role",
             "matched_run",
             "library_layout",
             "run_match_confidence",
@@ -42,6 +43,7 @@ class RunTranscriptomeAssemblyTests(unittest.TestCase):
                     if index < 6
                     else "C. lineare",
                     "morph": "W" if index < 3 else "BP" if index < 6 else "",
+                    "panel_role": "focal_colour_morph" if index < 6 else "outgroup",
                     "matched_run": run,
                     "library_layout": "PAIRED",
                     "run_match_confidence": "verified",
@@ -96,6 +98,38 @@ class RunTranscriptomeAssemblyTests(unittest.TestCase):
         self.assertEqual(len(rows), 19)
         self.assertEqual(len({row["matched_run"] for row in rows}), 19)
         self.assertEqual({row["library_layout"] for row in rows}, {"PAIRED"})
+
+    def test_validates_balanced_six_sample_focal_pilot(self) -> None:
+        rows = mod.read_csv(self.panel)[:6]
+        self.rewrite(rows)
+        pilot = mod.validate_panel(self.panel, expected_samples=6)
+        self.assertEqual(len(pilot), 6)
+        self.assertEqual(
+            {row["panel_role"] for row in pilot},
+            {"focal_colour_morph"},
+        )
+        self.assertEqual(sum(row["morph"] == "W" for row in pilot), 3)
+        self.assertEqual(sum(row["morph"] == "BP" for row in pilot), 3)
+
+    def test_unbalanced_six_sample_pilot_fails(self) -> None:
+        rows = mod.read_csv(self.panel)[:6]
+        rows[0]["morph"] = "BP"
+        self.rewrite(rows)
+        with self.assertRaisesRegex(ValueError, "three BP and three W"):
+            mod.validate_panel(self.panel, expected_samples=6)
+
+    def test_selects_one_stable_sample_after_full_panel_validation(self) -> None:
+        rows = mod.validate_panel(self.panel)
+        selected = mod.select_panel_rows(rows, ["sample04"])
+        self.assertEqual(len(selected), 1)
+        self.assertEqual(selected[0]["sample_id"], "sample04")
+
+    def test_unknown_or_duplicate_selected_sample_fails(self) -> None:
+        rows = mod.validate_panel(self.panel)
+        with self.assertRaisesRegex(ValueError, "absent"):
+            mod.select_panel_rows(rows, ["missing"])
+        with self.assertRaisesRegex(ValueError, "unique"):
+            mod.select_panel_rows(rows, ["sample01", "sample01"])
 
     def test_mismatched_read_counts_do_not_override_official_layout(self) -> None:
         rows = mod.validate_panel(self.panel)
@@ -171,24 +205,42 @@ class RunTranscriptomeAssemblyTests(unittest.TestCase):
         self.assertEqual(result["status"], "skipped_existing_prefixed_proteome")
         self.assertEqual(result["library_layout"], "PAIRED")
 
-    def test_summary_counts_failures_and_layouts(self) -> None:
+    def test_summary_counts_failures_layouts_and_subset_provenance(self) -> None:
         summary = mod.build_summary(
             [
-                {"status": "completed", "library_layout": "PAIRED"},
                 {
+                    "sample_id": "sample01",
+                    "status": "completed",
+                    "library_layout": "PAIRED",
+                },
+                {
+                    "sample_id": "sample02",
                     "status": "skipped_existing_prefixed_proteome",
                     "library_layout": "PAIRED",
                 },
-                {"status": "failed", "library_layout": "PAIRED"},
+                {
+                    "sample_id": "sample03",
+                    "status": "failed",
+                    "library_layout": "PAIRED",
+                },
             ],
             dry_run=False,
             keep_raw_reads=False,
+            input_panel_sample_count=6,
+            selected_sample_ids=["sample01", "sample02", "sample03"],
         )
         self.assertEqual(summary["sample_count"], 3)
         self.assertEqual(summary["completed_or_existing_proteome_count"], 2)
         self.assertEqual(summary["failed_count"], 1)
         self.assertEqual(summary["official_library_layout_counts"], {"PAIRED": 3})
         self.assertEqual(summary["library_layout_source"], "official NCBI SRA LibraryLayout")
+        self.assertEqual(summary["input_panel_sample_count"], 6)
+        self.assertEqual(summary["selected_sample_count"], 3)
+        self.assertEqual(
+            summary["selected_sample_ids"],
+            ["sample01", "sample02", "sample03"],
+        )
+        self.assertTrue(summary["subset_execution"])
 
     def test_jobs_must_be_positive(self) -> None:
         with self.assertRaises(ValueError):
