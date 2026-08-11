@@ -48,8 +48,13 @@ class ChangGeneTreePanelTests(unittest.TestCase):
                         "matched_run": f"SRR{counter:06d}",
                         "matched_experiment": f"SRX{counter:06d}",
                         "matched_biosample": f"SAMN{counter:06d}",
+                        "matched_library_layout": "PAIRED",
                         "matched_spots": str(counter * 1000),
-                        "read_count_relation": "exact_paired_end_raw_reads_equals_2x_spots",
+                        "read_count_relation": (
+                            "exact_paired_end_raw_reads_equals_2x_spots"
+                            if counter <= 9
+                            else "not_matching_reported_raw_reads"
+                        ),
                         "match_status": "verified_unique_read_count_and_taxon",
                         "match_confidence": "verified",
                     }
@@ -70,6 +75,7 @@ class ChangGeneTreePanelTests(unittest.TestCase):
         panel = mod.build_panel(reconciliation, assemblies)
         self.assertEqual(len(panel), 19)
         self.assertEqual(len({row["matched_run"] for row in panel}), 19)
+        self.assertEqual({row["library_layout"] for row in panel}, {"PAIRED"})
         self.assertEqual(
             sum(row["panel_role"] == "focal_colour_morph" for row in panel),
             6,
@@ -83,6 +89,10 @@ class ChangGeneTreePanelTests(unittest.TestCase):
             2,
         )
         self.assertTrue(all(row["de_novo_required"] == "true" for row in panel))
+        self.assertEqual(
+            sum(row["read_count_relation"] == "not_matching_reported_raw_reads" for row in panel),
+            10,
+        )
 
     def test_published_tsa_replaces_de_novo_source(self) -> None:
         reconciliation, assemblies = self.make_inputs()
@@ -96,6 +106,7 @@ class ChangGeneTreePanelTests(unittest.TestCase):
         row = next(item for item in panel if item["voucher"] == "voucher01")
         self.assertEqual(row["preferred_sequence_source"], "GABC00000000")
         self.assertEqual(row["de_novo_required"], "false")
+        self.assertEqual(row["library_layout"], "PAIRED")
 
     def test_unresolved_run_fails(self) -> None:
         reconciliation, assemblies = self.make_inputs()
@@ -107,6 +118,18 @@ class ChangGeneTreePanelTests(unittest.TestCase):
         reconciliation, assemblies = self.make_inputs()
         reconciliation[1]["matched_run"] = reconciliation[0]["matched_run"]
         with self.assertRaises(ValueError):
+            mod.build_panel(reconciliation, assemblies)
+
+    def test_missing_official_library_layout_fails(self) -> None:
+        reconciliation, assemblies = self.make_inputs()
+        reconciliation[0]["matched_library_layout"] = ""
+        with self.assertRaisesRegex(ValueError, "LibraryLayout"):
+            mod.build_panel(reconciliation, assemblies)
+
+    def test_unsupported_official_library_layout_fails(self) -> None:
+        reconciliation, assemblies = self.make_inputs()
+        reconciliation[0]["matched_library_layout"] = "UNKNOWN"
+        with self.assertRaisesRegex(ValueError, "LibraryLayout"):
             mod.build_panel(reconciliation, assemblies)
 
     def test_missing_taxon_sample_fails(self) -> None:
@@ -156,7 +179,7 @@ class ChangGeneTreePanelTests(unittest.TestCase):
             7,
         )
 
-    def test_summary_counts_morphs_and_sources(self) -> None:
+    def test_summary_counts_morphs_sources_and_layouts(self) -> None:
         reconciliation, assemblies = self.make_inputs()
         panel = mod.build_panel(reconciliation, assemblies)
         nearest = [
@@ -183,6 +206,7 @@ class ChangGeneTreePanelTests(unittest.TestCase):
         self.assertEqual(summary["takaoense_sample_count"], 6)
         self.assertEqual(summary["white_takaoense_count"], 3)
         self.assertEqual(summary["bluish_purple_takaoense_count"], 3)
+        self.assertEqual(summary["official_library_layout_counts"], {"PAIRED": 19})
         self.assertEqual(summary["de_novo_required_count"], 19)
         self.assertEqual(summary["hypothesis_count"], 8)
 
