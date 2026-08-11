@@ -96,9 +96,12 @@ class ChangGeneTreeWorkflowContractTests(unittest.TestCase):
                         "matched_run": run,
                         "matched_experiment": f"SRX{counter:08d}",
                         "matched_biosample": f"SAMN{counter:08d}",
+                        "library_layout": "PAIRED",
                         "matched_spots": str(counter * 1000),
                         "read_count_relation": (
                             "exact_paired_end_raw_reads_equals_2x_spots"
+                            if counter <= 9
+                            else "not_matching_reported_raw_reads"
                         ),
                         "run_match_status": "verified_unique_voucher_token",
                         "run_match_confidence": "verified",
@@ -145,6 +148,11 @@ class ChangGeneTreeWorkflowContractTests(unittest.TestCase):
         )
         self.assertEqual(summary["panel_rows"], 19)
         self.assertEqual(summary["unique_official_runs"], 19)
+        self.assertEqual(summary["official_library_layout_counts"], {"PAIRED": 19})
+        self.assertEqual(
+            summary["library_layout_source"],
+            "official NCBI SRA LibraryLayout",
+        )
         self.assertEqual(summary["focal_morph_counts"], {"BP": 3, "W": 3})
         self.assertEqual(summary["hypothesis_count"], 8)
         self.assertEqual(
@@ -156,8 +164,42 @@ class ChangGeneTreeWorkflowContractTests(unittest.TestCase):
         )
         self.assertEqual(len(summary["outgroup_sample_ids"]), 2)
         self.assertFalse(summary["heavy_computation_executed"])
+        self.assertEqual(
+            summary["contract_version"],
+            "chang2026_gene_tree_workflow_v2_official_layout",
+        )
         self.assertEqual(config["panel_csv"], str(self.panel.resolve()))
         self.assertEqual(config["hypotheses_csv"], str(self.hypotheses.resolve()))
+
+    def test_read_count_mismatch_does_not_invalidate_official_layout(self) -> None:
+        config, summary = mod.build_contract(
+            self.panel,
+            self.hypotheses,
+            self.snakefile,
+            self.root / "results",
+        )
+        self.assertEqual(
+            sum(
+                row["read_count_relation"] == "not_matching_reported_raw_reads"
+                for row in self.panel_rows
+            ),
+            10,
+        )
+        self.assertEqual(summary["official_library_layout_counts"], {"PAIRED": 19})
+        self.assertTrue(config["panel_csv"].endswith("panel.csv"))
+
+    def test_official_single_layout_fails_current_heavy_contract(self) -> None:
+        rows = [dict(row) for row in self.panel_rows]
+        rows[0]["library_layout"] = "SINGLE"
+        wrong = self.root / "single_layout.csv"
+        self._write_csv(wrong, rows)
+        with self.assertRaisesRegex(ValueError, "not PAIRED"):
+            mod.build_contract(
+                wrong,
+                self.hypotheses,
+                self.snakefile,
+                self.root / "results",
+            )
 
     def test_duplicate_hypothesis_topology_fails(self) -> None:
         rows = [dict(row) for row in self.hypothesis_rows]
