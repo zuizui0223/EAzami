@@ -8,10 +8,14 @@ its generic interface did not originally expose:
 * numeric BioSample ``isolate`` values become ``ccy####`` voucher tokens only
   when that exact voucher exists in the supplement;
 * heterogeneous supplement identifiers (SRR, SRX, or SAMN) are resolved against
-  the matching runinfo field before scoring; and
+  the matching runinfo field before scoring;
+* the official SRA ``LibraryLayout`` is carried into the reconciled manifest;
+  and
 * Figure 1's ``direct_figure_label`` is normalized to the core morph schema.
 
-Neither geography nor flower colour participates in run matching.
+Neither geography nor flower colour participates in run matching. The raw-read
+count relation remains a reconciliation diagnostic; it is not used to infer
+single- versus paired-end layout when official SRA layout metadata are present.
 """
 
 from __future__ import annotations
@@ -32,6 +36,8 @@ DEFAULT_MORPHS = core.DEFAULT_MORPHS
 DEFAULT_OUTDIR = Path(
     "data/evidence/generated/chang2026_complete_reconciliation"
 )
+COMPLETE_MATCH_FIELDS = core.MATCH_FIELDS + ("matched_library_layout",)
+VALID_LIBRARY_LAYOUTS = {"PAIRED", "SINGLE"}
 
 
 def clean(value: object) -> str:
@@ -167,9 +173,6 @@ def prepare_embedded_identifiers(
         resolved_run = choose_identifier_run(row, candidates)
         if not resolved_run:
             raise ValueError(f"Embedded identifier {original} resolved to no run")
-        # The core scorer's strongest rule is exact SRR accession.  Supply the
-        # resolved run transiently, then restore the original identifier in the
-        # published output below.
         row["embedded_public_accession"] = resolved_run
         prepared.append(row)
         resolutions.append(
@@ -201,9 +204,7 @@ def restore_embedded_provenance(
             )
         match["embedded_public_accession"] = original
         if kind != "run":
-            match["match_status"] = (
-                f"verified_exact_embedded_{kind}_accession"
-            )
+            match["match_status"] = f"verified_exact_embedded_{kind}_accession"
             match["match_confidence"] = "verified"
             match["match_evidence"] = (
                 f"exact_embedded_{kind}_accession|"
@@ -213,6 +214,42 @@ def restore_embedded_provenance(
                 f"Supplement {kind} accession {original} resolves exactly to "
                 f"official run {resolved}."
             )
+
+
+def attach_official_library_layout(
+    matches: Sequence[dict[str, object]],
+    runinfo_rows: Sequence[Mapping[str, str]],
+) -> Counter[str]:
+    """Attach exact SRA LibraryLayout to every reconciled run."""
+    by_run: dict[str, str] = {}
+    for row in runinfo_rows:
+        run = clean(row.get("Run"))
+        if not run:
+            continue
+        layout = clean(row.get("LibraryLayout")).upper()
+        if layout not in VALID_LIBRARY_LAYOUTS:
+            raise ValueError(
+                f"Official run {run} has unsupported LibraryLayout {layout!r}"
+            )
+        if run in by_run and by_run[run] != layout:
+            raise ValueError(
+                f"Official run {run} has conflicting LibraryLayout values: "
+                f"{by_run[run]} != {layout}"
+            )
+        by_run[run] = layout
+
+    counts: Counter[str] = Counter()
+    for match in matches:
+        run = clean(match.get("matched_run"))
+        if not run:
+            match["matched_library_layout"] = ""
+            continue
+        if run not in by_run:
+            raise ValueError(f"No official LibraryLayout recovered for matched run {run}")
+        layout = by_run[run]
+        match["matched_library_layout"] = layout
+        counts[layout] += 1
+    return counts
 
 
 def normalize_morph_rows(
@@ -247,7 +284,7 @@ def normalize_morph_rows(
 
 
 def reconcile_complete(
-    supplement_rows: Sequence[Mapping[str, str]],
+    supplement_rows: Sequence[Mapping[str,str]],
     runinfo_rows: Sequence[Mapping[str, str]],
     morph_rows: Sequence[Mapping[str, str]],
 ) -> tuple[
@@ -264,6 +301,7 @@ def reconcile_complete(
     morph_index = normalize_morph_rows(morph_rows)
     matches, candidates = core.reconcile(prepared, enriched, morph_index)
     restore_embedded_provenance(matches, resolutions)
+    layout_counts = attach_official_library_layout(matches, enriched)
     summary = core.build_summary(matches, candidates, enriched)
     resolution_rows = [
         row for row in resolutions if clean(row.get("original_identifier"))
@@ -281,10 +319,12 @@ def reconcile_complete(
                 sorted(resolution_type_counts.items())
             ),
             "embedded_identifier_resolutions": resolution_rows,
+            "official_library_layout_counts": dict(sorted(layout_counts.items())),
             "derived_voucher_alias_to_run": dict(sorted(alias_index.items())),
             "reconciliation_provenance": (
-                "Exact supplement SRR/SRX/SAMN identifiers plus exact vouchers "
-                "derived from official numeric BioSample isolate fields."
+                "Exact supplement SRR/SRX/SAMN identifiers, exact vouchers "
+                "derived from official numeric BioSample isolate fields, and "
+                "official SRA LibraryLayout metadata."
             ),
         }
     )
@@ -327,7 +367,7 @@ def main() -> int:
     write_csv(
         args.outdir / "chang2026_sample_run_reconciliation.csv",
         matches,
-        core.MATCH_FIELDS,
+        COMPLETE_MATCH_FIELDS,
     )
     write_csv(
         args.outdir / "chang2026_run_candidates.csv",
@@ -340,7 +380,7 @@ def main() -> int:
     write_csv(
         args.outdir / "chang2026_takaoense_sra_manifest.csv",
         takaoense,
-        core.MATCH_FIELDS,
+        COMPLETE_MATCH_FIELDS,
     )
     (args.outdir / "chang2026_ncbi_reconciliation_summary.json").write_text(
         json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
@@ -368,6 +408,10 @@ def main() -> int:
         "embedded_identifier_resolution_count="
         f"{summary['embedded_identifier_resolution_count']}"
     )
+    print(
+        "official_library_layout_counts="
+        + json.dumps(summary["official_library_layout_counts"], sort_keys=True)
+    )
     print(f"verified_or_probable_rows={summary['verified_or_probable_rows']}")
     print(f"unique_matched_runs={summary['unique_matched_runs']}")
     print(
@@ -379,7 +423,8 @@ def main() -> int:
         print(
             "TAKAOENSE "
             f"{row['code']} {row['voucher']} {row['published_figure_label']} "
-            f"{row['matched_run']} {row['match_status']}"
+            f"{row['matched_run']} {row['matched_library_layout']} "
+            f"{row['match_status']}"
         )
     return 0
 
