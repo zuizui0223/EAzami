@@ -5,6 +5,8 @@ on:
     paths:
       - "analysis/build_chang2026_resource_plan.py"
       - "tests/test_build_chang2026_resource_plan.py"
+      - "analysis/run_chang2026_layout_aware_transcriptome_assembly.py"
+      - "tests/test_run_chang2026_transcriptome_assembly.py"
       - "analysis/recover_chang2026_published_runinfo.py"
       - "analysis/reconcile_chang2026_complete_runs.py"
       - "analysis/normalize_chang2026_panel_taxa.py"
@@ -13,6 +15,10 @@ on:
       - "data/evidence/chang2026_takaoense_figure1_morph_assignments_*.csv"
       - ".github/workflows/plan-chang2026-gene-tree-resources.yml"
   workflow_dispatch:
+
+concurrency:
+  group: plan-chang2026-gene-tree-resources-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -30,10 +36,15 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Compile and test resource planner
+      - name: Compile and test resource and subset runners
         run: |
-          python -m py_compile analysis/build_chang2026_resource_plan.py
-          python -m unittest tests/test_build_chang2026_resource_plan.py -v
+          python -m py_compile \
+            analysis/build_chang2026_resource_plan.py \
+            analysis/run_chang2026_layout_aware_transcriptome_assembly.py
+          python -m unittest \
+            tests/test_build_chang2026_resource_plan.py \
+            tests/test_run_chang2026_transcriptome_assembly.py \
+            -v
 
       - name: Recover official run metadata and build frozen panel
         env:
@@ -69,6 +80,22 @@ jobs:
             --runinfo "$runinfo" \
             --outdir /tmp/chang2026_resource_plan
 
+      - name: Validate six-sample and single-sample command plans
+        run: |
+          python analysis/run_chang2026_layout_aware_transcriptome_assembly.py \
+            --panel /tmp/chang2026_gene_tree_panel/chang2026_takaoense6_assembly_pilot.csv \
+            --expected-panel-samples 6 \
+            --outdir /tmp/chang2026_takaoense6_dry_run \
+            --jobs 1 \
+            --dry-run
+          python analysis/run_chang2026_layout_aware_transcriptome_assembly.py \
+            --panel /tmp/chang2026_gene_tree_panel/chang2026_takaoense6_assembly_pilot.csv \
+            --expected-panel-samples 6 \
+            --sample-id NH_ccy3835 \
+            --outdir /tmp/chang2026_NH_single_sample_dry_run \
+            --jobs 1 \
+            --dry-run
+
       - name: Validate exact metadata and planning assumptions
         run: |
           python - <<'PY'
@@ -86,6 +113,18 @@ jobs:
               encoding="utf-8-sig", newline=""
           ) as handle:
               rows = list(csv.DictReader(handle))
+          pilot_dry = json.loads(
+              Path(
+                  "/tmp/chang2026_takaoense6_dry_run/"
+                  "transcriptome_assembly_run_summary.json"
+              ).read_text(encoding="utf-8")
+          )
+          single_dry = json.loads(
+              Path(
+                  "/tmp/chang2026_NH_single_sample_dry_run/"
+                  "transcriptome_assembly_run_summary.json"
+              ).read_text(encoding="utf-8")
+          )
 
           pilot = summary["takaoense6_pilot"]
           full = summary["full19_panel"]
@@ -116,6 +155,14 @@ jobs:
               "full_recommended_free_disk_gib="
               f"{full['recommended_free_disk_gib_rounded_up']}"
           )
+          print(
+              "pilot_dry_run_status_counts="
+              + json.dumps(pilot_dry["status_counts"], sort_keys=True)
+          )
+          print(
+              "single_dry_run_selected="
+              + "|".join(single_dry["selected_sample_ids"])
+          )
 
           if len(rows) != 19:
               raise SystemExit(f"Expected 19 resource rows, observed {len(rows)}")
@@ -127,13 +174,13 @@ jobs:
               raise SystemExit(f"Pilot spot total changed: {pilot['total_spots']}")
           if pilot["total_bases"] != 38665601347:
               raise SystemExit(f"Pilot base total changed: {pilot['total_bases']}")
-          if abs(pilot["total_sra_size_gib"] - 12.0830078125) > 1e-9:
+          if abs(pilot["total_sra_size_gib"] - 12.0830078125) > 1e-12:
               raise SystemExit(f"Pilot SRA size changed: {pilot['total_sra_size_gib']}")
           if full["total_spots"] != 430196870:
               raise SystemExit(f"Full-panel spot total changed: {full['total_spots']}")
           if full["total_bases"] != 126530492594:
               raise SystemExit(f"Full-panel base total changed: {full['total_bases']}")
-          if abs(full["total_sra_size_gib"] - 39.6552734375) > 1e-9:
+          if abs(full["total_sra_size_gib"] - 39.6552734375) > 1e-12:
               raise SystemExit(f"Full-panel SRA size changed: {full['total_sra_size_gib']}")
           if pilot["recommended_free_disk_gib_rounded_up"] != 275:
               raise SystemExit("Pilot free-disk plan changed without review")
@@ -143,14 +190,38 @@ jobs:
               raise SystemExit("Initial assembly concurrency must remain one sample")
           if any(row["library_layout"] != "PAIRED" for row in rows):
               raise SystemExit("A resource row is not officially paired-end")
+
+          if pilot_dry["input_panel_sample_count"] != 6:
+              raise SystemExit("Six-sample dry-run did not validate the pilot panel")
+          if pilot_dry["selected_sample_count"] != 6:
+              raise SystemExit("Six-sample dry-run did not plan all focal samples")
+          if pilot_dry["status_counts"] != {"planned_dry_run": 6}:
+              raise SystemExit("Unexpected six-sample dry-run status")
+          if pilot_dry["subset_execution"]:
+              raise SystemExit("Whole six-sample pilot was incorrectly marked as subset")
+          if pilot_dry["official_library_layout_counts"] != {"PAIRED": 6}:
+              raise SystemExit("Six-sample dry-run lost official layout")
+
+          if single_dry["input_panel_sample_count"] != 6:
+              raise SystemExit("Single-sample dry-run did not validate the six-sample panel")
+          if single_dry["selected_sample_count"] != 1:
+              raise SystemExit("Single-sample dry-run did not select one sample")
+          if single_dry["selected_sample_ids"] != ["NH_ccy3835"]:
+              raise SystemExit("Unexpected single-sample selection")
+          if single_dry["status_counts"] != {"planned_dry_run": 1}:
+              raise SystemExit("Unexpected single-sample dry-run status")
+          if not single_dry["subset_execution"]:
+              raise SystemExit("Single-sample dry-run was not marked as subset")
           PY
 
-      - name: Upload resource plan
+      - name: Upload resource and pilot command plans
         uses: actions/upload-artifact@v4
         with:
           name: chang2026-gene-tree-resource-plan-${{ github.run_id }}
           path: |
             /tmp/chang2026_resource_plan/
+            /tmp/chang2026_takaoense6_dry_run/
+            /tmp/chang2026_NH_single_sample_dry_run/
             /tmp/chang2026_gene_tree_panel/chang2026_sinocirsium_gene_tree_panel.csv
             /tmp/chang2026_gene_tree_panel/chang2026_takaoense6_assembly_pilot.csv
             /tmp/chang2026_ncbi/*_published_complete_runinfo.csv
