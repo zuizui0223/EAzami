@@ -7,10 +7,13 @@ on:
       - "analysis/summarize_moreyra_locus_filter.py"
       - "analysis/export_moreyra_locus_manifests.py"
       - "analysis/recover_compositae1061_target.py"
+      - "analysis/url_safe_download.py"
+      - "analysis/run_compositae1061_target_audit.py"
       - "tests/test_recover_moreyra_author_repository.py"
       - "tests/test_summarize_moreyra_locus_filter.py"
       - "tests/test_export_moreyra_locus_manifests.py"
       - "tests/test_recover_compositae1061_target.py"
+      - "tests/test_run_compositae1061_target_audit.py"
       - ".github/workflows/audit-compositae1061-target.yml"
   workflow_dispatch:
 
@@ -37,12 +40,15 @@ jobs:
             analysis/recover_moreyra_author_repository.py \
             analysis/summarize_moreyra_locus_filter.py \
             analysis/export_moreyra_locus_manifests.py \
-            analysis/recover_compositae1061_target.py
+            analysis/recover_compositae1061_target.py \
+            analysis/url_safe_download.py \
+            analysis/run_compositae1061_target_audit.py
           python -m unittest \
             tests/test_recover_moreyra_author_repository.py \
             tests/test_summarize_moreyra_locus_filter.py \
             tests/test_export_moreyra_locus_manifests.py \
             tests/test_recover_compositae1061_target.py \
+            tests/test_run_compositae1061_target_audit.py \
             -v
 
       - name: Rebuild public Moreyra locus universe
@@ -60,7 +66,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          python analysis/recover_compositae1061_target.py \
+          python analysis/run_compositae1061_target_audit.py \
             --moreyra-loci data/evidence/generated/moreyra_author_repository/locus_sets/moreyra_public_1061_loci.txt \
             --outdir data/evidence/generated/compositae1061_target_audit
 
@@ -169,7 +175,7 @@ jobs:
             - best current candidate: ${best}
             - exact target frozen: **${summary.exact_target_frozen}**
 
-            Sequence overlap alone is not accepted as proof of the exact Moreyra target/version. The workflow artifact contains request logs, candidate provenance, checksums and overlap diagnostics.
+            Sequence overlap alone is not accepted as proof of the exact Moreyra target/version. The workflow artifact contains URL-normalized request logs, candidate provenance, checksums and overlap diagnostics.
 
             Workflow run: \`${context.runId}\`.`;
             const comments = await github.paginate(github.rest.issues.listComments, {
