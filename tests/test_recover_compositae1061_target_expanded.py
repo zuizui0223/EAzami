@@ -51,13 +51,12 @@ class ExpandedTargetDiscoveryTests(unittest.TestCase):
             value
             for value in values
             if value.discovery_method == "json_field_pair"
+            and value.filename == "Compositae1061_targets.fasta"
+            and value.download_url == "https://example.org/file_downloaded"
         ]
         self.assertEqual(len(direct), 1)
-        self.assertEqual(direct[0].filename, "Compositae1061_targets.fasta")
-        self.assertEqual(
-            direct[0].download_url, "https://example.org/file_downloaded"
-        )
         self.assertEqual(direct[0].declared_size, "12345")
+        self.assertEqual(direct[0].file_id, "uuid-1")
 
     def test_constructs_mendeley_public_file_url(self) -> None:
         payload = {
