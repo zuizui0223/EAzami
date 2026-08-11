@@ -8,11 +8,13 @@ on:
       - "analysis/reconcile_chang2026_ncbi_runs.py"
       - "analysis/reconcile_chang2026_complete_runs.py"
       - "analysis/audit_chang2026_public_transcriptome_assemblies.py"
+      - "analysis/normalize_chang2026_panel_taxa.py"
       - "analysis/build_chang2026_gene_tree_panel.py"
       - "tests/test_recover_chang2026_published_runinfo.py"
       - "tests/test_reconcile_chang2026_ncbi_runs.py"
       - "tests/test_reconcile_chang2026_complete_runs.py"
       - "tests/test_audit_chang2026_public_transcriptome_assemblies.py"
+      - "tests/test_normalize_chang2026_panel_taxa.py"
       - "tests/test_build_chang2026_gene_tree_panel.py"
       - "data/evidence/chang2026_east_asia_accession_audit_*.csv"
       - "data/evidence/chang2026_takaoense_figure1_morph_assignments_*.csv"
@@ -45,12 +47,14 @@ jobs:
             analysis/reconcile_chang2026_ncbi_runs.py \
             analysis/reconcile_chang2026_complete_runs.py \
             analysis/audit_chang2026_public_transcriptome_assemblies.py \
+            analysis/normalize_chang2026_panel_taxa.py \
             analysis/build_chang2026_gene_tree_panel.py
           python -m unittest \
             tests/test_recover_chang2026_published_runinfo.py \
             tests/test_reconcile_chang2026_ncbi_runs.py \
             tests/test_reconcile_chang2026_complete_runs.py \
             tests/test_audit_chang2026_public_transcriptome_assemblies.py \
+            tests/test_normalize_chang2026_panel_taxa.py \
             tests/test_build_chang2026_gene_tree_panel.py \
             -v
 
@@ -77,8 +81,13 @@ jobs:
 
       - name: Build analysis panel and competing hypotheses
         run: |
+          mkdir -p /tmp/chang2026_gene_tree_panel
+          python analysis/normalize_chang2026_panel_taxa.py \
+            --input /tmp/chang2026_reconciliation/chang2026_sample_run_reconciliation.csv \
+            --output /tmp/chang2026_gene_tree_panel/chang2026_panel_taxon_normalized_reconciliation.csv \
+            --summary /tmp/chang2026_gene_tree_panel/chang2026_panel_taxon_normalization_summary.json
           python analysis/build_chang2026_gene_tree_panel.py \
-            --reconciliation /tmp/chang2026_reconciliation/chang2026_sample_run_reconciliation.csv \
+            --reconciliation /tmp/chang2026_gene_tree_panel/chang2026_panel_taxon_normalized_reconciliation.csv \
             --assembly-audit /tmp/chang2026_public_assemblies/chang2026_public_transcriptome_assembly_audit.csv \
             --outdir /tmp/chang2026_gene_tree_panel
 
@@ -103,6 +112,10 @@ jobs:
               ).read_text(encoding="utf-8")
           )
           outdir = Path("/tmp/chang2026_gene_tree_panel")
+          normalization = json.loads(
+              (outdir / "chang2026_panel_taxon_normalization_summary.json")
+              .read_text(encoding="utf-8")
+          )
           summary = json.loads(
               (outdir / "chang2026_gene_tree_panel_summary.json").read_text(
                   encoding="utf-8"
@@ -113,6 +126,7 @@ jobs:
               with (outdir / name).open(encoding="utf-8-sig", newline="") as handle:
                   return list(csv.DictReader(handle))
 
+          normalized = rows("chang2026_panel_taxon_normalized_reconciliation.csv")
           panel = rows("chang2026_sinocirsium_gene_tree_panel.csv")
           pilot = rows("chang2026_takaoense6_assembly_pilot.csv")
           hypotheses = rows("chang2026_takaoense_gene_tree_hypotheses.csv")
@@ -120,11 +134,21 @@ jobs:
 
           print(f"reconciled_samples={reconciliation['verified_or_probable_rows']}")
           print(f"assembly_audit_samples={assembly['sample_rows']}")
+          print(
+              "autonym_rows_collapsed_to_species_panel="
+              f"{normalization['autonym_rows_collapsed_to_species_panel']}"
+          )
           print(f"panel_samples={len(panel)}")
           print(f"unique_runs={len({row['matched_run'] for row in panel})}")
           print(f"takaoense_pilot_samples={len(pilot)}")
           print(f"hypotheses={len(hypotheses)}")
           print("roles=" + json.dumps(dict(sorted(roles.items())), sort_keys=True))
+          for row in normalization["changed_rows"]:
+              print(
+                  "PANEL_TAXON_MAP "
+                  f"{row['code']} {row['voucher']} "
+                  f"{row['source_taxon']} -> {row['panel_taxon']}"
+              )
           for row in pilot:
               print(
                   "PILOT "
@@ -140,12 +164,31 @@ jobs:
               "cirsium japonicum var. fukienense": 4,
               "cirsium lineare": 2,
           }
+          expected_changed = {
+              ("FKK", "ccy4204"),
+              ("ASO", "ccy4220"),
+          }
+          observed_changed = {
+              (row["code"], row["voucher"])
+              for row in normalization["changed_rows"]
+          }
           if reconciliation["verified_or_probable_rows"] != 33:
               raise SystemExit("Expected complete 33-sample reconciliation")
           if reconciliation["unique_matched_runs"] != 33:
               raise SystemExit("Expected 33 unique reconciled runs")
           if assembly["sample_rows"] != 33:
               raise SystemExit("Expected 33 public-assembly audit rows")
+          if normalization["input_rows"] != 33 or normalization["output_rows"] != 33:
+              raise SystemExit("Taxon normalization changed row count")
+          if normalization["autonym_rows_collapsed_to_species_panel"] != 2:
+              raise SystemExit("Expected exactly two japonicum autonym rows")
+          if observed_changed != expected_changed:
+              raise SystemExit(f"Unexpected panel taxon mappings: {observed_changed}")
+          if any(
+              not row["source_taxon"]
+              for row in normalized
+          ):
+              raise SystemExit("Source taxon was not preserved for every row")
           if summary["sample_count"] != 19 or len(panel) != 19:
               raise SystemExit("Expected 19 analysis-panel samples")
           if summary["taxon_counts"] != expected_taxa:
