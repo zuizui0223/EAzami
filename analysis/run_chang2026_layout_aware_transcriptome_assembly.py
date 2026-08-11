@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 """Run Chang 2026 transcriptome assembly using official SRA LibraryLayout.
 
-The original assembly runner is intentionally retained as the implementation of
-the paired-end fasterq/fastp/Trinity/TransDecoder pipeline.  This adapter replaces
-only the input contract:
+The original assembly runner is retained as the implementation of the paired-end
+fasterq/fastp/Trinity/TransDecoder pipeline. This adapter replaces and extends
+the input contract:
 
 * library layout is read from the official SRA ``LibraryLayout`` field carried
   through the reconciled panel;
 * the supplement raw-read versus SRA-spot relation remains a provenance and
-  reconciliation diagnostic, not a sequencing-layout classifier; and
+  reconciliation diagnostic, not a sequencing-layout classifier;
 * the current heavy pipeline is allowed only when every selected run is
-  officially ``PAIRED``.
+  officially ``PAIRED``;
+* the frozen 19-sample panel and the six-takaoense pilot are both accepted when
+  their expected panel size is declared explicitly; and
+* one or more stable sample IDs can be selected for restartable resource pilots.
 
-All 19 current Chang gene-tree-panel runs are officially paired-end.  A future
-single-end run will fail explicitly until a separately tested single-end command
-path is added; it will never be coerced into the paired workflow.
+All current Chang gene-tree-panel runs are officially paired-end. A future
+single-end run fails explicitly until a separately tested command path is added;
+it is never coerced into the paired workflow.
 """
 
 from __future__ import annotations
@@ -63,13 +66,21 @@ read_csv = paired.read_csv
 write_csv = paired.write_csv
 
 
-def validate_panel(path: Path) -> list[dict[str, str]]:
-    """Validate the frozen 19-sample panel from official SRA metadata."""
+def validate_panel(
+    path: Path,
+    *,
+    expected_samples: int = 19,
+) -> list[dict[str, str]]:
+    """Validate a declared frozen panel using official SRA metadata."""
+    if expected_samples < 1:
+        raise ValueError("expected_samples must be >= 1")
     rows = read_csv(path)
     if not rows:
         raise ValueError(f"No panel rows in {path}")
-    if len(rows) != 19:
-        raise ValueError(f"Expected 19 panel samples, observed {len(rows)}")
+    if len(rows) != expected_samples:
+        raise ValueError(
+            f"Expected {expected_samples} panel samples, observed {len(rows)}"
+        )
 
     sample_ids = [clean(row.get("sample_id")) for row in rows]
     runs = [clean(row.get("matched_run")) for row in rows]
@@ -126,7 +137,41 @@ def validate_panel(path: Path) -> list[dict[str, str]]:
             "LibraryLayout is not PAIRED for: " + "|".join(unsupported)
         )
 
+    if expected_samples == 6:
+        roles = Counter(clean(row.get("panel_role")) for row in rows)
+        morphs = Counter(clean(row.get("morph")).upper() for row in rows)
+        if roles != {"focal_colour_morph": 6}:
+            raise ValueError(
+                "Six-sample pilot must contain only focal_colour_morph rows: "
+                f"{dict(roles)}"
+            )
+        if morphs != {"BP": 3, "W": 3}:
+            raise ValueError(
+                "Six-sample pilot must contain three BP and three W samples: "
+                f"{dict(morphs)}"
+            )
+
     return sorted(rows, key=lambda row: row["sample_id"])
+
+
+def select_panel_rows(
+    rows: Sequence[Mapping[str, str]],
+    sample_ids: Sequence[str] | None,
+) -> list[dict[str, str]]:
+    """Select stable sample IDs without changing the validated input panel."""
+    requested = [clean(value) for value in (sample_ids or []) if clean(value)]
+    if not requested:
+        return [dict(row) for row in rows]
+    if len(requested) != len(set(requested)):
+        raise ValueError("--sample-id values must be unique")
+    index = {clean(row.get("sample_id")): dict(row) for row in rows}
+    missing = [sample_id for sample_id in requested if sample_id not in index]
+    if missing:
+        raise ValueError(
+            "Requested sample IDs are absent from the validated panel: "
+            + "|".join(missing)
+        )
+    return [index[sample_id] for sample_id in requested]
 
 
 def command_plan(
@@ -210,6 +255,8 @@ def build_summary(
     *,
     dry_run: bool,
     keep_raw_reads: bool,
+    input_panel_sample_count: int | None = None,
+    selected_sample_ids: Sequence[str] | None = None,
 ) -> dict[str, object]:
     summary = paired.build_summary(
         rows,
@@ -217,11 +264,19 @@ def build_summary(
         keep_raw_reads=keep_raw_reads,
     )
     layouts = Counter(clean(row.get("library_layout")).upper() for row in rows)
+    selected = [clean(value) for value in (selected_sample_ids or [])]
+    input_count = input_panel_sample_count if input_panel_sample_count is not None else len(rows)
     summary["official_library_layout_counts"] = dict(sorted(layouts.items()))
     summary["library_layout_source"] = "official NCBI SRA LibraryLayout"
     summary["read_count_relation_role"] = (
         "Reconciliation diagnostic only; not used to infer sequencing layout."
     )
+    summary["input_panel_sample_count"] = input_count
+    summary["selected_sample_count"] = len(rows)
+    summary["selected_sample_ids"] = selected or [
+        clean(row.get("sample_id")) for row in rows
+    ]
+    summary["subset_execution"] = len(rows) != input_count
     summary["assembly_sequence"] = [
         "fasterq-dump --split-files on officially PAIRED SRA run",
         "pigz raw read mates",
@@ -236,6 +291,16 @@ def build_summary(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--panel", type=Path, required=True)
+    parser.add_argument("--expected-panel-samples", type=int, default=19)
+    parser.add_argument(
+        "--sample-id",
+        action="append",
+        default=[],
+        help=(
+            "Stable sample_id to execute; repeat for multiple samples. The full "
+            "input panel is validated before selection."
+        ),
+    )
     parser.add_argument("--outdir", type=Path, default=DEFAULT_OUTDIR)
     parser.add_argument("--jobs", type=int, default=1)
     parser.add_argument("--fasterq-threads", type=int, default=8)
@@ -263,6 +328,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     for name in (
+        "expected_panel_samples",
         "fasterq_threads",
         "fastp_threads",
         "trinity_threads",
@@ -271,7 +337,11 @@ def main() -> int:
         if getattr(args, name) < 1:
             raise SystemExit(f"--{name.replace('_', '-')} must be >= 1")
 
-    panel_rows = validate_panel(args.panel)
+    validated_panel = validate_panel(
+        args.panel,
+        expected_samples=args.expected_panel_samples,
+    )
+    panel_rows = select_panel_rows(validated_panel, args.sample_id)
     plans = [
         command_plan(
             row,
@@ -303,6 +373,8 @@ def main() -> int:
         results,
         dry_run=args.dry_run,
         keep_raw_reads=args.keep_raw_reads,
+        input_panel_sample_count=len(validated_panel),
+        selected_sample_ids=[clean(row.get("sample_id")) for row in panel_rows],
     )
 
     args.outdir.mkdir(parents=True, exist_ok=True)
@@ -344,7 +416,9 @@ def main() -> int:
         SUMMARY_FIELDS,
     )
 
-    print(f"sample_count={summary['sample_count']}")
+    print(f"input_panel_sample_count={summary['input_panel_sample_count']}")
+    print(f"selected_sample_count={summary['selected_sample_count']}")
+    print("selected_sample_ids=" + "|".join(summary["selected_sample_ids"]))
     print("status_counts=" + json.dumps(summary["status_counts"], sort_keys=True))
     print(
         "official_library_layout_counts="
