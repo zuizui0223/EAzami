@@ -1,14 +1,23 @@
 """Chang 2026 Sinocirsium transcriptome gene-tree workflow.
 
-Run from the repository root, for example:
+First generate and validate a config from the frozen panel package:
+
+    python analysis/validate_chang2026_gene_tree_workflow_contract.py \
+      --panel /path/to/chang2026_sinocirsium_gene_tree_panel.csv \
+      --hypotheses /path/to/chang2026_takaoense_gene_tree_hypotheses.csv \
+      --config-output /path/to/config.json \
+      --summary-output /path/to/contract.json
+
+Then execute, for example:
 
     snakemake -s workflow/chang2026_gene_trees/Snakefile \
-      --configfile workflow/chang2026_gene_trees/config.json \
+      --configfile /path/to/config.json \
       --use-conda --cores 32
 
-The config must point to the generated 19-sample panel and eight-hypothesis CSV.
-Heavy external computation is never run in CI; CI validates scripts, command
-plans, schemas, and synthetic topology scoring.
+The config must point to the validated 19-sample panel and eight-hypothesis CSV.
+Heavy external computation is never run in pull-request CI; CI validates scripts,
+input hashes, conda specifications, command plans, the complete DAG and synthetic
+topology scoring, then runs a true Snakemake dry-run.
 """
 
 from pathlib import Path
