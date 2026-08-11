@@ -7,7 +7,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-ANALYSIS = Path(__file__).resolve().parents[1] / "analysis"
+REPO = Path(__file__).resolve().parents[1]
+ANALYSIS = REPO / "analysis"
 if str(ANALYSIS) not in sys.path:
     sys.path.insert(0, str(ANALYSIS))
 MODULE = ANALYSIS / "prepare_chang2026_read2tree_reads.py"
@@ -58,6 +59,18 @@ class Read2TreeReadPrepTests(unittest.TestCase):
             fasterq_threads=8,
             fastp_threads=8,
         )
+
+    def test_committed_panel_is_direct_evidence_validated(self):
+        rows = mod.frozen_panel.validate(
+            REPO / "sampling/chang2026_takaoense6_read2tree_panel_v1.csv",
+            REPO / "data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv",
+        )
+        self.assertEqual(len(rows), 6)
+        self.assertEqual({row["morph"] for row in rows}, {"BP", "W"})
+        self.assertEqual({row["matched_run"] for row in rows}, {
+            "SRR35152718", "SRR35152736", "SRR35152735",
+            "SRR35152717", "SRR35152738", "SRR35152734",
+        })
 
     def test_paths_match_read2tree_trimmed_contract(self):
         plan = self.plan()
