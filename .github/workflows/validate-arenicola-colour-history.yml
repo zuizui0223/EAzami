@@ -5,8 +5,11 @@ on:
     paths:
       - "data/evidence/arenicola_flower_colour_history_evidence_v1.csv"
       - "analysis/arenicola_colour_history_sensitivity.py"
+      - "analysis/arenicola_colour_history_sensitivity_v1.csv"
+      - "analysis/arenicola_colour_history_sensitivity_v1.json"
       - "analysis/arenicola_sister_context.py"
       - "analysis/arenicola_sister_context.csv"
+      - "docs/ARENICOLA_FLOWER_COLOUR_HISTORY_2026-08-12.md"
       - "tests/test_arenicola_colour_history_sensitivity.py"
       - ".github/workflows/validate-arenicola-colour-history.yml"
   workflow_dispatch:
@@ -67,6 +70,17 @@ jobs:
           print('forced_white_Arenicola_penalty=1_change')
           print('white_deep_root_sensitivity=Arenicola_MRCA_white')
           PY
+
+      - name: Check frozen outputs against recomputation
+        run: |
+          cmp \
+            analysis/arenicola_colour_history_sensitivity_v1.json \
+            /tmp/arenicola/arenicola_colour_history_sensitivity_v1.json
+          cmp \
+            <(tr -d '\r' < analysis/arenicola_colour_history_sensitivity_v1.csv) \
+            <(tr -d '\r' < /tmp/arenicola/arenicola_colour_history_sensitivity_v1.csv)
+          echo "frozen_json_exact_match=true"
+          echo "frozen_csv_line_ending_normalized_exact_match=true"
 
       - name: Regenerate legacy summary and check claim boundary
         run: |
