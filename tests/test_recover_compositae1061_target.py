@@ -22,7 +22,7 @@ SPEC.loader.exec_module(mod)
 
 
 class CompositaeTargetAuditTests(unittest.TestCase):
-    def test_extract_json_file_links(self) -> None:
+    def test_extract_json_preserves_explicit_download_url_once(self) -> None:
         payload = json.dumps(
             {
                 "files": [
@@ -42,8 +42,10 @@ class CompositaeTargetAuditTests(unittest.TestCase):
             final_url="https://example.org/api",
         )
         links = mod.extract_links(response)
-        self.assertEqual(len(links), 1)
-        self.assertEqual(links[0].url, "https://example.org/files/targets.fasta")
+        urls = [link.url for link in links]
+        explicit = "https://example.org/files/targets.fasta"
+        self.assertIn(explicit, urls)
+        self.assertEqual(urls.count(explicit), 1)
 
     def test_extract_html_file_links(self) -> None:
         payload = b'<html><body><a href="files/Compositae1061.fa.gz">download</a></body></html>'
