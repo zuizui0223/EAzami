@@ -77,11 +77,7 @@ rule assemble_transcriptomes:
     output:
         summary=ASSEMBLY / "transcriptome_assembly_run_summary.json",
         manifest=ASSEMBLY / "transcriptome_assembly_run_manifest.csv",
-    threads: max(
-        FASTERQ_THREADS,
-        FASTP_THREADS,
-        TRINITY_THREADS,
-    )
+    threads: max(FASTERQ_THREADS, FASTP_THREADS, TRINITY_THREADS)
     conda:
         "envs/assembly.yml"
     params:
