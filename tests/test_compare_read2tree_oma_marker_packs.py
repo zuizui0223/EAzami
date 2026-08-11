@@ -90,6 +90,19 @@ class MarkerPackComparisonTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "exactly one sequence"):
                 mod.marker_signatures(contract, expected_count=1)
 
+    def test_cross_marker_oma_id_reuse_is_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            contract = build_pack(
+                root / "a",
+                [
+                    ("CYNCS00001", "HELAN00001", "DAUCS00001"),
+                    ("CYNCS00001", "HELAN00002", "DAUCS00002"),
+                ],
+            )
+            with self.assertRaisesRegex(ValueError, "reused across markers"):
+                mod.marker_signatures(contract, expected_count=2)
+
     def test_overlap_classes(self):
         self.assertEqual(mod.overlap_class(400, 400), "identical_marker_sets")
         self.assertEqual(mod.overlap_class(300, 400), "high_overlap")
