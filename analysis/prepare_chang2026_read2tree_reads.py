@@ -2,10 +2,10 @@
 """Prepare the six Chang 2026 focal RNA-seq libraries through fastp only.
 
 This is the light-weight, restartable read-preparation stage shared by the
-Read2Tree fast screen and the later Trinity/TransDecoder workflow.  It reuses
-the frozen sample/run contract and path layout from
-run_chang2026_restartable_transcriptome_assembly.py, but deliberately stops
-before Trinity so the assembly-free topology screen can run first.
+Read2Tree fast screen and the later Trinity/TransDecoder workflow. It validates
+the committed six-sample panel directly against the source-backed Figure-1/NCBI
+evidence, reuses the heavy runner's path layout, and deliberately stops before
+Trinity so the assembly-free topology screen can run first.
 """
 from __future__ import annotations
 
@@ -21,7 +21,10 @@ from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 
 import run_chang2026_restartable_transcriptome_assembly as heavy
+import validate_chang2026_takaoense6_read2tree_panel as frozen_panel
 
+DEFAULT_PANEL = Path("sampling/chang2026_takaoense6_read2tree_panel_v1.csv")
+DEFAULT_EVIDENCE = Path("data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv")
 READ_STAGES = ("prefetch", "vdb_validate", "fasterq", "pigz", "fastp")
 RUN_FIELDS = (
     "sample_id", "taxon", "morph", "run", "library_layout", "status",
@@ -37,6 +40,19 @@ def write_csv(path: Path, rows: Iterable[Mapping[str, object]], fields: Sequence
         writer = csv.DictWriter(handle, fieldnames=list(fields), extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
+
+
+def select_rows(rows: Sequence[Mapping[str, str]], sample_ids: Sequence[str] | None) -> list[dict[str, str]]:
+    requested = [str(value).strip() for value in (sample_ids or []) if str(value).strip()]
+    if not requested:
+        return [dict(row) for row in rows]
+    if len(requested) != len(set(requested)):
+        raise ValueError("--sample-id values must be unique")
+    index = {str(row["sample_id"]): dict(row) for row in rows}
+    missing = [sample_id for sample_id in requested if sample_id not in index]
+    if missing:
+        raise ValueError("Requested sample IDs are absent from the frozen panel: " + "|".join(missing))
+    return [index[sample_id] for sample_id in requested]
 
 
 def command_plan_for_row(
@@ -117,9 +133,9 @@ def prepare_one(plan: Mapping[str, object], *, dry_run: bool) -> dict[str, objec
             if not all(gz_state):
                 if any(u_state):
                     raise RuntimeError("Uncompressed FASTQ pair exists without completed compression; inspect before restart")
-                # Only touch the network/SRA stages when no complete raw pair is
-                # already present. A stale completion marker without its SRA
-                # directory is repaired by repeating prefetch.
+                # Only touch network/SRA stages when no complete raw pair exists.
+                # A stale completion marker without its SRA directory is repaired
+                # by repeating prefetch rather than trusting the marker alone.
                 if not sra_dir.is_dir() or not heavy.marker(plan, "prefetch").exists():
                     heavy.run_stage(plan, "prefetch")
                     completed = "prefetch"
@@ -177,8 +193,8 @@ def executable_preflight(plans: Sequence[Mapping[str, object]]) -> list[str]:
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
-    p.add_argument("--panel", type=Path, required=True)
-    p.add_argument("--expected-panel-samples", type=int, default=6)
+    p.add_argument("--panel", type=Path, default=DEFAULT_PANEL)
+    p.add_argument("--evidence", type=Path, default=DEFAULT_EVIDENCE)
     p.add_argument("--sample-id", action="append", default=[])
     p.add_argument("--outdir", type=Path, required=True)
     p.add_argument("--jobs", type=int, default=1)
@@ -199,8 +215,8 @@ def main() -> int:
     args = parse_args()
     if args.jobs < 1:
         raise SystemExit("--jobs must be >= 1")
-    validated = heavy.validate_panel(args.panel, expected_samples=args.expected_panel_samples)
-    rows = heavy.select_rows(validated, args.sample_id)
+    validated = frozen_panel.validate(args.panel, args.evidence)
+    rows = select_rows(validated, args.sample_id)
     plans = [
         command_plan_for_row(
             row,
@@ -262,11 +278,13 @@ def main() -> int:
         "status_counts": dict(sorted(statuses.items())),
         "failed_count": statuses.get("failed", 0),
         "dry_run": args.dry_run,
+        "panel": str(args.panel),
+        "evidence": str(args.evidence),
         "reads_root": str(args.outdir),
         "read2tree_path_contract": "samples/<sample_id>/trimmed/<sample_id>.R[12].trim.fastq.gz",
         "last_allowed_stage": "fastp",
         "trinity_executed": False,
-        "claim_limit": "This stage prepares validated paired reads for the assembly-free Read2Tree topology screen. It does not assemble transcriptomes or test the colour-history hypotheses by itself.",
+        "claim_limit": "This stage prepares source-validated paired reads for the assembly-free Read2Tree topology screen. It does not assemble transcriptomes or test the colour-history hypotheses by itself.",
         "disk_preflight": disk,
     }
     (args.outdir / "read2tree_read_summary.json").write_text(
