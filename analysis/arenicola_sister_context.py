@@ -1,64 +1,62 @@
 #!/usr/bin/env python3
-"""Existing-data parsimony screen for the Arenicola + Nipponocirsium sister relationship.
+"""Legacy summary wrapper for the Arenicola sister-context parsimony screen.
 
-Published topology source: Chang et al. 2026, with Arenicola sister to Nipponocirsium.
-Nipponocirsium states used here are source-backed: morii pink/coloured; pengii and tatakaense
-bluish-purple/coloured; kawakamii white. Arenicola: brevicaule white, irumtiense coloured.
-
-This is a topology-only parsimony diagnostic, not a substitute for full Mk/stochastic mapping.
+The full analysis now lives in ``arenicola_colour_history_sensitivity.py``.
+This wrapper preserves the historical CSV path while correcting an important
+claim-boundary issue: the C. brevicaule / C. irumtiense pair alone does not
+polarize flower-colour change. Equal-cost parsimony prefers a coloured Arenicola
+MRCA only after the published Nipponocirsium sister context is included.
 """
+
+from __future__ import annotations
 
 import csv
 from pathlib import Path
 
-
-def fitch(tree, states):
-    if isinstance(tree, str):
-        return set(states[tree]), 0
-    left, right = tree
-    ls, lc = fitch(left, states)
-    rs, rc = fitch(right, states)
-    inter = ls & rs
-    if inter:
-        return inter, lc + rc
-    return ls | rs, lc + rc + 1
+import arenicola_colour_history_sensitivity as sensitivity
 
 
-def main():
-    # Simplified published topology: Arenicola sister to Nipponocirsium;
-    # within Nipponocirsium, morii basal and pengii basal to kawakamii+tatakaense.
-    tree = (("brevicaule", "irumtiense"),
-            ("morii", ("pengii", ("kawakamii", "tatakaense"))))
-    states = {
-        "brevicaule": {"W"},
-        "irumtiense": {"C"},
-        "morii": {"C"},
-        "pengii": {"C"},
-        "kawakamii": {"W"},
-        "tatakaense": {"C"},
+def main() -> int:
+    states = sensitivity.load_tip_states(sensitivity.DEFAULT_EVIDENCE)
+    rows = sensitivity.scenario_rows(states)
+
+    pair = next(
+        row for row in rows
+        if row["analysis_context"] == "Arenicola_pair_only"
+        and row["constraint"] == "unconstrained"
+    )
+    primary = {
+        str(row["constraint"]): row
+        for row in rows
+        if row["analysis_context"] == "Arenicola_plus_Nipponocirsium"
+        and row["topology_variant"] == "published_pengii_basal"
     }
-    root_states, steps = fitch(tree, states)
 
-    rows = [
-        {
-            "analysis": "Arenicola_plus_Nipponocirsium_published_context",
-            "minimum_transitions": steps,
-            "fitch_root_states": "|".join(sorted(root_states)),
-            "interpretation": (
-                "The combined sister-clade context reconstructs a coloured root under Fitch parsimony. "
-                "The minimum-history interpretation is therefore two independent C->W losses: one on "
-                "C. brevicaule and one on C. kawakamii. A W->C regain on C. irumtiense is not required by "
-                "the currently published sister-clade context."
-            ),
-        }
-    ]
+    output = {
+        "analysis": "Arenicola_plus_Nipponocirsium_published_context",
+        "minimum_transitions": primary["unconstrained"]["minimum_changes"],
+        "fitch_root_states": primary["unconstrained"]["optimal_root_states"],
+        "interpretation": (
+            "The brevicaule-irumtiense pair alone is directionally ambiguous under equal-cost "
+            f"parsimony (Arenicola MRCA={pair['optimal_arenicola_mrca_states']}; one change either "
+            "as C->W loss or W->C regain). After adding the published coloured-rich "
+            "Nipponocirsium sister context, the unique minimum has a coloured deep root and "
+            "coloured Arenicola MRCA with two total changes: C->W on C. brevicaule and C->W "
+            "on C. kawakamii. Forcing a white Arenicola MRCA costs three changes (+1), so "
+            "irumtiense regain is less parsimonious but remains an explicit competing hypothesis. "
+            "Historical treatment as C. brevicaule var. irumtiense is not an ancestor-descendant "
+            "constraint. No branch-length Mk probability or molecular reactivation claim is made."
+        ),
+    }
+
     out = Path("analysis/arenicola_sister_context.csv")
-    with out.open("w", newline="", encoding="utf-8") as fh:
-        writer = csv.DictWriter(fh, fieldnames=rows[0].keys())
+    with out.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(output))
         writer.writeheader()
-        writer.writerows(rows)
-    print(rows[0])
+        writer.writerow(output)
+    print(output)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
