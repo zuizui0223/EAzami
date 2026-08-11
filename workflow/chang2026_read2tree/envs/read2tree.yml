@@ -1,8 +1,7 @@
-name: eazami-read2tree-fast-screen
+name: chang2026-read2tree
 channels:
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - python=3.10.8
   - pip
