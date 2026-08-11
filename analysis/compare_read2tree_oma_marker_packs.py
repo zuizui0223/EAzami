@@ -77,6 +77,7 @@ def marker_signatures(
         )
     signatures: dict[str, str] = {}
     all_ids: set[str] = set()
+    id_to_marker: dict[str, str] = {}
     for path in files:
         ids = fasta_ids(path)
         codes = tuple(seq_id[:5] for seq_id in ids)
@@ -84,13 +85,23 @@ def marker_signatures(
             raise ValueError(
                 f"{path}: expected exactly one sequence for {EXPECTED_CODES}, observed {ids}"
             )
+        reused = [seq_id for seq_id in ids if seq_id in id_to_marker]
+        if reused:
+            detail = ", ".join(
+                f"{seq_id} already in {id_to_marker[seq_id]}" for seq_id in reused
+            )
+            raise ValueError(
+                f"{contract_path}: OMA sequence ID reused across markers in {path.name}: {detail}"
+            )
         signature = "|".join(sorted(ids))
         if signature in signatures:
             raise ValueError(
                 f"{contract_path}: duplicate marker signature in {path.name} and {signatures[signature]}"
             )
         signatures[signature] = path.name
-        all_ids.update(ids)
+        for seq_id in ids:
+            id_to_marker[seq_id] = path.name
+            all_ids.add(seq_id)
     return signatures, all_ids, contract
 
 
