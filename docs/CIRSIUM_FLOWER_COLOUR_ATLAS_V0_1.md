@@ -10,6 +10,23 @@ Therefore the broad comparative question — how often white flowers evolve and 
 
 This v0.1 is **not yet a rate-estimation dataset**. It establishes provenance, unit-of-observation and coding rules before expansion.
 
+## Current frozen state
+
+The expanded v0.1 contains **19 records**:
+
+- 16 reviewed focal records;
+- 3 pending Japan seed records;
+- 13 taxon-level records;
+- 6 direct sample-level var. *takaoense* records.
+
+Nine taxon-level W/C records currently pass the strict rate-fit eligibility contract:
+
+- `C = 6`;
+- `W = 3`;
+- phylogeny contexts = `Arenicola`, `Nipponocirsium`, `Sinocirsium`.
+
+The atlas therefore now clears the provisional minimum coloured-tip and minimum phylogeny-context gates, but **still fails the minimum total taxon-tip and minimum white-tip gates**. `transition_rate_fit_ready` remains `false`.
+
 ## Architecture
 
 Canonical schema:
@@ -24,11 +41,11 @@ Validator/readiness gate:
 
 - `analysis/validate_colour_atlas.py`
 
-Generated/frozen atlas after CI validation:
+Frozen atlas:
 
 - `data/evidence/cirsium_flower_colour_atlas_v0_1.csv`
 
-Readiness summary after CI validation:
+Readiness summary:
 
 - `analysis/cirsium_flower_colour_atlas_v0_1_readiness.json`
 
@@ -44,8 +61,6 @@ Six source-backed taxon-level flower states are imported from:
 
 - `data/evidence/arenicola_flower_colour_history_evidence_v1.csv`
 
-Current binary states:
-
 | taxon | state | phylogeny context | v0.1 rate-fit status |
 |---|---:|---|---|
 | *C. brevicaule* | W | Arenicola | eligible |
@@ -55,21 +70,39 @@ Current binary states:
 | *C. kawakamii* | W | Nipponocirsium | eligible |
 | *C. tatakaense* | C | Nipponocirsium | eligible |
 
-These six are the only v0.1 records allowed through the cross-species rate-fit eligibility filter.
+### 2. Taxon-level Sinocirsium expansion
 
-### 2. Direct var. takaoense W/BP samples
+Three additional states directly stated in Chang et al. 2026 are frozen in:
+
+- `data/evidence/chang2026_sinocirsium_taxon_colour_evidence_v1.csv`
+
+| taxon | state | treatment |
+|---|---:|---|
+| *C. japonicum* var. *albescens* | W | source explicitly states white / all-white corollas |
+| *C. japonicum* var. *australe* | C | source explicitly states bluish-purple throughout |
+| *C. japonicum* var. *fukienense* | C | bluish-purple to light/pale-purple shade variation; all remain binary C |
+
+The *fukienense* shade variation is **not** treated as W/C polymorphism. Under the current binary question it remains anthocyanin-coloured throughout the reported range.
+
+These three records are taxon-level, reviewed, source-located, mapped to the Sinocirsium phylogeny context and currently rate-fit eligible.
+
+### 3. Direct var. takaoense W/BP polymorphism
 
 Six directly morph-linked public samples are imported from:
 
 - `data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv`
 
-They retain three W and three C/BP sample observations with voucher, locality, SRA and BioSample linkage.
+They retain three W and three C/BP observations with voucher, locality, SRA and BioSample linkage.
 
-These records are **reviewed direct evidence but not species-level rate-fit tips**. They are observation unit `sample`, not six independent taxa. They will become useful for transition-history inference only after the within-variety topology/ancestry analysis is empirically resolved.
+The atlas now also contains an explicit taxon-level aggregate:
 
-This prevents pseudo-replication in which six sampled plants from one variety are counted as six independent macroevolutionary transitions.
+- `ATL-T00` = *C. japonicum* var. *takaoense*, state `P`.
 
-### 3. Japan evidence seed
+This aggregate exists specifically to prevent accidental fixed-state coding of a demonstrably W/C-polymorphic variety. It is not rate-fit eligible without an explicit polymorphic-state model or empirical within-variety genealogy.
+
+The six sample rows are also excluded from cross-species transition-rate fitting. They are real direct observations but are not six independent macroevolutionary taxa. This prevents pseudo-replication.
+
+### 4. Japan evidence seed
 
 The existing seed is imported from:
 
@@ -130,7 +163,7 @@ A record can be high-quality direct evidence without being a valid species-tree 
 8. declared phylogeny context;
 9. no exclusion reason.
 
-Thus sample-level W/BP *takaoense* data cannot leak into cross-species transition-rate estimation.
+Thus neither sample-level *takaoense* W/BP records nor taxon-level polymorphic aggregates can leak into a fixed-state cross-species rate fit.
 
 ## v0.1 readiness gate
 
@@ -142,6 +175,22 @@ The current conservative engineering gate requires at least:
 - 3 phylogenetic contexts;
 - no polymorphic/unknown eligible tips;
 - all eligible tips genuinely taxon-level.
+
+Current status:
+
+| gate | current | pass? |
+|---|---:|---:|
+| eligible taxon tips | 9 / 20 | no |
+| W tips | 3 / 5 | no |
+| C tips | 6 / 5 | yes |
+| phylogeny contexts | 3 / 3 | yes |
+| all eligible records taxon-level | yes | yes |
+| no P/U in eligible set | yes | yes |
+
+Therefore the remaining engineering blockers are now only:
+
+- `minimum_taxon_tips`;
+- `minimum_white_tips`.
 
 These thresholds are **not a statistical theorem** and passing them will not automatically make ARD transition rates identifiable. They are a project gate to prevent fitting an asymmetric model to one tiny focal sister-clade dataset.
 
@@ -156,23 +205,29 @@ Even after the gate passes, actual ER/ARD analyses must still assess:
 
 ## Expansion order
 
-### Priority A — current East Asian nuclear-tree tips
+### Priority A — white tips and phylogenetically independent contrasts
 
-Expand source-backed colour records for taxa already represented in the current nuclear backbone, especially:
+Because coloured-tip and context thresholds are already cleared, the next evidence search should not simply add more purple taxa. It should prioritize **source-backed white taxa and white/coloured sister contrasts** that sit on the current nuclear backbone.
 
-- remaining Chang 2025/2026 sampled East Asian taxa;
-- Japanese/continental *C. pendulum*;
-- Japanese/Zhejiang *C. sieboldii*;
-- Korean white-form candidates after taxonomic verification;
-- additional white/coloured sister contrasts.
+Highest-value targets include:
+
+- additional Chang 2025/2026 or closely connected East Asian taxa with explicit white corollas;
+- verified Korean white forms;
+- Japanese/continental *C. pendulum* populations while retaining polymorphism explicitly;
+- Japanese/Zhejiang *C. sieboldii* contrasts;
+- other independent white-flower lineages whose phylogenetic placement is already resolved.
+
+### Priority B — current East Asian nuclear-tree tips
+
+Continue adding direct flora/revision/voucher evidence for coloured taxa where needed for phylogenetic completeness, but do not inflate the dataset with redundant coloured tips merely to clear a row-count threshold.
 
 Prefer floras, taxonomic revisions, primary descriptions and verified vouchers over image-only inference.
 
-### Priority B — population-level polymorphism
+### Priority C — population-level polymorphism
 
-For taxa such as *C. pendulum* and var. *takaoense*, retain each source-backed morph/population record separately and model polymorphism explicitly. Do not manufacture a single fixed species state where the species is demonstrably polymorphic.
+For taxa such as *C. pendulum* and var. *takaoense*, retain each source-backed morph/population record separately and model polymorphism explicitly. Do not manufacture a single fixed species state where the taxon is demonstrably polymorphic.
 
-### Priority C — broader Cirsium transition-rate reference
+### Priority D — broader Cirsium transition-rate reference
 
 After East Asian coverage is solid, expand to a broader *Cirsium* backbone to constrain the frequency/asymmetry of white loss and coloured regain. This is what can eventually give a data-informed prior or comparative estimate for `q(C->W)` and `q(W->C)` rather than choosing those rates arbitrarily in the Arenicola sensitivity grid.
 
@@ -195,4 +250,4 @@ Only then should the inferred transition-rate distribution be fed back into the 
 
 The current project hypothesis is therefore sharpened to:
 
-> White-flower evolution appears recurrent in East Asian *Cirsium*, but whether coloured regain is genuinely rarer cannot be assumed from parsimony alone. The frequency asymmetry of white loss versus coloured regain must be estimated from a broader source-backed phylogenetic character dataset. That estimated asymmetry is itself a load-bearing input for deciding whether the *C. brevicaule–C. irumtiense* contrast more plausibly represents white loss, coloured regain, ancestral polymorphism or reticulate history.
+> White-flower evolution appears recurrent in East Asian *Cirsium*, but whether coloured regain is genuinely rarer cannot be assumed from parsimony alone. The frequency asymmetry of white loss versus coloured regain must be estimated from a broader source-backed phylogenetic character dataset. The expanded v0.1 now spans three focal phylogeny contexts and clears the provisional coloured-tip threshold, but the comparative estimate remains blocked by too few total taxon tips and especially too few independent white tips. That estimated rate asymmetry will be a load-bearing input for deciding whether the *C. brevicaule–C. irumtiense* contrast more plausibly represents white loss, coloured regain, ancestral polymorphism or reticulate history.
