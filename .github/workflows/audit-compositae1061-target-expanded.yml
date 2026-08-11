@@ -8,11 +8,13 @@ on:
       - "analysis/export_moreyra_locus_manifests.py"
       - "analysis/recover_compositae1061_target.py"
       - "analysis/recover_compositae1061_target_expanded.py"
+      - "analysis/run_compositae1061_target_expanded_audit.py"
       - "tests/test_recover_moreyra_author_repository.py"
       - "tests/test_summarize_moreyra_locus_filter.py"
       - "tests/test_export_moreyra_locus_manifests.py"
       - "tests/test_recover_compositae1061_target.py"
       - "tests/test_recover_compositae1061_target_expanded.py"
+      - "tests/test_run_compositae1061_target_expanded_audit.py"
       - ".github/workflows/audit-compositae1061-target-expanded.yml"
   workflow_dispatch:
 
@@ -40,13 +42,15 @@ jobs:
             analysis/summarize_moreyra_locus_filter.py \
             analysis/export_moreyra_locus_manifests.py \
             analysis/recover_compositae1061_target.py \
-            analysis/recover_compositae1061_target_expanded.py
+            analysis/recover_compositae1061_target_expanded.py \
+            analysis/run_compositae1061_target_expanded_audit.py
           python -m unittest \
             tests/test_recover_moreyra_author_repository.py \
             tests/test_summarize_moreyra_locus_filter.py \
             tests/test_export_moreyra_locus_manifests.py \
             tests/test_recover_compositae1061_target.py \
             tests/test_recover_compositae1061_target_expanded.py \
+            tests/test_run_compositae1061_target_expanded_audit.py \
             -v
 
       - name: Rebuild Moreyra public locus manifests
@@ -64,7 +68,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          python analysis/recover_compositae1061_target_expanded.py \
+          python analysis/run_compositae1061_target_expanded_audit.py \
             --moreyra-loci data/evidence/generated/moreyra_author_repository/locus_sets/moreyra_public_1061_loci.txt \
             --outdir data/evidence/generated/compositae1061_target_audit_expanded
 
@@ -179,7 +183,7 @@ jobs:
             - best candidate: ${best}
             - exact target frozen: **${summary.exact_target_frozen}**
 
-            This expanded run pairs file names with nested download URLs/IDs from Mendeley and Dryad and follows GitHub contents-API records. Sequence overlap alone is still not accepted as exact target provenance.
+            This expanded run pairs file names with nested download URLs/IDs from Mendeley and Dryad and follows URL-normalized GitHub contents-API records. Sequence overlap alone is still not accepted as exact target provenance.
 
             Workflow run: \`${context.runId}\`.`;
             const comments = await github.paginate(github.rest.issues.listComments, {
