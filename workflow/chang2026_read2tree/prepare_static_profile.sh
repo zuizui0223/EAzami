@@ -7,6 +7,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 RESULT_ROOT="${RESULT_ROOT:-$PWD/results/chang2026_read2tree_static400}"
 READS_ROOT="${READS_ROOT:-$PWD/results/chang2026_takaoense_pilot}"
 PANEL="${PANEL:-$REPO_ROOT/sampling/chang2026_takaoense6_read2tree_panel_v1.csv}"
+EVIDENCE="${EVIDENCE:-$REPO_ROOT/data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv}"
 REFS="${REFS:-$REPO_ROOT/sampling/read2tree_oma_reference_set_v0_2.csv}"
 THREADS="${THREADS:-16}"
 CHECK_INPUTS="${CHECK_INPUTS:-1}"
@@ -17,6 +18,12 @@ VALIDATED_DIR="$RESULT_ROOT/validated_marker_pack"
 PLAN_DIR="$RESULT_ROOT/read2tree_plan"
 R2T_OUTPUT="$RESULT_ROOT/read2tree_output"
 mkdir -p "$RESULT_ROOT"
+
+# Scientific-input gate: exact run/voucher/BioSample/morph assignments must still
+# match the direct Figure-1 + NCBI evidence before any marker data are fetched.
+python "$REPO_ROOT/analysis/validate_chang2026_takaoense6_read2tree_panel.py" \
+  --panel "$PANEL" \
+  --evidence "$EVIDENCE"
 
 builder=(
   python "$REPO_ROOT/analysis/build_read2tree_oma_static_marker_pack.py"
