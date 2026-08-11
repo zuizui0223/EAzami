@@ -1,85 +1,114 @@
-# Chang et al. 2026 public RNA-seq run and assembly audit
+# Chang et al. 2026 public RNA-seq run, assembly and gene-tree panel audit
 
 Date: 2026-08-11
 
 ## Purpose
 
-The six var. *takaoense* Figure 1 tips are now assigned directly to flower-colour morphs and their published topology supports a locally robust candidate regain. The next empirical question is whether public sequence material is sufficient to reconstruct gene trees and test alternative histories.
+The six var. *takaoense* Figure 1 tips are now assigned directly to flower-colour morphs, and the displayed sample topology supports a topology-dependent candidate regain. The next empirical task is to replace uniform weighting of 945 possible six-tip trees with gene-tree and quartet evidence from the published RNA-seq samples.
 
-This audit resolves two separate questions:
+This audit closes the metadata and input-design layer needed before raw-read assembly. It resolves four questions:
 
-1. Which official `PRJNA1311153` SRA run belongs to each of the 33 supplement samples?
-2. Does NCBI already expose a reusable TSA or Assembly record, or is de novo transcriptome assembly required?
+1. What is the complete public run universe for the 33 Chang 2026 supplement samples?
+2. Can every supplement sample be linked one-to-one to a run without geographic inference?
+3. Does NCBI already expose reusable TSA or Assembly records?
+4. Which samples and topology hypotheses should enter the first gene-tree analysis?
 
-## Source tables
+## Source layers
 
-The reconciliation uses:
+The reconstruction uses:
 
-- the official Chang 2026 supplementary sample/voucher table;
-- the morph assignments recovered directly from Figure 1;
-- official NCBI SRA runinfo and BioSample metadata for `PRJNA1311153`.
+- the official Chang 2026 supplementary sample, voucher and accession table;
+- direct Figure 1 W/BP assignments for the six var. *takaoense* samples;
+- official NCBI SRA runinfo and BioSample metadata;
+- the previously enumerated seven nearest loss-only six-tip topologies.
 
-No run is identified from geography alone.
+No run is identified from locality or flower colour.
 
-## Run-reconciliation rules
+## Correction: the published samples are not a single-BioProject set
 
-`analysis/reconcile_chang2026_ncbi_runs.py` keeps independent evidence channels separate:
+A query restricted to `PRJNA1311153` returns **25 runs**, not all 33 published samples. The supplement contains eight additional exact public identifiers reused from earlier datasets:
 
-- exact supplement-embedded SRR accession;
-- exact voucher token such as `ccy3559`;
-- exact short sample code in sample/library metadata;
-- exact or broad-species taxon agreement;
-- exact relation between supplement raw-read count and SRA spots:
-  - paired-end: raw reads = 2 × spots;
-  - single-end: raw reads = spots;
-- locality-token corroboration.
+- **6 SRR run accessions**;
+- **2 SAMN BioSample accessions**.
 
-A match is verified only through:
+The complete published run universe is therefore:
 
-1. exact SRR accession;
-2. a unique exact voucher token; or
-3. a unique exact read-count relation plus taxon agreement.
+```text
+25 runs deposited directly under PRJNA1311153
++ 8 exact supplement-embedded reused public identifiers
+= 33 unique published runs
+```
 
-Short code or locality alone cannot verify a run. Candidate scores are deterministic reconciliation aids, not biological parameters.
+`analysis/recover_chang2026_published_runinfo.py` resolves each identifier according to accession type, preserves its provenance layer and retrieves the associated official runinfo. It does not assume that the supplement accession column contains only SRR identifiers.
 
-## Run-reconciliation result
+## Voucher reconciliation
+
+All 33 recovered BioSamples expose a numeric `isolate` value corresponding to the collector number. `analysis/reconcile_chang2026_complete_runs.py` converts a numeric isolate to a `ccy####` alias only when that exact voucher exists in the supplement.
+
+The matching evidence is therefore separated as follows:
+
+- exact supplement SRR accession;
+- exact supplement BioSample accession resolved to its official run;
+- exact voucher token derived from official BioSample `isolate`;
+- exact paired- or single-end relation between supplement raw reads and SRA spots;
+- taxon agreement as corroboration.
+
+Short code and locality are never sufficient to verify a run. Figure 1 morph state is joined only after voucher/run identity has been resolved.
+
+## Complete reconciliation result
 
 - supplement samples: **33**;
-- verified or probable official run mappings: **33/33**;
-- unique official run assignments: **33**;
-- run-assignment collisions: **0**;
-- var. *takaoense* samples: **6/6 mapped**;
-- mapped morphs:
-  - white: WY-3560, FB-3629, LT-3839;
-  - bluish-purple: FC-3559, TJ-3807, NH-3835.
+- primary `PRJNA1311153` runs: **25**;
+- supplement-embedded reused identifiers: **8**;
+  - SRR: **6**;
+  - BioSample: **2**;
+- complete unique public runs: **33**;
+- unique BioSamples: **33**;
+- exact numeric BioSample-isolate/voucher aliases: **33**;
+- verified samples: **33/33**;
+- unique matched runs: **33**;
+- run-assignment collisions: **0**.
 
-The exact SRR, SRX and BioSample identifiers are generated in:
+### Exact var. takaoense anchors
 
-- `chang2026_sample_run_reconciliation.csv`;
-- `chang2026_takaoense_sra_manifest.csv`.
+| Code | Voucher | Morph | Run | BioSample |
+|---|---|---|---|---|
+| FC | `ccy3559` | BP | `SRR35152718` | `SAMN50798021` |
+| TJ | `ccy3807` | BP | `SRR35152736` | `SAMN50798026` |
+| NH | `ccy3835` | BP | `SRR35152735` | `SAMN50798027` |
+| WY | `ccy3560` | W | `SRR35152717` | `SAMN50798022` |
+| FB | `ccy3629` | W | `SRR35152738` | `SAMN50798024` |
+| LT | `ccy3839` | W | `SRR35152734` | `SAMN50798028` |
 
-They are uploaded as versioned GitHub Actions artifacts by:
+The complete evidence package is generated by:
 
+- `analysis/recover_chang2026_published_runinfo.py`;
+- `analysis/reconcile_chang2026_complete_runs.py`;
 - `.github/workflows/reconcile-chang2026-ncbi-runs.yml`.
 
-The workflow validates all supplement-embedded SRR accessions against official runinfo and fails on run collisions.
+Validated workflow provenance:
+
+- workflow run: `31451203922`;
+- artifact: `9086384019`;
+- artifact digest: `sha256:5778c5ad31912bc2d215e636eb43d60e7e6c940abcc0591ca8a58a86844d1f9c`;
+- offline tests: **27 passed**.
 
 ## Public transcriptome-assembly audit
 
-`analysis/audit_chang2026_public_transcriptome_assemblies.py` queries official NCBI E-utilities for every verified BioSample:
+`analysis/audit_chang2026_public_transcriptome_assemblies.py` queries official NCBI E-utilities for every verified sample:
 
-1. `nuccore`: `BioSample AND tsa[filter]`;
-2. `nuccore`: voucher-name TSA fallback when the BioSample query is empty;
-3. `assembly`: BioSample-linked Assembly records.
+1. BioSample-linked `nuccore` TSA records;
+2. voucher-name TSA fallback only when the BioSample query is empty;
+3. BioSample-linked Assembly records.
 
-The query distinguishes an empty result from an NCBI request error. A failed query is never reported as absence.
+A failed NCBI query is retained as an error and is never converted into an absence.
 
-## Public assembly result
+## Assembly result
 
 Across all 33 samples:
 
 - BioSample- or voucher-linked TSA records recovered: **0**;
-- BioSample-linked Assembly records without a TSA hit: **0**;
+- BioSample-linked Assembly records without TSA: **0**;
 - samples requiring de novo assembly from official SRA reads: **33**.
 
 For var. *takaoense*:
@@ -88,93 +117,135 @@ For var. *takaoense*:
 - public Assembly records: **0/6**;
 - de novo assembly required: **6/6**.
 
-This result means only that the current official BioSample/voucher-linked NCBI queries did not recover a reusable assembly. It does not exclude:
+This means only that the current official BioSample/voucher-linked NCBI audit recovered no reusable assembly. It does not exclude an author-held or differently indexed assembly.
 
-- an unlinked institutional repository;
-- an author-held assembly;
-- a repository indexed under a different identifier;
-- future deposition.
+Validated assembly-audit provenance:
 
-## Why six samples alone are not enough
+- workflow run: `31451203930`;
+- artifact: `9086409630`;
+- artifact digest: `sha256:f4b7f3682b7d427690dbea4706273a9be6380a605d7b437d7a4a47b05655dc3a`.
 
-The six morph-labelled var. *takaoense* transcriptomes are the core topology test, but they cannot by themselves distinguish all plausible histories. A useful gene-tree/reticulation panel needs:
+## Nineteen-sample gene-tree panel
 
-- white sister context;
-- coloured flanking lineages that may donate ancestry;
-- broader coloured root context;
-- an external outgroup.
+Six var. *takaoense* samples alone cannot provide white sister context, coloured donor controls or an external root. The first analysis panel therefore contains:
 
-`analysis/build_chang2026_gene_tree_panel.py` therefore constructs:
-
-| Taxon | Samples | Role |
+| Taxon or panel label | Samples | Role |
 |---|---:|---|
 | *C. japonicum* | 2 | coloured root context |
 | *C. japonicum* var. *albescens* | 2 | white sister control |
-| *C. japonicum* var. *takaoense* | 6 | three white + three bluish-purple focal samples |
-| *C. japonicum* var. *australe* | 3 | coloured flanking / possible ancestry control |
-| *C. japonicum* var. *fukienense* | 4 | coloured flanking / possible ancestry control |
+| *C. japonicum* var. *takaoense* | 6 | three W + three BP focal samples |
+| *C. japonicum* var. *australe* | 3 | coloured flanking / ancestry control |
+| *C. japonicum* var. *fukienense* | 4 | coloured flanking / ancestry control |
 | *C. lineare* | 2 | outgroup |
 | **Total** | **19** | Sinocirsium 17 + outgroup 2 |
 
-All 19 currently require de novo assembly from unique official SRA runs.
+All 19 have unique official runs and currently require de novo assembly.
+
+### Explicit autonym handling
+
+The supplement names the FKK (`ccy4204`) and ASO (`ccy4220`) samples as *C. japonicum* var. *japonicum*. For the species-level root-context role only, `analysis/normalize_chang2026_panel_taxa.py` maps those two rows to the panel label *C. japonicum* while retaining the original name in `source_taxon`.
+
+This is a documented panel transformation, not a silent alteration of the source evidence. No other variety is collapsed.
 
 ## Competing topology hypotheses
 
-The input package freezes eight six-tip hypotheses:
+The generated package freezes eight six-tip hypotheses before gene-tree inference:
 
-1. the published Figure 1 nested-bluish-purple topology, whose coloured-root optimum is `1 loss + 1 regain`;
-2. the seven nearest rooted topologies at RF distance 4 in which a no-regain history ties the optimum.
+1. `H_REG_PUBLISHED`: the displayed nested-BP topology, whose coloured-root optimum contains `1 loss + 1 regain`;
+2. seven `H_LOSS_ONLY_RF4_*` alternatives: every nearest rooted topology at RF distance 4 in which a no-regain history ties the optimum.
 
-This prevents a post hoc comparison against one hand-picked loss-only tree. Every closest loss-only escape topology enters the gene-tree test.
+This prevents selecting a convenient loss-only topology after inspecting the gene trees.
+
+## Validated panel result
+
+- complete reconciled source samples: **33**;
+- complete assembly-audit rows: **33**;
+- explicit autonym mappings: **2**;
+- panel samples: **19**;
+- unique panel runs: **19**;
+- panel samples requiring de novo assembly: **19**;
+- var. *takaoense* pilot samples: **6**;
+  - W: **3**;
+  - BP: **3**;
+- frozen competing hypotheses: **8**;
+  - candidate-regain displayed topology: **1**;
+  - nearest loss-only alternatives: **7**.
+
+Panel roles are:
+
+- focal colour morph: 6;
+- white sister control: 2;
+- coloured flanking/introgression control: 7;
+- coloured root context: 2;
+- outgroup: 2.
+
+Validated workflow provenance:
+
+- workflow run: `31451203976`;
+- artifact: `9086396076`;
+- artifact digest: `sha256:0414899f8093b2abbb11be8c71ef6f62d2ab47525e5ea896a8434c09e76efb0e`;
+- offline tests: **43 passed**.
 
 ## Next computational workflow
 
-The intended sequence is:
+The next execution stage is now unambiguous:
 
-1. download reconciled SRA runs;
-2. perform read QC and trimming;
-3. assemble each transcriptome de novo;
+1. download the 19 reconciled runs;
+2. perform versioned read QC and trimming;
+3. assemble all 19 transcriptomes de novo;
 4. predict coding sequences and proteins;
-5. infer orthogroups across the 19 samples;
-6. estimate per-orthogroup alignments and gene trees;
-7. root gene trees on *C. lineare*;
-8. prune to the six var. *takaoense* tips for topology scoring;
-9. compare support for the published regain topology versus all seven nearest loss-only alternatives;
-10. quantify gene/quartet concordance and identify topology-driving loci;
-11. test whether bluish-purple samples show excess affinity to var. *australe* or var. *fukienense*.
+5. infer orthogroups across the same 19 samples;
+6. build one-to-one orthologue alignments and gene trees as the conservative primary analysis;
+7. retain multi-copy/homeolog trees as a separate reticulation and polyploid sensitivity layer;
+8. root on *C. lineare*;
+9. score each gene tree against all eight pre-frozen hypotheses;
+10. calculate gene and quartet concordance;
+11. identify loci driving the displayed topology and each loss-only alternative;
+12. test whether BP samples show excess affinity to var. *australe* or var. *fukienense*.
 
-A conservative primary matrix should use one-to-one orthologues. Multi-copy/homeolog evidence must be retained separately because polyploidy and reticulation are biologically relevant.
+The current PR already contains modular assembly, orthogroup, gene-tree and topology-scoring code plus a Snakemake workflow. Pull-request CI validates manifests and contracts but does not download and assemble the raw cohort.
 
 ## Biological interpretation
 
-The current result materially strengthens feasibility:
+The input uncertainty is now sharply reduced:
 
-- the six morph-labelled tips are connected to exact official public reads;
-- all necessary sister/flanking/outgroup samples are also connected to unique runs;
-- the nearest loss-only alternatives are explicitly enumerated;
+- all 33 published samples have exact public-read provenance;
+- all six morph-labelled var. *takaoense* tips are exact run anchors;
+- all white-sister, coloured-control, root-context and outgroup samples are retained;
+- every closest loss-only escape topology is fixed in advance;
 - no unpublished assembly is silently assumed.
 
-But the inference remains:
+The remaining uncertainty is biological rather than clerical:
 
-> **topology-supported candidate regain**
+- whether the displayed topology has broad gene-tree support;
+- whether support is concentrated in a small locus subset;
+- whether coloured samples show introgressed ancestry;
+- whether ancestral variation or homeolog sorting explains discordance.
 
-not:
-
-> demonstrated functional reactivation of floral anthocyanin production.
-
-Gene-tree discordance can distinguish whether the published topology is broadly supported or driven by a subset of loci. It cannot alone exclude ancestral polymorphism or prove molecular pathway restoration. Those require dense populations and linked DNA, floral RNA, pigment and causal-variant evidence.
+Even strong gene-tree support would establish a better-supported population ordering, not functional anthocyanin reactivation. A demonstrated regain still requires population-aware ancestry plus linked pigment chemistry, floral expression and causal-variant evidence.
 
 ## Reproducible components
 
-- `analysis/reconcile_chang2026_ncbi_runs.py`
-- `tests/test_reconcile_chang2026_ncbi_runs.py`
+### Complete run recovery and reconciliation
+
+- `analysis/recover_chang2026_published_runinfo.py`
+- `analysis/reconcile_chang2026_complete_runs.py`
+- `tests/test_recover_chang2026_published_runinfo.py`
+- `tests/test_reconcile_chang2026_complete_runs.py`
 - `.github/workflows/reconcile-chang2026-ncbi-runs.yml`
+
+### Assembly audit
+
 - `analysis/audit_chang2026_public_transcriptome_assemblies.py`
 - `tests/test_audit_chang2026_public_transcriptome_assemblies.py`
 - `.github/workflows/audit-chang2026-public-assemblies.yml`
+
+### Panel and hypotheses
+
+- `analysis/normalize_chang2026_panel_taxa.py`
 - `analysis/build_chang2026_gene_tree_panel.py`
+- `tests/test_normalize_chang2026_panel_taxa.py`
 - `tests/test_build_chang2026_gene_tree_panel.py`
 - `.github/workflows/build-chang2026-gene-tree-panel.yml`
-- `data/evidence/chang2026_ncbi_public_assembly_audit_summary_2026-08-11.json`
 
-All three workflows are validated on the current PR and upload the exact generated manifests as retained Actions artifacts.
+Generated CSV and JSON manifests are retained in the versioned Actions artifacts listed above.
