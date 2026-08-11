@@ -80,7 +80,7 @@ class ChangResourcePlanTests(unittest.TestCase):
         self.assertEqual(first["spots"], 1001)
         self.assertEqual(first["paired_read_count"], 2002)
         self.assertEqual(first["bases"], 300300)
-        self.assertEqual(first["derived_average_read_length"], "150.000")
+        self.assertEqual(first["derived_average_read_length"], "150.000000")
         self.assertGreater(
             float(first["estimated_uncompressed_fastq_max_gib"]),
             float(first["estimated_uncompressed_fastq_min_gib"]),
@@ -93,12 +93,20 @@ class ChangResourcePlanTests(unittest.TestCase):
     def test_group_summary_retains_exact_metadata_totals(self) -> None:
         rows = self.build()
         focal = [row for row in rows if row["execution_group"] == "takaoense6_pilot"]
-        summary = mod.group_summary(focal)
+        summary = mod.group_summary(
+            focal,
+            fastq_bytes_per_base_min=2.2,
+            fastq_bytes_per_base_max=3.0,
+            working_disk_multiplier=2.5,
+        )
         expected_spots = sum(1000 + index for index in range(1, 7))
+        expected_size_mb = sum(100 + index for index in range(1, 7))
         self.assertEqual(summary["sample_count"], 6)
         self.assertEqual(summary["total_spots"], expected_spots)
         self.assertEqual(summary["total_paired_reads"], 2 * expected_spots)
         self.assertEqual(summary["total_bases"], expected_spots * 300)
+        self.assertEqual(summary["total_sra_size_mb"], expected_size_mb)
+        self.assertEqual(summary["total_sra_size_gib"], expected_size_mb / 1024)
         self.assertGreater(summary["recommended_free_disk_gib_rounded_up"], 0)
 
     def test_summary_freezes_inputs_and_execution_gate(self) -> None:
