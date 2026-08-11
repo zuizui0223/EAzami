@@ -2,9 +2,11 @@
 """Validate and freeze the Chang 2026 gene-tree workflow execution contract.
 
 This validator sits between the generated 19-sample/8-hypothesis package and the
-heavy Snakemake execution.  It confirms that:
+heavy Snakemake execution. It confirms that:
 
-* all 19 samples have unique, verified, paired-end official SRA runs;
+* all 19 samples have unique, verified official SRA runs;
+* all 19 current runs are officially ``LibraryLayout=PAIRED``;
+* supplement read-count discrepancies do not override official layout metadata;
 * the six focal tips contain exactly three W and three BP samples;
 * one published candidate-regain and seven nearest loss-only hypotheses are
   present and topologically distinct;
@@ -24,9 +26,9 @@ import json
 import re
 from collections import Counter
 from pathlib import Path
-from typing import Mapping, Sequence
+from typing import Mapping
 
-import run_chang2026_transcriptome_assembly as assembly_runner
+import run_chang2026_layout_aware_transcriptome_assembly as assembly_runner
 import score_chang2026_gene_tree_hypotheses as scorer
 
 DEFAULT_SNAKEFILE = Path("workflow/chang2026_gene_trees/Snakefile")
@@ -49,6 +51,7 @@ EXPECTED_RULES = (
     "score_competing_takaoense_histories",
 )
 EXPECTED_RUNNERS = (
+    "run_chang2026_layout_aware_transcriptome_assembly.py",
     "run_chang2026_transcriptome_assembly.py",
     "prefix_fasta_headers.py",
     "prepare_chang2026_single_copy_orthogroups.py",
@@ -128,7 +131,14 @@ def validate_workflow_files(
         path = analysis_dir / name
         if not path.is_file():
             raise ValueError(f"Required runner script is missing: {path}")
-        if name not in text:
+        # The layout-aware runner imports the paired implementation rather than
+        # invoking it directly from the Snakefile; both files remain frozen.
+        if name == "run_chang2026_transcriptome_assembly.py":
+            adapter = analysis_dir / "run_chang2026_layout_aware_transcriptome_assembly.py"
+            adapter_text = adapter.read_text(encoding="utf-8")
+            if "import run_chang2026_transcriptome_assembly as paired" not in adapter_text:
+                raise ValueError("Layout-aware adapter no longer imports paired implementation")
+        elif name not in text:
             raise ValueError(f"Snakefile does not reference required runner: {name}")
         runner_hashes[name] = sha256_file(path)
 
@@ -213,6 +223,13 @@ def build_contract(
     if dict(focal_morphs) != {"BP": 3, "W": 3}:
         raise ValueError(f"Unexpected focal morph counts: {dict(focal_morphs)}")
 
+    layouts = Counter(str(row.get("library_layout", "")).upper() for row in panel_rows)
+    if dict(layouts) != {"PAIRED": 19}:
+        raise ValueError(
+            "Current Chang heavy workflow requires 19 official paired-end runs; "
+            f"observed={dict(layouts)}"
+        )
+
     outgroups = sorted(
         sample_id
         for sample_id, role in roles.items()
@@ -223,10 +240,12 @@ def build_contract(
 
     config = make_config(panel, hypotheses, results_dir)
     summary: dict[str, object] = {
-        "contract_version": "chang2026_gene_tree_workflow_v1",
+        "contract_version": "chang2026_gene_tree_workflow_v2_official_layout",
         "panel_rows": len(panel_rows),
         "unique_sample_ids": len({row["sample_id"] for row in panel_rows}),
         "unique_official_runs": len({row["matched_run"] for row in panel_rows}),
+        "official_library_layout_counts": dict(sorted(layouts.items())),
+        "library_layout_source": "official NCBI SRA LibraryLayout",
         "panel_role_counts": dict(sorted(role_counts.items())),
         "focal_sample_count": len(focal),
         "focal_morph_counts": dict(sorted(focal_morphs.items())),
@@ -241,8 +260,9 @@ def build_contract(
         "conda_environment_sha256": dict(sorted(env_hashes.items())),
         "heavy_computation_executed": False,
         "execution_gate": (
-            "The contract validates inputs and DAG structure. Raw-read download, "
-            "assembly, orthology and gene-tree inference remain explicit external steps."
+            "The contract validates official layout, inputs and DAG structure. "
+            "Raw-read download, assembly, orthology and gene-tree inference "
+            "remain explicit external steps."
         ),
     }
     return config, summary
@@ -280,6 +300,10 @@ def main() -> int:
 
     print(f"panel_rows={summary['panel_rows']}")
     print(f"unique_official_runs={summary['unique_official_runs']}")
+    print(
+        "official_library_layout_counts="
+        + json.dumps(summary["official_library_layout_counts"], sort_keys=True)
+    )
     print(f"focal_morph_counts={json.dumps(summary['focal_morph_counts'], sort_keys=True)}")
     print(f"hypothesis_count={summary['hypothesis_count']}")
     print("snakefile_rules=" + "|".join(summary["snakefile_rules"]))
