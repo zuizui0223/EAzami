@@ -257,13 +257,16 @@ class GeneTreeHypothesisScorerTests(unittest.TestCase):
 
     def test_external_sister_affinity_is_descriptive(self) -> None:
         full_tree = (
-            "(LN_ccy3000,((BT_ccy1000,"
+            "(LN_ccy3000,(BT_ccy1000,("
             + self.published_sample_tree().rstrip(";")
-            + "),AU_ccy2000));"
+            + ",AU_ccy2000)));"
         )
         detail, _ = self.score(full_tree)
         self.assertEqual(detail["analysis_status"], "complete_single_copy")
-        self.assertIn("coloured_flanking_introgression_control", detail["bp_external_sister_affinity"])
+        self.assertIn(
+            "coloured_flanking_introgression_control",
+            detail["bp_external_sister_affinity"],
+        )
 
     def test_threshold_validation(self) -> None:
         self.assertEqual(mod.thresholds_from_text("70,0,50,70"), (0.0, 50.0, 70.0))
