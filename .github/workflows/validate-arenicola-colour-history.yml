@@ -1,0 +1,83 @@
+name: Validate Arenicola colour-history sensitivity
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/arenicola_flower_colour_history_evidence_v1.csv"
+      - "analysis/arenicola_colour_history_sensitivity.py"
+      - "analysis/arenicola_sister_context.py"
+      - "analysis/arenicola_sister_context.csv"
+      - "tests/test_arenicola_colour_history_sensitivity.py"
+      - ".github/workflows/validate-arenicola-colour-history.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: validate-arenicola-colour-history-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and test topology sensitivity
+        run: |
+          python -m py_compile \
+            analysis/arenicola_colour_history_sensitivity.py \
+            analysis/arenicola_sister_context.py
+          python -m unittest tests/test_arenicola_colour_history_sensitivity.py -v
+
+      - name: Recompute source-backed sensitivity table
+        run: |
+          mkdir -p /tmp/arenicola
+          python analysis/arenicola_colour_history_sensitivity.py \
+            --evidence data/evidence/arenicola_flower_colour_history_evidence_v1.csv \
+            --output /tmp/arenicola/arenicola_colour_history_sensitivity_v1.csv \
+            --summary /tmp/arenicola/arenicola_colour_history_sensitivity_v1.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          summary = json.loads(Path('/tmp/arenicola/arenicola_colour_history_sensitivity_v1.json').read_text())
+          if summary['pair_only']['optimal_arenicola_mrca_states'] != 'C|W':
+              raise SystemExit('Arenicola pair unexpectedly became polarized')
+          sister = summary['published_sister_context']
+          if sister['unconstrained_minimum_changes'] != 2:
+              raise SystemExit('Published sister-context minimum changed')
+          if sister['unconstrained_arenicola_mrca'] != 'C':
+              raise SystemExit('Published sister-context Arenicola MRCA changed')
+          if sister['force_coloured_arenicola_cost'] != 2 or sister['force_white_arenicola_cost'] != 3:
+              raise SystemExit('Loss/regain parsimony contrast changed')
+          if sister['white_ancestor_penalty_changes'] != 1:
+              raise SystemExit('Expected +1 change penalty for forced white Arenicola MRCA')
+          if sister['force_white_deep_root_arenicola_mrca'] != 'W':
+              raise SystemExit('White-root sensitivity no longer flips Arenicola state')
+          if summary['nipp_core_resolution_sensitivity']['unconstrained_arenicola_states'] != ['C']:
+              raise SystemExit('Nipponocirsium core-resolution sensitivity changed')
+          print('pair_only_direction=unresolved')
+          print('published_sister_context_preference=coloured_Arenicola_MRCA')
+          print('forced_white_Arenicola_penalty=1_change')
+          print('white_deep_root_sensitivity=Arenicola_MRCA_white')
+          PY
+
+      - name: Regenerate legacy summary and check claim boundary
+        run: |
+          python analysis/arenicola_sister_context.py
+          grep -q "pair alone is directionally ambiguous" analysis/arenicola_sister_context.csv
+          grep -q "less parsimonious but remains an explicit competing hypothesis" analysis/arenicola_sister_context.csv
+
+      - name: Upload sensitivity outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: arenicola-colour-history-${{ github.run_id }}
+          path: /tmp/arenicola/
+          if-no-files-found: error
+          retention-days: 90
