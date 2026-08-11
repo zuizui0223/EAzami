@@ -2,13 +2,14 @@
 """Reconcile Chang 2026 supplement samples to the complete published run set.
 
 This adapter preserves the conservative scoring rules in
-``reconcile_chang2026_ncbi_runs.py`` while adding two source-backed evidence
-channels that its generic interface did not originally expose:
+``reconcile_chang2026_ncbi_runs.py`` while adding source-backed evidence that
+its generic interface did not originally expose:
 
-* numeric BioSample ``isolate`` values are converted to a ``ccy####`` voucher
-  token only when that exact voucher exists in the supplement; and
-* Figure 1's ``direct_figure_label`` column is normalized to the core
-  ``published_figure_label`` schema.
+* numeric BioSample ``isolate`` values become ``ccy####`` voucher tokens only
+  when that exact voucher exists in the supplement;
+* heterogeneous supplement identifiers (SRR, SRX, or SAMN) are resolved against
+  the matching runinfo field before scoring; and
+* Figure 1's ``direct_figure_label`` is normalized to the core morph schema.
 
 Neither geography nor flower colour participates in run matching.
 """
@@ -24,6 +25,7 @@ from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 
 import reconcile_chang2026_ncbi_runs as core
+from recover_chang2026_published_runinfo import identifier_kind
 
 DEFAULT_SUPPLEMENT = core.DEFAULT_SUPPLEMENT
 DEFAULT_MORPHS = core.DEFAULT_MORPHS
@@ -98,6 +100,121 @@ def enrich_runinfo_with_voucher_aliases(
     return enriched, alias_index
 
 
+def identifier_field(kind: str) -> str:
+    field = {
+        "run": "Run",
+        "experiment": "Experiment",
+        "biosample": "BioSample",
+    }.get(kind)
+    if not field:
+        raise ValueError(f"Unsupported embedded identifier kind: {kind!r}")
+    return field
+
+
+def choose_identifier_run(
+    source: Mapping[str, str],
+    candidates: Sequence[Mapping[str, str]],
+) -> str:
+    """Choose one run within an exact SRX/SAMN set using non-geographic evidence."""
+    if len(candidates) == 1:
+        return clean(candidates[0].get("Run"))
+    ranked = sorted(
+        (core.score_candidate(source, candidate) for candidate in candidates),
+        key=lambda item: (-int(item["score"]), str(item["run"])),
+    )
+    status, confidence, note = core.classify_match(source, ranked)
+    if confidence not in {"verified", "probable"}:
+        raise ValueError(
+            "Embedded identifier maps to multiple unresolved runs for "
+            f"{clean(source.get('voucher'))}: {status}; {note}"
+        )
+    return clean(ranked[0]["run"])
+
+
+def prepare_embedded_identifiers(
+    supplement_rows: Sequence[Mapping[str, str]],
+    runinfo_rows: Sequence[Mapping[str, str]],
+) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """Resolve every exact SRR/SRX/SAMN identifier to one run for core scoring."""
+    prepared: list[dict[str, str]] = []
+    resolutions: list[dict[str, str]] = []
+    for source in supplement_rows:
+        row = {key: clean(value) for key, value in source.items()}
+        original = clean(row.get("embedded_public_accession")).upper()
+        if not original:
+            prepared.append(row)
+            resolutions.append(
+                {
+                    "original_identifier": "",
+                    "identifier_kind": "",
+                    "resolved_run": "",
+                }
+            )
+            continue
+        kind = identifier_kind(original)
+        if not kind:
+            raise ValueError(f"Unsupported supplement identifier: {original!r}")
+        field = identifier_field(kind)
+        candidates = [
+            candidate
+            for candidate in runinfo_rows
+            if clean(candidate.get(field)).upper() == original
+        ]
+        if not candidates:
+            raise ValueError(
+                f"Embedded identifier {original} has no exact {field} row"
+            )
+        resolved_run = choose_identifier_run(row, candidates)
+        if not resolved_run:
+            raise ValueError(f"Embedded identifier {original} resolved to no run")
+        # The core scorer's strongest rule is exact SRR accession.  Supply the
+        # resolved run transiently, then restore the original identifier in the
+        # published output below.
+        row["embedded_public_accession"] = resolved_run
+        prepared.append(row)
+        resolutions.append(
+            {
+                "original_identifier": original,
+                "identifier_kind": kind,
+                "resolved_run": resolved_run,
+            }
+        )
+    return prepared, resolutions
+
+
+def restore_embedded_provenance(
+    matches: Sequence[dict[str, object]],
+    resolutions: Sequence[Mapping[str, str]],
+) -> None:
+    if len(matches) != len(resolutions):
+        raise ValueError("Embedded-resolution ledger changed row count")
+    for match, resolution in zip(matches, resolutions):
+        original = clean(resolution.get("original_identifier"))
+        if not original:
+            continue
+        kind = clean(resolution.get("identifier_kind"))
+        resolved = clean(resolution.get("resolved_run"))
+        if clean(match.get("matched_run")) != resolved:
+            raise ValueError(
+                f"Resolved run changed for {original}: "
+                f"{match.get('matched_run')} != {resolved}"
+            )
+        match["embedded_public_accession"] = original
+        if kind != "run":
+            match["match_status"] = (
+                f"verified_exact_embedded_{kind}_accession"
+            )
+            match["match_confidence"] = "verified"
+            match["match_evidence"] = (
+                f"exact_embedded_{kind}_accession|"
+                + clean(match.get("match_evidence"))
+            ).rstrip("|")
+            match["review_note"] = (
+                f"Supplement {kind} accession {original} resolves exactly to "
+                f"official run {resolved}."
+            )
+
+
 def normalize_morph_rows(
     rows: Sequence[Mapping[str, str]],
 ) -> dict[str, dict[str, str]]:
@@ -141,17 +258,32 @@ def reconcile_complete(
     enriched, alias_index = enrich_runinfo_with_voucher_aliases(
         supplement_rows, runinfo_rows
     )
+    prepared, resolutions = prepare_embedded_identifiers(
+        supplement_rows, enriched
+    )
     morph_index = normalize_morph_rows(morph_rows)
-    matches, candidates = core.reconcile(supplement_rows, enriched, morph_index)
+    matches, candidates = core.reconcile(prepared, enriched, morph_index)
+    restore_embedded_provenance(matches, resolutions)
     summary = core.build_summary(matches, candidates, enriched)
+    resolution_rows = [
+        row for row in resolutions if clean(row.get("original_identifier"))
+    ]
+    resolution_type_counts = Counter(
+        clean(row.get("identifier_kind")) for row in resolution_rows
+    )
     summary.update(
         {
             "complete_runinfo_rows": len(enriched),
             "derived_unique_voucher_aliases": len(alias_index),
             "figure1_morph_rows_loaded": len(morph_index),
+            "embedded_identifier_resolution_count": len(resolution_rows),
+            "embedded_identifier_type_counts": dict(
+                sorted(resolution_type_counts.items())
+            ),
+            "embedded_identifier_resolutions": resolution_rows,
             "derived_voucher_alias_to_run": dict(sorted(alias_index.items())),
             "reconciliation_provenance": (
-                "Exact embedded SRR accessions plus exact supplement vouchers "
+                "Exact supplement SRR/SRX/SAMN identifiers plus exact vouchers "
                 "derived from official numeric BioSample isolate fields."
             ),
         }
@@ -232,9 +364,16 @@ def main() -> int:
     print(f"supplement_sample_rows={len(matches)}")
     print(f"complete_runinfo_rows={summary['complete_runinfo_rows']}")
     print(f"derived_unique_voucher_aliases={summary['derived_unique_voucher_aliases']}")
+    print(
+        "embedded_identifier_resolution_count="
+        f"{summary['embedded_identifier_resolution_count']}"
+    )
     print(f"verified_or_probable_rows={summary['verified_or_probable_rows']}")
     print(f"unique_matched_runs={summary['unique_matched_runs']}")
-    print(f"takaoense_verified_or_probable_rows={summary['takaoense_verified_or_probable_rows']}")
+    print(
+        "takaoense_verified_or_probable_rows="
+        f"{summary['takaoense_verified_or_probable_rows']}"
+    )
     print("confidence_counts=" + json.dumps(dict(sorted(confidence.items()))))
     for row in takaoense:
         print(
