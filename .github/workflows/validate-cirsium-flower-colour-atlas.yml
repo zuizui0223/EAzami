@@ -7,6 +7,7 @@ on:
       - "analysis/validate_colour_atlas.py"
       - "data/schema/flower_colour_records.csv"
       - "data/evidence/arenicola_flower_colour_history_evidence_v1.csv"
+      - "data/evidence/chang2026_sinocirsium_taxon_colour_evidence_v1.csv"
       - "data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv"
       - "data/japan_colour_evidence_seed.csv"
       - "data/evidence/cirsium_flower_colour_atlas_v0_1.csv"
@@ -45,6 +46,7 @@ jobs:
           mkdir -p /tmp/cirsium_colour_atlas
           python analysis/build_cirsium_flower_colour_atlas_v0_1.py \
             --arenicola data/evidence/arenicola_flower_colour_history_evidence_v1.csv \
+            --sinocirsium data/evidence/chang2026_sinocirsium_taxon_colour_evidence_v1.csv \
             --takaoense data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv \
             --japan-seed data/japan_colour_evidence_seed.csv \
             --output /tmp/cirsium_colour_atlas/cirsium_flower_colour_atlas_v0_1.csv
@@ -61,34 +63,54 @@ jobs:
           atlas = list(csv.DictReader(Path('/tmp/cirsium_colour_atlas/cirsium_flower_colour_atlas_v0_1.csv').open()))
           summary = json.loads(Path('/tmp/cirsium_colour_atlas/cirsium_flower_colour_atlas_v0_1_readiness.json').read_text())
 
-          if len(atlas) != 15:
+          if len(atlas) != 19:
               raise SystemExit(f'Unexpected v0.1 record count: {len(atlas)}')
-          if summary['reviewed_record_count'] != 12:
-              raise SystemExit('Expected 12 reviewed focal records')
-          if summary['rate_fit_eligible_unique_taxa'] != 6:
-              raise SystemExit('Only six source-backed species-tree tips should be rate-fit eligible in v0.1')
-          if summary['rate_fit_eligible_state_counts'] != {'C': 4, 'W': 2}:
+          if summary['reviewed_record_count'] != 16:
+              raise SystemExit('Expected 16 reviewed focal records')
+          if summary['rate_fit_eligible_unique_taxa'] != 9:
+              raise SystemExit('Expected nine source-backed species-tree tips in expanded v0.1')
+          if summary['rate_fit_eligible_state_counts'] != {'C': 6, 'W': 3}:
               raise SystemExit(f"Unexpected eligible state counts: {summary['rate_fit_eligible_state_counts']}")
+          if summary['rate_fit_eligible_phylogeny_contexts'] != ['Arenicola', 'Nipponocirsium', 'Sinocirsium']:
+              raise SystemExit('Expanded v0.1 lost one of the three source-backed phylogeny contexts')
           if summary['transition_rate_fit_ready'] is not False:
               raise SystemExit('v0.1 must not be promoted to transition-rate fitting')
+          if summary['readiness_conditions']['minimum_coloured_tips'] is not True:
+              raise SystemExit('Expanded v0.1 should clear the coloured-tip engineering threshold')
+          if summary['readiness_conditions']['minimum_phylogeny_contexts'] is not True:
+              raise SystemExit('Expanded v0.1 should clear the phylogeny-context engineering threshold')
 
           takaoense = [row for row in atlas if row['accepted_taxon'] == 'Cirsium japonicum var. takaoense']
-          if len(takaoense) != 6:
-              raise SystemExit('Lost direct six-sample takaoense evidence')
-          if sum(row['binary_colour_code'] == 'W' for row in takaoense) != 3 or sum(row['binary_colour_code'] == 'C' for row in takaoense) != 3:
-              raise SystemExit('takaoense 3W/3C morph balance changed')
-          if any(row['rate_fit_eligible'] != 'no' for row in takaoense):
+          if len(takaoense) != 7:
+              raise SystemExit('Expected one polymorphic takaoense aggregate plus six direct samples')
+          aggregate = next(row for row in takaoense if row['record_id'] == 'ATL-T00')
+          if aggregate['binary_colour_code'] != 'P' or aggregate['rate_fit_eligible'] != 'no':
+              raise SystemExit('Taxon-level takaoense polymorphism was silently collapsed')
+          samples = [row for row in takaoense if row['observation_unit'] == 'sample']
+          if sum(row['binary_colour_code'] == 'W' for row in samples) != 3 or sum(row['binary_colour_code'] == 'C' for row in samples) != 3:
+              raise SystemExit('takaoense direct 3W/3C sample balance changed')
+          if any(row['rate_fit_eligible'] != 'no' for row in samples):
               raise SystemExit('Sample-level takaoense observations leaked into species-level rate fitting')
+
+          sinocirsium = {row['accepted_taxon']: row['binary_colour_code'] for row in atlas if row['record_id'].startswith('ATL-S')}
+          expected_sin = {
+              'Cirsium japonicum var. albescens': 'W',
+              'Cirsium japonicum var. australe': 'C',
+              'Cirsium japonicum var. fukienense': 'C',
+          }
+          if sinocirsium != expected_sin:
+              raise SystemExit(f'Unexpected Sinocirsium direct states: {sinocirsium}')
 
           pendulum = next(row for row in atlas if row['accepted_taxon'] == 'Cirsium pendulum')
           if pendulum['binary_colour_code'] != 'P' or pendulum['rate_fit_eligible'] != 'no':
               raise SystemExit('C. pendulum polymorphism was silently collapsed')
 
-          print('atlas_records=15')
-          print('reviewed_records=12')
-          print('rate_fit_eligible_taxa=6')
-          print('eligible_states=C4_W2')
-          print('takaoense_sample_records=6_direct_but_excluded_from_species_rate_fit')
+          print('atlas_records=19')
+          print('reviewed_records=16')
+          print('rate_fit_eligible_taxa=9')
+          print('eligible_states=C6_W3')
+          print('phylogeny_contexts=Arenicola|Nipponocirsium|Sinocirsium')
+          print('takaoense=taxon_P_plus_3W_3C_direct_samples_excluded_from_species_rate_fit')
           print('pendulum_polymorphism_preserved=P')
           print('transition_rate_fit_ready=false')
           print('blockers=' + '|'.join(summary['readiness_blockers']))
