@@ -36,7 +36,7 @@ class ChangNcbiReconciliationTests(unittest.TestCase):
             "embedded_public_accession": accession,
         }
 
-    def run(
+    def run_row(
         self,
         *,
         run: str = "SRR100",
@@ -46,6 +46,7 @@ class ChangNcbiReconciliationTests(unittest.TestCase):
         spots: str = "24942543",
         locality: str = "Taiwan: Fenchihu",
     ) -> dict[str, str]:
+        """Build a synthetic SRA runinfo row without shadowing TestCase.run()."""
         return {
             "Run": run,
             "Experiment": "SRX100",
@@ -81,8 +82,8 @@ class ChangNcbiReconciliationTests(unittest.TestCase):
     def test_exact_accession_dominates(self) -> None:
         source = self.source(accession="SRR200")
         candidates = [
-            self.run(run="SRR100", library="ccy3559", sample_name="ccy3559"),
-            self.run(
+            self.run_row(run="SRR100", library="ccy3559", sample_name="ccy3559"),
+            self.run_row(
                 run="SRR200",
                 library="unlabelled",
                 sample_name="unlabelled",
@@ -102,8 +103,8 @@ class ChangNcbiReconciliationTests(unittest.TestCase):
     def test_voucher_token_verifies_unique_run(self) -> None:
         source = self.source(raw_reads="")
         candidates = [
-            self.run(run="SRR100", library="ccy3559_RNA", spots=""),
-            self.run(
+            self.run_row(run="SRR100", library="ccy3559_RNA", spots=""),
+            self.run_row(
                 run="SRR101",
                 library="ccy9999_RNA",
                 sample_name="ccy9999",
@@ -123,14 +124,14 @@ class ChangNcbiReconciliationTests(unittest.TestCase):
     def test_exact_paired_read_count_plus_taxon_verifies(self) -> None:
         source = self.source(voucher="", code="ZZ", location="")
         candidates = [
-            self.run(
+            self.run_row(
                 run="SRR100",
                 library="unknown",
                 sample_name="unknown",
                 spots="24942543",
                 locality="",
             ),
-            self.run(
+            self.run_row(
                 run="SRR101",
                 scientific_name="Cirsium lineare",
                 library="unknown2",
@@ -144,13 +145,16 @@ class ChangNcbiReconciliationTests(unittest.TestCase):
             key=lambda row: -int(row["score"]),
         )
         status, confidence, _ = mod.classify_match(source, ranked)
-        self.assertEqual(ranked[0]["read_count_relation"], "exact_paired_end_raw_reads_equals_2x_spots")
+        self.assertEqual(
+            ranked[0]["read_count_relation"],
+            "exact_paired_end_raw_reads_equals_2x_spots",
+        )
         self.assertEqual(status, "verified_unique_read_count_and_taxon")
         self.assertEqual(confidence, "verified")
 
     def test_short_code_or_locality_alone_never_verifies(self) -> None:
         source = self.source(voucher="", raw_reads="")
-        candidate = self.run(
+        candidate = self.run_row(
             scientific_name="Cirsium lineare",
             library="FC",
             sample_name="other",
@@ -165,8 +169,8 @@ class ChangNcbiReconciliationTests(unittest.TestCase):
     def test_tied_exact_read_count_is_ambiguous(self) -> None:
         source = self.source(voucher="", code="", location="")
         candidates = [
-            self.run(run="SRR100", library="a", sample_name="a"),
-            self.run(run="SRR101", library="b", sample_name="b"),
+            self.run_row(run="SRR100", library="a", sample_name="a"),
+            self.run_row(run="SRR101", library="b", sample_name="b"),
         ]
         ranked = sorted(
             (mod.score_candidate(source, row) for row in candidates),
@@ -182,7 +186,7 @@ class ChangNcbiReconciliationTests(unittest.TestCase):
             self.source(voucher="ccy3559", code="FC", raw_reads=""),
             self.source(voucher="ccy3559", code="FC", raw_reads=""),
         ]
-        matches, _ = mod.reconcile(sources, [self.run(spots="")], {})
+        matches, _ = mod.reconcile(sources, [self.run_row(spots="")], {})
         self.assertEqual(len(matches), 2)
         self.assertTrue(
             all(row["run_assignment_collision"] == "true" for row in matches)
@@ -200,7 +204,7 @@ class ChangNcbiReconciliationTests(unittest.TestCase):
                 "binary_colour_code": "C",
             }
         }
-        matches, _ = mod.reconcile([source], [self.run()], morphs)
+        matches, _ = mod.reconcile([source], [self.run_row()], morphs)
         self.assertEqual(matches[0]["published_figure_label"], "BP")
         self.assertEqual(matches[0]["binary_colour_code"], "C")
 
