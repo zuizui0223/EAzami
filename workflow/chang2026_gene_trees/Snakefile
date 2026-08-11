@@ -15,9 +15,11 @@ Then execute, for example:
       --use-conda --cores 32
 
 The config must point to the validated 19-sample panel and eight-hypothesis CSV.
-Heavy external computation is never run in pull-request CI; CI validates scripts,
-input hashes, conda specifications, command plans, the complete DAG and synthetic
-topology scoring, then runs a true Snakemake dry-run.
+The assembly stage uses official NCBI SRA LibraryLayout; supplement raw-read
+count discrepancies remain reconciliation diagnostics and never select the read
+layout. Heavy external computation is never run in pull-request CI; CI validates
+scripts, input hashes, conda specifications, command plans, the complete DAG and
+synthetic topology scoring, then runs a true Snakemake dry-run.
 """
 
 from pathlib import Path
@@ -70,7 +72,7 @@ rule all:
 rule assemble_transcriptomes:
     input:
         panel=PANEL,
-        runner=ANALYSIS / "run_chang2026_transcriptome_assembly.py",
+        runner=ANALYSIS / "run_chang2026_layout_aware_transcriptome_assembly.py",
         prefixer=ANALYSIS / "prefix_fasta_headers.py",
     output:
         summary=ASSEMBLY / "transcriptome_assembly_run_summary.json",
