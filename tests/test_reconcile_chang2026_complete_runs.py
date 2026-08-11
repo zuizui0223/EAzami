@@ -40,11 +40,13 @@ class ChangCompleteReconciliationTests(unittest.TestCase):
         run: str = "SRR35152718",
         isolate: str = "3559",
         spots: str = "24942543",
+        biosample: str = "SAMN50798021",
+        experiment: str = "SRX30258006",
     ) -> dict[str, str]:
         return {
             "Run": run,
-            "Experiment": "SRX30258006",
-            "BioSample": "SAMN50798021",
+            "Experiment": experiment,
+            "BioSample": biosample,
             "BioProject": "PRJNA1311153",
             "ScientificName": "Cirsium japonicum var. japonicum",
             "LibraryName": "8",
@@ -116,8 +118,8 @@ class ChangCompleteReconciliationTests(unittest.TestCase):
         self.assertEqual(summary["verified_or_probable_rows"], 1)
         self.assertEqual(summary["derived_unique_voucher_aliases"], 1)
 
-    def test_embedded_accession_remains_strongest_evidence(self) -> None:
-        matches, _, _ = mod.reconcile_complete(
+    def test_embedded_run_accession_remains_strongest_evidence(self) -> None:
+        matches, _, summary = mod.reconcile_complete(
             [
                 self.supplement_row(
                     accession="SRR30617342",
@@ -139,6 +141,39 @@ class ChangCompleteReconciliationTests(unittest.TestCase):
         )
         self.assertEqual(matches[0]["match_status"], "verified_exact_run_accession")
         self.assertEqual(matches[0]["matched_run"], "SRR30617342")
+        self.assertEqual(matches[0]["embedded_public_accession"], "SRR30617342")
+        self.assertEqual(summary["embedded_identifier_type_counts"], {"run": 1})
+
+    def test_embedded_biosample_resolves_to_run_and_preserves_accession(self) -> None:
+        matches, _, summary = mod.reconcile_complete(
+            [self.supplement_row(accession="SAMN50798021")],
+            [self.run_row()],
+            [self.morph_row()],
+        )
+        row = matches[0]
+        self.assertEqual(row["matched_run"], "SRR35152718")
+        self.assertEqual(row["embedded_public_accession"], "SAMN50798021")
+        self.assertEqual(
+            row["match_status"],
+            "verified_exact_embedded_biosample_accession",
+        )
+        self.assertEqual(row["match_confidence"], "verified")
+        self.assertIn("exact_embedded_biosample_accession", row["match_evidence"])
+        self.assertEqual(
+            summary["embedded_identifier_type_counts"], {"biosample": 1}
+        )
+
+    def test_embedded_experiment_resolves_to_run(self) -> None:
+        matches, _, _ = mod.reconcile_complete(
+            [self.supplement_row(accession="SRX30258006")],
+            [self.run_row()],
+            [self.morph_row()],
+        )
+        self.assertEqual(
+            matches[0]["match_status"],
+            "verified_exact_embedded_experiment_accession",
+        )
+        self.assertEqual(matches[0]["embedded_public_accession"], "SRX30258006")
 
 
 if __name__ == "__main__":
