@@ -1,0 +1,9 @@
+name: chang2026-read2tree-read-prep
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.11
+  - sra-tools
+  - pigz
+  - fastp
