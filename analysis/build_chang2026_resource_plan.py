@@ -3,7 +3,7 @@
 
 The frozen 19-sample panel records run identities and official library layout,
 while the complete NCBI runinfo table additionally records spots, bases,
-average spot length and deposited SRA size.  This planner joins those files by
+average spot length and deposited SRA size. This planner joins those files by
 exact SRR accession and reports:
 
 * exact public SRA download size;
@@ -195,14 +195,14 @@ def build_plan(
                 "spots": spots,
                 "paired_read_count": 2 * spots,
                 "bases": bases,
-                "gigabases": f"{bases / 1e9:.6f}",
-                "average_spot_length": f"{average_spot_length:.3f}",
-                "derived_average_read_length": f"{average_spot_length / 2:.3f}",
-                "sra_size_mb": f"{size_mb:.3f}",
-                "sra_size_gib": f"{size_mb / 1024:.6f}",
-                "estimated_uncompressed_fastq_min_gib": f"{fastq_min:.6f}",
-                "estimated_uncompressed_fastq_max_gib": f"{fastq_max:.6f}",
-                "estimated_working_disk_gib": f"{working:.6f}",
+                "gigabases": f"{bases / 1e9:.9f}",
+                "average_spot_length": f"{average_spot_length:.6f}",
+                "derived_average_read_length": f"{average_spot_length / 2:.6f}",
+                "sra_size_mb": f"{size_mb:.6f}",
+                "sra_size_gib": f"{size_mb / 1024:.12f}",
+                "estimated_uncompressed_fastq_min_gib": f"{fastq_min:.12f}",
+                "estimated_uncompressed_fastq_max_gib": f"{fastq_max:.12f}",
+                "estimated_working_disk_gib": f"{working:.12f}",
                 "execution_group": group,
             }
         )
@@ -219,20 +219,24 @@ def build_plan(
     )
 
 
-def group_summary(rows: Sequence[Mapping[str, object]]) -> dict[str, object]:
+def group_summary(
+    rows: Sequence[Mapping[str, object]],
+    *,
+    fastq_bytes_per_base_min: float,
+    fastq_bytes_per_base_max: float,
+    working_disk_multiplier: float,
+) -> dict[str, object]:
     if not rows:
         raise ValueError("Cannot summarize an empty resource group")
+    gib = 1024**3
     total_spots = sum(int(row["spots"]) for row in rows)
     total_reads = sum(int(row["paired_read_count"]) for row in rows)
     total_bases = sum(int(row["bases"]) for row in rows)
-    total_sra_gib = sum(float(row["sra_size_gib"]) for row in rows)
-    fastq_min = sum(
-        float(row["estimated_uncompressed_fastq_min_gib"]) for row in rows
-    )
-    fastq_max = sum(
-        float(row["estimated_uncompressed_fastq_max_gib"]) for row in rows
-    )
-    working = sum(float(row["estimated_working_disk_gib"]) for row in rows)
+    total_size_mb = sum(float(row["sra_size_mb"]) for row in rows)
+    total_sra_gib = total_size_mb / 1024
+    fastq_min = total_bases * fastq_bytes_per_base_min / gib
+    fastq_max = total_bases * fastq_bytes_per_base_max / gib
+    working = fastq_max * working_disk_multiplier
     return {
         "sample_count": len(rows),
         "sample_ids": [str(row["sample_id"]) for row in rows],
@@ -240,6 +244,7 @@ def group_summary(rows: Sequence[Mapping[str, object]]) -> dict[str, object]:
         "total_paired_reads": total_reads,
         "total_bases": total_bases,
         "total_gigabases": total_bases / 1e9,
+        "total_sra_size_mb": total_size_mb,
         "total_sra_size_gib": total_sra_gib,
         "estimated_uncompressed_fastq_min_gib": fastq_min,
         "estimated_uncompressed_fastq_max_gib": fastq_max,
@@ -262,6 +267,11 @@ def build_summary(
     working_disk_multiplier: float,
 ) -> dict[str, object]:
     pilot = [row for row in rows if row["execution_group"] == "takaoense6_pilot"]
+    group_kwargs = {
+        "fastq_bytes_per_base_min": fastq_bytes_per_base_min,
+        "fastq_bytes_per_base_max": fastq_bytes_per_base_max,
+        "working_disk_multiplier": working_disk_multiplier,
+    }
     return {
         "resource_plan_version": "chang2026_resource_plan_v1",
         "panel_sha256": sha256_file(panel),
@@ -279,8 +289,8 @@ def build_summary(
             "raw, trimmed, temporary and assembly staging. This is a planning "
             "heuristic, not measured disk use."
         ),
-        "takaoense6_pilot": group_summary(pilot),
-        "full19_panel": group_summary(rows),
+        "takaoense6_pilot": group_summary(pilot, **group_kwargs),
+        "full19_panel": group_summary(rows, **group_kwargs),
         "workflow_resource_request": {
             "initial_parallel_sample_jobs": 1,
             "trinity_threads_per_sample": 16,
