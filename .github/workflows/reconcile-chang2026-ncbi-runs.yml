@@ -73,6 +73,7 @@ jobs:
           import csv
           import json
           import re
+          from collections import Counter
           from pathlib import Path
 
           ncbi_dir = Path("/tmp/chang2026_ncbi")
@@ -114,6 +115,7 @@ jobs:
           reconciled = rows("chang2026_sample_run_reconciliation.csv")
           takaoense = rows("chang2026_takaoense_sra_manifest.csv")
           candidates = rows("chang2026_run_candidates.csv")
+          layouts = Counter(row["matched_library_layout"] for row in reconciled)
           embedded = [row for row in reconciled if row["embedded_public_accession"]]
           resolved_embedded = [row for row in embedded if embedded_resolved(row)]
           expected_takaoense = {
@@ -139,6 +141,11 @@ jobs:
           print(f"verified_or_probable_rows={summary['verified_or_probable_rows']}")
           print(f"unique_matched_runs={summary['unique_matched_runs']}")
           print(
+              "official_library_layout_counts="
+              + json.dumps(summary["official_library_layout_counts"], sort_keys=True)
+          )
+          print("reconciled_layout_rows=" + json.dumps(dict(layouts), sort_keys=True))
+          print(
               "derived_unique_voucher_aliases="
               f"{summary['derived_unique_voucher_aliases']}"
           )
@@ -149,7 +156,8 @@ jobs:
               print(
                   "TAKAOENSE "
                   f"{row['code']} {row['voucher']} {row['published_figure_label']} "
-                  f"{row['matched_run']} {row['match_status']}"
+                  f"{row['matched_run']} {row['matched_library_layout']} "
+                  f"{row['match_status']}"
               )
 
           if recovery["primary_bioproject_run_count"] != 25:
@@ -168,6 +176,10 @@ jobs:
               raise SystemExit("All 33 samples must be verified or probable")
           if summary["unique_matched_runs"] != 33:
               raise SystemExit("Expected 33 unique matched runs")
+          if summary["official_library_layout_counts"] != {"PAIRED": 33}:
+              raise SystemExit("All 33 Chang runs must be officially paired-end")
+          if dict(layouts) != {"PAIRED": 33}:
+              raise SystemExit("Reconciled CSV lost official LibraryLayout metadata")
           if summary["run_assignment_collision_rows"] != 0:
               raise SystemExit("Run-assignment collision detected")
           if summary["derived_unique_voucher_aliases"] < 25:
@@ -182,6 +194,8 @@ jobs:
               raise SystemExit("Expected six takaoense samples")
           if summary["takaoense_verified_or_probable_rows"] != 6:
               raise SystemExit("All six takaoense samples must be verified")
+          if {row["matched_library_layout"] for row in takaoense} != {"PAIRED"}:
+              raise SystemExit("Takaoense runs are not all officially paired-end")
           observed_takaoense = {
               row["code"]: (
                   row["voucher"],
