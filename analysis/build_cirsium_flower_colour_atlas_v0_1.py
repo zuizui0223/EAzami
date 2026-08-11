@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
 """Build the source-backed v0.1 Cirsium flower-colour atlas.
 
-The builder intentionally starts small and high-confidence.  It combines three
-existing EAzami evidence streams without silently promoting weak evidence:
+The builder intentionally starts small and high-confidence. It combines four
+EAzami evidence streams without silently promoting weak evidence:
 
-1. six taxon-level Arenicola/Nipponocirsium states that are directly supported
-   by Chang et al. 2025/2026 text and are already used in the topology screen;
-2. six morph-linked var. takaoense public RNA-seq samples whose W/BP labels are
-   directly tied to voucher/run/BioSample evidence;
-3. the Japan colour-evidence seed, retained as pending until exact page-level
+1. six taxon-level Arenicola/Nipponocirsium states directly supported by Chang
+   et al. 2025/2026 text and already used in the topology screen;
+2. three additional taxon-level Sinocirsium states directly stated in Chang et
+   al. 2026 (var. albescens, australe, fukienense);
+3. six morph-linked var. takaoense public RNA-seq samples whose W/BP labels are
+   directly tied to voucher/run/BioSample evidence, plus one explicit taxon-level
+   polymorphic aggregate derived from those six samples;
+4. the Japan colour-evidence seed, retained as pending until exact page-level
    provenance and phylogenetic tip mapping are frozen.
 
-Rate fitting is a *separate* eligibility field.  Direct sample-level takaoense
+Rate fitting is a separate eligibility field. Direct sample-level takaoense
 records are biologically real observations but are not independent species-tree
 tips, so they are excluded from cross-species transition-rate fitting until an
-empirical within-variety topology is available.  Polymorphic or unresolved
-species records are never silently collapsed to W or C.
+empirical within-variety topology is available. The taxon-level takaoense record
+is retained as polymorphic (P), never forced to W or C. Polymorphic or unresolved
+species records are never silently collapsed to W/C.
 """
 
 from __future__ import annotations
@@ -23,9 +27,10 @@ from __future__ import annotations
 import argparse
 import csv
 from pathlib import Path
-from typing import Iterable, Mapping, Sequence
+from typing import Iterable, Mapping
 
 DEFAULT_ARENICOLA = Path("data/evidence/arenicola_flower_colour_history_evidence_v1.csv")
+DEFAULT_SINOCIRSIUM = Path("data/evidence/chang2026_sinocirsium_taxon_colour_evidence_v1.csv")
 DEFAULT_TAKAOENSE = Path("data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv")
 DEFAULT_JAPAN = Path("data/japan_colour_evidence_seed.csv")
 DEFAULT_OUTPUT = Path("data/evidence/cirsium_flower_colour_atlas_v0_1.csv")
@@ -139,11 +144,94 @@ def build_arenicola_rows(path: Path) -> list[dict[str, str]]:
     return rows
 
 
+def build_sinocirsium_rows(path: Path) -> list[dict[str, str]]:
+    source = read_csv(path)
+    if len(source) != 3:
+        raise ValueError(f"Expected three source-backed Sinocirsium taxon states, observed {len(source)}")
+    rows: list[dict[str, str]] = []
+    for index, item in enumerate(source, start=1):
+        binary = clean(item.get("binary_colour_code")).upper()
+        fine = clean(item.get("fine_colour_state"))
+        if binary not in {"C", "W"} or FINE_TO_BINARY.get(fine) != binary:
+            raise ValueError(f"Invalid Sinocirsium fine/binary colour pair: {item}")
+        if clean(item.get("evidence_status")) != "direct_taxon_text":
+            raise ValueError("Sinocirsium v0.1 expansion requires direct_taxon_text evidence")
+        taxon = clean(item.get("accepted_taxon"))
+        row = blank_row()
+        row.update(
+            {
+                "record_id": f"ATL-S{index:02d}",
+                "accepted_taxon": taxon,
+                "source_taxon_name": taxon,
+                "country": "Taiwan",
+                "observation_unit": "taxon",
+                "observation_id": taxon,
+                "evidence_type": "published_taxon_description",
+                "evidence_source": clean(item.get("source")),
+                "evidence_id": clean(item.get("record_id")),
+                "source_url": clean(item.get("source_url")),
+                "source_locator": clean(item.get("source_locator")),
+                "life_stage": "flower",
+                "assessable": "yes",
+                "colour_state": fine,
+                "binary_colour_code": binary,
+                "binary_collapse_rule": "white/near_white->W; visible pink/purple/blue-purple->C",
+                "anthocyanin_visible": "no" if binary == "W" else "yes",
+                "polymorphic_context": "reported shade polymorphism remains within binary C" if taxon.endswith("var. fukienense") else "",
+                "phylogeny_context": clean(item.get("phylogeny_context")) or "Sinocirsium",
+                "phylogeny_tip_candidate": "yes",
+                "rate_fit_eligible": "yes",
+                "rate_fit_exclusion_reason": "",
+                "evidence_status": "direct_taxon_text",
+                "notes": clean(item.get("notes")),
+                "review_status": "reviewed",
+            }
+        )
+        rows.append(row)
+    return rows
+
+
 def build_takaoense_rows(path: Path) -> list[dict[str, str]]:
     source = read_csv(path)
     if len(source) != 6:
         raise ValueError(f"Expected six morph-linked takaoense samples, observed {len(source)}")
+    binaries = [clean(item.get("binary_colour_code")).upper() for item in source]
+    if sorted(binaries) != ["C", "C", "C", "W", "W", "W"]:
+        raise ValueError(f"Expected direct takaoense 3C/3W sample evidence, observed {binaries}")
+
     rows: list[dict[str, str]] = []
+    aggregate = blank_row()
+    aggregate.update(
+        {
+            "record_id": "ATL-T00",
+            "accepted_taxon": "Cirsium japonicum var. takaoense",
+            "source_taxon_name": "Cirsium japonicum var. takaoense",
+            "country": "Taiwan",
+            "observation_unit": "taxon",
+            "observation_id": "Cirsium japonicum var. takaoense",
+            "evidence_type": "derived_from_direct_morph_linked_samples",
+            "evidence_source": "Chang et al. 2026 Figure 1 + public SRA/BioSample linkage",
+            "evidence_id": "takaoense_direct_3W_3BP_aggregate",
+            "source_url": "https://doi.org/10.1186/s12870-026-08097-6",
+            "source_locator": "Figure 1 direct labels: FC/TJ/NH=BP and WY/FB/LT=W; six voucher/run/BioSample links frozen in chang2026_takaoense_morph_linked_public_samples_v1.csv",
+            "life_stage": "flower phenotype aggregated across six linked samples",
+            "assessable": "yes",
+            "colour_state": "polymorphic",
+            "binary_colour_code": "P",
+            "binary_collapse_rule": "W/C polymorphism retained as P; never collapsed to a single species-level W or C state",
+            "anthocyanin_visible": "unknown",
+            "polymorphic_context": "directly observed 3 W and 3 BP/C samples across six localities",
+            "phylogeny_context": "Sinocirsium/takaoense_within_variety",
+            "phylogeny_tip_candidate": "yes",
+            "rate_fit_eligible": "no",
+            "rate_fit_exclusion_reason": "taxon is directly W/C polymorphic; requires an explicit polymorphic-state model or within-variety genealogy",
+            "evidence_status": "morph_and_public_accession_directly_linked",
+            "notes": "Taxon-level aggregate exists to prevent accidental fixed-state coding while retaining sample-level records below.",
+            "review_status": "reviewed",
+        }
+    )
+    rows.append(aggregate)
+
     for index, item in enumerate(sorted(source, key=lambda r: clean(r.get("code"))), start=1):
         binary = clean(item.get("binary_colour_code")).upper()
         if binary not in {"C", "W"}:
@@ -243,8 +331,13 @@ def build_japan_seed_rows(path: Path) -> list[dict[str, str]]:
     return rows
 
 
-def build(arenicola: Path, takaoense: Path, japan: Path) -> list[dict[str, str]]:
-    rows = build_arenicola_rows(arenicola) + build_takaoense_rows(takaoense) + build_japan_seed_rows(japan)
+def build(arenicola: Path, sinocirsium: Path, takaoense: Path, japan: Path) -> list[dict[str, str]]:
+    rows = (
+        build_arenicola_rows(arenicola)
+        + build_sinocirsium_rows(sinocirsium)
+        + build_takaoense_rows(takaoense)
+        + build_japan_seed_rows(japan)
+    )
     ids = [row["record_id"] for row in rows]
     if len(ids) != len(set(ids)):
         raise ValueError("Generated atlas record IDs are not unique")
@@ -262,6 +355,7 @@ def write_csv(path: Path, rows: Iterable[Mapping[str, object]]) -> None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--arenicola", type=Path, default=DEFAULT_ARENICOLA)
+    parser.add_argument("--sinocirsium", type=Path, default=DEFAULT_SINOCIRSIUM)
     parser.add_argument("--takaoense", type=Path, default=DEFAULT_TAKAOENSE)
     parser.add_argument("--japan-seed", type=Path, default=DEFAULT_JAPAN)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
@@ -270,7 +364,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    rows = build(args.arenicola, args.takaoense, args.japan_seed)
+    rows = build(args.arenicola, args.sinocirsium, args.takaoense, args.japan_seed)
     write_csv(args.output, rows)
     print(f"atlas_records={len(rows)}")
     print(f"taxon_level_records={sum(row['observation_unit']=='taxon' for row in rows)}")
