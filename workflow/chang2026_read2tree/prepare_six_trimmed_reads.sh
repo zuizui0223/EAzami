@@ -7,7 +7,8 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 READS_ROOT="${READS_ROOT:-$PWD/results/chang2026_takaoense_pilot}"
 PANEL="${PANEL:-$REPO_ROOT/sampling/chang2026_takaoense6_read2tree_panel_v1.csv}"
 EVIDENCE="${EVIDENCE:-$REPO_ROOT/data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv}"
-ENV_PREFIX="${ENV_PREFIX:-$REPO_ROOT/.conda/eazami-chang2026-assembly}"
+READ_PREP_ENV="$REPO_ROOT/workflow/chang2026_read2tree/envs/read_prep.yml"
+ENV_PREFIX="${ENV_PREFIX:-$REPO_ROOT/.conda/eazami-chang2026-read2tree-read-prep}"
 JOBS="${JOBS:-1}"
 FASTERQ_THREADS="${FASTERQ_THREADS:-8}"
 FASTP_THREADS="${FASTP_THREADS:-8}"
@@ -19,12 +20,12 @@ MIN_FREE_DISK_GIB="${MIN_FREE_DISK_GIB:-150}"
 
 if command -v micromamba >/dev/null 2>&1; then
   if [[ ! -x "$ENV_PREFIX/bin/python" ]]; then
-    micromamba create -y -p "$ENV_PREFIX" -f "$REPO_ROOT/workflow/chang2026_gene_trees/envs/assembly.yml"
+    micromamba create -y -p "$ENV_PREFIX" -f "$READ_PREP_ENV"
   fi
   RUN=(micromamba run -p "$ENV_PREFIX")
 elif command -v mamba >/dev/null 2>&1; then
   if [[ ! -x "$ENV_PREFIX/bin/python" ]]; then
-    mamba env create -y -p "$ENV_PREFIX" -f "$REPO_ROOT/workflow/chang2026_gene_trees/envs/assembly.yml"
+    mamba env create -y -p "$ENV_PREFIX" -f "$READ_PREP_ENV"
   fi
   RUN=(mamba run -p "$ENV_PREFIX")
 else
@@ -37,7 +38,7 @@ mkdir -p "$READS_ROOT/provenance"
   date -u +"utc_started=%Y-%m-%dT%H:%M:%SZ"
   hostname
   git -C "$REPO_ROOT" rev-parse HEAD || true
-  sha256sum "$PANEL" "$EVIDENCE" "$REPO_ROOT/workflow/chang2026_gene_trees/envs/assembly.yml"
+  sha256sum "$PANEL" "$EVIDENCE" "$READ_PREP_ENV"
 } > "$READS_ROOT/provenance/read2tree_trimmed_reads.run_provenance.txt"
 
 "${RUN[@]}" python "$REPO_ROOT/analysis/prepare_chang2026_read2tree_reads.py" \
@@ -66,7 +67,7 @@ mkdir -p "$READS_ROOT/provenance"
 } >> "$READS_ROOT/provenance/read2tree_trimmed_reads.run_provenance.txt"
 
 cat <<EOF
-Six-sample trimmed-read stage completed without Trinity.
+Six-sample trimmed-read stage completed without installing or running Trinity.
 
 Reads root:
   $READS_ROOT
@@ -77,4 +78,10 @@ Read2Tree expects:
 
 Next static400 preparation:
   READS_ROOT="$READS_ROOT" bash "$REPO_ROOT/workflow/chang2026_read2tree/prepare_static_profile.sh"
+
+Browser400, after the official tarball is downloaded:
+  OMA_BROWSER_ARCHIVE=/path/to/archive.tar.gz \
+  OMA_BROWSER_EXPORT_DATE=YYYY-MM-DD \
+  READS_ROOT="$READS_ROOT" \
+  bash "$REPO_ROOT/workflow/chang2026_read2tree/prepare_browser_profile.sh"
 EOF
