@@ -4,9 +4,11 @@ on:
   pull_request:
     paths:
       - "analysis/build_read2tree_oma_static_marker_pack.py"
+      - "analysis/build_read2tree_oma_static_marker_pack_resilient.py"
       - "analysis/validate_read2tree_oma_marker_pack.py"
       - "sampling/read2tree_oma_reference_set_v0_2.csv"
       - "tests/test_build_read2tree_oma_static_marker_pack.py"
+      - "tests/test_build_read2tree_oma_static_marker_pack_resilient.py"
       - "tests/test_validate_read2tree_oma_marker_pack.py"
       - ".github/workflows/build-read2tree-static-marker-pack.yml"
   workflow_dispatch:
@@ -32,15 +34,21 @@ jobs:
         run: |
           python -m py_compile \
             analysis/build_read2tree_oma_static_marker_pack.py \
+            analysis/build_read2tree_oma_static_marker_pack_resilient.py \
             analysis/validate_read2tree_oma_marker_pack.py
           python -m unittest \
             tests/test_build_read2tree_oma_static_marker_pack.py \
+            tests/test_build_read2tree_oma_static_marker_pack_resilient.py \
             tests/test_validate_read2tree_oma_marker_pack.py \
             -v
 
       - name: Recover May-2026 OMA groups and build static400
         run: |
-          python analysis/build_read2tree_oma_static_marker_pack.py \
+          # The production OMA host currently returns 404 for its documented
+          # bulk_retrieve POST endpoint. The resilient wrapper first probes that
+          # endpoint and then falls back to the documented per-protein GET API,
+          # preserving the same selected IDs, release gate and downstream hashes.
+          python analysis/build_read2tree_oma_static_marker_pack_resilient.py \
             --reference-manifest sampling/read2tree_oma_reference_set_v0_2.csv \
             --outdir /tmp/eazami_oma_static400 \
             --target-count 400 \
