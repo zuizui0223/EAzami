@@ -2,7 +2,7 @@
 """Build the Chang 2026 Sinocirsium gene-tree and reticulation panel.
 
 A six-tip takaoense-only tree can describe morph ordering, but it cannot provide
-external coloured ancestry, a white sister comparison, or an outgroup root.  The
+external coloured ancestry, a white sister comparison, or an outgroup root. The
 analysis panel therefore combines:
 
 * six morph-labelled var. takaoense samples;
@@ -12,10 +12,11 @@ analysis panel therefore combines:
 * two broad C. japonicum coloured-root-context samples;
 * two C. lineare outgroups.
 
-The expected total is 19 samples.  Public TSA/Assembly records were not recovered
+The expected total is 19 samples. Public TSA/Assembly records were not recovered
 by the current NCBI audit, so the reproducible source is the reconciled official
-SRA run for each sample.  If a public assembly appears later, the builder records
-it without changing sample identity.
+SRA run for each sample. Official SRA LibraryLayout is retained separately from
+the supplement-read-count reconciliation diagnostic. If a public assembly
+appears later, the builder records it without changing sample identity.
 """
 
 from __future__ import annotations
@@ -57,6 +58,7 @@ PANEL_FIELDS = (
     "matched_run",
     "matched_experiment",
     "matched_biosample",
+    "library_layout",
     "matched_spots",
     "read_count_relation",
     "run_match_status",
@@ -88,6 +90,7 @@ EXPECTED_COUNTS = {
     "cirsium japonicum var. fukienense": 4,
     "cirsium lineare": 2,
 }
+VALID_LIBRARY_LAYOUTS = {"PAIRED", "SINGLE"}
 
 
 def clean(value: object) -> str:
@@ -193,6 +196,20 @@ def build_panel(
     if duplicates:
         raise ValueError(f"Duplicate official runs in panel: {duplicates}")
 
+    layouts = [
+        clean(row.get("matched_library_layout")).upper() for row in selected
+    ]
+    invalid_layouts = [
+        clean(row.get("voucher"))
+        for row, layout in zip(selected, layouts)
+        if layout not in VALID_LIBRARY_LAYOUTS
+    ]
+    if invalid_layouts:
+        raise ValueError(
+            "Missing or unsupported official LibraryLayout in panel: "
+            + "|".join(invalid_layouts)
+        )
+
     output: list[dict[str, str]] = []
     sample_ids: set[str] = set()
     for row in selected:
@@ -233,6 +250,9 @@ def build_panel(
                 "matched_run": clean(row.get("matched_run")),
                 "matched_experiment": clean(row.get("matched_experiment")),
                 "matched_biosample": clean(row.get("matched_biosample")),
+                "library_layout": clean(
+                    row.get("matched_library_layout")
+                ).upper(),
                 "matched_spots": clean(row.get("matched_spots")),
                 "read_count_relation": clean(row.get("read_count_relation")),
                 "run_match_status": clean(row.get("match_status")),
@@ -327,11 +347,13 @@ def build_summary(
 ) -> dict[str, object]:
     roles = Counter(row["panel_role"] for row in panel)
     taxa = Counter(canonical_taxon(row["taxon"]) for row in panel)
+    layouts = Counter(row["library_layout"] for row in panel)
     return {
         "panel_name": "Chang 2026 Sinocirsium17 + Cirsium lineare2",
         "sample_count": len(panel),
         "taxon_counts": dict(sorted(taxa.items())),
         "panel_role_counts": dict(sorted(roles.items())),
+        "official_library_layout_counts": dict(sorted(layouts.items())),
         "takaoense_sample_count": sum(
             canonical_taxon(row["taxon"])
             == "cirsium japonicum var. takaoense"
@@ -438,6 +460,10 @@ def main() -> int:
     print(f"sample_count={summary['sample_count']}")
     print(f"takaoense_sample_count={summary['takaoense_sample_count']}")
     print(f"de_novo_required_count={summary['de_novo_required_count']}")
+    print(
+        "official_library_layout_counts="
+        + json.dumps(summary["official_library_layout_counts"], sort_keys=True)
+    )
     print(f"hypothesis_count={summary['hypothesis_count']}")
     print(args.outdir / "chang2026_sinocirsium_gene_tree_panel.csv")
     return 0
