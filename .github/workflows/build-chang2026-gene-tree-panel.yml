@@ -10,16 +10,29 @@ on:
       - "analysis/audit_chang2026_public_transcriptome_assemblies.py"
       - "analysis/normalize_chang2026_panel_taxa.py"
       - "analysis/build_chang2026_gene_tree_panel.py"
+      - "analysis/run_chang2026_transcriptome_assembly.py"
+      - "analysis/prefix_fasta_headers.py"
+      - "analysis/prepare_chang2026_single_copy_orthogroups.py"
+      - "analysis/run_chang2026_single_copy_gene_trees.py"
+      - "analysis/score_chang2026_gene_tree_hypotheses.py"
+      - "analysis/validate_chang2026_gene_tree_workflow_contract.py"
       - "tests/test_recover_chang2026_published_runinfo.py"
       - "tests/test_reconcile_chang2026_ncbi_runs.py"
       - "tests/test_reconcile_chang2026_complete_runs.py"
       - "tests/test_audit_chang2026_public_transcriptome_assemblies.py"
       - "tests/test_normalize_chang2026_panel_taxa.py"
       - "tests/test_build_chang2026_gene_tree_panel.py"
+      - "tests/test_run_chang2026_transcriptome_assembly.py"
+      - "tests/test_prepare_chang2026_single_copy_orthogroups.py"
+      - "tests/test_run_chang2026_single_copy_gene_trees.py"
+      - "tests/test_score_chang2026_gene_tree_hypotheses.py"
+      - "tests/test_chang2026_gene_tree_workflow_integration.py"
+      - "tests/test_validate_chang2026_gene_tree_workflow_contract.py"
       - "data/evidence/chang2026_east_asia_accession_audit_*.csv"
       - "data/evidence/chang2026_takaoense_figure1_morph_assignments_*.csv"
       - "analysis/chang2026_takaoense_nearest_no_regain_topologies.csv"
       - "analysis/chang2026_takaoense_topology_robustness_summary.json"
+      - "workflow/chang2026_gene_trees/**"
       - ".github/workflows/build-chang2026-gene-tree-panel.yml"
   workflow_dispatch:
 
@@ -29,7 +42,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 60
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -48,7 +61,13 @@ jobs:
             analysis/reconcile_chang2026_complete_runs.py \
             analysis/audit_chang2026_public_transcriptome_assemblies.py \
             analysis/normalize_chang2026_panel_taxa.py \
-            analysis/build_chang2026_gene_tree_panel.py
+            analysis/build_chang2026_gene_tree_panel.py \
+            analysis/run_chang2026_transcriptome_assembly.py \
+            analysis/prefix_fasta_headers.py \
+            analysis/prepare_chang2026_single_copy_orthogroups.py \
+            analysis/run_chang2026_single_copy_gene_trees.py \
+            analysis/score_chang2026_gene_tree_hypotheses.py \
+            analysis/validate_chang2026_gene_tree_workflow_contract.py
           python -m unittest \
             tests/test_recover_chang2026_published_runinfo.py \
             tests/test_reconcile_chang2026_ncbi_runs.py \
@@ -56,6 +75,12 @@ jobs:
             tests/test_audit_chang2026_public_transcriptome_assemblies.py \
             tests/test_normalize_chang2026_panel_taxa.py \
             tests/test_build_chang2026_gene_tree_panel.py \
+            tests/test_run_chang2026_transcriptome_assembly.py \
+            tests/test_prepare_chang2026_single_copy_orthogroups.py \
+            tests/test_run_chang2026_single_copy_gene_trees.py \
+            tests/test_score_chang2026_gene_tree_hypotheses.py \
+            tests/test_chang2026_gene_tree_workflow_integration.py \
+            tests/test_validate_chang2026_gene_tree_workflow_contract.py \
             -v
 
       - name: Recover complete runs and public assembly links
@@ -91,7 +116,27 @@ jobs:
             --assembly-audit /tmp/chang2026_public_assemblies/chang2026_public_transcriptome_assembly_audit.csv \
             --outdir /tmp/chang2026_gene_tree_panel
 
-      - name: Validate frozen biological design
+      - name: Validate execution contract and Snakemake DAG
+        run: |
+          set -o pipefail
+          python -m pip install --disable-pip-version-check snakemake==9.23.1
+          python analysis/validate_chang2026_gene_tree_workflow_contract.py \
+            --panel /tmp/chang2026_gene_tree_panel/chang2026_sinocirsium_gene_tree_panel.csv \
+            --hypotheses /tmp/chang2026_gene_tree_panel/chang2026_takaoense_gene_tree_hypotheses.csv \
+            --snakefile workflow/chang2026_gene_trees/Snakefile \
+            --results-dir /tmp/chang2026_gene_tree_dry_run_results \
+            --config-output /tmp/chang2026_gene_tree_panel/chang2026_gene_tree_workflow_config.json \
+            --summary-output /tmp/chang2026_gene_tree_panel/chang2026_gene_tree_workflow_contract.json
+          snakemake --version | tee /tmp/chang2026_gene_tree_panel/snakemake_version.txt
+          snakemake \
+            --snakefile workflow/chang2026_gene_trees/Snakefile \
+            --configfile /tmp/chang2026_gene_tree_panel/chang2026_gene_tree_workflow_config.json \
+            --cores 1 \
+            --dry-run \
+            --printshellcmds \
+            2>&1 | tee /tmp/chang2026_gene_tree_panel/snakemake_dry_run.log
+
+      - name: Validate frozen biological and execution design
         run: |
           python - <<'PY'
           import csv
@@ -121,6 +166,17 @@ jobs:
                   encoding="utf-8"
               )
           )
+          contract = json.loads(
+              (outdir / "chang2026_gene_tree_workflow_contract.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          snakemake_version = (
+              outdir / "snakemake_version.txt"
+          ).read_text(encoding="utf-8").strip()
+          dry_run_log = (
+              outdir / "snakemake_dry_run.log"
+          ).read_text(encoding="utf-8")
 
           def rows(name):
               with (outdir / name).open(encoding="utf-8-sig", newline="") as handle:
@@ -143,6 +199,10 @@ jobs:
           print(f"takaoense_pilot_samples={len(pilot)}")
           print(f"hypotheses={len(hypotheses)}")
           print("roles=" + json.dumps(dict(sorted(roles.items())), sort_keys=True))
+          print(f"workflow_contract_version={contract['contract_version']}")
+          print("snakefile_rules=" + "|".join(contract["snakefile_rules"]))
+          print(f"snakemake_version={snakemake_version}")
+          print(f"snakemake_dry_run_bytes={len(dry_run_log.encode('utf-8'))}")
           for row in normalization["changed_rows"]:
               print(
                   "PANEL_TAXON_MAP "
@@ -168,6 +228,14 @@ jobs:
               ("FKK", "ccy4204"),
               ("ASO", "ccy4220"),
           }
+          expected_rules = [
+              "all",
+              "assemble_transcriptomes",
+              "orthofinder",
+              "prepare_single_copy_orthogroups",
+              "infer_rooted_gene_trees",
+              "score_competing_takaoense_histories",
+          ]
           observed_changed = {
               (row["code"], row["voucher"])
               for row in normalization["changed_rows"]
@@ -184,10 +252,7 @@ jobs:
               raise SystemExit("Expected exactly two japonicum autonym rows")
           if observed_changed != expected_changed:
               raise SystemExit(f"Unexpected panel taxon mappings: {observed_changed}")
-          if any(
-              not row["source_taxon"]
-              for row in normalized
-          ):
+          if any(not row["source_taxon"] for row in normalized):
               raise SystemExit("Source taxon was not preserved for every row")
           if summary["sample_count"] != 19 or len(panel) != 19:
               raise SystemExit("Expected 19 analysis-panel samples")
@@ -216,12 +281,34 @@ jobs:
               for row in hypotheses
           ) != 7:
               raise SystemExit("Expected seven nearest loss-only alternatives")
+          if contract["panel_rows"] != 19 or contract["unique_official_runs"] != 19:
+              raise SystemExit("Workflow contract does not preserve the 19-run panel")
+          if contract["focal_morph_counts"] != {"BP": 3, "W": 3}:
+              raise SystemExit("Workflow contract focal morph counts changed")
+          if contract["hypothesis_count"] != 8:
+              raise SystemExit("Workflow contract hypothesis count changed")
+          if contract["snakefile_rules"] != expected_rules:
+              raise SystemExit("Snakemake DAG rule order changed")
+          if contract["heavy_computation_executed"]:
+              raise SystemExit("CI contract must not claim heavy computation")
+          if snakemake_version != "9.23.1":
+              raise SystemExit(f"Unexpected Snakemake version: {snakemake_version}")
+          if not dry_run_log.strip():
+              raise SystemExit("Snakemake dry-run log is empty")
+          for forbidden in (
+              "MissingInputException",
+              "WorkflowError",
+              "RuleException",
+              "SyntaxError",
+          ):
+              if forbidden in dry_run_log:
+                  raise SystemExit(f"Snakemake dry-run contains {forbidden}")
           PY
 
-      - name: Upload complete gene-tree input package
+      - name: Upload complete gene-tree input and dry-run package
         uses: actions/upload-artifact@v4
         with:
-          name: chang2026-complete-gene-tree-panel-${{ github.run_id }}
+          name: chang2026-complete-gene-tree-workflow-${{ github.run_id }}
           path: |
             /tmp/chang2026_ncbi/
             /tmp/chang2026_reconciliation/
