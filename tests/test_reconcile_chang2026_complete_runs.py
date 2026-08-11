@@ -42,6 +42,7 @@ class ChangCompleteReconciliationTests(unittest.TestCase):
         spots: str = "24942543",
         biosample: str = "SAMN50798021",
         experiment: str = "SRX30258006",
+        layout: str = "PAIRED",
     ) -> dict[str, str]:
         return {
             "Run": run,
@@ -50,6 +51,7 @@ class ChangCompleteReconciliationTests(unittest.TestCase):
             "BioProject": "PRJNA1311153",
             "ScientificName": "Cirsium japonicum var. japonicum",
             "LibraryName": "8",
+            "LibraryLayout": layout,
             "SampleName": "",
             "spots": spots,
             "biosample_isolate": isolate,
@@ -101,7 +103,20 @@ class ChangCompleteReconciliationTests(unittest.TestCase):
         self.assertEqual(index["ccy3559"]["published_figure_label"], "BP")
         self.assertEqual(index["ccy3559"]["binary_colour_code"], "C")
 
-    def test_voucher_alias_and_morph_produce_verified_match(self) -> None:
+    def test_official_layout_is_attached_by_exact_run(self) -> None:
+        matches = [{"matched_run": "SRR35152718"}]
+        counts = mod.attach_official_library_layout(matches, [self.run_row()])
+        self.assertEqual(matches[0]["matched_library_layout"], "PAIRED")
+        self.assertEqual(dict(counts), {"PAIRED": 1})
+
+    def test_missing_or_unsupported_layout_fails(self) -> None:
+        with self.assertRaisesRegex(ValueError, "unsupported LibraryLayout"):
+            mod.attach_official_library_layout(
+                [{"matched_run": "SRR35152718"}],
+                [self.run_row(layout="")],
+            )
+
+    def test_voucher_alias_morph_and_layout_produce_verified_match(self) -> None:
         matches, candidates, summary = mod.reconcile_complete(
             [self.supplement_row()],
             [self.run_row()],
@@ -114,9 +129,11 @@ class ChangCompleteReconciliationTests(unittest.TestCase):
         self.assertEqual(row["match_confidence"], "verified")
         self.assertEqual(row["published_figure_label"], "BP")
         self.assertEqual(row["binary_colour_code"], "C")
+        self.assertEqual(row["matched_library_layout"], "PAIRED")
         self.assertTrue(candidates)
         self.assertEqual(summary["verified_or_probable_rows"], 1)
         self.assertEqual(summary["derived_unique_voucher_aliases"], 1)
+        self.assertEqual(summary["official_library_layout_counts"], {"PAIRED": 1})
 
     def test_embedded_run_accession_remains_strongest_evidence(self) -> None:
         matches, _, summary = mod.reconcile_complete(
@@ -142,6 +159,7 @@ class ChangCompleteReconciliationTests(unittest.TestCase):
         self.assertEqual(matches[0]["match_status"], "verified_exact_run_accession")
         self.assertEqual(matches[0]["matched_run"], "SRR30617342")
         self.assertEqual(matches[0]["embedded_public_accession"], "SRR30617342")
+        self.assertEqual(matches[0]["matched_library_layout"], "PAIRED")
         self.assertEqual(summary["embedded_identifier_type_counts"], {"run": 1})
 
     def test_embedded_biosample_resolves_to_run_and_preserves_accession(self) -> None:
