@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """Evaluate whether empirical flower-colour transition-rate fitting may start.
 
-This gate intentionally combines two independent requirements:
+The gate combines two independent requirements:
 
 1. the source-backed colour atlas must pass its predeclared taxon/state breadth
    gate; and
 2. at least one empirical machine-readable branch-length nuclear tree route
    must satisfy provenance/tip-join requirements.
 
-Passing the gate is necessary, not sufficient, for interpreting ER/ARD/Mk rate
-asymmetry. Model adequacy, polymorphism and sampling-bias sensitivity remain
-required downstream.
+The original public Compositae1061 HybPiper reference is now recovered and
+source-frozen, but that only removes an upstream compatibility-reanalysis input
+blocker.  It does not count as a branch-length tree and it is not the exact
+Moreyra augmented reference.
 """
 
 from __future__ import annotations
@@ -20,6 +21,9 @@ import json
 from pathlib import Path
 
 TREE_CONTRACT_VERSION = "flower_colour_rate_tree_contract_v0_1"
+EXPECTED_COMP1061_SHA256 = "77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c"
+EXPECTED_COMP1061_LOCI = 1061
+EXPECTED_TARGET_STATUS = "original_compatible_reference_recovered_augmented_not_recovered"
 
 
 def load_json(path: Path) -> dict[str, object]:
@@ -69,12 +73,20 @@ def evaluate(atlas: dict[str, object], tree: dict[str, object]) -> dict[str, obj
     if not isinstance(published, dict) or not isinstance(compatibility, dict):
         raise ValueError("Tree contract must retain published and compatibility routes")
 
-    if compatibility.get("exact_compositae1061_hybpiper_target_reference_available") is not False:
-        raise ValueError(
-            "v0.1 source contract must preserve the current unresolved exact Compositae1061 target-reference status"
-        )
+    if compatibility.get("original_comp1061_hybpiper_reference_available") is not True:
+        raise ValueError("Original compatible Compositae1061 reference recovery was lost")
+    if compatibility.get("original_comp1061_reference_sha256") != EXPECTED_COMP1061_SHA256:
+        raise ValueError("Original compatible Compositae1061 reference SHA256 drifted")
+    if compatibility.get("original_comp1061_reference_locus_count") != EXPECTED_COMP1061_LOCI:
+        raise ValueError("Original compatible Compositae1061 locus count drifted")
+    if compatibility.get("exact_moreyra_augmented_reference_available") is not False:
+        raise ValueError("Exact Moreyra augmented reference must remain unrecovered until sourced")
+    if compatibility.get("target_reference_status") != EXPECTED_TARGET_STATUS:
+        raise ValueError("Compositae1061 target/reference status drifted")
+    if compatibility.get("compatibility_raw_read_target_blocked") is not False:
+        raise ValueError("Recovered original reference should remove the raw-read target blocker")
     if compatibility.get("target_reference_issue") != 16:
-        raise ValueError("Compositae1061 target-reference blocker must point to Issue #16")
+        raise ValueError("Compositae1061 target/reference provenance must point to Issue #16")
 
     execution_allowed = not blockers
     if execution_allowed and atlas.get("transition_rate_fit_ready") is not True:
@@ -90,10 +102,14 @@ def evaluate(atlas: dict[str, object], tree: dict[str, object]) -> dict[str, obj
         "accepted_tree_route": tree.get("accepted_tree_route"),
         "execution_allowed": execution_allowed,
         "blockers": blockers,
-        "moreyra_exact_target_reference_status": compatibility.get("target_reference_status"),
+        "comp1061_original_reference_available": True,
+        "comp1061_original_reference_sha256": EXPECTED_COMP1061_SHA256,
+        "comp1061_original_reference_locus_count": EXPECTED_COMP1061_LOCI,
+        "moreyra_augmented_reference_available": False,
+        "target_reference_status": compatibility.get("target_reference_status"),
         "next_unlocks": {
             "atlas": "add independently supported fixed-white nuclear tips without collapsing polymorphic taxa",
-            "tree": "recover a published branch-length tree ensemble or complete a clearly labelled compatibility reanalysis",
+            "tree": "execute and validate a branch-length compatibility tree or recover a published branch-length tree ensemble",
         },
         "claim_limit": (
             "execution_allowed=true is only a prerequisite for empirical transition-rate modelling. "

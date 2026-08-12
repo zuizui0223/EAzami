@@ -28,6 +28,7 @@ GATE_SPEC.loader.exec_module(gate)
 BASE = ROOT / "data/evidence/cirsium_flower_colour_atlas_v0_2.csv"
 EXPANSION = ROOT / "data/evidence/cirsium_flower_colour_atlas_v0_3_expansion_evidence.csv"
 TREE = ROOT / "data/evidence/flower_colour_rate_tree_contract_v0_1.json"
+REFERENCE = ROOT / "data/evidence/comp1061_original_reference_contract_v1.json"
 
 
 class FlowerColourRateFitPreconditionsTests(unittest.TestCase):
@@ -35,6 +36,17 @@ class FlowerColourRateFitPreconditionsTests(unittest.TestCase):
         _, _, atlas = build.build(BASE, EXPANSION)
         tree = json.loads(TREE.read_text(encoding="utf-8"))
         return atlas, tree
+
+    def test_frozen_original_reference_contract(self):
+        x = json.loads(REFERENCE.read_text(encoding="utf-8"))
+        self.assertTrue(x["compatibility_reanalysis_usable"])
+        self.assertFalse(x["moreyra_augmented_reference_recovered"])
+        self.assertEqual(x["locus_count"], 1061)
+        self.assertEqual(x["sequence_record_count"], 2597)
+        self.assertEqual(
+            x["sha256"],
+            "77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c",
+        )
 
     def test_current_project_is_blocked_by_white_tips_and_tree(self):
         atlas, tree = self.current_inputs()
@@ -46,9 +58,11 @@ class FlowerColourRateFitPreconditionsTests(unittest.TestCase):
             result["blockers"],
             ["atlas_minimum_white_tips", "branch_length_tree_unavailable"],
         )
+        self.assertTrue(result["comp1061_original_reference_available"])
+        self.assertFalse(result["moreyra_augmented_reference_available"])
         self.assertEqual(
-            result["moreyra_exact_target_reference_status"],
-            "exact_or_compatible_target_not_recovered",
+            result["target_reference_status"],
+            "original_compatible_reference_recovered_augmented_not_recovered",
         )
 
     def test_white_tips_alone_do_not_unlock_rates(self):

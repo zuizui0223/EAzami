@@ -12,19 +12,25 @@
     "claim_limit": "Published figures and topology statements must not be converted into invented branch lengths."
   },
   "compatibility_reanalysis_route": {
-    "source": "PRJNA957074 raw reads plus public Moreyra locus diagnostics",
-    "status": "reanalysis_not_completed",
+    "source": "public Compositae1061 reference plus PRJNA957074 and other source-backed East Asian nuclear reads",
+    "status": "original_compatible_reference_recovered_reanalysis_not_completed",
     "public_locus_sets": [
       "1061_public_named_loci",
       "531_reproducible_warning_occupancy_candidates",
       "241_conservative_no_warning_high_occupancy_loci"
     ],
     "exact_moreyra_retained_350_available": false,
-    "exact_compositae1061_hybpiper_target_reference_available": false,
+    "original_comp1061_hybpiper_reference_available": true,
+    "original_comp1061_reference_contract": "data/evidence/comp1061_original_reference_contract_v1.json",
+    "original_comp1061_reference_sha256": "77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c",
+    "original_comp1061_reference_locus_count": 1061,
+    "exact_moreyra_augmented_reference_available": false,
     "target_reference_issue": 16,
-    "target_reference_status": "exact_or_compatible_target_not_recovered",
+    "target_reference_status": "original_compatible_reference_recovered_augmented_not_recovered",
+    "compatibility_raw_read_target_blocked": false,
+    "compatibility_branch_length_tree_available": false,
     "cos763_role": "mapping_reference_or_frame_correction_input_only",
-    "claim_limit": "A compatibility reanalysis must not be labelled an exact reproduction of the Moreyra pipeline until target/reference provenance and the retained-locus decisions are recovered."
+    "claim_limit": "The original public Compositae1061 HybPiper reference is now source-validated and can support a clearly labelled compatibility reanalysis. Moreyra et al. 2025 added Cirsium tioganum recovered exons; that augmented reference and the exact retained 350-locus set remain unrecovered, so this route is not an exact reproduction."
   },
   "tree_acceptance_rule": {
     "any_one_route_can_satisfy_tree_gate": true,
@@ -40,5 +46,5 @@
   },
   "current_analysis_status": "sensitivity_only",
   "rate_fit_execution_allowed": false,
-  "claim_limit": "This contract blocks empirical ER/ARD/Mk transition-rate fitting from being promoted from the current equal-cost/partial-calibration sensitivity analyses before a defensible branch-length nuclear tree route exists."
+  "claim_limit": "This contract blocks empirical ER/ARD/Mk transition-rate fitting until both the colour-atlas state gate and a defensible branch-length nuclear tree route exist. Recovery of the original Compositae1061 reference removes one upstream compatibility-reanalysis blocker but does not itself create a branch-length tree."
 }
