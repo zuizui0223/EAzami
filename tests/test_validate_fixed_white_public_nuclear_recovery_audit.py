@@ -18,8 +18,12 @@ class FixedWhitePublicAuditTests(unittest.TestCase):
         rows=[
             ['WREC01','Cirsium boninense','conference','title','existing_genetic_study_identified','J-GLOBAL','x','study exists','recover data','not a tip'],
             ['WREC01','Cirsium boninense','lab list','title','study_metadata_independently_corrobated','lab','x','confirmed','recover data','not a tip'],
-            ['WREC01','Cirsium boninense','PAFTOL','taxon','paftol_association_lead_unresolved','Kew','x','lead','resolve','not a tip'],
+            ['WREC01','Cirsium boninense','proceedings','RA241-R8 p69','proceedings_copy_route_identified','NDL','x','source route','read p69','catalogue only'],
+            ['WREC01','Cirsium boninense','index','Iriomote','iriomote_indexing_clue_identified','J-GLOBAL','x','index clue','verify abstract','not sequencing evidence'],
+            ['WREC01','Cirsium boninense','PAFTOL current','taxon','paftol_current_release_exact_taxon_absent','Kew','x','no exact current sample','focus study','current release only'],
+            ['WREC01','Cirsium boninense','PAFTOL deleted','taxon','paftol_current_deleted_exact_taxon_absent','Kew','x','no exact deleted entry','focus study','not all history'],
             ['WREC01','Cirsium boninense','archive','taxon','no_exact_indexed_plant_asset_recovered','NCBI/DDBJ','x','no recovery','recover study','not absence proof'],
+            ['WREC01','Cirsium boninense','followup','title/authors','no_followup_publication_or_thesis_recovered','bounded search','x','no recovery','recover p69','not absence proof'],
             ['WREC02','Cirsium wulongense','voucher','XLS21-095','voucher_anchor_recovered','paper','x','anchor','search data','not DNA'],
             ['WREC02','Cirsium wulongense','voucher','XLS21-093','additional_voucher_anchor_recovered','paper','x','anchor','search data','not DNA'],
             ['WREC02','Cirsium wulongense','archive','taxon','nuclear_tip_ready' if bad_status else 'no_exact_indexed_asset_recovered','NCBI/DDBJ','x','no recovery','contact/search','not absence proof'],
@@ -33,7 +37,10 @@ class FixedWhitePublicAuditTests(unittest.TestCase):
             out=m.validate(self.fixture(Path(td)))
             self.assertFalse(out['usable_nuclear_tip_recovered'])
             self.assertFalse(out['rate_fit_tip_promotion_allowed'])
-            self.assertEqual(out['evidence_rows'],7)
+            self.assertFalse(out['boninense_paftol_current_release_exact_taxon_present'])
+            self.assertFalse(out['boninense_existing_2025_genetic_study_data_recovered'])
+            self.assertEqual(out['evidence_rows'],11)
+            self.assertEqual(out['contract_version'],'fixed_white_public_nuclear_recovery_audit_v2')
 
     def test_rejects_ready_status_in_discovery_audit(self):
         with tempfile.TemporaryDirectory() as td:
