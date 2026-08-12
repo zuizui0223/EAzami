@@ -105,12 +105,36 @@ jobs:
           print('dna_reference_sha256=' + frozen['dna_reference_sha256'])
           PY
 
-      - name: Upload real static400 marker pack
+      - name: Guard lightweight execution artifact
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          root = Path('/tmp/eazami_oma_static400_validated')
+          total = sum(path.stat().st_size for path in root.rglob('*') if path.is_file())
+          if total > 25 * 1024 * 1024:
+              raise SystemExit(f'Validated execution pack unexpectedly exceeds 25 MiB: {total}')
+          if (root / 'source' / 'oma-groups.txt.gz').exists():
+              raise SystemExit('Archived 98-MB OMA group file leaked into execution pack')
+          print(f'execution_pack_bytes={total}')
+          print(f'execution_pack_mib={total / 1024 / 1024:.3f}')
+          PY
+
+      - name: Upload lightweight static400 execution pack
         uses: actions/upload-artifact@v4
         with:
-          name: eazami-read2tree-oma-static400-${{ github.run_id }}
+          name: eazami-read2tree-oma-static400-exec-${{ github.run_id }}
+          path: /tmp/eazami_oma_static400_validated/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload compact static400 source audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: eazami-read2tree-oma-static400-audit-${{ github.run_id }}
           path: |
-            /tmp/eazami_oma_static400/
-            /tmp/eazami_oma_static400_validated/
+            /tmp/eazami_oma_static400/static_marker_selection.csv
+            /tmp/eazami_oma_static400/static_marker_source_contract.json
+            /tmp/eazami_oma_static400/oma_static_broadconservation_marker_export.tar.gz
           if-no-files-found: error
           retention-days: 90
