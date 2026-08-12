@@ -107,8 +107,9 @@ def build_moreyra(rows: Sequence[Mapping[str,str]]) -> tuple[list[dict[str,str]]
     missing=required-set(rows[0])
     if missing: raise ValueError(f"Moreyra input missing {sorted(missing)}")
     by_bio: dict[str,list[Mapping[str,str]]]=defaultdict(list)
+    admitted_scopes={"core_east_asia","northeast_asia_bridge","source_conflict_target_vs_outside"}
     for row in rows:
-        if row["scope_class"] not in {"core_east_asia","northeast_asia_bridge"}:
+        if row["scope_class"] not in admitted_scopes:
             continue
         if row["sra_link_status"] != "linked_runinfo":
             continue
@@ -119,8 +120,11 @@ def build_moreyra(rows: Sequence[Mapping[str,str]]) -> tuple[list[dict[str,str]]
     panel=[]; exclusions=[]
     for biosample in sorted(by_bio):
         group=by_bio[biosample]
-        first=sorted(group,key=lambda r:(r["tree_code"],r["run"]))[0]
-        conflict=any(r["geographic_evidence_relation"]=="source_conflict_target_vs_outside" for r in group)
+        conflict=any(
+            r["scope_class"]=="source_conflict_target_vs_outside"
+            or r["geographic_evidence_relation"]=="source_conflict_target_vs_outside"
+            for r in group
+        )
         runs=unique_join(r["run"] for r in group)
         taxon=unique_join(r["tree_code"] for r in group)
         region=unique_join(r["region_class"] for r in group)
