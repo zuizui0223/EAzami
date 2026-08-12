@@ -5,10 +5,12 @@ on:
     paths:
       - "analysis/build_japan_origin_max_public_panel.py"
       - "analysis/augment_japan_origin_panel_with_chang2026_runs.py"
+      - "analysis/augment_japan_origin_panel_with_chang2025_runs.py"
       - "tests/test_build_japan_origin_max_public_panel.py"
       - "data/evidence/moreyra2025_east_ne_asia_sample_audit_2026-08-10.csv"
       - "data/evidence/chang2025_nipponocirsium_accession_audit_2026-08-10.csv"
       - "data/evidence/chang2026_east_asia_accession_audit_2026-08-10.csv"
+      - "data/evidence/chang2025_public_run_manifest_v1.csv"
       - "data/evidence/chang2026_public_run_manifest_v1.csv"
       - "docs/JAPAN_CIRSIUM_ORIGIN_MAX_PUBLIC_PANEL_2026-08-12.md"
       - ".github/workflows/build-japan-origin-max-public-panel.yml"
@@ -34,9 +36,10 @@ jobs:
         run: |
           python -m py_compile \
             analysis/build_japan_origin_max_public_panel.py \
-            analysis/augment_japan_origin_panel_with_chang2026_runs.py
+            analysis/augment_japan_origin_panel_with_chang2026_runs.py \
+            analysis/augment_japan_origin_panel_with_chang2025_runs.py
           python -m unittest tests/test_build_japan_origin_max_public_panel.py -v
-      - name: Build maximal public panel and join all verified Chang 2026 runs
+      - name: Build focused public panel and resolve all 96 public runs
         run: |
           rm -rf /tmp/japan_origin_max_public_panel
           python analysis/build_japan_origin_max_public_panel.py \
@@ -47,39 +50,43 @@ jobs:
             --runs data/evidence/chang2026_public_run_manifest_v1.csv \
             --output /tmp/japan_origin_max_public_panel/japan_origin_max_public_panel_v1_run_resolved.csv \
             | tee -a /tmp/japan_origin_max_public_panel.log
+          python analysis/augment_japan_origin_panel_with_chang2025_runs.py \
+            --panel /tmp/japan_origin_max_public_panel/japan_origin_max_public_panel_v1_run_resolved.csv \
+            --runs data/evidence/chang2025_public_run_manifest_v1.csv \
+            --output /tmp/japan_origin_max_public_panel/japan_origin_max_public_panel_v1_all_runs_resolved.csv \
+            | tee -a /tmp/japan_origin_max_public_panel.log
           python - <<'PY'
           import csv,json
           from pathlib import Path
           root=Path('/tmp/japan_origin_max_public_panel')
           s=json.loads((root/'japan_origin_max_public_panel_summary_v1.json').read_text())
-          rs=json.loads((root/'japan_origin_max_public_panel_v1_run_resolved_summary.json').read_text())
-          rows=list(csv.DictReader((root/'japan_origin_max_public_panel_v1_run_resolved.csv').open()))
+          c26=json.loads((root/'japan_origin_max_public_panel_v1_run_resolved_summary.json').read_text())
+          rs=json.loads((root/'japan_origin_max_public_panel_v1_all_runs_resolved_summary.json').read_text())
+          rows=list(csv.DictReader((root/'japan_origin_max_public_panel_v1_all_runs_resolved.csv').open()))
           ex=list(csv.DictReader((root/'japan_origin_max_public_exclusions_v1.csv').open()))
           assert s['japan_all_taxa_monophyly_claim_allowed'] is False
           assert s['joint_common_locus_tree_executed'] is False
           assert s['new_china_sampling_freeze_allowed'] is False
           assert s['ryukyu_public_replicates']=={'Cirsium brevicaule':3,'Cirsium irumtiense':3}
-          assert rs['all_chang2026_verified_run_resolved'] is True
-          assert rs['chang2026_rows']==33
-          assert rs['chang2026_unique_runs']==33
-          assert rs['chang2026_unique_biosamples']==33
-          assert rs['arenicola_rows']==6
-          assert rs['arenicola_unique_runs']==6
+          assert c26['all_chang2026_verified_run_resolved'] is True
+          assert c26['chang2026_rows']==33 and c26['chang2026_unique_runs']==33
+          assert rs['panel_rows']==96
+          assert rs['source_counts']=={'Moreyra2025':50,'Chang2025':13,'Chang2026':33}
+          assert rs['resolved_public_rows']==96 and rs['unresolved_public_rows']==0
+          assert rs['chang2025_unique_runs']==13 and rs['chang2025_unique_biosamples']==13
           assert rs['joint_common_locus_tree_executed'] is False
           assert rs['new_china_sampling_freeze_allowed'] is False
-          ch=[r for r in rows if r['source_study']=='Chang2026']
-          assert len(ch)==33 and all(r['run_resolution_state']=='resolved_public_runs' for r in ch)
+          assert len(rows)==96 and all(r['run_resolution_state']=='resolved_public_runs' for r in rows)
           assert any(r['source_study']=='Moreyra2025' and r['region']=='China' for r in rows)
           assert any(r['origin_test_role']=='northeast_asia_bridge' for r in rows)
           assert any(r['analysis_taxon_label']=='Cirsium dipsacolepis' for r in rows)
           assert any(r['analysis_taxon_label']=='Cirsium lineare' for r in rows)
           assert any(r['exclusion_reason']=='source_conflict_target_vs_outside' for r in ex)
-          print('panel_rows',s['panel_rows'])
+          print('panel_rows',rs['panel_rows'])
           print('unique_analysis_taxa',s['unique_analysis_taxa'])
           print('study_counts',s['study_counts'])
           print('region_counts',s['region_counts'])
           print('run_resolution_state_counts',rs['run_resolution_state_counts'])
-          print('chang2026_run_resolved',rs['chang2026_rows'])
           PY
       - uses: actions/upload-artifact@v4
         with:
