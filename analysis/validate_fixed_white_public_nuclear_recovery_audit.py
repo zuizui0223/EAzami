@@ -2,9 +2,10 @@
 """Validate the bounded public-data recovery audit for fixed-white candidates.
 
 The purpose is to prevent discovery metadata from being silently promoted into a
-usable nuclear phylogenetic tip.  A conference study, PAFTOL interface lead,
-herbarium specimen, or no-result archive search remains a discovery state until
-an exact reusable sample/sequence artifact with provenance is recovered.
+usable nuclear phylogenetic tip. A conference study, catalogue route, exact-name
+absence from a current public release, herbarium specimen, or no-result archive
+search remains a discovery state until an exact reusable sample/sequence artifact
+with provenance is recovered.
 """
 from __future__ import annotations
 
@@ -25,8 +26,12 @@ A1_EXPECTED = {
 NON_TIP_STATUSES = {
     "existing_genetic_study_identified",
     "study_metadata_independently_corrobated",
-    "paftol_association_lead_unresolved",
+    "proceedings_copy_route_identified",
+    "iriomote_indexing_clue_identified",
+    "paftol_current_release_exact_taxon_absent",
+    "paftol_current_deleted_exact_taxon_absent",
     "no_exact_indexed_plant_asset_recovered",
+    "no_followup_publication_or_thesis_recovered",
     "voucher_anchor_recovered",
     "additional_voucher_anchor_recovered",
     "no_exact_indexed_asset_recovered",
@@ -79,28 +84,39 @@ def validate(path: Path) -> dict[str,object]:
         raise ValueError("both A1 fixed-white candidates must remain represented")
 
     bon={r["result_status"] for r in by_candidate["WREC01"]}
-    required_bon={"existing_genetic_study_identified","study_metadata_independently_corrobated","no_exact_indexed_plant_asset_recovered"}
+    required_bon={
+        "existing_genetic_study_identified",
+        "study_metadata_independently_corrobated",
+        "proceedings_copy_route_identified",
+        "iriomote_indexing_clue_identified",
+        "paftol_current_release_exact_taxon_absent",
+        "paftol_current_deleted_exact_taxon_absent",
+        "no_exact_indexed_plant_asset_recovered",
+        "no_followup_publication_or_thesis_recovered",
+    }
     if not required_bon<=bon:
-        raise ValueError(f"C. boninense audit lost required study/no-indexed-asset states: {sorted(required_bon-bon)}")
-    if "paftol_association_lead_unresolved" not in bon:
-        raise ValueError("C. boninense audit must retain the unresolved PAFTOL lead")
+        raise ValueError(f"C. boninense audit lost required recovery states: {sorted(required_bon-bon)}")
+    if "paftol_association_lead_unresolved" in bon:
+        raise ValueError("C. boninense PAFTOL lead must not remain unresolved after direct v4.0 manifest audit")
 
     wul={r["result_status"] for r in by_candidate["WREC02"]}
     if not {"voucher_anchor_recovered","additional_voucher_anchor_recovered","no_exact_indexed_asset_recovered"}<=wul:
         raise ValueError("C. wulongense audit must retain two specimen anchors and bounded no-indexed-asset result")
 
     return {
-        "contract_version":"fixed_white_public_nuclear_recovery_audit_v1",
+        "contract_version":"fixed_white_public_nuclear_recovery_audit_v2",
         "evidence_rows":len(rows),
         "candidates":A1_EXPECTED,
         "result_status_counts":dict(sorted(statuses.items())),
+        "boninense_paftol_current_release_exact_taxon_present":False,
+        "boninense_existing_2025_genetic_study_data_recovered":False,
         "usable_nuclear_tip_recovered":False,
         "rate_fit_tip_promotion_allowed":False,
         "next_actions":{
-            "Cirsium boninense":"recover 2025 genetic-study method/sample/data accessions and resolve PAFTOL lead before new sequencing",
+            "Cirsium boninense":"recover NDL p.69 / 2025 study method, sample identities and data accessions; Kew v4.0 exact-taxonomy route is exhausted",
             "Cirsium wulongense":"search author/institution/herbarium-held molecular data by XLS21-095/XLS21-093 before new sequencing",
         },
-        "claim_limit":"Discovery metadata and specimen anchors are not reusable nuclear tips. Promotion still requires the independent fixed-white tree-promotion contract.",
+        "claim_limit":"Current Kew Tree of Life v4.0 exact manifests contain no C. boninense record. The existing 2025 Japanese genetic study remains a high-value recovery lead but is not yet a reusable nuclear tip. Promotion still requires the independent fixed-white tree-promotion contract.",
     }
 
 
