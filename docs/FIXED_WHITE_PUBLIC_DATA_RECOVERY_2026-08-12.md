@@ -2,11 +2,13 @@
 
 ## Purpose
 
-Before generating new nuclear data for the two A1 fixed-white candidates, exhaust credible existing-data routes. The flower-colour gate still requires two additional fixed-white **species-level nuclear tips**; a conference presentation, image attribution, catalogue record or taxonomic voucher does not itself satisfy that gate.
+Before generating new nuclear data for the two A1 fixed-white candidates, exhaust credible existing-data routes. The flower-colour gate still requires two additional fixed-white **species-level nuclear tips**; a conference presentation, image attribution, catalogue record, morphology-only taxonomic paper or taxonomic voucher does not itself satisfy that gate.
 
 Machine-readable audit: `data/evidence/fixed_white_public_nuclear_recovery_audit_2026-08-12.csv`.
 
-## Cirsium boninense — existing 2025 genetic study is now the only strong public-data recovery route
+Author contact is deliberately deferred for the present work package. The active task is public/lawful acquisition only.
+
+## Cirsium boninense — existing 2025 genetic study is the only strong remaining public-data recovery route
 
 A 2025 Japanese Plant Taxonomy Society presentation is indexed as:
 
@@ -14,45 +16,50 @@ A 2025 Japanese Plant Taxonomy Society presentation is indexed as:
 
 The same presentation is independently listed by the Tohoku University Forest Ecology laboratory. J-GLOBAL indexing also includes イリオモテアザミ as a quasi-thesaurus term, making the actual study especially relevant to the Arenicola question; that indexing clue is not evidence that *C. irumtiense* was sequenced.
 
-The full 2025 meeting proceedings is catalogued by the National Diet Library as a 110-page volume, bibliographic ID `034039888`, call number `RA241-R8`; the target contribution is p.69. This is now the concrete public-document recovery route for method/comparator/sample information.
+The full 2025 meeting proceedings is catalogued by the National Diet Library as a 110-page volume, bibliographic ID `034039888`, call number `RA241-R8`; the target contribution is p.69. This is now the concrete lawful document-recovery route for method/comparator/sample information.
 
-Bounded exact-name searches did **not** recover an NCBI BioProject/SRA or DDBJ plant sequence artifact. Searches for abbreviated `C. boninense` are unsafe because the fungal *Colletotrichum boninense* produces abundant unrelated sequence hits.
+Bounded exact-name searches did **not** recover an NCBI BioProject/SRA or DDBJ plant sequence artifact. Exact-title/method-term and 2025–2026 follow-up publication/thesis searches likewise did not expose the method or a reusable dataset. Searches for abbreviated `C. boninense` are unsafe because the fungal *Colletotrichum boninense* produces abundant unrelated sequence hits.
 
-### Kew/PAFTOL lead resolved: no exact current-release taxon
+### Kew/PAFTOL route closed for the current release
 
-POWO displays `Image: PAFTOL` and a Tree-of-Life interface link for *C. boninense*. This was previously retained as an unresolved nuclear-data lead. Direct audit of the actual Kew Tree of Life Explorer release v4.0 now resolves that ambiguity:
+POWO displays `Image: PAFTOL` and a Tree-of-Life interface link for *C. boninense*. Direct audit of the actual Kew Tree of Life Explorer release v4.0 resolves that ambiguity:
 
 - `sequence_manifest.txt`: no exact `Cirsium boninense`;
 - `specimen_manifest.txt`: no exact `Cirsium boninense`;
 - `deleted_sequences.txt`: no exact `Cirsium boninense` deletion entry for the current release;
-- the same current manifests do contain multiple other *Cirsium* species, so the absence is not because the genus is missing from the release.
+- the same current manifests contain multiple other *Cirsium* species.
 
-Therefore the POWO `Image: PAFTOL` element must **not** be treated as evidence of a current Kew nuclear sample or accepted rate-tree tip. The Kew v4.0 exact-taxonomy route is exhausted for the present audit. This does not prove that no older, differently named, unpublished or partner-held data exist.
+Therefore the POWO `Image: PAFTOL` element is **not** evidence of a current Kew nuclear sample or accepted rate-tree tip. This does not prove that no older, differently named, unpublished or partner-held data exist.
 
-### Required order
+### Current public-only order
 
-1. Obtain/read NDL proceedings p.69 through a lawful library route or recover the full poster/extended abstract.
-2. Identify the actual molecular method, comparator taxa, sample/voucher identities and archive accession **from the study itself**; do not infer MIG-seq, target capture or another method from coauthor expertise.
-3. If the 2025 study provides a reusable nuclear dataset, test whether >=2 independent *C. boninense* individuals are represented and whether their placement is concordant.
-4. If data are unavailable, unsuitable or single-individual-only, obtain >=2 new voucher/flower-colour-linked nuclear samples, preferably in the recovered original Compositae1061 compatibility space or with an explicitly independent assay.
+1. Obtain/read NDL proceedings p.69 through a lawful library/copy route or recover a lawful public copy of the poster/extended abstract.
+2. Extract the actual molecular method, comparator taxa, sample/voucher identities and archive accession from the study itself; do not infer MIG-seq, target capture or another method from coauthor expertise.
+3. If a reusable nuclear dataset becomes public/recoverable, test whether >=2 independent *C. boninense* individuals are represented and placement is concordant.
+4. If public/lawful routes remain exhausted, keep author contact as a later task rather than silently assuming data absence.
+5. If no suitable existing dataset is ultimately available, obtain >=2 new voucher/flower-colour-linked nuclear samples.
 
 No author contact has been sent from this repository workflow.
 
-## Cirsium wulongense — concrete specimen anchors, no indexed nuclear asset recovered
+## Cirsium wulongense — published paper is morphology-only; public sequence route remains negative
 
-The 2024 primary description gives a white corolla and provides two concrete Xiannü Shan specimen identifiers:
+The 2024 primary description provides the two concrete Xiannü Shan collections:
 
-- `XLS21-095` — holotype, IBSC; isotypes CQNM;
-- `XLS21-093` — additional specimen, CBNM/IBSC.
+- `XLS21-095` — holotype, IBSC; isotypes CQNM; 14 Aug 2021, 1780 m;
+- `XLS21-093` — additional specimen, CBNM/IBSC; 14 Aug 2021, 1651 m.
 
-Exact-name searches of NCBI BioProject/SRA and DDBJ/ENA did not recover an indexed *C. wulongense* nuclear dataset in the bounded 2026-08-12 search. This is a **no-recovery result**, not proof that no author-held, institutional, unpublished or differently indexed data exist.
+The published **Materials and methods** route is now resolved. The study reports collection of specimens in August 2021 and critical examination of herbarium specimens/high-resolution images for **morphological comparison**. It does not report DNA extraction, sequencing, molecular markers, phylogenetic analysis or a sequence-generation workflow. Therefore the primary publication itself cannot supply the missing nuclear tip.
 
-### Required order
+Exact-name NCBI BioProject/SRA and DDBJ/ENA searches did not recover an indexed *C. wulongense* nuclear dataset. Bounded exact-voucher searches across searchable CVH/IBSC/CQNM/CBNM web indexes also did not recover a public digitized record for `XLS21-095` or `XLS21-093`. The latter is an index non-recovery result, **not** evidence that the physical herbarium sheets are absent.
 
-1. Search author/institutional/herbarium-held molecular data using both the taxon name and `XLS21-095` / `XLS21-093`.
-2. If existing sequence data are found, require exact specimen/sample provenance before use.
-3. If no reusable nuclear data exist, obtain >=2 independent voucher-linked fixed-white individuals matching the published taxonomic concept.
-4. Prefer the recovered original Compositae1061 reference for compatibility with the current 20-tip bridge; Angiosperms353 or low-coverage WGS remains an explicitly independent fallback.
+The primary description additionally reports a second locality in Zunyi city, Guizhou, based on Plant Photo Bank of China image `2837783`. This is useful as an independent future-sampling lead, but it is not a voucher-linked nuclear individual and does not count toward the >=2-individual promotion gate.
+
+### Current public-only order
+
+1. Treat the 2024 article molecular-data route as closed: it is morphology-only.
+2. Retain `XLS21-095` and `XLS21-093` as exact taxonomic/material anchors and keep checking public specimen/data mirrors without contacting authors yet.
+3. Retain the Guizhou PPBC locality as a second geographic sampling lead, but do not count it as a sequence/voucher replicate.
+4. If no reusable public molecular asset appears, the efficient next empirical route is >=2 independent, verified fixed-white nuclear samples; use the recovered original Compositae1061 reference for compatibility with the current 20-tip bridge or an explicitly independent assay.
 
 The existing coloured *C. fanjingshanense* Moreyra tip is a useful regional comparator, but the morphological comparison in the species description is not an assumed sister relationship.
 
