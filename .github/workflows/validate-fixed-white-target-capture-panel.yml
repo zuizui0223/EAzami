@@ -5,6 +5,8 @@ on:
     paths:
       - "sampling/FIXED_WHITE_TARGET_CAPTURE_PANEL_V0_1.csv"
       - "analysis/validate_fixed_white_target_capture_panel.py"
+      - "analysis/validate_fixed_white_tree_promotion_contract.py"
+      - "data/evidence/fixed_white_tree_promotion_contract_v0_1.json"
       - "tests/test_fixed_white_target_capture_panel.py"
       - "docs/FIXED_WHITE_TIP_GATE_TARGET_CAPTURE_2026-08-12.md"
       - ".github/workflows/validate-fixed-white-target-capture-panel.yml"
@@ -26,8 +28,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Compile and test panel contract
+      - name: Compile and test panel and tree-promotion contracts
         run: |
-          python -m py_compile analysis/validate_fixed_white_target_capture_panel.py
+          python -m py_compile \
+            analysis/validate_fixed_white_target_capture_panel.py \
+            analysis/validate_fixed_white_tree_promotion_contract.py
           python -m unittest tests/test_fixed_white_target_capture_panel.py -v
           python analysis/validate_fixed_white_target_capture_panel.py sampling/FIXED_WHITE_TARGET_CAPTURE_PANEL_V0_1.csv
+          python analysis/validate_fixed_white_tree_promotion_contract.py data/evidence/fixed_white_tree_promotion_contract_v0_1.json
