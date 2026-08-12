@@ -21,15 +21,14 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  validate-offline:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Validate static marker code offline
         run: |
           python -m py_compile \
@@ -41,13 +40,26 @@ jobs:
             tests/test_build_read2tree_oma_static_marker_pack_resilient.py \
             tests/test_validate_read2tree_oma_marker_pack.py \
             -v
+          echo "real_oma_rebuild=false_on_pull_request"
+          echo "real_oma_rebuild=workflow_dispatch_only"
+
+  build-real-static400:
+    if: github.event_name == 'workflow_dispatch'
+    needs: validate-offline
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
       - name: Recover May-2026 OMA groups and build static400
         run: |
-          # The production OMA host currently returns 404 for its documented
-          # bulk_retrieve POST endpoint. The resilient wrapper first probes that
-          # endpoint and then falls back to the documented per-protein GET API,
-          # preserving the same selected IDs, release gate and downstream hashes.
+          # Real external reconstruction is intentionally manual. A source-backed
+          # build already completed successfully in run 31544674246; ordinary PR
+          # synchronization must not re-download the 98-MB group file and 1,200
+          # protein records on every commit.
           python analysis/build_read2tree_oma_static_marker_pack_resilient.py \
             --reference-manifest sampling/read2tree_oma_reference_set_v0_2.csv \
             --outdir /tmp/eazami_oma_static400 \
@@ -114,7 +126,7 @@ jobs:
           total = sum(path.stat().st_size for path in root.rglob('*') if path.is_file())
           if total > 25 * 1024 * 1024:
               raise SystemExit(f'Validated execution pack unexpectedly exceeds 25 MiB: {total}')
-          if (root / 'source' / 'oma-groups.txt.gz').exists():
+          if any(path.name == 'oma-groups.txt.gz' for path in root.rglob('*')):
               raise SystemExit('Archived 98-MB OMA group file leaked into execution pack')
           print(f'execution_pack_bytes={total}')
           print(f'execution_pack_mib={total / 1024 / 1024:.3f}')
