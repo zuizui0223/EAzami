@@ -13,6 +13,7 @@ RESULT_ROOT="${RESULT_ROOT:-$PWD/results/colour_rate_comp1061}"
 ENV_PREFIX="${ENV_PREFIX:-$REPO_ROOT/.conda/eazami-colour-rate-comp1061}"
 MODE="${MODE:-bwa}"
 [[ "$MODE" == "bwa" || "$MODE" == "blastx" ]]
+export BUNDLE_DIR REPO_ROOT RESULT_ROOT ENV_PREFIX MODE
 if command -v micromamba >/dev/null 2>&1; then RUN=(micromamba run -p "$ENV_PREFIX"); elif command -v mamba >/dev/null 2>&1; then RUN=(mamba run -p "$ENV_PREFIX"); else echo "micromamba or mamba required" >&2; exit 2; fi
 '''
 
@@ -66,7 +67,6 @@ sha=hashlib.sha256(tree.read_bytes()).hexdigest()
 prov={'tree_route':'compatibility_reanalysis','tree_sha256':sha,'analysis_name':f'EAzami 20-tip Compositae1061 {mode} concatenated ML tree','branch_length_interpretation':'IQ-TREE maximum-likelihood substitutions per site on concatenated recovered coding-sequence alignment','rooting_definition':'IQ-TREE rooted using OUTGROUP_lett and OUTGROUP_sunf reference sequences appended from the pinned original Compositae1061 target','support_metric_definition':'IQ-TREE ultrafast bootstrap 1000 plus SH-aLRT 1000; per-locus ML gene trees retained as topology sensitivity','source_or_pipeline_provenance':'20 frozen colour-atlas taxa; pinned original Compositae1061 reference SHA256 77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c; frozen Moreyra conservative 241-locus universe; current 20-tip occupancy >=0.80; HybPiper 2.3.4; MAFFT; IQ-TREE','topology_uncertainty_status':'bootstrap_or_gene_tree_sensitivity'}
 (tr/'tree_provenance.json').write_text(json.dumps(prov,indent=2)+'\n')
 PY
-export BUNDLE_DIR RESULT_ROOT MODE
 "${RUN[@]}" python "$REPO_ROOT/analysis/validate_colour_atlas_branch_length_tree.py" \
  --tree "$TREEFILE" --atlas "$REPO_ROOT/data/evidence/cirsium_flower_colour_atlas_v0_3.csv" \
  --tip-map "$TREE/tip_map.csv" --provenance "$TREE/tree_provenance.json" --output "$TREE/tree_acceptance.json"
