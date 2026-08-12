@@ -26,7 +26,10 @@ class FixedWhitePublicAuditTests(unittest.TestCase):
             ['WREC01','Cirsium boninense','followup','title/authors','no_followup_publication_or_thesis_recovered','bounded search','x','no recovery','recover p69','not absence proof'],
             ['WREC02','Cirsium wulongense','voucher','XLS21-095','voucher_anchor_recovered','paper','x','anchor','search data','not DNA'],
             ['WREC02','Cirsium wulongense','voucher','XLS21-093','additional_voucher_anchor_recovered','paper','x','anchor','search data','not DNA'],
-            ['WREC02','Cirsium wulongense','archive','taxon','nuclear_tip_ready' if bad_status else 'no_exact_indexed_asset_recovered','NCBI/DDBJ','x','no recovery','contact/search','not absence proof'],
+            ['WREC02','Cirsium wulongense','paper methods','morphology','published_taxonomic_study_morphology_only_no_molecular_data','paper','x','no molecular analysis in paper','continue public routes','not proof of no separate data'],
+            ['WREC02','Cirsium wulongense','specimen index','vouchers','no_public_digitized_voucher_record_recovered','CVH/IBSC','x','no indexed digitized record','retain anchors','not specimen absence'],
+            ['WREC02','Cirsium wulongense','image locality','PPBC','secondary_locality_image_evidence_identified','paper/PPBC','x','second locality','future sampling lead','not a nuclear sample'],
+            ['WREC02','Cirsium wulongense','archive','taxon','nuclear_tip_ready' if bad_status else 'no_exact_indexed_asset_recovered','NCBI/DDBJ','x','no recovery','public search/new sampling','not absence proof'],
         ]
         with p.open('w',newline='',encoding='utf-8') as h:
             w=csv.writer(h);w.writerow(FIELDS);w.writerows(rows)
@@ -39,8 +42,10 @@ class FixedWhitePublicAuditTests(unittest.TestCase):
             self.assertFalse(out['rate_fit_tip_promotion_allowed'])
             self.assertFalse(out['boninense_paftol_current_release_exact_taxon_present'])
             self.assertFalse(out['boninense_existing_2025_genetic_study_data_recovered'])
-            self.assertEqual(out['evidence_rows'],11)
-            self.assertEqual(out['contract_version'],'fixed_white_public_nuclear_recovery_audit_v2')
+            self.assertFalse(out['wulongense_published_study_contains_molecular_analysis'])
+            self.assertFalse(out['wulongense_public_digitized_exact_voucher_recovered'])
+            self.assertEqual(out['evidence_rows'],14)
+            self.assertEqual(out['contract_version'],'fixed_white_public_nuclear_recovery_audit_v3')
 
     def test_rejects_ready_status_in_discovery_audit(self):
         with tempfile.TemporaryDirectory() as td:
