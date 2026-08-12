@@ -1,0 +1,44 @@
+{
+  "contract_version": "flower_colour_rate_tree_contract_v0_1",
+  "date": "2026-08-12",
+  "empirical_branch_length_tree_ready": false,
+  "accepted_tree_route": "none_yet",
+  "published_tree_route": {
+    "source": "Moreyra et al. 2025",
+    "issue": 12,
+    "status": "final_machine_readable_branch_length_trees_not_recovered",
+    "branch_lengths_available": false,
+    "tip_join_ready": false,
+    "claim_limit": "Published figures and topology statements must not be converted into invented branch lengths."
+  },
+  "compatibility_reanalysis_route": {
+    "source": "PRJNA957074 raw reads plus public Moreyra locus diagnostics",
+    "status": "reanalysis_not_completed",
+    "public_locus_sets": [
+      "1061_public_named_loci",
+      "531_reproducible_warning_occupancy_candidates",
+      "241_conservative_no_warning_high_occupancy_loci"
+    ],
+    "exact_moreyra_retained_350_available": false,
+    "exact_compositae1061_hybpiper_target_reference_available": false,
+    "target_reference_issue": 16,
+    "target_reference_status": "exact_or_compatible_target_not_recovered",
+    "cos763_role": "mapping_reference_or_frame_correction_input_only",
+    "claim_limit": "A compatibility reanalysis must not be labelled an exact reproduction of the Moreyra pipeline until target/reference provenance and the retained-locus decisions are recovered."
+  },
+  "tree_acceptance_rule": {
+    "any_one_route_can_satisfy_tree_gate": true,
+    "requirements": [
+      "machine_readable_tree_or_tree_ensemble",
+      "branch_lengths_with_defined_units_or_interpretation",
+      "tip_labels_joinable_to_frozen_taxon_and_sample evidence",
+      "rooting_and_outgroup_definition",
+      "support_metric_definition",
+      "provenance_and_checksum",
+      "topology_uncertainty_available_or_explicitly_constructed_without_invented_support"
+    ]
+  },
+  "current_analysis_status": "sensitivity_only",
+  "rate_fit_execution_allowed": false,
+  "claim_limit": "This contract blocks empirical ER/ARD/Mk transition-rate fitting from being promoted from the current equal-cost/partial-calibration sensitivity analyses before a defensible branch-length nuclear tree route exists."
+}

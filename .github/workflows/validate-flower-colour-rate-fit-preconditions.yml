@@ -1,0 +1,65 @@
+name: Validate flower-colour rate-fit preconditions
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_cirsium_flower_colour_atlas_v0_3.py"
+      - "analysis/validate_flower_colour_rate_fit_preconditions.py"
+      - "analysis/validate_colour_atlas.py"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_2.csv"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_3_expansion_evidence.csv"
+      - "data/evidence/flower_colour_rate_tree_contract_v0_1.json"
+      - "tests/test_flower_colour_rate_fit_preconditions.py"
+      - ".github/workflows/validate-flower-colour-rate-fit-preconditions.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: validate-flower-colour-rate-fit-preconditions-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile and unit-test the combined rate gate
+        run: |
+          python -m py_compile \
+            analysis/build_cirsium_flower_colour_atlas_v0_3.py \
+            analysis/validate_flower_colour_rate_fit_preconditions.py
+          python -m unittest tests/test_flower_colour_rate_fit_preconditions.py -v
+      - name: Rebuild current atlas gate and assert empirical rate fitting stays blocked
+        run: |
+          mkdir -p /tmp/eazami_rate_gate
+          python analysis/build_cirsium_flower_colour_atlas_v0_3.py \
+            --base data/evidence/cirsium_flower_colour_atlas_v0_2.csv \
+            --expansion data/evidence/cirsium_flower_colour_atlas_v0_3_expansion_evidence.csv \
+            --output /tmp/eazami_rate_gate/atlas_v0_3.csv \
+            --summary /tmp/eazami_rate_gate/atlas_v0_3_readiness.json
+          python analysis/validate_flower_colour_rate_fit_preconditions.py \
+            --atlas-summary /tmp/eazami_rate_gate/atlas_v0_3_readiness.json \
+            --tree-contract data/evidence/flower_colour_rate_tree_contract_v0_1.json \
+            --output /tmp/eazami_rate_gate/rate_fit_preconditions.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/eazami_rate_gate/rate_fit_preconditions.json').read_text())
+          if x['execution_allowed'] is not False:
+              raise SystemExit('Current project must remain blocked from empirical transition-rate fitting')
+          if x['blockers'] != ['atlas_minimum_white_tips','branch_length_tree_unavailable']:
+              raise SystemExit(f"Unexpected blockers: {x['blockers']}")
+          print('execution_allowed=false')
+          print('blockers='+'|'.join(x['blockers']))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: flower-colour-rate-fit-preconditions-${{ github.run_id }}
+          path: /tmp/eazami_rate_gate/
+          retention-days: 90
