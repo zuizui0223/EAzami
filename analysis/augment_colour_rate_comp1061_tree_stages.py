@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Add alignment/tree/acceptance stages to a validated colour-rate HPC bundle."""
+"""Add alignment/tree/acceptance stages to a validated colour-rate HPC bundle.
+
+The tree stage starts from the frozen public 241-locus conservative universe,
+but it must also re-apply *current* 20-tip occupancy and paralog QC before any
+alignment is admitted.  This prevents a locus that was clean in the published
+Moreyra screen from entering the compatibility tree when the present mixed
+RNA-seq/target-capture panel reveals a new paralog conflict.
+"""
 from __future__ import annotations
 import argparse,json
 from pathlib import Path
@@ -19,15 +26,39 @@ if command -v micromamba >/dev/null 2>&1; then RUN=(micromamba run -p "$ENV_PREF
 
 def prep():
     return '#!/usr/bin/env bash\n#SBATCH --job-name=EAzami-cr-treeprep\n#SBATCH --cpus-per-task=4\n#SBATCH --mem=16G\n#SBATCH --time=04:00:00\n'+common()+'''TREE="$RESULT_ROOT/tree_$MODE"
-mkdir -p "$TREE"
+QC="$RESULT_ROOT/qc_$MODE"
+mkdir -p "$TREE/current_qc" "$TREE/inputs"
+test -d "$QC/retrieved_dna"
+PARALOG=$(find "$QC" -maxdepth 1 -type f \
+  \( -name 'paralog_report' -o -name 'paralog_report.tsv' -o -name 'paralog_report*.tsv' \) \
+  -print -quit)
+[[ -n "$PARALOG" ]] || { echo "No HybPiper paralog report found in $QC" >&2; exit 3; }
+test -s "$PARALOG"
+
+# Re-apply the present 20-tip occupancy and paralog gate.  The frozen 241 loci
+# are the public starting universe, not an automatic pass for the current data.
+"${RUN[@]}" python "$REPO_ROOT/analysis/summarize_colour_rate_comp1061_qc.py" \
+ --runs "$BUNDLE_DIR/primary_runs.csv" \
+ --retrieved-dir "$QC/retrieved_dna" \
+ --paralog-report "$PARALOG" \
+ --locus-dir "$RESULT_ROOT/inputs/locus_sets" \
+ --outdir "$TREE/current_qc" --min-occupancy 0.80
+CURRENT="$TREE/current_qc/current_conservative_241_loci.txt"
+test -s "$CURRENT"
+N_CURRENT=$(grep -cve '^[[:space:]]*$' "$CURRENT")
+if (( N_CURRENT < 100 )); then
+  echo "Only $N_CURRENT current no-paralog/occupancy-qualified loci; minimum launch gate is 100" >&2
+  exit 4
+fi
+
 "${RUN[@]}" python "$REPO_ROOT/analysis/prepare_colour_rate_comp1061_tree_inputs.py" \
  --primary-runs "$BUNDLE_DIR/primary_runs.csv" \
- --locus-list "$RESULT_ROOT/inputs/locus_sets/moreyra_conservative_241_no_warning_loci.txt" \
- --retrieved-dir "$RESULT_ROOT/qc_$MODE/retrieved_dna" \
+ --locus-list "$CURRENT" \
+ --retrieved-dir "$QC/retrieved_dna" \
  --target "$RESULT_ROOT/inputs/reference/comp1061_hybpiper_reference.fasta" \
  --outdir "$TREE/inputs" --min-fraction 0.8
 test -s "$TREE/inputs/eligible_loci.txt"
-echo tree_input_checkpoint=complete mode=$MODE
+echo tree_input_checkpoint=complete mode=$MODE current_clean_loci=$N_CURRENT
 '''
 def align():
     return '#!/usr/bin/env bash\n#SBATCH --job-name=EAzami-cr-align\n#SBATCH --array=0-240\n#SBATCH --cpus-per-task=4\n#SBATCH --mem=8G\n#SBATCH --time=02:00:00\n'+common()+'''TREE="$RESULT_ROOT/tree_$MODE"; IDX="${SLURM_ARRAY_TASK_ID:?}"
@@ -64,7 +95,7 @@ rows=list(csv.DictReader((bundle/'primary_runs.csv').open()))
 with (tr/'tip_map.csv').open('w',newline='') as f:
  w=csv.DictWriter(f,fieldnames=['tree_tip','accepted_taxon','mapping_status']);w.writeheader();w.writerows({'tree_tip':r['tip_id'],'accepted_taxon':r['accepted_taxon'],'mapping_status':'exact'} for r in rows)
 sha=hashlib.sha256(tree.read_bytes()).hexdigest()
-prov={'tree_route':'compatibility_reanalysis','tree_sha256':sha,'analysis_name':f'EAzami 20-tip Compositae1061 {mode} concatenated ML tree','branch_length_interpretation':'IQ-TREE maximum-likelihood substitutions per site on concatenated recovered coding-sequence alignment','rooting_definition':'IQ-TREE rooted using OUTGROUP_lett and OUTGROUP_sunf reference sequences appended from the pinned original Compositae1061 target','support_metric_definition':'IQ-TREE ultrafast bootstrap 1000 plus SH-aLRT 1000; per-locus ML gene trees retained as topology sensitivity','source_or_pipeline_provenance':'20 frozen colour-atlas taxa; pinned original Compositae1061 reference SHA256 77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c; frozen Moreyra conservative 241-locus universe; current 20-tip occupancy >=0.80; HybPiper 2.3.4; MAFFT; IQ-TREE','topology_uncertainty_status':'bootstrap_or_gene_tree_sensitivity'}
+prov={'tree_route':'compatibility_reanalysis','tree_sha256':sha,'analysis_name':f'EAzami 20-tip Compositae1061 {mode} concatenated ML tree','branch_length_interpretation':'IQ-TREE maximum-likelihood substitutions per site on concatenated recovered coding-sequence alignment','rooting_definition':'IQ-TREE rooted using OUTGROUP_lett and OUTGROUP_sunf reference sequences appended from the pinned original Compositae1061 target','required_outgroup_tips':['OUTGROUP_lett','OUTGROUP_sunf'],'support_metric_definition':'IQ-TREE ultrafast bootstrap 1000 plus SH-aLRT 1000; per-locus ML gene trees retained as topology sensitivity','source_or_pipeline_provenance':'20 frozen colour-atlas taxa; pinned original Compositae1061 reference SHA256 77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c; frozen Moreyra conservative 241-locus universe intersected with current 20-tip occupancy >=0.80 and zero current focal paralog warnings; HybPiper 2.3.4; MAFFT; IQ-TREE','topology_uncertainty_status':'bootstrap_or_gene_tree_sensitivity'}
 (tr/'tree_provenance.json').write_text(json.dumps(prov,indent=2)+'\n')
 PY
 "${RUN[@]}" python "$REPO_ROOT/analysis/validate_colour_atlas_branch_length_tree.py" \
@@ -89,6 +120,6 @@ def main():
     if m.get('current_stage_end')!='retrieve_stats_paralog_qc': raise ValueError('Expected v0.2 QC-stage bundle')
     files={'04_prepare_tree_inputs_slurm.sh':prep(),'05_align_loci_slurm.sh':align(),'06_gene_trees_slurm.sh':gene(),'07_concat_tree_slurm.sh':concat(),'08_accept_tree_slurm.sh':accept(),'submit_tree_chain.sh':submit()}
     for n,t in files.items(): q=b/n;q.write_text(t);q.chmod(0o755)
-    m['bundle_version']='colour_rate_comp1061_hpc_bundle_v0_3_tree_stage';m['current_stage_end']='tree_acceptance_scripts_prepared';m['tree_stage']={'frozen_locus_universe':241,'current_occupancy_gate':0.8,'minimum_eligible_loci_to_launch':100,'primary_branch_length_tree':'concatenated IQ-TREE ML substitutions/site','topology_sensitivity':'per-locus IQ-TREE gene trees','required_outgroups':['OUTGROUP_lett','OUTGROUP_sunf'],'acceptance_validator':'analysis/validate_colour_atlas_branch_length_tree.py'};m['branch_length_tree_completed']=False;m['rate_fit_execution_allowed']=False
+    m['bundle_version']='colour_rate_comp1061_hpc_bundle_v0_3_tree_stage';m['current_stage_end']='tree_acceptance_scripts_prepared';m['tree_stage']={'frozen_locus_universe':241,'current_occupancy_gate':0.8,'current_paralog_gate':'zero focal samples with >1 recovered copy per admitted locus','minimum_eligible_loci_to_launch':100,'primary_branch_length_tree':'concatenated IQ-TREE ML substitutions/site','topology_sensitivity':'per-locus IQ-TREE gene trees','required_outgroups':['OUTGROUP_lett','OUTGROUP_sunf'],'acceptance_validator':'analysis/validate_colour_atlas_branch_length_tree.py'};m['branch_length_tree_completed']=False;m['rate_fit_execution_allowed']=False
     (b/'execution_manifest.json').write_text(json.dumps(m,indent=2)+'\n');print(json.dumps(m,indent=2))
 if __name__=='__main__': main()
