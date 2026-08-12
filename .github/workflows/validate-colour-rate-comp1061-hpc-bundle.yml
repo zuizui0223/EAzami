@@ -63,6 +63,7 @@ jobs:
           x=json.loads((r/'execution_manifest.json').read_text())
           baseprep=(r/'00_prepare_inputs_slurm.sh').read_text()
           treeprep=(r/'04_prepare_tree_inputs_slurm.sh').read_text()
+          concat=(r/'07_concat_tree_slurm.sh').read_text()
           accept=(r/'08_accept_tree_slurm.sh').read_text()
           submit=(r/'submit_tree_chain.sh').read_text()
           assert len(rows)==20 and len({z['run'] for z in rows})==20
@@ -74,6 +75,8 @@ jobs:
           assert x['tree_stage']['current_occupancy_gate']==0.8
           assert 'paralog' in x['tree_stage']['current_paralog_gate']
           assert x['tree_stage']['minimum_eligible_loci_to_launch']==100
+          assert x['tree_stage']['root_outgroups']==['OUTGROUP_lett','OUTGROUP_sunf']
+          assert 'OUTGROUP_saff' in x['tree_stage']['optional_near_reference']
           assert 'export REPO_ROOT RESULT_ROOT ENV_PREFIX' in baseprep
           assert 'summarize_moreyra_locus_filter.py' in baseprep
           assert '--input "$RESULT_ROOT/inputs/moreyra_author_repo/paralog_locus_filter_reconstruction.csv"' in baseprep
@@ -82,12 +85,19 @@ jobs:
           assert 'current_conservative_241_loci.txt' in treeprep
           assert 'paralog_report' in treeprep
           assert 'N_CURRENT < 100' in treeprep
+          assert 'concatenate_colour_rate_comp1061_alignments.py' in concat
+          assert '-o OUTGROUP_lett,OUTGROUP_sunf' in concat
           assert 'validate_colour_atlas_branch_length_tree.py' in accept
-          assert "'required_outgroup_tips':['OUTGROUP_lett','OUTGROUP_sunf']" in accept
+          assert "root_outgroups=concat['root_outgroups']" in accept
+          assert "references=concat['reference_tips']" in accept
+          assert "'required_outgroup_tips':root_outgroups" in accept
+          assert "'required_reference_tips':references" in accept
+          assert 'optional OUTGROUP_saff retained as a near Cardueae reference' in accept
           assert 'zero current focal paralog warnings' in accept
           assert 'tree_provenance.json' in accept
           assert 'afterok:$gene:$concat' in submit
           print('bundle_entrypoint=user_wrapper_valid')
+          print('tree_references=root_lett_sunf_optional_saff')
           print('bundle_contract=v0.3_tree_stage_current_paralog_gated')
           print('branch_length_tree_completed=false')
           print('rate_fit_execution_allowed=false')
