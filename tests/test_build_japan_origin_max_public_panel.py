@@ -43,7 +43,7 @@ class JapanOriginMaxPublicPanelTests(unittest.TestCase):
             mrow('Cirsium abukumense','SAMN6','SRR7','Japan'),
             mrow('Cirsium yuki-uenoanum','SAMN7','SRR8','Japan|Outside_target_region',
                  relation='different_submitted_or_published_name',priority='high',
-                 geo='source_conflict_target_vs_outside'),
+                 geo='conflicting_resolved_regions',scope='source_conflict_target_vs_outside'),
         ]
         ch25=[c25('Cirsium kujuense',1,'JAPAN. Oita','ccy25')]
         ch26=[]
