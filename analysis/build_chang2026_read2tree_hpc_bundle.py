@@ -75,23 +75,34 @@ def common_header(*, slurm: bool, job_name: str, cpus: int, mem_gb: int, hours: 
     return f"#!/usr/bin/env bash\n{directives}set -euo pipefail\n"
 
 
+def path_preamble() -> str:
+    return '''SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -z "${REPO_ROOT:-}" ]]; then
+  REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || true)"
+fi
+if [[ -z "$REPO_ROOT" || ! -f "$REPO_ROOT/analysis/build_chang2026_read2tree_pilot.py" ]]; then
+  echo "Unable to resolve EAzami repository root. Set REPO_ROOT explicitly." >&2
+  exit 2
+fi
+'''
+
+
 def trim_script(*, slurm: bool, panel_name: str, evidence_name: str) -> str:
     header = common_header(slurm=slurm, job_name="EAzami-r2t-trim", cpus=16, mem_gb=32, hours=24)
-    return header + f'''# Run from the EAzami repository root.
-PANEL="${{PANEL:-{panel_name}}}"
-EVIDENCE="${{EVIDENCE:-{evidence_name}}}"
-READS_ROOT="${{READS_ROOT:-results/chang2026_takaoense_pilot}}"
+    return header + path_preamble() + f'''PANEL="${{PANEL:-$SCRIPT_DIR/{panel_name}}}"
+EVIDENCE="${{EVIDENCE:-$SCRIPT_DIR/{evidence_name}}}"
+READS_ROOT="${{READS_ROOT:-$REPO_ROOT/results/chang2026_takaoense_pilot}}"
 JOBS="${{JOBS:-1}}"
 FASTERQ_THREADS="${{FASTERQ_THREADS:-8}}"
 FASTP_THREADS="${{FASTP_THREADS:-8}}"
 MIN_FREE_DISK_GIB="${{MIN_FREE_DISK_GIB:-150}}"
 export PANEL EVIDENCE READS_ROOT JOBS FASTERQ_THREADS FASTP_THREADS MIN_FREE_DISK_GIB
-bash workflow/chang2026_read2tree/prepare_six_trimmed_reads.sh
+bash "$REPO_ROOT/workflow/chang2026_read2tree/prepare_six_trimmed_reads.sh"
 python - <<'PY'
-import csv
+import csv, os
 from pathlib import Path
-panel=list(csv.DictReader(Path("{panel_name}").open()))
-root=Path("results/chang2026_takaoense_pilot")
+panel = list(csv.DictReader(Path(os.environ["PANEL"]).open()))
+root = Path(os.environ["READS_ROOT"])
 missing=[]
 for row in panel:
     sid=row["sample_id"]
@@ -108,23 +119,40 @@ PY
 
 def read2tree_script(*, slurm: bool, panel_name: str, evidence_name: str, refs_name: str) -> str:
     header = common_header(slurm=slurm, job_name="EAzami-r2t-static", cpus=16, mem_gb=64, hours=48)
-    return header + f'''# Requires the lightweight validated static400 execution pack to be unpacked.
+    return header + path_preamble() + f'''# Requires the lightweight validated static400 execution pack to be unpacked.
 : "${{MARKER_CONTRACT:?Set MARKER_CONTRACT to marker_pack_contract.json inside the validated static400 execution pack}}"
-PANEL="${{PANEL:-{panel_name}}}"
-EVIDENCE="${{EVIDENCE:-{evidence_name}}}"
-REFS="${{REFS:-{refs_name}}}"
-READS_ROOT="${{READS_ROOT:-results/chang2026_takaoense_pilot}}"
-RESULT_ROOT="${{RESULT_ROOT:-results/chang2026_read2tree_static400}}"
+MARKER_CONTRACT="$(cd "$(dirname "$MARKER_CONTRACT")" && pwd)/$(basename "$MARKER_CONTRACT")"
+PANEL="${{PANEL:-$SCRIPT_DIR/{panel_name}}}"
+EVIDENCE="${{EVIDENCE:-$SCRIPT_DIR/{evidence_name}}}"
+REFS="${{REFS:-$SCRIPT_DIR/{refs_name}}}"
+READS_ROOT="${{READS_ROOT:-$REPO_ROOT/results/chang2026_takaoense_pilot}}"
+RESULT_ROOT="${{RESULT_ROOT:-$REPO_ROOT/results/chang2026_read2tree_static400}}"
 THREADS="${{THREADS:-16}}"
 CHECK_INPUTS=1
+ENV_PREFIX="${{READ2TREE_ENV_PREFIX:-$REPO_ROOT/.conda/eazami-chang2026-read2tree}}"
+ENV_YML="$REPO_ROOT/workflow/chang2026_read2tree/envs/read2tree.yml"
+if command -v micromamba >/dev/null 2>&1; then
+  if [[ ! -x "$ENV_PREFIX/bin/python" ]]; then
+    micromamba create -y -p "$ENV_PREFIX" -f "$ENV_YML"
+  fi
+  RUN=(micromamba run -p "$ENV_PREFIX")
+elif command -v mamba >/dev/null 2>&1; then
+  if [[ ! -x "$ENV_PREFIX/bin/python" ]]; then
+    mamba env create -y -p "$ENV_PREFIX" -f "$ENV_YML"
+  fi
+  RUN=(mamba run -p "$ENV_PREFIX")
+else
+  echo "micromamba or mamba is required for the pinned Read2Tree environment" >&2
+  exit 2
+fi
 export MARKER_CONTRACT PANEL EVIDENCE REFS READS_ROOT RESULT_ROOT THREADS CHECK_INPUTS
-bash workflow/chang2026_read2tree/prepare_from_validated_marker_pack.sh
+"${{RUN[@]}}" bash "$REPO_ROOT/workflow/chang2026_read2tree/prepare_from_validated_marker_pack.sh"
 PLAN="$RESULT_ROOT/read2tree_plan/run_read2tree_fast_screen.sh"
 if [[ ! -s "$PLAN" ]]; then
   echo "Read2Tree plan missing: $PLAN" >&2
   exit 2
 fi
-bash "$PLAN"
+"${{RUN[@]}}" bash "$PLAN"
 TREE="$RESULT_ROOT/read2tree_output/takaoense6_read2tree_dna.treefile"
 if [[ ! -s "$TREE" ]]; then
   echo "IQ-TREE output missing: $TREE" >&2
@@ -136,19 +164,19 @@ printf 'read2tree_checkpoint=complete\ntree=%s\n' "$TREE"
 
 def scoring_script(*, slurm: bool, panel_name: str, refs_name: str) -> str:
     header = common_header(slurm=slurm, job_name="EAzami-r2t-score", cpus=2, mem_gb=8, hours=2)
-    return header + f'''PANEL="${{PANEL:-{panel_name}}}"
-REFS="${{REFS:-{refs_name}}}"
-RESULT_ROOT="${{RESULT_ROOT:-results/chang2026_read2tree_static400}}"
+    return header + path_preamble() + f'''PANEL="${{PANEL:-$SCRIPT_DIR/{panel_name}}}"
+REFS="${{REFS:-$SCRIPT_DIR/{refs_name}}}"
+RESULT_ROOT="${{RESULT_ROOT:-$REPO_ROOT/results/chang2026_read2tree_static400}}"
 TREE="$RESULT_ROOT/read2tree_output/takaoense6_read2tree_dna.treefile"
-python analysis/run_chang2026_read2tree_scoring_contract.py \
+python "$REPO_ROOT/analysis/run_chang2026_read2tree_scoring_contract.py" \
   --tree "$TREE" \
   --panel "$PANEL" \
   --reference-manifest "$REFS" \
-  --frozen-hypotheses analysis/chang2026_takaoense_gene_tree_hypotheses_v1.csv \
+  --frozen-hypotheses "$REPO_ROOT/analysis/chang2026_takaoense_gene_tree_hypotheses_v1.csv" \
   --expected-hypothesis-sha256 {EXPECTED_HYPOTHESIS_SHA256} \
-  --nearest analysis/chang2026_takaoense_nearest_no_regain_topologies.csv \
-  --robustness-summary analysis/chang2026_takaoense_topology_robustness_summary.json \
-  --scorer analysis/score_chang2026_read2tree_topology.py \
+  --nearest "$REPO_ROOT/analysis/chang2026_takaoense_nearest_no_regain_topologies.csv" \
+  --robustness-summary "$REPO_ROOT/analysis/chang2026_takaoense_topology_robustness_summary.json" \
+  --scorer "$REPO_ROOT/analysis/score_chang2026_read2tree_topology.py" \
   --thresholds 0,50,70,90 \
   --output "$RESULT_ROOT/read2tree_topology_scores.csv" \
   --hypothesis-output "$RESULT_ROOT/read2tree_per_hypothesis_scores.csv" \
@@ -161,10 +189,12 @@ echo "scoring_checkpoint=complete"
 def submit_script() -> str:
     return '''#!/usr/bin/env bash
 set -euo pipefail
-: "${MARKER_CONTRACT:?Set MARKER_CONTRACT before submission so the static400 execution pack location is explicit}"
-trim_job=$(sbatch --parsable run_01_trim_slurm.sh)
-r2t_job=$(sbatch --parsable --dependency=afterok:"$trim_job" --export=ALL,MARKER_CONTRACT="$MARKER_CONTRACT" run_02_read2tree_slurm.sh)
-score_job=$(sbatch --parsable --dependency=afterok:"$r2t_job" run_03_score_slurm.sh)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+: "${MARKER_CONTRACT:?Set MARKER_CONTRACT before submission so the static400 execution-pack location is explicit}"
+MARKER_CONTRACT="$(cd "$(dirname "$MARKER_CONTRACT")" && pwd)/$(basename "$MARKER_CONTRACT")"
+trim_job=$(sbatch --parsable --chdir="$SCRIPT_DIR" "$SCRIPT_DIR/run_01_trim_slurm.sh")
+r2t_job=$(sbatch --parsable --chdir="$SCRIPT_DIR" --dependency=afterok:"$trim_job" --export=ALL,MARKER_CONTRACT="$MARKER_CONTRACT" "$SCRIPT_DIR/run_02_read2tree_slurm.sh")
+score_job=$(sbatch --parsable --chdir="$SCRIPT_DIR" --dependency=afterok:"$r2t_job" "$SCRIPT_DIR/run_03_score_slurm.sh")
 printf 'trim_job=%s\nread2tree_job=%s\nscore_job=%s\n' "$trim_job" "$r2t_job" "$score_job"
 '''
 
@@ -225,8 +255,16 @@ def main() -> int:
             "expected_oma_release": "May2026",
             "note": "Use the lightweight eazami-read2tree-oma-static400-exec artifact; the archived oma-groups.txt.gz is not needed for execution.",
         },
+        "environment_contracts": {
+            "read_prep": "workflow/chang2026_read2tree/envs/read_prep.yml",
+            "read2tree": "workflow/chang2026_read2tree/envs/read2tree.yml",
+            "read2tree_source_commit": "e19ad8f32a438ff7a38d9ee1d41832e1fc326a3c",
+        },
         "frozen_hypothesis_sha256": EXPECTED_HYPOTHESIS_SHA256,
         "execution_order": ["trim", "read2tree_iqtree", "score"],
+        "restart_policy": (
+            "Each numbered stage has an explicit output checkpoint. Re-run a failed stage without deleting prior successful SRA/FASTQ/Read2Tree outputs; downstream Slurm jobs use afterok dependencies."
+        ),
         "claim_limit": (
             "This bundle executes an ancestry/topology sensitivity screen from young-leaf RNA-seq. "
             "It does not test floral anthocyanin expression or molecular reactivation."
@@ -237,10 +275,14 @@ def main() -> int:
     )
     (args.outdir / "README.md").write_text(
         "# Chang 2026 static400 Read2Tree HPC bundle\n\n"
-        "Unpack the validated static400 execution artifact, set `MARKER_CONTRACT` to its `marker_pack_contract.json`, "
-        "then run `submit_slurm_chain.sh` on Slurm or the three local scripts in numeric order.\n\n"
-        "The trim stage intentionally stops before Trinity. The topology stage runs Read2Tree and IQ-TREE. "
-        "The scoring stage applies the frozen 8-hypothesis/support-collapse contract.\n",
+        "Keep this directory inside an EAzami checkout (or set `REPO_ROOT`). Unpack the lightweight validated static400 "
+        "execution artifact, set `MARKER_CONTRACT` to its `marker_pack_contract.json`, then run `submit_slurm_chain.sh` "
+        "on Slurm or the three local scripts in numeric order.\n\n"
+        "The trim stage intentionally stops before Trinity. The topology stage creates/uses the pinned Read2Tree conda "
+        "environment, validates the marker pack, runs Read2Tree and IQ-TREE, and checks the tree exists. The scoring stage "
+        "applies the frozen 8-hypothesis/support-collapse contract.\n\n"
+        "Default planning resources: trim 16 CPU/32 GiB/24 h with >=150 GiB free disk; Read2Tree+IQ-TREE "
+        "16 CPU/64 GiB/48 h; scoring 2 CPU/8 GiB/2 h. These are planning envelopes, not measured requirements.\n",
         encoding="utf-8",
     )
     print("bundle_version=chang2026_read2tree_static400_hpc_bundle_v1")
