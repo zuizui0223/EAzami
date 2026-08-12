@@ -4,12 +4,12 @@ on:
   pull_request:
     paths:
       - "analysis/build_japan_origin_max_public_panel.py"
-      - "analysis/augment_japan_origin_panel_with_arenicola_runs.py"
+      - "analysis/augment_japan_origin_panel_with_chang2026_runs.py"
       - "tests/test_build_japan_origin_max_public_panel.py"
       - "data/evidence/moreyra2025_east_ne_asia_sample_audit_2026-08-10.csv"
       - "data/evidence/chang2025_nipponocirsium_accession_audit_2026-08-10.csv"
       - "data/evidence/chang2026_east_asia_accession_audit_2026-08-10.csv"
-      - "data/evidence/chang2026_arenicola_public_run_manifest_v1.csv"
+      - "data/evidence/chang2026_public_run_manifest_v1.csv"
       - "docs/JAPAN_CIRSIUM_ORIGIN_MAX_PUBLIC_PANEL_2026-08-12.md"
       - ".github/workflows/build-japan-origin-max-public-panel.yml"
   workflow_dispatch:
@@ -34,17 +34,17 @@ jobs:
         run: |
           python -m py_compile \
             analysis/build_japan_origin_max_public_panel.py \
-            analysis/augment_japan_origin_panel_with_arenicola_runs.py
+            analysis/augment_japan_origin_panel_with_chang2026_runs.py
           python -m unittest tests/test_build_japan_origin_max_public_panel.py -v
-      - name: Build maximal public panel and join verified Arenicola runs
+      - name: Build maximal public panel and join all verified Chang 2026 runs
         run: |
           rm -rf /tmp/japan_origin_max_public_panel
           python analysis/build_japan_origin_max_public_panel.py \
             --outdir /tmp/japan_origin_max_public_panel \
             | tee /tmp/japan_origin_max_public_panel.log
-          python analysis/augment_japan_origin_panel_with_arenicola_runs.py \
+          python analysis/augment_japan_origin_panel_with_chang2026_runs.py \
             --panel /tmp/japan_origin_max_public_panel/japan_origin_max_public_panel_v1.csv \
-            --arenicola data/evidence/chang2026_arenicola_public_run_manifest_v1.csv \
+            --runs data/evidence/chang2026_public_run_manifest_v1.csv \
             --output /tmp/japan_origin_max_public_panel/japan_origin_max_public_panel_v1_run_resolved.csv \
             | tee -a /tmp/japan_origin_max_public_panel.log
           python - <<'PY'
@@ -59,14 +59,16 @@ jobs:
           assert s['joint_common_locus_tree_executed'] is False
           assert s['new_china_sampling_freeze_allowed'] is False
           assert s['ryukyu_public_replicates']=={'Cirsium brevicaule':3,'Cirsium irumtiense':3}
-          assert rs['arenicola_all_verified_run_resolved'] is True
+          assert rs['all_chang2026_verified_run_resolved'] is True
+          assert rs['chang2026_rows']==33
+          assert rs['chang2026_unique_runs']==33
+          assert rs['chang2026_unique_biosamples']==33
           assert rs['arenicola_rows']==6
           assert rs['arenicola_unique_runs']==6
-          assert rs['arenicola_unique_biosamples']==6
           assert rs['joint_common_locus_tree_executed'] is False
           assert rs['new_china_sampling_freeze_allowed'] is False
-          ry=[r for r in rows if r['analysis_taxon_label'] in {'Cirsium brevicaule','Cirsium irumtiense'}]
-          assert len(ry)==6 and all(r['run_resolution_state']=='resolved_public_runs' for r in ry)
+          ch=[r for r in rows if r['source_study']=='Chang2026']
+          assert len(ch)==33 and all(r['run_resolution_state']=='resolved_public_runs' for r in ch)
           assert any(r['source_study']=='Moreyra2025' and r['region']=='China' for r in rows)
           assert any(r['origin_test_role']=='northeast_asia_bridge' for r in rows)
           assert any(r['analysis_taxon_label']=='Cirsium dipsacolepis' for r in rows)
@@ -77,7 +79,7 @@ jobs:
           print('study_counts',s['study_counts'])
           print('region_counts',s['region_counts'])
           print('run_resolution_state_counts',rs['run_resolution_state_counts'])
-          print('arenicola_run_resolved',rs['arenicola_rows'])
+          print('chang2026_run_resolved',rs['chang2026_rows'])
           PY
       - uses: actions/upload-artifact@v4
         with:
