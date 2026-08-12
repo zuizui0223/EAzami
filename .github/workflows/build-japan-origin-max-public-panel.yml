@@ -4,10 +4,12 @@ on:
   pull_request:
     paths:
       - "analysis/build_japan_origin_max_public_panel.py"
+      - "analysis/augment_japan_origin_panel_with_arenicola_runs.py"
       - "tests/test_build_japan_origin_max_public_panel.py"
       - "data/evidence/moreyra2025_east_ne_asia_sample_audit_2026-08-10.csv"
       - "data/evidence/chang2025_nipponocirsium_accession_audit_2026-08-10.csv"
       - "data/evidence/chang2026_east_asia_accession_audit_2026-08-10.csv"
+      - "data/evidence/chang2026_arenicola_public_run_manifest_v1.csv"
       - "docs/JAPAN_CIRSIUM_ORIGIN_MAX_PUBLIC_PANEL_2026-08-12.md"
       - ".github/workflows/build-japan-origin-max-public-panel.yml"
   workflow_dispatch:
@@ -30,25 +32,41 @@ jobs:
           python-version: "3.12"
       - name: Compile and unit test
         run: |
-          python -m py_compile analysis/build_japan_origin_max_public_panel.py
+          python -m py_compile \
+            analysis/build_japan_origin_max_public_panel.py \
+            analysis/augment_japan_origin_panel_with_arenicola_runs.py
           python -m unittest tests/test_build_japan_origin_max_public_panel.py -v
-      - name: Build maximal public panel
+      - name: Build maximal public panel and join verified Arenicola runs
         run: |
           rm -rf /tmp/japan_origin_max_public_panel
           python analysis/build_japan_origin_max_public_panel.py \
             --outdir /tmp/japan_origin_max_public_panel \
             | tee /tmp/japan_origin_max_public_panel.log
+          python analysis/augment_japan_origin_panel_with_arenicola_runs.py \
+            --panel /tmp/japan_origin_max_public_panel/japan_origin_max_public_panel_v1.csv \
+            --arenicola data/evidence/chang2026_arenicola_public_run_manifest_v1.csv \
+            --output /tmp/japan_origin_max_public_panel/japan_origin_max_public_panel_v1_run_resolved.csv \
+            | tee -a /tmp/japan_origin_max_public_panel.log
           python - <<'PY'
           import csv,json
           from pathlib import Path
           root=Path('/tmp/japan_origin_max_public_panel')
           s=json.loads((root/'japan_origin_max_public_panel_summary_v1.json').read_text())
-          rows=list(csv.DictReader((root/'japan_origin_max_public_panel_v1.csv').open()))
+          rs=json.loads((root/'japan_origin_max_public_panel_v1_run_resolved_summary.json').read_text())
+          rows=list(csv.DictReader((root/'japan_origin_max_public_panel_v1_run_resolved.csv').open()))
           ex=list(csv.DictReader((root/'japan_origin_max_public_exclusions_v1.csv').open()))
           assert s['japan_all_taxa_monophyly_claim_allowed'] is False
           assert s['joint_common_locus_tree_executed'] is False
           assert s['new_china_sampling_freeze_allowed'] is False
           assert s['ryukyu_public_replicates']=={'Cirsium brevicaule':3,'Cirsium irumtiense':3}
+          assert rs['arenicola_all_verified_run_resolved'] is True
+          assert rs['arenicola_rows']==6
+          assert rs['arenicola_unique_runs']==6
+          assert rs['arenicola_unique_biosamples']==6
+          assert rs['joint_common_locus_tree_executed'] is False
+          assert rs['new_china_sampling_freeze_allowed'] is False
+          ry=[r for r in rows if r['analysis_taxon_label'] in {'Cirsium brevicaule','Cirsium irumtiense'}]
+          assert len(ry)==6 and all(r['run_resolution_state']=='resolved_public_runs' for r in ry)
           assert any(r['source_study']=='Moreyra2025' and r['region']=='China' for r in rows)
           assert any(r['origin_test_role']=='northeast_asia_bridge' for r in rows)
           assert any(r['analysis_taxon_label']=='Cirsium dipsacolepis' for r in rows)
@@ -58,7 +76,8 @@ jobs:
           print('unique_analysis_taxa',s['unique_analysis_taxa'])
           print('study_counts',s['study_counts'])
           print('region_counts',s['region_counts'])
-          print('run_resolution_state_counts',s['run_resolution_state_counts'])
+          print('run_resolution_state_counts',rs['run_resolution_state_counts'])
+          print('arenicola_run_resolved',rs['arenicola_rows'])
           PY
       - uses: actions/upload-artifact@v4
         with:
