@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Validate a branch-length nuclear tree before flower-colour rate fitting.
 
-This is deliberately independent from ER/ARD/Mk fitting.  It establishes that a
+This is deliberately independent from ER/ARD/Mk fitting. It establishes that a
 machine-readable nuclear tree is real, has branch lengths, has explicit
-provenance/rooting/support semantics, and can be joined one-to-one to the frozen
-source-backed colour atlas.  A valid tree does not by itself unlock rate fitting;
-the independent atlas state/breadth gate must also pass.
+provenance/rooting/support semantics, can be joined one-to-one to the frozen
+source-backed colour atlas, and—when reference/outgroup tips are declared—keeps
+the focal taxa monophyletic relative to those references. A valid tree does not
+by itself unlock rate fitting; the independent atlas state/breadth gate must
+also pass.
 """
 from __future__ import annotations
 
@@ -44,6 +46,7 @@ class NewickParser:
         self.tips: list[str] = []
         self.edge_lengths: list[float] = []
         self.missing_edge_lengths = 0
+        self.clades: list[frozenset[str]] = []
 
     def skip_ws(self) -> None:
         while self.i < len(self.s) and self.s[self.i].isspace():
@@ -84,17 +87,17 @@ class NewickParser:
             raise ValueError(f"Branch length must be finite and >=0, observed {value}")
         self.edge_lengths.append(value)
 
-    def subtree(self, *, is_root: bool = False) -> None:
+    def subtree(self, *, is_root: bool = False) -> set[str]:
         self.skip_ws()
         if self.i >= len(self.s):
             raise ValueError("Unexpected end of Newick")
         if self.s[self.i] == "(":
             self.i += 1
-            self.subtree()
+            descendants = set(self.subtree())
             while True:
                 self.skip_ws()
                 if self.i < len(self.s) and self.s[self.i] == ",":
-                    self.i += 1; self.subtree(); continue
+                    self.i += 1; descendants.update(self.subtree()); continue
                 break
             self.skip_ws()
             if self.i >= len(self.s) or self.s[self.i] != ")":
@@ -102,12 +105,14 @@ class NewickParser:
             self.i += 1
             _ = self.label()  # optional internal support/node label
             self.branch_length(required=not is_root)
-        else:
-            lab = self.label()
-            if not lab:
-                raise ValueError("Leaf tip has empty label")
-            self.tips.append(lab)
-            self.branch_length(required=True)
+            self.clades.append(frozenset(descendants))
+            return descendants
+        lab = self.label()
+        if not lab:
+            raise ValueError("Leaf tip has empty label")
+        self.tips.append(lab)
+        self.branch_length(required=True)
+        return {lab}
 
     def parse(self) -> tuple[list[str], list[float], int]:
         self.subtree(is_root=True)
@@ -168,19 +173,46 @@ def validate_provenance(path: Path, tree_sha: str) -> dict[str, object]:
             raise ValueError(f"Tree provenance lacks {key}")
     if p.get("topology_uncertainty_status") not in {"ensemble_available", "bootstrap_or_gene_tree_sensitivity", "single_tree_with_explicit_limitation"}:
         raise ValueError("Tree provenance lacks an accepted topology_uncertainty_status")
+    outgroups = p.get("required_outgroup_tips", [])
+    if outgroups is None:
+        outgroups = []
+    if not isinstance(outgroups, list) or any(not isinstance(x, str) or not clean(x) for x in outgroups):
+        raise ValueError("required_outgroup_tips must be a list of non-empty strings")
+    if len(outgroups) != len(set(outgroups)):
+        raise ValueError("required_outgroup_tips contains duplicates")
+    p["required_outgroup_tips"] = [clean(x) for x in outgroups]
     return p
 
 
 def validate(tree: Path, atlas: Path, tip_map: Path, provenance: Path) -> dict[str, object]:
     tree_sha = sha256(tree)
-    tips, lengths, missing = NewickParser(tree.read_text(encoding="utf-8")).parse()
+    parser = NewickParser(tree.read_text(encoding="utf-8"))
+    tips, lengths, missing = parser.parse()
+    tree_tip_set = set(tips)
     if missing:
         raise ValueError(f"Tree has {missing} non-root edges without branch lengths")
     if not lengths or not any(x > 0 for x in lengths):
         raise ValueError("Tree has no positive empirical branch lengths")
     eligible, states = eligible_atlas_taxa(atlas)
-    mapping = validate_mapping(tip_map, eligible, set(tips))
+    mapping = validate_mapping(tip_map, eligible, tree_tip_set)
     prov = validate_provenance(provenance, tree_sha)
+
+    focal_tips = {mapping[t] for t in eligible}
+    required_outgroups = set(prov.get("required_outgroup_tips", []))
+    focal_monophyly_checked = bool(required_outgroups)
+    if required_outgroups:
+        missing_outgroups = sorted(required_outgroups - tree_tip_set)
+        if missing_outgroups:
+            raise ValueError(f"Required outgroup/reference tips absent from tree: {missing_outgroups}")
+        overlap = sorted(required_outgroups & focal_tips)
+        if overlap:
+            raise ValueError(f"Declared outgroup tips overlap focal atlas tips: {overlap}")
+        unexpected_extra = sorted(tree_tip_set - focal_tips - required_outgroups)
+        if unexpected_extra:
+            raise ValueError(f"Tree contains undeclared extra tips outside focal atlas/outgroups: {unexpected_extra}")
+        if frozenset(focal_tips) not in parser.clades:
+            raise ValueError("Eligible focal taxa are not monophyletic relative to declared outgroup/reference tips")
+
     matched = len(eligible)
     return {
         "contract_version": "colour_atlas_branch_length_tree_acceptance_v1",
@@ -190,6 +222,9 @@ def validate(tree: Path, atlas: Path, tip_map: Path, provenance: Path) -> dict[s
         "eligible_atlas_taxa": matched,
         "eligible_state_counts": {"C": sum(v == "C" for v in states.values()), "W": sum(v == "W" for v in states.values())},
         "eligible_taxa_all_mapped": matched == len(mapping),
+        "required_outgroup_tips": sorted(required_outgroups),
+        "focal_monophyly_checked": focal_monophyly_checked,
+        "focal_monophyly_passed": True if focal_monophyly_checked else None,
         "branch_length_edge_count": len(lengths),
         "branch_length_min": min(lengths),
         "branch_length_max": max(lengths),
@@ -198,7 +233,7 @@ def validate(tree: Path, atlas: Path, tip_map: Path, provenance: Path) -> dict[s
         "support_metric_definition": prov["support_metric_definition"],
         "topology_uncertainty_status": prov["topology_uncertainty_status"],
         "tree_gate_ready": True,
-        "claim_limit": "Tree acceptance validates branch-length/provenance/tip-join integrity only; it does not imply the colour-state breadth gate passes or that ARD is supported over ER."
+        "claim_limit": "Tree acceptance validates branch-length/provenance/tip-join integrity and, when declared reference tips are present, focal monophyly relative to those references. It does not imply the colour-state breadth gate passes or that ARD is supported over ER."
     }
 
 
