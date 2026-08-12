@@ -26,12 +26,19 @@ class AugmentTests(unittest.TestCase):
             self.assertEqual(manifest['current_stage_end'],'tree_acceptance_scripts_prepared')
             self.assertFalse(manifest['branch_length_tree_completed'])
             self.assertFalse(manifest['rate_fit_execution_allowed'])
+            self.assertIn('paralog',manifest['tree_stage']['current_paralog_gate'])
             for name in ('04_prepare_tree_inputs_slurm.sh','05_align_loci_slurm.sh','06_gene_trees_slurm.sh','07_concat_tree_slurm.sh','08_accept_tree_slurm.sh','submit_tree_chain.sh'):
                 self.assertTrue((b/name).is_file(),name)
+            prep=(b/'04_prepare_tree_inputs_slurm.sh').read_text()
+            self.assertIn('summarize_colour_rate_comp1061_qc.py',prep)
+            self.assertIn('current_conservative_241_loci.txt',prep)
+            self.assertIn('paralog_report',prep)
+            self.assertIn('N_CURRENT < 100',prep)
             accept=(b/'08_accept_tree_slurm.sh').read_text()
             self.assertIn('validate_colour_atlas_branch_length_tree.py',accept)
             self.assertIn('tree_route',accept)
-            self.assertIn('OUTGROUP_lett',accept)
+            self.assertIn("'required_outgroup_tips':['OUTGROUP_lett','OUTGROUP_sunf']",accept)
+            self.assertIn('zero current focal paralog warnings',accept)
             self.assertIn('export BUNDLE_DIR REPO_ROOT RESULT_ROOT ENV_PREFIX MODE',accept)
 
     def test_rejects_wrong_upstream_stage(self):
