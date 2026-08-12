@@ -16,7 +16,7 @@ m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
 
 
 class TreeGateTests(unittest.TestCase):
-    def write_fixture(self, td: str, *, missing_length: bool = False, bad_hash: bool = False, tree_text: str | None = None, required_outgroups: list[str] | None = None):
+    def write_fixture(self, td: str, *, missing_length: bool = False, bad_hash: bool = False, tree_text: str | None = None, required_outgroups: list[str] | None = None, required_references: list[str] | None = None):
         root = Path(td)
         tree = root / "tree.nwk"
         default = "((t1:0.1,t2:0.2)95:0.3,t3:0.4);\n" if not missing_length else "((t1:0.1,t2)95:0.3,t3:0.4);\n"
@@ -50,8 +50,8 @@ class TreeGateTests(unittest.TestCase):
             "source_or_pipeline_provenance":"synthetic unit-test fixture",
             "topology_uncertainty_status":"bootstrap_or_gene_tree_sensitivity"
         }
-        if required_outgroups is not None:
-            payload["required_outgroup_tips"] = required_outgroups
+        if required_outgroups is not None: payload["required_outgroup_tips"] = required_outgroups
+        if required_references is not None: payload["required_reference_tips"] = required_references
         prov.write_text(json.dumps(payload))
         return tree,atlas,tipmap,prov
 
@@ -63,19 +63,26 @@ class TreeGateTests(unittest.TestCase):
             self.assertEqual(result["tree_tip_count"],3)
             self.assertFalse(result["focal_monophyly_checked"])
 
-    def test_accepts_declared_outgroups_only_when_focal_is_monophyletic(self):
+    def test_accepts_root_outgroups_and_additional_near_reference(self):
         with tempfile.TemporaryDirectory() as td:
-            tree="((t1:0.1,t2:0.2,t3:0.3):0.4,OUT1:0.5,OUT2:0.6);\n"
-            result=m.validate(*self.write_fixture(td,tree_text=tree,required_outgroups=["OUT1","OUT2"]))
+            tree="((t1:0.1,t2:0.2,t3:0.3):0.4,NEAR:0.45,OUT1:0.5,OUT2:0.6);\n"
+            result=m.validate(*self.write_fixture(td,tree_text=tree,required_outgroups=["OUT1","OUT2"],required_references=["OUT1","OUT2","NEAR"]))
             self.assertTrue(result["focal_monophyly_checked"])
             self.assertTrue(result["focal_monophyly_passed"])
             self.assertEqual(result["required_outgroup_tips"],["OUT1","OUT2"])
+            self.assertEqual(result["required_reference_tips"],["NEAR","OUT1","OUT2"])
+
+    def test_rejects_outgroup_not_declared_as_reference(self):
+        with tempfile.TemporaryDirectory() as td:
+            tree="((t1:0.1,t2:0.2,t3:0.3):0.4,OUT1:0.5,OUT2:0.6);\n"
+            with self.assertRaisesRegex(ValueError,"subset"):
+                m.validate(*self.write_fixture(td,tree_text=tree,required_outgroups=["OUT1","OUT2"],required_references=["OUT1"]))
 
     def test_rejects_reference_intrusion_into_focal_clade(self):
         with tempfile.TemporaryDirectory() as td:
-            tree="((t1:0.1,OUT1:0.2):0.3,(t2:0.1,t3:0.1):0.2,OUT2:0.5);\n"
+            tree="((t1:0.1,NEAR:0.2):0.3,(t2:0.1,t3:0.1):0.2,OUT1:0.5,OUT2:0.6);\n"
             with self.assertRaisesRegex(ValueError,"not monophyletic"):
-                m.validate(*self.write_fixture(td,tree_text=tree,required_outgroups=["OUT1","OUT2"]))
+                m.validate(*self.write_fixture(td,tree_text=tree,required_outgroups=["OUT1","OUT2"],required_references=["OUT1","OUT2","NEAR"]))
 
     def test_rejects_undeclared_extra_tree_tip(self):
         with tempfile.TemporaryDirectory() as td:
