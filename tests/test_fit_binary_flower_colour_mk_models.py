@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import math
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -10,7 +11,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 MOD=ROOT/'analysis/fit_binary_flower_colour_mk_models.py'
 spec=importlib.util.spec_from_file_location('mkfit',MOD);assert spec and spec.loader
-m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+m=importlib.util.module_from_spec(spec);sys.modules[spec.name]=m;spec.loader.exec_module(m)
 
 class MkFitTests(unittest.TestCase):
     def test_transition_rows_sum_to_one(self):
