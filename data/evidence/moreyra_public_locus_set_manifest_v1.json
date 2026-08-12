@@ -1,0 +1,19 @@
+{
+  "contract_version": "moreyra_public_locus_sets_v1",
+  "source_workflow_run": 31557261287,
+  "source_artifact_name": "moreyra-author-repository-audit-31557261287",
+  "source_artifact_digest": "sha256:9503762705a12bdf9bc28496cb6f5a273e388a86f3b1b255634c30012a35ad4d",
+  "source_reconstruction_file": "paralog_locus_filter_reconstruction.csv",
+  "paper_reported_mapped_loci": 1064,
+  "public_named_locus_count": 1061,
+  "paper_reported_final_alignment_count": 350,
+  "exact_final_350_locus_names_recovered": false,
+  "locus_sets": {
+    "public_1061": {"count": 1061, "sha256": "d019a37197a9549d4a8160358c93284906f4f590a098d78e81004f04bd185b75"},
+    "reproducible_531": {"count": 531, "sha256": "3d6a1994758eb6e6cf2934435d2482fbd56cad1b526b5fd17a7891e138fc3d53"},
+    "conservative_241": {"count": 241, "sha256": "d561c6e393b1964fdd4b3acf14fda8b10f2f43923b1074cd35f86bfed07ebf73"},
+    "manual_review_290": {"count": 290, "sha256": "f04f11206928b60ef97c0abf3bde44978ea3805d350e2b562442fe02be20e076"}
+  },
+  "primary_tree_policy": "The exact published retained-350 set is unavailable. Use the 241 conservative set as the predeclared high-stringency compatibility matrix only after current 20-tip occupancy/paralog gates; 531 and 1061 are broader sensitivities. Do not call any of them the published 350.",
+  "claim_limit": "These named sets are reproducible functions of the recovered public HybPiper stats/paralog report. The manual 290 requires gene-tree review and is not automatically promoted. The published final 350 identities remain unresolved."
+}
