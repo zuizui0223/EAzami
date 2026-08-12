@@ -1,0 +1,33 @@
+name: Validate fixed-white target-capture panel
+
+on:
+  pull_request:
+    paths:
+      - "sampling/FIXED_WHITE_TARGET_CAPTURE_PANEL_V0_1.csv"
+      - "analysis/validate_fixed_white_target_capture_panel.py"
+      - "tests/test_fixed_white_target_capture_panel.py"
+      - "docs/FIXED_WHITE_TIP_GATE_TARGET_CAPTURE_2026-08-12.md"
+      - ".github/workflows/validate-fixed-white-target-capture-panel.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: validate-fixed-white-target-capture-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile and test panel contract
+        run: |
+          python -m py_compile analysis/validate_fixed_white_target_capture_panel.py
+          python -m unittest tests/test_fixed_white_target_capture_panel.py -v
+          python analysis/validate_fixed_white_target_capture_panel.py sampling/FIXED_WHITE_TARGET_CAPTURE_PANEL_V0_1.csv
