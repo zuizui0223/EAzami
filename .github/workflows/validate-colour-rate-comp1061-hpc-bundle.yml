@@ -1,0 +1,48 @@
+name: Validate colour-rate Compositae1061 HPC bundle
+on:
+  pull_request:
+    paths:
+      - "analysis/build_colour_rate_comp1061_hpc_bundle.py"
+      - "tests/test_build_colour_rate_comp1061_hpc_bundle.py"
+      - "data/evidence/colour_rate_comp1061_bridge_artifact_contract_v1.json"
+      - "data/evidence/moreyra_public_locus_set_manifest_v1.json"
+      - ".github/workflows/validate-colour-rate-comp1061-hpc-bundle.yml"
+  workflow_dispatch:
+concurrency:
+  group: validate-colour-rate-comp1061-hpc-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Build and validate bundle
+        run: |
+          python -m py_compile analysis/build_colour_rate_comp1061_hpc_bundle.py
+          python -m unittest tests/test_build_colour_rate_comp1061_hpc_bundle.py -v
+          python analysis/build_colour_rate_comp1061_hpc_bundle.py \
+            --bridge-contract data/evidence/colour_rate_comp1061_bridge_artifact_contract_v1.json \
+            --locus-manifest data/evidence/moreyra_public_locus_set_manifest_v1.json \
+            --outdir /tmp/colour_rate_hpc_bundle
+          for f in /tmp/colour_rate_hpc_bundle/*.sh; do bash -n "$f"; done
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          r=Path('/tmp/colour_rate_hpc_bundle'); rows=list(csv.DictReader((r/'primary_runs.csv').open())); x=json.loads((r/'execution_manifest.json').read_text())
+          assert len(rows)==20 and len({z['run'] for z in rows})==20
+          assert sum(z['binary_colour_code']=='W' for z in rows)==3
+          assert x['current_stage_end']=='retrieve_stats_paralog_qc'
+          assert x['branch_length_tree_completed'] is False and x['rate_fit_execution_allowed'] is False
+          print('bundle_contract=valid')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: colour-rate-comp1061-hpc-bundle-${{ github.run_id }}
+          path: /tmp/colour_rate_hpc_bundle/
+          if-no-files-found: error
+          retention-days: 90
