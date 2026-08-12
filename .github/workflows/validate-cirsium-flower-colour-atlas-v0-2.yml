@@ -1,0 +1,121 @@
+name: Validate Cirsium flower-colour atlas v0.2
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_cirsium_flower_colour_atlas_v0_2.py"
+      - "analysis/validate_colour_atlas.py"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_1.csv"
+      - "data/evidence/moreyra2025_japan_colour_text_evidence_v1.csv"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_2.csv"
+      - "analysis/cirsium_flower_colour_atlas_v0_2_readiness.json"
+      - "tests/test_cirsium_flower_colour_atlas_v0_2.py"
+      - ".github/workflows/validate-cirsium-flower-colour-atlas-v0-2.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: validate-cirsium-flower-colour-atlas-v0-2-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and test v0.2 atlas contract
+        run: |
+          python -m py_compile \
+            analysis/build_cirsium_flower_colour_atlas_v0_2.py \
+            analysis/validate_colour_atlas.py
+          python -m unittest tests/test_cirsium_flower_colour_atlas_v0_2.py -v
+
+      - name: Rebuild v0.2 from frozen source layers
+        run: |
+          mkdir -p /tmp/cirsium_colour_atlas_v02
+          python analysis/build_cirsium_flower_colour_atlas_v0_2.py \
+            --base data/evidence/cirsium_flower_colour_atlas_v0_1.csv \
+            --moreyra-japan data/evidence/moreyra2025_japan_colour_text_evidence_v1.csv \
+            --output /tmp/cirsium_colour_atlas_v02/cirsium_flower_colour_atlas_v0_2.csv \
+            --summary /tmp/cirsium_colour_atlas_v02/cirsium_flower_colour_atlas_v0_2_readiness.json
+          python analysis/validate_colour_atlas.py \
+            /tmp/cirsium_colour_atlas_v02/cirsium_flower_colour_atlas_v0_2.csv
+
+      - name: Assert v0.2 scientific boundaries
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+
+          atlas = list(csv.DictReader(Path('/tmp/cirsium_colour_atlas_v02/cirsium_flower_colour_atlas_v0_2.csv').open()))
+          summary = json.loads(Path('/tmp/cirsium_colour_atlas_v02/cirsium_flower_colour_atlas_v0_2_readiness.json').read_text())
+
+          if len(atlas) != 25:
+              raise SystemExit(f'Unexpected v0.2 record count: {len(atlas)}')
+          if summary['contract_version'] != 'cirsium_flower_colour_atlas_v0_2':
+              raise SystemExit('Unexpected v0.2 contract version')
+          if summary['reviewed_record_count'] != 24:
+              raise SystemExit(f"Expected 24 reviewed records, got {summary['reviewed_record_count']}")
+          if summary['rate_fit_eligible_unique_taxa'] != 14:
+              raise SystemExit(f"Expected 14 rate-fit eligible taxa, got {summary['rate_fit_eligible_unique_taxa']}")
+          if summary['rate_fit_eligible_state_counts'] != {'C': 11, 'W': 3}:
+              raise SystemExit(f"Unexpected eligible state counts: {summary['rate_fit_eligible_state_counts']}")
+          if set(summary['rate_fit_eligible_phylogeny_contexts']) != {'Arenicola','Nipponocirsium','Sinocirsium','Moreyra2025_Japan38'}:
+              raise SystemExit(f"Unexpected phylogeny contexts: {summary['rate_fit_eligible_phylogeny_contexts']}")
+          if summary['transition_rate_fit_ready'] is not False:
+              raise SystemExit('v0.2 must remain below the final transition-rate fit gate')
+          if set(summary['readiness_blockers']) != {'minimum_taxon_tips','minimum_white_tips'}:
+              raise SystemExit(f"Unexpected blockers: {summary['readiness_blockers']}")
+
+          fixed = {'Cirsium alpicola','Cirsium gyojanum','Cirsium maritimum','Cirsium nippoense','Cirsium yezoense'}
+          for taxon in fixed:
+              rows = [r for r in atlas if r['accepted_taxon'] == taxon]
+              if len(rows) != 1 or rows[0]['binary_colour_code'] != 'C' or rows[0]['rate_fit_eligible'] != 'yes':
+                  raise SystemExit(f'Fixed mapped Japanese taxon failed promotion: {taxon}')
+
+          polymorphic = {'Cirsium aomorense','Cirsium sieboldii','Cirsium pendulum'}
+          for taxon in polymorphic:
+              rows = [r for r in atlas if r['accepted_taxon'] == taxon]
+              if len(rows) != 1 or rows[0]['binary_colour_code'] != 'P' or rows[0]['rate_fit_eligible'] != 'no':
+                  raise SystemExit(f'Polymorphic Japanese taxon was incorrectly collapsed/promoted: {taxon}')
+
+          if summary['superseded_pending_taxa'] != ['Cirsium pendulum','Cirsium yezoense']:
+              raise SystemExit(f"Unexpected superseded pending taxa: {summary['superseded_pending_taxa']}")
+
+          print('atlas_v02_records=25')
+          print('reviewed_records=24')
+          print('rate_fit_eligible_taxa=14')
+          print('eligible_states=C11_W3')
+          print('phylogeny_contexts=4')
+          print('polymorphic_moreyra_taxa_preserved=P')
+          print('transition_rate_fit_ready=false')
+          print('blockers=minimum_taxon_tips|minimum_white_tips')
+          PY
+
+      - name: Check frozen v0.2 outputs when present
+        run: |
+          if [[ -f data/evidence/cirsium_flower_colour_atlas_v0_2.csv ]]; then
+            cmp \
+              <(tr -d '\r' < data/evidence/cirsium_flower_colour_atlas_v0_2.csv) \
+              <(tr -d '\r' < /tmp/cirsium_colour_atlas_v02/cirsium_flower_colour_atlas_v0_2.csv)
+          fi
+          if [[ -f analysis/cirsium_flower_colour_atlas_v0_2_readiness.json ]]; then
+            cmp \
+              analysis/cirsium_flower_colour_atlas_v0_2_readiness.json \
+              /tmp/cirsium_colour_atlas_v02/cirsium_flower_colour_atlas_v0_2_readiness.json
+          fi
+
+      - name: Upload v0.2 atlas artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cirsium-flower-colour-atlas-v0-2-${{ github.run_id }}
+          path: /tmp/cirsium_colour_atlas_v02/
+          if-no-files-found: error
+          retention-days: 90
