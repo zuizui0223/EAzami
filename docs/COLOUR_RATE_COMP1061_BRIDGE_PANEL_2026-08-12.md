@@ -24,15 +24,17 @@ The primary analysis uses one predeclared public run per fixed-state taxon. Samp
 
 The larger-run rule is intended to favour locus recovery rather than minimize compute. All other eligible runs remain in a replicate-sensitivity manifest.
 
-Expected primary composition:
+The first complete official-SRA build corrected one bookkeeping assumption from v0.1. The actual source-project composition is:
 
 - 20 taxa;
 - C=17, W=3;
 - 13 leaf-RNA-seq tips;
 - 7 target-capture tips;
-- Chang 2026 = 7;
-- Chang 2025 = 6;
-- Moreyra 2025 = 7.
+- **PRJNA1311153 / Chang 2026 = 10**;
+- **PRJNA1158676 / Chang 2025 = 3**;
+- Moreyra 2025 / PRJNA957074 = 7.
+
+The earlier 7/6 Chang study-label split was a pre-data expectation, not a sample-selection rule. No taxon, run, colour state or primary-selection rule changes in v0.2 because of this correction.
 
 Polymorphic var. `takaoense`, `C. pendulum`, `C. sieboldii`, `C. aomorense` and `C. amplexifolium` are not forced into the fixed-state primary tree.
 
@@ -40,7 +42,7 @@ Polymorphic var. `takaoense`, `C. pendulum`, `C. sieboldii`, `C. aomorense` and 
 
 The CI does not hard-code Chang SRR values for the bridge.
 
-- Chang 2026 plus inherited Chang 2025 samples are re-reconciled with `recover_chang2026_published_runinfo.py` and `reconcile_chang2026_complete_runs.py`; geography and flower colour are not used for run matching.
+- The PRJNA1311153 sample set is re-reconciled with `recover_chang2026_published_runinfo.py` and `reconcile_chang2026_complete_runs.py`; geography and flower colour are not used for run matching.
 - `PRJNA1158676` is independently recovered to obtain the three additional Chang 2025 taxa (`C. suffultum`, `C. nipponicum var. incomptum`, `C. kujuense`).
 - `PRJNA957074` is independently recovered and its run metadata are joined back to the frozen Moreyra voucher/sample audit for the seven target-capture taxa.
 

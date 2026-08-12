@@ -4,7 +4,9 @@ on:
   pull_request:
     paths:
       - "analysis/build_colour_rate_comp1061_bridge_panel.py"
+      - "analysis/build_colour_rate_comp1061_bridge_panel_v0_2.py"
       - "tests/test_build_colour_rate_comp1061_bridge_panel.py"
+      - "tests/test_build_colour_rate_comp1061_bridge_panel_v0_2.py"
       - "analysis/build_cirsium_flower_colour_atlas_v0_3.py"
       - "analysis/recover_ncbi_project_runs.py"
       - "analysis/recover_chang2026_published_runinfo.py"
@@ -40,12 +42,16 @@ jobs:
         run: |
           python -m py_compile \
             analysis/build_colour_rate_comp1061_bridge_panel.py \
+            analysis/build_colour_rate_comp1061_bridge_panel_v0_2.py \
             analysis/build_cirsium_flower_colour_atlas_v0_3.py \
             analysis/recover_ncbi_project_runs.py \
             analysis/recover_chang2026_published_runinfo.py \
             analysis/reconcile_chang2026_ncbi_runs.py \
             analysis/reconcile_chang2026_complete_runs.py
-          python -m unittest tests/test_build_colour_rate_comp1061_bridge_panel.py -v
+          python -m unittest \
+            tests/test_build_colour_rate_comp1061_bridge_panel.py \
+            tests/test_build_colour_rate_comp1061_bridge_panel_v0_2.py \
+            -v
 
       - name: Rebuild the frozen v0.3 atlas input
         run: |
@@ -101,7 +107,7 @@ jobs:
 
       - name: Build primary 20-tip and replicate manifests
         run: |
-          python analysis/build_colour_rate_comp1061_bridge_panel.py \
+          python analysis/build_colour_rate_comp1061_bridge_panel_v0_2.py \
             --atlas /tmp/atlas_v03/cirsium_flower_colour_atlas_v0_3.csv \
             --reference-contract data/evidence/comp1061_original_reference_contract_v1.json \
             --chang-reconciliation /tmp/chang_reconciliation/chang2026_sample_run_reconciliation.csv \
@@ -121,13 +127,15 @@ jobs:
           primary=list(csv.DictReader((root/'colour_rate_comp1061_primary_20tip_panel.csv').open()))
           reps=list(csv.DictReader((root/'colour_rate_comp1061_replicate_sensitivity_manifest.csv').open()))
           summary=json.loads((root/'colour_rate_comp1061_bridge_summary.json').read_text())
+          if summary['contract_version'] != 'colour_rate_comp1061_bridge_panel_v0_2':
+              raise SystemExit(f"Unexpected bridge contract: {summary['contract_version']}")
           if len(primary)!=20 or len({r['accepted_taxon'] for r in primary})!=20:
               raise SystemExit('Primary bridge is not exactly 20 taxa')
           if Counter(r['binary_colour_code'] for r in primary)!=Counter({'C':17,'W':3}):
               raise SystemExit('Primary bridge colour counts changed')
           if Counter(r['data_type'] for r in primary)!=Counter({'leaf_rnaseq':13,'target_capture':7}):
               raise SystemExit('Primary bridge data-type counts changed')
-          if Counter(r['source_study'] for r in primary)!=Counter({'Chang2025':6,'Chang2026':7,'Moreyra2025':7}):
+          if Counter(r['source_study'] for r in primary)!=Counter({'Chang2025':3,'Chang2026':10,'Moreyra2025':7}):
               raise SystemExit('Primary bridge source-study counts changed')
           if any('takaoense' in r['accepted_taxon'].lower() for r in primary):
               raise SystemExit('Polymorphic takaoense leaked into primary fixed-state tree')
@@ -138,7 +146,7 @@ jobs:
           print('primary_taxa=20')
           print('states=C17_W3')
           print('data_types=leaf_rnaseq13_target_capture7')
-          print('studies=Chang2025_6_Chang2026_7_Moreyra2025_7')
+          print('studies=Chang2025_3_Chang2026_10_Moreyra2025_7')
           print(f'replicate_candidate_rows={len(reps)}')
           print('branch_length_tree_completed=false')
           print('rate_fit_execution_allowed=false')
