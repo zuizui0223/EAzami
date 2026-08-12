@@ -1,0 +1,59 @@
+name: Recover original Compositae1061 HybPiper reference
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_comp1061_original_hybpiper_reference.py"
+      - "tests/test_recover_comp1061_original_hybpiper_reference.py"
+      - "docs/COMPOSITAE1061_COMPATIBLE_REFERENCE_RECOVERY_2026-08-12.md"
+      - ".github/workflows/recover-comp1061-original-reference.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: recover-comp1061-original-reference-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile and unit-test recovery contract
+        run: |
+          python -m py_compile analysis/recover_comp1061_original_hybpiper_reference.py
+          python -m unittest tests/test_recover_comp1061_original_hybpiper_reference.py -v
+      - name: Recover the pinned public reference
+        run: |
+          python analysis/recover_comp1061_original_hybpiper_reference.py \
+            --outdir /tmp/eazami_comp1061_original
+      - name: Assert compatibility boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/eazami_comp1061_original/comp1061_original_reference_contract.json')
+          x=json.loads(p.read_text())
+          if x['locus_count'] != 1061:
+              raise SystemExit(f"Expected 1061 loci, observed {x['locus_count']}")
+          if x['reference_prefixes'] != ['lett','saff','sunf']:
+              raise SystemExit(f"Unexpected reference prefixes: {x['reference_prefixes']}")
+          if x['compatibility_reanalysis_usable'] is not True:
+              raise SystemExit('Original reference did not pass compatibility validation')
+          if x['moreyra_augmented_reference_recovered'] is not False:
+              raise SystemExit('Original reference was incorrectly promoted to the Moreyra augmented file')
+          print('original_comp1061_reference=recovered_and_validated')
+          print('moreyra_augmented_reference=recovery_still_required_for_exact_reproduction')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comp1061-original-hybpiper-reference-${{ github.run_id }}
+          path: /tmp/eazami_comp1061_original/
+          if-no-files-found: error
+          retention-days: 90
