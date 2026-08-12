@@ -1,0 +1,140 @@
+name: Build flower-colour Compositae1061 bridge panel
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_colour_rate_comp1061_bridge_panel.py"
+      - "tests/test_build_colour_rate_comp1061_bridge_panel.py"
+      - "analysis/recover_ncbi_project_runs.py"
+      - "analysis/recover_chang2026_published_runinfo.py"
+      - "analysis/reconcile_chang2026_ncbi_runs.py"
+      - "analysis/reconcile_chang2026_complete_runs.py"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_3.csv"
+      - "data/evidence/comp1061_original_reference_contract_v1.json"
+      - "data/evidence/chang2026_east_asia_accession_audit_2026-08-10.csv"
+      - "data/evidence/moreyra2025_east_ne_asia_sample_audit_2026-08-10.csv"
+      - "docs/COLOUR_RATE_COMP1061_BRIDGE_PANEL_2026-08-12.md"
+      - ".github/workflows/build-colour-rate-comp1061-bridge-panel.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: build-colour-rate-comp1061-bridge-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and unit-test bridge contract
+        run: |
+          python -m py_compile \
+            analysis/build_colour_rate_comp1061_bridge_panel.py \
+            analysis/recover_ncbi_project_runs.py \
+            analysis/recover_chang2026_published_runinfo.py \
+            analysis/reconcile_chang2026_ncbi_runs.py \
+            analysis/reconcile_chang2026_complete_runs.py
+          python -m unittest tests/test_build_colour_rate_comp1061_bridge_panel.py -v
+
+      - name: Recover Chang complete run reconciliation
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        run: |
+          python analysis/recover_chang2026_published_runinfo.py \
+            --bioproject PRJNA1311153 \
+            --supplement data/evidence/chang2026_east_asia_accession_audit_2026-08-10.csv \
+            --outdir /tmp/chang_complete
+          runinfo=$(find /tmp/chang_complete -name '*_published_complete_runinfo.csv' -print -quit)
+          test -n "$runinfo"
+          python analysis/reconcile_chang2026_complete_runs.py \
+            --runinfo "$runinfo" \
+            --outdir /tmp/chang_reconciliation
+
+      - name: Recover Chang 2025 and Moreyra official project runinfo
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        run: |
+          printf '%s\n' \
+            'Cirsium suffultum' \
+            'Cirsium nipponicum var. incomptum' \
+            'Cirsium kujuense' \
+            > /tmp/chang2025_focal.txt
+          python analysis/recover_ncbi_project_runs.py \
+            --bioproject PRJNA1158676 \
+            --focal-taxa /tmp/chang2025_focal.txt \
+            --outdir /tmp/chang2025_runs
+          printf '%s\n' \
+            'Cirsium alpicola' \
+            'Cirsium fanjingshanense' \
+            'Cirsium gyojanum' \
+            'Cirsium kamtschaticum' \
+            'Cirsium maritimum' \
+            'Cirsium nippoense' \
+            'Cirsium yezoense' \
+            > /tmp/moreyra_focal.txt
+          python analysis/recover_ncbi_project_runs.py \
+            --bioproject PRJNA957074 \
+            --focal-taxa /tmp/moreyra_focal.txt \
+            --outdir /tmp/moreyra_runs
+
+      - name: Build primary 20-tip and replicate manifests
+        run: |
+          python analysis/build_colour_rate_comp1061_bridge_panel.py \
+            --atlas data/evidence/cirsium_flower_colour_atlas_v0_3.csv \
+            --reference-contract data/evidence/comp1061_original_reference_contract_v1.json \
+            --chang-reconciliation /tmp/chang_reconciliation/chang2026_sample_run_reconciliation.csv \
+            --chang-accession-audit data/evidence/chang2026_east_asia_accession_audit_2026-08-10.csv \
+            --chang2025-runinfo /tmp/chang2025_runs/PRJNA1158676_runinfo.csv \
+            --moreyra-audit data/evidence/moreyra2025_east_ne_asia_sample_audit_2026-08-10.csv \
+            --moreyra-runinfo /tmp/moreyra_runs/PRJNA957074_runinfo.csv \
+            --outdir /tmp/colour_rate_bridge
+
+      - name: Assert bridge scientific boundaries
+        run: |
+          python - <<'PY'
+          import csv, json
+          from collections import Counter
+          from pathlib import Path
+          root=Path('/tmp/colour_rate_bridge')
+          primary=list(csv.DictReader((root/'colour_rate_comp1061_primary_20tip_panel.csv').open()))
+          reps=list(csv.DictReader((root/'colour_rate_comp1061_replicate_sensitivity_manifest.csv').open()))
+          summary=json.loads((root/'colour_rate_comp1061_bridge_summary.json').read_text())
+          if len(primary)!=20 or len({r['accepted_taxon'] for r in primary})!=20:
+              raise SystemExit('Primary bridge is not exactly 20 taxa')
+          if Counter(r['binary_colour_code'] for r in primary)!=Counter({'C':17,'W':3}):
+              raise SystemExit('Primary bridge colour counts changed')
+          if Counter(r['data_type'] for r in primary)!=Counter({'leaf_rnaseq':13,'target_capture':7}):
+              raise SystemExit('Primary bridge data-type counts changed')
+          if Counter(r['source_study'] for r in primary)!=Counter({'Chang2025':6,'Chang2026':7,'Moreyra2025':7}):
+              raise SystemExit('Primary bridge source-study counts changed')
+          if any('takaoense' in r['accepted_taxon'].lower() for r in primary):
+              raise SystemExit('Polymorphic takaoense leaked into primary fixed-state tree')
+          if summary['branch_length_tree_completed'] is not False or summary['rate_fit_execution_allowed'] is not False:
+              raise SystemExit('Bridge manifest was incorrectly promoted to an empirical tree/rate result')
+          if len(reps) < len(primary):
+              raise SystemExit('Replicate manifest lost primary candidates')
+          print('primary_taxa=20')
+          print('states=C17_W3')
+          print('data_types=leaf_rnaseq13_target_capture7')
+          print('studies=Chang2025_6_Chang2026_7_Moreyra2025_7')
+          print(f'replicate_candidate_rows={len(reps)}')
+          print('branch_length_tree_completed=false')
+          print('rate_fit_execution_allowed=false')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: colour-rate-comp1061-bridge-panel-${{ github.run_id }}
+          path: /tmp/colour_rate_bridge/
+          if-no-files-found: error
+          retention-days: 90
