@@ -27,6 +27,8 @@ class AugmentTests(unittest.TestCase):
             self.assertFalse(manifest['branch_length_tree_completed'])
             self.assertFalse(manifest['rate_fit_execution_allowed'])
             self.assertIn('paralog',manifest['tree_stage']['current_paralog_gate'])
+            self.assertEqual(manifest['tree_stage']['root_outgroups'],['OUTGROUP_lett','OUTGROUP_sunf'])
+            self.assertIn('OUTGROUP_saff',manifest['tree_stage']['optional_near_reference'])
             for name in ('04_prepare_tree_inputs_slurm.sh','05_align_loci_slurm.sh','06_gene_trees_slurm.sh','07_concat_tree_slurm.sh','08_accept_tree_slurm.sh','submit_tree_chain.sh'):
                 self.assertTrue((b/name).is_file(),name)
             prep=(b/'04_prepare_tree_inputs_slurm.sh').read_text()
@@ -37,7 +39,11 @@ class AugmentTests(unittest.TestCase):
             accept=(b/'08_accept_tree_slurm.sh').read_text()
             self.assertIn('validate_colour_atlas_branch_length_tree.py',accept)
             self.assertIn('tree_route',accept)
-            self.assertIn("'required_outgroup_tips':['OUTGROUP_lett','OUTGROUP_sunf']",accept)
+            self.assertIn("root_outgroups=concat['root_outgroups']",accept)
+            self.assertIn("references=concat['reference_tips']",accept)
+            self.assertIn("'required_outgroup_tips':root_outgroups",accept)
+            self.assertIn("'required_reference_tips':references",accept)
+            self.assertIn('optional OUTGROUP_saff retained as a near Cardueae reference',accept)
             self.assertIn('zero current focal paralog warnings',accept)
             self.assertIn('export BUNDLE_DIR REPO_ROOT RESULT_ROOT ENV_PREFIX MODE',accept)
 
