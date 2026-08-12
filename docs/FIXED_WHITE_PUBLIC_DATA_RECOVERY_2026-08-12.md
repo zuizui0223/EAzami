@@ -8,7 +8,7 @@ Machine-readable audit: `data/evidence/fixed_white_public_nuclear_recovery_audit
 
 Author contact is deliberately deferred for the present work package. The active task is public/lawful acquisition only.
 
-## Cirsium boninense — existing 2025 genetic study is the only strong remaining public-data recovery route
+## Cirsium boninense — exact lawful p.69 acquisition route identified
 
 A 2025 Japanese Plant Taxonomy Society presentation is indexed as:
 
@@ -16,7 +16,13 @@ A 2025 Japanese Plant Taxonomy Society presentation is indexed as:
 
 The same presentation is independently listed by the Tohoku University Forest Ecology laboratory. J-GLOBAL indexing also includes イリオモテアザミ as a quasi-thesaurus term, making the actual study especially relevant to the Arenicola question; that indexing clue is not evidence that *C. irumtiense* was sequenced.
 
-The full 2025 meeting proceedings is catalogued by the National Diet Library as a 110-page volume, bibliographic ID `034039888`, call number `RA241-R8`; the target contribution is p.69. This is now the concrete lawful document-recovery route for method/comparator/sample information.
+The full 2025 meeting proceedings is catalogued by the National Diet Library as a 110-page volume:
+
+- NDL bibliographic ID `034039888`;
+- call number `RA241-R8`;
+- target contribution p.69.
+
+The target page is therefore known precisely enough for an NDL remote-copy request. NDL provides remote copying under its user/library access rules; eligible fully registered individual users can use the PDF-download route, with other remote-copy routes depending on registration/library-mediated access. **This repository has not authenticated as the user, placed an order or paid for a copy.** The scientific acquisition state is thus `exact lawful copy route confirmed`, not `abstract obtained`.
 
 Bounded exact-name searches did **not** recover an NCBI BioProject/SRA or DDBJ plant sequence artifact. Exact-title/method-term and 2025–2026 follow-up publication/thesis searches likewise did not expose the method or a reusable dataset. Searches for abbreviated `C. boninense` are unsafe because the fungal *Colletotrichum boninense* produces abundant unrelated sequence hits.
 
@@ -33,7 +39,7 @@ Therefore the POWO `Image: PAFTOL` element is **not** evidence of a current Kew 
 
 ### Current public-only order
 
-1. Obtain/read NDL proceedings p.69 through a lawful library/copy route or recover a lawful public copy of the poster/extended abstract.
+1. Request/read exactly p.69 of NDL item `034039888` / `RA241-R8` through an eligible NDL or library remote-copy route.
 2. Extract the actual molecular method, comparator taxa, sample/voucher identities and archive accession from the study itself; do not infer MIG-seq, target capture or another method from coauthor expertise.
 3. If a reusable nuclear dataset becomes public/recoverable, test whether >=2 independent *C. boninense* individuals are represented and placement is concordant.
 4. If public/lawful routes remain exhausted, keep author contact as a later task rather than silently assuming data absence.
@@ -48,7 +54,7 @@ The 2024 primary description provides the two concrete Xiannü Shan collections:
 - `XLS21-095` — holotype, IBSC; isotypes CQNM; 14 Aug 2021, 1780 m;
 - `XLS21-093` — additional specimen, CBNM/IBSC; 14 Aug 2021, 1651 m.
 
-The published **Materials and methods** route is now resolved. The study reports collection of specimens in August 2021 and critical examination of herbarium specimens/high-resolution images for **morphological comparison**. It does not report DNA extraction, sequencing, molecular markers, phylogenetic analysis or a sequence-generation workflow. Therefore the primary publication itself cannot supply the missing nuclear tip.
+The published **Materials and methods** route is resolved. The study reports collection of specimens in August 2021 and critical examination of herbarium specimens/high-resolution images for **morphological comparison**. It does not report DNA extraction, sequencing, molecular markers, phylogenetic analysis or a sequence-generation workflow. Therefore the primary publication itself cannot supply the missing nuclear tip.
 
 Exact-name NCBI BioProject/SRA and DDBJ/ENA searches did not recover an indexed *C. wulongense* nuclear dataset. Bounded exact-voucher searches across searchable CVH/IBSC/CQNM/CBNM web indexes also did not recover a public digitized record for `XLS21-095` or `XLS21-093`. The latter is an index non-recovery result, **not** evidence that the physical herbarium sheets are absent.
 
