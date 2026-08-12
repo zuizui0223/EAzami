@@ -1,0 +1,88 @@
+name: Validate Japan-origin global HPC bundle
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_japan_origin_global_hpc_bundle.py"
+      - "analysis/summarize_japan_origin_global_comp1061_qc.py"
+      - "analysis/prepare_japan_origin_global_comp1061_tree_inputs.py"
+      - "analysis/validate_japan_origin_global_tree.py"
+      - "tests/test_build_japan_origin_global_hpc_bundle.py"
+      - "data/evidence/japan_origin_global_public_panel_contract_v1.json"
+      - ".github/workflows/validate-japan-origin-global-hpc-bundle.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: validate-japan-origin-global-hpc-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile and unit test
+        run: |
+          python -m py_compile \
+            analysis/build_japan_origin_global_hpc_bundle.py \
+            analysis/summarize_japan_origin_global_comp1061_qc.py \
+            analysis/prepare_japan_origin_global_comp1061_tree_inputs.py \
+            analysis/validate_japan_origin_global_tree.py
+          python -m unittest tests/test_build_japan_origin_global_hpc_bundle.py -v
+      - name: Build synthetic 302-sample bundle
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          p=Path('/tmp/global_panel.csv')
+          fields=['panel_id','source_study','bioproject','assay','source_taxon_label','analysis_taxon_label','voucher','biosample','run_accessions','run_count','region','location','name_review_required','common_locus_space','claim_boundary']
+          critical=['Cirsium brevicaule']*3+['Cirsium irumtiense']*3+['Cirsium dipsacolepis','Cirsium lineare']
+          rows=[]
+          for i in range(302):
+              tax=critical[i] if i<len(critical) else f'Cirsium synthetic_{i:03d}'
+              runs='SRR000001|SRR000002' if i==0 else f'SRR{i+100000:06d}'
+              rows.append({'panel_id':f'P{i:04d}','source_study':'Moreyra2025' if i<256 else ('Chang2025' if i<269 else 'Chang2026'),'bioproject':'X','assay':'Compositae1061_target_capture' if i<256 else 'leaf_RNAseq_transcriptome','source_taxon_label':tax,'analysis_taxon_label':tax,'voucher':f'V{i}','biosample':f'SAMN{i:06d}','run_accessions':runs,'run_count':'2' if i==0 else '1','region':'X','location':'X','name_review_required':'false','common_locus_space':'X','claim_boundary':'synthetic'})
+          with p.open('w',newline='',encoding='utf-8') as h:
+              w=csv.DictWriter(h,fieldnames=fields);w.writeheader();w.writerows(rows)
+          PY
+          rm -rf /tmp/jog_bundle
+          python analysis/build_japan_origin_global_hpc_bundle.py --panel /tmp/global_panel.csv --outdir /tmp/jog_bundle | tee /tmp/jog_bundle.log
+          for s in /tmp/jog_bundle/*.sh; do bash -n "$s"; done
+          python - <<'PY'
+          import csv,json,pathlib
+          root=pathlib.Path('/tmp/jog_bundle')
+          m=json.loads((root/'execution_manifest.json').read_text())
+          rows=list(csv.DictReader((root/'sample_manifest.tsv').open(),delimiter='\t'))
+          assert len(rows)==302 and rows[0]['tip_id']=='JOG0001' and rows[-1]['tip_id']=='JOG0302'
+          assert sum(int(r['run_count']) for r in rows)==303
+          assert m['biological_samples']==302 and m['public_runs']==303
+          assert m['frozen_primary_locus_universe']==241
+          assert m['primary_current_occupancy_gate']==0.80
+          assert m['minimum_primary_loci_to_launch']==100
+          assert m['automatic_filter_relaxation_allowed'] is False
+          assert m['tree_completed'] is False
+          assert m['japanese_origin_inference_completed'] is False
+          assert m['new_china_sampling_freeze_allowed'] is False
+          required={'00_prepare_inputs_slurm.sh','01_fetch_trim_slurm.sh','02_hybpiper_bwa_slurm.sh','02b_hybpiper_blastx_slurm.sh','03_retrieve_qc_slurm.sh','04_prepare_tree_inputs_slurm.sh','05_align_loci_slurm.sh','06_gene_trees_slurm.sh','07_concat_tree_slurm.sh','08_accept_tree_slurm.sh','submit_bwa_chain.sh','submit_blastx_chain.sh','submit_tree_chain.sh'}
+          assert required <= {p.name for p in root.glob('*.sh')}
+          txt=(root/'01_fetch_trim_slurm.sh').read_text()
+          assert '#SBATCH --array=0-301%20' in txt
+          assert "IFS='|' read -r -a ACCS" in txt
+          assert 'cat "${R1S[@]}"' in txt
+          print('global_bundle_offline_validation=passed')
+          print('heavy_execution_completed=false')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan-origin-global-hpc-bundle-${{ github.run_id }}
+          path: |
+            /tmp/jog_bundle
+            /tmp/jog_bundle.log
+          if-no-files-found: error
