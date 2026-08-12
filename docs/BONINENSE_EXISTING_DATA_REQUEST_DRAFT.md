@@ -11,13 +11,13 @@ Shinozaki T. et al. (2025), 「遺伝子情報によるオガサワラアザミ�
 ### Concrete recovery clues already identified
 
 - J-GLOBAL ID: `202502289420525672` / reference `25A1570147`;
-- the J-GLOBAL indexing includes the quasi-thesaurus term **イリオモテアザミ**, so the study may contain a comparison relevant to the current Ryukyu Arenicola question; this is an indexing clue, not yet recovered abstract text;
+- J-GLOBAL indexing includes the quasi-thesaurus term **イリオモテアザミ**; this is a comparison clue, not evidence that *C. irumtiense* was sequenced;
 - the full 2025 meeting proceedings are catalogued by the National Diet Library as a 110-page volume;
 - NDL bibliographic ID: `034039888`;
 - NDL call number: `RA241-R8`;
 - target page: p.69.
 
-These routes should be exhausted before assuming the method or generating duplicate nuclear data.
+Kew Tree of Life v4.0 has now been checked directly. Its `sequence_manifest.txt`, `specimen_manifest.txt` and current deleted-sequence list contain no exact *Cirsium boninense* record, despite including multiple other *Cirsium* species. POWO's `Image: PAFTOL` attribution therefore is **not** being treated as an existing *C. boninense* nuclear-data route.
 
 ## Requested information / materials
 
@@ -36,7 +36,7 @@ These routes should be exhausted before assuming the method or generating duplic
 
 The immediate goal is not to reinterpret the authors' unpublished results. It is to determine whether the existing study already provides enough voucher-linked nuclear information to place *C. boninense* in a broader East Asian *Cirsium* phylogenomic comparison. If it does, the project should reuse or cite those data appropriately rather than generate redundant data.
 
-The J-GLOBAL keyword link to イリオモテアザミ makes the existing study especially relevant to the current question of whether white-flower evolution in the Ogasawara and Ryukyu coastal thistles represents independent losses, retained ancestral states, or a more complex history. That biological interpretation must wait until the actual study design and topology are recovered.
+The J-GLOBAL keyword link to イリオモテアザミ makes the study especially relevant to whether white-flower evolution in the Ogasawara and Ryukyu coastal thistles represents independent losses, retained ancestral states, or a more complex history. That biological interpretation must wait until the actual study design and topology are recovered.
 
 For the current flower-colour transition-rate framework, one literature record alone is insufficient. Promotion requires at least two independent, taxonomically secure, flower-colour-linked nuclear samples or equivalent evidence of concordant placement. If the 2025 study does not meet that requirement, it can still guide the minimum additional sampling needed.
 
@@ -47,4 +47,5 @@ Until the abstract/poster/authors/data source provides the method and exact data
 - do not state that the study used MIG-seq, target capture, RAD-seq, WGS, or any other specific assay;
 - do not state that *C. irumtiense* was actually sequenced merely because it appears in J-GLOBAL indexing;
 - do not state that reusable sequence data are public merely because the study exists;
+- do not describe POWO's PAFTOL image attribution as a current *C. boninense* genomic sample;
 - do not convert the conference result into a fixed species-tree placement without the underlying evidence.
