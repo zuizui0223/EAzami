@@ -1,0 +1,85 @@
+{
+  "contract_version": "cirsium_flower_colour_atlas_v0_3",
+  "record_count": 32,
+  "review_status_counts": {
+    "pending": 1,
+    "reviewed": 31
+  },
+  "observation_unit_counts": {
+    "sample": 6,
+    "taxon": 26
+  },
+  "fine_colour_counts": {
+    "blue_purple": 7,
+    "pale_pink": 4,
+    "polymorphic": 5,
+    "purple": 9,
+    "unknown": 1,
+    "white": 6
+  },
+  "binary_colour_counts": {
+    "C": 20,
+    "P": 5,
+    "U": 1,
+    "W": 6
+  },
+  "reviewed_record_count": 31,
+  "rate_fit_eligible_record_count": 20,
+  "rate_fit_eligible_unique_taxa": 20,
+  "rate_fit_eligible_taxa": [
+    "Cirsium alpicola",
+    "Cirsium brevicaule",
+    "Cirsium fanjingshanense",
+    "Cirsium gyojanum",
+    "Cirsium irumtiense",
+    "Cirsium japonicum var. albescens",
+    "Cirsium japonicum var. australe",
+    "Cirsium japonicum var. fukienense",
+    "Cirsium japonicum var. japonicum",
+    "Cirsium kamtschaticum",
+    "Cirsium kawakamii",
+    "Cirsium kujuense",
+    "Cirsium maritimum",
+    "Cirsium morii",
+    "Cirsium nippoense",
+    "Cirsium nipponicum var. incomptum",
+    "Cirsium pengii",
+    "Cirsium suffultum",
+    "Cirsium tatakaense",
+    "Cirsium yezoense"
+  ],
+  "rate_fit_eligible_state_counts": {
+    "C": 17,
+    "W": 3
+  },
+  "rate_fit_eligible_phylogeny_contexts": [
+    "Arenicola",
+    "Moreyra2025_China",
+    "Moreyra2025_Japan38",
+    "Moreyra2025_NEAsia",
+    "Nipponocirsium",
+    "Sinocirsium"
+  ],
+  "readiness_thresholds": {
+    "min_rate_fit_taxon_tips": 20,
+    "min_per_binary_state": 5,
+    "min_phylogeny_contexts": 3
+  },
+  "readiness_conditions": {
+    "minimum_taxon_tips": true,
+    "minimum_white_tips": false,
+    "minimum_coloured_tips": true,
+    "minimum_phylogeny_contexts": true,
+    "all_eligible_are_taxon_level": true,
+    "no_polymorphic_or_unknown_eligible": true
+  },
+  "transition_rate_fit_ready": false,
+  "readiness_blockers": [
+    "minimum_white_tips"
+  ],
+  "threshold_note": "These thresholds are a conservative project gate against fitting asymmetric rates to a tiny focal clade; they are not a statistical guarantee of identifiability or adequate phylogenetic coverage.",
+  "claim_limit": "v0.3 deliberately broadens nuclear-mapped coloured coverage and preserves polymorphic taxa. It must not trigger asymmetric transition-rate fitting while fixed-white coverage remains below the predeclared gate.",
+  "base_atlas": "data/evidence/cirsium_flower_colour_atlas_v0_2.csv",
+  "expansion_evidence": "data/evidence/cirsium_flower_colour_atlas_v0_3_expansion_evidence.csv",
+  "intended_gate_state": "all conservative engineering conditions except minimum_white_tips"
+}
