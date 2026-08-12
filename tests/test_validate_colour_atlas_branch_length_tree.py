@@ -16,10 +16,11 @@ m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
 
 
 class TreeGateTests(unittest.TestCase):
-    def write_fixture(self, td: str, *, missing_length: bool = False, bad_hash: bool = False):
+    def write_fixture(self, td: str, *, missing_length: bool = False, bad_hash: bool = False, tree_text: str | None = None, required_outgroups: list[str] | None = None):
         root = Path(td)
         tree = root / "tree.nwk"
-        tree.write_text("((t1:0.1,t2:0.2)95:0.3,t3:0.4);\n" if not missing_length else "((t1:0.1,t2)95:0.3,t3:0.4);\n")
+        default = "((t1:0.1,t2:0.2)95:0.3,t3:0.4);\n" if not missing_length else "((t1:0.1,t2)95:0.3,t3:0.4);\n"
+        tree.write_text(tree_text or default)
         atlas = root / "atlas.csv"
         fields = ["accepted_taxon","observation_unit","rate_fit_eligible","binary_colour_code"]
         with atlas.open("w", newline="") as f:
@@ -39,16 +40,19 @@ class TreeGateTests(unittest.TestCase):
             ])
         sha=hashlib.sha256(tree.read_bytes()).hexdigest()
         prov=root/"prov.json"
-        prov.write_text(json.dumps({
+        payload={
             "tree_route":"compatibility_reanalysis",
             "tree_sha256":"0"*64 if bad_hash else sha,
             "analysis_name":"synthetic compatibility tree",
             "branch_length_interpretation":"substitutions per site",
-            "rooting_definition":"rooted on t3 for synthetic test",
+            "rooting_definition":"synthetic explicit rooting",
             "support_metric_definition":"IQ-TREE ultrafast bootstrap labels on internal nodes",
             "source_or_pipeline_provenance":"synthetic unit-test fixture",
             "topology_uncertainty_status":"bootstrap_or_gene_tree_sensitivity"
-        }))
+        }
+        if required_outgroups is not None:
+            payload["required_outgroup_tips"] = required_outgroups
+        prov.write_text(json.dumps(payload))
         return tree,atlas,tipmap,prov
 
     def test_accepts_complete_branch_tree(self):
@@ -57,6 +61,27 @@ class TreeGateTests(unittest.TestCase):
             self.assertTrue(result["tree_gate_ready"])
             self.assertEqual(result["eligible_state_counts"], {"C":2,"W":1})
             self.assertEqual(result["tree_tip_count"],3)
+            self.assertFalse(result["focal_monophyly_checked"])
+
+    def test_accepts_declared_outgroups_only_when_focal_is_monophyletic(self):
+        with tempfile.TemporaryDirectory() as td:
+            tree="((t1:0.1,t2:0.2,t3:0.3):0.4,OUT1:0.5,OUT2:0.6);\n"
+            result=m.validate(*self.write_fixture(td,tree_text=tree,required_outgroups=["OUT1","OUT2"]))
+            self.assertTrue(result["focal_monophyly_checked"])
+            self.assertTrue(result["focal_monophyly_passed"])
+            self.assertEqual(result["required_outgroup_tips"],["OUT1","OUT2"])
+
+    def test_rejects_reference_intrusion_into_focal_clade(self):
+        with tempfile.TemporaryDirectory() as td:
+            tree="((t1:0.1,OUT1:0.2):0.3,(t2:0.1,t3:0.1):0.2,OUT2:0.5);\n"
+            with self.assertRaisesRegex(ValueError,"not monophyletic"):
+                m.validate(*self.write_fixture(td,tree_text=tree,required_outgroups=["OUT1","OUT2"]))
+
+    def test_rejects_undeclared_extra_tree_tip(self):
+        with tempfile.TemporaryDirectory() as td:
+            tree="((t1:0.1,t2:0.2,t3:0.3):0.4,OUT1:0.5,OUT2:0.6,EXTRA:0.7);\n"
+            with self.assertRaisesRegex(ValueError,"undeclared extra tips"):
+                m.validate(*self.write_fixture(td,tree_text=tree,required_outgroups=["OUT1","OUT2"]))
 
     def test_rejects_missing_branch_length(self):
         with tempfile.TemporaryDirectory() as td:
@@ -78,10 +103,12 @@ class TreeGateTests(unittest.TestCase):
                 m.validate(tree,atlas,tipmap,prov)
 
     def test_internal_support_is_not_counted_as_tip(self):
-        tips,lengths,missing=m.NewickParser("((A:1,B:1)99:2,C:3);").parse()
+        parser=m.NewickParser("((A:1,B:1)99:2,C:3);")
+        tips,lengths,missing=parser.parse()
         self.assertEqual(tips,["A","B","C"])
         self.assertEqual(missing,0)
         self.assertEqual(len(lengths),4)
+        self.assertIn(frozenset({"A","B"}),parser.clades)
 
 if __name__ == "__main__":
     unittest.main()
