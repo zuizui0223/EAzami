@@ -5,11 +5,13 @@ on:
     paths:
       - "analysis/build_colour_rate_comp1061_bridge_panel.py"
       - "tests/test_build_colour_rate_comp1061_bridge_panel.py"
+      - "analysis/build_cirsium_flower_colour_atlas_v0_3.py"
       - "analysis/recover_ncbi_project_runs.py"
       - "analysis/recover_chang2026_published_runinfo.py"
       - "analysis/reconcile_chang2026_ncbi_runs.py"
       - "analysis/reconcile_chang2026_complete_runs.py"
-      - "data/evidence/cirsium_flower_colour_atlas_v0_3.csv"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_2.csv"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_3_expansion_evidence.csv"
       - "data/evidence/comp1061_original_reference_contract_v1.json"
       - "data/evidence/chang2026_east_asia_accession_audit_2026-08-10.csv"
       - "data/evidence/moreyra2025_east_ne_asia_sample_audit_2026-08-10.csv"
@@ -38,11 +40,21 @@ jobs:
         run: |
           python -m py_compile \
             analysis/build_colour_rate_comp1061_bridge_panel.py \
+            analysis/build_cirsium_flower_colour_atlas_v0_3.py \
             analysis/recover_ncbi_project_runs.py \
             analysis/recover_chang2026_published_runinfo.py \
             analysis/reconcile_chang2026_ncbi_runs.py \
             analysis/reconcile_chang2026_complete_runs.py
           python -m unittest tests/test_build_colour_rate_comp1061_bridge_panel.py -v
+
+      - name: Rebuild the frozen v0.3 atlas input
+        run: |
+          mkdir -p /tmp/atlas_v03
+          python analysis/build_cirsium_flower_colour_atlas_v0_3.py \
+            --base data/evidence/cirsium_flower_colour_atlas_v0_2.csv \
+            --expansion data/evidence/cirsium_flower_colour_atlas_v0_3_expansion_evidence.csv \
+            --output /tmp/atlas_v03/cirsium_flower_colour_atlas_v0_3.csv \
+            --summary /tmp/atlas_v03/cirsium_flower_colour_atlas_v0_3_readiness.json
 
       - name: Recover Chang complete run reconciliation
         env:
@@ -90,7 +102,7 @@ jobs:
       - name: Build primary 20-tip and replicate manifests
         run: |
           python analysis/build_colour_rate_comp1061_bridge_panel.py \
-            --atlas data/evidence/cirsium_flower_colour_atlas_v0_3.csv \
+            --atlas /tmp/atlas_v03/cirsium_flower_colour_atlas_v0_3.csv \
             --reference-contract data/evidence/comp1061_original_reference_contract_v1.json \
             --chang-reconciliation /tmp/chang_reconciliation/chang2026_sample_run_reconciliation.csv \
             --chang-accession-audit data/evidence/chang2026_east_asia_accession_audit_2026-08-10.csv \
