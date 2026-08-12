@@ -3,9 +3,9 @@
 
 The purpose is to prevent discovery metadata from being silently promoted into a
 usable nuclear phylogenetic tip. A conference study, catalogue route, exact-name
-absence from a current public release, herbarium specimen, or no-result archive
-search remains a discovery state until an exact reusable sample/sequence artifact
-with provenance is recovered.
+absence from a current public release, morphology-only taxonomic paper, herbarium
+specimen, image locality, or no-result archive search remains a discovery state
+until an exact reusable sample/sequence artifact with provenance is recovered.
 """
 from __future__ import annotations
 
@@ -34,6 +34,9 @@ NON_TIP_STATUSES = {
     "no_followup_publication_or_thesis_recovered",
     "voucher_anchor_recovered",
     "additional_voucher_anchor_recovered",
+    "published_taxonomic_study_morphology_only_no_molecular_data",
+    "no_public_digitized_voucher_record_recovered",
+    "secondary_locality_image_evidence_identified",
     "no_exact_indexed_asset_recovered",
 }
 FORBIDDEN_READY_TOKENS = ("rate_fit_ready","nuclear_tip_ready","placement_ready","execution_allowed")
@@ -100,23 +103,33 @@ def validate(path: Path) -> dict[str,object]:
         raise ValueError("C. boninense PAFTOL lead must not remain unresolved after direct v4.0 manifest audit")
 
     wul={r["result_status"] for r in by_candidate["WREC02"]}
-    if not {"voucher_anchor_recovered","additional_voucher_anchor_recovered","no_exact_indexed_asset_recovered"}<=wul:
-        raise ValueError("C. wulongense audit must retain two specimen anchors and bounded no-indexed-asset result")
+    required_wul={
+        "voucher_anchor_recovered",
+        "additional_voucher_anchor_recovered",
+        "published_taxonomic_study_morphology_only_no_molecular_data",
+        "no_public_digitized_voucher_record_recovered",
+        "secondary_locality_image_evidence_identified",
+        "no_exact_indexed_asset_recovered",
+    }
+    if not required_wul<=wul:
+        raise ValueError(f"C. wulongense audit lost required public-recovery states: {sorted(required_wul-wul)}")
 
     return {
-        "contract_version":"fixed_white_public_nuclear_recovery_audit_v2",
+        "contract_version":"fixed_white_public_nuclear_recovery_audit_v3",
         "evidence_rows":len(rows),
         "candidates":A1_EXPECTED,
         "result_status_counts":dict(sorted(statuses.items())),
         "boninense_paftol_current_release_exact_taxon_present":False,
         "boninense_existing_2025_genetic_study_data_recovered":False,
+        "wulongense_published_study_contains_molecular_analysis":False,
+        "wulongense_public_digitized_exact_voucher_recovered":False,
         "usable_nuclear_tip_recovered":False,
         "rate_fit_tip_promotion_allowed":False,
         "next_actions":{
-            "Cirsium boninense":"recover NDL p.69 / 2025 study method, sample identities and data accessions; Kew v4.0 exact-taxonomy route is exhausted",
-            "Cirsium wulongense":"search author/institution/herbarium-held molecular data by XLS21-095/XLS21-093 before new sequencing",
+            "Cirsium boninense":"recover NDL p.69 / 2025 study method, sample identities and data accessions; Kew v4.0 exact-taxonomy route is exhausted; author contact deferred",
+            "Cirsium wulongense":"published paper sequence route is closed as morphology-only; retain XLS21-095/XLS21-093 and Guizhou PPBC locality as identity/sampling anchors, continue public specimen/data mirrors, then new >=2-individual nuclear sampling if no reusable public asset emerges; author contact deferred",
         },
-        "claim_limit":"Current Kew Tree of Life v4.0 exact manifests contain no C. boninense record. The existing 2025 Japanese genetic study remains a high-value recovery lead but is not yet a reusable nuclear tip. Promotion still requires the independent fixed-white tree-promotion contract.",
+        "claim_limit":"Public retrieval has not produced a reusable nuclear tip for either A1 species. Kew Tree of Life v4.0 has no exact C. boninense; the C. wulongense primary study is morphology-only and exact public voucher/sequence records were not recovered. Promotion still requires the independent fixed-white tree-promotion contract.",
     }
 
 
