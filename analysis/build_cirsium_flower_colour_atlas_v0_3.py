@@ -83,6 +83,13 @@ def build_expansion_rows(
         if not clean(item.get("nuclear_tip_status")):
             raise ValueError(f"Missing nuclear-tip status for {taxon}")
 
+        source_name = clean(item.get("colour_evidence_source"))
+        evidence_status = (
+            "official_database_text_direct"
+            if "National Museum of Nature and Science" in source_name
+            else "direct_taxon_text"
+        )
+
         row = blank_row(fieldnames)
         row.update(
             {
@@ -97,7 +104,7 @@ def build_expansion_rows(
                 "observation_unit": "taxon",
                 "observation_id": taxon,
                 "evidence_type": "source_backed_colour_plus_nuclear_tip_mapping",
-                "evidence_source": clean(item.get("colour_evidence_source")),
+                "evidence_source": source_name,
                 "evidence_id": "|".join(
                     value
                     for value in (
@@ -127,7 +134,7 @@ def build_expansion_rows(
                     if binary == "P"
                     else ""
                 ),
-                "evidence_status": "direct_colour_and_nuclear_mapping",
+                "evidence_status": evidence_status,
                 "notes": (
                     f"Nuclear evidence: {clean(item.get('nuclear_evidence_source'))}; "
                     f"tip={clean(item.get('nuclear_tip_identifier'))}; "
