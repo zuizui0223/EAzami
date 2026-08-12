@@ -78,11 +78,7 @@ After the BWA QC job completes, submit:
 MODE=bwa bash submit_tree_chain.sh
 ```
 
-`04_prepare_tree_inputs_slurm.sh` first runs:
-
-`analysis/summarize_colour_rate_comp1061_qc.py`
-
-against the **current** 20 recovered samples. Starting from the frozen public 241 no-warning/high-occupancy loci, a locus is admitted only when:
+`04_prepare_tree_inputs_slurm.sh` first runs `analysis/summarize_colour_rate_comp1061_qc.py` against the **current** 20 recovered samples. Starting from the frozen public 241 no-warning/high-occupancy loci, a locus is admitted only when:
 
 - current focal occupancy >=0.80, i.e. >=16/20 focal taxa;
 - no current focal sample has a HybPiper >1-copy/paralog warning at that locus.
@@ -101,18 +97,27 @@ For the current-qualified subset:
 
 5. `05_align_loci_slurm.sh`
    - MAFFT per locus;
-   - focal sequences plus `lett` and `sunf` source-reference anchors;
+   - focal sequences plus original Compositae1061 reference sequences;
+   - `lett` and `sunf` are required on every admitted locus;
+   - `saff` is retained wherever the original reference provides it;
 6. `06_gene_trees_slurm.sh`
    - per-locus IQ-TREE ML;
    - ModelFinder;
    - UFBoot 1000;
    - SH-aLRT 1000;
-   - gene trees retained as topology sensitivity;
+   - root definition remains `OUTGROUP_lett,OUTGROUP_sunf`;
+   - optional `OUTGROUP_saff` is a near Cardueae reference, not a root-defining taxon;
 7. `07_concat_tree_slurm.sh`
    - deterministic concatenation of exactly the admitted locus set;
    - explicit gap padding for missing focal sequences;
+   - if `OUTGROUP_saff` occurs in at least one admitted alignment it is retained as a concatenated reference tip and gap-padded at loci where it is absent;
    - partition table retained;
-   - concatenated IQ-TREE ML tree with branch lengths in substitutions/site.
+   - concatenated IQ-TREE ML tree with branch lengths in substitutions/site, rooted with `lett+sunf`.
+
+This separates two roles that must not be conflated:
+
+- **root outgroups:** `OUTGROUP_lett`, `OUTGROUP_sunf`;
+- **near-reference/monophyly anchor:** optional `OUTGROUP_saff`.
 
 The concatenated ML branch lengths are the candidate scale for the later binary Mk analysis. Gene-tree/topology disagreement remains a sensitivity and is not converted into invented support or branch lengths.
 
@@ -131,11 +136,13 @@ The concatenated ML branch lengths are the candidate scale for the later binary 
 - tree SHA256 matching the provenance record;
 - one-to-one mapping for every currently eligible atlas taxon;
 - explicit branch-length interpretation, rooting, support semantics and pipeline provenance;
-- declared `OUTGROUP_lett` and `OUTGROUP_sunf` present in the tree;
+- `OUTGROUP_lett` and `OUTGROUP_sunf` present as the declared root-outgroup set;
+- any retained `OUTGROUP_saff` explicitly declared as an additional reference;
+- root outgroups to be a subset of the full declared reference set;
 - no undeclared extra tips;
-- **all focal Cirsium atlas tips monophyletic relative to those reference/outgroup tips**.
+- **all focal Cirsium atlas tips monophyletic relative to every declared reference tip**.
 
-If a reference sequence enters the focal clade, the tree is blocked. It is not pruned away after the fact to manufacture an acceptable Cirsium tree.
+If `lett`, `sunf`, or retained `saff` enters the focal clade, the tree is blocked. It is not pruned away after the fact to manufacture an acceptable *Cirsium* tree.
 
 Tree acceptance is structural/scientific input validation only. It does not mean ARD is preferred over ER and does not satisfy the independent W>=5 state gate.
 
@@ -192,6 +199,7 @@ If the real BWA tree passes all gates, it provides:
 - an independently reconstructed common-locus branch-length tree for the current 20 fixed-state taxa;
 - a preflight test of whether Chang leaf RNA-seq and Moreyra target-capture samples can coexist in the same conservative Compositae1061 tree;
 - a direct placement of *C. brevicaule* and *C. irumtiense* in the broader colour atlas under an explicit branch-length model;
+- a reference-intrusion diagnostic using distant and, where available, near Cardueae source references;
 - a branch-length framework that can be extended to the two additional fixed-white taxa once their nuclear data are recovered.
 
 It does **not** yet estimate empirical C->W versus W->C transition rates, because W=3 remains below the predeclared state gate.
