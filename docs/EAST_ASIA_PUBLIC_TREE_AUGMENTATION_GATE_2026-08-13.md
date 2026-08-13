@@ -14,7 +14,7 @@ Successful workflow run `31684233834` recovered the five audited East Asian cand
 - EA04 — *C. setidens*: **0/241**, not pilot-ready.
 - EA05 — *C. japonicum* var. *ussuriense*: **0/241**, not pilot-ready.
 
-EA01's strict locus set is a complete subset of EA02's; their candidate-only joint set is therefore **236 loci**. EA03–EA05 are not carried forward under the present Compositae1061 admission rule. Their workflow success is retained as evidence that the zero-locus outcome is a data/recovery result rather than a pipeline crash.
+EA01's BWA strict locus set is a complete subset of EA02's; their BWA candidate-only joint set is therefore **236 loci**. EA03–EA05 are not carried forward under the present Compositae1061 admission rule. Their workflow success is retained as evidence that the zero-locus outcome is a data/recovery result rather than a pipeline crash.
 
 Machine-readable evidence is `data/evidence/east_asia_public_sra_comp1061_pilot_results_2026-08-13.csv`. Artifact IDs and SHA256 digests are frozen there.
 
@@ -38,13 +38,24 @@ No candidate is promoted from locus recovery alone. The next tree stage uses fou
 
 Within each mapping mode, all four use the exact same locus list:
 
-`accepted baseline-294 loci for that mapping ∩ EA01 strict loci ∩ EA02 strict loci`.
+`accepted baseline-294 loci for that mapping ∩ EA01 strict loci for that mapping ∩ EA02 strict loci for that mapping`.
 
 At least 100 joint paired loci are required separately for BWA and BLASTx. The BWA and BLASTx accepted locus sets are allowed to differ because mapping sensitivity is itself part of the test. No post-hoc filter relaxation is allowed.
 
 EA01 is an independent same-taxon target-capture replicate. Its role is assay/placement replication: it should recover the neighbourhood of the existing *C. nipponicum* var. *yoshinoi* public tip across mapping/tree sensitivities. EA02 is an independent cross-study same-taxon *C. sairamense* replicate, not a new taxon label. It should reproduce the existing *C. sairamense* neighbourhood across BWA and BLASTx concatenated trees and source-label ASTRAL sensitivity.
 
 For every augmented concatenated tree, the 294 shared baseline focal tips are pruned conceptually and their unrooted Robinson–Foulds distance from the paired `baseline294` tree is recorded. RF is a diagnostic, not a loophole: a non-zero value must be interpreted rather than hidden by changing the locus set. The source-label ASTRAL backbone is evaluated separately on the baseline species IDs.
+
+## Candidate-side mapping sensitivity
+
+The original successful public-SRA pilot used HybPiper/BWA for EA01 and EA02. Reusing those same candidate sequences in the BLASTx tree would test only the baseline mapping sensitivity and would therefore be asymmetric.
+
+The full HPC handoff fixes that problem:
+
+- **BWA candidate side:** use the frozen successful EA01/EA02 BWA packs from run `31684233834` (236/241 and 239/241).
+- **BLASTx candidate side:** download the original EA01/EA02 SRRs again on HPC, run fresh HybPiper 2.3.4 without `--bwa`, rebuild strict frozen-241 packs, and require `pilot_locus_pack_ready=true` before BLASTx paired trees start.
+
+Thus each mapping mode uses baseline and candidate sequences recovered under the same mapping strategy. Candidate BLASTx recovery is deliberately performed on HPC/local compute, not inferred from the BWA pack.
 
 ## Frozen cross-mapping promotion gate
 
@@ -56,27 +67,41 @@ For every augmented concatenated tree, the 294 shared baseline focal tips are pr
 
 If any check fails, the script returns `manual_review_required=true`; it does **not** relax an RF threshold or alter the locus gate automatically. This conservative rule distinguishes “safe replicate enrichment” from a candidate that changes the inferred backbone enough to require biological interpretation.
 
-## Execution bundle
+## Execution bundles
 
-`analysis/build_east_asia_public_augmentation_hpc_bundle.py` packages the two successful candidate locus packs with the existing v2 baseline bundle and writes a restartable Slurm stage for:
+`analysis/build_east_asia_public_augmentation_hpc_bundle.py` builds the paired-tree augmentation stage. `analysis/build_east_asia_public_full_hpc_handoff.py` then combines that stage with the validated 294-tip v2 baseline bundle and adds:
 
-- paired input preparation;
-- MAFFT for all four scenarios;
-- per-locus IQ-TREE gene trees;
-- concatenated IQ-TREE trees;
-- source-label ASTRAL trees;
-- concatenated shared-tip RF and candidate-neighbour diagnostics;
-- ASTRAL shared-species backbone RF diagnostics;
-- frozen cross-mapping promotion summary.
+- EA01/EA02 public-read fetch for candidate BLASTx sensitivity;
+- candidate HybPiper/BLASTx recovery and strict pack rebuilding;
+- mapping-aware paired-input preparation;
+- a **single Slurm orchestrator** for the complete public-tree analysis.
 
-Run the ordinary v2 baseline recovery/tree-input stage first for both `bwa` and `blastx`. Then run `submit_paired_augmentation_chain.sh` once per mapping mode. After both mode-specific evaluation jobs have succeeded, run `16_summarize_cross_mapping_sensitivities_slurm.sh` to generate `cross_mapping_sensitivity_summary.json`.
+The full orchestrator submits the following dependency graph:
 
-The heavy read recovery/tree inference remains an HPC/local task. GitHub Actions validates real artifacts, manifests, generated bundles, decision logic, and shell/Python contracts rather than serving as the heavy phylogenomics runner.
+1. prepare the frozen Compositae1061 reference/locus universe;
+2. download/trim the 295 baseline SRRs **once**;
+3. branch the same baseline reads into 294-tip BWA and BLASTx HybPiper recovery;
+4. fetch the two extra candidate SRRs and run their fresh BLASTx recovery in parallel;
+5. run mode-specific QC, locus admission, MAFFT, gene-tree IQ-TREE, concatenated IQ-TREE, ASTRAL and baseline acceptance;
+6. run `baseline294`, `ea01_295`, `ea02_295`, `ea01_ea02_296` under BWA and BLASTx, with strict pairing inside each mapping mode;
+7. evaluate shared-backbone RF and same-taxon neighbourhoods;
+8. write the final `cross_mapping_sensitivity_summary.json`.
+
+After building the full handoff, the intended HPC entry point is:
+
+```bash
+export REPO_ROOT=/path/to/EAzami
+bash /path/to/full_handoff/submit_full_public_tree_and_augmentation.sh
+```
+
+Optional `RESULT_ROOT` and `AUGMENT_ROOT` environment variables redirect large outputs to scratch storage.
+
+The heavy read recovery/tree inference remains an HPC/large-memory-local task. GitHub Actions validates real artifacts, manifests, generated bundles, decision logic, and shell/Python contracts rather than serving as the heavy phylogenomics runner.
 
 ## Current boundary
 
 The public-data **sample-level** ceiling supported by the current pilot is **at most 296 tips**, not 299: 294 baseline + EA01 + EA02. However, both admitted candidates duplicate analysis taxon labels already present in the 294-tip baseline, so they add **0 new taxon labels** at this gate. The 296 state is therefore a replicate-enriched candidate tree, not an expansion of unique taxonomic coverage and not a final accepted primary tree.
 
-The remaining empirical blocker is the heavy 294-tip Compositae1061 recovery/tree run itself. This repository change removes the downstream design ambiguity so that, once `tree_bwa/inputs` and `tree_blastx/inputs` exist, the augmentation comparison can start without changing scientific rules.
+The remaining empirical blocker is execution of the validated full HPC handoff. Once both baseline mapping modes, candidate BLASTx packs, paired trees and the cross-mapping sensitivity summary complete, EA01/EA02 can either be automatically admitted under the frozen exact-backbone rule or sent to manual biological review without changing thresholds.
 
 New China sampling remains deliberately unfrozen.
