@@ -108,6 +108,8 @@ Keep:
 
 The var. *takaoense* topology work remains a focused hypothesis test and provenance layer. It is useful, but it is secondary to the current 294-tip public nuclear backbone. Frozen morph assignments, topology hypotheses, marker contracts and source evidence should be retained even when superseded exploratory runners are later removed.
 
+For Figure 1 morph provenance, the live CI is now validation-only: `.github/workflows/validate-chang2026-takaoense-figure-evidence.yml` checks the six vouchers, W/BP 3+3 assignment, panel B/C direct labels and the frozen official-image SHA256 without re-downloading Springer or Research Square content on every relevant change.
+
 ## 5. Cleanup rule
 
 Keep:
@@ -142,6 +144,12 @@ The second cleanup removes the last live dependency on the old 302-sample HPC bu
 - `analysis/build_japan_origin_global_hpc_bundle.py` is deleted after the v2 bundle reproduces its required shell contracts without legacy string patching;
 - v2 CI now watches and compiles the shared primitive module directly.
 
+The third cleanup retires one-shot source-recovery implementations after preserving their evidence products:
+
+- the Elsevier supplementary-artifact enumerator, its test and its Action are removed; the frozen enumeration CSV and recovery log remain;
+- the obsolete Moreyra 2025 supplement/public-tip recovery wrapper, test and Action are removed; shared NCBI recovery utilities still used elsewhere remain;
+- Chang 2026 Figure 1 live re-download/preprint fallback scripts and tests are removed; the workflow is replaced by a frozen-evidence validator that preserves the W/BP and source-hash gates.
+
 These cleanups do not change any accepted biological conclusion, the 294-tip baseline, the EA01/EA02 augmentation gate, or any frozen source evidence used by the active path.
 
 ## 7. Next cleanup targets after the primary tree gate is stable
@@ -149,5 +157,5 @@ These cleanups do not change any accepted biological conclusion, the 294-tip bas
 Do not delete these blindly. Refactor them first, then remove the historical wrappers only after current CI is changed to the new shared path:
 
 - collapse wrapper/base pairs such as colour-rate Compositae1061 builders where the current generation still imports the previous implementation;
-- consolidate one-shot `recover-*` Actions only after their recovered source artifacts have durable checksums/locations and no current bundle invokes those recovery scripts;
+- continue consolidating recovery/audit Actions only where the frozen evidence has durable checksums/locations and no current bundle invokes the implementation;
 - reduce transcriptome/Read2Tree runner generations only after the current contracts stop importing or regression-testing the older runner.
