@@ -1,8 +1,10 @@
-# East Asia public nuclear-tree augmentation gate — 2026-08-13
+# East Asia public-SRA nuclear-tree augmentation gate — 2026-08-13
 
 ## Purpose
 
 Continue the public-data-only maximum nuclear phylogeny before defining any new China field-sampling list. The baseline remains the deduplicated Japan-origin global panel v2: **294 unique biological tips / 295 unique public SRRs**. Japan-38 membership is provenance/sensitivity metadata, not a topology constraint.
+
+This document defines the **EA01/EA02 public-SRA same-assay gate**. A separate natural-Ulleung *Cirsium nipponicum* genome-derived candidate is now handled by `docs/CIRSIUM_NIPPONICUM_PUBLIC_GENOME_AUGMENTATION_GATE_2026-08-13.md`; it is intentionally not mixed into this SRA mapping-sensitivity contract.
 
 ## Public SRA pilot result now frozen in-repo
 
@@ -25,7 +27,7 @@ Both successful candidates duplicate analysis taxon labels already present in th
 - EA01 is an independent *C. nipponicum* var. *yoshinoi* sample. The baseline Moreyra sample is `SAMN44017955` / `SRR30887222`.
 - EA02 is an independent cross-study *C. sairamense* sample. The baseline Moreyra sample is `SAMN34240330` / `SRR25265647`, with the published locality `Tajikistan: Maijora`.
 
-Thus the pilot adds potentially useful biological replicates and cross-study placement tests, but **adds zero new analysis taxon labels** to the 294-tip baseline.
+Thus the SRA pilot adds potentially useful biological replicates and cross-study placement tests, but **adds zero new analysis taxon labels** to the 294-tip baseline.
 
 ## Paired-tree rule
 
@@ -65,7 +67,7 @@ Thus each mapping mode uses baseline and candidate sequences recovered under the
 - the existing same-taxon baseline tip is among the nearest baseline neighbours of the candidate;
 - source-label ASTRAL shared-species RF = 0.
 
-If any check fails, the script returns `manual_review_required=true`; it does **not** relax an RF threshold or alter the locus gate automatically. This conservative rule distinguishes “safe replicate enrichment” from a candidate that changes the inferred backbone enough to require biological interpretation.
+If any check fails, the script returns `manual_review_required=true`; it does **not** relax an RF threshold or alter the locus gate automatically. This conservative rule distinguishes safe replicate enrichment from a candidate that changes the inferred backbone enough to require biological interpretation.
 
 ## Execution bundles
 
@@ -74,7 +76,7 @@ If any check fails, the script returns `manual_review_required=true`; it does **
 - EA01/EA02 public-read fetch for candidate BLASTx sensitivity;
 - candidate HybPiper/BLASTx recovery and strict pack rebuilding;
 - mapping-aware paired-input preparation;
-- a **single Slurm orchestrator** for the complete public-tree analysis.
+- a **single Slurm orchestrator** for the complete SRA augmentation analysis.
 
 The full orchestrator submits the following dependency graph:
 
@@ -100,8 +102,10 @@ The heavy read recovery/tree inference remains an HPC/large-memory-local task. G
 
 ## Current boundary
 
-The public-data **sample-level** ceiling supported by the current pilot is **at most 296 tips**, not 299: 294 baseline + EA01 + EA02. However, both admitted candidates duplicate analysis taxon labels already present in the 294-tip baseline, so they add **0 new taxon labels** at this gate. The 296 state is therefore a replicate-enriched candidate tree, not an expansion of unique taxonomic coverage and not a final accepted primary tree.
+Within this **EA01/EA02 public-SRA gate**, the candidate sample-level ceiling is **296 tips**: 294 baseline + EA01 + EA02. Both candidates duplicate analysis taxon labels already present in the 294-tip baseline, so this gate adds **0 new taxon labels**. The 296 state is a replicate-enriched candidate tree, not a final accepted primary tree.
 
-The remaining empirical blocker is execution of the validated full HPC handoff. Once both baseline mapping modes, candidate BLASTx packs, paired trees and the cross-mapping sensitivity summary complete, EA01/EA02 can either be automatically admitted under the frozen exact-backbone rule or sent to manual biological review without changing thresholds.
+Across all currently ready public augmentation sources, the separate natural-Ulleung genome candidate adds a third possible biological sample. Therefore the broader current public candidate ceiling is **297 tips if all independent gates pass**, still with 0 new analysis taxon labels. That broader 297 state is also not yet an accepted combined tree; it requires an explicit common paired-locus contract after independent admissions.
+
+The remaining empirical blocker for this SRA gate is execution of the validated full HPC handoff. Once both baseline mapping modes, candidate BLASTx packs, paired trees and the cross-mapping sensitivity summary complete, EA01/EA02 can either be automatically admitted under the frozen exact-backbone rule or sent to manual biological review without changing thresholds.
 
 New China sampling remains deliberately unfrozen.
