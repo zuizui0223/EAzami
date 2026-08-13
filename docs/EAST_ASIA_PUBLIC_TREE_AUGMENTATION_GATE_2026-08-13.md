@@ -18,6 +18,15 @@ EA01's strict locus set is a complete subset of EA02's; their candidate-only joi
 
 Machine-readable evidence is `data/evidence/east_asia_public_sra_comp1061_pilot_results_2026-08-13.csv`. Artifact IDs and SHA256 digests are frozen there.
 
+## Baseline taxon reconciliation
+
+Both successful candidates duplicate analysis taxon labels already present in the 294-tip baseline.
+
+- EA01 is an independent *C. nipponicum* var. *yoshinoi* sample. The baseline Moreyra sample is `SAMN44017955` / `SRR30887222`.
+- EA02 is an independent cross-study *C. sairamense* sample. The baseline Moreyra sample is `SAMN34240330` / `SRR25265647`, with the published locality `Tajikistan: Maijora`.
+
+Thus the pilot adds potentially useful biological replicates and cross-study placement tests, but **adds zero new analysis taxon labels** to the 294-tip baseline.
+
 ## Paired-tree rule
 
 No candidate is promoted from locus recovery alone. The next tree stage uses four scenarios:
@@ -33,7 +42,7 @@ All four must use the exact same locus list:
 
 At least 100 joint paired loci are required. No post-hoc filter relaxation is allowed.
 
-EA01 is an independent same-taxon target-capture replicate. Its role is assay/placement replication: it should recover the neighbourhood of the existing *C. nipponicum* var. *yoshinoi* public tip across mapping/tree sensitivities. EA02 is the genuine new continental taxon candidate. Its placement must be compared across BWA and BLASTx concatenated trees and source-label ASTRAL sensitivity.
+EA01 is an independent same-taxon target-capture replicate. Its role is assay/placement replication: it should recover the neighbourhood of the existing *C. nipponicum* var. *yoshinoi* public tip across mapping/tree sensitivities. EA02 is an independent cross-study same-taxon *C. sairamense* replicate, not a new taxon label. It should reproduce the existing *C. sairamense* neighbourhood across BWA and BLASTx concatenated trees and source-label ASTRAL sensitivity.
 
 For every augmented concatenated tree, the 294 shared baseline focal tips are pruned conceptually and their unrooted Robinson–Foulds distance from the paired `baseline294` tree is recorded. RF is a diagnostic, not a loophole: a non-zero value must be interpreted rather than hidden by changing the locus set. The source-label ASTRAL backbone is evaluated separately on the baseline species IDs.
 
@@ -53,7 +62,7 @@ Run the ordinary v2 baseline recovery/tree-input stage first for both `bwa` and 
 
 ## Current boundary
 
-The public-data sample-level ceiling supported by the current pilot is **at most 296 tips**, not 299: 294 baseline + EA01 + EA02. This is a candidate ceiling, not a final accepted tree size. It becomes the maximum-public primary tree only after the paired topology/sensitivity gate passes.
+The public-data **sample-level** ceiling supported by the current pilot is **at most 296 tips**, not 299: 294 baseline + EA01 + EA02. However, both admitted candidates duplicate analysis taxon labels already present in the 294-tip baseline, so they add **0 new taxon labels** at this gate. The 296 state is therefore a replicate-enriched candidate tree, not an expansion of unique taxonomic coverage and not a final accepted primary tree.
 
 The remaining empirical blocker is the heavy 294-tip Compositae1061 recovery/tree run itself. This repository change removes the downstream design ambiguity so that, once `tree_bwa/inputs` and `tree_blastx/inputs` exist, the augmentation comparison can start without changing scientific rules.
 
