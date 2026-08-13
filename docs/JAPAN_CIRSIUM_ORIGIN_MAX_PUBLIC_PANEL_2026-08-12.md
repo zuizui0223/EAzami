@@ -12,6 +12,8 @@ The most important missing test is Ryukyu Arenicola. *C. brevicaule* and *C. iru
 
 `analysis/build_japan_origin_max_public_panel.py` combines the currently curated public evidence without pretending that different assays are already directly comparable.
 
+The current executable successor is the deduplicated v2 panel: 294 biological individuals / 295 unique SRRs. It collapses eight BioSamples reused across Chang 2025 and Chang 2026 into one tree tip each while retaining both source-paper links. The earlier 302-tip inventory is historical and must not be used for inference.
+
 ### Layer 1 — Moreyra 2025
 
 Use every currently curated East/Northeast Asian PRJNA957074 biological sample with linked runinfo, grouped by BioSample rather than by run.

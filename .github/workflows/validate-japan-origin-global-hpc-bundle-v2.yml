@@ -9,6 +9,14 @@ on:
       - "analysis/summarize_japan_origin_global_comp1061_qc.py"
       - "analysis/prepare_japan_origin_global_comp1061_tree_inputs.py"
       - "analysis/validate_japan_origin_global_tree.py"
+      - "analysis/validate_japan_origin_astral_tree_v2.py"
+      - "analysis/analyze_japan_origin_global_tree.py"
+      - "analysis/integrate_japan_origin_topology_sensitivities.py"
+      - "tests/test_analyze_japan_origin_global_tree.py"
+      - "tests/test_build_japan_origin_global_hpc_bundle_v2.py"
+      - "tests/test_integrate_japan_origin_topology_sensitivities.py"
+      - "data/schema/japan_origin_topology_sensitivity_scenarios.csv"
+      - "data/schema/japan_origin_name_review.csv"
       - "data/evidence/japan_origin_global_public_panel_contract_v2.json"
       - "data/evidence/chang2025_public_run_manifest_v1.csv"
       - "data/evidence/chang2026_public_run_manifest_v1.csv"
@@ -37,7 +45,12 @@ jobs:
         run: |
           python -m py_compile analysis/build_japan_origin_global_public_panel_v2.py
           python -m py_compile analysis/build_japan_origin_global_hpc_bundle_v2.py
+          python -m py_compile analysis/analyze_japan_origin_global_tree.py
+          python -m py_compile analysis/integrate_japan_origin_topology_sensitivities.py
           python -m unittest tests/test_build_japan_origin_global_public_panel_v2.py -v
+          python -m unittest tests/test_build_japan_origin_global_hpc_bundle_v2.py -v
+          python -m unittest tests/test_analyze_japan_origin_global_tree.py -v
+          python -m unittest tests/test_integrate_japan_origin_topology_sensitivities.py -v
       - name: Recover frozen Moreyra reconciliation artifact
         env:
           GH_TOKEN: ${{ github.token }}
@@ -67,6 +80,7 @@ jobs:
           m=json.loads((b/'execution_manifest.json').read_text())
           rows=list(csv.DictReader((b/'sample_manifest.csv').open()))
           species=list(csv.DictReader((b/'astral_species_map.csv').open()))
+          astral_bridge=list(csv.DictReader((b/'astral_interpretation_manifest.csv').open()))
           assert m['biological_samples']==294
           assert m['public_runs']==295
           assert m['source_preserving_taxon_labels']==270
@@ -75,6 +89,7 @@ jobs:
           runs=[x for r in rows for x in r['run_accessions'].split('|') if x]
           assert len(runs)==295 and len(set(runs))==295
           assert len(species)==270
+          assert sum(int(r['constituent_tip_count']) for r in astral_bridge)==294
           assert sum(r['analysis_taxon_label']=='Cirsium brevicaule' for r in rows)==3
           assert sum(r['analysis_taxon_label']=='Cirsium irumtiense' for r in rows)==3
           assert sum(r['shared_cross_paper_sample']=='true' for r in rows)==8
@@ -83,6 +98,8 @@ jobs:
           treeprep=(b/'04_prepare_tree_inputs_slurm.sh').read_text()
           astral=(b/'08_astral_species_tree_slurm.sh').read_text()
           submit=(b/'submit_tree_chain.sh').read_text()
+          accept=(b/'09_accept_trees_slurm.sh').read_text()
+          integrate=(b/'10_integrate_sensitivity_gate_slurm.sh').read_text()
           env=(b/'env.yml').read_text()
           assert '--array=0-293%20' in fetch and '0-301' not in fetch
           assert '--array=0-293%16' in bwa and '0-301' not in bwa
@@ -90,9 +107,14 @@ jobs:
           assert '$BUNDLE_DIR/helpers/prepare_japan_origin_global_comp1061_tree_inputs_v2.py' in treeprep
           assert 'astral -Xmx90G' in astral
           assert '08_astral_species_tree_slurm.sh' in submit and '09_accept_trees_slurm.sh' in submit
+          assert 'concat_topology.json' in accept and 'astral_topology.json' in accept
+          for scenario in ('bwa_concat','bwa_astral','blastx_concat','blastx_astral'):
+              assert scenario in integrate
           assert 'astral-tree=5.7.8' in env
           assert (b/'helpers/validate_japan_origin_global_tree_v2.py').is_file()
           assert (b/'helpers/validate_japan_origin_astral_tree_v2.py').is_file()
+          assert (b/'helpers/analyze_japan_origin_global_tree.py').is_file()
+          assert (b/'helpers/integrate_japan_origin_topology_sensitivities.py').is_file()
           print(json.dumps(m,indent=2))
           PY
           python -m py_compile /tmp/bundle/helpers/*.py

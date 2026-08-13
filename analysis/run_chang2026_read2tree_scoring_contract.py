@@ -22,7 +22,7 @@ from pathlib import Path
 import validate_chang2026_takaoense_hypothesis_freeze as freeze
 
 DEFAULT_FROZEN = Path("analysis/chang2026_takaoense_gene_tree_hypotheses_v1.csv")
-DEFAULT_EXPECTED_SHA256 = "5cf8aed00a71df8d18868b7b7d108344dcc22ec79541e53a941ce43df295e7ef"
+DEFAULT_EXPECTED_SHA256 = "b3cf6ab230fba4e21dd06690580c49c0bfd759be2c1e30ac2fa576ff8e2b7082"
 DEFAULT_SCORER = Path("analysis/score_chang2026_read2tree_topology.py")
 DEFAULT_NEAREST = Path("analysis/chang2026_takaoense_nearest_no_regain_topologies.csv")
 DEFAULT_ROBUSTNESS = Path("analysis/chang2026_takaoense_topology_robustness_summary.json")

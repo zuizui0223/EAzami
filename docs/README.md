@@ -18,7 +18,7 @@ Read these first, in order:
 |---|---|---|
 | Evidence gates and phylogeny | [Evidence map v0.3](CIRSIUM_PHYLOGENY_EVIDENCE_MAP_RELEASE_V0_3.md) | Which sources and public artifacts are safe to use |
 | Anthocyanin regain candidate | [Exact var. *takaoense* topology and uncertainty](CHANG_2026_TAKAOENSE_EXACT_TOPOLOGY_AND_UNCERTAINTY_2026-08-11.md) | Candidate regain versus historical alternatives |
-| Japan origin topology | [Decision contract](JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md) | Monophyly classification and stable continental gaps |
+| Japan origin topology | [Decision contract](JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md) and [four-scenario gate](JAPAN_ORIGIN_SENSITIVITY_ACCEPTANCE_GATE_2026-08-13.md) | Monophyly classification and stable continental gaps |
 | RAD-seq priority | [Phylogeny-gap and RAD-seq plan](PHYLOGENY_GAP_AND_RADSEQ_PLAN.md) | Species placement versus population-history sequencing |
 | Flower-colour evidence | [Flower-colour atlas v0.1](CIRSIUM_FLOWER_COLOUR_ATLAS_V0_1.md) | Population-aware colour states and transition candidates |
 | Capitulum traits | [Capitulum trait foundation](CAPITULUM_TRAIT_FOUNDATION.md) | Future trait mapping without premature adaptation claims |

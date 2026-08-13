@@ -67,7 +67,7 @@ After IQ-TREE completes, score with the frozen hypothesis gate:
     --panel $PANEL \
     --reference-manifest $REFS \
     --frozen-hypotheses $REPO_ROOT/analysis/chang2026_takaoense_gene_tree_hypotheses_v1.csv \
-    --expected-hypothesis-sha256 5cf8aed00a71df8d18868b7b7d108344dcc22ec79541e53a941ce43df295e7ef \
+    --expected-hypothesis-sha256 b3cf6ab230fba4e21dd06690580c49c0bfd759be2c1e30ac2fa576ff8e2b7082 \
     --nearest $REPO_ROOT/analysis/chang2026_takaoense_nearest_no_regain_topologies.csv \
     --robustness-summary $REPO_ROOT/analysis/chang2026_takaoense_topology_robustness_summary.json \
     --scorer $REPO_ROOT/analysis/score_chang2026_read2tree_topology.py \

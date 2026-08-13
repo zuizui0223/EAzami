@@ -109,7 +109,7 @@ class NewickParser:
 
 
 def clean(x: object) -> str:
-    return str(x or "").strip()
+    return "" if x is None else str(x).strip()
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -140,6 +140,88 @@ def tip_index(root: Node) -> dict[str, Node]:
         for c in n.children: walk(c)
     walk(root)
     return out
+
+
+def reroot_on_reference_clade(root: Node, references: set[str]) -> Node:
+    """Root an arbitrarily rooted Newick on the edge separating references.
+
+    The input root is suppressed when it is an unlabelled degree-two artifact.
+    This makes individual concatenated and unrooted ASTRAL trees comparable
+    without treating their serialized root position as biological evidence.
+    """
+    observed = set(tip_index(root))
+    if not references or not references < observed:
+        raise ValueError("reference rooting requires a non-empty proper tip subset")
+    missing = sorted(references - observed)
+    if missing:
+        raise ValueError(f"reference tips absent from tree: {missing}")
+
+    adjacency: dict[Node, list[Node]] = defaultdict(list)
+
+    def connect(node: Node) -> None:
+        for child in node.children:
+            adjacency[node].append(child)
+            adjacency[child].append(node)
+            connect(child)
+
+    connect(root)
+    if not root.name and len(adjacency[root]) == 2:
+        left, right = adjacency.pop(root)
+        adjacency[left].remove(root)
+        adjacency[right].remove(root)
+        adjacency[left].append(right)
+        adjacency[right].append(left)
+
+    def component_tips(start: Node, blocked: Node) -> set[str]:
+        tips: set[str] = set()
+        stack = [(start, blocked)]
+        while stack:
+            node, parent = stack.pop()
+            neighbours = [item for item in adjacency[node] if item is not parent]
+            if not neighbours:
+                if not node.name:
+                    raise ValueError("unlabelled leaf encountered while rerooting")
+                tips.add(node.name)
+            else:
+                stack.extend((item, node) for item in neighbours)
+        return tips
+
+    split: tuple[Node, Node] | None = None
+    seen_edges: set[frozenset[Node]] = set()
+    for left, neighbours in adjacency.items():
+        for right in neighbours:
+            edge = frozenset((left, right))
+            if edge in seen_edges:
+                continue
+            seen_edges.add(edge)
+            side = component_tips(left, right)
+            if side == references:
+                split = (left, right)
+                break
+            if observed - side == references:
+                split = (right, left)
+                break
+        if split:
+            break
+    if split is None:
+        raise ValueError("declared reference tips do not form a separable clade")
+
+    def orient(node: Node, parent: Node) -> Node:
+        neighbours = [item for item in adjacency[node] if item is not parent]
+        clone = Node(node.name if not neighbours else "", node.length)
+        for neighbour in neighbours:
+            child = orient(neighbour, node)
+            child.parent = clone
+            clone.children.append(child)
+        return clone
+
+    reference_side, focal_side = split
+    new_root = Node()
+    for node, parent in ((reference_side, focal_side), (focal_side, reference_side)):
+        child = orient(node, parent)
+        child.parent = new_root
+        new_root.children.append(child)
+    return new_root
 
 
 def mrca(index: Mapping[str, Node], names: Iterable[str]) -> Node:
@@ -217,12 +299,19 @@ def join_metadata(manifest: Sequence[Mapping[str, str]], panel: Sequence[Mapping
             raise ValueError(f"manifest panel_id missing from source panel: {r['panel_id']}")
         p = pmap[r["panel_id"]]; tip = r["tip_id"]
         if tip in out: raise ValueError(f"duplicate manifest tip {tip}")
+        try:
+            constituent_count = int(clean(r.get("constituent_tip_count")) or "1")
+        except ValueError as error:
+            raise ValueError(f"manifest tip {tip} has invalid constituent_tip_count") from error
+        if constituent_count < 1:
+            raise ValueError(f"manifest tip {tip} has non-positive constituent_tip_count")
         out[tip] = {"tip_id": tip, "panel_id": r["panel_id"],
-                    "source_study": r["source_study"],
-                    "analysis_taxon_label": r["analysis_taxon_label"],
-                    "region": clean(p.get("region")), "location": clean(p.get("location")),
-                    "name_review_required": clean(p.get("name_review_required") or
-                                                   p.get("name_or_geography_review_required")).casefold()}
+                     "source_study": r["source_study"],
+                     "analysis_taxon_label": r["analysis_taxon_label"],
+                     "region": clean(p.get("region")), "location": clean(p.get("location")),
+                     "name_review_required": clean(p.get("name_review_required") or
+                                                   p.get("name_or_geography_review_required")).casefold(),
+                     "constituent_tip_count": constituent_count}
     return out
 
 
@@ -261,19 +350,28 @@ def priority(focal_group: str, region: str) -> str:
 
 def build_candidates(index: Mapping[str, Node], groups: Mapping[str, set[str]], focal: set[str],
                      meta: Mapping[str, Mapping[str, str]]) -> list[dict[str, str]]:
-    agg: dict[tuple[str, str, str, str, str], list[str]] = defaultdict(list)
+    agg: dict[tuple[str, str, str, str], list[str]] = defaultdict(list)
     for gname, gtips in groups.items():
         kind, ntips = neighbourhood(index, gtips, focal)
         for tip in sorted(ntips):
             m = meta[tip]
-            key = (gname, kind, m["analysis_taxon_label"], m["region"], m["source_study"])
+            key = (gname, kind, m["analysis_taxon_label"], m["region"])
             agg[key].append(tip)
     rows = []
-    for (g, kind, taxon, region, study), tips in sorted(agg.items()):
+    for (g, kind, taxon, region), tips in sorted(agg.items()):
         rows.append({"focal_group": g, "neighbourhood_kind": kind,
-                     "candidate_taxon": taxon, "region": region, "source_study": study,
-                     "tip_count": str(len(tips)), "tip_ids": "|".join(sorted(tips)),
-                     "sampling_priority_if_public_data_remain_unresolved": priority(g, region),
+                      "candidate_taxon": taxon, "region": region,
+                      "source_study": "|".join(sorted({
+                          study
+                          for tip in tips
+                          for study in meta[tip]["source_study"].split("|")
+                          if study
+                      })),
+                      "tip_count": str(len(tips)), "tip_ids": "|".join(sorted(tips)),
+                      "name_review_required": str(any(
+                          meta[tip]["name_review_required"] == "true" for tip in tips
+                      )).lower(),
+                      "sampling_priority_if_public_data_remain_unresolved": priority(g, region),
                      "interpretation_limit": "Topological neighbourhood only; not dispersal direction, direct ancestry or introgression."})
     return rows
 
@@ -282,18 +380,26 @@ def analyze(tree: Path, manifest: Path, source_panel: Path, japan38: Path,
             acceptance: Path | None = None, require_38: bool = True):
     mr = read_csv(manifest); pr = read_csv(source_panel); jr = read_csv(japan38)
     if require_38 and len(jr) != 38: raise ValueError(f"expected 38 Japan-38 rows, found {len(jr)}")
-    accepted = False
+    accepted = False; acceptance_contract = ""; reference_tips: set[str] = set()
+    tree_hash = hashlib.sha256(tree.read_bytes()).hexdigest()
     if acceptance:
         ac = json.loads(acceptance.read_text(encoding="utf-8"))
         if not ac.get("tree_artifact_accepted"):
             raise ValueError("tree has not passed artifact acceptance")
+        if clean(ac.get("tree_sha256")) != tree_hash:
+            raise ValueError("tree artifact acceptance SHA does not match interpreted tree")
+        acceptance_contract = clean(ac.get("contract_version"))
+        reference_tips = set(ac.get("reference_tips") or ac.get("required_reference_tips") or [])
         accepted = True
-    root = NewickParser(tree.read_text(encoding="utf-8")).parse(); idx = tip_index(root)
+    root = NewickParser(tree.read_text(encoding="utf-8")).parse()
+    if reference_tips:
+        root = reroot_on_reference_clade(root, reference_tips)
+    idx = tip_index(root)
     meta = join_metadata(mr, pr); focal = set(meta)
     missing = sorted(focal - set(idx))
     if missing: raise ValueError(f"manifest tips absent from tree: {missing[:8]}")
     main_labels, excluded = derive_main_labels(jr)
-    main = {t for t,m in meta.items() if m["source_study"] == "Moreyra2025" and m["analysis_taxon_label"] in main_labels}
+    main = {t for t,m in meta.items() if "Moreyra2025" in m["source_study"].split("|") and m["analysis_taxon_label"] in main_labels}
     main_clean = {t for t in main if meta[t]["name_review_required"] != "true"}
     brev = {t for t,m in meta.items() if m["analysis_taxon_label"] == "Cirsium brevicaule"}
     irum = {t for t,m in meta.items() if m["analysis_taxon_label"] == "Cirsium irumtiense"}
@@ -301,7 +407,15 @@ def analyze(tree: Path, manifest: Path, source_panel: Path, japan38: Path,
     dips = {t for t,m in meta.items() if m["analysis_taxon_label"] == "Cirsium dipsacolepis"}
     line = {t for t,m in meta.items() if m["analysis_taxon_label"] == "Cirsium lineare"}
     japan = {t for t,m in meta.items() if "japan" in m["region"].casefold()}
-    if len(brev) < 3 or len(irum) < 3: raise ValueError("Arenicola public replication fell below 3+3")
+    individual_counts = {
+        name: sum(meta[tip]["constituent_tip_count"] for tip in tips)
+        for name, tips in {
+            "Cirsium brevicaule": brev,
+            "Cirsium irumtiense": irum,
+        }.items()
+    }
+    if individual_counts["Cirsium brevicaule"] < 3 or individual_counts["Cirsium irumtiense"] < 3:
+        raise ValueError("Arenicola public replication fell below 3+3")
     if not dips or not line: raise ValueError("published separate-invasion anchors missing")
     if len(main) < 20: raise ValueError(f"too few published main-radiation tips: {len(main)}")
     groups = {"main_japanese_radiation": main,
@@ -310,7 +424,22 @@ def analyze(tree: Path, manifest: Path, source_panel: Path, japan38: Path,
               "arenicola": aren, "Cirsium brevicaule": brev, "Cirsium irumtiense": irum,
               "Cirsium dipsacolepis": dips, "Cirsium lineare": line}
     stats = {g: group_stats(idx, tips, focal) for g,tips in groups.items()}
+    for group_name, tips in groups.items():
+        stats[group_name]["constituent_individual_count"] = sum(
+            meta[tip]["constituent_tip_count"] for tip in tips
+        )
     relation = classify_arenicola(idx, main, aren, focal)
+    main_mrca_descendants = descendants(mrca(idx, main)) & focal
+    exception_relationships = {}
+    for name, tips in (("Cirsium dipsacolepis", dips), ("Cirsium lineare", line)):
+        inside = tips & main_mrca_descendants
+        if not inside:
+            state = "outside_published_main_radiation_mrca"
+        elif inside == tips:
+            state = "inside_published_main_radiation_mrca"
+        else:
+            state = "partly_inside_published_main_radiation_mrca"
+        exception_relationships[name] = state
     neigh = {}; cand_groups = {k:groups[k] for k in ("main_japanese_radiation","arenicola","Cirsium dipsacolepis","Cirsium lineare")}
     for g,tips in cand_groups.items():
         kind, ns = neighbourhood(idx, tips, focal)
@@ -319,20 +448,30 @@ def analyze(tree: Path, manifest: Path, source_panel: Path, japan38: Path,
                     "regions": dict(sorted(Counter(meta[t]["region"] for t in ns).items())),
                     "source_studies": dict(sorted(Counter(meta[t]["source_study"] for t in ns).items()))}
     candidates = build_candidates(idx, cand_groups, focal, meta)
-    result = {"contract_version":"japan_origin_global_topology_interpretation_v1",
-              "tree_sha256": hashlib.sha256(tree.read_bytes()).hexdigest(),
+    result = {"contract_version":"japan_origin_global_topology_interpretation_v2",
+              "tree_sha256": tree_hash,
               "tree_artifact_acceptance_verified": accepted,
+              "tree_artifact_acceptance_contract_version": acceptance_contract,
+              "reference_tips_used_for_rooting": sorted(reference_tips),
               "focal_public_tip_count": len(focal), "tree_tip_count": len(idx),
+              "focal_public_individual_count": sum(
+                  item["constituent_tip_count"] for item in meta.values()
+              ),
+              "analysis_unit": (
+                  "individual_tip" if all(item["constituent_tip_count"] == 1 for item in meta.values())
+                  else "source_label_tip"
+              ),
               "japan38_audit_rows": len(jr),
               "published_main_radiation_concept_count": len(jr)-len(excluded),
               "published_exception_concepts": excluded,
               "main_radiation_tree_code_count": len(main_labels),
               "group_statistics": stats,
               "arenicola_relative_to_main_radiation": relation,
+              "published_exception_relationships": exception_relationships,
               "sibling_neighbourhoods": neigh,
               "dispersal_direction_inferred": False, "direct_ancestry_inferred": False,
               "introgression_inferred": False,
-              "topology_based_sampling_shortlist_allowed": True,
+              "topology_based_sampling_shortlist_allowed": accepted,
               "new_china_sampling_freeze_allowed": False,
               "sampling_freeze_blockers":["compare BWA-primary and BLASTx mapping-sensitivity topologies",
                   "compare concatenated topology with gene-tree/coalescent sensitivity",
@@ -343,7 +482,7 @@ def analyze(tree: Path, manifest: Path, source_panel: Path, japan38: Path,
 
 
 def write_candidates(path: Path, rows: Sequence[Mapping[str,str]]):
-    fields=["focal_group","neighbourhood_kind","candidate_taxon","region","source_study","tip_count","tip_ids","sampling_priority_if_public_data_remain_unresolved","interpretation_limit"]
+    fields=["focal_group","neighbourhood_kind","candidate_taxon","region","source_study","tip_count","tip_ids","name_review_required","sampling_priority_if_public_data_remain_unresolved","interpretation_limit"]
     path.parent.mkdir(parents=True,exist_ok=True)
     with path.open("w",encoding="utf-8",newline="") as h:
         w=csv.DictWriter(h,fieldnames=fields); w.writeheader(); w.writerows(rows)

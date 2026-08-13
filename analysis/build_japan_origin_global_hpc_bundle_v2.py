@@ -28,7 +28,11 @@ EXPECTED_RUNS = 295
 
 
 def clean(value: object) -> str:
-    return str(value or "").strip()
+    return "" if value is None else str(value).strip()
+
+
+def joinvals(values: list[str]) -> str:
+    return "|".join(sorted({clean(value) for value in values if clean(value)}))
 
 
 def read_panel(path: Path) -> list[dict[str, str]]:
@@ -48,6 +52,9 @@ def read_panel(path: Path) -> list[dict[str, str]]:
         "run_count",
         "japan38_member_ids",
         "shared_cross_paper_sample",
+        "region",
+        "location",
+        "name_review_required",
     }
     if not rows or not required <= set(rows[0]):
         raise ValueError(f"v2 panel requires columns {sorted(required)}")
@@ -85,6 +92,10 @@ def sample_manifests(outdir: Path, rows: list[dict[str, str]]) -> list[dict[str,
         "run_count",
         "japan38_member_ids",
         "shared_cross_paper_sample",
+        "region",
+        "location",
+        "name_review_required",
+        "constituent_tip_count",
     ]
     data: list[dict[str, str]] = []
     for index, row in enumerate(rows):
@@ -102,6 +113,10 @@ def sample_manifests(outdir: Path, rows: list[dict[str, str]]) -> list[dict[str,
                 "run_count": row["run_count"],
                 "japan38_member_ids": row["japan38_member_ids"],
                 "shared_cross_paper_sample": row["shared_cross_paper_sample"],
+                "region": row["region"],
+                "location": row["location"],
+                "name_review_required": row["name_review_required"],
+                "constituent_tip_count": "1",
             }
         )
     for filename, delimiter in (("sample_manifest.tsv", "\t"), ("sample_manifest.csv", ",")):
@@ -113,25 +128,75 @@ def sample_manifests(outdir: Path, rows: list[dict[str, str]]) -> list[dict[str,
 
 
 def species_map(outdir: Path, data: list[dict[str, str]]) -> list[dict[str, str]]:
-    by_taxon: dict[str, list[str]] = defaultdict(list)
+    by_taxon: dict[str, list[dict[str, str]]] = defaultdict(list)
     for row in data:
-        by_taxon[row["analysis_taxon_label"]].append(row["tip_id"])
-    rows = [
-        {
-            "species_id": f"SP{index:04d}",
+        by_taxon[row["analysis_taxon_label"]].append(row)
+    rows = []
+    interpretation_manifest = []
+    interpretation_panel = []
+    for index, taxon in enumerate(sorted(by_taxon), 1):
+        members = by_taxon[taxon]
+        tip_ids = sorted(row["tip_id"] for row in members)
+        species_id = f"SP{index:04d}"
+        source_studies = joinvals([row["source_study"] for row in members])
+        regions = joinvals([row["region"] for row in members])
+        locations = joinvals([row["location"] for row in members])
+        review_required = str(any(
+            row["name_review_required"].casefold() == "true" for row in members
+        )).lower()
+        rows.append({
+            "species_id": species_id,
             "analysis_taxon_label": taxon,
-            "tip_ids": "|".join(sorted(by_taxon[taxon])),
-            "n_tips": str(len(by_taxon[taxon])),
-        }
-        for index, taxon in enumerate(sorted(by_taxon), 1)
-    ]
+            "tip_ids": "|".join(tip_ids),
+            "n_tips": str(len(tip_ids)),
+            "source_studies": source_studies,
+            "regions": regions,
+            "name_review_required": review_required,
+        })
+        interpretation_manifest.append({
+            "tip_id": species_id,
+            "panel_id": species_id,
+            "source_study": source_studies,
+            "analysis_taxon_label": taxon,
+            "constituent_tip_count": str(len(tip_ids)),
+        })
+        interpretation_panel.append({
+            "panel_id": species_id,
+            "region": regions,
+            "location": locations,
+            "name_review_required": review_required,
+        })
     with (outdir / "astral_species_map.csv").open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(
             handle,
-            fieldnames=["species_id", "analysis_taxon_label", "tip_ids", "n_tips"],
+            fieldnames=[
+                "species_id", "analysis_taxon_label", "tip_ids", "n_tips",
+                "source_studies", "regions", "name_review_required",
+            ],
         )
         writer.writeheader()
         writer.writerows(rows)
+    with (outdir / "astral_interpretation_manifest.csv").open(
+        "w", encoding="utf-8", newline=""
+    ) as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=[
+                "tip_id", "panel_id", "source_study", "analysis_taxon_label",
+                "constituent_tip_count",
+            ],
+        )
+        writer.writeheader()
+        writer.writerows(interpretation_manifest)
+    with (outdir / "astral_interpretation_panel.csv").open(
+        "w", encoding="utf-8", newline=""
+    ) as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=["panel_id", "region", "location", "name_review_required"],
+        )
+        writer.writeheader()
+        writer.writerows(interpretation_panel)
     map_lines = [
         f"{row['species_id']}:{','.join(row['tip_ids'].split('|'))}" for row in rows
     ] + ["OUTGROUP_lett:OUTGROUP_lett", "OUTGROUP_sunf:OUTGROUP_sunf"]
@@ -176,6 +241,8 @@ def helper_sources(outdir: Path) -> None:
     static_helpers = [
         "validate_japan_origin_astral_tree_v2.py",
         "write_japan_origin_global_tree_provenance_v2.py",
+        "analyze_japan_origin_global_tree.py",
+        "integrate_japan_origin_topology_sensitivities.py",
     ]
     for filename in static_helpers:
         write(
@@ -239,6 +306,7 @@ TREEFILE="$TREE/concat/japan_origin_global_concat.treefile"
 ASTRAL="$TREE/astral/japan_origin_global_astral.tree"
 test -s "$TREEFILE"
 test -s "$ASTRAL"
+mkdir -p "$TREE/interpretation"
 "${RUN[@]}" python "$BUNDLE_DIR/helpers/write_japan_origin_global_tree_provenance_v2.py" \
   --tree "$TREEFILE" \
   --concat-summary "$TREE/concat/concat_summary.json" \
@@ -252,6 +320,57 @@ test -s "$ASTRAL"
   --tree "$ASTRAL" \
   --species-map "$BUNDLE_DIR/astral_species_map.csv" \
   --output "$TREE/astral/tree_acceptance.json"
+"${RUN[@]}" python "$BUNDLE_DIR/helpers/analyze_japan_origin_global_tree.py" \
+  --tree "$TREEFILE" \
+  --manifest "$BUNDLE_DIR/sample_manifest.csv" \
+  --source-panel "$BUNDLE_DIR/sample_manifest.csv" \
+  --japan38-audit "$REPO_ROOT/data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv" \
+  --tree-acceptance "$TREE/tree_acceptance.json" \
+  --output "$TREE/interpretation/concat_topology.json" \
+  --candidates "$TREE/interpretation/concat_candidates.csv"
+"${RUN[@]}" python "$BUNDLE_DIR/helpers/analyze_japan_origin_global_tree.py" \
+  --tree "$ASTRAL" \
+  --manifest "$BUNDLE_DIR/astral_interpretation_manifest.csv" \
+  --source-panel "$BUNDLE_DIR/astral_interpretation_panel.csv" \
+  --japan38-audit "$REPO_ROOT/data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv" \
+  --tree-acceptance "$TREE/astral/tree_acceptance.json" \
+  --output "$TREE/interpretation/astral_topology.json" \
+  --candidates "$TREE/interpretation/astral_candidates.csv"
+"""
+    )
+
+
+def integration_script() -> str:
+    return (
+        """#!/usr/bin/env bash
+#SBATCH --job-name=EAzami-jogv2-integrate
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=4G
+#SBATCH --time=01:00:00
+"""
+        + patch(legacy.common())
+        + """OUT="$RESULT_ROOT/sensitivity_acceptance"
+mkdir -p "$OUT"
+for MODE in bwa blastx; do
+  test -s "$RESULT_ROOT/tree_$MODE/interpretation/concat_topology.json"
+  test -s "$RESULT_ROOT/tree_$MODE/interpretation/concat_candidates.csv"
+  test -s "$RESULT_ROOT/tree_$MODE/interpretation/astral_topology.json"
+  test -s "$RESULT_ROOT/tree_$MODE/interpretation/astral_candidates.csv"
+done
+SCENARIOS="$OUT/topology_sensitivity_scenarios.csv"
+cat > "$SCENARIOS" <<EOF
+scenario_id,mapping_method,tree_method,interpretation_json,candidate_table
+bwa_concat,bwa,concat,$RESULT_ROOT/tree_bwa/interpretation/concat_topology.json,$RESULT_ROOT/tree_bwa/interpretation/concat_candidates.csv
+bwa_astral,bwa,astral,$RESULT_ROOT/tree_bwa/interpretation/astral_topology.json,$RESULT_ROOT/tree_bwa/interpretation/astral_candidates.csv
+blastx_concat,blastx,concat,$RESULT_ROOT/tree_blastx/interpretation/concat_topology.json,$RESULT_ROOT/tree_blastx/interpretation/concat_candidates.csv
+blastx_astral,blastx,astral,$RESULT_ROOT/tree_blastx/interpretation/astral_topology.json,$RESULT_ROOT/tree_blastx/interpretation/astral_candidates.csv
+EOF
+ARGS=(--scenarios "$SCENARIOS" --output "$OUT/sensitivity_acceptance.json" --stable-candidates "$OUT/stable_sister_candidates.csv")
+if [[ -n "${NAME_REVIEW:-}" ]]; then
+  test -s "$NAME_REVIEW"
+  ARGS+=(--name-review "$NAME_REVIEW")
+fi
+"${RUN[@]}" python "$BUNDLE_DIR/helpers/integrate_japan_origin_topology_sensitivities.py" "${ARGS[@]}"
 """
     )
 
@@ -295,6 +414,7 @@ def main() -> int:
         "07_concat_tree_slurm.sh": patch(legacy.concat()),
         "08_astral_species_tree_slurm.sh": astral_script(),
         "09_accept_trees_slurm.sh": accept_script(),
+        "10_integrate_sensitivity_gate_slurm.sh": integration_script(),
         "submit_bwa_chain.sh": patch(legacy.submit_data("bwa")),
         "submit_blastx_chain.sh": patch(legacy.submit_data("blastx")),
         "submit_tree_chain.sh": submit_tree(),
@@ -324,6 +444,11 @@ def main() -> int:
         ],
         "tree_completed": False,
         "japanese_origin_inference_completed": False,
+        "sensitivity_acceptance_contract": "japan_origin_topology_sensitivity_acceptance_v1",
+        "sensitivity_scenarios": [
+            "bwa_concat", "bwa_astral", "blastx_concat", "blastx_astral"
+        ],
+        "sensitivity_integration_command": "sbatch 10_integrate_sensitivity_gate_slurm.sh",
         "new_china_sampling_freeze_allowed": False,
     }
     write(args.outdir / "execution_manifest.json", json.dumps(manifest, indent=2) + "\n")

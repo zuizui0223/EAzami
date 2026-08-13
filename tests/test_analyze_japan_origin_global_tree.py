@@ -1,5 +1,5 @@
 from __future__ import annotations
-import csv,importlib.util,sys,tempfile,unittest
+import csv,hashlib,importlib.util,json,sys,tempfile,unittest
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -70,5 +70,50 @@ class JapanOriginTopologyTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             root=Path(td);tree,m,p,j=fixture(root,'sister');a=root/'accept.json';a.write_text('{"tree_artifact_accepted": false}')
             with self.assertRaisesRegex(ValueError,'artifact acceptance'):mod.analyze(tree,m,p,j,a,False)
+
+    def test_accepted_tree_is_sha_bound_and_rerooted_on_references(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);tree,m,p,j=fixture(root,'sister')
+            focal=tree.read_text(encoding='utf-8').strip().rstrip(';')
+            tree.write_text(f'({focal}:0.1,(OUTGROUP_lett:0.1,OUTGROUP_sunf:0.1):0.2);\n',encoding='utf-8')
+            acceptance=root/'accept.json'
+            acceptance.write_text(json.dumps({
+                'contract_version':'synthetic_tree_acceptance_v1',
+                'tree_sha256':hashlib.sha256(tree.read_bytes()).hexdigest(),
+                'reference_tips':['OUTGROUP_lett','OUTGROUP_sunf'],
+                'tree_artifact_accepted':True,
+            }),encoding='utf-8')
+            result,_=mod.analyze(tree,m,p,j,acceptance,False)
+            self.assertTrue(result['tree_artifact_acceptance_verified'])
+            self.assertEqual(result['reference_tips_used_for_rooting'],['OUTGROUP_lett','OUTGROUP_sunf'])
+            self.assertTrue(result['group_statistics']['main_japanese_radiation']['monophyletic'])
+
+    def test_acceptance_sha_mismatch_fails(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);tree,m,p,j=fixture(root,'sister');a=root/'accept.json'
+            a.write_text(json.dumps({'tree_artifact_accepted':True,'tree_sha256':'0'*64}),encoding='utf-8')
+            with self.assertRaisesRegex(ValueError,'SHA does not match'):
+                mod.analyze(tree,m,p,j,a,False)
+
+    def test_candidate_retains_name_review_gate(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);tree,m,p,j=fixture(root,'separate')
+            rows=mod.read_csv(p)
+            next(row for row in rows if row['panel_id']=='PC1')['name_review_required']='true'
+            write_csv(p,['panel_id','region','location','name_review_required'],rows)
+            _,candidates=mod.analyze(tree,m,p,j,None,False)
+            row=next(item for item in candidates if item['candidate_taxon']=='Cirsium continental_candidate')
+            self.assertEqual(row['name_review_required'],'true')
+
+    def test_candidate_aggregates_source_provenance_by_taxon_and_region(self):
+        tree=mod.NewickParser('((G1,G2),(C1,C2));').parse();index=mod.tip_index(tree)
+        meta={
+            'C1':{'analysis_taxon_label':'Cirsium candidate','region':'China','source_study':'Moreyra2025','name_review_required':'false'},
+            'C2':{'analysis_taxon_label':'Cirsium candidate','region':'China','source_study':'Chang2026','name_review_required':'false'},
+        }
+        rows=mod.build_candidates(index,{'arenicola':{'G1','G2'}},set(index),meta)
+        self.assertEqual(len(rows),1)
+        self.assertEqual(rows[0]['tip_count'],'2')
+        self.assertEqual(rows[0]['source_study'],'Chang2026|Moreyra2025')
 
 if __name__=='__main__':unittest.main()

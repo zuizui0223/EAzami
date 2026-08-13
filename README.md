@@ -359,6 +359,6 @@ Publisher/source files are retained in versioned Actions artifacts when licensin
 
 ## Next resolution milestone
 
-Accept or reject a stable topology class for the main Japanese radiation using the common-locus public nuclear panel. BWA-primary versus BLASTx mapping sensitivity and concatenated versus per-locus/coalescent sensitivity must be compared before a final continental sampling panel is frozen. The exact gate and allowed conclusions are defined in [`PROJECT_STATUS.md`](PROJECT_STATUS.md) and [`docs/JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md`](docs/JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md).
+Accept or reject a stable topology class for the main Japanese radiation using the deduplicated 294-individual / 295-SRR common-locus public nuclear panel. BWA-primary versus BLASTx mapping sensitivity and concatenated versus ASTRAL/coalescent sensitivity must be compared before a final continental sampling panel is frozen. The exact gate and allowed conclusions are defined in [`PROJECT_STATUS.md`](PROJECT_STATUS.md), [`docs/JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md`](docs/JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md) and [`docs/JAPAN_ORIGIN_SENSITIVITY_ACCEPTANCE_GATE_2026-08-13.md`](docs/JAPAN_ORIGIN_SENSITIVITY_ACCEPTANCE_GATE_2026-08-13.md).
 
 No large WGS cohort should be finalized before the morph/population-history and ploidy sampling design is complete.

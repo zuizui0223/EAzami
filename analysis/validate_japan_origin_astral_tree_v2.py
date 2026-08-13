@@ -52,6 +52,7 @@ def main() -> int:
         "tree_sha256": hashlib.sha256(args.tree.read_bytes()).hexdigest(),
         "mapped_source_label_taxa": len(focal),
         "tree_tips": len(seen),
+        "reference_tips": sorted(seen & (required_outgroups | optional)),
         "required_outgroups_present": True,
         "tree_artifact_accepted": True,
         "rooting_status": (

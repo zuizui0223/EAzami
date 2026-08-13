@@ -22,7 +22,7 @@ import hashlib
 import json
 from pathlib import Path
 
-EXPECTED_HYPOTHESIS_SHA256 = "5cf8aed00a71df8d18868b7b7d108344dcc22ec79541e53a941ce43df295e7ef"
+EXPECTED_HYPOTHESIS_SHA256 = "b3cf6ab230fba4e21dd06690580c49c0bfd759be2c1e30ac2fa576ff8e2b7082"
 
 
 def clean(value: object) -> str:

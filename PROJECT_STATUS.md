@@ -20,14 +20,16 @@ This is the next decision gate because flower-colour direction, the priority of 
 
 The Japan-origin result becomes decision-grade only when all of the following are versioned and pass validation:
 
-1. The maximal public panel manifest and sample-name reconciliation are complete and reproducible.
+1. The deduplicated v2 public panel contains 294 biological individuals / 295 unique SRRs and preserves all source-paper provenance. The old 302-tip / 303-run v1 count is superseded because eight Chang BioSamples were reused across papers.
 2. BWA-primary and BLASTx mapping-sensitivity results are compared.
 3. Concatenated and per-locus/coalescent results are compared, with support and discordance retained.
-4. The main Japanese radiation is classified as `supported_monophyletic`, `rejected`, or `unresolved`; Arenicola, *C. dipsacolepis* and *C. lineare* are reported separately.
+4. The main Japanese radiation is classified as `supported_monophyletic`, `rejected_monophyly`, or `unresolved_sensitivity_conflict`; Arenicola, *C. dipsacolepis* and *C. lineare* are reported separately.
 5. Name-conflicted tips affecting the relevant sister neighbourhoods are reviewed.
 6. Only gaps stable across those checks are promoted to new sampling targets.
 
 Until all six conditions pass, `new_china_sampling_freeze_allowed` remains false.
+
+The executable four-scenario gate is now implemented. It requires `bwa_concat`, `bwa_astral`, `blastx_concat` and `blastx_astral`, verifies that every interpreted tree was SHA-bound to an accepted artifact, and intersects sister candidates across all four results. The heavy public-read reconstruction itself remains unexecuted.
 
 ## Execution order
 
@@ -57,4 +59,5 @@ The same stable taxon, population, voucher and phylogeny-tip identifiers will su
 - Durable research aims: [docs/RESEARCH_PLAN.md](docs/RESEARCH_PLAN.md)
 - Phylogenomics implementation: [docs/EAST_ASIA_CIRSIUM_PHYLOGENOMICS_IMPLEMENTATION_PLAN.md](docs/EAST_ASIA_CIRSIUM_PHYLOGENOMICS_IMPLEMENTATION_PLAN.md)
 - Japan-origin decision contract: [docs/JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md](docs/JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md)
+- Four-scenario sensitivity gate: [docs/JAPAN_ORIGIN_SENSITIVITY_ACCEPTANCE_GATE_2026-08-13.md](docs/JAPAN_ORIGIN_SENSITIVITY_ACCEPTANCE_GATE_2026-08-13.md)
 - Current sampling decisions: [docs/SEQUENCING_PANEL_V0_3_EXACT_COVERAGE.md](docs/SEQUENCING_PANEL_V0_3_EXACT_COVERAGE.md)

@@ -309,7 +309,7 @@ def build_hypotheses(
                 "published_no_regain_penalty", ""
             ),
             "analysis_role": (
-                "Primary published six-tip morph topology; compare per-gene and quartet support against all nearest loss-only alternatives."
+                "Primary published six-tip morph topology; compare per-locus gene-tree and quartet support against all nearest loss-only alternatives."
             ),
         }
     ]

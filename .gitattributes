@@ -1,0 +1,2 @@
+# Byte-level scientific input contracts must be identical on every platform.
+analysis/chang2026_takaoense_gene_tree_hypotheses_v1.csv text eol=lf

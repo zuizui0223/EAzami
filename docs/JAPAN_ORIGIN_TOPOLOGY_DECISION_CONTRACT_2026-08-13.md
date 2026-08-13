@@ -2,7 +2,7 @@
 
 ## Why this layer exists
 
-The maximal public-data panel now contains 302 biological samples / 303 public runs from Moreyra 2025, Chang 2025 and Chang 2026. That is enough to place the published Japanese radiation, the two published separate Japanese invasion anchors (`C. dipsacolepis`, `C. lineare`), and the 3 + 3 public Ryukyu Arenicola samples into one Compositae1061-compatible reconstruction.
+The current deduplicated v2 public-data panel contains 294 biological individuals / 295 unique public SRRs from Moreyra 2025, Chang 2025 and Chang 2026. The earlier 302-tip / 303-run v1 inventory is superseded because eight Taiwan RNA-seq BioSamples were reused across Chang 2025 and Chang 2026 and must not become duplicate tree tips. The v2 panel still retains the published Japanese radiation, the two published separate Japanese invasion anchors (`C. dipsacolepis`, `C. lineare`), and the 3 + 3 public Ryukyu Arenicola samples.
 
 The heavy tree has **not** yet been executed. This document defines what will be extracted from it once the accepted tree exists.
 
@@ -42,3 +42,16 @@ A topological sister-neighbourhood can enter the **candidate** continental sampl
 4. only stable public-data gaps are converted into new collection targets.
 
 This makes the public-data reconstruction the screening step and new field sampling the gap-filling step, rather than sampling China broadly before the source neighbourhood is known.
+
+## Four-scenario acceptance output
+
+The integration gate requires exactly:
+
+- `bwa_concat`
+- `bwa_astral`
+- `blastx_concat`
+- `blastx_astral`
+
+Every interpretation must be SHA-bound to an accepted empirical tree artifact and retain all 294 constituent biological individuals, even though ASTRAL uses source-label tips. A sister candidate is stable only when the same focal group, neighbourhood kind, taxon and region occur in all four scenarios. Unreviewed name conflicts block promotion.
+
+The gate classifies sampled-lineage monophyly. It never converts monophyly into proof of one colonisation, dispersal direction, direct ancestry or absence of introgression.
