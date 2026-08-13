@@ -1,0 +1,65 @@
+name: Audit Cirsium nipponicum public genome augmentation
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_cirsium_nipponicum_public_genome_augmentation.py"
+      - "tests/test_audit_cirsium_nipponicum_public_genome_augmentation.py"
+      - ".github/workflows/audit-cirsium-nipponicum-public-genome-augmentation.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: nipponicum-public-genome-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  audit-public-article:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile and unit test
+        run: |
+          python -m py_compile analysis/audit_cirsium_nipponicum_public_genome_augmentation.py
+          python -m unittest tests/test_audit_cirsium_nipponicum_public_genome_augmentation.py -v
+      - name: Recover public Figshare metadata
+        run: |
+          mkdir -p /tmp/nipponicum
+          curl --fail --location --retry 3 \
+            -H 'Accept: application/json' \
+            'https://api.figshare.com/v2/articles/26927092' \
+            -o /tmp/nipponicum/figshare_article_26927092.json
+          test -s /tmp/nipponicum/figshare_article_26927092.json
+      - name: Audit public sequence candidates
+        run: |
+          python analysis/audit_cirsium_nipponicum_public_genome_augmentation.py \
+            --figshare-json /tmp/nipponicum/figshare_article_26927092.json \
+            --output-csv /tmp/nipponicum/public_file_manifest.csv \
+            --summary /tmp/nipponicum/augmentation_summary.json \
+            | tee /tmp/nipponicum/audit.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('/tmp/nipponicum/augmentation_summary.json').read_text())
+          assert s['taxon']=='Cirsium nipponicum'
+          assert s['bioproject']=='PRJNA1127082'
+          assert s['figshare_article_id']==26927092
+          assert s['file_count'] >= 1
+          assert s['sequence_or_archive_candidate_count'] >= 1
+          assert s['stable_candidate_download_count'] >= 1
+          assert s['augmentation_candidate'] is True
+          assert s['primary_294_panel_changed'] is False
+          assert s['tree_tip_promotion_allowed'] is False
+          print(json.dumps(s,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cirsium-nipponicum-public-genome-augmentation-${{ github.run_id }}
+          path: /tmp/nipponicum
+          if-no-files-found: error
