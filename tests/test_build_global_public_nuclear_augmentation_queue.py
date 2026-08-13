@@ -73,6 +73,7 @@ class GlobalAugmentationQueueTests(unittest.TestCase):
         self.assertEqual(summary["new_exact_taxon_candidates"], 1)
         self.assertEqual(summary["existing_exact_taxon_independent_replicates"], 1)
         self.assertEqual(summary["existing_primary_biosample_extra_run_groups"], 1)
+        self.assertEqual(summary["contract_version"], "global_public_nuclear_augmentation_queue_v2")
 
         by_bs = {row["biosample"]: row for row in queue}
         self.assertEqual(by_bs["SAMN_NEW1"]["run_count"], 2)
@@ -82,6 +83,55 @@ class GlobalAugmentationQueueTests(unittest.TestCase):
         self.assertEqual(by_bs["SAMN_NEW2"]["priority_tier"], "B_REPLICATE_BOUNDED")
         self.assertEqual(by_bs["SAMN_CORE"]["priority_tier"], "MERGE_ONLY")
         self.assertFalse(by_bs["SAMN_CORE"]["automatic_tip_admission_allowed"])
+
+    def test_numbered_moreyra_replicate_suffix_is_not_taxon_novelty(self):
+        primary = [
+            {
+                "biosample": "SAMN_CORE1",
+                "source_taxon_label": "Cirsium canum 1",
+                "analysis_taxon_label": "Cirsium canum 1",
+            },
+            {
+                "biosample": "SAMN_CORE2",
+                "source_taxon_label": "Cirsium canum 2",
+                "analysis_taxon_label": "Cirsium canum 2",
+            },
+        ]
+        audit = [{
+            "Run": "SRR_NEW", "BioSample": "SAMN_NEW", "BioProject": "P",
+            "ScientificName": "Cirsium canum", "LibraryStrategy": "Targeted-Capture",
+            "LibrarySource": "GENOMIC", "LibrarySelection": "Hybrid Selection",
+            "LibraryLayout": "PAIRED", "Platform": "ILLUMINA", "size_MB": "500", "bases": "1000",
+            "known_primary_295_srr": "false",
+            "common_locus_compatibility_class": "direct_common_locus_candidate",
+        }]
+        queue, summary = mod.aggregate_runs(audit, primary)
+        self.assertTrue(queue[0]["exact_taxon_label_in_primary_294"])
+        self.assertEqual(queue[0]["priority_tier"], "B_REPLICATE_BOUNDED")
+        self.assertEqual(summary["new_exact_taxon_candidates"], 0)
+        self.assertEqual(summary["existing_exact_taxon_independent_replicates"], 1)
+        self.assertEqual(
+            summary["primary_taxon_novelty_normalization"],
+            "strip_trailing_bare_replicate_integer_only",
+        )
+
+    def test_variety_is_not_silently_collapsed(self):
+        primary = [{
+            "biosample": "SAMN1",
+            "source_taxon_label": "Cirsium japonicum",
+            "analysis_taxon_label": "Cirsium japonicum",
+        }]
+        audit = [{
+            "Run": "SRR2", "BioSample": "SAMN2", "BioProject": "P2",
+            "ScientificName": "Cirsium japonicum var. ussuriense",
+            "LibraryStrategy": "WGS", "LibrarySource": "GENOMIC", "LibrarySelection": "RANDOM",
+            "LibraryLayout": "PAIRED", "Platform": "ILLUMINA", "size_MB": "648", "bases": "1000",
+            "known_primary_295_srr": "false",
+            "common_locus_compatibility_class": "direct_common_locus_candidate",
+        }]
+        queue, summary = mod.aggregate_runs(audit, primary)
+        self.assertFalse(queue[0]["exact_taxon_label_in_primary_294"])
+        self.assertEqual(summary["new_exact_taxon_candidates"], 1)
 
     def test_nonpositive_size_metadata_does_not_enter_bounded_tier(self):
         primary = [{"biosample": "SAMN1", "source_taxon_label": "Cirsium a", "analysis_taxon_label": "Cirsium a"}]
