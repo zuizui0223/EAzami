@@ -1,0 +1,65 @@
+{
+  "contract_version": "cirsium_nipponicum_public_genome_augmentation_v1",
+  "baseline": {
+    "panel_contract_version": "japan_origin_global_public_panel_v2",
+    "biological_tips": 294,
+    "public_runs": 295,
+    "minimum_primary_loci_to_launch": 100
+  },
+  "candidate_source": {
+    "source_contract": "data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json",
+    "frozen_result": "data/evidence/cirsium_nipponicum_comp1061_locus_pack_result_2026-08-13.json",
+    "workflow_run": 31684233926,
+    "artifact_id": 9174758977,
+    "artifact_sha256": "079e3bfaab1d5041ebc2dcb1919532c75eefde7ffe1f766ab0473845f2f9dd69"
+  },
+  "candidates": [
+    {
+      "candidate_id": "CNIPG",
+      "tip_id": "AUG_ULLEUNG_CNIP2024",
+      "scientific_name": "Cirsium nipponicum",
+      "role": "independent_natural_same_taxon_genome_derived_replicate",
+      "strict_no_warning_recovered_loci": 180,
+      "baseline_exact_taxon_expected": true,
+      "baseline_same_taxon_reference": {
+        "source_study": "Moreyra2025",
+        "biosample": "SAMN34240318",
+        "run": "SRR25265660",
+        "analysis_taxon_label": "Cirsium nipponicum",
+        "baseline_provenance_note": "The baseline Moreyra sample is cultivated/garden provenance; the augmentation is the natural Ulleung genome sample."
+      },
+      "placement_expectation": "The natural Ulleung genome-derived Cirsium nipponicum tip should recover the neighbourhood of the existing baseline Cirsium nipponicum taxon representation without changing the 294-tip shared backbone. A different placement is biologically interesting and routes to manual review rather than threshold relaxation."
+    }
+  ],
+  "minimum_joint_paired_loci": 100,
+  "scenarios": [
+    {"scenario_id": "baseline294", "candidate_ids": []},
+    {"scenario_id": "cnipg_295", "candidate_ids": ["CNIPG"]}
+  ],
+  "baseline_mapping_modes": ["bwa", "blastx"],
+  "locus_rule": "For each baseline mapping mode, baseline294 and cnipg_295 use the exact intersection of the accepted baseline loci for that mode and the frozen 180-locus genome-derived pack.",
+  "candidate_mapping_mode": "genome_annotation_derived_CDS_fixed_pack",
+  "cross_data_type_sensitivity": true,
+  "automatic_filter_relaxation_allowed": false,
+  "tree_tip_promotion_allowed_before_paired_trees": false,
+  "automatic_promotion_requires": [
+    "retain at least 100 paired loci separately against the accepted BWA and BLASTx baseline locus sets",
+    "run baseline294 and cnipg_295 on the identical paired locus set within each baseline mapping mode",
+    "shared-294-tip concatenated unrooted RF distance equals zero in both baseline mapping modes",
+    "an existing baseline Cirsium nipponicum tip is among the nearest baseline neighbours of AUG_ULLEUNG_CNIP2024 in both baseline mapping modes",
+    "shared source-label ASTRAL species backbone unrooted RF distance equals zero in both baseline mapping modes",
+    "do not alter locus thresholds, homology thresholds or topology gates post hoc to admit the genome-derived tip"
+  ],
+  "manual_review_triggers": [
+    "paired locus count below 100 in either baseline mapping mode",
+    "non-zero shared-294-tip RF in either baseline mapping mode",
+    "same-taxon baseline tip absent from the nearest-neighbour set in either baseline mapping mode",
+    "non-zero shared-species ASTRAL RF in either baseline mapping mode"
+  ],
+  "accepted_primary_tree_tips_before_gate": 294,
+  "candidate_tree_tips_if_promoted_alone": 295,
+  "new_analysis_taxon_labels_if_promoted": 0,
+  "combined_public_candidate_tip_ceiling_if_all_current_independent_gates_pass": 297,
+  "combined_ceiling_note": "294 baseline + EA01 + EA02 + CNIPG. This is a candidate sample-level ceiling, not an accepted combined 297-tip tree. A final combined tree still requires an explicit common paired-locus contract across all admitted candidates.",
+  "new_china_sampling_freeze_allowed": false
+}
