@@ -101,16 +101,41 @@ jobs:
                   out.write(f'{key}={value}\n')
           print({k:r[k] for k in ('candidate_id','tip_id','scientific_name','biosample','run','library_strategy','size_mb')})
           PY
-      - name: Install SRA, read-processing and HybPiper external tools
+      - name: Create pinned HybPiper/Bioconda execution environment
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-name: hybpiper-pilot
+          create-args: >-
+            python=3.11
+            hybpiper=2.3.4
+            sra-tools
+            fastp
+            pigz
+          condarc: |
+            channels:
+              - conda-forge
+              - bioconda
+            channel_priority: strict
+          init-shell: none
+          generate-run-shell: true
+          cache-environment: true
+          cache-downloads: true
+          post-cleanup: all
+      - name: Verify pinned SRA and HybPiper toolchain
+        shell: micromamba-shell {0}
         run: |
           set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq sra-toolkit fastp pigz bwa samtools ncbi-blast+ spades exonerate
-          python -m pip install --disable-pip-version-check 'hybpiper==2.3.4'
           hybpiper --version
           prefetch --version
           fasterq-dump --version
+          fastp --version
+          bwa 2>&1 | head -n 2 || true
+          samtools --version | head -n 1
+          blastx -version | head -n 1
+          spades.py --version
+          exonerate --version | head -n 1
       - name: Download, validate and trim public reads
+        shell: micromamba-shell {0}
         run: |
           set -euo pipefail
           mkdir -p /tmp/eapilot/${TIP_ID}/{sra,raw,trimmed,scratch,hybpiper,retrieved,pack}
@@ -137,6 +162,7 @@ jobs:
           test -s "/tmp/eapilot/${TIP_ID}/trimmed/${TIP_ID}.R2.fastq.gz"
           rm -rf "/tmp/eapilot/${TIP_ID}/raw" "/tmp/eapilot/${TIP_ID}/sra" "/tmp/eapilot/${TIP_ID}/scratch"
       - name: Recover Compositae1061 loci with HybPiper BWA
+        shell: micromamba-shell {0}
         run: |
           set -euo pipefail
           TARGET=/tmp/eapilot/reference_bundle/comp1061_hybpiper_reference.fasta
@@ -170,6 +196,7 @@ jobs:
           test -d "/tmp/eapilot/${TIP_ID}/retrieved"
           test -s "/tmp/eapilot/${TIP_ID}/paralog_report"
       - name: Build strict frozen-241 candidate pack
+        shell: micromamba-shell {0}
         env:
           CANDIDATE_ID: ${{ matrix.candidate_id }}
         run: |
