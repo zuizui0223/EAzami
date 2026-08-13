@@ -133,7 +133,7 @@ jobs:
           samtools --version | head -n 1
           blastx -version | head -n 1
           spades.py --version
-          exonerate --version | head -n 1
+          command -v exonerate
       - name: Download, validate and trim public reads
         shell: micromamba-shell {0}
         run: |
