@@ -8,6 +8,11 @@ warnings, and then retained alignments with <50% missing data and >=80% species
 presence.  This script reproduces the warning-count and raw occupancy portions,
 but explicitly does not invent the manual gene-tree decisions or the final
 alignment-level 350-locus list.
+
+When a non-default ``--audit-dir`` is supplied and the output paths are not
+explicitly overridden, outputs follow that audit directory.  This keeps
+restartable HPC/CI workspaces self-contained instead of silently writing the
+reconstruction CSV back into the repository-relative default directory.
 """
 
 from __future__ import annotations
@@ -260,6 +265,23 @@ def sample_difference_rows(stats_names: Sequence[str], seq_names: Sequence[str])
     return rows
 
 
+def resolve_output_paths(
+    audit_dir: Path,
+    output: Path,
+    summary: Path,
+    sample_difference: Path,
+) -> tuple[Path, Path, Path]:
+    """Make implicit outputs follow an explicitly relocated audit workspace."""
+    if audit_dir != DEFAULT_AUDIT_DIR:
+        if output == DEFAULT_OUTPUT:
+            output = audit_dir / "paralog_locus_filter_reconstruction.csv"
+        if summary == DEFAULT_SUMMARY:
+            summary = audit_dir / "locus_filter_reconstruction_summary.json"
+        if sample_difference == DEFAULT_SAMPLE_DIFF:
+            sample_difference = audit_dir / "sample_matrix_membership_difference.csv"
+    return output, summary, sample_difference
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--audit-dir", type=Path, default=DEFAULT_AUDIT_DIR)
@@ -271,6 +293,9 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    args.output, args.summary, args.sample_difference = resolve_output_paths(
+        args.audit_dir, args.output, args.summary, args.sample_difference
+    )
     paralog_path = args.audit_dir / "extracted/paralog_report/sheet_01_paralog_report_1.csv"
     seq_path = args.audit_dir / "source/seq_lengths_exonerate.tsv"
     stats_path = args.audit_dir / "source/hybpiper_stats_exonerate.tsv"
