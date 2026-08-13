@@ -15,7 +15,7 @@ This workflow is a lightweight, reference-guided topology sensitivity analysis f
 The final step first verifies that `analysis/chang2026_takaoense_gene_tree_hypotheses_v1.csv` still matches the current source-derived hypotheses and has exact SHA256:
 
 ```text
-5dbd081b5c360f73d824221f2dbc09892666f23ecc74a706620943f4c881692f
+5cf8aed00a71df8d18868b7b7d108344dcc22ec79541e53a941ce43df295e7ef
 ```
 
 Only after that gate does it invoke `analysis/score_chang2026_read2tree_topology.py`, and the scoring JSON is annotated with the frozen-input provenance and exact invocation.

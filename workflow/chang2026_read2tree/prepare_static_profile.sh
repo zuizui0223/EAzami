@@ -84,7 +84,7 @@ After IQ-TREE completes, score the tree with:
     --panel $PANEL \
     --reference-manifest $REFS \
     --frozen-hypotheses $REPO_ROOT/analysis/chang2026_takaoense_gene_tree_hypotheses_v1.csv \
-    --expected-hypothesis-sha256 5dbd081b5c360f73d824221f2dbc09892666f23ecc74a706620943f4c881692f \
+    --expected-hypothesis-sha256 5cf8aed00a71df8d18868b7b7d108344dcc22ec79541e53a941ce43df295e7ef \
     --nearest $REPO_ROOT/analysis/chang2026_takaoense_nearest_no_regain_topologies.csv \
     --robustness-summary $REPO_ROOT/analysis/chang2026_takaoense_topology_robustness_summary.json \
     --scorer $REPO_ROOT/analysis/score_chang2026_read2tree_topology.py \

@@ -101,7 +101,7 @@ Minimum useful package:
 
 A ready-to-send request is stored in:
 
-- `docs/CHANG2026_TREE_DATA_REQUEST_DRAFT.md`
+- `docs/requests/CHANG2026_TREE_DATA_REQUEST_DRAFT.md`
 
 ## Claim boundary
 

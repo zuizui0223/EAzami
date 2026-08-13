@@ -2,6 +2,8 @@
 
 Chapter 2 project for reconstructing repeated loss and possible re-expression of floral anthocyanin pigmentation in East Asian *Cirsium*, while building the nuclear phylogenetic, population-genomic and molecular framework needed to test those transitions.
 
+For the active decision gate, acceptance criteria and canonical workstream map, start with [`PROJECT_STATUS.md`](PROJECT_STATUS.md).
+
 ## Core question
 
 > How repeatedly has floral anthocyanin pigmentation been lost and regained in East Asian *Cirsium*, and do repeated transitions use the same molecular mechanisms?
@@ -49,6 +51,7 @@ Key result files:
 4. **Population history:** resolve white/coloured ancestry and geographic bridges with RAD-seq or resequencing.
 5. **Molecular mechanism:** combine pigment chemistry, floral RNA-seq and causal-region genomics.
 6. **Selection:** test pollinator and abiotic fitness effects only after history and mechanism are sufficiently resolved.
+7. **Reusable trait foundation:** carry stable taxon, population, voucher and tree-tip identifiers into future capitulum-trait mapping without assuming adaptive radiation in advance.
 
 ## State of *Cirsium* phylogeny
 
@@ -354,14 +357,8 @@ Publisher/source files are retained in versioned Actions artifacts when licensin
 - #11 — six published var. *takaoense* morph identities — **completed**
 - #12 — Moreyra/Chang final trees, gene trees and exact retained-locus artifacts
 
-## Next existing-data milestone
+## Next resolution milestone
 
-1. obtain or reconstruct machine-readable Chang Figure 1 trees, branch lengths, support definitions and Neighbor-Net inputs;
-2. reanalyse the six labelled public transcriptomes for gene-tree concordance, coding variation, ancestry and reticulation;
-3. exhaust public repositories and author-linked resources for the final Moreyra trees and retained-locus decisions;
-4. recover and version the Herrando-Moraira tree/data archive;
-5. finish accepted-name, synonym and voucher reconciliation;
-6. run branch-length-aware ancestral-state and stochastic-mapping analyses only with documented trees;
-7. freeze the first population and conditional target-capture panels from information gain rather than raw taxon count.
+Accept or reject a stable topology class for the main Japanese radiation using the common-locus public nuclear panel. BWA-primary versus BLASTx mapping sensitivity and concatenated versus per-locus/coalescent sensitivity must be compared before a final continental sampling panel is frozen. The exact gate and allowed conclusions are defined in [`PROJECT_STATUS.md`](PROJECT_STATUS.md) and [`docs/JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md`](docs/JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md).
 
 No large WGS cohort should be finalized before the morph/population-history and ploidy sampling design is complete.

@@ -74,8 +74,16 @@ class Read2TreeReadPrepTests(unittest.TestCase):
 
     def test_paths_match_read2tree_trimmed_contract(self):
         plan = self.plan()
-        self.assertTrue(str(plan["trimmed_read_1"]).endswith("samples/S1/trimmed/S1.R1.trim.fastq.gz"))
-        self.assertTrue(str(plan["trimmed_read_2"]).endswith("samples/S1/trimmed/S1.R2.trim.fastq.gz"))
+        self.assertTrue(
+            Path(str(plan["trimmed_read_1"])).as_posix().endswith(
+                "samples/S1/trimmed/S1.R1.trim.fastq.gz"
+            )
+        )
+        self.assertTrue(
+            Path(str(plan["trimmed_read_2"])).as_posix().endswith(
+                "samples/S1/trimmed/S1.R2.trim.fastq.gz"
+            )
+        )
         self.assertEqual(tuple(mod.READ_STAGES), ("prefetch", "vdb_validate", "fasterq", "pigz", "fastp"))
         self.assertNotIn("trinity", mod.READ_STAGES)
 

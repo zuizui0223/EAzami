@@ -29,7 +29,7 @@ class RestartableRunnerTests(unittest.TestCase):
     def test_six_sample_contract_and_selection(self):
         rows=mod.validate_panel(self.panel,expected_samples=6); self.assertEqual(len(rows),6); self.assertEqual([r["sample_id"] for r in mod.select_rows(rows,["S4"])],["S4"])
     def test_commands_fix_dry_run_only_execution_gaps(self):
-        plan=self.plan(); self.assertIn("--max-size",plan["commands"]["prefetch"]); self.assertEqual(plan["commands"]["vdb_validate"][0],"vdb-validate"); self.assertIn("-e",plan["commands"]["fasterq"]); self.assertIn("-t",plan["commands"]["fasterq"]); self.assertNotIn("--threads",plan["commands"]["fasterq"]); self.assertNotIn("--skip-technical",plan["commands"]["fasterq"]); self.assertNotIn("--full_cleanup",plan["commands"]["trinity"]); self.assertTrue(str(plan["trinity_fasta"]).endswith("/trinity/Trinity.fasta"))
+        plan=self.plan(); self.assertIn("--max-size",plan["commands"]["prefetch"]); self.assertEqual(plan["commands"]["vdb_validate"][0],"vdb-validate"); self.assertIn("-e",plan["commands"]["fasterq"]); self.assertIn("-t",plan["commands"]["fasterq"]); self.assertNotIn("--threads",plan["commands"]["fasterq"]); self.assertNotIn("--skip-technical",plan["commands"]["fasterq"]); self.assertNotIn("--full_cleanup",plan["commands"]["trinity"]); self.assertTrue(Path(str(plan["trinity_fasta"])).as_posix().endswith("/trinity/Trinity.fasta"))
     def test_dry_run_calls_no_external_program(self):
         plan=self.plan(); plan["commands"]={stage:["DO_NOT_EXECUTE"] for stage in mod.STAGES}; result=mod.execute_one(plan,dry_run=True,force=False,delete_raw_after_success=False,delete_sra_after_success=False); self.assertEqual(result["status"],"planned_dry_run")
     def test_partial_fastq_pair_is_rejected(self):
