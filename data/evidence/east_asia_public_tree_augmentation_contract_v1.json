@@ -1,0 +1,57 @@
+{
+  "contract_version": "east_asia_public_tree_augmentation_v1",
+  "baseline": {
+    "panel_contract_version": "japan_origin_global_public_panel_v2",
+    "biological_tips": 294,
+    "public_runs": 295,
+    "minimum_primary_loci_to_launch": 100
+  },
+  "candidate_source_workflow": {
+    "workflow_name": "Build East Asia public SRA Compositae1061 pilot",
+    "run_id": 31684233834,
+    "head_sha": "13529016edc4a04a6b83ac95b17ff05743aa33bd",
+    "conclusion": "success"
+  },
+  "candidates": [
+    {
+      "candidate_id": "EA01",
+      "tip_id": "PUBEA001",
+      "scientific_name": "Cirsium nipponicum var. yoshinoi",
+      "biosample": "SAMN44017954",
+      "run": "SRR30887223",
+      "role": "independent_same_taxon_target_capture_replicate",
+      "strict_no_warning_recovered_loci": 236,
+      "baseline_exact_taxon_expected": true
+    },
+    {
+      "candidate_id": "EA02",
+      "tip_id": "PUBEA002",
+      "scientific_name": "Cirsium sairamense",
+      "biosample": "SAMN11585477",
+      "run": "SRR9119112",
+      "role": "new_continental_target_capture_taxon",
+      "strict_no_warning_recovered_loci": 239,
+      "baseline_exact_taxon_expected": false
+    }
+  ],
+  "joint_candidate_strict_loci": 236,
+  "minimum_joint_paired_loci": 100,
+  "scenarios": [
+    {"scenario_id": "baseline294", "candidate_ids": []},
+    {"scenario_id": "ea01_295", "candidate_ids": ["EA01"]},
+    {"scenario_id": "ea02_295", "candidate_ids": ["EA02"]},
+    {"scenario_id": "ea01_ea02_296", "candidate_ids": ["EA01", "EA02"]}
+  ],
+  "locus_rule": "All four scenarios use the exact intersection of the accepted baseline loci, EA01 strict loci, and EA02 strict loci.",
+  "automatic_filter_relaxation_allowed": false,
+  "tree_tip_promotion_allowed_before_paired_trees": false,
+  "promotion_requires": [
+    "retain at least 100 joint paired loci under the frozen baseline gate",
+    "run baseline294, EA01-only, EA02-only, and EA01+EA02 on the identical paired locus set",
+    "quantify the 294-shared-tip backbone change rather than assuming augmentation is harmless",
+    "verify EA01 reproduces the existing Cirsium nipponicum var. yoshinoi placement across mapping and tree sensitivities",
+    "verify EA02 placement is concordant across BWA and BLASTx concatenated trees and source-label coalescent sensitivity",
+    "do not weaken locus or topology gates post hoc to admit a preferred candidate"
+  ],
+  "new_china_sampling_freeze_allowed": false
+}
