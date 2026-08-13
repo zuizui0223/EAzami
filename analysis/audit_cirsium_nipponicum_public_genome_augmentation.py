@@ -4,9 +4,9 @@
 The primary Japan-origin panel is deliberately built from unique public biological
 samples in Moreyra 2025 and Chang 2025/2026. A separate high-quality genome exists
 for an Ulleung Island C. nipponicum individual (PRJNA1127082; Figshare article
-26927092). This audit asks only whether the public Figshare article exposes stable
-assembly/annotation sequence files from which the frozen Compositae1061 locus set
-can later be recovered. It does not silently append the genome to the primary tree.
+26927092). This audit asks only whether the cited public Figshare item exposes
+stable sequence files from which the frozen Compositae1061 locus set can later be
+recovered. Annotation-only files are not treated as recoverable nuclear sequence.
 """
 from __future__ import annotations
 
@@ -21,10 +21,10 @@ EXPECTED_ARTICLE_ID = 26927092
 EXPECTED_BIOPROJECT = "PRJNA1127082"
 EXPECTED_TAXON = "Cirsium nipponicum"
 
-SEQUENCE_SUFFIXES = (
-    ".fa", ".fasta", ".fna", ".ffn", ".faa", ".fas", ".fsa", ".cds",
-    ".gff", ".gff3", ".gtf", ".gb", ".gbk", ".gbff", ".zip", ".gz",
-)
+ANNOTATION_SUFFIXES = (".gff", ".gff3", ".gtf")
+FASTA_SUFFIXES = (".fa", ".fasta", ".fna", ".ffn", ".faa", ".fas", ".fsa", ".cds")
+ARCHIVE_SUFFIXES = (".zip", ".tar", ".tgz")
+COMPRESSION_SUFFIXES = (".gz", ".bz2", ".xz")
 
 
 def clean(value: object) -> str:
@@ -38,19 +38,29 @@ def load_json(path: Path) -> dict[str, Any]:
     return data
 
 
+def payload_name(name: str) -> str:
+    n = name.casefold()
+    for suffix in COMPRESSION_SUFFIXES:
+        if n.endswith(suffix):
+            return n[: -len(suffix)]
+    return n
+
+
 def classify_file(name: str) -> tuple[bool, str]:
     n = name.casefold()
-    sequence_like = n.endswith(SEQUENCE_SUFFIXES)
-    if any(token in n for token in ("protein", "pep", "amino")):
-        return sequence_like, "protein_or_peptide_candidate"
-    if any(token in n for token in ("cds", "coding", "transcript", "rna")):
-        return sequence_like, "cds_or_transcript_candidate"
-    if any(token in n for token in ("gff", "gtf", "annotation")):
-        return sequence_like, "annotation_candidate"
+    payload = payload_name(name)
+    if payload.endswith(ANNOTATION_SUFFIXES):
+        return False, "annotation_only_candidate"
+    if payload.endswith(ARCHIVE_SUFFIXES):
+        return False, "archive_requires_content_inspection"
+    if any(token in n for token in ("protein", "peptide", "pep")) or payload.endswith(".faa"):
+        return payload.endswith(FASTA_SUFFIXES), "protein_or_peptide_candidate"
+    if any(token in n for token in ("cds", "coding", "transcript")) or payload.endswith((".ffn", ".cds")):
+        return payload.endswith(FASTA_SUFFIXES), "cds_or_transcript_candidate"
     if any(token in n for token in ("genome", "assembly", "purge", "contig", "scaffold")):
-        return sequence_like, "genome_assembly_candidate"
-    if sequence_like:
-        return True, "generic_sequence_or_archive_candidate"
+        return payload.endswith(FASTA_SUFFIXES), "genome_assembly_candidate"
+    if payload.endswith(FASTA_SUFFIXES):
+        return True, "generic_fasta_sequence_candidate"
     return False, "non_sequence_support_file"
 
 
@@ -59,7 +69,7 @@ def audit(data: dict[str, Any]) -> tuple[list[dict[str, str]], dict[str, object]
     if article_id != EXPECTED_ARTICLE_ID:
         raise ValueError(f"unexpected Figshare article id {article_id!r}")
     title = clean(data.get("title"))
-    if "Cirsium nipponicum" not in title:
+    if "nipponicum" not in title.casefold():
         raise ValueError(f"unexpected Figshare article title: {title}")
     files = data.get("files")
     if not isinstance(files, list) or not files:
@@ -88,15 +98,10 @@ def audit(data: dict[str, Any]) -> tuple[list[dict[str, str]], dict[str, object]
         )
 
     candidates = [row for row in rows if row["sequence_candidate"] == "true"]
-    direct_seq = [
-        row for row in candidates
-        if row["candidate_role"] in {
-            "protein_or_peptide_candidate",
-            "cds_or_transcript_candidate",
-            "genome_assembly_candidate",
-        }
-    ]
-    stable_downloads = [row for row in candidates if row["download_url"]]
+    stable_candidates = [row for row in candidates if row["download_url"]]
+    annotation_rows = [row for row in rows if row["candidate_role"] == "annotation_only_candidate"]
+    archive_rows = [row for row in rows if row["candidate_role"] == "archive_requires_content_inspection"]
+    stable_public_files = [row for row in rows if row["download_url"]]
     total_bytes = sum(int(row["size_bytes"] or 0) for row in rows)
     candidate_bytes = sum(int(row["size_bytes"] or 0) for row in candidates)
 
@@ -110,19 +115,22 @@ def audit(data: dict[str, Any]) -> tuple[list[dict[str, str]], dict[str, object]
         "figshare_doi": clean(data.get("doi")),
         "article_metadata_sha256": "filled_by_cli",
         "file_count": len(rows),
+        "stable_public_file_count": len(stable_public_files),
         "total_public_file_bytes": total_bytes,
-        "sequence_or_archive_candidate_count": len(candidates),
-        "sequence_or_archive_candidate_bytes": candidate_bytes,
-        "direct_sequence_candidate_count": len(direct_seq),
-        "stable_candidate_download_count": len(stable_downloads),
-        "augmentation_candidate": bool(candidates and stable_downloads),
+        "direct_sequence_candidate_count": len(candidates),
+        "direct_sequence_candidate_bytes": candidate_bytes,
+        "stable_sequence_candidate_count": len(stable_candidates),
+        "annotation_only_file_count": len(annotation_rows),
+        "archive_requires_inspection_count": len(archive_rows),
+        "augmentation_candidate": bool(stable_candidates),
         "primary_294_panel_changed": False,
         "tree_tip_promotion_allowed": False,
         "promotion_gate": (
-            "Recover the frozen Compositae1061 loci from the public genome/annotation, "
-            "verify orthology/copy state and occupancy against the 294-tip matrix, then "
-            "add the Ulleung individual only as a separately labelled public-genome "
-            "augmentation/sensitivity until cross-data-type placement is validated."
+            "Recover a public genome/CDS/protein FASTA or an explicitly inspected archive, "
+            "then recover the frozen Compositae1061 loci and verify orthology/copy state and "
+            "occupancy against the 294-tip matrix. Add the Ulleung individual only as a "
+            "separately labelled public-genome augmentation/sensitivity until cross-data-type "
+            "placement is validated."
         ),
         "sampling_policy": "No new China sampling decision is made by this audit.",
     }
