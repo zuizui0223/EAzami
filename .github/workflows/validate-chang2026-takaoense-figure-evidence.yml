@@ -1,0 +1,93 @@
+name: Validate Chang 2026 takaoense Figure 1 evidence
+
+on:
+  pull_request:
+    paths:
+      - "analysis/validate_chang2026_takaoense_voucher_evidence.py"
+      - "analysis/validate_chang2026_takaoense_figure1_assignments.py"
+      - "tests/test_validate_chang2026_takaoense_voucher_evidence.py"
+      - "tests/test_validate_chang2026_takaoense_figure1_assignments.py"
+      - "data/evidence/chang2026_takaoense_voucher_morph_evidence_*.csv"
+      - "data/evidence/chang2026_takaoense_figure1_morph_assignments_*.csv"
+      - "data/evidence/chang2026_takaoense_ncbi_*"
+      - ".github/workflows/validate-chang2026-takaoense-figure-evidence.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile \
+            analysis/validate_chang2026_takaoense_voucher_evidence.py \
+            analysis/validate_chang2026_takaoense_figure1_assignments.py
+          python -m unittest \
+            tests/test_validate_chang2026_takaoense_voucher_evidence.py \
+            tests/test_validate_chang2026_takaoense_figure1_assignments.py \
+            -v
+
+      - name: Validate frozen voucher, supplement and Figure 1 evidence
+        run: |
+          python analysis/validate_chang2026_takaoense_voucher_evidence.py
+          python analysis/validate_chang2026_takaoense_figure1_assignments.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          generated = Path("data/evidence/generated")
+          voucher = json.loads(
+              (generated / "chang2026_takaoense_voucher_evidence_summary.json")
+              .read_text(encoding="utf-8")
+          )
+          figure = json.loads(
+              (generated / "chang2026_takaoense_figure1_assignment_summary.json")
+              .read_text(encoding="utf-8")
+          )
+
+          expected_hash = "10375f1d79a4799babdebffca84301f602adfa0aabc825b852de84177bbb878c"
+          if voucher['voucher_rows'] != 6:
+              raise SystemExit("Expected six voucher rows")
+          if voucher['supplement_s6_exact_records'] != 4:
+              raise SystemExit("Expected four exact S6 collector records")
+          if voucher['supplement_s6_not_recovered'] != 2:
+              raise SystemExit("Expected two collector numbers absent from S6")
+          if voucher['s1_s6_herbarium_conflicts'] != ['ccy3839']:
+              raise SystemExit("Expected only the ccy3839 TCF/TNM conflict")
+          if voucher['direct_sample_morph_assignments'] != 6:
+              raise SystemExit("Expected all six direct W/BP labels")
+          if voucher['morph_counts'] != {'W': 3, 'BP': 3}:
+              raise SystemExit(f"Unexpected morph counts: {voucher['morph_counts']}")
+          if voucher['unresolved_vouchers']:
+              raise SystemExit("All six Figure 1 morphs should be resolved")
+          if figure['panel_b_direct_labels'] != 6 or figure['panel_c_direct_labels'] != 6:
+              raise SystemExit("Expected six direct labels in each Figure 1 panel")
+          if figure['morph_counts'] != {'W': 3, 'BP': 3}:
+              raise SystemExit("Figure assignment and voucher summaries disagree")
+          if figure['white_vouchers'] != voucher['white_vouchers']:
+              raise SystemExit("White-voucher lists disagree")
+          if figure['bluish_purple_vouchers'] != voucher['bluish_purple_vouchers']:
+              raise SystemExit("BP-voucher lists disagree")
+          if figure['source_image_sha256'] != expected_hash:
+              raise SystemExit(
+                  f"Frozen Figure 1 provenance hash changed: {figure['source_image_sha256']}"
+              )
+
+          print(f"voucher_rows={voucher['voucher_rows']}")
+          print(f"direct_sample_morph_assignments={voucher['direct_sample_morph_assignments']}")
+          print(f"panel_b_direct_labels={figure['panel_b_direct_labels']}")
+          print(f"panel_c_direct_labels={figure['panel_c_direct_labels']}")
+          print(f"source_image_sha256={figure['source_image_sha256']}")
+          PY
