@@ -41,10 +41,14 @@ jobs:
           diamond version
       - name: Recover frozen Compositae1061 reference and conservative 241-locus universe
         run: |
-          mkdir -p /tmp/cnip/reference /tmp/cnip/locus_sets /tmp/cnip/source /tmp/cnip/work /tmp/cnip/output
+          mkdir -p /tmp/cnip/reference /tmp/cnip/locus_sets /tmp/cnip/source /tmp/cnip/work /tmp/cnip/output /tmp/cnip/moreyra_author_repo
           python analysis/recover_comp1061_original_hybpiper_reference.py --outdir /tmp/cnip/reference
           python analysis/recover_moreyra_author_repository.py --outdir /tmp/cnip/moreyra_author_repo --force
-          python analysis/summarize_moreyra_locus_filter.py --audit-dir /tmp/cnip/moreyra_author_repo
+          python analysis/summarize_moreyra_locus_filter.py \
+            --audit-dir /tmp/cnip/moreyra_author_repo \
+            --output /tmp/cnip/moreyra_author_repo/paralog_locus_filter_reconstruction.csv \
+            --summary /tmp/cnip/moreyra_author_repo/locus_filter_reconstruction_summary.json \
+            --sample-difference /tmp/cnip/moreyra_author_repo/sample_matrix_membership_difference.csv
           python analysis/export_moreyra_locus_manifests.py \
             --input /tmp/cnip/moreyra_author_repo/paralog_locus_filter_reconstruction.csv \
             --outdir /tmp/cnip/locus_sets
