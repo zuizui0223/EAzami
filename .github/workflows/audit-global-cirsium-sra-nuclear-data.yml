@@ -7,6 +7,8 @@ on:
       - "tests/test_audit_global_cirsium_sra_nuclear_data.py"
       - "analysis/build_global_public_nuclear_augmentation_queue.py"
       - "tests/test_build_global_public_nuclear_augmentation_queue.py"
+      - "analysis/enrich_global_public_nuclear_candidate_biosamples.py"
+      - "tests/test_enrich_global_public_nuclear_candidate_biosamples.py"
       - "analysis/recover_ncbi_project_runs.py"
       - ".github/workflows/audit-global-cirsium-sra-nuclear-data.yml"
   workflow_dispatch:
@@ -22,7 +24,7 @@ permissions:
 jobs:
   audit-global-sra:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -32,8 +34,10 @@ jobs:
         run: |
           python -m py_compile analysis/audit_global_cirsium_sra_nuclear_data.py
           python -m py_compile analysis/build_global_public_nuclear_augmentation_queue.py
+          python -m py_compile analysis/enrich_global_public_nuclear_candidate_biosamples.py
           python -m unittest tests/test_audit_global_cirsium_sra_nuclear_data.py -v
           python -m unittest tests/test_build_global_public_nuclear_augmentation_queue.py -v
+          python -m unittest tests/test_enrich_global_public_nuclear_candidate_biosamples.py -v
       - name: Recover the frozen 294-tip / 295-SRR primary panel artifact
         env:
           GH_TOKEN: ${{ github.token }}
@@ -94,13 +98,39 @@ jobs:
           assert s['new_china_sampling_freeze_allowed'] is False
           print(json.dumps(s,indent=2))
           PY
+      - name: Recover BioSample provenance for every queued biological candidate
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        run: |
+          mkdir -p /tmp/global_cirsium/audit/augmentation_queue/provenance
+          python analysis/enrich_global_public_nuclear_candidate_biosamples.py \
+            --queue /tmp/global_cirsium/audit/augmentation_queue/global_public_nuclear_augmentation_queue.csv \
+            --outdir /tmp/global_cirsium/audit/augmentation_queue/provenance \
+            | tee /tmp/global_cirsium/audit/augmentation_queue/provenance/build.log
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          qroot=Path('/tmp/global_cirsium/audit/augmentation_queue')
+          proot=qroot/'provenance'
+          queue=list(csv.DictReader((qroot/'global_public_nuclear_augmentation_queue.csv').open()))
+          rows=list(csv.DictReader((proot/'global_public_nuclear_candidate_biosample_provenance.csv').open()))
+          s=json.loads((proot/'global_public_nuclear_candidate_biosample_provenance_summary.json').read_text())
+          assert len(rows)==len(queue)==s['queued_candidate_groups']
+          assert sum(s['provenance_review_status_counts'].values())==len(queue)
+          assert s['automatic_tree_tip_promotion_allowed'] is False
+          assert s['primary_294_panel_changed'] is False
+          assert s['new_china_sampling_freeze_allowed'] is False
+          print(json.dumps(s,indent=2))
+          PY
       - name: Freeze audit query context
         run: |
           printf '%s\n' \
-            'NCBI database: SRA' \
+            'NCBI database: SRA + BioSample' \
             'Query: Cirsium[Organism]' \
             'Known-run baseline: v2 public-panel artifact 9163736681 (295 SRRs)' \
             'Biological unit: BioSample; extra runs for an existing BioSample are merge-only, never a new tip' \
+            'Taxon provenance: BioSample organism conflict blocks promotion; genus-concordant non-exact names require explicit review' \
             'Admission: candidates only; no automatic extra tree tips' \
             'New China/mainland sampling freeze: not allowed in this audit' \
             > /tmp/global_cirsium/audit/query_contract.txt
