@@ -296,7 +296,7 @@ def evaluate(
         "same_taxon_among_nearest_baseline_tips": bool(set(nearest) & set(same_taxon_tips)),
         "placement_interpretation": (
             "EA01 is a same-taxon replicate and should reproduce the existing yoshinoi neighbourhood; "
-            "EA02 is a new continental taxon and its neighbourhood must be compared across mapping/tree sensitivities."
+            "EA02 is an independent cross-study same-taxon Cirsium sairamense replicate and should reproduce its existing baseline neighbourhood across mapping/tree sensitivities."
         ),
         "tree_tip_promotion_allowed_from_this_pair_alone": False,
         "new_china_sampling_freeze_allowed": False,
