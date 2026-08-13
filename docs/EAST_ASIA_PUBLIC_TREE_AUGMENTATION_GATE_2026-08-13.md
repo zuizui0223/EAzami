@@ -36,15 +36,25 @@ No candidate is promoted from locus recovery alone. The next tree stage uses fou
 3. `ea02_295`
 4. `ea01_ea02_296`
 
-All four must use the exact same locus list:
+Within each mapping mode, all four use the exact same locus list:
 
-`accepted baseline-294 loci ∩ EA01 strict loci ∩ EA02 strict loci`.
+`accepted baseline-294 loci for that mapping ∩ EA01 strict loci ∩ EA02 strict loci`.
 
-At least 100 joint paired loci are required. No post-hoc filter relaxation is allowed.
+At least 100 joint paired loci are required separately for BWA and BLASTx. The BWA and BLASTx accepted locus sets are allowed to differ because mapping sensitivity is itself part of the test. No post-hoc filter relaxation is allowed.
 
 EA01 is an independent same-taxon target-capture replicate. Its role is assay/placement replication: it should recover the neighbourhood of the existing *C. nipponicum* var. *yoshinoi* public tip across mapping/tree sensitivities. EA02 is an independent cross-study same-taxon *C. sairamense* replicate, not a new taxon label. It should reproduce the existing *C. sairamense* neighbourhood across BWA and BLASTx concatenated trees and source-label ASTRAL sensitivity.
 
 For every augmented concatenated tree, the 294 shared baseline focal tips are pruned conceptually and their unrooted Robinson–Foulds distance from the paired `baseline294` tree is recorded. RF is a diagnostic, not a loophole: a non-zero value must be interpreted rather than hidden by changing the locus set. The source-label ASTRAL backbone is evaluated separately on the baseline species IDs.
+
+## Frozen cross-mapping promotion gate
+
+`analysis/summarize_east_asia_public_augmentation_sensitivities.py` consumes both mapping-mode result sets after the paired trees finish. A candidate gets the strict automatic sample-tip promotion route only when all of the following hold in **both BWA and BLASTx**, in both its single-candidate and joint-candidate scenario:
+
+- concatenated shared-294-tip RF = 0;
+- the existing same-taxon baseline tip is among the nearest baseline neighbours of the candidate;
+- source-label ASTRAL shared-species RF = 0.
+
+If any check fails, the script returns `manual_review_required=true`; it does **not** relax an RF threshold or alter the locus gate automatically. This conservative rule distinguishes “safe replicate enrichment” from a candidate that changes the inferred backbone enough to require biological interpretation.
 
 ## Execution bundle
 
@@ -56,9 +66,12 @@ For every augmented concatenated tree, the 294 shared baseline focal tips are pr
 - concatenated IQ-TREE trees;
 - source-label ASTRAL trees;
 - concatenated shared-tip RF and candidate-neighbour diagnostics;
-- ASTRAL shared-species backbone RF diagnostics.
+- ASTRAL shared-species backbone RF diagnostics;
+- frozen cross-mapping promotion summary.
 
-Run the ordinary v2 baseline recovery/tree-input stage first for both `bwa` and `blastx`. Then build the augmentation bundle with the successful EA01/EA02 artifacts and submit `submit_paired_augmentation_chain.sh` once per mapping mode.
+Run the ordinary v2 baseline recovery/tree-input stage first for both `bwa` and `blastx`. Then run `submit_paired_augmentation_chain.sh` once per mapping mode. After both mode-specific evaluation jobs have succeeded, run `16_summarize_cross_mapping_sensitivities_slurm.sh` to generate `cross_mapping_sensitivity_summary.json`.
+
+The heavy read recovery/tree inference remains an HPC/local task. GitHub Actions validates real artifacts, manifests, generated bundles, decision logic, and shell/Python contracts rather than serving as the heavy phylogenomics runner.
 
 ## Current boundary
 
