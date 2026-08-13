@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 """Collapse the global public Cirsium SRA audit into biological augmentation candidates.
 
-The SRA audit is run-level.  Phylogenetic tips are biological-sample-level, so
-this queue builder prevents a second form of pseudoreplication: an extra run for
-an already admitted BioSample must be merged into that tip rather than counted
-as a new tip.  New BioSamples are separated into exact-taxon additions versus
-independent replicates of taxa already represented in the frozen 294-tip core.
+The SRA audit is run-level. Phylogenetic tips are biological-sample-level, so
+this queue builder prevents pseudoreplication: an extra run for an already
+admitted BioSample is merged into that tip rather than counted as a new tip.
+New BioSamples are separated into taxon additions versus independent replicates
+of taxa already represented in the frozen 294-tip core.
+
+Moreyra preserves replicate suffixes in some source labels (for example,
+``Cirsium canum 1`` and ``Cirsium canum 2``).  Those suffixes identify samples,
+not taxonomic concepts.  Novelty comparison therefore strips a final bare
+integer from *primary-panel* labels before comparing them with SRA
+ScientificName.  No synonym resolution, varietal collapse, or other taxonomic
+rewriting is performed.
 
 Priority tiers are execution order only. They never auto-admit a sample into the
 maximum-public tree and they never define a new mainland sampling list.
@@ -30,6 +37,13 @@ def clean(value: object) -> str:
 
 def label(value: object) -> str:
     return " ".join(clean(value).casefold().split())
+
+
+def primary_taxon_label(value: object) -> str:
+    """Normalize only known primary-panel replicate suffixes, not taxonomy."""
+    text = " ".join(clean(value).split())
+    text = re.sub(r"\s+\d+$", "", text)
+    return text.casefold()
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -73,9 +87,17 @@ def aggregate_runs(
     if "biosample" not in primary_rows[0]:
         raise ValueError("primary panel lacks biosample")
 
-    primary_biosamples = {clean(row.get("biosample")) for row in primary_rows if clean(row.get("biosample"))}
-    source_labels = {label(row.get("source_taxon_label")) for row in primary_rows if clean(row.get("source_taxon_label"))}
-    analysis_labels = {label(row.get("analysis_taxon_label")) for row in primary_rows if clean(row.get("analysis_taxon_label"))}
+    primary_biosamples = {
+        clean(row.get("biosample")) for row in primary_rows if clean(row.get("biosample"))
+    }
+    source_labels = {
+        primary_taxon_label(row.get("source_taxon_label"))
+        for row in primary_rows if clean(row.get("source_taxon_label"))
+    }
+    analysis_labels = {
+        primary_taxon_label(row.get("analysis_taxon_label"))
+        for row in primary_rows if clean(row.get("analysis_taxon_label"))
+    }
     primary_labels = source_labels | analysis_labels
 
     direct = [
@@ -109,7 +131,9 @@ def aggregate_runs(
         sizes = [number(row.get("size_MB")) for row in rows]
         sizes_present = [value for value in sizes if value is not None]
         total_size = sum(sizes_present) if sizes_present else 0.0
-        positive_size_complete = len(sizes_present) == len(rows) and all(value > 0 for value in sizes_present)
+        positive_size_complete = (
+            len(sizes_present) == len(rows) and all(value > 0 for value in sizes_present)
+        )
         bases = [number(row.get("bases")) for row in rows]
         total_bases = sum(value for value in bases if value is not None)
 
@@ -150,34 +174,32 @@ def aggregate_runs(
             candidate_type = "new_biological_sample_existing_exact_taxon"
             tier = "F_REPLICATE_LARGE_OR_NONPAIRED"
 
-        queue.append(
-            {
-                "candidate_id": stable_tip_id(biosample, runs[0]),
-                "tip_id_if_admitted": stable_tip_id(biosample, runs[0]),
-                "scientific_name": taxon,
-                "taxon_conflict": taxon_conflict,
-                "biosample": biosample,
-                "biosample_missing": biosample_missing,
-                "biosample_in_primary_294": biosample_in_primary,
-                "exact_taxon_label_in_primary_294": exact_taxon_in_primary,
-                "candidate_type": candidate_type,
-                "priority_tier": tier,
-                "bioprojects": "|".join(projects),
-                "run_accessions": "|".join(runs),
-                "run_count": len(runs),
-                "library_strategies": "|".join(strategies),
-                "library_sources": "|".join(sources),
-                "library_selections": "|".join(selections),
-                "library_layouts": "|".join(layouts),
-                "platforms": "|".join(platforms),
-                "total_size_mb": round(total_size, 3),
-                "positive_size_metadata_complete": positive_size_complete,
-                "total_bases": int(total_bases),
-                "bounded_ci_pilot_shape": bounded,
-                "automatic_tip_admission_allowed": False,
-                "new_china_sampling_freeze_allowed": False,
-            }
-        )
+        queue.append({
+            "candidate_id": stable_tip_id(biosample, runs[0]),
+            "tip_id_if_admitted": stable_tip_id(biosample, runs[0]),
+            "scientific_name": taxon,
+            "taxon_conflict": taxon_conflict,
+            "biosample": biosample,
+            "biosample_missing": biosample_missing,
+            "biosample_in_primary_294": biosample_in_primary,
+            "exact_taxon_label_in_primary_294": exact_taxon_in_primary,
+            "candidate_type": candidate_type,
+            "priority_tier": tier,
+            "bioprojects": "|".join(projects),
+            "run_accessions": "|".join(runs),
+            "run_count": len(runs),
+            "library_strategies": "|".join(strategies),
+            "library_sources": "|".join(sources),
+            "library_selections": "|".join(selections),
+            "library_layouts": "|".join(layouts),
+            "platforms": "|".join(platforms),
+            "total_size_mb": round(total_size, 3),
+            "positive_size_metadata_complete": positive_size_complete,
+            "total_bases": int(total_bases),
+            "bounded_ci_pilot_shape": bounded,
+            "automatic_tip_admission_allowed": False,
+            "new_china_sampling_freeze_allowed": False,
+        })
 
     tier_order = {
         "A_NEW_EXACT_TAXON_BOUNDED": 0,
@@ -190,28 +212,40 @@ def aggregate_runs(
         "MANUAL_METADATA": 7,
         "MERGE_ONLY": 8,
     }
-    queue.sort(
-        key=lambda row: (
-            tier_order.get(str(row["priority_tier"]), 99),
-            str(row["scientific_name"]).casefold(),
-            str(row["biosample"]),
-            str(row["run_accessions"]),
-        )
-    )
+    queue.sort(key=lambda row: (
+        tier_order.get(str(row["priority_tier"]), 99),
+        str(row["scientific_name"]).casefold(),
+        str(row["biosample"]),
+        str(row["run_accessions"]),
+    ))
 
-    new_samples = [row for row in queue if not bool(row["biosample_in_primary_294"]) and not bool(row["biosample_missing"])]
-    new_exact = [row for row in new_samples if not bool(row["exact_taxon_label_in_primary_294"]) and not bool(row["taxon_conflict"])]
-    replicate = [row for row in new_samples if bool(row["exact_taxon_label_in_primary_294"]) and not bool(row["taxon_conflict"])]
+    new_samples = [
+        row for row in queue
+        if not bool(row["biosample_in_primary_294"]) and not bool(row["biosample_missing"])
+    ]
+    new_exact = [
+        row for row in new_samples
+        if not bool(row["exact_taxon_label_in_primary_294"]) and not bool(row["taxon_conflict"])
+    ]
+    replicate = [
+        row for row in new_samples
+        if bool(row["exact_taxon_label_in_primary_294"]) and not bool(row["taxon_conflict"])
+    ]
     summary: dict[str, object] = {
-        "contract_version": "global_public_nuclear_augmentation_queue_v1",
+        "contract_version": "global_public_nuclear_augmentation_queue_v2",
         "primary_core_biological_tips": len(primary_rows),
+        "primary_taxon_novelty_normalization": "strip_trailing_bare_replicate_integer_only",
         "direct_extra_sra_runs": len(direct),
         "run_groups_after_biosample_collapse": len(queue),
         "new_biological_sample_candidates": len(new_samples),
         "new_exact_taxon_candidates": len(new_exact),
         "existing_exact_taxon_independent_replicates": len(replicate),
-        "existing_primary_biosample_extra_run_groups": sum(bool(row["biosample_in_primary_294"]) for row in queue),
-        "bounded_paired_positive_size_candidates_le_2000mb": sum(bool(row["bounded_ci_pilot_shape"]) for row in queue),
+        "existing_primary_biosample_extra_run_groups": sum(
+            bool(row["biosample_in_primary_294"]) for row in queue
+        ),
+        "bounded_paired_positive_size_candidates_le_2000mb": sum(
+            bool(row["bounded_ci_pilot_shape"]) for row in queue
+        ),
         "priority_tier_counts": dict(sorted(Counter(str(row["priority_tier"]) for row in queue).items())),
         "new_exact_taxa": sorted({str(row["scientific_name"]) for row in new_exact}),
         "automatic_tip_admission_allowed": False,
