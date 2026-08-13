@@ -1,0 +1,91 @@
+name: Build Japan-origin global public panel v2
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_japan_origin_global_public_panel_v2.py"
+      - "tests/test_build_japan_origin_global_public_panel_v2.py"
+      - "data/evidence/japan_origin_global_public_panel_contract_v2.json"
+      - "data/evidence/chang2025_public_run_manifest_v1.csv"
+      - "data/evidence/chang2026_public_run_manifest_v1.csv"
+      - "data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv"
+      - ".github/workflows/build-japan-origin-global-public-panel-v2.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: japan-origin-global-public-v2-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  build-real-panel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile and unit test
+        run: |
+          python -m py_compile analysis/build_japan_origin_global_public_panel_v2.py
+          python -m unittest tests/test_build_japan_origin_global_public_panel_v2.py -v
+      - name: Recover frozen Moreyra reconciliation artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/moreyra /tmp/japan_origin_global_v2
+          curl --fail --location \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9067368059/zip" \
+            -o /tmp/moreyra.zip
+          echo "a18e4867362fed7b509c351bc901a9456fe258f09c7e277b0069d8c257b6ed72  /tmp/moreyra.zip" | sha256sum -c -
+          unzip -q /tmp/moreyra.zip -d /tmp/moreyra
+          test -s /tmp/moreyra/moreyra_sample_audit_output/moreyra2025_all_sample_reconciliation.csv
+      - name: Build and verify real deduplicated panel
+        run: |
+          python analysis/build_japan_origin_global_public_panel_v2.py \
+            --moreyra-reconciliation /tmp/moreyra/moreyra_sample_audit_output/moreyra2025_all_sample_reconciliation.csv \
+            --outdir /tmp/japan_origin_global_v2 \
+            | tee /tmp/japan_origin_global_v2/build.log
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path('/tmp/japan_origin_global_v2')
+          summary=json.loads((root/'japan_origin_global_public_panel_summary_v2.json').read_text())
+          rows=list(csv.DictReader((root/'japan_origin_global_public_panel_v2.csv').open()))
+          shared=list(csv.DictReader((root/'chang_cross_paper_reused_samples_v2.csv').open()))
+          assert summary['biological_samples']==294
+          assert summary['public_run_accessions']==295
+          assert summary['unique_biosamples']==294
+          assert summary['unique_public_run_accessions']==295
+          assert summary['unique_source_preserving_analysis_taxon_labels']==270
+          assert summary['Moreyra2025_unique_samples']==256
+          assert summary['Chang_unique_samples']==38
+          assert summary['Chang_cross_paper_shared_samples']==8
+          assert summary['Chang_source_record_counts']=={'Chang2025':5,'Chang2025|Chang2026':8,'Chang2026':25}
+          assert summary['japan38_paper_concepts_mapped']==38
+          assert summary['japan38_conflicted_member_ids']==['JPN_31']
+          assert summary['v1_302_tip_inventory_superseded'] is True
+          assert summary['new_china_sampling_freeze_allowed'] is False
+          assert len(rows)==294 and len({r['biosample'] for r in rows})==294
+          all_runs=[x for r in rows for x in r['run_accessions'].split('|') if x]
+          assert len(all_runs)==295 and len(set(all_runs))==295
+          assert len(shared)==8
+          assert {r['run'] for r in shared}=={
+            'SRR30617335','SRR30617336','SRR30617337','SRR30617338',
+            'SRR30617339','SRR30617340','SRR30617342','SRR30617347'
+          }
+          for taxon,n in {'Cirsium brevicaule':3,'Cirsium irumtiense':3}.items():
+            assert sum(r['analysis_taxon_label']==taxon for r in rows)==n
+          print(json.dumps(summary,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan-origin-global-public-panel-v2-${{ github.run_id }}
+          path: /tmp/japan_origin_global_v2
+          if-no-files-found: error
