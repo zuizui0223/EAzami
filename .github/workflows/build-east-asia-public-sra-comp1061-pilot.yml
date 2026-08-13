@@ -138,7 +138,7 @@ jobs:
         shell: micromamba-shell {0}
         run: |
           set -euo pipefail
-          mkdir -p /tmp/eapilot/${TIP_ID}/{sra,raw,trimmed,scratch,hybpiper,retrieved,pack}
+          mkdir -p /tmp/eapilot/${TIP_ID}/{sra,raw,trimmed,scratch,hybpiper,retrieved,pack/diagnostics}
           prefetch "$RUN_ACCESSION" --output-directory "/tmp/eapilot/${TIP_ID}/sra"
           SRA=$(find "/tmp/eapilot/${TIP_ID}/sra" -name "${RUN_ACCESSION}.sra" -print -quit)
           test -s "$SRA"
@@ -164,25 +164,54 @@ jobs:
       - name: Recover Compositae1061 loci with HybPiper BWA
         shell: micromamba-shell {0}
         run: |
-          set -euo pipefail
+          set -uo pipefail
           TARGET=/tmp/eapilot/reference_bundle/comp1061_hybpiper_reference.fasta
           R1="/tmp/eapilot/${TIP_ID}/trimmed/${TIP_ID}.R1.fastq.gz"
           R2="/tmp/eapilot/${TIP_ID}/trimmed/${TIP_ID}.R2.fastq.gz"
-          cd "/tmp/eapilot/${TIP_ID}/hybpiper"
+          WORK="/tmp/eapilot/${TIP_ID}/hybpiper"
+          DIAG="/tmp/eapilot/${TIP_ID}/pack/diagnostics"
+          mkdir -p "$WORK" "$DIAG"
+          cd "$WORK"
+
+          set +e
           hybpiper assemble \
             -t_dna "$TARGET" \
             -r "$R1" "$R2" \
             --prefix "$TIP_ID" \
             --cpu 4 \
             --bwa \
-            --no_intronerate
+            --no_intronerate \
+            2>&1 | tee "$DIAG/assemble.stdout.log"
+          assemble_rc=${PIPESTATUS[0]}
+          set -e
+          echo "$assemble_rc" > "$DIAG/assemble.exit_code.txt"
+          find "$WORK" -maxdepth 3 -type f -printf '%P\t%s\n' | sort > "$DIAG/after_assemble_files.tsv" || true
+          find "$WORK" -type f \( -name '*hybpiper_assemble*.log' -o -name 'check_targetfile_report-*' -o -name '*flagstat.tsv' -o -name 'gene_read_counts.tsv' \) -print0 | while IFS= read -r -d '' f; do
+            cp "$f" "$DIAG/$(basename "$f")" || true
+          done
+          if [ "$assemble_rc" -ne 0 ]; then
+            echo "HybPiper assemble failed for $TIP_ID with exit code $assemble_rc" >&2
+            exit "$assemble_rc"
+          fi
+
           printf '%s\n' "$TIP_ID" > sample_names.txt
+          set +e
           hybpiper retrieve_sequences dna \
             -t_dna "$TARGET" \
             --sample_names sample_names.txt \
             --hybpiper_dir . \
             --fasta_dir "/tmp/eapilot/${TIP_ID}/retrieved" \
-            --cpu 4
+            --cpu 4 \
+            2>&1 | tee "$DIAG/retrieve_sequences.stdout.log"
+          retrieve_rc=${PIPESTATUS[0]}
+          set -e
+          echo "$retrieve_rc" > "$DIAG/retrieve_sequences.exit_code.txt"
+          if [ "$retrieve_rc" -ne 0 ]; then
+            echo "HybPiper retrieve_sequences failed for $TIP_ID with exit code $retrieve_rc" >&2
+            exit "$retrieve_rc"
+          fi
+
+          set +e
           hybpiper paralog_retriever sample_names.txt \
             -t_dna "$TARGET" \
             --hybpiper_dir . \
@@ -191,7 +220,16 @@ jobs:
             --paralogs_above_threshold_report_filename "/tmp/eapilot/${TIP_ID}/paralog_loci_any" \
             --paralogs_list_threshold_percentage 0 \
             --no_heatmap \
-            --cpu 4
+            --cpu 4 \
+            2>&1 | tee "$DIAG/paralog_retriever.stdout.log"
+          paralog_rc=${PIPESTATUS[0]}
+          set -e
+          echo "$paralog_rc" > "$DIAG/paralog_retriever.exit_code.txt"
+          if [ "$paralog_rc" -ne 0 ]; then
+            echo "HybPiper paralog_retriever failed for $TIP_ID with exit code $paralog_rc" >&2
+            exit "$paralog_rc"
+          fi
+
           cd - >/dev/null
           test -d "/tmp/eapilot/${TIP_ID}/retrieved"
           test -s "/tmp/eapilot/${TIP_ID}/paralog_report"
