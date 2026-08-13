@@ -1,0 +1,183 @@
+name: Validate East Asia public augmentation gate
+
+on:
+  pull_request:
+    paths:
+      - "analysis/prepare_east_asia_public_augmentation_tree_inputs.py"
+      - "analysis/evaluate_east_asia_public_augmentation_tree_pair.py"
+      - "analysis/compare_east_asia_public_augmentation_astral_backbone.py"
+      - "analysis/build_east_asia_public_augmentation_hpc_bundle.py"
+      - "data/evidence/east_asia_public_tree_augmentation_contract_v1.json"
+      - "data/evidence/east_asia_public_sra_comp1061_pilot_results_2026-08-13.csv"
+      - "docs/EAST_ASIA_PUBLIC_TREE_AUGMENTATION_GATE_2026-08-13.md"
+      - ".github/workflows/validate-east-asia-public-augmentation-gate.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: east-asia-public-augmentation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile augmentation gate
+        run: |
+          python -m py_compile \
+            analysis/prepare_east_asia_public_augmentation_tree_inputs.py \
+            analysis/evaluate_east_asia_public_augmentation_tree_pair.py \
+            analysis/compare_east_asia_public_augmentation_astral_backbone.py \
+            analysis/build_east_asia_public_augmentation_hpc_bundle.py
+      - name: Recover successful EA01 and EA02 candidate packs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/EA01 /tmp/EA02
+          curl --fail --location -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9175870949/zip" -o /tmp/EA01.zip
+          curl --fail --location -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9175876315/zip" -o /tmp/EA02.zip
+          echo "275fecf31e202ae28914441faff70a7faede3c2b8912901221d84e4aa6ef2232  /tmp/EA01.zip" | sha256sum -c -
+          echo "6a9c0d91b2d98ed5ebc72bf96effd5f41c8c6f865747b1d1124ee3d59eb0d1bb  /tmp/EA02.zip" | sha256sum -c -
+          unzip -q /tmp/EA01.zip -d /tmp/EA01
+          unzip -q /tmp/EA02.zip -d /tmp/EA02
+      - name: Validate frozen pilot evidence and joint candidate locus set
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          evidence={r['candidate_id']:r for r in csv.DictReader(Path('data/evidence/east_asia_public_sra_comp1061_pilot_results_2026-08-13.csv').open())}
+          contract=json.loads(Path('data/evidence/east_asia_public_tree_augmentation_contract_v1.json').read_text())
+          e1=json.loads(Path('/tmp/EA01/candidate_pack_summary.json').read_text())
+          e2=json.loads(Path('/tmp/EA02/candidate_pack_summary.json').read_text())
+          s1={x for x in Path('/tmp/EA01/strict_recovered_loci.txt').read_text().splitlines() if x}
+          s2={x for x in Path('/tmp/EA02/strict_recovered_loci.txt').read_text().splitlines() if x}
+          assert e1['strict_no_warning_recovered_loci']==236==len(s1)
+          assert e2['strict_no_warning_recovered_loci']==239==len(s2)
+          assert s1 <= s2 and len(s1&s2)==236
+          assert evidence['EA01']['artifact_id']=='9175870949'
+          assert evidence['EA02']['artifact_id']=='9175876315'
+          assert int(contract['joint_candidate_strict_loci'])==236
+          assert contract['tree_tip_promotion_allowed_before_paired_trees'] is False
+          print(json.dumps({'EA01':len(s1),'EA02':len(s2),'joint':len(s1&s2)},indent=2))
+          PY
+      - name: Recover real baseline-v2 panel dependency and build bundles
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/moreyra /tmp/panel /tmp/baseline_bundle /tmp/augmentation_bundle
+          curl --fail --location -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9067368059/zip" -o /tmp/moreyra.zip
+          echo "a18e4867362fed7b509c351bc901a9456fe258f09c7e277b0069d8c257b6ed72  /tmp/moreyra.zip" | sha256sum -c -
+          unzip -q /tmp/moreyra.zip -d /tmp/moreyra
+          python analysis/build_japan_origin_global_public_panel_v2.py \
+            --moreyra-reconciliation /tmp/moreyra/moreyra_sample_audit_output/moreyra2025_all_sample_reconciliation.csv \
+            --outdir /tmp/panel
+          python analysis/build_japan_origin_global_hpc_bundle_v2.py \
+            --panel /tmp/panel/japan_origin_global_public_panel_v2.csv \
+            --outdir /tmp/baseline_bundle
+          python analysis/build_east_asia_public_augmentation_hpc_bundle.py \
+            --baseline-bundle /tmp/baseline_bundle \
+            --ea01-pack /tmp/EA01 \
+            --ea02-pack /tmp/EA02 \
+            --contract data/evidence/east_asia_public_tree_augmentation_contract_v1.json \
+            --outdir /tmp/augmentation_bundle
+      - name: Validate real augmentation bundle offline
+        run: |
+          python -m py_compile /tmp/augmentation_bundle/helpers/*.py
+          for f in /tmp/augmentation_bundle/*.sh; do bash -n "$f"; done
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          b=Path('/tmp/augmentation_bundle')
+          m=json.loads((b/'execution_manifest.json').read_text())
+          assert m['bundle_version']=='east_asia_public_augmentation_hpc_bundle_v1'
+          assert m['baseline_focal_tips']==294
+          assert m['candidate_strict_loci']=={'EA01':236,'EA02':239}
+          assert m['scenarios']==['baseline294','ea01_295','ea02_295','ea01_ea02_296']
+          assert m['mapping_modes']==['bwa','blastx']
+          assert m['tree_tip_promotion_allowed'] is False
+          assert len(list((b/'candidate_packs/EA01/loci').glob('*.fasta')))==236
+          assert len(list((b/'candidate_packs/EA02/loci').glob('*.fasta')))==239
+          print(json.dumps(m,indent=2))
+          PY
+      - name: Exercise paired-input builder with real candidate loci
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          joint=[x for x in Path('/tmp/EA01/strict_recovered_loci.txt').read_text().splitlines() if x][:100]
+          p=Path('/tmp/synthetic_primary'); (p/'loci_unaligned').mkdir(parents=True,exist_ok=True)
+          (p/'eligible_loci.txt').write_text(''.join(x+'\n' for x in joint))
+          for locus in joint:
+              (p/'loci_unaligned'/f'{locus}.fasta').write_text('>JOG0001\nACGTACGT\n>OUTGROUP_lett\nACGTACGA\n>OUTGROUP_sunf\nACGTACGG\n')
+          PY
+          python analysis/prepare_east_asia_public_augmentation_tree_inputs.py \
+            --primary-inputs /tmp/synthetic_primary \
+            --baseline-manifest /tmp/baseline_bundle/sample_manifest.csv \
+            --baseline-species-map /tmp/baseline_bundle/astral_species_map.csv \
+            --ea01-pack /tmp/EA01 \
+            --ea02-pack /tmp/EA02 \
+            --contract data/evidence/east_asia_public_tree_augmentation_contract_v1.json \
+            --outdir /tmp/paired_inputs
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('/tmp/paired_inputs'); s=json.loads((p/'paired_augmentation_summary.json').read_text())
+          assert s['joint_paired_loci']==100
+          assert s['ea01_is_subset_of_ea02_strict_loci'] is True
+          assert s['scenario_focal_tip_counts']=={'baseline294':294,'ea01_295':295,'ea02_295':295,'ea01_ea02_296':296}
+          y=[r for r in csv.DictReader((p/'ea01_295/astral_species_map.csv').open()) if r['analysis_taxon_label']=='Cirsium nipponicum var. yoshinoi']
+          assert len(y)==1 and int(y[0]['n_tips'])>=2 and 'PUBEA001' in y[0]['tip_ids']
+          s2=list(csv.DictReader((p/'ea02_295/astral_species_map.csv').open()))
+          assert any(r['species_id']=='AUG_EA02' and r['analysis_taxon_label']=='Cirsium sairamense' for r in s2)
+          print(json.dumps(s,indent=2))
+          PY
+      - name: Exercise shared-backbone RF evaluator
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          rows=list(csv.DictReader(Path('/tmp/baseline_bundle/sample_manifest.csv').open()))
+          names=[r['tip_id'] for r in rows]
+          yosh=[r['tip_id'] for r in rows if r['analysis_taxon_label']=='Cirsium nipponicum var. yoshinoi']
+          assert yosh
+          focal=yosh[0]
+          def balanced(items):
+              cur=list(items)
+              while len(cur)>1:
+                  cur=[f'({cur[i]},{cur[i+1]})' if i+1<len(cur) else cur[i] for i in range(0,len(cur),2)]
+              return cur[0]+';'
+          Path('/tmp/base.tre').write_text(balanced(names))
+          Path('/tmp/ea01.tre').write_text(balanced([f'({x},PUBEA001)' if x==focal else x for x in names]))
+          PY
+          python analysis/evaluate_east_asia_public_augmentation_tree_pair.py \
+            --baseline-tree /tmp/base.tre \
+            --augmented-tree /tmp/ea01.tre \
+            --baseline-manifest /tmp/baseline_bundle/sample_manifest.csv \
+            --contract data/evidence/east_asia_public_tree_augmentation_contract_v1.json \
+            --candidate-id EA01 \
+            --output /tmp/ea01_rf_test.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/ea01_rf_test.json'))
+          assert d['unrooted_rf_distance_on_shared_baseline_tips']==0
+          assert d['same_taxon_among_nearest_baseline_tips'] is True
+          assert d['tree_tip_promotion_allowed_from_this_pair_alone'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: east-asia-public-augmentation-gate-${{ github.run_id }}
+          path: |
+            /tmp/augmentation_bundle
+            /tmp/paired_inputs/paired_augmentation_summary.json
+            /tmp/paired_inputs/scenario_manifest.csv
+          if-no-files-found: error
