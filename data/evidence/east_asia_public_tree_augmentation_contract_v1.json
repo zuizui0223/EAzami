@@ -21,7 +21,13 @@
       "run": "SRR30887223",
       "role": "independent_same_taxon_target_capture_replicate",
       "strict_no_warning_recovered_loci": 236,
-      "baseline_exact_taxon_expected": true
+      "baseline_exact_taxon_expected": true,
+      "baseline_same_taxon_reference": {
+        "source_study": "Moreyra2025",
+        "biosample": "SAMN44017955",
+        "run": "SRR30887222",
+        "analysis_taxon_label": "Cirsium nipponicum var. yoshinoi"
+      }
     },
     {
       "candidate_id": "EA02",
@@ -29,9 +35,16 @@
       "scientific_name": "Cirsium sairamense",
       "biosample": "SAMN11585477",
       "run": "SRR9119112",
-      "role": "new_continental_target_capture_taxon",
+      "role": "independent_cross_study_same_taxon_target_capture_replicate",
       "strict_no_warning_recovered_loci": 239,
-      "baseline_exact_taxon_expected": false
+      "baseline_exact_taxon_expected": true,
+      "baseline_same_taxon_reference": {
+        "source_study": "Moreyra2025",
+        "biosample": "SAMN34240330",
+        "run": "SRR25265647",
+        "analysis_taxon_label": "Cirsium sairamense",
+        "published_location": "Tajikistan: Maijora"
+      }
     }
   ],
   "joint_candidate_strict_loci": 236,
@@ -50,7 +63,7 @@
     "run baseline294, EA01-only, EA02-only, and EA01+EA02 on the identical paired locus set",
     "quantify the 294-shared-tip backbone change rather than assuming augmentation is harmless",
     "verify EA01 reproduces the existing Cirsium nipponicum var. yoshinoi placement across mapping and tree sensitivities",
-    "verify EA02 placement is concordant across BWA and BLASTx concatenated trees and source-label coalescent sensitivity",
+    "verify EA02 reproduces the existing Cirsium sairamense neighbourhood across studies and across BWA/BLASTx concatenated plus source-label coalescent sensitivities",
     "do not weaken locus or topology gates post hoc to admit a preferred candidate"
   ],
   "new_china_sampling_freeze_allowed": false
