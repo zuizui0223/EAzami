@@ -1,0 +1,95 @@
+name: Audit PRJNA1127082 nuclear augmentation
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_ncbi_project_runs.py"
+      - ".github/workflows/audit-prjna1127082-nuclear-augmentation.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: prjna1127082-augmentation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  audit-runs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile existing NCBI recovery client
+        run: python -m py_compile analysis/recover_ncbi_project_runs.py
+      - name: Recover PRJNA1127082 SRA run metadata
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        run: |
+          mkdir -p /tmp/prjna1127082
+          : > /tmp/empty_focal_taxa.txt
+          python analysis/recover_ncbi_project_runs.py \
+            --bioproject PRJNA1127082 \
+            --focal-taxa /tmp/empty_focal_taxa.txt \
+            --outdir /tmp/prjna1127082 \
+            --enrich-biosample
+      - name: Freeze compatible nuclear-data lanes
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path('/tmp/prjna1127082')
+          paths=list(root.glob('*_runinfo.csv'))
+          if len(paths)!=1:
+              raise SystemExit(f'expected one runinfo file, observed {paths}')
+          with paths[0].open(encoding='utf-8-sig',newline='') as h:
+              rows=list(csv.DictReader(h))
+          if not rows:
+              raise SystemExit('PRJNA1127082 returned no public SRA runs')
+          for r in rows:
+              if r.get('BioProject')!='PRJNA1127082':
+                  raise SystemExit(f'unexpected project row: {r.get("Run")} {r.get("BioProject")}')
+          fields=['Run','BioSample','ScientificName','LibraryStrategy','LibrarySource','LibrarySelection','LibraryLayout','Platform','Model','spots','bases','size_MB','geographic_location','collection_date']
+          out=[]
+          for r in rows:
+              out.append({k:r.get(k,'') for k in fields})
+          with (root/'prjna1127082_nuclear_augmentation_run_manifest.csv').open('w',encoding='utf-8',newline='') as h:
+              w=csv.DictWriter(h,fieldnames=fields);w.writeheader();w.writerows(out)
+          def norm(x): return str(x or '').strip().upper().replace('-','_').replace(' ','_')
+          by_strategy={}
+          for r in rows:
+              s=norm(r.get('LibraryStrategy')) or 'UNKNOWN'
+              by_strategy[s]=by_strategy.get(s,0)+1
+          biosamples=sorted({r.get('BioSample','') for r in rows if r.get('BioSample')})
+          scientific=sorted({r.get('ScientificName','') for r in rows if r.get('ScientificName')})
+          rnaseq=[r for r in rows if norm(r.get('LibraryStrategy')) in {'RNA_SEQ','RNA-SEQ'} or 'RNA' in norm(r.get('LibraryStrategy'))]
+          wgs=[r for r in rows if norm(r.get('LibraryStrategy')) in {'WGS','WHOLE_GENOME_SEQUENCING'}]
+          summary={
+            'contract_version':'prjna1127082_nuclear_augmentation_audit_v1',
+            'bioproject':'PRJNA1127082',
+            'public_runs':len(rows),
+            'biosamples':biosamples,
+            'biosample_count':len(biosamples),
+            'scientific_names':scientific,
+            'library_strategy_counts':dict(sorted(by_strategy.items())),
+            'rnaseq_runs':[r.get('Run','') for r in rnaseq],
+            'wgs_runs':[r.get('Run','') for r in wgs],
+            'paired_rnaseq_runs':[r.get('Run','') for r in rnaseq if norm(r.get('LibraryLayout'))=='PAIRED'],
+            'total_size_mb':sum(float(r.get('size_MB') or 0) for r in rows),
+            'primary_294_panel_changed':False,
+            'augmentation_tip_allowed':False,
+            'promotion_gate':'Choose one biological Ulleung individual, recover the same frozen Compositae1061 loci, and pass orthology/copy-state/occupancy and cross-data-type placement checks before adding a tip.',
+            'sampling_policy':'No new China sampling list is frozen by this audit.'
+          }
+          (root/'prjna1127082_nuclear_augmentation_summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps(summary,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: prjna1127082-nuclear-augmentation-${{ github.run_id }}
+          path: /tmp/prjna1127082
+          if-no-files-found: error
