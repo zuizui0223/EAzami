@@ -232,7 +232,7 @@ jobs:
 
           cd - >/dev/null
           test -d "/tmp/eapilot/${TIP_ID}/retrieved"
-          test -s "/tmp/eapilot/${TIP_ID}/paralog_report"
+          test -s "/tmp/eapilot/${TIP_ID}/paralog_report.tsv"
       - name: Build strict frozen-241 candidate pack
         shell: micromamba-shell {0}
         env:
@@ -244,10 +244,10 @@ jobs:
             --candidate-id "$CANDIDATE_ID" \
             --locus-list /tmp/eapilot/reference_bundle/moreyra_conservative_241_no_warning_loci.txt \
             --retrieved-dir "/tmp/eapilot/${TIP_ID}/retrieved" \
-            --paralog-report "/tmp/eapilot/${TIP_ID}/paralog_report" \
+            --paralog-report "/tmp/eapilot/${TIP_ID}/paralog_report.tsv" \
             --outdir "/tmp/eapilot/${TIP_ID}/pack"
           cp "/tmp/eapilot/${TIP_ID}/trimmed/fastp.json" "/tmp/eapilot/${TIP_ID}/pack/"
-          cp "/tmp/eapilot/${TIP_ID}/paralog_report" "/tmp/eapilot/${TIP_ID}/pack/paralog_report.tsv"
+          cp "/tmp/eapilot/${TIP_ID}/paralog_report.tsv" "/tmp/eapilot/${TIP_ID}/pack/paralog_report.tsv"
           python - <<'PY'
           import json, os
           from pathlib import Path
