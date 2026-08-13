@@ -4,6 +4,12 @@
 The goal is not to append every run to the phylogeny. It is to identify public
 nuclear sequence sources outside the frozen 294-tip Moreyra+Chang core that could
 be projected into the same Compositae1061 locus space.
+
+The assay classifier is deliberately conservative. In particular, an SRA row
+labelled RNA-Seq is not treated as a host nuclear transcriptome unless its source
+metadata is transcriptomic and the selection is not PCR. This prevents ITS-PCR,
+viral-RNA and other non-host libraries from entering the augmentation queue just
+because LibraryStrategy contains RNA-Seq.
 """
 from __future__ import annotations
 
@@ -11,7 +17,7 @@ import argparse
 import csv
 import json
 import os
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
 from typing import Mapping, Sequence
 
@@ -69,19 +75,38 @@ def compatibility_class(row: Mapping[str, str]) -> tuple[str, str]:
     selection = norm(row.get("LibrarySelection"))
     library = norm(row.get("LibraryName"))
 
+    # Reduced-representation / amplicon assays are not allowed to sneak in via
+    # generic target-like words elsewhere in the metadata.
+    if any(token in strategy for token in ("rad", "gbs", "amplicon")):
+        return "not_directly_common_locus_compatible", "reduced_representation_or_amplicon"
+
     if strategy in {"rna_seq", "rnaseq"}:
-        return "direct_common_locus_candidate", "RNA_seq"
+        if "viral" in source:
+            return "not_directly_common_locus_compatible", "RNA_seq_non_host_viral_source"
+        if "pcr" in selection:
+            return "not_directly_common_locus_compatible", "RNA_seq_PCR_selection_not_host_transcriptome"
+        if source in {"transcriptomic", "transcriptomic_single_cell"}:
+            return "direct_common_locus_candidate", "host_transcriptomic_RNA_seq"
+        return "manual_assay_review", "RNA_seq_without_host_transcriptomic_source"
+
     if strategy in {"wgs", "wxs"}:
+        if source and source != "genomic":
+            return "manual_assay_review", f"{strategy.upper()}_non_genomic_source"
         return "direct_common_locus_candidate", strategy.upper()
+
     if "hybrid" in selection or "capture" in selection or "target" in strategy:
+        if source and source != "genomic":
+            return "manual_assay_review", "target_capture_non_genomic_source"
         return "direct_common_locus_candidate", "target_capture_or_hybrid_selection"
+
     if strategy in {"other", "unknown", ""}:
         text = "_".join((strategy, source, selection, library))
         if any(token in text for token in ("hybpiper", "hybrid", "capture", "bait", "target")):
+            if source and source != "genomic":
+                return "manual_assay_review", "metadata_target_capture_non_genomic_source"
             return "direct_common_locus_candidate", "metadata_indicates_target_capture"
         return "manual_assay_review", "OTHER_or_unspecified"
-    if any(token in strategy for token in ("rad", "gbs", "amplicon")):
-        return "not_directly_common_locus_compatible", "reduced_representation_or_amplicon"
+
     return "manual_assay_review", strategy or "unclassified"
 
 
@@ -123,7 +148,7 @@ def audit(rows: Sequence[Mapping[str, str]], known_runs: set[str]) -> tuple[list
     ]
     direct_biosamples = {row["BioSample"] for row in direct if row["BioSample"]}
     summary: dict[str, object] = {
-        "contract_version": "global_cirsium_sra_nuclear_audit_v1",
+        "contract_version": "global_cirsium_sra_nuclear_audit_v2",
         "query": "Cirsium[Organism] in NCBI SRA",
         "global_cirsium_public_runs": len(out),
         "known_primary_panel_runs_recovered_by_global_query": sum(
@@ -138,13 +163,16 @@ def audit(rows: Sequence[Mapping[str, str]], known_runs: set[str]) -> tuple[list
         "extra_compatibility_class_counts": dict(sorted(Counter(
             row["common_locus_compatibility_class"] for row in extra
         ).items())),
+        "extra_compatibility_reason_counts": dict(sorted(Counter(
+            row["compatibility_reason"] for row in extra
+        ).items())),
         "extra_library_strategy_counts": dict(sorted(Counter(
             row["LibraryStrategy"] or "UNKNOWN" for row in extra
         ).items())),
         "primary_294_panel_changed": False,
         "automatic_tip_admission_allowed": False,
         "admission_rule": (
-            "Extra runs are candidates only. Collapse by biological sample, verify taxon/provenance, "
+            "Extra runs are candidates only. Collapse by biological sample, verify taxon/provenance and host-assay identity, "
             "recover the same frozen Compositae1061 loci, and pass orthology/copy-state/occupancy "
             "before adding any new individual to a maximum-public sensitivity tree."
         ),
