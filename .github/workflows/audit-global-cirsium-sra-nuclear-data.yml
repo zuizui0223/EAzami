@@ -1,0 +1,82 @@
+name: Audit global Cirsium SRA nuclear data
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_global_cirsium_sra_nuclear_data.py"
+      - "tests/test_audit_global_cirsium_sra_nuclear_data.py"
+      - "analysis/recover_ncbi_project_runs.py"
+      - ".github/workflows/audit-global-cirsium-sra-nuclear-data.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: global-cirsium-sra-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  audit-global-sra:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile and unit test
+        run: |
+          python -m py_compile analysis/audit_global_cirsium_sra_nuclear_data.py
+          python -m unittest tests/test_audit_global_cirsium_sra_nuclear_data.py -v
+      - name: Recover the frozen 294-tip / 295-SRR primary panel artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/global_cirsium/known_panel /tmp/global_cirsium/audit
+          curl --fail --location \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9163736681/zip" \
+            -o /tmp/global_cirsium/known_panel.zip
+          echo '111583da688510fcf2948dce987dfa9a1e088a298262ada8b78e59715c51baab  /tmp/global_cirsium/known_panel.zip' | sha256sum -c -
+          unzip -q /tmp/global_cirsium/known_panel.zip -d /tmp/global_cirsium/known_panel
+          test -s /tmp/global_cirsium/known_panel/japan_origin_global_public_panel_v2.csv
+      - name: Query all current public Cirsium SRA records and subtract the known 295 SRRs
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        run: |
+          python analysis/audit_global_cirsium_sra_nuclear_data.py \
+            --known-panel /tmp/global_cirsium/known_panel/japan_origin_global_public_panel_v2.csv \
+            --outdir /tmp/global_cirsium/audit \
+            | tee /tmp/global_cirsium/audit/audit.log
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path('/tmp/global_cirsium/audit')
+          s=json.loads((root/'global_cirsium_sra_nuclear_audit_summary.json').read_text())
+          rows=list(csv.DictReader((root/'global_cirsium_sra_run_audit.csv').open()))
+          extra=list(csv.DictReader((root/'extra_direct_common_locus_candidates.csv').open()))
+          assert s['global_cirsium_public_runs']==len(rows)>0
+          assert s['known_primary_panel_runs_total']==295
+          assert s['extra_direct_common_locus_candidate_runs']==len(extra)
+          assert s['primary_294_panel_changed'] is False
+          assert s['automatic_tip_admission_allowed'] is False
+          assert s['new_china_sampling_freeze_allowed'] is False
+          print(json.dumps(s,indent=2))
+          PY
+      - name: Freeze audit query context
+        run: |
+          printf '%s\n' \
+            'NCBI database: SRA' \
+            'Query: Cirsium[Organism]' \
+            'Known-run baseline: v2 public-panel artifact 9163736681 (295 SRRs)' \
+            'Admission: candidates only; no automatic extra tree tips' \
+            > /tmp/global_cirsium/audit/query_contract.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: global-cirsium-sra-nuclear-audit-${{ github.run_id }}
+          path: /tmp/global_cirsium/audit
+          if-no-files-found: error
