@@ -80,14 +80,13 @@ jobs:
           assert sum(r['shared_cross_paper_sample']=='true' for r in rows)==8
           fetch=(b/'01_fetch_trim_slurm.sh').read_text()
           bwa=(b/'02_hybpiper_bwa_slurm.sh').read_text()
-          qc=(b/'03_retrieve_qc_slurm.sh').read_text()
           treeprep=(b/'04_prepare_tree_inputs_slurm.sh').read_text()
           astral=(b/'08_astral_species_tree_slurm.sh').read_text()
           submit=(b/'submit_tree_chain.sh').read_text()
           env=(b/'env.yml').read_text()
           assert '--array=0-293%20' in fetch and '0-301' not in fetch
           assert '--array=0-293%16' in bwa and '0-301' not in bwa
-          assert '$BUNDLE_DIR/helpers/summarize_japan_origin_global_comp1061_qc_v2.py' in qc
+          assert '$BUNDLE_DIR/helpers/summarize_japan_origin_global_comp1061_qc_v2.py' in treeprep
           assert '$BUNDLE_DIR/helpers/prepare_japan_origin_global_comp1061_tree_inputs_v2.py' in treeprep
           assert 'astral -Xmx90G' in astral
           assert '08_astral_species_tree_slurm.sh' in submit and '09_accept_trees_slurm.sh' in submit
