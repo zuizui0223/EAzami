@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Evaluate one paired baseline-vs-augmentation tree comparison.
 
-The trees must come from the same frozen locus set.  The evaluator quantifies
-unrooted RF change on the 294 shared focal tips and records the candidate's
+The trees must come from the same frozen locus set. The evaluator quantifies
+unrooted RF change on the shared baseline focal tips and records the candidate's
 nearest baseline-tip neighbourhood without turning one tree into an automatic
-promotion decision.
+promotion decision. The same evaluator is used by same-assay SRA augmentation
+and cross-data-type genome augmentation gates.
 """
 from __future__ import annotations
 
@@ -13,9 +14,12 @@ import csv
 import json
 from collections import deque
 from pathlib import Path
-from typing import Iterable, Mapping
+from typing import Mapping
 
-EXPECTED_CONTRACT = "east_asia_public_tree_augmentation_v1"
+SUPPORTED_CONTRACTS = {
+    "east_asia_public_tree_augmentation_v1",
+    "cirsium_nipponicum_public_genome_augmentation_v1",
+}
 
 
 class Node:
@@ -113,8 +117,9 @@ def clean(value: object) -> str:
 
 def load_contract(path: Path) -> dict[str, object]:
     data = json.loads(path.read_text(encoding="utf-8"))
-    if data.get("contract_version") != EXPECTED_CONTRACT:
-        raise ValueError("unexpected augmentation contract")
+    version = clean(data.get("contract_version"))
+    if version not in SUPPORTED_CONTRACTS:
+        raise ValueError(f"unexpected augmentation contract: {version!r}")
     return data
 
 
@@ -150,15 +155,6 @@ def tip_index(root: Node) -> dict[str, Node]:
         for child in node.children:
             walk(child)
     walk(root)
-    return out
-
-
-def descendants(node: Node) -> set[str]:
-    if node.is_tip:
-        return {node.name}
-    out: set[str] = set()
-    for child in node.children:
-        out.update(descendants(child))
     return out
 
 
@@ -279,7 +275,8 @@ def evaluate(
         raise ValueError(f"contract expects {candidate_taxon} to be new, but baseline already contains it")
 
     result: dict[str, object] = {
-        "contract_version": "east_asia_public_augmentation_tree_pair_evaluation_v1",
+        "contract_version": "public_augmentation_tree_pair_evaluation_v2",
+        "source_gate_contract_version": clean(contract.get("contract_version")),
         "candidate_id": candidate_id,
         "candidate_tip": candidate_tip,
         "candidate_taxon": candidate_taxon,
@@ -294,9 +291,9 @@ def evaluate(
         "candidate_nearest_baseline_taxa": nearest_taxa,
         "baseline_exact_taxon_tip_ids": same_taxon_tips,
         "same_taxon_among_nearest_baseline_tips": bool(set(nearest) & set(same_taxon_tips)),
-        "placement_interpretation": (
-            "EA01 is a same-taxon replicate and should reproduce the existing yoshinoi neighbourhood; "
-            "EA02 is an independent cross-study same-taxon Cirsium sairamense replicate and should reproduce its existing baseline neighbourhood across mapping/tree sensitivities."
+        "placement_interpretation": clean(candidate.get("placement_expectation")) or (
+            f"{candidate_id} is evaluated as a public augmentation candidate for {candidate_taxon}; "
+            "same-taxon replication and shared-backbone stability are diagnostics, not automatic proof of admission."
         ),
         "tree_tip_promotion_allowed_from_this_pair_alone": False,
         "new_china_sampling_freeze_allowed": False,
@@ -313,7 +310,7 @@ def main() -> int:
     parser.add_argument("--augmented-tree", type=Path, required=True)
     parser.add_argument("--baseline-manifest", type=Path, required=True)
     parser.add_argument("--contract", type=Path, required=True)
-    parser.add_argument("--candidate-id", choices=("EA01", "EA02"), required=True)
+    parser.add_argument("--candidate-id", required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     evaluate(
