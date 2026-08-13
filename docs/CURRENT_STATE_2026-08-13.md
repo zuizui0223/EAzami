@@ -77,19 +77,20 @@ Keep and develop:
 
 - `analysis/build_japan_origin_global_public_panel_v2.py`
 - `analysis/build_japan_origin_global_hpc_bundle_v2.py`
-- `analysis/build_japan_origin_global_hpc_bundle.py` (temporary shared shell-primitives helper imported by v2; **not** a supported v1 entry point)
+- `analysis/japan_origin_global_hpc_primitives.py`
 - `analysis/prepare_east_asia_public_augmentation_tree_inputs.py`
 - `analysis/evaluate_east_asia_public_augmentation_tree_pair.py`
 - `analysis/compare_east_asia_public_augmentation_astral_backbone.py`
 - `analysis/summarize_east_asia_public_augmentation_sensitivities.py`
 - `analysis/build_east_asia_public_augmentation_hpc_bundle.py`
 - `analysis/build_east_asia_public_full_hpc_handoff.py`
+- `.github/workflows/validate-japan-origin-global-hpc-bundle-v2.yml`
 - `.github/workflows/validate-east-asia-public-augmentation-gate.yml`
 - `data/evidence/japan_origin_global_public_panel_contract_v2.json`
 - `data/evidence/east_asia_public_tree_augmentation_contract_v1.json`
 - `docs/EAST_ASIA_PUBLIC_TREE_AUGMENTATION_GATE_2026-08-13.md`
 
-The old-named HPC helper above should eventually be extracted/renamed to a neutral shared-primitives module. Until then, deleting it breaks the validated v2 builder, so it is intentionally retained as implementation debt rather than advertised as a historical pipeline.
+The shared HPC shell-generation primitives are now parameterized by the active builder. Historical 302-sample counts and `0-301` Slurm arrays are no longer embedded in the live shared implementation and corrected later by string replacement.
 
 ### Flower-colour state layer
 
@@ -116,7 +117,7 @@ Keep:
 - current builders/runners;
 - tests of live code;
 - concise state/claim documentation;
-- implementation helpers still imported by a current builder, even if their filename is historical.
+- shared implementation modules that are directly used by current builders.
 
 Remove from the live tree when a replacement is validated:
 
@@ -127,20 +128,26 @@ Remove from the live tree when a replacement is validated:
 
 Do **not** delete a frozen scientific result merely because its generating implementation is retired. Historical source code remains available through Git history.
 
-## 6. Cleanup applied with this state file
+## 6. Cleanup applied
 
-The first cleanup removes two closed obsolete families while preserving live dependencies:
+The first cleanup removed two closed obsolete families while preserving evidence needed by live code:
 
-1. Japan-origin global panel **v1** entry point, v1 contract and v1 workflows (302-sample inventory), because v2 explicitly corrects its cross-paper duplicate-sample error. The old-named HPC helper is retained only because the v2 bundle currently imports its shell-generation primitives.
+1. Japan-origin global panel **v1** entry point, v1 contract and v1 workflows (302-sample inventory), because v2 explicitly corrects its cross-paper duplicate-sample error.
 2. Flower-colour atlas **v0.1/v0.2** builders, tests and validation workflows, because v0.3 is the active validated atlas generation. Frozen atlas/evidence CSVs used by v0.3 remain; stale v0.1/v0.2 readiness summaries are removed.
 
-This cleanup does not change any accepted biological conclusion, the 294-tip baseline, the EA01/EA02 augmentation gate, or any frozen source evidence used by the active path.
+The second cleanup removes the last live dependency on the old 302-sample HPC builder:
+
+- reusable Slurm generation is extracted to `analysis/japan_origin_global_hpc_primitives.py`;
+- sample-array bounds, result namespace and v2 helper paths are supplied explicitly by the active v2 builder;
+- `analysis/build_japan_origin_global_hpc_bundle.py` is deleted after the v2 bundle reproduces its required shell contracts without legacy string patching;
+- v2 CI now watches and compiles the shared primitive module directly.
+
+These cleanups do not change any accepted biological conclusion, the 294-tip baseline, the EA01/EA02 augmentation gate, or any frozen source evidence used by the active path.
 
 ## 7. Next cleanup targets after the primary tree gate is stable
 
 Do not delete these blindly. Refactor them first, then remove the historical wrappers only after current CI is changed to the new shared path:
 
-- extract `build_japan_origin_global_hpc_bundle.py` shell primitives into a neutral shared module and make v2 import that module;
 - collapse wrapper/base pairs such as colour-rate Compositae1061 builders where the current generation still imports the previous implementation;
 - consolidate one-shot `recover-*` Actions only after their recovered source artifacts have durable checksums/locations and no current bundle invokes those recovery scripts;
 - reduce transcriptome/Read2Tree runner generations only after the current contracts stop importing or regression-testing the older runner.
