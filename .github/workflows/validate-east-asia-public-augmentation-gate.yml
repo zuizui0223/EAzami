@@ -7,6 +7,7 @@ on:
       - "analysis/evaluate_east_asia_public_augmentation_tree_pair.py"
       - "analysis/compare_east_asia_public_augmentation_astral_backbone.py"
       - "analysis/build_east_asia_public_augmentation_hpc_bundle.py"
+      - "analysis/summarize_east_asia_public_augmentation_sensitivities.py"
       - "data/evidence/east_asia_public_tree_augmentation_contract_v1.json"
       - "data/evidence/east_asia_public_sra_comp1061_pilot_results_2026-08-13.csv"
       - "docs/EAST_ASIA_PUBLIC_TREE_AUGMENTATION_GATE_2026-08-13.md"
@@ -36,7 +37,8 @@ jobs:
             analysis/prepare_east_asia_public_augmentation_tree_inputs.py \
             analysis/evaluate_east_asia_public_augmentation_tree_pair.py \
             analysis/compare_east_asia_public_augmentation_astral_backbone.py \
-            analysis/build_east_asia_public_augmentation_hpc_bundle.py
+            analysis/build_east_asia_public_augmentation_hpc_bundle.py \
+            analysis/summarize_east_asia_public_augmentation_sensitivities.py
       - name: Recover successful EA01 and EA02 candidate packs
         env:
           GH_TOKEN: ${{ github.token }}
@@ -111,6 +113,7 @@ jobs:
           assert m['tree_tip_promotion_allowed'] is False
           assert len(list((b/'candidate_packs/EA01/loci').glob('*.fasta')))==236
           assert len(list((b/'candidate_packs/EA02/loci').glob('*.fasta')))==239
+          assert (b/'16_summarize_cross_mapping_sensitivities_slurm.sh').is_file()
           print(json.dumps(m,indent=2))
           PY
       - name: Exercise paired-input builder with real candidate loci
@@ -177,6 +180,52 @@ jobs:
           assert d['unrooted_rf_distance_on_shared_baseline_tips']==0
           assert d['same_taxon_among_nearest_baseline_tips'] is True
           assert d['tree_tip_promotion_allowed_from_this_pair_alone'] is False
+          PY
+      - name: Exercise frozen cross-mapping promotion aggregator
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/sensitivity_test')
+          for mode in ('bwa','blastx'):
+              d=root/mode/'evaluation'; d.mkdir(parents=True,exist_ok=True)
+              (root/mode/'paired_summary.json').write_text(json.dumps({'joint_paired_loci':123 if mode=='bwa' else 117,'minimum_joint_paired_loci':100}))
+              for cid,single in [('EA01','ea01_295'),('EA02','ea02_295')]:
+                  for scenario in (single,'ea01_ea02_296'):
+                      (d/f'{scenario}_{cid}_concat.json').write_text(json.dumps({'candidate_id':cid,'shared_baseline_focal_tips':294,'exact_shared_tip_backbone_invariance':True,'same_taxon_among_nearest_baseline_tips':True,'unrooted_rf_distance_on_shared_baseline_tips':0}))
+              for scenario in ('ea01_295','ea02_295','ea01_ea02_296'):
+                  (d/f'{scenario}_astral_backbone.json').write_text(json.dumps({'scenario_id':scenario,'exact_shared_species_backbone_invariance':True,'unrooted_rf_distance_on_shared_species':0}))
+          PY
+          python analysis/summarize_east_asia_public_augmentation_sensitivities.py \
+            --bwa-paired-summary /tmp/sensitivity_test/bwa/paired_summary.json \
+            --blastx-paired-summary /tmp/sensitivity_test/blastx/paired_summary.json \
+            --bwa-evaluation /tmp/sensitivity_test/bwa/evaluation \
+            --blastx-evaluation /tmp/sensitivity_test/blastx/evaluation \
+            --output /tmp/sensitivity_test/pass.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('/tmp/sensitivity_test/pass.json').read_text())
+          assert d['joint_paired_loci_by_mapping']=={'bwa':123,'blastx':117}
+          assert d['both_candidate_sample_tip_promotion_allowed'] is True
+          assert d['resulting_sample_level_tip_count_if_both_promoted']==296
+          assert d['new_analysis_taxon_labels_added_if_both_promoted']==0
+          bad=Path('/tmp/sensitivity_test/blastx/evaluation/ea02_295_EA02_concat.json')
+          x=json.loads(bad.read_text()); x['same_taxon_among_nearest_baseline_tips']=False; bad.write_text(json.dumps(x))
+          PY
+          python analysis/summarize_east_asia_public_augmentation_sensitivities.py \
+            --bwa-paired-summary /tmp/sensitivity_test/bwa/paired_summary.json \
+            --blastx-paired-summary /tmp/sensitivity_test/blastx/paired_summary.json \
+            --bwa-evaluation /tmp/sensitivity_test/bwa/evaluation \
+            --blastx-evaluation /tmp/sensitivity_test/blastx/evaluation \
+            --output /tmp/sensitivity_test/manual_review.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/sensitivity_test/manual_review.json'))
+          assert d['candidates']['EA01']['sample_tip_promotion_allowed'] is True
+          assert d['candidates']['EA02']['sample_tip_promotion_allowed'] is False
+          assert d['candidates']['EA02']['manual_review_required'] is True
+          assert d['both_candidate_sample_tip_promotion_allowed'] is False
           PY
       - uses: actions/upload-artifact@v4
         with:
