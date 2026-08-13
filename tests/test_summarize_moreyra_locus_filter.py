@@ -155,6 +155,29 @@ class MoreyraLocusFilterTests(unittest.TestCase):
         self.assertFalse(summary["exact_final_350_locus_names_recovered"])
         self.assertEqual(summary["seq_length_samples_not_in_hybpiper_stats"], ["sample_b"])
 
+    def test_implicit_outputs_follow_custom_audit_directory(self) -> None:
+        custom = Path("/tmp/custom_moreyra")
+        output, summary, sample_diff = mod.resolve_output_paths(
+            custom,
+            mod.DEFAULT_OUTPUT,
+            mod.DEFAULT_SUMMARY,
+            mod.DEFAULT_SAMPLE_DIFF,
+        )
+        self.assertEqual(output, custom / "paralog_locus_filter_reconstruction.csv")
+        self.assertEqual(summary, custom / "locus_filter_reconstruction_summary.json")
+        self.assertEqual(sample_diff, custom / "sample_matrix_membership_difference.csv")
+
+    def test_explicit_outputs_are_not_relocated(self) -> None:
+        custom = Path("/tmp/custom_moreyra")
+        explicit = Path("/tmp/explicit.csv")
+        output, _, _ = mod.resolve_output_paths(
+            custom,
+            explicit,
+            mod.DEFAULT_SUMMARY,
+            mod.DEFAULT_SAMPLE_DIFF,
+        )
+        self.assertEqual(output, explicit)
+
 
 if __name__ == "__main__":
     unittest.main()
