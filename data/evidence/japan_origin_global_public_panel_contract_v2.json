@@ -1,0 +1,56 @@
+{
+  "contract_version": "japan_origin_global_public_panel_v2",
+  "purpose": "Maximum public nuclear placement panel for testing Japan-38, continental context and Ryukyu Arenicola before any new mainland sampling list is frozen.",
+  "supersedes": "japan_origin_global_public_panel_v1",
+  "correction": {
+    "problem": "v1 appended Chang 2025 and Chang 2026 source records independently even when the later paper reused the identical public BioSample/SRR.",
+    "rule": "One biological BioSample/SRR is one tree tip. Cross-paper reuse merges provenance and must never create a duplicate phylogenetic tip.",
+    "cross_paper_shared_chang_samples": 8
+  },
+  "source_artifacts": {
+    "Moreyra2025": {
+      "bioproject": "PRJNA957074",
+      "workflow_run": 31400324674,
+      "artifact_id": 9067368059,
+      "artifact_sha256": "a18e4867362fed7b509c351bc901a9456fe258f09c7e277b0069d8c257b6ed72",
+      "input_file": "moreyra2025_all_sample_reconciliation.csv"
+    },
+    "Chang2025": {
+      "bioproject": "PRJNA1158676",
+      "frozen_manifest": "data/evidence/chang2025_public_run_manifest_v1.csv",
+      "source_rows": 13
+    },
+    "Chang2026": {
+      "bioproject": "PRJNA1311153 plus explicitly reused public runs",
+      "frozen_manifest": "data/evidence/chang2026_public_run_manifest_v1.csv",
+      "source_rows": 33
+    },
+    "Japan38": {
+      "frozen_membership_audit": "data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv",
+      "paper_taxon_concepts": 38
+    }
+  },
+  "expected_deduplicated_inventory": {
+    "biological_samples": 294,
+    "public_run_accessions": 295,
+    "source_preserving_analysis_taxon_labels": 270,
+    "Moreyra2025_unique_samples": 256,
+    "Chang_unique_samples": 38,
+    "Chang_cross_paper_shared_samples": 8
+  },
+  "estimated_public_sra_size_from_current_runinfo_mb": 187246,
+  "primary_analysis_order": [
+    "recover all 294 biological tips into one validated Compositae1061 homolog space",
+    "retain all individuals for the initial global nuclear placement",
+    "infer concatenated and gene-tree/coalescent topology with paralog/homeolog sensitivity",
+    "map the 38 Moreyra Japanese paper concepts as a tested membership set, not a QC constraint",
+    "test Ryukyu Arenicola placement relative to the main Japanese radiation and continental branches",
+    "only after topology is stable identify branch-specific public-data gaps; do not freeze a new China sampling list now"
+  ],
+  "claim_gates": {
+    "global_common_locus_tree_executed": false,
+    "all_japanese_flora_monophyly_claim_allowed": false,
+    "arenicola_main_radiation_membership_claim_allowed": false,
+    "new_china_sampling_freeze_allowed": false
+  }
+}
