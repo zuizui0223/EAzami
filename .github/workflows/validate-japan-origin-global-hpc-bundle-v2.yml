@@ -5,7 +5,7 @@ on:
     paths:
       - "analysis/build_japan_origin_global_public_panel_v2.py"
       - "analysis/build_japan_origin_global_hpc_bundle_v2.py"
-      - "analysis/build_japan_origin_global_hpc_bundle.py"
+      - "analysis/japan_origin_global_hpc_primitives.py"
       - "analysis/summarize_japan_origin_global_comp1061_qc.py"
       - "analysis/prepare_japan_origin_global_comp1061_tree_inputs.py"
       - "analysis/validate_japan_origin_global_tree.py"
@@ -36,6 +36,7 @@ jobs:
       - name: Compile builders
         run: |
           python -m py_compile analysis/build_japan_origin_global_public_panel_v2.py
+          python -m py_compile analysis/japan_origin_global_hpc_primitives.py
           python -m py_compile analysis/build_japan_origin_global_hpc_bundle_v2.py
           python -m unittest tests/test_build_japan_origin_global_public_panel_v2.py -v
       - name: Recover frozen Moreyra reconciliation artifact
@@ -86,6 +87,8 @@ jobs:
           env=(b/'env.yml').read_text()
           assert '--array=0-293%20' in fetch and '0-301' not in fetch
           assert '--array=0-293%16' in bwa and '0-301' not in bwa
+          assert 'results/japan_origin_global_v2' in fetch
+          assert '302 public biological samples / 303 runs' not in fetch
           assert '$BUNDLE_DIR/helpers/summarize_japan_origin_global_comp1061_qc_v2.py' in treeprep
           assert '$BUNDLE_DIR/helpers/prepare_japan_origin_global_comp1061_tree_inputs_v2.py' in treeprep
           assert 'astral -Xmx90G' in astral
