@@ -1,0 +1,41 @@
+{
+  "contract_version": "fixed_white_tree_promotion_v0_1",
+  "current_primary_rate_tree": {
+    "taxon_count": 20,
+    "state_counts": {"C": 17, "W": 3},
+    "purpose": "preflight compatibility tree before new fixed-white taxa are available"
+  },
+  "target_fixed_white_taxa": [
+    "Cirsium boninense",
+    "Cirsium wulongense"
+  ],
+  "minimum_independent_samples_per_new_taxon": 2,
+  "placement_tree": {
+    "minimum_sample_tips": 24,
+    "composition": "20 current primary species representatives plus >=2 voucher-linked samples for each of the two new fixed-white taxa",
+    "purpose": "identity, contamination, hybrid/discordance and placement audit; not the macroevolutionary rate tree",
+    "required_new_taxon_concordance": "samples of each proposed fixed-white taxon must show a concordant placement across primary and declared sensitivity analyses; discordance blocks promotion",
+    "state_counting_rule": "multiple samples of one species are never counted as multiple white macroevolutionary tips"
+  },
+  "representative_selection": {
+    "performed_only_after_placement_gate": true,
+    "criterion": "highest number of eligible recovered loci in the frozen/common tree matrix",
+    "tie_breaker": "lexicographically smallest stable sample_id",
+    "forbidden_criteria": [
+      "flower-colour history favoured by the sample",
+      "Arenicola ancestral-state result",
+      "ER versus ARD result",
+      "preferred topology beyond the predeclared placement-concordance gate"
+    ],
+    "replicate_sensitivity": "all non-primary concordant samples remain in a representative-swap sensitivity analysis"
+  },
+  "final_rate_tree": {
+    "taxon_count": 22,
+    "state_counts": {"C": 17, "W": 5},
+    "one_tip_per_species": true,
+    "branch_length_rule": "re-infer the branch-length tree from the final 22-species primary matrix; do not obtain the final rate tree merely by double-counting or collapsing replicate white samples",
+    "must_pass_branch_length_acceptance": true,
+    "must_pass_rate_fit_preconditions": true
+  },
+  "claim_limit": "The current 20-tip compatibility tree can validate the cross-assay pipeline and provide a preflight topology, but it cannot become the final W>=5 transition-rate tree after two new white taxa are promoted unless those taxa are included and a final one-tip-per-species branch-length tree is re-inferred."
+}

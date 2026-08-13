@@ -1,0 +1,4 @@
+oma_code,scientific_name,reference_role,verified_in_oma,verification_url,selection_note
+CYNCS,Cynara cardunculus var. scolymus,closest_cardueae_reference,true,https://omabrowser.org/oma/genome/CYNCS/info/,Superseded by read2tree_oma_reference_set_v0_2.csv which pins the OMA May2026 release and taxon provenance
+HELAN,Helianthus annuus,asteraceae_reference,true,https://omabrowser.org/oma/genome/HELAN/info/,Superseded by read2tree_oma_reference_set_v0_2.csv which pins the OMA May2026 release and taxon provenance
+DAUCS,Daucus carota subsp. sativus,campanulid_outgroup,true,https://omabrowser.org/oma/genome/DAUCS/info/,Superseded by read2tree_oma_reference_set_v0_2.csv which pins the OMA May2026 release and taxon provenance

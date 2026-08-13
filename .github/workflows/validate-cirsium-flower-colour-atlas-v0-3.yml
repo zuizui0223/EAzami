@@ -1,0 +1,101 @@
+name: Validate Cirsium flower-colour atlas v0.3
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_cirsium_flower_colour_atlas_v0_3.py"
+      - "analysis/validate_colour_atlas.py"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_2.csv"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_3_expansion_evidence.csv"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_3.csv"
+      - "analysis/cirsium_flower_colour_atlas_v0_3_readiness.json"
+      - "tests/test_cirsium_flower_colour_atlas_v0_3.py"
+      - ".github/workflows/validate-cirsium-flower-colour-atlas-v0-3.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: validate-cirsium-flower-colour-atlas-v0-3-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and test v0.3
+        run: |
+          python -m py_compile \
+            analysis/build_cirsium_flower_colour_atlas_v0_3.py \
+            analysis/validate_colour_atlas.py
+          python -m unittest tests/test_cirsium_flower_colour_atlas_v0_3.py -v
+
+      - name: Rebuild v0.3
+        run: |
+          mkdir -p /tmp/cirsium_colour_atlas_v03
+          python analysis/build_cirsium_flower_colour_atlas_v0_3.py \
+            --base data/evidence/cirsium_flower_colour_atlas_v0_2.csv \
+            --expansion data/evidence/cirsium_flower_colour_atlas_v0_3_expansion_evidence.csv \
+            --output /tmp/cirsium_colour_atlas_v03/cirsium_flower_colour_atlas_v0_3.csv \
+            --summary /tmp/cirsium_colour_atlas_v03/cirsium_flower_colour_atlas_v0_3_readiness.json
+          python analysis/validate_colour_atlas.py \
+            /tmp/cirsium_colour_atlas_v03/cirsium_flower_colour_atlas_v0_3.csv
+
+      - name: Assert only white-tip coverage blocks promotion
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+
+          atlas = list(csv.DictReader(Path('/tmp/cirsium_colour_atlas_v03/cirsium_flower_colour_atlas_v0_3.csv').open()))
+          summary = json.loads(Path('/tmp/cirsium_colour_atlas_v03/cirsium_flower_colour_atlas_v0_3_readiness.json').read_text())
+          if len(atlas) != 32:
+              raise SystemExit(f'Unexpected v0.3 record count: {len(atlas)}')
+          if summary['rate_fit_eligible_unique_taxa'] != 20:
+              raise SystemExit(f"Expected 20 eligible taxa, got {summary['rate_fit_eligible_unique_taxa']}")
+          if summary['rate_fit_eligible_state_counts'] != {'C': 17, 'W': 3}:
+              raise SystemExit(f"Unexpected eligible states: {summary['rate_fit_eligible_state_counts']}")
+          if summary['readiness_blockers'] != ['minimum_white_tips']:
+              raise SystemExit(f"Expected only white-tip blocker, got {summary['readiness_blockers']}")
+          if summary['transition_rate_fit_ready'] is not False:
+              raise SystemExit('Rate fitting must remain blocked with only three fixed-white eligible taxa')
+          if any(r['accepted_taxon'] == 'Cirsium henryi' for r in atlas):
+              raise SystemExit('Taxonomically conflicted Moreyra C. henryi label leaked into the atlas')
+          ample = next(r for r in atlas if r['accepted_taxon'] == 'Cirsium amplexifolium')
+          if ample['binary_colour_code'] != 'P' or ample['rate_fit_eligible'] != 'no':
+              raise SystemExit('C. amplexifolium white-form polymorphism was collapsed')
+          print('atlas_v03_records=32')
+          print('rate_fit_eligible_taxa=20')
+          print('eligible_states=C17_W3')
+          print('only_blocker=minimum_white_tips')
+          print('henryi_conflict_guard=true')
+          print('amplexifolium_polymorphism_preserved=P')
+          PY
+
+      - name: Check frozen outputs when present
+        run: |
+          if [[ -f data/evidence/cirsium_flower_colour_atlas_v0_3.csv ]]; then
+            cmp \
+              <(tr -d '\r' < data/evidence/cirsium_flower_colour_atlas_v0_3.csv) \
+              <(tr -d '\r' < /tmp/cirsium_colour_atlas_v03/cirsium_flower_colour_atlas_v0_3.csv)
+          fi
+          if [[ -f analysis/cirsium_flower_colour_atlas_v0_3_readiness.json ]]; then
+            cmp \
+              analysis/cirsium_flower_colour_atlas_v0_3_readiness.json \
+              /tmp/cirsium_colour_atlas_v03/cirsium_flower_colour_atlas_v0_3_readiness.json
+          fi
+
+      - name: Upload v0.3 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cirsium-flower-colour-atlas-v0-3-${{ github.run_id }}
+          path: /tmp/cirsium_colour_atlas_v03/
+          if-no-files-found: error
+          retention-days: 90

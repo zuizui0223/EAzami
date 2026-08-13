@@ -1,0 +1,34 @@
+{
+  "contract_version": "comp1061_original_hybpiper_reference_v1",
+  "source_repository": "carol-siniscalchi/Comp1061-Angio353",
+  "source_commit": "c340244907c39579dca42060769678bf8759fa1d",
+  "source_filename": "comp1061_hybpiper_reference.fasta",
+  "source_url": "https://raw.githubusercontent.com/carol-siniscalchi/Comp1061-Angio353/c340244907c39579dca42060769678bf8759fa1d/comp1061_hybpiper_reference.fasta",
+  "github_blob_sha1": "4f89e234007f367ffa8aa5e2be536bc44f31f445",
+  "sha256": "77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c",
+  "size_bytes": 1162856,
+  "sequence_record_count": 2597,
+  "locus_count": 1061,
+  "reference_prefixes": [
+    "lett",
+    "saff",
+    "sunf"
+  ],
+  "records_by_reference": {
+    "lett": 1061,
+    "saff": 475,
+    "sunf": 1061
+  },
+  "locus_reference_multiplicity": {
+    "2": 586,
+    "3": 475
+  },
+  "hybpiper_reference_structure_valid": true,
+  "compatibility_reanalysis_usable": true,
+  "moreyra_augmented_reference_recovered": false,
+  "moreyra_augmentation_missing": "Cirsium tioganum recovered exons added by Moreyra et al. 2025",
+  "recovery_workflow_run": 31556924969,
+  "recovery_artifact_name": "comp1061-original-hybpiper-reference-31556924969",
+  "recovery_artifact_digest": "sha256:c16f8b1f5eaf2bbbd8e9c42066572a5304745c8153f6e283817dfefd38fb2fb4",
+  "claim_limit": "This validates the original public Compositae1061 HybPiper reference used in a primary Asteraceae comparison study. Moreyra et al. 2025 augmented the original reference with Cirsium tioganum recovered exons; that augmented file remains unrecovered. Analyses using this file are compatibility reanalyses, not exact reproductions of Moreyra preprocessing."
+}

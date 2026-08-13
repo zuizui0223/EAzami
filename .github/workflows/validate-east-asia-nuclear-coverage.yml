@@ -1,0 +1,84 @@
+name: Validate East Asia nuclear coverage
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_east_asia_nuclear_coverage.py"
+      - "tests/test_build_east_asia_nuclear_coverage.py"
+      - "data/regional_master_taxa_seed.csv"
+      - "data/evidence/prjna957074_focal_tip_recovery_*.csv"
+      - "data/evidence/chang2025_nipponocirsium_accession_audit_*.csv"
+      - "data/evidence/chang2026_east_asia_accession_audit_*.csv"
+      - "data/evidence/east_asia_nuclear_coverage_v1_*.csv"
+      - "data/evidence/east_asia_nuclear_coverage_summary_v1_*.json"
+      - ".github/workflows/validate-east-asia-nuclear-coverage.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and test builder
+        run: |
+          python -m py_compile analysis/build_east_asia_nuclear_coverage.py
+          python -m unittest tests/test_build_east_asia_nuclear_coverage.py -v
+
+      - name: Rebuild and compare frozen coverage table
+        run: |
+          python analysis/build_east_asia_nuclear_coverage.py \
+            --output /tmp/east_asia_nuclear_coverage_current.csv \
+            --summary /tmp/east_asia_nuclear_coverage_summary.json
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          def csv_rows(path):
+              with Path(path).open(encoding="utf-8-sig", newline="") as handle:
+                  return list(csv.DictReader(handle))
+
+          observed = csv_rows("/tmp/east_asia_nuclear_coverage_current.csv")
+          frozen = csv_rows("data/evidence/east_asia_nuclear_coverage_v1_2026-08-10.csv")
+          if observed != frozen:
+              raise SystemExit("Rebuilt East Asia coverage rows differ from frozen v1")
+
+          observed_summary = json.loads(
+              Path("/tmp/east_asia_nuclear_coverage_summary.json").read_text(encoding="utf-8")
+          )
+          frozen_summary = json.loads(
+              Path("data/evidence/east_asia_nuclear_coverage_summary_v1_2026-08-10.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          for key, value in observed_summary.items():
+              if frozen_summary.get(key) != value:
+                  raise SystemExit(f"Frozen summary differs for {key}: {frozen_summary.get(key)!r} != {value!r}")
+
+          if observed_summary["taxa"] != 33:
+              raise SystemExit("Expected 33 master taxa")
+          resolved = observed_summary["species_backbone_gap_class"].get(
+              "species_placement_resolved_in_modern_nuclear_data", 0
+          )
+          if resolved != 21:
+              raise SystemExit(f"Expected 21 resolved taxa, observed {resolved}")
+          if observed_summary["priority_A_species_gap_candidates"]:
+              raise SystemExit(
+                  "An active Tier-A taxon has become a species-placement gap; update the sequencing panel"
+              )
+
+          print(f"validated_taxa={len(observed)}")
+          print(f"resolved_species_placements={resolved}")
+          print("priority_A_species_gaps=0")
+          PY

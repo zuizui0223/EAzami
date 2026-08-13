@@ -1,0 +1,4 @@
+root_state,minimum_total_changes,losses_C_to_W,regains_W_to_C,n_equally_parsimonious_assignments,interpretation
+C,2,1,1,1,"Shared white ancestry of albescens + takaoense followed by one coloured regain within takaoense is equally parsimonious with repeated loss."
+C,2,2,0,1,"Independent white losses in albescens and white takaoense are equally parsimonious with a regain scenario."
+W,3,0,3,1,"A white root requires three coloured gains and is disfavoured by basal coloured var. japonicum plus the coloured australe-fukienense lineage."

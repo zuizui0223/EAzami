@@ -1,0 +1,103 @@
+name: Validate flower-colour rate-fit preconditions
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_cirsium_flower_colour_atlas_v0_3.py"
+      - "analysis/validate_flower_colour_rate_fit_preconditions.py"
+      - "analysis/validate_colour_atlas.py"
+      - "analysis/fit_binary_flower_colour_mk_models.py"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_2.csv"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_3_expansion_evidence.csv"
+      - "data/evidence/flower_colour_rate_tree_contract_v0_1.json"
+      - "tests/test_flower_colour_rate_fit_preconditions.py"
+      - "tests/test_fit_binary_flower_colour_mk_models.py"
+      - ".github/workflows/validate-flower-colour-rate-fit-preconditions.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: validate-flower-colour-rate-fit-preconditions-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install numerical dependency for synthetic Mk test
+        run: python -m pip install --disable-pip-version-check scipy
+      - name: Compile and unit-test the combined rate gate and Mk fitter
+        run: |
+          python -m py_compile \
+            analysis/build_cirsium_flower_colour_atlas_v0_3.py \
+            analysis/validate_flower_colour_rate_fit_preconditions.py \
+            analysis/fit_binary_flower_colour_mk_models.py
+          python -m unittest \
+            tests/test_flower_colour_rate_fit_preconditions.py \
+            tests/test_fit_binary_flower_colour_mk_models.py \
+            -v
+      - name: Rebuild current atlas gate and assert empirical rate fitting stays blocked
+        run: |
+          mkdir -p /tmp/eazami_rate_gate
+          python analysis/build_cirsium_flower_colour_atlas_v0_3.py \
+            --base data/evidence/cirsium_flower_colour_atlas_v0_2.csv \
+            --expansion data/evidence/cirsium_flower_colour_atlas_v0_3_expansion_evidence.csv \
+            --output /tmp/eazami_rate_gate/atlas_v0_3.csv \
+            --summary /tmp/eazami_rate_gate/atlas_v0_3_readiness.json
+          python analysis/validate_flower_colour_rate_fit_preconditions.py \
+            --atlas-summary /tmp/eazami_rate_gate/atlas_v0_3_readiness.json \
+            --tree-contract data/evidence/flower_colour_rate_tree_contract_v0_1.json \
+            --output /tmp/eazami_rate_gate/rate_fit_preconditions.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/eazami_rate_gate/rate_fit_preconditions.json').read_text())
+          if x['execution_allowed'] is not False:
+              raise SystemExit('Current project must remain blocked from empirical transition-rate fitting')
+          if x['blockers'] != ['atlas_minimum_white_tips','branch_length_tree_unavailable']:
+              raise SystemExit(f"Unexpected blockers: {x['blockers']}")
+          print('execution_allowed=false')
+          print('blockers='+'|'.join(x['blockers']))
+          PY
+      - name: Assert the empirical fitter itself refuses the current blocked gate
+        run: |
+          cat > /tmp/eazami_rate_gate/synthetic_tree.nwk <<'EOF'
+          (A:0.1,B:0.1);
+          EOF
+          cat > /tmp/eazami_rate_gate/synthetic_tip_map.csv <<'EOF'
+          tree_tip,accepted_taxon,mapping_status
+          A,Cirsium brevicaule,exact
+          B,Cirsium irumtiense,exact
+          EOF
+          cat > /tmp/eazami_rate_gate/synthetic_tree_acceptance.json <<'EOF'
+          {"tree_gate_ready": true}
+          EOF
+          set +e
+          python analysis/fit_binary_flower_colour_mk_models.py \
+            --tree /tmp/eazami_rate_gate/synthetic_tree.nwk \
+            --atlas /tmp/eazami_rate_gate/atlas_v0_3.csv \
+            --tip-map /tmp/eazami_rate_gate/synthetic_tip_map.csv \
+            --preconditions /tmp/eazami_rate_gate/rate_fit_preconditions.json \
+            --tree-acceptance /tmp/eazami_rate_gate/synthetic_tree_acceptance.json \
+            --output /tmp/eazami_rate_gate/SHOULD_NOT_EXIST.json \
+            > /tmp/eazami_rate_gate/fitter_block.stdout 2> /tmp/eazami_rate_gate/fitter_block.stderr
+          status=$?
+          set -e
+          if [[ $status -eq 0 ]]; then
+            echo "Blocked empirical fitter unexpectedly ran" >&2
+            exit 1
+          fi
+          grep -q 'atlas_minimum_white_tips' /tmp/eazami_rate_gate/fitter_block.stderr
+          test ! -e /tmp/eazami_rate_gate/SHOULD_NOT_EXIST.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: flower-colour-rate-fit-preconditions-${{ github.run_id }}
+          path: /tmp/eazami_rate_gate/
+          retention-days: 90

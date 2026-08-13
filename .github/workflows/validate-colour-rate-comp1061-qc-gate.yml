@@ -1,0 +1,19 @@
+name: Validate colour-rate Compositae1061 QC gate
+on:
+  pull_request:
+    paths:
+      - "analysis/summarize_colour_rate_comp1061_qc.py"
+      - "tests/test_summarize_colour_rate_comp1061_qc.py"
+      - ".github/workflows/validate-colour-rate-comp1061-qc-gate.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: |
+          python -m py_compile analysis/summarize_colour_rate_comp1061_qc.py
+          python -m unittest tests/test_summarize_colour_rate_comp1061_qc.py -v

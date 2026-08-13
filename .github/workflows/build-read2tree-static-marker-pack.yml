@@ -1,0 +1,152 @@
+name: Build Read2Tree static OMA marker pack
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_read2tree_oma_static_marker_pack.py"
+      - "analysis/build_read2tree_oma_static_marker_pack_resilient.py"
+      - "analysis/validate_read2tree_oma_marker_pack.py"
+      - "sampling/read2tree_oma_reference_set_v0_2.csv"
+      - "tests/test_build_read2tree_oma_static_marker_pack.py"
+      - "tests/test_build_read2tree_oma_static_marker_pack_resilient.py"
+      - "tests/test_validate_read2tree_oma_marker_pack.py"
+      - ".github/workflows/build-read2tree-static-marker-pack.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: build-read2tree-static-marker-pack-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate-offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate static marker code offline
+        run: |
+          python -m py_compile \
+            analysis/build_read2tree_oma_static_marker_pack.py \
+            analysis/build_read2tree_oma_static_marker_pack_resilient.py \
+            analysis/validate_read2tree_oma_marker_pack.py
+          python -m unittest \
+            tests/test_build_read2tree_oma_static_marker_pack.py \
+            tests/test_build_read2tree_oma_static_marker_pack_resilient.py \
+            tests/test_validate_read2tree_oma_marker_pack.py \
+            -v
+          echo "real_oma_rebuild=false_on_pull_request"
+          echo "real_oma_rebuild=workflow_dispatch_only"
+
+  build-real-static400:
+    if: github.event_name == 'workflow_dispatch'
+    needs: validate-offline
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Recover May-2026 OMA groups and build static400
+        run: |
+          # Real external reconstruction is intentionally manual. A source-backed
+          # build already completed successfully in run 31544674246; ordinary PR
+          # synchronization must not re-download the 98-MB group file and 1,200
+          # protein records on every commit.
+          python analysis/build_read2tree_oma_static_marker_pack_resilient.py \
+            --reference-manifest sampling/read2tree_oma_reference_set_v0_2.csv \
+            --outdir /tmp/eazami_oma_static400 \
+            --target-count 400 \
+            --oma-release May2026
+
+      - name: Normalize and freeze marker pack
+        run: |
+          python analysis/validate_read2tree_oma_marker_pack.py \
+            --archive /tmp/eazami_oma_static400/oma_static_broadconservation_marker_export.tar.gz \
+            --reference-manifest sampling/read2tree_oma_reference_set_v0_2.csv \
+            --outdir /tmp/eazami_oma_static400_validated \
+            --oma-release May2026 \
+            --export-date "$(date -u +%F)" \
+            --export-url "static-profile:oma_may2026_static_broadconservation400_v1" \
+            --minimum-species-coverage 1.0 \
+            --maximum-markers 400 \
+            --expected-marker-count 400
+
+      - name: Audit real marker artifacts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          source = json.loads(Path('/tmp/eazami_oma_static400/static_marker_source_contract.json').read_text())
+          frozen = json.loads(Path('/tmp/eazami_oma_static400_validated/marker_pack_contract.json').read_text())
+          aa = list(Path('/tmp/eazami_oma_static400_validated/marker_genes').glob('*.fa'))
+          dna = list(Path('/tmp/eazami_oma_static400_validated/marker_genes').glob('*.fna'))
+
+          if source['profile_id'] != 'oma_may2026_static_broadconservation400_v1':
+              raise SystemExit('Unexpected static profile ID')
+          if source['oma_release'] != 'May2026':
+              raise SystemExit('Static source is not pinned to May2026')
+          if source['selection_method']['target_marker_count'] != 400:
+              raise SystemExit('Static source did not select 400 markers')
+          if source['api']['selected_protein_records'] != 1200:
+              raise SystemExit('Static source did not recover exactly 1,200 reference records')
+          if frozen['execution_allowed'] is not True:
+              raise SystemExit('Validated marker pack does not allow Read2Tree execution')
+          if frozen['reference_codes'] != ['CYNCS', 'HELAN', 'DAUCS']:
+              raise SystemExit('Validated reference codes changed')
+          if frozen['marker_count'] != 400 or len(aa) != 400 or len(dna) != 400:
+              raise SystemExit('Validated marker file count is not 400 AA + 400 DNA')
+          if not Path('/tmp/eazami_oma_static400_validated/dna_ref.fa').is_file():
+              raise SystemExit('dna_ref.fa missing')
+
+          print('oma_release=May2026')
+          print('marker_profile=oma_may2026_static_broadconservation400_v1')
+          print('marker_count=400')
+          print('selected_protein_records=1200')
+          print('execution_allowed=true')
+          print('archive_sha256=' + frozen['archive_sha256'])
+          print('normalized_pack_sha256=' + frozen['normalized_pack_sha256'])
+          print('dna_reference_sha256=' + frozen['dna_reference_sha256'])
+          PY
+
+      - name: Guard lightweight execution artifact
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          root = Path('/tmp/eazami_oma_static400_validated')
+          total = sum(path.stat().st_size for path in root.rglob('*') if path.is_file())
+          if total > 25 * 1024 * 1024:
+              raise SystemExit(f'Validated execution pack unexpectedly exceeds 25 MiB: {total}')
+          if any(path.name == 'oma-groups.txt.gz' for path in root.rglob('*')):
+              raise SystemExit('Archived 98-MB OMA group file leaked into execution pack')
+          print(f'execution_pack_bytes={total}')
+          print(f'execution_pack_mib={total / 1024 / 1024:.3f}')
+          PY
+
+      - name: Upload lightweight static400 execution pack
+        uses: actions/upload-artifact@v4
+        with:
+          name: eazami-read2tree-oma-static400-exec-${{ github.run_id }}
+          path: /tmp/eazami_oma_static400_validated/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload compact static400 source audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: eazami-read2tree-oma-static400-audit-${{ github.run_id }}
+          path: |
+            /tmp/eazami_oma_static400/static_marker_selection.csv
+            /tmp/eazami_oma_static400/static_marker_source_contract.json
+            /tmp/eazami_oma_static400/oma_static_broadconservation_marker_export.tar.gz
+          if-no-files-found: error
+          retention-days: 90

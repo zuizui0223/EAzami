@@ -1,0 +1,110 @@
+name: Validate colour-rate Compositae1061 HPC bundle
+on:
+  pull_request:
+    paths:
+      - "analysis/build_colour_rate_comp1061_hpc_bundle.py"
+      - "analysis/build_colour_rate_comp1061_hpc_bundle_v0_2.py"
+      - "analysis/augment_colour_rate_comp1061_tree_stages.py"
+      - "analysis/prepare_colour_rate_comp1061_tree_inputs.py"
+      - "analysis/concatenate_colour_rate_comp1061_alignments.py"
+      - "analysis/summarize_colour_rate_comp1061_qc.py"
+      - "analysis/validate_colour_atlas_branch_length_tree.py"
+      - "workflow/colour_rate_comp1061/prepare_hpc_bundle.sh"
+      - "docs/COLOUR_RATE_COMP1061_HPC_EXECUTION_2026-08-12.md"
+      - "tests/test_build_colour_rate_comp1061_hpc_bundle.py"
+      - "tests/test_build_colour_rate_comp1061_hpc_bundle_v0_2.py"
+      - "tests/test_augment_colour_rate_comp1061_tree_stages.py"
+      - "tests/test_prepare_colour_rate_comp1061_tree_inputs.py"
+      - "tests/test_concatenate_colour_rate_comp1061_alignments.py"
+      - "tests/test_summarize_colour_rate_comp1061_qc.py"
+      - "tests/test_validate_colour_atlas_branch_length_tree.py"
+      - "data/evidence/colour_rate_comp1061_bridge_artifact_contract_v1.json"
+      - "data/evidence/moreyra_public_locus_set_manifest_v1.json"
+      - ".github/workflows/validate-colour-rate-comp1061-hpc-bundle.yml"
+  workflow_dispatch:
+concurrency:
+  group: validate-colour-rate-comp1061-hpc-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Build and validate user-facing bundle through tree acceptance
+        run: |
+          python -m py_compile \
+            analysis/build_colour_rate_comp1061_hpc_bundle.py \
+            analysis/build_colour_rate_comp1061_hpc_bundle_v0_2.py \
+            analysis/augment_colour_rate_comp1061_tree_stages.py \
+            analysis/prepare_colour_rate_comp1061_tree_inputs.py \
+            analysis/concatenate_colour_rate_comp1061_alignments.py \
+            analysis/summarize_colour_rate_comp1061_qc.py \
+            analysis/validate_colour_atlas_branch_length_tree.py
+          python -m unittest \
+            tests/test_build_colour_rate_comp1061_hpc_bundle.py \
+            tests/test_build_colour_rate_comp1061_hpc_bundle_v0_2.py \
+            tests/test_augment_colour_rate_comp1061_tree_stages.py \
+            tests/test_prepare_colour_rate_comp1061_tree_inputs.py \
+            tests/test_concatenate_colour_rate_comp1061_alignments.py \
+            tests/test_summarize_colour_rate_comp1061_qc.py \
+            tests/test_validate_colour_atlas_branch_length_tree.py \
+            -v
+          bash workflow/colour_rate_comp1061/prepare_hpc_bundle.sh /tmp/colour_rate_hpc_bundle
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          r=Path('/tmp/colour_rate_hpc_bundle')
+          rows=list(csv.DictReader((r/'primary_runs.csv').open()))
+          x=json.loads((r/'execution_manifest.json').read_text())
+          baseprep=(r/'00_prepare_inputs_slurm.sh').read_text()
+          treeprep=(r/'04_prepare_tree_inputs_slurm.sh').read_text()
+          concat=(r/'07_concat_tree_slurm.sh').read_text()
+          accept=(r/'08_accept_tree_slurm.sh').read_text()
+          submit=(r/'submit_tree_chain.sh').read_text()
+          assert len(rows)==20 and len({z['run'] for z in rows})==20
+          assert sum(z['binary_colour_code']=='W' for z in rows)==3
+          assert x['bundle_version']=='colour_rate_comp1061_hpc_bundle_v0_3_tree_stage'
+          assert x['current_stage_end']=='tree_acceptance_scripts_prepared'
+          assert x['branch_length_tree_completed'] is False and x['rate_fit_execution_allowed'] is False
+          assert x['tree_stage']['frozen_locus_universe']==241
+          assert x['tree_stage']['current_occupancy_gate']==0.8
+          assert 'paralog' in x['tree_stage']['current_paralog_gate']
+          assert x['tree_stage']['minimum_eligible_loci_to_launch']==100
+          assert x['tree_stage']['root_outgroups']==['OUTGROUP_lett','OUTGROUP_sunf']
+          assert 'OUTGROUP_saff' in x['tree_stage']['optional_near_reference']
+          assert 'export REPO_ROOT RESULT_ROOT ENV_PREFIX' in baseprep
+          assert 'summarize_moreyra_locus_filter.py' in baseprep
+          assert '--input "$RESULT_ROOT/inputs/moreyra_author_repo/paralog_locus_filter_reconstruction.csv"' in baseprep
+          assert '--locus-filter' not in baseprep
+          assert 'summarize_colour_rate_comp1061_qc.py' in treeprep
+          assert 'current_conservative_241_loci.txt' in treeprep
+          assert 'paralog_report' in treeprep
+          assert 'N_CURRENT < 100' in treeprep
+          assert 'concatenate_colour_rate_comp1061_alignments.py' in concat
+          assert '-o OUTGROUP_lett,OUTGROUP_sunf' in concat
+          assert 'validate_colour_atlas_branch_length_tree.py' in accept
+          assert "root_outgroups=concat['root_outgroups']" in accept
+          assert "references=concat['reference_tips']" in accept
+          assert "'required_outgroup_tips':root_outgroups" in accept
+          assert "'required_reference_tips':references" in accept
+          assert 'optional OUTGROUP_saff retained as a near Cardueae reference' in accept
+          assert 'zero current focal paralog warnings' in accept
+          assert 'tree_provenance.json' in accept
+          assert 'afterok:$gene:$concat' in submit
+          print('bundle_entrypoint=user_wrapper_valid')
+          print('tree_references=root_lett_sunf_optional_saff')
+          print('bundle_contract=v0.3_tree_stage_current_paralog_gated')
+          print('branch_length_tree_completed=false')
+          print('rate_fit_execution_allowed=false')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: colour-rate-comp1061-hpc-bundle-${{ github.run_id }}
+          path: /tmp/colour_rate_hpc_bundle/
+          if-no-files-found: error
+          retention-days: 90

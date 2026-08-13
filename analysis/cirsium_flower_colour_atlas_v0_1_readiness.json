@@ -1,0 +1,68 @@
+{
+  "contract_version": "cirsium_flower_colour_atlas_v0_1",
+  "record_count": 19,
+  "review_status_counts": {
+    "pending": 3,
+    "reviewed": 16
+  },
+  "observation_unit_counts": {
+    "sample": 6,
+    "taxon": 13
+  },
+  "fine_colour_counts": {
+    "blue_purple": 5,
+    "polymorphic": 2,
+    "purple": 5,
+    "unknown": 1,
+    "white": 6
+  },
+  "binary_colour_counts": {
+    "C": 10,
+    "P": 2,
+    "U": 1,
+    "W": 6
+  },
+  "reviewed_record_count": 16,
+  "rate_fit_eligible_record_count": 9,
+  "rate_fit_eligible_unique_taxa": 9,
+  "rate_fit_eligible_taxa": [
+    "Cirsium brevicaule",
+    "Cirsium irumtiense",
+    "Cirsium japonicum var. albescens",
+    "Cirsium japonicum var. australe",
+    "Cirsium japonicum var. fukienense",
+    "Cirsium kawakamii",
+    "Cirsium morii",
+    "Cirsium pengii",
+    "Cirsium tatakaense"
+  ],
+  "rate_fit_eligible_state_counts": {
+    "C": 6,
+    "W": 3
+  },
+  "rate_fit_eligible_phylogeny_contexts": [
+    "Arenicola",
+    "Nipponocirsium",
+    "Sinocirsium"
+  ],
+  "readiness_thresholds": {
+    "min_rate_fit_taxon_tips": 20,
+    "min_per_binary_state": 5,
+    "min_phylogeny_contexts": 3
+  },
+  "readiness_conditions": {
+    "minimum_taxon_tips": false,
+    "minimum_white_tips": false,
+    "minimum_coloured_tips": true,
+    "minimum_phylogeny_contexts": true,
+    "all_eligible_are_taxon_level": true,
+    "no_polymorphic_or_unknown_eligible": true
+  },
+  "transition_rate_fit_ready": false,
+  "readiness_blockers": [
+    "minimum_taxon_tips",
+    "minimum_white_tips"
+  ],
+  "threshold_note": "These thresholds are a conservative project gate against fitting asymmetric rates to a tiny focal clade; they are not a statistical guarantee of identifiability or adequate phylogenetic coverage.",
+  "claim_limit": "Atlas validation establishes provenance/coding eligibility only. Even when the engineering gate passes, ER/ARD model adequacy, phylogenetic uncertainty, polymorphic-state treatment and sampling bias must be assessed before interpreting q(C->W) or q(W->C)."
+}

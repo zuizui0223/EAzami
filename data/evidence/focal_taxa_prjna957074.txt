@@ -1,0 +1,34 @@
+# High-value East Asian Cirsium taxa to audit against PRJNA957074.
+# Exact accepted-name matching is intentional; synonyms are audited separately.
+Cirsium domonii
+Cirsium dipsacolepis
+Cirsium tamastoloniferum
+Cirsium pendulum
+Cirsium sieboldii
+Cirsium yezoense
+Cirsium japonicum
+Cirsium japonicum var. japonicum
+Cirsium japonicum var. albescens
+Cirsium japonicum var. takaoense
+Cirsium japonicum var. australe
+Cirsium japonicum var. fukienense
+Cirsium brevicaule
+Cirsium irumtiense
+Cirsium morii
+Cirsium kawakamii
+Cirsium tatakaense
+Cirsium pengii
+Cirsium suffultum
+Cirsium nipponicum
+Cirsium nipponicum var. incomptum
+Cirsium kujuense
+Cirsium lineare
+Cirsium setidens
+Cirsium rhinoceros
+Cirsium schantarense
+Cirsium vlassovianum
+Cirsium arisanense
+Cirsium taiwanense
+Cirsium ferum
+Cirsium suzukii
+Cirsium hosokawae

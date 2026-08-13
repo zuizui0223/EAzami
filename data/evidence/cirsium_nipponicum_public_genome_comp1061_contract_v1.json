@@ -1,0 +1,65 @@
+{
+  "contract_version": "cirsium_nipponicum_public_genome_comp1061_v1",
+  "purpose": "Recover a natural-Ulleung Cirsium nipponicum nuclear augmentation tip in the same Compositae1061 locus space as the 294-tip public Japan-origin tree, without changing the primary panel before cross-data-type validation.",
+  "taxon": "Cirsium nipponicum",
+  "sample_context": "natural Ulleung Island plant used for the 2024 nuclear genome study",
+  "publication_doi": "10.3390/genes15101269",
+  "publication_reported_bioproject": "PRJNA1127082",
+  "figshare_article_id": 26927092,
+  "figshare_doi": "10.6084/m9.figshare.26927092.v1",
+  "figshare_article_metadata_sha256": "9b4157ea35c0aad1cc7cf40d76346bcb143c4d728a392dfb6c6281b241b96bf9",
+  "public_files": {
+    "protein": {
+      "file_id": 48979486,
+      "name": "C.nipponicum_aa.fa",
+      "size_bytes": 14011750,
+      "download_url": "https://ndownloader.figshare.com/files/48979486",
+      "md5": "5c76467d3ad7f15df94897463633ce4a"
+    },
+    "softmasked_genome": {
+      "file_id": 48979489,
+      "name": "C.nipponicum_softmasked_genome.fa",
+      "size_bytes": 948012384,
+      "download_url": "https://ndownloader.figshare.com/files/48979489",
+      "md5": "e9390e23ffd0dc5e3da8271db4d1d3ca"
+    },
+    "annotation": {
+      "file_id": 48979519,
+      "name": "C.nipponicum.gff3",
+      "size_bytes": 67010582,
+      "download_url": "https://ndownloader.figshare.com/files/48979519",
+      "md5": "6bfb9bc256624aff95d03f9c67414bee"
+    }
+  },
+  "discovery_provenance": {
+    "workflow_run": 31655319501,
+    "artifact_id": 9164169813,
+    "artifact_sha256": "875f83b54c7170181fef84ad9a1cd926264436e867d5986f69d6874309d4a35d",
+    "related_article_count": 8,
+    "related_file_count": 10,
+    "fasta_like_file_count": 2
+  },
+  "reference_space": {
+    "target_contract": "data/evidence/comp1061_original_reference_contract_v1.json",
+    "target_sha256": "77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c",
+    "target_loci": 1061,
+    "primary_candidate_universe": "Moreyra conservative 241 no-warning/high-occupancy loci"
+  },
+  "admission_policy": {
+    "primary_294_panel_changed": false,
+    "tip_id_if_admitted": "AUG_ULLEUNG_CNIP2024",
+    "minimum_strict_recovered_loci": 100,
+    "require_two_reference_queries_per_selected_locus": true,
+    "maximum_second_to_best_score_ratio": 0.90,
+    "minimum_query_coverage_percent": 50.0,
+    "cross_locus_subject_collision_allowed": false,
+    "tree_tip_promotion_allowed": false,
+    "promotion_requires": [
+      "strict Compositae1061 locus pack passes the frozen audit",
+      "same 294-tip admitted-locus set is used for comparison",
+      "natural-Ulleung tip placement is stable to the predeclared cross-data-type sensitivity",
+      "no conclusion depends solely on the cultivated Moreyra C. nipponicum sample or solely on the genome-derived tip"
+    ]
+  },
+  "claim_boundary": "The public genome is a recoverable nuclear augmentation source, but discovery alone does not add a 295th tip to the accepted primary tree and does not establish the origin of C. nipponicum or Japanese Cirsium."
+}

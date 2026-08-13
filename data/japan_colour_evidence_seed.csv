@@ -1,0 +1,4 @@
+accepted_taxon,japanese_name,colour_state,evidence_type,evidence_source,source_detail,priority_implication
+Cirsium pendulum,タカアザミ,polymorphic_purple_white,official_species_database,National Museum of Nature and Science Japan Cirsium database,"Species page explicitly recognizes the white-flowered form シロバナタカアザミ",Tier_A_within_species
+Cirsium yezoense,サワアザミ,coloured_red_purple,official_species_database,National Museum of Nature and Science Japan Cirsium database,"Bisexual florets described as pale reddish purple and female florets as dark reddish purple",coloured_context
+Cirsium dipsacolepis,モリアザミ,colour_not_textually_coded,official_species_database,National Museum of Nature and Science Japan Cirsium database,"Species page and photographs verified; page text does not explicitly state corolla colour, so state is not inferred from image here",needs_image_or_spectral_review

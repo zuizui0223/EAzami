@@ -1,0 +1,10 @@
+name: eazami-chang2026-gene-trees
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.11
+  - mafft
+  - clipkit
+  - iqtree

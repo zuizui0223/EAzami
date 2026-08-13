@@ -1,0 +1,129 @@
+name: Audit PRJNA1127082 nuclear augmentation
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_ncbi_project_runs.py"
+      - ".github/workflows/audit-prjna1127082-nuclear-augmentation.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: prjna1127082-augmentation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  audit-runs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile existing NCBI recovery client
+        run: python -m py_compile analysis/recover_ncbi_project_runs.py
+      - name: Recover PRJNA1127082 SRA run metadata without hiding a zero-record result
+        id: recover
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        shell: bash
+        run: |
+          set +e
+          mkdir -p /tmp/prjna1127082
+          : > /tmp/empty_focal_taxa.txt
+          python analysis/recover_ncbi_project_runs.py \
+            --bioproject PRJNA1127082 \
+            --focal-taxa /tmp/empty_focal_taxa.txt \
+            --outdir /tmp/prjna1127082 \
+            --enrich-biosample \
+            > >(tee /tmp/prjna1127082/recover.stdout.log) \
+            2> >(tee /tmp/prjna1127082/recover.stderr.log >&2)
+          rc=$?
+          echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
+          if [[ $rc -eq 0 ]]; then
+            echo "status=public_sra_runs_recovered" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if grep -Fq 'No public SRA records found for PRJNA1127082.' /tmp/prjna1127082/recover.stdout.log /tmp/prjna1127082/recover.stderr.log; then
+            echo "status=no_public_sra_records_current_query" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "Unexpected NCBI recovery failure; refusing to reinterpret it as a biological/public-availability result." >&2
+          exit "$rc"
+      - name: Freeze current public availability and compatible nuclear-data lanes
+        env:
+          RECOVERY_STATUS: ${{ steps.recover.outputs.status }}
+          RECOVERY_EXIT_CODE: ${{ steps.recover.outputs.exit_code }}
+        run: |
+          python - <<'PY'
+          import csv,json,os
+          from pathlib import Path
+          root=Path('/tmp/prjna1127082')
+          status=os.environ['RECOVERY_STATUS']
+          paths=list(root.glob('*_runinfo.csv'))
+          rows=[]
+          if paths:
+              if len(paths)!=1:
+                  raise SystemExit(f'expected at most one runinfo file, observed {paths}')
+              with paths[0].open(encoding='utf-8-sig',newline='') as h:
+                  rows=list(csv.DictReader(h))
+          if status=='public_sra_runs_recovered' and not rows:
+              raise SystemExit('recovery reported success but no runinfo rows were written')
+          if status=='no_public_sra_records_current_query' and rows:
+              raise SystemExit('zero-record status conflicts with a non-empty runinfo table')
+          for r in rows:
+              if r.get('BioProject')!='PRJNA1127082':
+                  raise SystemExit(f'unexpected project row: {r.get("Run")} {r.get("BioProject")}')
+
+          fields=['Run','BioSample','ScientificName','LibraryStrategy','LibrarySource','LibrarySelection','LibraryLayout','Platform','Model','spots','bases','size_MB','geographic_location','collection_date']
+          out=[{k:r.get(k,'') for k in fields} for r in rows]
+          with (root/'prjna1127082_nuclear_augmentation_run_manifest.csv').open('w',encoding='utf-8',newline='') as h:
+              w=csv.DictWriter(h,fieldnames=fields);w.writeheader();w.writerows(out)
+
+          def norm(x): return str(x or '').strip().upper().replace('-','_').replace(' ','_')
+          by_strategy={}
+          for r in rows:
+              s=norm(r.get('LibraryStrategy')) or 'UNKNOWN'
+              by_strategy[s]=by_strategy.get(s,0)+1
+          biosamples=sorted({r.get('BioSample','') for r in rows if r.get('BioSample')})
+          scientific=sorted({r.get('ScientificName','') for r in rows if r.get('ScientificName')})
+          rnaseq=[r for r in rows if 'RNA' in norm(r.get('LibraryStrategy'))]
+          wgs=[r for r in rows if norm(r.get('LibraryStrategy')) in {'WGS','WHOLE_GENOME_SEQUENCING'}]
+          summary={
+            'contract_version':'prjna1127082_nuclear_augmentation_audit_v1',
+            'bioproject':'PRJNA1127082',
+            'publication_data_availability_claim':'The 2024 genome paper reports all sequencing data deposited to NCBI SRA under PRJNA1127082.',
+            'live_ncbi_sra_query_status':status,
+            'recovery_exit_code':int(os.environ.get('RECOVERY_EXIT_CODE') or 0),
+            'public_runs_recovered':len(rows),
+            'biosamples':biosamples,
+            'biosample_count':len(biosamples),
+            'scientific_names':scientific,
+            'library_strategy_counts':dict(sorted(by_strategy.items())),
+            'rnaseq_runs':[r.get('Run','') for r in rnaseq],
+            'wgs_runs':[r.get('Run','') for r in wgs],
+            'paired_rnaseq_runs':[r.get('Run','') for r in rnaseq if norm(r.get('LibraryLayout'))=='PAIRED'],
+            'total_size_mb':sum(float(r.get('size_MB') or 0) for r in rows),
+            'availability_interpretation':(
+              'Current official SRA query recovered public runs; evaluate one biological Ulleung sample for locus recovery.'
+              if rows else
+              'The cited BioProject currently yields zero public SRA records through the official SRA query used by this repository. This is an archive/publication discrepancy, not evidence that the study generated no sequence data.'
+            ),
+            'primary_294_panel_changed':False,
+            'augmentation_tip_allowed':False,
+            'promotion_gate':'A stable public sequence artifact must first be recovered; then recover the frozen Compositae1061 loci and pass orthology/copy-state/occupancy and cross-data-type placement checks before adding an Ulleung tip.',
+            'sampling_policy':'No new China sampling list is frozen by this audit.'
+          }
+          (root/'prjna1127082_nuclear_augmentation_summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps(summary,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: prjna1127082-nuclear-augmentation-${{ github.run_id }}
+          path: /tmp/prjna1127082
+          if-no-files-found: warn

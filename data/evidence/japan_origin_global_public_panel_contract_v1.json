@@ -1,0 +1,60 @@
+{
+  "contract_version": "japan_origin_global_public_panel_v1",
+  "purpose": "Primary all-public placement layer for testing Japanese Cirsium origins before any broad new China sampling. The global Moreyra Cirsium layer is retained because the published main Japanese radiation is inferred to derive from Middle Asia, not exclusively East Asia.",
+  "source_artifacts": {
+    "Moreyra2025": {
+      "bioproject": "PRJNA957074",
+      "workflow_run": 31400324674,
+      "artifact_id": 9067368059,
+      "artifact_sha256": "a18e4867362fed7b509c351bc901a9456fe258f09c7e277b0069d8c257b6ed72",
+      "input_file": "moreyra2025_all_sample_reconciliation.csv",
+      "linked_cirsium_biological_samples": 256,
+      "linked_cirsium_runs": 257,
+      "selection_rule": "tree_code begins Cirsium; linked_runinfo required; group by BioSample; exclude the source_conflict_target_vs_outside duplicate row while retaining the concordant C. waldsteinii representation of SAMN44017949"
+    },
+    "Chang2025": {
+      "bioproject": "PRJNA1158676",
+      "workflow_run": 31601572691,
+      "artifact_id": 9143773532,
+      "artifact_sha256": "9ca6fda561ebb301e8d090ae015bd8c189b73b07e5f823d8121fe5c166915076",
+      "frozen_manifest": "data/evidence/chang2025_public_run_manifest_v1.csv",
+      "biological_samples": 13,
+      "runs": 13
+    },
+    "Chang2026": {
+      "bioproject": "PRJNA1311153 plus explicitly reused public runs",
+      "workflow_run": 31592382792,
+      "artifact_id": 9139696490,
+      "artifact_sha256": "2cfd3cd79387d749d7de8bd2a82b0f9e3201169bb2a5328d7b80b68eac0b7643",
+      "frozen_manifest": "data/evidence/chang2026_public_run_manifest_v1.csv",
+      "biological_samples": 33,
+      "runs": 33,
+      "arenicola_samples": 6
+    }
+  },
+  "expected_global_inventory": {
+    "biological_samples": 302,
+    "public_run_accessions": 303,
+    "source_preserving_analysis_taxon_labels": 270,
+    "Moreyra2025_samples": 256,
+    "Chang2025_samples": 13,
+    "Chang2026_samples": 33
+  },
+  "analysis_order": [
+    "all-individual global placement in a common validated Compositae1061 homolog space",
+    "identify the source/sister neighbourhood of the main Japanese radiation, C. dipsacolepis, C. lineare and Arenicola",
+    "run focused East/Middle/Northeast-Asia topology/network sensitivity on the neighbourhood identified by the global placement",
+    "only then rank unsampled Chinese or Central-Asian taxa for new collection by information gain"
+  ],
+  "published_priors_not_results_of_this_contract": {
+    "main_japanese_radiation": "Moreyra 2025 reports 36 of 38 sampled Japanese taxa in one rapid radiation following a Middle Asia to Japan jump dispersal",
+    "exceptions": ["Cirsium dipsacolepis", "Cirsium lineare"]
+  },
+  "claim_gates": {
+    "global_common_locus_tree_executed": false,
+    "all_japanese_flora_monophyly_claim_allowed": false,
+    "arenicola_main_radiation_membership_claim_allowed": false,
+    "new_china_sampling_freeze_allowed": false
+  },
+  "claim_boundary": "The 302-sample inventory is an accession/provenance and execution contract, not a phylogenetic result. Do not infer colonisation direction, Japanese monophyly or Arenicola placement until common-locus recovery and joint inference are completed."
+}

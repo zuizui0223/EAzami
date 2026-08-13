@@ -1,0 +1,26 @@
+name: Validate flower-colour branch-length tree contract
+
+on:
+  pull_request:
+    paths:
+      - "analysis/validate_colour_atlas_branch_length_tree.py"
+      - "tests/test_validate_colour_atlas_branch_length_tree.py"
+      - ".github/workflows/validate-colour-atlas-branch-length-tree.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile and test branch-length tree gate
+        run: |
+          python -m py_compile analysis/validate_colour_atlas_branch_length_tree.py
+          python -m unittest tests/test_validate_colour_atlas_branch_length_tree.py -v

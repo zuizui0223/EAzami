@@ -1,0 +1,69 @@
+name: Enumerate Moreyra Elsevier supplementary artifacts
+
+on:
+  pull_request:
+    paths:
+      - "analysis/enumerate_elsevier_supplements.py"
+      - "tests/test_enumerate_elsevier_supplements.py"
+      - "data/evidence/moreyra2025_elsevier_supplement_enumeration_*.csv"
+      - ".github/workflows/enumerate-moreyra-elsevier-artifacts.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run offline tests
+        run: |
+          python -m py_compile analysis/enumerate_elsevier_supplements.py
+          python -m unittest tests/test_enumerate_elsevier_supplements.py -v
+
+      - name: Re-enumerate and compare valid artifact candidates
+        run: |
+          python analysis/enumerate_elsevier_supplements.py \
+            --pii S1055790325000028 \
+            --max-index 20 \
+            --output /tmp/observed.csv
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          def valid(path):
+              with Path(path).open(encoding="utf-8-sig", newline="") as handle:
+                  rows = list(csv.DictReader(handle))
+              return sorted(
+                  (
+                      row["index"], row["extension"], row["magic_class"],
+                      row["validation"]
+                  )
+                  for row in rows
+                  if row["validation"] == "candidate_exists"
+              )
+
+          expected = valid(
+              "data/evidence/moreyra2025_elsevier_supplement_enumeration_2026-08-11.csv"
+          )
+          observed = valid("/tmp/observed.csv")
+          if expected != observed:
+              raise SystemExit(
+                  f"Valid supplementary candidates changed: expected={expected}, observed={observed}"
+              )
+          if not observed:
+              raise SystemExit("No valid Elsevier supplementary artifact was recovered")
+          print(f"validated_artifact_candidates={len(observed)}")
+          for row in observed:
+              print(row)
+          PY

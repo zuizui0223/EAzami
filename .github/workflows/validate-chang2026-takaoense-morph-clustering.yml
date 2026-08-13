@@ -1,0 +1,126 @@
+name: Validate Chang 2026 takaoense morph clustering
+
+on:
+  pull_request:
+    paths:
+      - "analysis/chang2026_takaoense_morph_clustering.py"
+      - "analysis/chang2026_takaoense_morph_clustering_permutations.csv"
+      - "tests/test_chang2026_takaoense_morph_clustering.py"
+      - "data/evidence/chang2026_takaoense_morph_clustering_summary_*.json"
+      - "data/evidence/chang2026_takaoense_figure1_morph_assignments_*.csv"
+      - ".github/workflows/validate-chang2026-takaoense-morph-clustering.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run exact allocation tests
+        run: |
+          python -m py_compile \
+            analysis/chang2026_takaoense_sample_colour_history.py \
+            analysis/chang2026_takaoense_morph_clustering.py
+          python -m unittest \
+            tests/test_chang2026_takaoense_morph_clustering.py \
+            -v
+
+      - name: Generate all balanced W/BP allocations
+        run: |
+          python analysis/chang2026_takaoense_morph_clustering.py \
+            --output /tmp/chang2026_takaoense_morph_clustering_permutations.csv \
+            --summary /tmp/chang2026_takaoense_morph_clustering_summary.json
+
+      - name: Validate exact conditional probabilities
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          with Path(
+              "/tmp/chang2026_takaoense_morph_clustering_permutations.csv"
+          ).open(encoding="utf-8-sig", newline="") as handle:
+              rows = list(csv.DictReader(handle))
+          summary = json.loads(
+              Path("/tmp/chang2026_takaoense_morph_clustering_summary.json")
+              .read_text(encoding="utf-8")
+          )
+
+          print(f"balanced_label_allocations={summary['balanced_label_allocations']}")
+          print(f"observed_fitch_changes={summary['observed_fitch_changes']}")
+          print("score_distribution=" + json.dumps(summary['score_distribution'], sort_keys=True))
+          print(
+              "exact_oriented_assignment_probability="
+              + str(summary['exact_oriented_assignment_probability'])
+          )
+          print(
+              "exact_unordered_partition_probability="
+              + str(summary['exact_unordered_partition_probability'])
+          )
+          print(
+              "exact_at_least_as_clustered_probability="
+              + str(summary['exact_at_least_as_clustered_probability'])
+          )
+
+          if len(rows) != 20:
+              raise SystemExit("Expected all C(6,3)=20 balanced allocations")
+          if summary['topology'] != (
+              "(((((NH_BP,TJ_BP),FC_BP),LT_W),FB_W),WY_W)"
+          ):
+              raise SystemExit("Displayed six-tip topology changed")
+          if summary['observed_fitch_changes'] != 1:
+              raise SystemExit("Observed morph allocation should require one change")
+          if summary['minimum_possible_fitch_changes'] != 1:
+              raise SystemExit("Minimum possible score should be one")
+          if summary['score_distribution'] != {'1': 2, '2': 10, '3': 8}:
+              raise SystemExit(
+                  f"Unexpected score distribution: {summary['score_distribution']}"
+              )
+          if summary['oriented_observed_allocations'] != 1:
+              raise SystemExit("Expected one exact oriented observed allocation")
+          if summary['unordered_observed_partition_allocations'] != 2:
+              raise SystemExit("Expected observed partition and colour-swapped complement")
+          if summary['allocations_at_least_as_clustered_as_observed'] != 2:
+              raise SystemExit("Only two allocations should score at least as well")
+          if summary['exact_oriented_assignment_probability'] != 0.05:
+              raise SystemExit("Expected exact oriented probability 0.05")
+          if summary['exact_unordered_partition_probability'] != 0.1:
+              raise SystemExit("Expected exact unordered partition probability 0.10")
+          if summary['exact_at_least_as_clustered_probability'] != 0.1:
+              raise SystemExit("Expected exact clustering probability 0.10")
+
+          observed = [
+              row for row in rows
+              if row['is_observed_oriented_assignment'] == 'yes'
+          ]
+          if len(observed) != 1:
+              raise SystemExit("Expected one observed oriented row")
+          if observed[0]['bp_tips'] != (
+              'FC_3559_BP|NH_3835_BP|TJ_3807_BP'
+          ):
+              raise SystemExit("Observed BP-tip identity changed")
+          if observed[0]['fitch_root_states'] != 'W':
+              raise SystemExit("Observed exact tree should have a white Fitch root")
+          PY
+
+      - name: Upload exact clustering outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: chang2026-takaoense-morph-clustering-${{ github.run_id }}
+          path: |
+            /tmp/chang2026_takaoense_morph_clustering_permutations.csv
+            /tmp/chang2026_takaoense_morph_clustering_summary.json
+          if-no-files-found: error
+          retention-days: 90

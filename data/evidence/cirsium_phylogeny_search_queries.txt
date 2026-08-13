@@ -1,0 +1,83 @@
+# Backbone and generic delimitation
+Cirsium phylogeny
+Cirsium phylogenomics
+Carduus Cirsium phylogeny
+Carduinae Hyb-Seq
+Cirsium Lophiolepis phylogeny
+Cirsium generic delimitation
+Asteraceae Compositae target enrichment Cirsium
+Compositae1061 Cardueae Cirsium
+
+# Regional nuclear phylogeny
+Cirsium Japan phylogeny
+Cirsium Ryukyu phylogeny
+Cirsium Taiwan phylogeny
+Cirsium China phylogeny
+Cirsium Korea phylogeny
+Cirsium Russian Far East phylogeny
+Cirsium Sakhalin phylogeny
+Cirsium Mongolia phylogeny
+Cirsium North America target capture
+Cirsium Europe phylogeny
+Cirsium Mediterranean phylogeny
+Cirsium Southwest Asia phylogeny
+Cirsium Himalaya phylogeny
+Cirsium species diversification Japan Kadota
+
+# Population history, species delimitation and reticulation
+Cirsium population genomics
+Cirsium phylogeography
+Cirsium species delimitation
+Cirsium hybridization
+Cirsium introgression
+Cirsium allopolyploid
+Cirsium polyploidy
+Cirsium RADseq
+Cirsium AFLP hybrid
+Cirsium chloroplast capture
+Cirsium cytonuclear discordance
+Cirsium incomplete lineage sorting
+
+# Cytogenetics and genome evolution
+Cirsium chromosome
+Cirsium karyotype
+Cirsium genome size
+Cirsium B chromosome
+Cirsium cytomixis
+Cirsium dysploidy
+Cirsium flow cytometry
+
+# Nuclear genomes, transcriptomes and annotation resources
+Cirsium genome assembly
+Cirsium reference genome
+Cirsium nuclear genome
+Cirsium transcriptome phylogeny
+Cirsium RNA-seq transcriptome
+Cirsium single-copy ortholog genome
+Cirsium anthocyanin transcriptome flower
+
+# Organelle and maternal history
+Cirsium complete chloroplast genome phylogeny
+Cirsium plastome phylogeography
+Cirsium chloroplast haplotype population
+Cirsium mitochondrial genome
+
+# Taxonomy and synonym recovery in East Asia
+Cirsium taxonomic revision Japan
+Cirsium taxonomic revision China
+Cirsium taxonomic revision Korea
+Cirsium new species Taiwan chromosome
+Cirsium synonym China Japan
+Cirsium Flora of China phylogeny
+
+# Public data and tree artifacts
+Cirsium phylogeny dataset Newick
+Cirsium Nexus tree
+Cirsium TreeBASE
+Cirsium Dryad phylogeny
+Cirsium Mendeley Data phylogeny
+Cirsium figshare phylogeny
+Cirsium Zenodo phylogeny
+Cirsium BioProject target capture
+Cirsium SRA target enrichment
+Cirsium genome assembly BioProject

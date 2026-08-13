@@ -1,0 +1,5 @@
+scenario,minimum_transitions,fitch_root_states,interpretation
+Nipponocirsium_published_topology,1,C,"one minimum transition; coloured Fitch root makes kawakamii white loss the parsimonious direction"
+Sinocirsium_species_level_ambiguous_takaoense,1,C|W,"species-level polymorphic tip collapses information and needs only one minimum transition"
+Sinocirsium_population_aware_takaoense,2,C|W,"population-aware coding raises the minimum to two transitions; direction still requires population history/outgroups"
+Arenicola_pair,1,C|W,"one minimum transition but direction is unresolved from a two-tip pair"

@@ -1,0 +1,36 @@
+name: Validate Moreyra Japan-38 membership
+
+on:
+  pull_request:
+    paths:
+      - "analysis/validate_moreyra2025_japan38.py"
+      - "data/evidence/moreyra2025_japan_38_membership_audit_*.csv"
+      - "docs/MOREYRA_2025_JAPAN_38_MEMBERSHIP_AUDIT.md"
+      - ".github/workflows/validate-moreyra-japan38.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile and validate the frozen membership table
+        run: |
+          python -m py_compile analysis/validate_moreyra2025_japan38.py
+          python analysis/validate_moreyra2025_japan38.py
+
+      - name: Confirm paper-count interpretation is documented
+        run: |
+          grep -q "38 paper taxon concepts" docs/MOREYRA_2025_JAPAN_38_MEMBERSHIP_AUDIT.md
+          grep -q "current accepted names" docs/MOREYRA_2025_JAPAN_38_MEMBERSHIP_AUDIT.md

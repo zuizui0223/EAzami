@@ -1,0 +1,7 @@
+sample_id,matched_run,library_layout,panel_role,morph,code,voucher,biosample,source_evidence
+FC_ccy3559,SRR35152718,PAIRED,focal_colour_morph,BP,FC,ccy3559,SAMN50798021,data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv
+TJ_ccy3807,SRR35152736,PAIRED,focal_colour_morph,BP,TJ,ccy3807,SAMN50798026,data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv
+NH_ccy3835,SRR35152735,PAIRED,focal_colour_morph,BP,NH,ccy3835,SAMN50798027,data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv
+WY_ccy3560,SRR35152717,PAIRED,focal_colour_morph,W,WY,ccy3560,SAMN50798022,data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv
+FB_ccy3629,SRR35152738,PAIRED,focal_colour_morph,W,FB,ccy3629,SAMN50798024,data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv
+LT_ccy3839,SRR35152734,PAIRED,focal_colour_morph,W,LT,ccy3839,SAMN50798028,data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv

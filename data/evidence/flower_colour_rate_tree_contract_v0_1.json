@@ -1,0 +1,50 @@
+{
+  "contract_version": "flower_colour_rate_tree_contract_v0_1",
+  "date": "2026-08-12",
+  "empirical_branch_length_tree_ready": false,
+  "accepted_tree_route": "none_yet",
+  "published_tree_route": {
+    "source": "Moreyra et al. 2025",
+    "issue": 12,
+    "status": "final_machine_readable_branch_length_trees_not_recovered",
+    "branch_lengths_available": false,
+    "tip_join_ready": false,
+    "claim_limit": "Published figures and topology statements must not be converted into invented branch lengths."
+  },
+  "compatibility_reanalysis_route": {
+    "source": "public Compositae1061 reference plus PRJNA957074 and other source-backed East Asian nuclear reads",
+    "status": "original_compatible_reference_recovered_reanalysis_not_completed",
+    "public_locus_sets": [
+      "1061_public_named_loci",
+      "531_reproducible_warning_occupancy_candidates",
+      "241_conservative_no_warning_high_occupancy_loci"
+    ],
+    "exact_moreyra_retained_350_available": false,
+    "original_comp1061_hybpiper_reference_available": true,
+    "original_comp1061_reference_contract": "data/evidence/comp1061_original_reference_contract_v1.json",
+    "original_comp1061_reference_sha256": "77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c",
+    "original_comp1061_reference_locus_count": 1061,
+    "exact_moreyra_augmented_reference_available": false,
+    "target_reference_issue": 16,
+    "target_reference_status": "original_compatible_reference_recovered_augmented_not_recovered",
+    "compatibility_raw_read_target_blocked": false,
+    "compatibility_branch_length_tree_available": false,
+    "cos763_role": "mapping_reference_or_frame_correction_input_only",
+    "claim_limit": "The original public Compositae1061 HybPiper reference is now source-validated and can support a clearly labelled compatibility reanalysis. Moreyra et al. 2025 added Cirsium tioganum recovered exons; that augmented reference and the exact retained 350-locus set remain unrecovered, so this route is not an exact reproduction."
+  },
+  "tree_acceptance_rule": {
+    "any_one_route_can_satisfy_tree_gate": true,
+    "requirements": [
+      "machine_readable_tree_or_tree_ensemble",
+      "branch_lengths_with_defined_units_or_interpretation",
+      "tip_labels_joinable_to_frozen_taxon_and_sample evidence",
+      "rooting_and_outgroup_definition",
+      "support_metric_definition",
+      "provenance_and_checksum",
+      "topology_uncertainty_available_or_explicitly_constructed_without_invented_support"
+    ]
+  },
+  "current_analysis_status": "sensitivity_only",
+  "rate_fit_execution_allowed": false,
+  "claim_limit": "This contract blocks empirical ER/ARD/Mk transition-rate fitting until both the colour-atlas state gate and a defensible branch-length nuclear tree route exist. Recovery of the original Compositae1061 reference removes one upstream compatibility-reanalysis blocker but does not itself create a branch-length tree."
+}

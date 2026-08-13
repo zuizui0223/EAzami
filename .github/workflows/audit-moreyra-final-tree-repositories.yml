@@ -1,0 +1,103 @@
+name: Audit Moreyra final-tree repositories
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_moreyra_final_tree_repositories.py"
+      - "tests/test_audit_moreyra_final_tree_repositories.py"
+      - ".github/workflows/audit-moreyra-final-tree-repositories.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "31 4 1 * *"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run offline parser tests
+        run: |
+          python -m py_compile analysis/audit_moreyra_final_tree_repositories.py
+          python -m unittest tests/test_audit_moreyra_final_tree_repositories.py -v
+
+      - name: Query public bibliographic and data-repository APIs
+        run: |
+          python analysis/audit_moreyra_final_tree_repositories.py \
+            --outdir data/evidence/generated/moreyra_final_tree_repository_audit
+
+      - name: Summarize bounded repository search
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          outdir = Path("data/evidence/generated/moreyra_final_tree_repository_audit")
+          with (outdir / "repository_api_audit.csv").open(
+              encoding="utf-8-sig", newline=""
+          ) as handle:
+              rows = list(csv.DictReader(handle))
+          summary = json.loads(
+              (outdir / "repository_api_audit_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          print(f"services_attempted={summary['services_attempted']}")
+          print(
+              f"services_queried_successfully={summary['services_queried_successfully']}"
+          )
+          print(
+              "matching_services="
+              + "|".join(summary["services_with_matching_record"])
+          )
+          print(
+              "tree_candidate_services="
+              + "|".join(summary["services_with_tree_like_file_candidate"])
+          )
+          for row in rows:
+              print(
+                  f"{row['service']}: status={row['status']} "
+                  f"records={row['record_count']} matches={row['matching_record_count']} "
+                  f"tree_files={row['tree_like_file_count']} error={row['error']}"
+              )
+
+          if len(rows) != 6:
+              raise SystemExit(f"Expected six audit services, observed {len(rows)}")
+          github = [row for row in rows if row["service"] == "GitHub"]
+          if len(github) != 1:
+              raise SystemExit("GitHub author-repository audit row is missing")
+          if github[0]["status"] != "queried":
+              raise SystemExit(f"GitHub audit failed: {github[0]['error']}")
+          if github[0]["record_count"] != "3":
+              raise SystemExit(
+                  "Author repository no longer contains exactly the three audited files"
+              )
+          if github[0]["tree_like_file_count"] != "0":
+              raise SystemExit(
+                  "A tree-like file appeared in the author repository; inspect immediately"
+              )
+          if summary["machine_readable_final_tree_recovered"]:
+              raise SystemExit("Tree recovery state changed unexpectedly")
+          PY
+
+      - name: Upload time-stamped repository audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: moreyra-final-tree-repository-audit-${{ github.run_id }}
+          path: data/evidence/generated/moreyra_final_tree_repository_audit
+          if-no-files-found: error
+          retention-days: 90

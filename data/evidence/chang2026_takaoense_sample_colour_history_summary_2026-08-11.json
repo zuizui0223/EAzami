@@ -1,0 +1,28 @@
+{
+  "figure1_six_sample_topology": "(((((NH_BP,TJ_BP),FC_BP),LT_W),FB_W),WY_W)",
+  "direct_labels": {
+    "BP": [
+      "FC-3559",
+      "TJ-3807",
+      "NH-3835"
+    ],
+    "W": [
+      "WY-3560",
+      "FB-3629",
+      "LT-3839"
+    ]
+  },
+  "six_sample_unconstrained_fitch_changes": 1,
+  "six_sample_fitch_root_states": "W",
+  "sinocirsium_coloured_root_minimum": "losses=1;regains=1",
+  "sinocirsium_no_regain_minimum_changes": 4,
+  "full_east_asia_coloured_root_minimum": "losses=3;regains=1",
+  "full_east_asia_no_regain_minimum_changes": 6,
+  "current_inference": "On the displayed exact sample topology and a coloured broader root, a takaoense W->C transition is required in every minimum-change history. This is topology-level support for candidate regain, not proof of a molecular restoration or exclusion of introgression/standing variation.",
+  "workflow_provenance": {
+    "workflow_run": 31430965810,
+    "artifact_id": 9079080760,
+    "artifact_sha256": "cee4baa1aa0d9b0717554cddc6b69ec3fbb88063a5b0a8e00967273d49854f84",
+    "unit_tests_passed": 8
+  }
+}

@@ -1,0 +1,9 @@
+name: eazami-chang2026-orthofinder
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.11
+  - orthofinder
+  - diamond

@@ -1,0 +1,5 @@
+total_transition_rate_per_myr,n_scenarios,min_p_arenicola_mrca_C,max_p_arenicola_mrca_C,all_prefer_C,interpretation
+0.1,72,0.955891891407,0.982746098219,true,Low symmetric transition rate strongly retains the coloured-Arenicola direction across tested topology and unresolved-node-age nuisance settings.
+0.3,72,0.876767936649,0.941767020161,true,Moderate-low symmetric transition rate still favours a coloured Arenicola ancestor across all tested nuisance settings.
+1.0,72,0.685287450304,0.773271779464,true,At roughly one expected total state-switch opportunity per Myr scale the direction remains C-favouring but is much weaker.
+3.0,72,0.521517481081,0.535483031411,true,Fast symmetric switching almost erases the directional information and approaches a tie.

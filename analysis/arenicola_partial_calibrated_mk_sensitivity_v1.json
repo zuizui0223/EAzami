@@ -1,0 +1,98 @@
+{
+  "analysis_version": "arenicola_partial_calibrated_mk_sensitivity_v1",
+  "published_median_node_ages_mya": {
+    "AREN_NIPP_ROOT": 1.02,
+    "AREN_MRCA": 0.93,
+    "NIPP_MRCA": 0.79
+  },
+  "grid": {
+    "topology_variants": [
+      "published_pengii_basal",
+      "alternative_kawakamii_basal",
+      "alternative_tatakaense_basal"
+    ],
+    "nipp_core_age_mya": [
+      0.15,
+      0.3,
+      0.45,
+      0.6
+    ],
+    "nipp_crown_fraction_of_core_age": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "total_transition_rate_per_myr": [
+      0.1,
+      0.3,
+      1.0,
+      3.0
+    ],
+    "q_C_to_W_over_q_W_to_C": [
+      0.25,
+      0.5,
+      1.0,
+      2.0,
+      4.0
+    ],
+    "root_priors": [
+      "flat",
+      "equilibrium"
+    ]
+  },
+  "scenario_count": 1440,
+  "symmetric_rate_summary": {
+    "0.1": {
+      "n_scenarios": 72,
+      "min_p_arenicola_C": 0.955891891407,
+      "max_p_arenicola_C": 0.982746098219,
+      "all_prefer_C": true
+    },
+    "0.3": {
+      "n_scenarios": 72,
+      "min_p_arenicola_C": 0.876767936649,
+      "max_p_arenicola_C": 0.941767020161,
+      "all_prefer_C": true
+    },
+    "1": {
+      "n_scenarios": 72,
+      "min_p_arenicola_C": 0.685287450304,
+      "max_p_arenicola_C": 0.773271779464,
+      "all_prefer_C": true
+    },
+    "3": {
+      "n_scenarios": 72,
+      "min_p_arenicola_C": 0.521517481081,
+      "max_p_arenicola_C": 0.535483031411,
+      "all_prefer_C": true
+    }
+  },
+  "all_grid_summary": {
+    "min_p_arenicola_C": 0.290119425633,
+    "max_p_arenicola_C": 0.996839943621,
+    "n_prefer_C": 1324,
+    "n_prefer_W": 116,
+    "n_near_tie_0_45_to_0_55": 205,
+    "direction_reversal_exists": true
+  },
+  "strongest_C_scenario": {
+    "topology_variant": "published_pengii_basal",
+    "nipp_core_age_mya": "0.600000",
+    "nipp_crown_fraction": "0.750000",
+    "total_rate_per_myr": "0.100000",
+    "loss_to_regain_rate_ratio": "4.000000",
+    "root_prior": "flat",
+    "p_arenicola_mrca_C": "0.996839943621"
+  },
+  "strongest_W_scenario": {
+    "topology_variant": "alternative_kawakamii_basal",
+    "nipp_core_age_mya": "0.150000",
+    "nipp_crown_fraction": "0.250000",
+    "total_rate_per_myr": "3.000000",
+    "loss_to_regain_rate_ratio": "4.000000",
+    "root_prior": "equilibrium",
+    "p_arenicola_mrca_C": "0.290119425633"
+  },
+  "working_inference": "The one-step parsimony preference for a coloured Arenicola ancestor is the low-transition-rate limit of a broader Mk sensitivity surface. Under symmetric low-to-moderate transition rates the partial published calibration consistently favours Arenicola MRCA=C, but the signal approaches a tie as transitions become fast. Across asymmetric loss/regain rates and alternative root priors, scenarios exist that favour Arenicola MRCA=W. Therefore the direction cannot be promoted to a rate-model posterior conclusion until flower-colour transition rates are estimated from a broader East Asian/global Cirsium character dataset or exact published posterior trees and a justified rate prior become available.",
+  "claim_limit": "This is not the published Chang et al. posterior. Three node medians are sourced from the paper, two younger Nipponocirsium ages are nuisance grids, and transition rates/root priors are explicit sensitivity assumptions. A single binary character cannot identify q(C->W) and q(W->C). Do not report p_arenicola_mrca_C from any one grid row as an empirical posterior probability."
+}

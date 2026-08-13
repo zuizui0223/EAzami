@@ -1,0 +1,250 @@
+name: Recover Chang 2026 takaoense Figure 1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_chang2026_takaoense_figure.py"
+      - "analysis/download_chang2026_figure1_image.py"
+      - "analysis/recover_chang2026_takaoense_preprint.py"
+      - "analysis/validate_chang2026_takaoense_voucher_evidence.py"
+      - "analysis/validate_chang2026_takaoense_figure1_assignments.py"
+      - "tests/test_recover_chang2026_takaoense_figure.py"
+      - "tests/test_download_chang2026_figure1_image.py"
+      - "tests/test_recover_chang2026_takaoense_preprint.py"
+      - "tests/test_validate_chang2026_takaoense_voucher_evidence.py"
+      - "tests/test_validate_chang2026_takaoense_figure1_assignments.py"
+      - "data/evidence/chang2026_takaoense_voucher_morph_evidence_*.csv"
+      - "data/evidence/chang2026_takaoense_figure1_morph_assignments_*.csv"
+      - "data/evidence/chang2026_takaoense_ncbi_*"
+      - ".github/workflows/recover-chang2026-takaoense-figure.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile \
+            analysis/recover_chang2026_takaoense_figure.py \
+            analysis/download_chang2026_figure1_image.py \
+            analysis/recover_chang2026_takaoense_preprint.py \
+            analysis/validate_chang2026_takaoense_voucher_evidence.py \
+            analysis/validate_chang2026_takaoense_figure1_assignments.py
+          python -m unittest \
+            tests/test_recover_chang2026_takaoense_figure.py \
+            tests/test_download_chang2026_figure1_image.py \
+            tests/test_recover_chang2026_takaoense_preprint.py \
+            tests/test_validate_chang2026_takaoense_voucher_evidence.py \
+            tests/test_validate_chang2026_takaoense_figure1_assignments.py \
+            -v
+
+      - name: Validate frozen voucher, supplement and Figure 1 evidence
+        run: |
+          python analysis/validate_chang2026_takaoense_voucher_evidence.py
+          python analysis/validate_chang2026_takaoense_figure1_assignments.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          generated = Path("data/evidence/generated")
+          voucher = json.loads(
+              (generated / "chang2026_takaoense_voucher_evidence_summary.json")
+              .read_text(encoding="utf-8")
+          )
+          figure = json.loads(
+              (generated / "chang2026_takaoense_figure1_assignment_summary.json")
+              .read_text(encoding="utf-8")
+          )
+
+          print(f"voucher_rows={voucher['voucher_rows']}")
+          print(f"supplement_s6_exact_records={voucher['supplement_s6_exact_records']}")
+          print(f"supplement_s6_not_recovered={voucher['supplement_s6_not_recovered']}")
+          print(
+              "s1_s6_herbarium_conflicts="
+              + "|".join(voucher['s1_s6_herbarium_conflicts'])
+          )
+          print(f"direct_sample_morph_assignments={voucher['direct_sample_morph_assignments']}")
+          print("white_vouchers=" + "|".join(voucher['white_vouchers']))
+          print(
+              "bluish_purple_vouchers="
+              + "|".join(voucher['bluish_purple_vouchers'])
+          )
+          print(f"panel_b_direct_labels={figure['panel_b_direct_labels']}")
+          print(f"panel_c_direct_labels={figure['panel_c_direct_labels']}")
+          print(f"source_image_sha256={figure['source_image_sha256']}")
+
+          if voucher['voucher_rows'] != 6:
+              raise SystemExit("Expected six voucher rows")
+          if voucher['supplement_s6_exact_records'] != 4:
+              raise SystemExit("Expected four exact S6 collector records")
+          if voucher['supplement_s6_not_recovered'] != 2:
+              raise SystemExit("Expected two collector numbers absent from S6")
+          if voucher['s1_s6_herbarium_conflicts'] != ['ccy3839']:
+              raise SystemExit("Expected only the ccy3839 TCF/TNM conflict")
+          if voucher['direct_sample_morph_assignments'] != 6:
+              raise SystemExit("Expected all six direct W/BP labels")
+          if voucher['morph_counts'] != {'W': 3, 'BP': 3}:
+              raise SystemExit(f"Unexpected morph counts: {voucher['morph_counts']}")
+          if voucher['unresolved_vouchers']:
+              raise SystemExit("All six Figure 1 morphs should be resolved")
+          if figure['panel_b_direct_labels'] != 6 or figure['panel_c_direct_labels'] != 6:
+              raise SystemExit("Expected six direct labels in each Figure 1 panel")
+          if figure['morph_counts'] != {'W': 3, 'BP': 3}:
+              raise SystemExit("Figure assignment and voucher summaries disagree")
+          if figure['white_vouchers'] != voucher['white_vouchers']:
+              raise SystemExit("White-voucher lists disagree")
+          if figure['bluish_purple_vouchers'] != voucher['bluish_purple_vouchers']:
+              raise SystemExit("BP-voucher lists disagree")
+          PY
+
+  recover-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PDF and image readers
+        run: python -m pip install --disable-pip-version-check PyMuPDF Pillow
+
+      - name: Attempt official Springer Figure 1 PNG recovery
+        id: official_image
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          mkdir -p data/evidence/generated/chang2026_takaoense_figure
+          python analysis/download_chang2026_figure1_image.py \
+            --outdir data/evidence/generated/chang2026_takaoense_figure \
+            --force \
+            2>&1 | tee data/evidence/generated/chang2026_takaoense_figure/official_image_recovery.log
+
+      - name: Attempt Research Square/preprint fallback
+        id: preprint_recovery
+        if: steps.official_image.outcome != 'success'
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python analysis/recover_chang2026_takaoense_preprint.py \
+            --outdir data/evidence/generated/chang2026_takaoense_figure \
+            --force \
+            2>&1 | tee data/evidence/generated/chang2026_takaoense_figure/preprint_recovery.log
+
+      - name: Validate live official image against frozen provenance
+        if: steps.official_image.outcome == 'success'
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          from PIL import Image
+
+          outdir = Path("data/evidence/generated/chang2026_takaoense_figure")
+          image_path = outdir / "chang2026_figure1.png"
+          expected_hash = "10375f1d79a4799babdebffca84301f602adfa0aabc825b852de84177bbb878c"
+          digest = hashlib.sha256(image_path.read_bytes()).hexdigest()
+          with Image.open(image_path) as image:
+              dimensions = list(image.size)
+          if digest != expected_hash:
+              raise SystemExit(
+                  f"Official Figure 1 changed: expected {expected_hash}, observed {digest}"
+              )
+          if dimensions != [1945, 2400]:
+              raise SystemExit(f"Official Figure 1 dimensions changed: {dimensions}")
+          payload = {
+              "source_image_sha256": digest,
+              "source_image_dimensions_px": dimensions,
+              "frozen_assignment_table": (
+                  "data/evidence/"
+                  "chang2026_takaoense_figure1_morph_assignments_2026-08-11.csv"
+              ),
+              "resolved_labels": {
+                  "FC-3559": "BP",
+                  "TJ-3807": "BP",
+                  "NH-3835": "BP",
+                  "WY-3560": "W",
+                  "FB-3629": "W",
+                  "LT-3839": "W"
+              }
+          }
+          (outdir / "live_image_assignment_provenance.json").write_text(
+              json.dumps(payload, indent=2) + "\n", encoding="utf-8"
+          )
+          print(json.dumps(payload, indent=2))
+          PY
+
+      - name: Record live-recovery status
+        if: always()
+        env:
+          OFFICIAL_OUTCOME: ${{ steps.official_image.outcome }}
+          PREPRINT_OUTCOME: ${{ steps.preprint_recovery.outcome }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          outdir = Path("data/evidence/generated/chang2026_takaoense_figure")
+          outdir.mkdir(parents=True, exist_ok=True)
+          official = os.environ.get("OFFICIAL_OUTCOME", "not_run")
+          preprint = os.environ.get("PREPRINT_OUTCOME", "not_run")
+          image = outdir / "chang2026_figure1.png"
+          if image.exists():
+              status = "official_figure1_image_recovered_and_assignments_frozen"
+              interpretation = (
+                  "The official Springer Nature Figure 1 image was recovered and matches "
+                  "the frozen image hash. Direct labels are FC/TJ/NH=BP and WY/FB/LT=W."
+              )
+          elif preprint == "success":
+              status = "preprint_recovery_succeeded"
+              interpretation = (
+                  "The preprint/PDF fallback was recovered for direct figure review."
+              )
+          else:
+              status = "external_source_unavailable_from_github_actions"
+              interpretation = (
+                  "Official Springer image/PDF and preprint endpoints rejected or "
+                  "failed automated GitHub Actions recovery. Frozen assignments remain "
+                  "linked to the previously recovered official-image hash."
+              )
+          payload = {
+              "status": status,
+              "official_image_outcome": official,
+              "preprint_outcome": preprint,
+              "official_image_exists": image.exists(),
+              "interpretation": interpretation,
+              "next_analysis": (
+                  "Apply the six resolved morph states to the published sample topology "
+                  "and reuse the transcriptomes as morph-labelled population anchors."
+              )
+          }
+          (outdir / "live_recovery_status.json").write_text(
+              json.dumps(payload, indent=2) + "\n", encoding="utf-8"
+          )
+          print(json.dumps(payload, indent=2))
+          PY
+
+      - name: Upload live-recovery evidence and diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: chang2026-takaoense-figure-evidence-${{ github.run_id }}
+          path: data/evidence/generated/chang2026_takaoense_figure
+          if-no-files-found: error
+          retention-days: 90

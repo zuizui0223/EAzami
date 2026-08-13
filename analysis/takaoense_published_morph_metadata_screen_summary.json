@@ -1,0 +1,32 @@
+{
+  "accepted_taxon": "Cirsium japonicum var. takaoense",
+  "published_samples": 6,
+  "morph_counts": {
+    "W": 3,
+    "BP": 3
+  },
+  "white_vouchers": [
+    "ccy3560",
+    "ccy3629",
+    "ccy3839"
+  ],
+  "bluish_purple_vouchers": [
+    "ccy3559",
+    "ccy3807",
+    "ccy3835"
+  ],
+  "mean_altitude_bp_m": 1160.6666666666667,
+  "mean_altitude_w_m": 357.0,
+  "mean_difference_bp_minus_w_m": 803.6666666666667,
+  "complete_rank_separation": true,
+  "exact_allocation_count": 20,
+  "exact_one_sided_p": 0.05,
+  "exact_two_sided_p": 0.1,
+  "leave_one_out_difference_range_m": [
+    635.666667,
+    1113.666667
+  ],
+  "allowed_inference": "The six published samples show a strong altitude-stratified morph pattern that should guide balanced field sampling and ancestry analyses.",
+  "prohibited_inference": "These six non-random localities do not establish altitude-dependent selection, causality, a reaction norm, or the direction of flower-colour evolution.",
+  "transcriptome_scope": "Young-leaf RNA-seq can support ancestry, topology and candidate coding-variation screens, but cannot establish floral anthocyanin expression or regulatory reactivation."
+}

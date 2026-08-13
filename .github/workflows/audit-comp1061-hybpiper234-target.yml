@@ -1,0 +1,120 @@
+name: Audit Compositae1061 target with HybPiper 2.3.4
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_comp1061_original_hybpiper_reference.py"
+      - ".github/workflows/audit-comp1061-hybpiper234-target.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-target:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Recover frozen original Compositae1061 target
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/comp1061_target_audit
+          python analysis/recover_comp1061_original_hybpiper_reference.py --outdir /tmp/comp1061_target_audit
+          test -s /tmp/comp1061_target_audit/comp1061_hybpiper_reference.fasta
+          echo '77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c  /tmp/comp1061_target_audit/comp1061_hybpiper_reference.fasta' | sha256sum -c -
+      - name: Install pinned HybPiper 2.3.4
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-name: hybpiper-target-audit
+          create-args: >-
+            python=3.11
+            hybpiper=2.3.4
+          condarc: |
+            channels:
+              - conda-forge
+              - bioconda
+            channel_priority: strict
+          init-shell: none
+          generate-run-shell: true
+          cache-environment: true
+          cache-downloads: true
+          post-cleanup: all
+      - name: Run native HybPiper target-file audit without bypass
+        id: native_audit
+        shell: micromamba-shell {0}
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          cd /tmp/comp1061_target_audit
+          hybpiper --version | tee hybpiper_version.txt
+          set +e
+          hybpiper check_targetfile --targetfile_dna comp1061_hybpiper_reference.fasta 2>&1 | tee native_check_targetfile.stdout.log
+          rc=${PIPESTATUS[0]}
+          set -e
+          echo "$rc" > native_check_targetfile.exit_code.txt
+          echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
+          find . -maxdepth 2 -type f -printf '%P\n' | sort > artifact_file_inventory.txt
+          exit 0
+      - name: Summarize structural frame diagnostics
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter, defaultdict
+          from pathlib import Path
+          p=Path('/tmp/comp1061_target_audit/comp1061_hybpiper_reference.fasta')
+          rows=[]; name=None; seq=[]
+          for raw in p.read_text().splitlines():
+              x=raw.strip()
+              if not x: continue
+              if x.startswith('>'):
+                  if name is not None: rows.append((name,''.join(seq).upper()))
+                  name=x[1:].split()[0]; seq=[]
+              else: seq.append(x)
+          if name is not None: rows.append((name,''.join(seq).upper()))
+          stops={'TAA','TAG','TGA'}; iupac=set('ACGTRYSWKMBDHVN')
+          reasons=Counter(); by_taxon=Counter(); loci=defaultdict(list)
+          for h,s in rows:
+              taxon,locus=h.split('-',1)
+              r=[]
+              if len(s)%3: r.append('length_not_multiple_of_three')
+              if set(s)-iupac: r.append('non_iupac_dna')
+              if len(s)%3==0:
+                  hit=[i for i in range(0,len(s),3) if s[i:i+3] in stops]
+                  if any(i != len(s)-3 for i in hit): r.append('internal_stop_codon')
+              if r:
+                  for item in r: reasons[item]+=1
+                  by_taxon[taxon]+=1
+              loci[locus].append(not r)
+          summary={
+              'contract_version':'comp1061_hybpiper234_native_target_audit_v1',
+              'original_sha256':'77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c',
+              'records':len(rows),
+              'loci':len(loci),
+              'structurally_flagged_records':sum(1 for h,s in rows if len(s)%3 or set(s)-iupac or (len(s)%3==0 and any(i != len(s)-3 for i in range(0,len(s),3) if s[i:i+3] in stops))),
+              'structural_reason_counts':dict(reasons),
+              'flagged_records_by_reference_taxon':dict(by_taxon),
+              'loci_with_no_structurally_clean_representative':sorted(k for k,v in loci.items() if not any(v)),
+              'native_hybpiper_exit_code':int(Path('/tmp/comp1061_target_audit/native_check_targetfile.exit_code.txt').read_text().strip()),
+              'skip_targetfile_checks_used':False,
+          }
+          Path('/tmp/comp1061_target_audit/structural_audit_summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps(summary,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: comp1061-hybpiper234-native-target-audit-${{ github.run_id }}
+          path: /tmp/comp1061_target_audit
+          if-no-files-found: error
+      - name: Enforce explicit admission gate
+        run: |
+          rc='${{ steps.native_audit.outputs.exit_code }}'
+          test -n "$rc"
+          if [ "$rc" -ne 0 ]; then
+            echo "Frozen original target is not natively accepted by HybPiper 2.3.4; do not use --skip_targetfile_checks. Build and validate an explicit derived target instead." >&2
+            exit 1
+          fi

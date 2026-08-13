@@ -1,0 +1,154 @@
+name: Recover Moreyra author repository
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_moreyra_author_repository.py"
+      - "analysis/summarize_moreyra_locus_filter.py"
+      - "tests/test_recover_moreyra_author_repository.py"
+      - "tests/test_summarize_moreyra_locus_filter.py"
+      - ".github/workflows/recover-moreyra-author-repository.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile \
+            analysis/recover_moreyra_author_repository.py \
+            analysis/summarize_moreyra_locus_filter.py
+          python -m unittest \
+            tests/test_recover_moreyra_author_repository.py \
+            tests/test_summarize_moreyra_locus_filter.py \
+            -v
+
+      - name: Recover and audit public author-repository files
+        run: |
+          python analysis/recover_moreyra_author_repository.py \
+            --outdir data/evidence/generated/moreyra_author_repository \
+            --force
+
+      - name: Reconstruct reproducible locus-filter stages
+        run: |
+          python analysis/summarize_moreyra_locus_filter.py \
+            --audit-dir data/evidence/generated/moreyra_author_repository
+
+      - name: Validate recovery and filter invariants
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          outdir = Path("data/evidence/generated/moreyra_author_repository")
+          audit = json.loads(
+              (outdir / "author_repository_audit_summary.json").read_text(encoding="utf-8")
+          )
+          filter_summary = json.loads(
+              (outdir / "locus_filter_reconstruction_summary.json").read_text(encoding="utf-8")
+          )
+
+          def rows(path):
+              with path.open(encoding="utf-8-sig", newline="") as handle:
+                  return list(csv.DictReader(handle))
+
+          provenance = rows(outdir / "source_provenance.csv")
+          occupancy = rows(outdir / "locus_occupancy.csv")
+          locus_filter = rows(outdir / "paralog_locus_filter_reconstruction.csv")
+          sample_diff = rows(outdir / "sample_matrix_membership_difference.csv")
+          sheets = rows(outdir / "paralog_report_sheets.csv")
+
+          classes = filter_summary["paralog_warning_class_counts"]
+          print(f"source_files={len(provenance)}")
+          print(f"hybpiper_sample_rows={audit['hybpiper_stats']['sample_rows']}")
+          print(f"seq_length_biological_samples={filter_summary['sequence_length_matrix']['biological_sample_rows']}")
+          print(f"public_named_loci={filter_summary['public_named_loci']}")
+          print(f"paper_vs_public_locus_difference={filter_summary['paper_vs_public_named_locus_difference']}")
+          print(f"discard_gt10={classes['discard_gt10_paralog_warnings']}")
+          print(f"manual_1_to_10={classes['manual_gene_tree_review_1_to_10_warnings']}")
+          print(f"no_warning={classes['no_paralog_warning']}")
+          print(f"raw_occupancy_ge_0_80={filter_summary['loci_raw_occupancy_ge_0_80']}")
+          print(
+              "warning_le_10_and_occupancy_ge_0_80="
+              + str(filter_summary['loci_warning_le_10_and_occupancy_ge_0_80'])
+          )
+          print(
+              "no_warning_and_occupancy_ge_0_80="
+              + str(filter_summary['no_warning_and_occupancy_ge_0_80'])
+          )
+          print(
+              "manual_review_and_occupancy_ge_0_80="
+              + str(filter_summary['manual_review_class_and_occupancy_ge_0_80'])
+          )
+          print(f"paper_final_alignments={filter_summary['paper_reported_final_alignments']}")
+          print(f"sample_membership_differences={len(sample_diff)}")
+
+          if len(provenance) != 3:
+              raise SystemExit("Expected exactly three author-repository files")
+          if audit['hybpiper_stats']['sample_rows'] != 295:
+              raise SystemExit("Expected 295 HybPiper stats rows")
+          if filter_summary['sequence_length_matrix']['biological_sample_rows'] != 302:
+              raise SystemExit("Expected 302 biological sequence-length rows after excluding MeanLength")
+          if filter_summary['sequence_length_matrix']['reference_meanlength_rows'] != 1:
+              raise SystemExit("Expected one MeanLength reference row")
+          if filter_summary['public_named_loci'] != 1061:
+              raise SystemExit("Expected 1061 named public loci")
+          if filter_summary['paper_vs_public_named_locus_difference'] != 3:
+              raise SystemExit("Expected the paper/public named-locus difference to remain three")
+          if len(occupancy) != 1061 or len(locus_filter) != 1061:
+              raise SystemExit("Locus output tables do not contain 1061 rows")
+          if classes != {
+              'discard_gt10_paralog_warnings': 478,
+              'manual_gene_tree_review_1_to_10_warnings': 307,
+              'no_paralog_warning': 276,
+          }:
+              raise SystemExit(f"Unexpected paralog warning classes: {classes}")
+          if filter_summary['loci_raw_occupancy_ge_0_80'] != 1001:
+              raise SystemExit("Expected 1001 loci with raw occupancy >= 0.80")
+          if filter_summary['loci_warning_le_10_and_occupancy_ge_0_80'] != 531:
+              raise SystemExit("Expected 531 loci after reproducible warning/occupancy screen")
+          if filter_summary['no_warning_and_occupancy_ge_0_80'] != 241:
+              raise SystemExit("Expected 241 no-warning high-occupancy loci")
+          if filter_summary['manual_review_class_and_occupancy_ge_0_80'] != 290:
+              raise SystemExit("Expected 290 manual-review high-occupancy loci")
+          if filter_summary['seq_length_samples_not_in_hybpiper_stats'] != [
+              'Cirsium-cosmelii_MA425',
+              'Cirsium-kiotoense_FJ333',
+              'Cirsium-montanum_WG150',
+              'Cirsium-scabrum_MA420',
+              'Cirsium-valdespinulosum_MA421',
+              'Cirsium-vulgare_R114',
+              'Echinops-karatavicus_S142',
+          ]:
+              raise SystemExit("Unexpected sequence-length-only sample membership")
+          if filter_summary['hybpiper_stats_samples_not_in_seq_lengths']:
+              raise SystemExit("Expected no HybPiper-stats-only samples")
+          if len(sample_diff) != 7:
+              raise SystemExit("Expected seven sample-membership differences")
+          if len(sheets) != 1:
+              raise SystemExit("Expected one extracted paralog workbook sheet")
+          if filter_summary['exact_final_350_locus_names_recovered']:
+              raise SystemExit("The exact final 350-locus list must remain unresolved")
+          PY
+
+      - name: Upload author-repository audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: moreyra-author-repository-audit-${{ github.run_id }}
+          path: data/evidence/generated/moreyra_author_repository
+          if-no-files-found: error
+          retention-days: 90

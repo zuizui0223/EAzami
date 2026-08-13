@@ -1,0 +1,9 @@
+group,topology_count,regain_required_count,regain_required_fraction,no_regain_equal_optimum_count,no_regain_penalty_1_count,no_regain_penalty_2_count,minimum_change_2_count,minimum_change_3_count,minimum_change_4_count,interpretation
+all_rooted_binary_topologies,945,270,0.285714,675,252,18,81,486,378,Worst-case topology uncertainty across all 945 rooted binary resolutions.
+bp_monophyletic,45,36,0.800000,9,18,18,45,0,0,"All three bluish-purple tips form one clade, but their position relative to white tips is unrestricted."
+w_monophyletic,45,0,0.000000,45,0,0,45,0,0,All three white tips form one clade; a loss-only explanation remains available.
+nh_tj_cherry,105,66,0.628571,39,60,6,21,84,0,"The published NH-TJ sister pair is preserved, while other relationships vary."
+bp_monophyletic_and_nh_tj_cherry,15,12,0.800000,3,6,6,15,0,0,The full BP clade and its NH-TJ internal pair are preserved.
+published_plus_single_split_perturbations,9,9,1.000000,0,4,5,7,2,0,Published topology plus every rooted topology differing by rooted RF distance at most two.
+published_plus_two_split_perturbations,51,44,0.862745,7,32,12,25,26,0,Published topology plus wider local rearrangements up to rooted RF distance four.
+published_topology,1,1,1.000000,0,0,1,1,0,0,Exact Figure 1 sample topology.

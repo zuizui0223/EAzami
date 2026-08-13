@@ -1,0 +1,202 @@
+# Chang et al. 2026 var. *takaoense* sample topology and flower-colour history
+
+Date: 2026-08-11
+
+## Current conclusion
+
+The direct Figure 1 labels make var. *takaoense* the strongest present candidate for a white-to-coloured transition, but support is topology-sensitive.
+
+- In the **displayed Figure 1 topology**, a coloured-root Sinocirsium reconstruction uniquely requires one white loss followed by one W-to-coloured transition.
+- Across **all 945 rooted bifurcating resolutions** of the same six labelled tips, 270 resolutions require a regain at the parsimony minimum and 675 allow a no-regain minimum.
+- Uniform enumeration is a robustness boundary, not a posterior distribution over trees.
+
+The defensible claim is:
+
+> **The displayed sample topology supports candidate regain, but regain is not robust to unresolved six-tip topology.**
+
+## Direct labels and displayed topology
+
+The six published var. *takaoense* transcriptomes are:
+
+- bluish-purple `(BP)`: FC-3559, TJ-3807, NH-3835;
+- white `(W)`: WY-3560, FB-3629, LT-3839.
+
+Figure 1 panel C displays:
+
+```text
+(((((NH_BP, TJ_BP), FC_BP), LT_W), FB_W), WY_W)
+```
+
+Panel B's Neighbor-Net independently groups the same three BP-labelled samples and the same three W-labelled samples.
+
+## Directional-history results on the displayed tree
+
+### Six samples alone
+
+Fitch parsimony gives a white root and one change.
+
+- fixed white root: one `W -> C` transition;
+- fixed coloured root: three changes, with two equal minima:
+  - three `C -> W` losses;
+  - two losses and one regain.
+
+The six tips alone therefore do not orient the transition without outside context.
+
+### White var. albescens plus exact var. takaoense
+
+With a coloured parent node:
+
+- minimum: two losses and one regain, three changes;
+- best no-regain history: four changes;
+- no-regain penalty: `+1`.
+
+### Sample-aware Sinocirsium
+
+Using broad coloured *C. japonicum*, coloured var. *australe* and var. *fukienense*, white var. *albescens*, and the exact six-tip var. *takaoense* topology:
+
+- minimum: one loss and one regain, two changes;
+- every minimum assignment contains `W -> C`;
+- best no-regain history: four changes;
+- no-regain penalty: `+2`.
+
+### Full East Asian focal topology
+
+With Arenicola and Taiwanese Nipponocirsium added under a coloured root:
+
+- minimum: three losses and one regain, four changes;
+- best no-regain history: six changes;
+- no-regain penalty: `+2`.
+
+This differs from the earlier generic population-aware sensitivity, which used an unresolved W/C sister pair and allowed four-loss/no-regain and three-loss/one-regain histories equally.
+
+Frozen outputs:
+
+- `analysis/chang2026_takaoense_sample_colour_history.py`
+- `analysis/chang2026_takaoense_sample_colour_history.csv`
+- `data/evidence/chang2026_takaoense_sample_colour_history_summary_2026-08-11.json`
+- `tests/test_chang2026_takaoense_sample_colour_history.py`
+
+## Exact morph-label clustering on the displayed tree
+
+Conditional on the displayed tree and exactly three BP plus three W labels, there are 20 balanced assignments.
+
+- observed Fitch score: `1`, the minimum possible;
+- score distribution: 2 assignments with score 1, 10 with score 2, 8 with score 3;
+- exact observed oriented assignment probability: `1/20 = 0.05`;
+- exact unordered W/BP partition probability: `2/20 = 0.10`.
+
+Only the observed partition and its colour-swapped complement produce a one-change split. This demonstrates unusually strong morph clustering on the displayed tree, conditional on that topology.
+
+Files:
+
+- `analysis/chang2026_takaoense_morph_clustering.py`
+- `tests/test_chang2026_takaoense_morph_clustering.py`
+
+## Exhaustive topology uncertainty
+
+Several internal sample branches are weakly supported. To quantify the boundary, all 945 rooted, fully bifurcating six-tip topologies were enumerated and inserted into the same coloured-root Sinocirsium screen.
+
+### Overall
+
+- topologies enumerated: `945`;
+- regain required at the minimum: `270` (`28.57%`);
+- no-regain allowed at the same minimum: `675` (`71.43%`).
+
+### Morph monophyly
+
+- BP-monophyletic topologies: `45`;
+- W-monophyletic topologies: `45`;
+- both morphs monophyletic: `9`;
+- BP monophyletic but W non-monophyletic: `36`;
+- all 36 BP-monophyletic/W-nonmonophyletic resolutions require regain.
+
+### Penalty among regain-required topologies
+
+- no-regain penalty `+1`: `252` topologies;
+- no-regain penalty `+2`: `18` topologies;
+- the displayed Figure 1 topology belongs to the `+2` class.
+
+The `270/945` fraction is **not** a posterior probability of regain because the 945 topologies are weighted uniformly rather than by gene-tree, quartet, bootstrap or network support.
+
+Files:
+
+- `analysis/chang2026_takaoense_topology_uncertainty.py`
+- `analysis/chang2026_takaoense_topology_uncertainty.csv`
+- `analysis/chang2026_takaoense_topology_uncertainty_summary.json`
+- `tests/test_chang2026_takaoense_topology_uncertainty.py`
+- `data/evidence/generated/chang2026_takaoense_all_945_topologies.csv` when generated by CI.
+
+## Strong altitude confounding
+
+The six published samples also show complete altitude-rank separation:
+
+- BP mean altitude: `1160.67 m`;
+- W mean altitude: `357.00 m`;
+- mean difference: `803.67 m`;
+- all BP samples occur above all W samples;
+- exact one-sided allocation probability: `0.05`;
+- exact two-sided probability: `0.10`;
+- leave-one-sample-out differences: `635.67–1113.67 m`.
+
+This is a sampling clue, not a causal test. One plant per non-random locality confounds morph, altitude, geography and genomic ancestry.
+
+Files:
+
+- `analysis/takaoense_published_morph_metadata_screen.py`
+- `analysis/takaoense_published_morph_metadata_screen_summary.json`
+- `analysis/takaoense_published_morph_altitude_screen.csv`
+
+## Why molecular reactivation is not yet demonstrated
+
+Even if the displayed tree is correct, the same pattern could reflect:
+
+- introgression of coloured ancestry;
+- retention of ancestral coloured variation;
+- geography-associated structure;
+- regulatory polymorphism without prior complete pathway loss;
+- reticulation not represented by one bifurcating tree.
+
+If weak internodes are unresolved, most possible binary resolutions permit no-regain histories. Branch-length-aware Mk or stochastic mapping also cannot be run from a figure-derived topology without documented branches.
+
+## Revised claim hierarchy
+
+### Supported
+
+> The published six samples contain three W and three BP transcriptomes with strong morph clustering on the displayed tree.
+
+> On the displayed topology and a coloured-root Sinocirsium model, regain is required at the parsimony minimum and a no-regain history costs two additional changes.
+
+### Supported only as a sensitivity statement
+
+> Candidate-regain support depends on resolving the weak six-tip topology: 270 of 945 possible binary resolutions require regain, while 675 permit no-regain minima.
+
+### Not supported yet
+
+> Anthocyanin was molecularly lost and then restored.
+
+> Altitude or pollinators caused the colour transition.
+
+## Immediate next analyses
+
+1. obtain the exact machine-readable Chang tree, branch lengths, quartet/local posterior support and Neighbor-Net inputs;
+2. weight alternative six-tip topologies by empirical gene-tree or quartet support rather than uniformly;
+3. reanalyse the six labelled transcriptomes for gene-tree concordance, topology weighting and ancestry;
+4. test introgression using var. *fukienense*, var. *australe*, var. *japonicum* and var. *albescens* as source/context lineages;
+5. sample mixed or geographically matched W/BP populations to separate colour from altitude and geography;
+6. collect matched flower RNA, pigment chemistry, reflectance, leaf DNA and ploidy.
+
+## Validation provenance
+
+Displayed-tree directional screen:
+
+- workflow run `31430965810`;
+- eight tests passed;
+- artifact `9079080760`;
+- artifact SHA256 `cee4baa1aa0d9b0717554cddc6b69ec3fbb88063a5b0a8e00967273d49854f84`.
+
+Official Figure 1 source:
+
+- image SHA256 `10375f1d79a4799babdebffca84301f602adfa0aabc825b852de84177bbb878c`;
+- dimensions `1945 × 2400`;
+- workflow run `31429139819`;
+- artifact `9078372622`.

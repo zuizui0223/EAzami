@@ -1,0 +1,223 @@
+name: Reconcile Chang 2026 transcriptomes with NCBI
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_ncbi_project_runs.py"
+      - "analysis/recover_chang2026_published_runinfo.py"
+      - "analysis/reconcile_chang2026_ncbi_runs.py"
+      - "analysis/reconcile_chang2026_complete_runs.py"
+      - "tests/test_recover_ncbi_project_runs.py"
+      - "tests/test_recover_chang2026_published_runinfo.py"
+      - "tests/test_reconcile_chang2026_ncbi_runs.py"
+      - "tests/test_reconcile_chang2026_complete_runs.py"
+      - "data/evidence/chang2026_east_asia_accession_audit_*.csv"
+      - "data/evidence/chang2026_takaoense_figure1_morph_assignments_*.csv"
+      - ".github/workflows/reconcile-chang2026-ncbi-runs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run offline tests
+        run: |
+          python -m py_compile \
+            analysis/recover_ncbi_project_runs.py \
+            analysis/recover_chang2026_published_runinfo.py \
+            analysis/reconcile_chang2026_ncbi_runs.py \
+            analysis/reconcile_chang2026_complete_runs.py
+          python -m unittest \
+            tests/test_recover_ncbi_project_runs.py \
+            tests/test_recover_chang2026_published_runinfo.py \
+            tests/test_reconcile_chang2026_ncbi_runs.py \
+            tests/test_reconcile_chang2026_complete_runs.py \
+            -v
+
+      - name: Recover complete published run universe
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+        run: |
+          python analysis/recover_chang2026_published_runinfo.py \
+            --bioproject PRJNA1311153 \
+            --supplement data/evidence/chang2026_east_asia_accession_audit_2026-08-10.csv \
+            --outdir /tmp/chang2026_ncbi
+
+      - name: Reconcile supplement samples to complete run universe
+        run: |
+          runinfo=$(find /tmp/chang2026_ncbi -name '*_published_complete_runinfo.csv' -print -quit)
+          if [[ -z "$runinfo" ]]; then
+            echo "No complete published runinfo file recovered" >&2
+            exit 1
+          fi
+          python analysis/reconcile_chang2026_complete_runs.py \
+            --runinfo "$runinfo" \
+            --outdir /tmp/chang2026_reconciliation
+
+      - name: Validate complete evidence package
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          import re
+          from collections import Counter
+          from pathlib import Path
+
+          ncbi_dir = Path("/tmp/chang2026_ncbi")
+          outdir = Path("/tmp/chang2026_reconciliation")
+          recovery = json.loads(
+              next(ncbi_dir.glob("*_published_complete_runinfo_summary.json"))
+              .read_text(encoding="utf-8")
+          )
+          summary = json.loads(
+              (outdir / "chang2026_ncbi_reconciliation_summary.json")
+              .read_text(encoding="utf-8")
+          )
+
+          def rows(name):
+              with (outdir / name).open(encoding="utf-8-sig", newline="") as handle:
+                  return list(csv.DictReader(handle))
+
+          def embedded_resolved(row):
+              value = row["embedded_public_accession"].upper()
+              if re.fullmatch(r"SRR\d+", value):
+                  return (
+                      row["matched_run"] == value
+                      and row["match_status"] == "verified_exact_run_accession"
+                  )
+              if re.fullmatch(r"SRX\d+", value):
+                  return (
+                      row["matched_experiment"] == value
+                      and row["match_status"]
+                      == "verified_exact_embedded_experiment_accession"
+                  )
+              if re.fullmatch(r"SAM[A-Z]+\d+", value):
+                  return (
+                      row["matched_biosample"] == value
+                      and row["match_status"]
+                      == "verified_exact_embedded_biosample_accession"
+                  )
+              return False
+
+          reconciled = rows("chang2026_sample_run_reconciliation.csv")
+          takaoense = rows("chang2026_takaoense_sra_manifest.csv")
+          candidates = rows("chang2026_run_candidates.csv")
+          layouts = Counter(row["matched_library_layout"] for row in reconciled)
+          embedded = [row for row in reconciled if row["embedded_public_accession"]]
+          resolved_embedded = [row for row in embedded if embedded_resolved(row)]
+          expected_takaoense = {
+              "FC": ("ccy3559", "BP", "SRR35152718"),
+              "TJ": ("ccy3807", "BP", "SRR35152736"),
+              "NH": ("ccy3835", "BP", "SRR35152735"),
+              "WY": ("ccy3560", "W", "SRR35152717"),
+              "FB": ("ccy3629", "W", "SRR35152738"),
+              "LT": ("ccy3839", "W", "SRR35152734"),
+          }
+
+          print(f"primary_bioproject_runs={recovery['primary_bioproject_run_count']}")
+          print(
+              "supplement_embedded_identifiers="
+              f"{recovery['supplement_embedded_identifier_count']}"
+          )
+          print(
+              "embedded_identifier_types="
+              + json.dumps(recovery["embedded_identifier_type_counts"], sort_keys=True)
+          )
+          print(f"complete_unique_runs={recovery['complete_unique_run_count']}")
+          print(f"supplement_sample_rows={len(reconciled)}")
+          print(f"verified_or_probable_rows={summary['verified_or_probable_rows']}")
+          print(f"unique_matched_runs={summary['unique_matched_runs']}")
+          print(
+              "official_library_layout_counts="
+              + json.dumps(summary["official_library_layout_counts"], sort_keys=True)
+          )
+          print("reconciled_layout_rows=" + json.dumps(dict(layouts), sort_keys=True))
+          print(
+              "derived_unique_voucher_aliases="
+              f"{summary['derived_unique_voucher_aliases']}"
+          )
+          print(f"takaoense_verified={summary['takaoense_verified_or_probable_rows']}")
+          print(f"resolved_embedded_identifiers={len(resolved_embedded)}")
+          print(f"candidate_rows={len(candidates)}")
+          for row in takaoense:
+              print(
+                  "TAKAOENSE "
+                  f"{row['code']} {row['voucher']} {row['published_figure_label']} "
+                  f"{row['matched_run']} {row['matched_library_layout']} "
+                  f"{row['match_status']}"
+              )
+
+          if recovery["primary_bioproject_run_count"] != 25:
+              raise SystemExit(
+                  "Expected 25 runs deposited directly under PRJNA1311153"
+              )
+          if recovery["supplement_embedded_identifier_count"] != 8:
+              raise SystemExit("Expected eight exact reused public identifiers")
+          if recovery["complete_unique_run_count"] != 33:
+              raise SystemExit("Expected 33 unique published runs after union")
+          if recovery["missing_embedded_identifiers"]:
+              raise SystemExit("One or more supplement identifiers were not recovered")
+          if len(reconciled) != 33:
+              raise SystemExit(f"Expected 33 supplement samples, observed {len(reconciled)}")
+          if summary["verified_or_probable_rows"] != 33:
+              raise SystemExit("All 33 samples must be verified or probable")
+          if summary["unique_matched_runs"] != 33:
+              raise SystemExit("Expected 33 unique matched runs")
+          if summary["official_library_layout_counts"] != {"PAIRED": 33}:
+              raise SystemExit("All 33 Chang runs must be officially paired-end")
+          if dict(layouts) != {"PAIRED": 33}:
+              raise SystemExit("Reconciled CSV lost official LibraryLayout metadata")
+          if summary["run_assignment_collision_rows"] != 0:
+              raise SystemExit("Run-assignment collision detected")
+          if summary["derived_unique_voucher_aliases"] < 25:
+              raise SystemExit(
+                  "Fewer than the 25 newly deposited samples have exact voucher aliases"
+              )
+          if len(embedded) != 8 or len(resolved_embedded) != 8:
+              raise SystemExit("All eight embedded identifiers must resolve exactly")
+          if summary["embedded_identifier_resolution_count"] != 8:
+              raise SystemExit("Embedded identifier resolution ledger changed")
+          if len(takaoense) != 6:
+              raise SystemExit("Expected six takaoense samples")
+          if summary["takaoense_verified_or_probable_rows"] != 6:
+              raise SystemExit("All six takaoense samples must be verified")
+          if {row["matched_library_layout"] for row in takaoense} != {"PAIRED"}:
+              raise SystemExit("Takaoense runs are not all officially paired-end")
+          observed_takaoense = {
+              row["code"]: (
+                  row["voucher"],
+                  row["published_figure_label"],
+                  row["matched_run"],
+              )
+              for row in takaoense
+          }
+          if observed_takaoense != expected_takaoense:
+              raise SystemExit(
+                  f"Takaoense voucher/morph/run mapping changed: {observed_takaoense}"
+              )
+          if not candidates:
+              raise SystemExit("No candidate audit rows were written")
+          PY
+
+      - name: Upload complete reconciliation evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: chang2026-complete-ncbi-reconciliation-${{ github.run_id }}
+          path: |
+            /tmp/chang2026_ncbi/
+            /tmp/chang2026_reconciliation/
+          if-no-files-found: error
+          retention-days: 90
