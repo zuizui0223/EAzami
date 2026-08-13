@@ -68,6 +68,7 @@ jobs:
           assert evidence['EA02']['artifact_id']=='9175876315'
           assert int(contract['joint_candidate_strict_loci'])==236
           assert contract['tree_tip_promotion_allowed_before_paired_trees'] is False
+          assert all(x['baseline_exact_taxon_expected'] is True for x in contract['candidates'])
           print(json.dumps({'EA01':len(s1),'EA02':len(s2),'joint':len(s1&s2)},indent=2))
           PY
       - name: Recover real baseline-v2 panel dependency and build bundles
@@ -105,6 +106,8 @@ jobs:
           assert m['candidate_strict_loci']=={'EA01':236,'EA02':239}
           assert m['scenarios']==['baseline294','ea01_295','ea02_295','ea01_ea02_296']
           assert m['mapping_modes']==['bwa','blastx']
+          assert m['candidate_analysis_taxon_labels_already_in_baseline']==['EA01','EA02']
+          assert m['new_analysis_taxon_labels_added']==0
           assert m['tree_tip_promotion_allowed'] is False
           assert len(list((b/'candidate_packs/EA01/loci').glob('*.fasta')))==236
           assert len(list((b/'candidate_packs/EA02/loci').glob('*.fasta')))==239
@@ -138,13 +141,15 @@ jobs:
           y=[r for r in csv.DictReader((p/'ea01_295/astral_species_map.csv').open()) if r['analysis_taxon_label']=='Cirsium nipponicum var. yoshinoi']
           assert len(y)==1 and int(y[0]['n_tips'])>=2 and 'PUBEA001' in y[0]['tip_ids']
           s2=list(csv.DictReader((p/'ea02_295/astral_species_map.csv').open()))
-          assert any(r['species_id']=='AUG_EA02' and r['analysis_taxon_label']=='Cirsium sairamense' for r in s2)
+          sa=[r for r in s2 if r['analysis_taxon_label']=='Cirsium sairamense']
+          assert len(sa)==1 and int(sa[0]['n_tips'])>=2 and 'PUBEA002' in sa[0]['tip_ids']
+          assert not any(r['species_id']=='AUG_EA02' for r in s2)
           print(json.dumps(s,indent=2))
           PY
       - name: Exercise shared-backbone RF evaluator
         run: |
           python - <<'PY'
-          import csv,json
+          import csv
           from pathlib import Path
           rows=list(csv.DictReader(Path('/tmp/baseline_bundle/sample_manifest.csv').open()))
           names=[r['tip_id'] for r in rows]
