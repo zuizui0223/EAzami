@@ -1,0 +1,20 @@
+name: Validate Japan-origin topology interpretation
+
+on:
+  pull_request:
+    paths:
+      - 'analysis/analyze_japan_origin_global_tree.py'
+      - 'tests/test_analyze_japan_origin_global_tree.py'
+      - '.github/workflows/validate-japan-origin-topology-analysis.yml'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run topology-interpretation contract tests
+        run: python -m unittest -v tests.test_analyze_japan_origin_global_tree
