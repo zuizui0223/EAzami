@@ -19,7 +19,7 @@ class NipponicumGenomeAuditTests(unittest.TestCase):
     def fixture(self):
         return {
             "id": 26927092,
-            "title": "Genome assembly and annotations of Cirsium nipponicum",
+            "title": "C.nipponicum.gff3",
             "doi": "10.6084/m9.figshare.26927092",
             "files": [
                 {
@@ -33,9 +33,9 @@ class NipponicumGenomeAuditTests(unittest.TestCase):
                 },
                 {
                     "id": 2,
-                    "name": "Cirsium_nipponicum.gff3.gz",
+                    "name": "C.nipponicum.gff3",
                     "size": 100,
-                    "download_url": "https://example.org/ann.gz",
+                    "download_url": "https://example.org/ann.gff3",
                     "supplied_md5": "def",
                     "computed_md5": "def",
                     "is_link_only": False,
@@ -49,7 +49,8 @@ class NipponicumGenomeAuditTests(unittest.TestCase):
         self.assertTrue(summary["augmentation_candidate"])
         self.assertFalse(summary["primary_294_panel_changed"])
         self.assertFalse(summary["tree_tip_promotion_allowed"])
-        self.assertEqual(summary["sequence_or_archive_candidate_count"], 2)
+        self.assertEqual(summary["direct_sequence_candidate_count"], 1)
+        self.assertEqual(summary["annotation_only_file_count"], 1)
 
     def test_wrong_article_is_fatal(self):
         data = self.fixture()
@@ -57,19 +58,21 @@ class NipponicumGenomeAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unexpected Figshare article id"):
             mod.audit(data)
 
-    def test_nonsequence_files_do_not_promote(self):
+    def test_annotation_only_file_does_not_promote(self):
         data = self.fixture()
         data["files"] = [{
             "id": 3,
-            "name": "README.txt",
+            "name": "C.nipponicum.gff3",
             "size": 50,
-            "download_url": "https://example.org/readme",
+            "download_url": "https://example.org/ann.gff3",
             "supplied_md5": "",
             "computed_md5": "",
             "is_link_only": False,
         }]
         _, summary = mod.audit(data)
         self.assertFalse(summary["augmentation_candidate"])
+        self.assertEqual(summary["annotation_only_file_count"], 1)
+        self.assertEqual(summary["direct_sequence_candidate_count"], 0)
 
 
 if __name__ == "__main__":
