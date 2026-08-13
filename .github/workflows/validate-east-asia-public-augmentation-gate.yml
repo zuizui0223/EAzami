@@ -7,6 +7,7 @@ on:
       - "analysis/evaluate_east_asia_public_augmentation_tree_pair.py"
       - "analysis/compare_east_asia_public_augmentation_astral_backbone.py"
       - "analysis/build_east_asia_public_augmentation_hpc_bundle.py"
+      - "analysis/build_east_asia_public_full_hpc_handoff.py"
       - "analysis/summarize_east_asia_public_augmentation_sensitivities.py"
       - "data/evidence/east_asia_public_tree_augmentation_contract_v1.json"
       - "data/evidence/east_asia_public_sra_comp1061_pilot_results_2026-08-13.csv"
@@ -38,6 +39,7 @@ jobs:
             analysis/evaluate_east_asia_public_augmentation_tree_pair.py \
             analysis/compare_east_asia_public_augmentation_astral_backbone.py \
             analysis/build_east_asia_public_augmentation_hpc_bundle.py \
+            analysis/build_east_asia_public_full_hpc_handoff.py \
             analysis/summarize_east_asia_public_augmentation_sensitivities.py
       - name: Recover successful EA01 and EA02 candidate packs
         env:
@@ -77,7 +79,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p /tmp/moreyra /tmp/panel /tmp/baseline_bundle /tmp/augmentation_bundle
+          mkdir -p /tmp/moreyra /tmp/panel /tmp/baseline_bundle /tmp/augmentation_bundle /tmp/full_handoff
           curl --fail --location -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9067368059/zip" -o /tmp/moreyra.zip
           echo "a18e4867362fed7b509c351bc901a9456fe258f09c7e277b0069d8c257b6ed72  /tmp/moreyra.zip" | sha256sum -c -
@@ -94,27 +96,50 @@ jobs:
             --ea02-pack /tmp/EA02 \
             --contract data/evidence/east_asia_public_tree_augmentation_contract_v1.json \
             --outdir /tmp/augmentation_bundle
-      - name: Validate real augmentation bundle offline
+          python analysis/build_east_asia_public_full_hpc_handoff.py \
+            --baseline-bundle /tmp/baseline_bundle \
+            --augmentation-bundle /tmp/augmentation_bundle \
+            --outdir /tmp/full_handoff
+      - name: Validate real full HPC handoff offline
         run: |
-          python -m py_compile /tmp/augmentation_bundle/helpers/*.py
-          for f in /tmp/augmentation_bundle/*.sh; do bash -n "$f"; done
+          python -m py_compile /tmp/full_handoff/augmentation_bundle/helpers/*.py
+          while IFS= read -r -d '' f; do bash -n "$f"; done < <(find /tmp/full_handoff -type f -name '*.sh' -print0)
           python - <<'PY'
           import json
           from pathlib import Path
-          b=Path('/tmp/augmentation_bundle')
-          m=json.loads((b/'execution_manifest.json').read_text())
-          assert m['bundle_version']=='east_asia_public_augmentation_hpc_bundle_v1'
-          assert m['baseline_focal_tips']==294
-          assert m['candidate_strict_loci']=={'EA01':236,'EA02':239}
-          assert m['scenarios']==['baseline294','ea01_295','ea02_295','ea01_ea02_296']
-          assert m['mapping_modes']==['bwa','blastx']
-          assert m['candidate_analysis_taxon_labels_already_in_baseline']==['EA01','EA02']
-          assert m['new_analysis_taxon_labels_added']==0
-          assert m['tree_tip_promotion_allowed'] is False
-          assert len(list((b/'candidate_packs/EA01/loci').glob('*.fasta')))==236
-          assert len(list((b/'candidate_packs/EA02/loci').glob('*.fasta')))==239
-          assert (b/'16_summarize_cross_mapping_sensitivities_slurm.sh').is_file()
-          print(json.dumps(m,indent=2))
+          h=Path('/tmp/full_handoff')
+          aug=h/'augmentation_bundle'
+          am=json.loads((aug/'execution_manifest.json').read_text())
+          hm=json.loads((h/'handoff_manifest.json').read_text())
+          assert am['bundle_version']=='east_asia_public_augmentation_hpc_bundle_v1'
+          assert am['baseline_focal_tips']==294
+          assert am['candidate_strict_loci']=={'EA01':236,'EA02':239}
+          assert am['scenarios']==['baseline294','ea01_295','ea02_295','ea01_ea02_296']
+          assert am['mapping_modes']==['bwa','blastx']
+          assert am['candidate_analysis_taxon_labels_already_in_baseline']==['EA01','EA02']
+          assert am['new_analysis_taxon_labels_added']==0
+          assert am['tree_tip_promotion_allowed'] is False
+          assert len(list((aug/'candidate_packs/EA01/loci').glob('*.fasta')))==236
+          assert len(list((aug/'candidate_packs/EA02/loci').glob('*.fasta')))==239
+          assert (aug/'16_summarize_cross_mapping_sensitivities_slurm.sh').is_file()
+          assert hm['handoff_version']=='east_asia_public_full_hpc_handoff_v1'
+          assert hm['baseline_biological_tips']==294 and hm['baseline_public_runs']==295
+          assert hm['baseline_sra_download_shared_between_mapping_modes'] is True
+          assert hm['candidate_mapping_sensitivity_is_symmetric'] is True
+          assert hm['heavy_compute_location']=='HPC_or_large_memory_local_only'
+          assert hm['github_actions_role']=='artifact_contract_bundle_and_decision_logic_validation_only'
+          assert hm['new_analysis_taxon_labels_added_by_candidates']==0
+          fetch=(aug/'00_fetch_candidate_reads_slurm.sh').read_text()
+          blast=(aug/'01_hybpiper_candidate_blastx_slurm.sh').read_text()
+          prep=(aug/'10_prepare_paired_inputs_with_candidate_mapping_slurm.sh').read_text()
+          orch=(h/'submit_full_public_tree_and_augmentation.sh').read_text()
+          assert 'SRR30887223' in fetch and 'SRR9119112' in fetch
+          assert 'hybpiper assemble' in blast and '--bwa' not in blast
+          assert 'candidate_mapping/blastx/packs/EA01' in prep
+          assert 'candidate_mapping/blastx/packs/EA02' in prep
+          assert 'baseline_fetch_295_srr' in orch and 'candidate_blastx_hybpiper' in orch
+          assert 'cross_mapping_summary' in orch
+          print(json.dumps(hm,indent=2))
           PY
       - name: Exercise paired-input builder with real candidate loci
         run: |
@@ -229,9 +254,9 @@ jobs:
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: east-asia-public-augmentation-gate-${{ github.run_id }}
+          name: east-asia-public-full-hpc-handoff-${{ github.run_id }}
           path: |
-            /tmp/augmentation_bundle
+            /tmp/full_handoff
             /tmp/paired_inputs/paired_augmentation_summary.json
             /tmp/paired_inputs/scenario_manifest.csv
           if-no-files-found: error
