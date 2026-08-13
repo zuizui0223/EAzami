@@ -77,6 +77,7 @@ Keep and develop:
 
 - `analysis/build_japan_origin_global_public_panel_v2.py`
 - `analysis/build_japan_origin_global_hpc_bundle_v2.py`
+- `analysis/build_japan_origin_global_hpc_bundle.py` (temporary shared shell-primitives helper imported by v2; **not** a supported v1 entry point)
 - `analysis/prepare_east_asia_public_augmentation_tree_inputs.py`
 - `analysis/evaluate_east_asia_public_augmentation_tree_pair.py`
 - `analysis/compare_east_asia_public_augmentation_astral_backbone.py`
@@ -88,9 +89,11 @@ Keep and develop:
 - `data/evidence/east_asia_public_tree_augmentation_contract_v1.json`
 - `docs/EAST_ASIA_PUBLIC_TREE_AUGMENTATION_GATE_2026-08-13.md`
 
+The old-named HPC helper above should eventually be extracted/renamed to a neutral shared-primitives module. Until then, deleting it breaks the validated v2 builder, so it is intentionally retained as implementation debt rather than advertised as a historical pipeline.
+
 ### Flower-colour state layer
 
-The active atlas generation is v0.3. Earlier v0.1/v0.2 builders and validation workflows are historical prototypes and should not be executable from the current tree.
+The active atlas generation is v0.3. Earlier v0.1/v0.2 builders and validation workflows are historical prototypes and should not be executable from the current tree. The frozen v0.2 atlas CSV remains because v0.3 uses it as its explicit base evidence layer.
 
 Keep:
 
@@ -98,6 +101,7 @@ Keep:
 - `analysis/cirsium_flower_colour_atlas_v0_3_readiness.json`
 - `tests/test_cirsium_flower_colour_atlas_v0_3.py`
 - `.github/workflows/validate-cirsium-flower-colour-atlas-v0-3.yml`
+- `data/evidence/cirsium_flower_colour_atlas_v0_2.csv`
 
 ### Chang 2026 / Read2Tree
 
@@ -111,22 +115,32 @@ Keep:
 - current contracts and decision gates;
 - current builders/runners;
 - tests of live code;
-- concise state/claim documentation.
+- concise state/claim documentation;
+- implementation helpers still imported by a current builder, even if their filename is historical.
 
 Remove from the live tree when a replacement is validated:
 
-- executable v1/v0.x pipelines superseded by a corrected later version;
-- tests that only exercise deleted obsolete code;
+- executable v1/v0.x entry points superseded by a corrected later version;
+- tests that only exercise deleted obsolete entry points;
 - GitHub Actions workflows that can rebuild known-wrong or superseded states;
 - one-off recovery workflows after their recovered artifacts are frozen and the recovery implementation no longer participates in current CI.
 
 Do **not** delete a frozen scientific result merely because its generating implementation is retired. Historical source code remains available through Git history.
 
-## 6. First cleanup applied with this state file
+## 6. Cleanup applied with this state file
 
-The first cleanup removes two closed obsolete families:
+The first cleanup removes two closed obsolete families while preserving live dependencies:
 
-1. Japan-origin global panel **v1** executable path (302-sample inventory), because v2 explicitly corrects its cross-paper duplicate-sample error.
-2. Flower-colour atlas **v0.1/v0.2** executable/test/workflow paths, because v0.3 is the active validated atlas generation.
+1. Japan-origin global panel **v1** entry point, v1 contract and v1 workflows (302-sample inventory), because v2 explicitly corrects its cross-paper duplicate-sample error. The old-named HPC helper is retained only because the v2 bundle currently imports its shell-generation primitives.
+2. Flower-colour atlas **v0.1/v0.2** builders, tests and validation workflows, because v0.3 is the active validated atlas generation. Frozen atlas/evidence CSVs used by v0.3 remain; stale v0.1/v0.2 readiness summaries are removed.
 
 This cleanup does not change any accepted biological conclusion, the 294-tip baseline, the EA01/EA02 augmentation gate, or any frozen source evidence used by the active path.
+
+## 7. Next cleanup targets after the primary tree gate is stable
+
+Do not delete these blindly. Refactor them first, then remove the historical wrappers only after current CI is changed to the new shared path:
+
+- extract `build_japan_origin_global_hpc_bundle.py` shell primitives into a neutral shared module and make v2 import that module;
+- collapse wrapper/base pairs such as colour-rate Compositae1061 builders where the current generation still imports the previous implementation;
+- consolidate one-shot `recover-*` Actions only after their recovered source artifacts have durable checksums/locations and no current bundle invokes those recovery scripts;
+- reduce transcriptome/Read2Tree runner generations only after the current contracts stop importing or regression-testing the older runner.
