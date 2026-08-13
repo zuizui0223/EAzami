@@ -1,0 +1,138 @@
+name: Audit global Cirsium public genome assemblies
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/audit-global-cirsium-public-genome-assemblies.yml"
+      - "data/evidence/japan_origin_global_public_panel_contract_v2.json"
+  workflow_dispatch:
+
+concurrency:
+  group: global-cirsium-assemblies-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  audit-assemblies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install current NCBI Datasets CLI
+        run: |
+          curl --fail --location --retry 3 \
+            -o /usr/local/bin/datasets \
+            'https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/datasets'
+          curl --fail --location --retry 3 \
+            -o /usr/local/bin/dataformat \
+            'https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/dataformat'
+          chmod +x /usr/local/bin/datasets /usr/local/bin/dataformat
+          datasets version
+          dataformat version
+      - name: Recover the frozen 294-tip primary panel
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/cirsium_assemblies/known /tmp/cirsium_assemblies/audit
+          curl --fail --location \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9163736681/zip" \
+            -o /tmp/cirsium_assemblies/known.zip
+          echo '111583da688510fcf2948dce987dfa9a1e088a298262ada8b78e59715c51baab  /tmp/cirsium_assemblies/known.zip' | sha256sum -c -
+          unzip -q /tmp/cirsium_assemblies/known.zip -d /tmp/cirsium_assemblies/known
+          test -s /tmp/cirsium_assemblies/known/japan_origin_global_public_panel_v2.csv
+      - name: Query all current NCBI Cirsium genome assemblies
+        run: |
+          datasets summary genome taxon Cirsium --as-json-lines \
+            > /tmp/cirsium_assemblies/audit/assembly_data_report.jsonl
+          test -s /tmp/cirsium_assemblies/audit/assembly_data_report.jsonl
+          dataformat tsv genome \
+            --inputfile /tmp/cirsium_assemblies/audit/assembly_data_report.jsonl \
+            --fields accession,organism-name,organism-tax-id,assminfo-name,assminfo-level,assminfo-bioproject,assminfo-biosample-accession,assminfo-biosample-geo-loc-name,assminfo-release-date,assminfo-sequencing-tech,assminfo-submitter,assminfo-status,assmstats-total-sequence-len,assmstats-contig-n50,assmstats-scaffold-n50,annotinfo-featcount-gene-protein-coding,source_database \
+            > /tmp/cirsium_assemblies/audit/cirsium_public_assemblies.tsv
+          test -s /tmp/cirsium_assemblies/audit/cirsium_public_assemblies.tsv
+      - name: Classify nuclear-scale augmentation candidates
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path('/tmp/cirsium_assemblies')
+          with (root/'audit/cirsium_public_assemblies.tsv').open(encoding='utf-8',newline='') as h:
+              rows=list(csv.DictReader(h,delimiter='\t'))
+          if not rows:
+              raise SystemExit('NCBI Datasets returned no Cirsium genome assemblies')
+          with (root/'known/japan_origin_global_public_panel_v2.csv').open(encoding='utf-8-sig',newline='') as h:
+              panel=list(csv.DictReader(h))
+          known_labels={r['analysis_taxon_label'] for r in panel}
+          def pick(row,*keys):
+              for k in keys:
+                  if k in row and str(row[k]).strip(): return str(row[k]).strip()
+              return ''
+          def integer(x):
+              try:return int(float(str(x).replace(',','')))
+              except:return 0
+          audit=[]
+          for r in rows:
+              accession=pick(r,'Assembly Accession','accession')
+              organism=pick(r,'Organism Name','organism-name')
+              length=integer(pick(r,'Assembly Stats Total Sequence Length','assmstats-total-sequence-len'))
+              status=pick(r,'Assembly Status','assminfo-status')
+              nuclear=length >= 100_000_000 and 'suppressed' not in status.lower()
+              audit.append({
+                'assembly_accession':accession,
+                'organism_name':organism,
+                'assembly_name':pick(r,'Assembly Name','assminfo-name'),
+                'assembly_level':pick(r,'Assembly Level','assminfo-level'),
+                'bioproject':pick(r,'Assembly BioProject Accession','assminfo-bioproject'),
+                'biosample':pick(r,'Assembly BioSample Accession','assminfo-biosample-accession'),
+                'geo_loc_name':pick(r,'Assembly BioSample Geographic location','assminfo-biosample-geo-loc-name'),
+                'release_date':pick(r,'Assembly Release Date','assminfo-release-date'),
+                'sequencing_tech':pick(r,'Assembly Sequencing Tech','assminfo-sequencing-tech'),
+                'submitter':pick(r,'Assembly Submitter','assminfo-submitter'),
+                'status':status,
+                'total_sequence_length':str(length),
+                'protein_coding_gene_count':pick(r,'Annotation Count Gene Protein-coding','annotinfo-featcount-gene-protein-coding'),
+                'nuclear_scale_candidate':str(nuclear).lower(),
+                'taxon_label_already_in_primary294':str(organism in known_labels).lower(),
+                'automatic_tip_admission_allowed':'false',
+              })
+          fields=list(audit[0])
+          with (root/'audit/cirsium_public_assembly_audit.csv').open('w',encoding='utf-8',newline='') as h:
+              w=csv.DictWriter(h,fieldnames=fields);w.writeheader();w.writerows(audit)
+          candidates=[r for r in audit if r['nuclear_scale_candidate']=='true']
+          with (root/'audit/nuclear_scale_assembly_candidates.csv').open('w',encoding='utf-8',newline='') as h:
+              w=csv.DictWriter(h,fieldnames=fields);w.writeheader();w.writerows(candidates)
+          summary={
+            'contract_version':'global_cirsium_public_genome_assembly_audit_v1',
+            'ncbi_taxon_query':'Cirsium',
+            'public_assembly_records':len(audit),
+            'nuclear_scale_candidate_assemblies':len(candidates),
+            'nuclear_scale_candidate_taxa':sorted({r['organism_name'] for r in candidates}),
+            'nuclear_scale_candidate_bioprojects':sorted({r['bioproject'] for r in candidates if r['bioproject']}),
+            'candidate_taxa_already_represented_in_primary294':sorted({r['organism_name'] for r in candidates if r['taxon_label_already_in_primary294']=='true'}),
+            'candidate_taxa_not_exactly_represented_in_primary294':sorted({r['organism_name'] for r in candidates if r['taxon_label_already_in_primary294']=='false'}),
+            'primary_294_panel_changed':False,
+            'automatic_tip_admission_allowed':False,
+            'admission_rule':'Recover the same frozen Compositae1061 loci from each biological assembly; collapse alternate/haplotype assemblies of one BioSample; require orthology/copy-state/occupancy and paired baseline-vs-augmentation topology checks before adding a public genome tip.',
+            'new_china_sampling_freeze_allowed':False,
+          }
+          (root/'audit/global_cirsium_public_genome_assembly_audit_summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps(summary,indent=2))
+          PY
+      - name: Freeze query contract
+        run: |
+          datasets version > /tmp/cirsium_assemblies/audit/ncbi_datasets_version.txt
+          printf '%s\n' \
+            'NCBI Datasets query: datasets summary genome taxon Cirsium --as-json-lines' \
+            'Nuclear-scale candidate: total assembly sequence length >= 100,000,000 nt and not suppressed' \
+            'Candidate assemblies are not automatic phylogenetic tips' \
+            > /tmp/cirsium_assemblies/audit/query_contract.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: global-cirsium-public-genome-assembly-audit-${{ github.run_id }}
+          path: /tmp/cirsium_assemblies/audit
+          if-no-files-found: error
