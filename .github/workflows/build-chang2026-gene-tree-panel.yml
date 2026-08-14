@@ -10,8 +10,7 @@ on:
       - "analysis/audit_chang2026_public_transcriptome_assemblies.py"
       - "analysis/normalize_chang2026_panel_taxa.py"
       - "analysis/build_chang2026_gene_tree_panel.py"
-      - "analysis/run_chang2026_transcriptome_assembly.py"
-      - "analysis/run_chang2026_layout_aware_transcriptome_assembly.py"
+      - "analysis/run_chang2026_restartable_transcriptome_assembly.py"
       - "analysis/prefix_fasta_headers.py"
       - "analysis/prepare_chang2026_single_copy_orthogroups.py"
       - "analysis/run_chang2026_single_copy_gene_trees.py"
@@ -23,7 +22,7 @@ on:
       - "tests/test_audit_chang2026_public_transcriptome_assemblies.py"
       - "tests/test_normalize_chang2026_panel_taxa.py"
       - "tests/test_build_chang2026_gene_tree_panel.py"
-      - "tests/test_run_chang2026_transcriptome_assembly.py"
+      - "tests/test_run_chang2026_restartable_transcriptome_assembly.py"
       - "tests/test_prepare_chang2026_single_copy_orthogroups.py"
       - "tests/test_run_chang2026_single_copy_gene_trees.py"
       - "tests/test_score_chang2026_gene_tree_hypotheses.py"
@@ -63,8 +62,7 @@ jobs:
             analysis/audit_chang2026_public_transcriptome_assemblies.py \
             analysis/normalize_chang2026_panel_taxa.py \
             analysis/build_chang2026_gene_tree_panel.py \
-            analysis/run_chang2026_transcriptome_assembly.py \
-            analysis/run_chang2026_layout_aware_transcriptome_assembly.py \
+            analysis/run_chang2026_restartable_transcriptome_assembly.py \
             analysis/prefix_fasta_headers.py \
             analysis/prepare_chang2026_single_copy_orthogroups.py \
             analysis/run_chang2026_single_copy_gene_trees.py \
@@ -77,7 +75,7 @@ jobs:
             tests/test_audit_chang2026_public_transcriptome_assemblies.py \
             tests/test_normalize_chang2026_panel_taxa.py \
             tests/test_build_chang2026_gene_tree_panel.py \
-            tests/test_run_chang2026_transcriptome_assembly.py \
+            tests/test_run_chang2026_restartable_transcriptome_assembly.py \
             tests/test_prepare_chang2026_single_copy_orthogroups.py \
             tests/test_run_chang2026_single_copy_gene_trees.py \
             tests/test_score_chang2026_gene_tree_hypotheses.py \
@@ -146,189 +144,83 @@ jobs:
           from collections import Counter
           from pathlib import Path
 
-          reconciliation = json.loads(
-              Path(
-                  "/tmp/chang2026_reconciliation/"
-                  "chang2026_ncbi_reconciliation_summary.json"
-              ).read_text(encoding="utf-8")
-          )
-          assembly = json.loads(
-              Path(
-                  "/tmp/chang2026_public_assemblies/"
-                  "chang2026_public_assembly_audit_summary.json"
-              ).read_text(encoding="utf-8")
-          )
-          outdir = Path("/tmp/chang2026_gene_tree_panel")
-          normalization = json.loads(
-              (outdir / "chang2026_panel_taxon_normalization_summary.json")
-              .read_text(encoding="utf-8")
-          )
-          summary = json.loads(
-              (outdir / "chang2026_gene_tree_panel_summary.json").read_text(
-                  encoding="utf-8"
-              )
-          )
-          contract = json.loads(
-              (outdir / "chang2026_gene_tree_workflow_contract.json").read_text(
-                  encoding="utf-8"
-              )
-          )
-          snakemake_version = (
-              outdir / "snakemake_version.txt"
-          ).read_text(encoding="utf-8").strip()
-          dry_run_log = (
-              outdir / "snakemake_dry_run.log"
-          ).read_text(encoding="utf-8")
+          reconciliation=json.loads(Path('/tmp/chang2026_reconciliation/chang2026_ncbi_reconciliation_summary.json').read_text())
+          assembly=json.loads(Path('/tmp/chang2026_public_assemblies/chang2026_public_assembly_audit_summary.json').read_text())
+          outdir=Path('/tmp/chang2026_gene_tree_panel')
+          normalization=json.loads((outdir/'chang2026_panel_taxon_normalization_summary.json').read_text())
+          summary=json.loads((outdir/'chang2026_gene_tree_panel_summary.json').read_text())
+          contract=json.loads((outdir/'chang2026_gene_tree_workflow_contract.json').read_text())
+          snakemake_version=(outdir/'snakemake_version.txt').read_text().strip()
+          dry_run_log=(outdir/'snakemake_dry_run.log').read_text()
 
           def rows(name):
-              with (outdir / name).open(encoding="utf-8-sig", newline="") as handle:
+              with (outdir/name).open(encoding='utf-8-sig',newline='') as handle:
                   return list(csv.DictReader(handle))
 
-          normalized = rows("chang2026_panel_taxon_normalized_reconciliation.csv")
-          panel = rows("chang2026_sinocirsium_gene_tree_panel.csv")
-          pilot = rows("chang2026_takaoense6_assembly_pilot.csv")
-          hypotheses = rows("chang2026_takaoense_gene_tree_hypotheses.csv")
-          roles = Counter(row["panel_role"] for row in panel)
-          panel_layouts = Counter(row["library_layout"] for row in panel)
-          read_relations = Counter(row["read_count_relation"] for row in panel)
+          normalized=rows('chang2026_panel_taxon_normalized_reconciliation.csv')
+          panel=rows('chang2026_sinocirsium_gene_tree_panel.csv')
+          pilot=rows('chang2026_takaoense6_assembly_pilot.csv')
+          hypotheses=rows('chang2026_takaoense_gene_tree_hypotheses.csv')
+          roles=Counter(row['panel_role'] for row in panel)
+          panel_layouts=Counter(row['library_layout'] for row in panel)
 
-          print(f"reconciled_samples={reconciliation['verified_or_probable_rows']}")
-          print(
-              "reconciled_library_layouts="
-              + json.dumps(reconciliation["official_library_layout_counts"], sort_keys=True)
-          )
-          print(f"assembly_audit_samples={assembly['sample_rows']}")
-          print(
-              "autonym_rows_collapsed_to_species_panel="
-              f"{normalization['autonym_rows_collapsed_to_species_panel']}"
-          )
-          print(f"panel_samples={len(panel)}")
-          print(f"unique_runs={len({row['matched_run'] for row in panel})}")
-          print("panel_library_layouts=" + json.dumps(dict(panel_layouts), sort_keys=True))
-          print("panel_read_count_relations=" + json.dumps(dict(read_relations), sort_keys=True))
-          print(f"takaoense_pilot_samples={len(pilot)}")
-          print(f"hypotheses={len(hypotheses)}")
-          print("roles=" + json.dumps(dict(sorted(roles.items())), sort_keys=True))
-          print(f"workflow_contract_version={contract['contract_version']}")
-          print(
-              "contract_library_layouts="
-              + json.dumps(contract["official_library_layout_counts"], sort_keys=True)
-          )
-          print("snakefile_rules=" + "|".join(contract["snakefile_rules"]))
-          print(f"snakemake_version={snakemake_version}")
-          print(f"snakemake_dry_run_bytes={len(dry_run_log.encode('utf-8'))}")
-          for row in normalization["changed_rows"]:
-              print(
-                  "PANEL_TAXON_MAP "
-                  f"{row['code']} {row['voucher']} "
-                  f"{row['source_taxon']} -> {row['panel_taxon']}"
-              )
-          for row in pilot:
-              print(
-                  "PILOT "
-                  f"{row['sample_id']} {row['morph']} {row['matched_run']} "
-                  f"layout={row['library_layout']} de_novo={row['de_novo_required']}"
-              )
+          expected_taxa={
+              'cirsium japonicum':2,
+              'cirsium japonicum var. albescens':2,
+              'cirsium japonicum var. takaoense':6,
+              'cirsium japonicum var. australe':3,
+              'cirsium japonicum var. fukienense':4,
+              'cirsium lineare':2,
+          }
+          expected_changed={('FKK','ccy4204'),('ASO','ccy4220')}
+          expected_rules=['all','assemble_transcriptomes','orthofinder','prepare_single_copy_orthogroups','infer_rooted_gene_trees','score_competing_takaoense_histories']
+          expected_runners={
+              'run_chang2026_restartable_transcriptome_assembly.py',
+              'prefix_fasta_headers.py',
+              'prepare_chang2026_single_copy_orthogroups.py',
+              'run_chang2026_single_copy_gene_trees.py',
+              'score_chang2026_gene_tree_hypotheses.py',
+          }
+          observed_changed={(row['code'],row['voucher']) for row in normalization['changed_rows']}
 
-          expected_taxa = {
-              "cirsium japonicum": 2,
-              "cirsium japonicum var. albescens": 2,
-              "cirsium japonicum var. takaoense": 6,
-              "cirsium japonicum var. australe": 3,
-              "cirsium japonicum var. fukienense": 4,
-              "cirsium lineare": 2,
-          }
-          expected_changed = {
-              ("FKK", "ccy4204"),
-              ("ASO", "ccy4220"),
-          }
-          expected_rules = [
-              "all",
-              "assemble_transcriptomes",
-              "orthofinder",
-              "prepare_single_copy_orthogroups",
-              "infer_rooted_gene_trees",
-              "score_competing_takaoense_histories",
-          ]
-          observed_changed = {
-              (row["code"], row["voucher"])
-              for row in normalization["changed_rows"]
-          }
-          if reconciliation["verified_or_probable_rows"] != 33:
-              raise SystemExit("Expected complete 33-sample reconciliation")
-          if reconciliation["unique_matched_runs"] != 33:
-              raise SystemExit("Expected 33 unique reconciled runs")
-          if reconciliation["official_library_layout_counts"] != {"PAIRED": 33}:
-              raise SystemExit(
-                  "All 33 reconciled Chang runs must be officially paired-end"
-              )
-          if assembly["sample_rows"] != 33:
-              raise SystemExit("Expected 33 public-assembly audit rows")
-          if normalization["input_rows"] != 33 or normalization["output_rows"] != 33:
-              raise SystemExit("Taxon normalization changed row count")
-          if normalization["autonym_rows_collapsed_to_species_panel"] != 2:
-              raise SystemExit("Expected exactly two japonicum autonym rows")
-          if observed_changed != expected_changed:
-              raise SystemExit(f"Unexpected panel taxon mappings: {observed_changed}")
-          if any(not row["source_taxon"] for row in normalized):
-              raise SystemExit("Source taxon was not preserved for every row")
-          if summary["sample_count"] != 19 or len(panel) != 19:
-              raise SystemExit("Expected 19 analysis-panel samples")
-          if summary["taxon_counts"] != expected_taxa:
-              raise SystemExit(f"Unexpected taxon counts: {summary['taxon_counts']}")
-          if summary["unique_official_run_count"] != 19:
-              raise SystemExit("Expected 19 unique official SRA runs")
-          if summary["official_library_layout_counts"] != {"PAIRED": 19}:
-              raise SystemExit("Expected 19 officially paired panel runs")
-          if dict(panel_layouts) != {"PAIRED": 19}:
-              raise SystemExit("Panel CSV lost official layout metadata")
-          if len(pilot) != 6:
-              raise SystemExit("Expected six takaoense pilot samples")
-          if {row["morph"] for row in pilot} != {"W", "BP"}:
-              raise SystemExit("Pilot does not contain both published morphs")
-          if sum(row["morph"] == "W" for row in pilot) != 3:
-              raise SystemExit("Expected three white takaoense samples")
-          if sum(row["morph"] == "BP" for row in pilot) != 3:
-              raise SystemExit("Expected three bluish-purple takaoense samples")
-          if summary["de_novo_required_count"] != 19:
-              raise SystemExit("Expected de novo assembly for all 19 panel samples")
-          if any(row["de_novo_required"] != "true" for row in panel):
-              raise SystemExit("A panel row unexpectedly has a public assembly source")
-          if len(hypotheses) != 8:
-              raise SystemExit("Expected one regain and seven nearest loss-only hypotheses")
-          if hypotheses[0]["hypothesis_id"] != "H_REG_PUBLISHED":
-              raise SystemExit("Primary published topology is not first")
-          if sum(
-              row["history_class"] == "nearest_loss_only_topology"
-              for row in hypotheses
-          ) != 7:
-              raise SystemExit("Expected seven nearest loss-only alternatives")
-          if contract["panel_rows"] != 19 or contract["unique_official_runs"] != 19:
-              raise SystemExit("Workflow contract does not preserve the 19-run panel")
-          if contract["official_library_layout_counts"] != {"PAIRED": 19}:
-              raise SystemExit("Workflow contract lost official layout metadata")
-          if contract["focal_morph_counts"] != {"BP": 3, "W": 3}:
-              raise SystemExit("Workflow contract focal morph counts changed")
-          if contract["hypothesis_count"] != 8:
-              raise SystemExit("Workflow contract hypothesis count changed")
-          if contract["snakefile_rules"] != expected_rules:
-              raise SystemExit("Snakemake DAG rule order changed")
-          if contract["heavy_computation_executed"]:
-              raise SystemExit("CI contract must not claim heavy computation")
-          if contract["contract_version"] != "chang2026_gene_tree_workflow_v3_restartable_sra":
-              raise SystemExit("Unexpected workflow contract version")
-          if snakemake_version != "9.23.1":
-              raise SystemExit(f"Unexpected Snakemake version: {snakemake_version}")
-          if not dry_run_log.strip():
-              raise SystemExit("Snakemake dry-run log is empty")
-          for forbidden in (
-              "MissingInputException",
-              "WorkflowError",
-              "RuleException",
-              "SyntaxError",
-          ):
-              if forbidden in dry_run_log:
-                  raise SystemExit(f"Snakemake dry-run contains {forbidden}")
+          assert reconciliation['verified_or_probable_rows']==33
+          assert reconciliation['unique_matched_runs']==33
+          assert reconciliation['official_library_layout_counts']=={'PAIRED':33}
+          assert assembly['sample_rows']==33
+          assert normalization['input_rows']==33 and normalization['output_rows']==33
+          assert normalization['autonym_rows_collapsed_to_species_panel']==2
+          assert observed_changed==expected_changed
+          assert all(row['source_taxon'] for row in normalized)
+          assert summary['sample_count']==19 and len(panel)==19
+          assert summary['taxon_counts']==expected_taxa
+          assert summary['unique_official_run_count']==19
+          assert summary['official_library_layout_counts']=={'PAIRED':19}
+          assert dict(panel_layouts)=={'PAIRED':19}
+          assert len(pilot)==6
+          assert sum(row['morph']=='W' for row in pilot)==3
+          assert sum(row['morph']=='BP' for row in pilot)==3
+          assert summary['de_novo_required_count']==19
+          assert all(row['de_novo_required']=='true' for row in panel)
+          assert len(hypotheses)==8
+          assert hypotheses[0]['hypothesis_id']=='H_REG_PUBLISHED'
+          assert sum(row['history_class']=='nearest_loss_only_topology' for row in hypotheses)==7
+          assert contract['panel_rows']==19 and contract['unique_official_runs']==19
+          assert contract['official_library_layout_counts']=={'PAIRED':19}
+          assert contract['focal_morph_counts']=={'BP':3,'W':3}
+          assert contract['hypothesis_count']==8
+          assert contract['snakefile_rules']==expected_rules
+          assert set(contract['runner_sha256'])==expected_runners
+          assert contract['heavy_computation_executed'] is False
+          assert contract['contract_version']=='chang2026_gene_tree_workflow_v4_canonical_restartable_sra'
+          assert snakemake_version=='9.23.1'
+          assert dry_run_log.strip()
+          for forbidden in ('MissingInputException','WorkflowError','RuleException','SyntaxError'):
+              assert forbidden not in dry_run_log, forbidden
+          print('panel_samples=19')
+          print('official_layout=PAIRED_19')
+          print('takaoense_pilot=BP3_W3')
+          print('canonical_assembly_runner=run_chang2026_restartable_transcriptome_assembly.py')
+          print('workflow_contract=v4_canonical_restartable_sra')
           PY
 
       - name: Upload complete gene-tree input and dry-run package
