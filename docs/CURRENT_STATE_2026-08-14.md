@@ -125,18 +125,28 @@ The live Slurm-generation primitives are parameterized. Historical 302-sample co
 
 The tree-pair evaluator is gate-generic and shared across the SRA and CNIPG paths.
 
-### Flower-colour state and rate bridge
+### Flower-colour state, bridge and HPC path
 
 The active flower-colour atlas generation is v0.3. The frozen v0.2 atlas CSV remains because v0.3 explicitly consumes it as its evidence base.
 
-The flower-colour Compositae1061 bridge now has **one supported public entry point**:
+The flower-colour Compositae1061 bridge has one supported public entry point:
 
 - `analysis/build_colour_rate_comp1061_bridge_panel.py`
 - `analysis/colour_rate_comp1061_bridge_primitives.py`
 - `tests/test_build_colour_rate_comp1061_bridge_panel.py`
 - `.github/workflows/build-colour-rate-comp1061-bridge-panel.yml`
 
-The corrected empirical source partition is frozen directly as Chang2025=3, Chang2026=10, Moreyra2025=7. The old `_v0_2.py` wrapper that temporarily overwrote an older constant has been removed.
+The corrected empirical source partition is frozen directly as Chang2025=3, Chang2026=10, Moreyra2025=7. The old bridge `_v0_2.py` monkey-patch wrapper has been removed.
+
+The colour-rate HPC bundle likewise has one supported public builder:
+
+- `analysis/build_colour_rate_comp1061_hpc_bundle.py`
+- `analysis/colour_rate_comp1061_hpc_primitives.py`
+- `tests/test_build_colour_rate_comp1061_hpc_bundle.py`
+- `workflow/colour_rate_comp1061/prepare_hpc_bundle.sh`
+- `.github/workflows/validate-colour-rate-comp1061-hpc-bundle.yml`
+
+The canonical builder directly carries the corrected stage-0 contract: `RESULT_ROOT` is exported to inline Python; Moreyra locus filtering is summarized before export; and locus manifests use the real `--input` interface. The old HPC `_v0_2.py` wrapper and wrapper-only test have been removed. The complete bundle through current-paralog QC and tree-acceptance script generation passes CI without that wrapper.
 
 ### var. takaoense focused topology/provenance work
 
@@ -174,9 +184,10 @@ Retired executable families include:
 - live Chang 2026 Figure 1 re-download/preprint fallback code;
 - one-shot *C. nipponicum* Figshare discovery code;
 - obsolete Chang BioSample morph-discovery code after direct Figure 1 evidence was frozen;
-- colour-rate bridge `_v0_2` monkey-patch wrapper and wrapper-only test.
+- colour-rate bridge `_v0_2` monkey-patch wrapper and wrapper-only test;
+- colour-rate HPC `_v0_2` monkey-patch wrapper and wrapper-only test.
 
-The repository now also retains the useful organizational structure from main: workstream navigation, data/schema documentation, capitulum-trait foundation, archived historical decision notes and separated request drafts. Cleanup-specific deletions were preserved when that structure was merged.
+The repository also retains the useful organizational structure from main: workstream navigation, data/schema documentation, capitulum-trait foundation, archived historical decision notes and separated request drafts. Cleanup-specific deletions were preserved when that structure was merged.
 
 Frozen scientific evidence and checksums required by current analyses were retained. Historical code remains recoverable from Git history.
 
@@ -200,13 +211,9 @@ EA01, EA02 and CNIPG validation still consume successful locus-pack Actions arti
 
 They currently expire on 2026-11-11. Provenance and compact result summaries are frozen, but the actual small locus packs still need a durable binary-capable repository/archive route or a deterministic durable source before expiry.
 
-### Colour-rate bridge primitives
+### Internal colour-rate primitives
 
-The public bridge entrypoint is now canonical, but `analysis/colour_rate_comp1061_bridge_primitives.py` was initially extracted from the old implementation wholesale. It still carries some historical entrypoint/build scaffolding that is no longer part of the supported interface. Slim that internal module only after the canonical bridge CI is stable.
-
-### Colour-rate HPC generations
-
-The colour-rate HPC path still has base/v0.2 builder generations. Inspect and consolidate that pair separately; do not assume it is identical to the bridge wrapper case.
+Both `analysis/colour_rate_comp1061_bridge_primitives.py` and `analysis/colour_rate_comp1061_hpc_primitives.py` were initially extracted wholesale from older supported entry points so the public wrappers could be removed safely. They still contain historical entrypoint/build scaffolding that is no longer part of the supported interface. Slim these internal modules only after the canonical bridge/HPC CI remains stable; do not reintroduce public versioned wrappers.
 
 ### Chang transcriptome runner generations
 
