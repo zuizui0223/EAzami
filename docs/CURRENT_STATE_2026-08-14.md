@@ -1,6 +1,6 @@
 # EAzami current state — 2026-08-14
 
-This is the operational source of truth for the repository. It separates accepted scientific conclusions, ready-but-not-promoted public candidates, active execution paths, completed cleanup, and remaining blockers. Historical implementations remain recoverable from Git history and topic-specific evidence documents.
+This is the operational source of truth for the repository. It separates accepted scientific conclusions, ready-but-not-promoted public candidates, durable evidence, active execution paths, completed cleanup, and remaining blockers. Historical implementations remain recoverable from Git history and topic-specific evidence documents.
 
 ## 1. Accepted scientific state
 
@@ -68,7 +68,9 @@ If all independent gates pass, the current sample-level candidate ceiling is **2
 
 This is **not** an accepted combined 297-tip tree. A final combined state requires an explicit common paired-locus contract across independently admitted candidates. Until then, the accepted primary remains 294 tips.
 
-## 3. Durable 294-tip baseline reconstruction
+## 3. Durable public evidence
+
+### 294-tip baseline reconciliation
 
 The 294-tip rebuild no longer depends on the expiring Moreyra Actions artifact `9067368059`.
 
@@ -78,13 +80,32 @@ The exact subset consumed by the v2 builder is frozen under:
 - `data/evidence/moreyra2025_cirsium_reconciliation_v1/part_001.csv` … `part_008.csv`
 - `analysis/materialize_frozen_moreyra_reconciliation.py`
 
-The durable copy contains **258 linked *Cirsium* reconciliation rows** and only the 11 columns consumed by the v2 builder. The manifest retains the original workflow run, artifact ID, source-file checksum, artifact ZIP checksum, per-shard checksums and canonical reconstructed-CSV checksum.
-
-Canonical reconstructed CSV SHA256:
+The durable copy contains **258 linked *Cirsium* reconciliation rows** and only the 11 columns consumed by the v2 builder. The manifest retains original workflow/artifact provenance and checksum lineage. Canonical reconstructed CSV SHA256:
 
 `cf3af71a1a77eee5bd177cef9cf8106b749b949eaacc0ad82bbb331978084505`
 
-The panel-v2, HPC-v2, EA01/EA02 and CNIPG validation workflows rebuild the real 294/295 baseline from this repository evidence. The generic Moreyra metadata-recovery workflow can remain for source re-audit but is no longer a runtime dependency of the primary nuclear-tree CI path.
+### EA01 / EA02 / CNIPG locus packs
+
+The successful candidate locus packs also no longer depend on expiring Actions artifacts at runtime.
+
+Durable evidence is frozen under:
+
+- `data/evidence/public_candidate_locus_packs_v1/manifest.json`
+- sharded base64(gzip(TSV)) payloads for EA01, EA02 and CNIPG;
+- `analysis/materialize_frozen_public_candidate_locus_pack.py`
+- `tests/test_materialize_frozen_public_candidate_locus_pack.py`
+
+The manifest retains the original artifact IDs, artifact ZIP SHA256 values, strict locus-list hashes, source summary hashes, canonical TSV hashes and every source per-locus FASTA hash. The original artifact expiry date, 2026-11-11, is retained as provenance only.
+
+The freeze audit verified the source artifact ZIP hashes first, then proved byte identity after materialization for:
+
+- EA01: all **236** strict FASTAs plus strict locus list and source summary;
+- EA02: all **239** strict FASTAs plus strict locus list and source summary;
+- CNIPG: all **180** strict FASTAs plus strict locus list and source summary.
+
+Thus **655/655 source locus FASTAs** are exactly reconstructable from repository evidence. The normal EA01/EA02 and CNIPG validation workflows now use only this durable repository evidence; they no longer require `actions: read`, `GH_TOKEN`, or `/actions/artifacts/.../zip` downloads.
+
+The CNIPG downstream bundle still requires the scientific tree inputs—frozen summary, strict 180-locus list and all 180 locus FASTAs. The historical per-locus audit CSV is treated only as an optional diagnostic and its presence/absence is recorded explicitly in the generated execution manifest rather than silently required.
 
 ## 4. Active implementation paths
 
@@ -185,7 +206,8 @@ Retired executable families include:
 - one-shot *C. nipponicum* Figshare discovery code;
 - obsolete Chang BioSample morph-discovery code after direct Figure 1 evidence was frozen;
 - colour-rate bridge `_v0_2` monkey-patch wrapper and wrapper-only test;
-- colour-rate HPC `_v0_2` monkey-patch wrapper and wrapper-only test.
+- colour-rate HPC `_v0_2` monkey-patch wrapper and wrapper-only test;
+- one-shot candidate-pack freeze/migration workflows after durable EA01/EA02/CNIPG evidence was committed and normal CI switched to repository materialization.
 
 The repository also retains the useful organizational structure from main: workstream navigation, data/schema documentation, capitulum-trait foundation, archived historical decision notes and separated request drafts. Cleanup-specific deletions were preserved when that structure was merged.
 
@@ -200,16 +222,6 @@ Frozen scientific evidence and checksums required by current analyses were retai
 New China sampling remains deliberately unfrozen until this public-data ceiling is evaluated.
 
 ## 8. Remaining implementation debt
-
-### Candidate pack durability
-
-EA01, EA02 and CNIPG validation still consume successful locus-pack Actions artifacts:
-
-- EA01 artifact `9175870949`, SHA256 `275fecf31e202ae28914441faff70a7faede3c2b8912901221d84e4aa6ef2232`;
-- EA02 artifact `9175876315`, SHA256 `6a9c0d91b2d98ed5ebc72bf96effd5f41c8c6f865747b1d1124ee3d59eb0d1bb`;
-- CNIPG artifact `9174758977`, SHA256 `079e3bfaab1d5041ebc2dcb1919532c75eefde7ffe1f766ab0473845f2f9dd69`.
-
-They currently expire on 2026-11-11. Provenance and compact result summaries are frozen, but the actual small locus packs still need a durable binary-capable repository/archive route or a deterministic durable source before expiry.
 
 ### Internal colour-rate primitives
 
