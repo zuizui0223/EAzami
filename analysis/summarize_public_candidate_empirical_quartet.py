@@ -7,11 +7,11 @@ candidate for each of two taxa:
 * baseline *C. nipponicum* var. *yoshinoi* + EA01/PUBEA001;
 * baseline *C. sairamense* + EA02/PUBEA002.
 
-Every gene tree and the concatenated tree are inferred from the exact same
-four-way strict-locus intersection.  This script classifies each resolved
-unrooted quartet into one of the three possible bipartitions.  It is an
-empirical sanity check of same-taxon placement, not a substitute for the full
-294-tip promotion gate.
+All four samples are first restricted to one exact four-way strict-locus
+intersection. Per-locus ML trees may then be restricted further to loci with
+actual phylogenetic information, while the concatenated ML tree still uses the
+full four-way strict intersection. This is an empirical same-taxon placement
+sanity check, not a substitute for the full 294-tip promotion gate.
 """
 from __future__ import annotations
 
@@ -64,16 +64,26 @@ def classify_newick(text: str) -> str:
 def read_loci(path: Path) -> list[str]:
     loci = [line.strip() for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
     if not loci or len(loci) != len(set(loci)):
-        raise ValueError("common-locus list is empty or duplicated")
+        raise ValueError(f"locus list is empty or duplicated: {path}")
     return loci
 
 
-def summarize(common_loci: Path, gene_tree_dir: Path, concat_tree: Path, output: Path) -> dict[str, object]:
-    loci = read_loci(common_loci)
+def summarize(
+    common_loci: Path,
+    gene_tree_dir: Path,
+    concat_tree: Path,
+    output: Path,
+    gene_tree_loci: Path | None = None,
+) -> dict[str, object]:
+    common = read_loci(common_loci)
+    analysis_loci = read_loci(gene_tree_loci) if gene_tree_loci is not None else common
+    if not set(analysis_loci) <= set(common):
+        raise ValueError("gene-tree loci are not a subset of the four-way common strict loci")
+
     counts = {name: 0 for name in (*TOPOLOGIES, "unresolved")}
     missing: list[str] = []
     per_locus: list[dict[str, str]] = []
-    for locus in loci:
+    for locus in analysis_loci:
         path = gene_tree_dir / f"{locus}.treefile"
         if not path.is_file() or not path.stat().st_size:
             missing.append(locus)
@@ -99,11 +109,12 @@ def summarize(common_loci: Path, gene_tree_dir: Path, concat_tree: Path, output:
             "Cirsium nipponicum var. yoshinoi": ["MRY_YOSHINOI", "PUBEA001"],
             "Cirsium sairamense": ["MRY_SAIRAMENSE", "PUBEA002"],
         },
-        "common_strict_loci": len(loci),
+        "four_way_common_strict_loci": len(common),
+        "gene_tree_analysis_loci": len(analysis_loci),
         "gene_trees": len(per_locus),
         "gene_tree_topology_counts": counts,
         "resolved_gene_trees": resolved,
-        "same_taxon_pair_gene_tree_fraction_all": same / len(loci),
+        "same_taxon_pair_gene_tree_fraction_all_analysis_loci": same / len(analysis_loci),
         "same_taxon_pair_fraction_resolved": same / resolved if resolved else None,
         "same_taxon_pair_fraction_informative": same / informative if informative else None,
         "concatenated_topology": concat_topology,
@@ -128,11 +139,18 @@ def summarize(common_loci: Path, gene_tree_dir: Path, concat_tree: Path, output:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--common-loci", type=Path, required=True)
+    parser.add_argument("--gene-tree-loci", type=Path)
     parser.add_argument("--gene-tree-dir", type=Path, required=True)
     parser.add_argument("--concat-tree", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    summarize(args.common_loci, args.gene_tree_dir, args.concat_tree, args.output)
+    summarize(
+        args.common_loci,
+        args.gene_tree_dir,
+        args.concat_tree,
+        args.output,
+        args.gene_tree_loci,
+    )
     return 0
 
 
