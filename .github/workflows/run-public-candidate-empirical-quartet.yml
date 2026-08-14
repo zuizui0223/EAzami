@@ -1,0 +1,461 @@
+name: Run public-candidate empirical quartet
+
+on:
+  pull_request:
+    paths:
+      - "analysis/summarize_public_candidate_empirical_quartet.py"
+      - "tests/test_summarize_public_candidate_empirical_quartet.py"
+      - "analysis/build_public_sra_comp1061_candidate_pack.py"
+      - "analysis/materialize_frozen_public_candidate_locus_pack.py"
+      - "analysis/recover_comp1061_original_hybpiper_reference.py"
+      - "analysis/recover_moreyra_author_repository.py"
+      - "analysis/summarize_moreyra_locus_filter.py"
+      - "analysis/export_moreyra_locus_manifests.py"
+      - "data/evidence/public_candidate_locus_packs_v1/**"
+      - ".github/workflows/run-public-candidate-empirical-quartet.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: public-candidate-empirical-quartet-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  prepare-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile and test empirical quartet code
+        run: |
+          python -m py_compile \
+            analysis/summarize_public_candidate_empirical_quartet.py \
+            analysis/build_public_sra_comp1061_candidate_pack.py
+          python -m unittest \
+            tests/test_summarize_public_candidate_empirical_quartet.py \
+            tests/test_build_public_sra_comp1061_candidate_pack.py \
+            -v
+
+      - name: Recover pinned reference and conservative 241-locus set
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/quartet/reference /tmp/quartet/moreyra_author_repo /tmp/quartet/locus_sets /tmp/quartet/reference_bundle
+          python analysis/recover_comp1061_original_hybpiper_reference.py \
+            --outdir /tmp/quartet/reference
+          python analysis/recover_moreyra_author_repository.py \
+            --outdir /tmp/quartet/moreyra_author_repo --force
+          python analysis/summarize_moreyra_locus_filter.py \
+            --audit-dir /tmp/quartet/moreyra_author_repo \
+            --output /tmp/quartet/moreyra_author_repo/paralog_locus_filter_reconstruction.csv \
+            --summary /tmp/quartet/moreyra_author_repo/locus_filter_reconstruction_summary.json \
+            --sample-difference /tmp/quartet/moreyra_author_repo/sample_matrix_membership_difference.csv
+          python analysis/export_moreyra_locus_manifests.py \
+            --input /tmp/quartet/moreyra_author_repo/paralog_locus_filter_reconstruction.csv \
+            --outdir /tmp/quartet/locus_sets
+          test -s /tmp/quartet/reference/comp1061_hybpiper_reference.fasta
+          echo '77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c  /tmp/quartet/reference/comp1061_hybpiper_reference.fasta' | sha256sum -c -
+          test "$(wc -l < /tmp/quartet/locus_sets/moreyra_conservative_241_no_warning_loci.txt)" -eq 241
+          cp /tmp/quartet/reference/comp1061_hybpiper_reference.fasta /tmp/quartet/reference_bundle/
+          cp /tmp/quartet/locus_sets/moreyra_conservative_241_no_warning_loci.txt /tmp/quartet/reference_bundle/
+          cat > /tmp/quartet/reference_bundle/baseline_quartet_manifest.csv <<'CSV'
+          candidate_id,tip_id,scientific_name,biosample,run,bioproject,library_strategy,pilot_execute
+          BLYO,MRY_YOSHINOI,Cirsium nipponicum var. yoshinoi,SAMN44017955,SRR30887222,PRJNA957074,Targeted-Capture,true
+          BLSA,MRY_SAIRAMENSE,Cirsium sairamense,SAMN34240330,SRR25265647,PRJNA957074,Targeted-Capture,true
+          CSV
+          sha256sum /tmp/quartet/reference_bundle/* > /tmp/quartet/reference_bundle/SHA256SUMS
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public-candidate-quartet-reference-${{ github.run_id }}
+          path: /tmp/quartet/reference_bundle
+          if-no-files-found: error
+          retention-days: 30
+
+  recover-baseline:
+    needs: prepare-reference
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        baseline_id: [BLYO, BLSA]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/download-artifact@v4
+        with:
+          name: public-candidate-quartet-reference-${{ github.run_id }}
+          path: /tmp/quartet/reference_bundle
+
+      - name: Resolve frozen baseline replicate metadata
+        env:
+          BASELINE_ID: ${{ matrix.baseline_id }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import csv, os
+          from pathlib import Path
+          bid=os.environ['BASELINE_ID']
+          p=Path('/tmp/quartet/reference_bundle/baseline_quartet_manifest.csv')
+          rows=list(csv.DictReader(p.open(encoding='utf-8-sig', newline='')))
+          hits=[r for r in rows if r['candidate_id']==bid]
+          if len(hits)!=1: raise SystemExit(f'{bid}: expected one row')
+          r=hits[0]
+          with open(os.environ['GITHUB_ENV'],'a',encoding='utf-8') as out:
+              for env,field in [('TIP_ID','tip_id'),('RUN_ACCESSION','run'),('BIOSAMPLE','biosample')]:
+                  out.write(f'{env}={r[field]}\n')
+          print(r)
+          PY
+
+      - name: Create pinned HybPiper environment
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-name: quartet-hybpiper
+          create-args: >-
+            python=3.11
+            hybpiper=2.3.4
+            sra-tools
+            fastp
+            pigz
+          condarc: |
+            channels:
+              - conda-forge
+              - bioconda
+            channel_priority: strict
+          init-shell: none
+          generate-run-shell: true
+          cache-environment: true
+          cache-downloads: true
+          post-cleanup: all
+
+      - name: Download and trim real baseline public reads
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          ROOT="/tmp/quartet/${TIP_ID}"
+          mkdir -p "$ROOT"/{sra,raw,trimmed,scratch,hybpiper,retrieved,pack/diagnostics}
+          prefetch "$RUN_ACCESSION" --output-directory "$ROOT/sra"
+          SRA=$(find "$ROOT/sra" -name "${RUN_ACCESSION}.sra" -print -quit)
+          test -s "$SRA"
+          vdb-validate "$SRA"
+          fasterq-dump "$SRA" \
+            --split-files \
+            --threads 4 \
+            --temp "$ROOT/scratch" \
+            --outdir "$ROOT/raw"
+          test -s "$ROOT/raw/${RUN_ACCESSION}_1.fastq"
+          test -s "$ROOT/raw/${RUN_ACCESSION}_2.fastq"
+          fastp \
+            -i "$ROOT/raw/${RUN_ACCESSION}_1.fastq" \
+            -I "$ROOT/raw/${RUN_ACCESSION}_2.fastq" \
+            -o "$ROOT/trimmed/${TIP_ID}.R1.fastq.gz" \
+            -O "$ROOT/trimmed/${TIP_ID}.R2.fastq.gz" \
+            --thread 4 \
+            --json "$ROOT/trimmed/fastp.json" \
+            --html "$ROOT/trimmed/fastp.html"
+          test -s "$ROOT/trimmed/${TIP_ID}.R1.fastq.gz"
+          test -s "$ROOT/trimmed/${TIP_ID}.R2.fastq.gz"
+          rm -rf "$ROOT/raw" "$ROOT/sra" "$ROOT/scratch"
+
+      - name: Recover real Compositae1061 loci with HybPiper BWA
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          ROOT="/tmp/quartet/${TIP_ID}"
+          TARGET=/tmp/quartet/reference_bundle/comp1061_hybpiper_reference.fasta
+          cd "$ROOT/hybpiper"
+          hybpiper assemble \
+            -t_dna "$TARGET" \
+            -r "$ROOT/trimmed/${TIP_ID}.R1.fastq.gz" "$ROOT/trimmed/${TIP_ID}.R2.fastq.gz" \
+            --prefix "$TIP_ID" \
+            --cpu 4 \
+            --bwa \
+            --no_intronerate \
+            2>&1 | tee "$ROOT/pack/diagnostics/assemble.stdout.log"
+          printf '%s\n' "$TIP_ID" > sample_names.txt
+          hybpiper retrieve_sequences dna \
+            -t_dna "$TARGET" \
+            --sample_names sample_names.txt \
+            --hybpiper_dir . \
+            --fasta_dir "$ROOT/retrieved" \
+            --cpu 4 \
+            2>&1 | tee "$ROOT/pack/diagnostics/retrieve.stdout.log"
+          hybpiper paralog_retriever sample_names.txt \
+            -t_dna "$TARGET" \
+            --hybpiper_dir . \
+            --fasta_dir_all "$ROOT/paralogs_all" \
+            --paralog_report_filename "$ROOT/paralog_report" \
+            --paralogs_above_threshold_report_filename "$ROOT/paralog_loci_any" \
+            --paralogs_list_threshold_percentage 0 \
+            --no_heatmap \
+            --cpu 4 \
+            2>&1 | tee "$ROOT/pack/diagnostics/paralog.stdout.log"
+          cd - >/dev/null
+          test -s "$ROOT/paralog_report.tsv"
+
+      - name: Build strict baseline replicate pack
+        shell: micromamba-shell {0}
+        env:
+          BASELINE_ID: ${{ matrix.baseline_id }}
+        run: |
+          set -euo pipefail
+          ROOT="/tmp/quartet/${TIP_ID}"
+          python analysis/build_public_sra_comp1061_candidate_pack.py \
+            --candidate-manifest /tmp/quartet/reference_bundle/baseline_quartet_manifest.csv \
+            --candidate-id "$BASELINE_ID" \
+            --locus-list /tmp/quartet/reference_bundle/moreyra_conservative_241_no_warning_loci.txt \
+            --retrieved-dir "$ROOT/retrieved" \
+            --paralog-report "$ROOT/paralog_report.tsv" \
+            --outdir "$ROOT/pack"
+          cp "$ROOT/trimmed/fastp.json" "$ROOT/pack/fastp.json"
+          cp "$ROOT/paralog_report.tsv" "$ROOT/pack/paralog_report.tsv"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('/tmp/quartet')/os.environ['TIP_ID']/'pack/candidate_pack_summary.json'
+          s=json.loads(p.read_text())
+          print(json.dumps(s,indent=2))
+          if s['strict_no_warning_recovered_loci'] < 100:
+              raise SystemExit('baseline replicate recovered fewer than 100 strict loci')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public-candidate-quartet-baseline-${{ matrix.baseline_id }}-${{ github.run_id }}
+          path: /tmp/quartet/${{ env.TIP_ID }}/pack
+          if-no-files-found: error
+          retention-days: 30
+
+  infer-quartet:
+    needs: recover-baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          name: public-candidate-quartet-baseline-BLYO-${{ github.run_id }}
+          path: /tmp/quartet/baseline/BLYO
+      - uses: actions/download-artifact@v4
+        with:
+          name: public-candidate-quartet-baseline-BLSA-${{ github.run_id }}
+          path: /tmp/quartet/baseline/BLSA
+
+      - name: Materialize frozen real candidate locus packs
+        run: |
+          set -euo pipefail
+          python analysis/materialize_frozen_public_candidate_locus_pack.py \
+            --candidate EA01 --output /tmp/quartet/candidates/EA01
+          python analysis/materialize_frozen_public_candidate_locus_pack.py \
+            --candidate EA02 --output /tmp/quartet/candidates/EA02
+          test "$(wc -l < /tmp/quartet/candidates/EA01/strict_recovered_loci.txt)" -eq 236
+          test "$(wc -l < /tmp/quartet/candidates/EA02/strict_recovered_loci.txt)" -eq 239
+
+      - name: Create MAFFT and IQ-TREE environment
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-name: quartet-tree
+          create-args: >-
+            python=3.12
+            mafft
+            iqtree
+          condarc: |
+            channels:
+              - conda-forge
+              - bioconda
+            channel_priority: strict
+          init-shell: none
+          generate-run-shell: true
+          cache-environment: true
+          cache-downloads: true
+          post-cleanup: all
+
+      - name: Build exact four-way strict-locus intersection
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/quartet/analysis/{unaligned,aligned,gene_trees,concat,result}
+          python - <<'PY'
+          from pathlib import Path
+
+          root=Path('/tmp/quartet')
+          packs={
+              'MRY_YOSHINOI':root/'baseline/BLYO',
+              'PUBEA001':root/'candidates/EA01',
+              'MRY_SAIRAMENSE':root/'baseline/BLSA',
+              'PUBEA002':root/'candidates/EA02',
+          }
+          def loci(p):
+              return [x.strip() for x in (p/'strict_recovered_loci.txt').read_text().splitlines() if x.strip()]
+          order=loci(packs['MRY_YOSHINOI'])
+          others=[set(loci(p)) for tip,p in packs.items() if tip!='MRY_YOSHINOI']
+          common=[x for x in order if all(x in s for s in others)]
+          if len(common)<100:
+              raise SystemExit(f'four-way strict intersection too small: {len(common)}')
+          (root/'analysis/common_strict_loci.txt').write_text(''.join(x+'\n' for x in common))
+
+          def read_one(path):
+              name=None; seq=[]
+              for raw in path.read_text().splitlines():
+                  line=raw.strip()
+                  if not line: continue
+                  if line.startswith('>'):
+                      if name is not None: raise SystemExit(f'multiple records: {path}')
+                      name=line[1:].split()[0]
+                  else: seq.append(line)
+              if name is None or not seq: raise SystemExit(f'empty record: {path}')
+              return name,''.join(seq).upper()
+
+          for locus in common:
+              out=[]
+              for expected,p in packs.items():
+                  name,seq=read_one(p/'loci'/f'{locus}.fasta')
+                  if name!=expected:
+                      raise SystemExit(f'{locus}: expected {expected}, observed {name}')
+                  out.append(f'>{expected}\n{seq}\n')
+              (root/'analysis/unaligned'/f'{locus}.fasta').write_text(''.join(out))
+          print(f'four_way_common_strict_loci={len(common)}')
+          PY
+
+      - name: Align all common loci and identify phylogenetically informative loci
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          while IFS= read -r locus; do
+            mafft --auto --thread 1 "/tmp/quartet/analysis/unaligned/${locus}.fasta" \
+              > "/tmp/quartet/analysis/aligned/${locus}.aln.fasta" 2> /dev/null
+          done < /tmp/quartet/analysis/common_strict_loci.txt
+          python - <<'PY'
+          import csv
+          from collections import Counter
+          from pathlib import Path
+          root=Path('/tmp/quartet/analysis')
+          loci=[x for x in (root/'common_strict_loci.txt').read_text().splitlines() if x]
+          rows=[]; informative=[]
+          for locus in loci:
+              p=root/'aligned'/f'{locus}.aln.fasta'
+              seqs={}; name=None; chunks=[]
+              for raw in p.read_text().splitlines():
+                  line=raw.strip()
+                  if not line: continue
+                  if line.startswith('>'):
+                      if name is not None: seqs[name]=''.join(chunks).upper()
+                      name=line[1:].split()[0]; chunks=[]
+                  else: chunks.append(line)
+              if name is not None: seqs[name]=''.join(chunks).upper()
+              if len(seqs)!=4: raise SystemExit(f'{locus}: expected four aligned tips')
+              lengths={len(s) for s in seqs.values()}
+              if len(lengths)!=1: raise SystemExit(f'{locus}: unequal alignment lengths')
+              variable=0; pi=0
+              for col in zip(*seqs.values()):
+                  bases=[b for b in col if b in 'ACGT']
+                  counts=Counter(bases)
+                  if len(counts)>=2: variable+=1
+                  if sum(n>=2 for n in counts.values())>=2: pi+=1
+              rows.append({'locus':locus,'alignment_nt':next(iter(lengths)),'variable_sites':variable,'parsimony_informative_sites':pi})
+              if pi>0: informative.append(locus)
+          with (root/'locus_information.csv').open('w',newline='') as h:
+              w=csv.DictWriter(h,fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
+          (root/'informative_loci.txt').write_text(''.join(x+'\n' for x in informative))
+          print(f'common_loci={len(loci)} informative_loci={len(informative)}')
+          if len(informative)<10:
+              raise SystemExit(f'fewer than 10 informative quartet loci: {len(informative)}')
+          PY
+
+      - name: Infer per-locus and concatenated empirical ML trees
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          while IFS= read -r locus; do
+            iqtree2 \
+              -s "/tmp/quartet/analysis/aligned/${locus}.aln.fasta" \
+              -m GTR+G \
+              -T 1 \
+              --quiet \
+              --redo \
+              --prefix "/tmp/quartet/analysis/gene_trees/${locus}"
+          done < /tmp/quartet/analysis/informative_loci.txt
+
+          python - <<'PY'
+          from pathlib import Path
+          root=Path('/tmp/quartet/analysis')
+          loci=[x for x in (root/'common_strict_loci.txt').read_text().splitlines() if x]
+          tips=['MRY_YOSHINOI','PUBEA001','MRY_SAIRAMENSE','PUBEA002']
+          concat={tip:[] for tip in tips}
+          def read(path):
+              out={}; name=None; chunks=[]
+              for raw in path.read_text().splitlines():
+                  line=raw.strip()
+                  if not line: continue
+                  if line.startswith('>'):
+                      if name is not None: out[name]=''.join(chunks)
+                      name=line[1:].split()[0]; chunks=[]
+                  else: chunks.append(line)
+              if name is not None: out[name]=''.join(chunks)
+              return out
+          for locus in loci:
+              seqs=read(root/'aligned'/f'{locus}.aln.fasta')
+              for tip in tips: concat[tip].append(seqs[tip])
+          with (root/'concat/quartet_concat.fasta').open('w') as h:
+              for tip in tips:
+                  h.write(f'>{tip}\n{"".join(concat[tip])}\n')
+          print('concat_nt='+str(len(''.join(concat[tips[0]]))))
+          PY
+
+          iqtree2 \
+            -s /tmp/quartet/analysis/concat/quartet_concat.fasta \
+            -m MFP \
+            -B 1000 \
+            --alrt 1000 \
+            -T AUTO \
+            --redo \
+            --prefix /tmp/quartet/analysis/concat/quartet_concat
+
+      - name: Summarize real-read quartet signal
+        run: |
+          set -euo pipefail
+          python analysis/summarize_public_candidate_empirical_quartet.py \
+            --common-loci /tmp/quartet/analysis/common_strict_loci.txt \
+            --gene-tree-loci /tmp/quartet/analysis/informative_loci.txt \
+            --gene-tree-dir /tmp/quartet/analysis/gene_trees \
+            --concat-tree /tmp/quartet/analysis/concat/quartet_concat.treefile \
+            --output /tmp/quartet/analysis/result/empirical_quartet_summary.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('/tmp/quartet/analysis/result/empirical_quartet_summary.json').read_text())
+          print('EMPIRICAL_QUARTET_RESULT')
+          print(json.dumps({k:v for k,v in s.items() if k!='per_locus'},indent=2,ensure_ascii=False))
+          if s['full_294_tip_promotion_allowed_from_this_pilot']:
+              raise SystemExit('pilot must never authorize full promotion')
+          PY
+
+      - name: Preserve baseline pack summaries and empirical products
+        run: |
+          set -euo pipefail
+          cp /tmp/quartet/baseline/BLYO/candidate_pack_summary.json /tmp/quartet/analysis/result/baseline_yoshinoi_pack_summary.json
+          cp /tmp/quartet/baseline/BLSA/candidate_pack_summary.json /tmp/quartet/analysis/result/baseline_sairamense_pack_summary.json
+          cp /tmp/quartet/analysis/locus_information.csv /tmp/quartet/analysis/result/
+          cp /tmp/quartet/analysis/common_strict_loci.txt /tmp/quartet/analysis/result/
+          cp /tmp/quartet/analysis/informative_loci.txt /tmp/quartet/analysis/result/
+          cp /tmp/quartet/analysis/concat/quartet_concat.treefile /tmp/quartet/analysis/result/
+          cp /tmp/quartet/analysis/concat/quartet_concat.iqtree /tmp/quartet/analysis/result/
+          cp /tmp/quartet/analysis/concat/quartet_concat.log /tmp/quartet/analysis/result/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public-candidate-empirical-quartet-${{ github.run_id }}
+          path: /tmp/quartet/analysis/result
+          if-no-files-found: error
+          retention-days: 90
