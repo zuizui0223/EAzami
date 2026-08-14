@@ -104,6 +104,7 @@ jobs:
           while IFS= read -r locus; do
             "$IQTREE" \
               -s "/tmp/quartet/analysis/aligned/${locus}.aln.fasta" \
+              -st DNA \
               -m JC \
               -T 1 \
               --quiet \
@@ -113,6 +114,7 @@ jobs:
           done < /tmp/quartet/analysis/tree_inputs/informative_loci.txt
           "$IQTREE" \
             -s /tmp/quartet/analysis/tree_inputs/concat.fasta \
+            -st DNA \
             -m MFP \
             -B 1000 \
             --alrt 1000 \
