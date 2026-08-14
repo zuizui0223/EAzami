@@ -5,8 +5,8 @@ on:
     paths:
       - "analysis/build_chang2026_resource_plan.py"
       - "tests/test_build_chang2026_resource_plan.py"
-      - "analysis/run_chang2026_layout_aware_transcriptome_assembly.py"
-      - "tests/test_run_chang2026_transcriptome_assembly.py"
+      - "analysis/run_chang2026_restartable_transcriptome_assembly.py"
+      - "tests/test_run_chang2026_restartable_transcriptome_assembly.py"
       - "analysis/recover_chang2026_published_runinfo.py"
       - "analysis/reconcile_chang2026_complete_runs.py"
       - "analysis/normalize_chang2026_panel_taxa.py"
@@ -36,14 +36,14 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Compile and test resource and subset runners
+      - name: Compile and test resource planner and canonical runner
         run: |
           python -m py_compile \
             analysis/build_chang2026_resource_plan.py \
-            analysis/run_chang2026_layout_aware_transcriptome_assembly.py
+            analysis/run_chang2026_restartable_transcriptome_assembly.py
           python -m unittest \
             tests/test_build_chang2026_resource_plan.py \
-            tests/test_run_chang2026_transcriptome_assembly.py \
+            tests/test_run_chang2026_restartable_transcriptome_assembly.py \
             -v
 
       - name: Recover official run metadata and build frozen panel
@@ -82,13 +82,13 @@ jobs:
 
       - name: Validate six-sample and single-sample command plans
         run: |
-          python analysis/run_chang2026_layout_aware_transcriptome_assembly.py \
+          python analysis/run_chang2026_restartable_transcriptome_assembly.py \
             --panel /tmp/chang2026_gene_tree_panel/chang2026_takaoense6_assembly_pilot.csv \
             --expected-panel-samples 6 \
             --outdir /tmp/chang2026_takaoense6_dry_run \
             --jobs 1 \
             --dry-run
-          python analysis/run_chang2026_layout_aware_transcriptome_assembly.py \
+          python analysis/run_chang2026_restartable_transcriptome_assembly.py \
             --panel /tmp/chang2026_gene_tree_panel/chang2026_takaoense6_assembly_pilot.csv \
             --expected-panel-samples 6 \
             --sample-id NH_ccy3835 \
@@ -103,115 +103,95 @@ jobs:
           import json
           from pathlib import Path
 
-          outdir = Path("/tmp/chang2026_resource_plan")
-          summary = json.loads(
-              (outdir / "chang2026_resource_plan_summary.json").read_text(
-                  encoding="utf-8"
-              )
-          )
-          with (outdir / "chang2026_sample_resource_plan.csv").open(
-              encoding="utf-8-sig", newline=""
-          ) as handle:
+          outdir = Path('/tmp/chang2026_resource_plan')
+          summary = json.loads((outdir/'chang2026_resource_plan_summary.json').read_text())
+          with (outdir/'chang2026_sample_resource_plan.csv').open(encoding='utf-8-sig', newline='') as handle:
               rows = list(csv.DictReader(handle))
-          pilot_dry = json.loads(
-              Path(
-                  "/tmp/chang2026_takaoense6_dry_run/"
-                  "transcriptome_assembly_run_summary.json"
-              ).read_text(encoding="utf-8")
-          )
-          single_dry = json.loads(
-              Path(
-                  "/tmp/chang2026_NH_single_sample_dry_run/"
-                  "transcriptome_assembly_run_summary.json"
-              ).read_text(encoding="utf-8")
-          )
 
-          pilot = summary["takaoense6_pilot"]
-          full = summary["full19_panel"]
+          pilot_root=Path('/tmp/chang2026_takaoense6_dry_run')
+          single_root=Path('/tmp/chang2026_NH_single_sample_dry_run')
+          pilot_dry=json.loads((pilot_root/'restartable_run_summary.json').read_text())
+          single_dry=json.loads((single_root/'restartable_run_summary.json').read_text())
+          with (pilot_root/'restartable_command_plan.csv').open(newline='') as handle:
+              pilot_commands=list(csv.DictReader(handle))
+          with (single_root/'restartable_command_plan.csv').open(newline='') as handle:
+              single_commands=list(csv.DictReader(handle))
+
+          pilot = summary['takaoense6_pilot']
+          full = summary['full19_panel']
           print(f"resource_plan_version={summary['resource_plan_version']}")
           print(f"pilot_samples={pilot['sample_count']}")
           print(f"pilot_spots={pilot['total_spots']}")
           print(f"pilot_gigabases={pilot['total_gigabases']:.9f}")
           print(f"pilot_sra_size_gib={pilot['total_sra_size_gib']:.9f}")
-          print(
-              "pilot_fastq_range_gib="
-              f"{pilot['estimated_uncompressed_fastq_min_gib']:.3f}-"
-              f"{pilot['estimated_uncompressed_fastq_max_gib']:.3f}"
-          )
-          print(
-              "pilot_recommended_free_disk_gib="
-              f"{pilot['recommended_free_disk_gib_rounded_up']}"
-          )
+          print('pilot_fastq_range_gib=' f"{pilot['estimated_uncompressed_fastq_min_gib']:.3f}-" f"{pilot['estimated_uncompressed_fastq_max_gib']:.3f}")
+          print('pilot_recommended_free_disk_gib=' f"{pilot['recommended_free_disk_gib_rounded_up']}")
           print(f"full_samples={full['sample_count']}")
           print(f"full_spots={full['total_spots']}")
           print(f"full_gigabases={full['total_gigabases']:.9f}")
           print(f"full_sra_size_gib={full['total_sra_size_gib']:.9f}")
-          print(
-              "full_fastq_range_gib="
-              f"{full['estimated_uncompressed_fastq_min_gib']:.3f}-"
-              f"{full['estimated_uncompressed_fastq_max_gib']:.3f}"
-          )
-          print(
-              "full_recommended_free_disk_gib="
-              f"{full['recommended_free_disk_gib_rounded_up']}"
-          )
-          print(
-              "pilot_dry_run_status_counts="
-              + json.dumps(pilot_dry["status_counts"], sort_keys=True)
-          )
-          print(
-              "single_dry_run_selected="
-              + "|".join(single_dry["selected_sample_ids"])
-          )
+          print('full_fastq_range_gib=' f"{full['estimated_uncompressed_fastq_min_gib']:.3f}-" f"{full['estimated_uncompressed_fastq_max_gib']:.3f}")
+          print('full_recommended_free_disk_gib=' f"{full['recommended_free_disk_gib_rounded_up']}")
+          print('pilot_dry_run_status_counts='+json.dumps(pilot_dry['status_counts'],sort_keys=True))
+          print('single_dry_run_selected='+'|'.join(single_dry['selected_sample_ids']))
 
           if len(rows) != 19:
               raise SystemExit(f"Expected 19 resource rows, observed {len(rows)}")
-          if summary["official_library_layout_counts"] != {"PAIRED": 19}:
-              raise SystemExit("Resource plan lost official paired-end layout")
-          if pilot["sample_count"] != 6 or full["sample_count"] != 19:
-              raise SystemExit("Pilot/full panel sample counts changed")
-          if pilot["total_spots"] != 132162018:
+          if summary['official_library_layout_counts'] != {'PAIRED': 19}:
+              raise SystemExit('Resource plan lost official paired-end layout')
+          if pilot['sample_count'] != 6 or full['sample_count'] != 19:
+              raise SystemExit('Pilot/full panel sample counts changed')
+          if pilot['total_spots'] != 132162018:
               raise SystemExit(f"Pilot spot total changed: {pilot['total_spots']}")
-          if pilot["total_bases"] != 38665601347:
+          if pilot['total_bases'] != 38665601347:
               raise SystemExit(f"Pilot base total changed: {pilot['total_bases']}")
-          if abs(pilot["total_sra_size_gib"] - 12.0830078125) > 1e-12:
+          if abs(pilot['total_sra_size_gib'] - 12.0830078125) > 1e-12:
               raise SystemExit(f"Pilot SRA size changed: {pilot['total_sra_size_gib']}")
-          if full["total_spots"] != 430196870:
+          if full['total_spots'] != 430196870:
               raise SystemExit(f"Full-panel spot total changed: {full['total_spots']}")
-          if full["total_bases"] != 126530492594:
+          if full['total_bases'] != 126530492594:
               raise SystemExit(f"Full-panel base total changed: {full['total_bases']}")
-          if abs(full["total_sra_size_gib"] - 39.6552734375) > 1e-12:
+          if abs(full['total_sra_size_gib'] - 39.6552734375) > 1e-12:
               raise SystemExit(f"Full-panel SRA size changed: {full['total_sra_size_gib']}")
-          if pilot["recommended_free_disk_gib_rounded_up"] != 275:
-              raise SystemExit("Pilot free-disk plan changed without review")
-          if full["recommended_free_disk_gib_rounded_up"] != 900:
-              raise SystemExit("Full-panel free-disk plan changed without review")
-          if summary["workflow_resource_request"]["initial_parallel_sample_jobs"] != 1:
-              raise SystemExit("Initial assembly concurrency must remain one sample")
-          if any(row["library_layout"] != "PAIRED" for row in rows):
-              raise SystemExit("A resource row is not officially paired-end")
+          if pilot['recommended_free_disk_gib_rounded_up'] != 275:
+              raise SystemExit('Pilot free-disk plan changed without review')
+          if full['recommended_free_disk_gib_rounded_up'] != 900:
+              raise SystemExit('Full-panel free-disk plan changed without review')
+          if summary['workflow_resource_request']['initial_parallel_sample_jobs'] != 1:
+              raise SystemExit('Initial assembly concurrency must remain one sample')
+          if any(row['library_layout'] != 'PAIRED' for row in rows):
+              raise SystemExit('A resource row is not officially paired-end')
 
-          if pilot_dry["input_panel_sample_count"] != 6:
-              raise SystemExit("Six-sample dry-run did not validate the pilot panel")
-          if pilot_dry["selected_sample_count"] != 6:
-              raise SystemExit("Six-sample dry-run did not plan all focal samples")
-          if pilot_dry["status_counts"] != {"planned_dry_run": 6}:
-              raise SystemExit("Unexpected six-sample dry-run status")
-          if pilot_dry["subset_execution"]:
-              raise SystemExit("Whole six-sample pilot was incorrectly marked as subset")
-          if pilot_dry["official_library_layout_counts"] != {"PAIRED": 6}:
-              raise SystemExit("Six-sample dry-run lost official layout")
+          if pilot_dry['runner_version']!='chang2026_restartable_heavy_runner_v2_self_contained':
+              raise SystemExit('Pilot did not use canonical restartable runner')
+          if pilot_dry['input_panel_sample_count'] != 6 or pilot_dry['selected_sample_count'] != 6:
+              raise SystemExit('Six-sample dry-run did not validate/plan the full pilot panel')
+          if pilot_dry['status_counts'] != {'planned_dry_run': 6}:
+              raise SystemExit('Unexpected six-sample dry-run status')
+          if pilot_dry['library_layout_source'] != 'official NCBI SRA LibraryLayout':
+              raise SystemExit('Six-sample dry-run lost official layout provenance')
+          if len(pilot_commands)!=6 or any(r['library_layout']!='PAIRED' for r in pilot_commands):
+              raise SystemExit('Six-sample command plan lost PAIRED-only contract')
+          if any('--full_cleanup' in r['trinity_command'] for r in pilot_commands):
+              raise SystemExit('Trinity full cleanup must remain disabled')
 
-          if single_dry["input_panel_sample_count"] != 6:
-              raise SystemExit("Single-sample dry-run did not validate the six-sample panel")
-          if single_dry["selected_sample_count"] != 1:
-              raise SystemExit("Single-sample dry-run did not select one sample")
-          if single_dry["selected_sample_ids"] != ["NH_ccy3835"]:
-              raise SystemExit("Unexpected single-sample selection")
-          if single_dry["status_counts"] != {"planned_dry_run": 1}:
-              raise SystemExit("Unexpected single-sample dry-run status")
-          if not single_dry["subset_execution"]:
-              raise SystemExit("Single-sample dry-run was not marked as subset")
+          if single_dry['runner_version']!='chang2026_restartable_heavy_runner_v2_self_contained':
+              raise SystemExit('Subset did not use canonical restartable runner')
+          if single_dry['input_panel_sample_count'] != 6 or single_dry['selected_sample_count'] != 1:
+              raise SystemExit('Single-sample dry-run did not validate the six-sample panel and select one sample')
+          if single_dry['selected_sample_ids'] != ['NH_ccy3835']:
+              raise SystemExit('Unexpected single-sample selection')
+          if single_dry['status_counts'] != {'planned_dry_run': 1}:
+              raise SystemExit('Unexpected single-sample dry-run status')
+          if len(single_commands)!=1 or single_commands[0]['sample_id']!='NH_ccy3835':
+              raise SystemExit('Single-sample command plan drift')
+          if 'prefetch SRR35152735' not in single_commands[0]['prefetch_command']:
+              raise SystemExit('Single-sample run identity drift')
+          if '--full_cleanup' in single_commands[0]['trinity_command']:
+              raise SystemExit('Subset Trinity full cleanup must remain disabled')
+          print('canonical_restartable_runner=true')
+          print('official_layout_gate=PAIRED')
+          print('takaoense_pilot=BP3_W3')
           PY
 
       - name: Upload resource and pilot command plans
