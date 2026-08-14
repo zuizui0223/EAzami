@@ -9,8 +9,10 @@ on:
       - "analysis/build_east_asia_public_augmentation_hpc_bundle.py"
       - "analysis/build_east_asia_public_full_hpc_handoff.py"
       - "analysis/summarize_east_asia_public_augmentation_sensitivities.py"
+      - "analysis/materialize_frozen_moreyra_reconciliation.py"
       - "data/evidence/east_asia_public_tree_augmentation_contract_v1.json"
       - "data/evidence/east_asia_public_sra_comp1061_pilot_results_2026-08-13.csv"
+      - "data/evidence/moreyra2025_cirsium_reconciliation_v1/**"
       - "docs/EAST_ASIA_PUBLIC_TREE_AUGMENTATION_GATE_2026-08-13.md"
       - ".github/workflows/validate-east-asia-public-augmentation-gate.yml"
   workflow_dispatch:
@@ -40,7 +42,8 @@ jobs:
             analysis/compare_east_asia_public_augmentation_astral_backbone.py \
             analysis/build_east_asia_public_augmentation_hpc_bundle.py \
             analysis/build_east_asia_public_full_hpc_handoff.py \
-            analysis/summarize_east_asia_public_augmentation_sensitivities.py
+            analysis/summarize_east_asia_public_augmentation_sensitivities.py \
+            analysis/materialize_frozen_moreyra_reconciliation.py
       - name: Recover successful EA01 and EA02 candidate packs
         env:
           GH_TOKEN: ${{ github.token }}
@@ -75,15 +78,12 @@ jobs:
           assert all(x['baseline_exact_taxon_expected'] is True for x in contract['candidates'])
           print(json.dumps({'EA01':len(s1),'EA02':len(s2),'joint':len(s1&s2)},indent=2))
           PY
-      - name: Recover real baseline-v2 panel dependency and build bundles
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Materialize durable baseline-v2 dependency and build bundles
         run: |
-          mkdir -p /tmp/moreyra /tmp/panel /tmp/baseline_bundle /tmp/augmentation_bundle /tmp/full_handoff
-          curl --fail --location -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9067368059/zip" -o /tmp/moreyra.zip
-          echo "a18e4867362fed7b509c351bc901a9456fe258f09c7e277b0069d8c257b6ed72  /tmp/moreyra.zip" | sha256sum -c -
-          unzip -q /tmp/moreyra.zip -d /tmp/moreyra
+          mkdir -p /tmp/moreyra/moreyra_sample_audit_output /tmp/panel /tmp/baseline_bundle /tmp/augmentation_bundle /tmp/full_handoff
+          python analysis/materialize_frozen_moreyra_reconciliation.py \
+            --output /tmp/moreyra/moreyra_sample_audit_output/moreyra2025_all_sample_reconciliation.csv
+          echo "cf3af71a1a77eee5bd177cef9cf8106b749b949eaacc0ad82bbb331978084505  /tmp/moreyra/moreyra_sample_audit_output/moreyra2025_all_sample_reconciliation.csv" | sha256sum -c -
           python analysis/build_japan_origin_global_public_panel_v2.py \
             --moreyra-reconciliation /tmp/moreyra/moreyra_sample_audit_output/moreyra2025_all_sample_reconciliation.csv \
             --outdir /tmp/panel
