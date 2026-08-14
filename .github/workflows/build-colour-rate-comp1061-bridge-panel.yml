@@ -4,9 +4,8 @@ on:
   pull_request:
     paths:
       - "analysis/build_colour_rate_comp1061_bridge_panel.py"
-      - "analysis/build_colour_rate_comp1061_bridge_panel_v0_2.py"
+      - "analysis/colour_rate_comp1061_bridge_primitives.py"
       - "tests/test_build_colour_rate_comp1061_bridge_panel.py"
-      - "tests/test_build_colour_rate_comp1061_bridge_panel_v0_2.py"
       - "analysis/build_cirsium_flower_colour_atlas_v0_3.py"
       - "analysis/recover_ncbi_project_runs.py"
       - "analysis/recover_chang2026_published_runinfo.py"
@@ -41,17 +40,14 @@ jobs:
       - name: Compile and unit-test bridge contract
         run: |
           python -m py_compile \
+            analysis/colour_rate_comp1061_bridge_primitives.py \
             analysis/build_colour_rate_comp1061_bridge_panel.py \
-            analysis/build_colour_rate_comp1061_bridge_panel_v0_2.py \
             analysis/build_cirsium_flower_colour_atlas_v0_3.py \
             analysis/recover_ncbi_project_runs.py \
             analysis/recover_chang2026_published_runinfo.py \
             analysis/reconcile_chang2026_ncbi_runs.py \
             analysis/reconcile_chang2026_complete_runs.py
-          python -m unittest \
-            tests/test_build_colour_rate_comp1061_bridge_panel.py \
-            tests/test_build_colour_rate_comp1061_bridge_panel_v0_2.py \
-            -v
+          python -m unittest tests/test_build_colour_rate_comp1061_bridge_panel.py -v
 
       - name: Rebuild the frozen v0.3 atlas input
         run: |
@@ -107,7 +103,7 @@ jobs:
 
       - name: Build primary 20-tip and replicate manifests
         run: |
-          python analysis/build_colour_rate_comp1061_bridge_panel_v0_2.py \
+          python analysis/build_colour_rate_comp1061_bridge_panel.py \
             --atlas /tmp/atlas_v03/cirsium_flower_colour_atlas_v0_3.csv \
             --reference-contract data/evidence/comp1061_original_reference_contract_v1.json \
             --chang-reconciliation /tmp/chang_reconciliation/chang2026_sample_run_reconciliation.csv \
@@ -137,6 +133,8 @@ jobs:
               raise SystemExit('Primary bridge data-type counts changed')
           if Counter(r['source_study'] for r in primary)!=Counter({'Chang2025':3,'Chang2026':10,'Moreyra2025':7}):
               raise SystemExit('Primary bridge source-study counts changed')
+          if summary['source_study_partition']!={'Chang2025':3,'Chang2026':10,'Moreyra2025':7}:
+              raise SystemExit('Canonical source-study partition drifted')
           if any('takaoense' in r['accepted_taxon'].lower() for r in primary):
               raise SystemExit('Polymorphic takaoense leaked into primary fixed-state tree')
           if summary['branch_length_tree_completed'] is not False or summary['rate_fit_execution_allowed'] is not False:
