@@ -1,0 +1,161 @@
+name: Finish public-candidate empirical quartet ML trees
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/run-public-candidate-empirical-quartet-tree-only.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  infer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Download completed real-read baseline packs from empirical run 31788828923
+        uses: actions/download-artifact@v4
+        with:
+          name: public-candidate-quartet-baseline-YOSHINOI-31788828923
+          path: /tmp/quartet/baseline/YOSHINOI
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 31788828923
+      - uses: actions/download-artifact@v4
+        with:
+          name: public-candidate-quartet-baseline-SAIRAMENSE-31788828923
+          path: /tmp/quartet/baseline/SAIRAMENSE
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 31788828923
+
+      - name: Materialize frozen EA01 and EA02 real candidate packs
+        run: |
+          set -euo pipefail
+          python analysis/materialize_frozen_public_candidate_locus_pack.py \
+            --candidate EA01 --output /tmp/quartet/candidates/EA01
+          python analysis/materialize_frozen_public_candidate_locus_pack.py \
+            --candidate EA02 --output /tmp/quartet/candidates/EA02
+
+      - name: Create MAFFT and IQ-TREE environment
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-name: quartet-tree
+          create-args: >-
+            python=3.12
+            mafft
+            iqtree
+          condarc: |
+            channels:
+              - conda-forge
+              - bioconda
+            channel_priority: strict
+          init-shell: none
+          generate-run-shell: true
+          cache-environment: true
+          cache-downloads: true
+          post-cleanup: all
+
+      - name: Rebuild exact four-way empirical inputs and align 235 common strict loci
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/quartet/analysis/{aligned,gene_trees,concat,result}
+          python analysis/prepare_public_candidate_empirical_quartet.py \
+            --locus-universe <(python - <<'PY'
+          from pathlib import Path
+          # The two matched baseline packs were themselves restricted to the frozen conservative 241-locus universe.
+          # Reconstruct that exact universe by unioning their locus-audit rows and retaining the candidate-pack contract.
+          by=Path('/tmp/quartet/baseline/YOSHINOI/strict_recovered_loci.txt')
+          bs=Path('/tmp/quartet/baseline/SAIRAMENSE/strict_recovered_loci.txt')
+          loci=[]
+          for p in (by,bs):
+              for x in p.read_text().splitlines():
+                  x=x.strip()
+                  if x and x not in loci: loci.append(x)
+          # Both packs lose only strict failures from the frozen 241. prepare() only uses this as an ordered upper universe;
+          # the exact four-way intersection is determined from all four strict lists below.
+          print('\n'.join(loci))
+          PY
+            ) \
+            --baseline-yoshinoi /tmp/quartet/baseline/YOSHINOI \
+            --ea01 /tmp/quartet/candidates/EA01 \
+            --baseline-sairamense /tmp/quartet/baseline/SAIRAMENSE \
+            --ea02 /tmp/quartet/candidates/EA02 \
+            --outdir /tmp/quartet/analysis/inputs
+          test "$(wc -l < /tmp/quartet/analysis/inputs/four_way_common_strict_loci.txt)" -eq 235
+          while IFS= read -r locus; do
+            mafft --auto --thread 1 "/tmp/quartet/analysis/inputs/loci_unaligned/${locus}.fasta" \
+              > "/tmp/quartet/analysis/aligned/${locus}.aln.fasta" 2> /dev/null
+          done < /tmp/quartet/analysis/inputs/four_way_common_strict_loci.txt
+          python analysis/prepare_public_candidate_empirical_quartet_tree_inputs.py \
+            --common-loci /tmp/quartet/analysis/inputs/four_way_common_strict_loci.txt \
+            --alignment-dir /tmp/quartet/analysis/aligned \
+            --outdir /tmp/quartet/analysis/tree_inputs
+          test "$(wc -l < /tmp/quartet/analysis/tree_inputs/informative_loci.txt)" -eq 231
+
+      - name: Infer 231 real per-locus ML trees and concatenated ML tree
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          IQTREE=$(command -v iqtree3 || command -v iqtree2 || command -v iqtree || true)
+          test -n "$IQTREE"
+          "$IQTREE" --version
+          while IFS= read -r locus; do
+            "$IQTREE" \
+              -s "/tmp/quartet/analysis/aligned/${locus}.aln.fasta" \
+              -m JC \
+              -T 1 \
+              --quiet \
+              --redo \
+              --prefix "/tmp/quartet/analysis/gene_trees/${locus}"
+            test -s "/tmp/quartet/analysis/gene_trees/${locus}.treefile"
+          done < /tmp/quartet/analysis/tree_inputs/informative_loci.txt
+          "$IQTREE" \
+            -s /tmp/quartet/analysis/tree_inputs/concat.fasta \
+            -m MFP \
+            -B 1000 \
+            --alrt 1000 \
+            -T 2 \
+            --redo \
+            --prefix /tmp/quartet/analysis/concat/quartet_concat
+          test -s /tmp/quartet/analysis/concat/quartet_concat.treefile
+
+      - name: Summarize real empirical quartet
+        run: |
+          set -euo pipefail
+          python analysis/summarize_public_candidate_empirical_quartet.py \
+            --common-loci /tmp/quartet/analysis/inputs/four_way_common_strict_loci.txt \
+            --gene-tree-loci /tmp/quartet/analysis/tree_inputs/informative_loci.txt \
+            --gene-tree-dir /tmp/quartet/analysis/gene_trees \
+            --concat-tree /tmp/quartet/analysis/concat/quartet_concat.treefile \
+            --output /tmp/quartet/analysis/result/empirical_quartet_summary.json
+          cp /tmp/quartet/analysis/tree_inputs/locus_information.csv /tmp/quartet/analysis/result/
+          cp /tmp/quartet/analysis/inputs/four_way_common_strict_loci.txt /tmp/quartet/analysis/result/
+          cp /tmp/quartet/analysis/tree_inputs/informative_loci.txt /tmp/quartet/analysis/result/
+          cp /tmp/quartet/analysis/concat/quartet_concat.treefile /tmp/quartet/analysis/result/
+          cp /tmp/quartet/analysis/concat/quartet_concat.iqtree /tmp/quartet/analysis/result/
+          cp /tmp/quartet/analysis/concat/quartet_concat.log /tmp/quartet/analysis/result/
+          cp /tmp/quartet/baseline/YOSHINOI/matched_baseline_pack_summary.json /tmp/quartet/analysis/result/baseline_yoshinoi_pack_summary.json
+          cp /tmp/quartet/baseline/SAIRAMENSE/matched_baseline_pack_summary.json /tmp/quartet/analysis/result/baseline_sairamense_pack_summary.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('/tmp/quartet/analysis/result/empirical_quartet_summary.json').read_text())
+          print('REAL_EMPIRICAL_QUARTET')
+          print(json.dumps({k:v for k,v in s.items() if k!='per_locus'},indent=2,ensure_ascii=False))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public-candidate-empirical-quartet-ml-${{ github.run_id }}
+          path: /tmp/quartet/analysis/result
+          if-no-files-found: error
+          retention-days: 90
