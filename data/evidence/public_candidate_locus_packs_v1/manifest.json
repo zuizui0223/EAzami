@@ -50,10 +50,14 @@
         ],
         "new_china_sampling_freeze_allowed": false
       },
-      "payload_path": "data/evidence/public_candidate_locus_packs_v1/EA01.tsv.gz.b64",
       "payload_encoding": "base64(gzip(tsv))",
-      "payload_sha256": "4753580637032c8dc6a60d5f8c2c752223181e1b1c9c36305fc469f7a19f86b8",
-      "gzip_sha256": "27f52c1b2d2f99fa48fb8af26007799ea3f96905732bf08148a747c841b61bf4"
+      "gzip_sha256": "27f52c1b2d2f99fa48fb8af26007799ea3f96905732bf08148a747c841b61bf4",
+      "payload_parts": [
+        {"path": "data/evidence/public_candidate_locus_packs_v1/EA01.part01.b64", "sha256": "02a9074d237e50561607708195d6d160774d283181d91ae70b35397a62dddc89", "size_bytes": 24000},
+        {"path": "data/evidence/public_candidate_locus_packs_v1/EA01.part02.b64", "sha256": "ed1c87242d06f049f8c8d9ea5750fd6ad9b7b628d4cf569e388c7671592fcce4", "size_bytes": 24000},
+        {"path": "data/evidence/public_candidate_locus_packs_v1/EA01.part03.b64", "sha256": "bd12b2396db3a6e7f1d35cead005fe8057be19b9e72e21097ba137e238157ed7", "size_bytes": 7576}
+      ],
+      "encoded_payload_sha256": "80a13e34cd9de5d5ff07aa3ddd3b9400be07b1d39742217bdaaa0312355475f6"
     },
     "EA02": {
       "tip_id": "PUBEA002",
@@ -93,10 +97,14 @@
         ],
         "new_china_sampling_freeze_allowed": false
       },
-      "payload_path": "data/evidence/public_candidate_locus_packs_v1/EA02.tsv.gz.b64",
       "payload_encoding": "base64(gzip(tsv))",
-      "payload_sha256": "03176505d728cbaec3f9ea3ac27046b6459ee25b6e1f7879df4c0e1091ea84b9",
-      "gzip_sha256": "e6669afbfc178df29c6d4bc2f5a62dec64d50aafce79e3f5926305b5d2106f32"
+      "gzip_sha256": "e6669afbfc178df29c6d4bc2f5a62dec64d50aafce79e3f5926305b5d2106f32",
+      "payload_parts": [
+        {"path": "data/evidence/public_candidate_locus_packs_v1/EA02.part01.b64", "sha256": "918876dcad5fd94d51c4609d25f9cb2034147c325d3c5758a222663086fc28db", "size_bytes": 24000},
+        {"path": "data/evidence/public_candidate_locus_packs_v1/EA02.part02.b64", "sha256": "1ea58cb9eaaaf16edb24ea40bffdf611bd46063d05ab322988b826f8749d64e6", "size_bytes": 24000},
+        {"path": "data/evidence/public_candidate_locus_packs_v1/EA02.part03.b64", "sha256": "0ffe50b08e030651111a31f48ef75d50e9231152207d1339cf981904c50a9f46", "size_bytes": 10436}
+      ],
+      "encoded_payload_sha256": "66b3d3188c0e16825257ff83cd5e13bac4a7dd6f7f350fb697ed95dc3a4699a3"
     },
     "CNIPG": {
       "tip_id": "AUG_ULLEUNG_CNIP2024",
@@ -136,10 +144,15 @@
         "tree_tip_promotion_allowed": false,
         "claim_limit": "A ready locus pack permits a predeclared 295-tip genome-augmentation tree. It does not modify the accepted 294-tip primary tree until placement is stable under cross-data-type sensitivity."
       },
-      "payload_path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.tsv.gz.b64",
       "payload_encoding": "base64(gzip(tsv))",
-      "payload_sha256": "3571716e4076cda36e378b225ea3d61689e2edd973d2859e0cba83aaceb1dac9",
-      "gzip_sha256": "b49486f835dc5bf5da9e56e2e44700c67bd13e06837cb1595481cd94ca6526ff"
+      "gzip_sha256": "b49486f835dc5bf5da9e56e2e44700c67bd13e06837cb1595481cd94ca6526ff",
+      "payload_parts": [
+        {"path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part01.b64", "sha256": "fae1884144ecd2a97dd7bccddab4e37fecc5399cacc5bc13f7d1ade093cf323c", "size_bytes": 24000},
+        {"path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part02.b64", "sha256": "d247f13a93723b240df9f9ce9f969cf2f5907cc89b969b939070621a4a30849c", "size_bytes": 24000},
+        {"path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part03.b64", "sha256": "43d0ddb57b35bd206a9c61028e1b4df4d917fc67fa5bf7c758ccd7711c443e2a", "size_bytes": 24000},
+        {"path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part04.b64", "sha256": "de051485c40566e8f100d8219ee88a388c7eaefed9e3ba862c4aa4e5523e2beb", "size_bytes": 16756}
+      ],
+      "encoded_payload_sha256": "60723388d8e97ef3a26785f573c2d64bbff3a775ce07ad17375aa9d72d159dc7"
     }
   }
 }
