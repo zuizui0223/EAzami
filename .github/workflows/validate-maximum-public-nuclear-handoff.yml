@@ -11,6 +11,7 @@ on:
       - "analysis/build_cirsium_nipponicum_genome_augmentation_hpc_bundle.py"
       - "analysis/materialize_frozen_moreyra_reconciliation.py"
       - "analysis/materialize_frozen_public_candidate_locus_pack.py"
+      - "workflow/public_nuclear_maximum/**"
       - "data/evidence/japan_origin_global_public_panel_contract_v2.json"
       - "data/evidence/east_asia_public_tree_augmentation_contract_v1.json"
       - "data/evidence/cirsium_nipponicum_public_genome_augmentation_gate_v1.json"
@@ -39,6 +40,7 @@ jobs:
 
       - name: Compile and build the unified handoff
         run: |
+          bash -n workflow/public_nuclear_maximum/prepare_and_submit.sh
           python -m py_compile \
             analysis/build_maximum_public_nuclear_hpc_handoff.py \
             analysis/build_japan_origin_global_public_panel_v2.py \
@@ -94,6 +96,14 @@ jobs:
           assert '/actions/artifacts/' not in top and 'GH_TOKEN' not in top
           print(json.dumps(m,indent=2))
           PY
+
+      - name: Exercise supported prepare-only wrapper
+        run: |
+          PREPARE_ONLY=1 bash workflow/public_nuclear_maximum/prepare_and_submit.sh \
+            /tmp/maximum_public_nuclear_handoff_via_wrapper
+          test -s /tmp/maximum_public_nuclear_handoff_via_wrapper/handoff_manifest.json
+          test -s /tmp/maximum_public_nuclear_handoff_via_wrapper/EXECUTE_ON_HPC.md
+          test -x /tmp/maximum_public_nuclear_handoff_via_wrapper/submit_all_independent_public_gates.sh
 
       - name: Exercise final independent-gate collector with all candidates passing
         run: |
