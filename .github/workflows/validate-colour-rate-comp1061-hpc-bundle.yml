@@ -3,7 +3,7 @@ on:
   pull_request:
     paths:
       - "analysis/build_colour_rate_comp1061_hpc_bundle.py"
-      - "analysis/build_colour_rate_comp1061_hpc_bundle_v0_2.py"
+      - "analysis/colour_rate_comp1061_hpc_primitives.py"
       - "analysis/augment_colour_rate_comp1061_tree_stages.py"
       - "analysis/prepare_colour_rate_comp1061_tree_inputs.py"
       - "analysis/concatenate_colour_rate_comp1061_alignments.py"
@@ -12,7 +12,6 @@ on:
       - "workflow/colour_rate_comp1061/prepare_hpc_bundle.sh"
       - "docs/COLOUR_RATE_COMP1061_HPC_EXECUTION_2026-08-12.md"
       - "tests/test_build_colour_rate_comp1061_hpc_bundle.py"
-      - "tests/test_build_colour_rate_comp1061_hpc_bundle_v0_2.py"
       - "tests/test_augment_colour_rate_comp1061_tree_stages.py"
       - "tests/test_prepare_colour_rate_comp1061_tree_inputs.py"
       - "tests/test_concatenate_colour_rate_comp1061_alignments.py"
@@ -35,11 +34,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - name: Build and validate user-facing bundle through tree acceptance
+      - name: Build and validate canonical user-facing bundle through tree acceptance
         run: |
           python -m py_compile \
             analysis/build_colour_rate_comp1061_hpc_bundle.py \
-            analysis/build_colour_rate_comp1061_hpc_bundle_v0_2.py \
+            analysis/colour_rate_comp1061_hpc_primitives.py \
             analysis/augment_colour_rate_comp1061_tree_stages.py \
             analysis/prepare_colour_rate_comp1061_tree_inputs.py \
             analysis/concatenate_colour_rate_comp1061_alignments.py \
@@ -47,7 +46,6 @@ jobs:
             analysis/validate_colour_atlas_branch_length_tree.py
           python -m unittest \
             tests/test_build_colour_rate_comp1061_hpc_bundle.py \
-            tests/test_build_colour_rate_comp1061_hpc_bundle_v0_2.py \
             tests/test_augment_colour_rate_comp1061_tree_stages.py \
             tests/test_prepare_colour_rate_comp1061_tree_inputs.py \
             tests/test_concatenate_colour_rate_comp1061_alignments.py \
@@ -96,7 +94,7 @@ jobs:
           assert 'zero current focal paralog warnings' in accept
           assert 'tree_provenance.json' in accept
           assert 'afterok:$gene:$concat' in submit
-          print('bundle_entrypoint=user_wrapper_valid')
+          print('bundle_entrypoint=canonical_builder_valid')
           print('tree_references=root_lett_sunf_optional_saff')
           print('bundle_contract=v0.3_tree_stage_current_paralog_gated')
           print('branch_length_tree_completed=false')
