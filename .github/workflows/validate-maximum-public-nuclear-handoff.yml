@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "analysis/build_maximum_public_nuclear_hpc_handoff.py"
+      - "analysis/prepare_maximum_public_combined_tree_inputs.py"
       - "analysis/build_japan_origin_global_public_panel_v2.py"
       - "analysis/build_japan_origin_global_hpc_bundle_v2.py"
       - "analysis/build_east_asia_public_augmentation_hpc_bundle.py"
@@ -18,6 +19,7 @@ on:
       - "data/evidence/moreyra2025_cirsium_reconciliation_v1/**"
       - "data/evidence/public_candidate_locus_packs_v1/**"
       - "tests/test_build_maximum_public_nuclear_hpc_handoff.py"
+      - "tests/test_prepare_maximum_public_combined_tree_inputs.py"
       - ".github/workflows/validate-maximum-public-nuclear-handoff.yml"
   workflow_dispatch:
 
@@ -43,6 +45,7 @@ jobs:
           bash -n workflow/public_nuclear_maximum/prepare_and_submit.sh
           python -m py_compile \
             analysis/build_maximum_public_nuclear_hpc_handoff.py \
+            analysis/prepare_maximum_public_combined_tree_inputs.py \
             analysis/build_japan_origin_global_public_panel_v2.py \
             analysis/build_japan_origin_global_hpc_bundle_v2.py \
             analysis/build_east_asia_public_augmentation_hpc_bundle.py \
@@ -53,9 +56,12 @@ jobs:
           python analysis/build_maximum_public_nuclear_hpc_handoff.py \
             --outdir /tmp/maximum_public_nuclear_handoff
 
-      - name: Run bundle unit test and shell syntax validation
+      - name: Run bundle and post-admission input tests
         run: |
-          python -m unittest tests/test_build_maximum_public_nuclear_hpc_handoff.py -v
+          python -m unittest \
+            tests/test_build_maximum_public_nuclear_hpc_handoff.py \
+            tests/test_prepare_maximum_public_combined_tree_inputs.py \
+            -v
           while IFS= read -r -d '' f; do
             bash -n "$f"
           done < <(find /tmp/maximum_public_nuclear_handoff -type f -name '*.sh' -print0)
