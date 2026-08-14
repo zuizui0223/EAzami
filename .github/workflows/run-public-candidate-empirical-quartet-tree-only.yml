@@ -20,8 +20,15 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Download completed real-read baseline packs from empirical run 31788828923
+      - name: Download completed empirical inputs from run 31788828923
         uses: actions/download-artifact@v4
+        with:
+          name: public-candidate-quartet-reference-31788828923
+          path: /tmp/quartet/reference_bundle
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 31788828923
+      - uses: actions/download-artifact@v4
         with:
           name: public-candidate-quartet-baseline-YOSHINOI-31788828923
           path: /tmp/quartet/baseline/YOSHINOI
@@ -43,6 +50,7 @@ jobs:
             --candidate EA01 --output /tmp/quartet/candidates/EA01
           python analysis/materialize_frozen_public_candidate_locus_pack.py \
             --candidate EA02 --output /tmp/quartet/candidates/EA02
+          test "$(wc -l < /tmp/quartet/reference_bundle/moreyra_conservative_241_no_warning_loci.txt)" -eq 241
 
       - name: Create MAFFT and IQ-TREE environment
         uses: mamba-org/setup-micromamba@v3
@@ -69,22 +77,7 @@ jobs:
           set -euo pipefail
           mkdir -p /tmp/quartet/analysis/{aligned,gene_trees,concat,result}
           python analysis/prepare_public_candidate_empirical_quartet.py \
-            --locus-universe <(python - <<'PY'
-          from pathlib import Path
-          # The two matched baseline packs were themselves restricted to the frozen conservative 241-locus universe.
-          # Reconstruct that exact universe by unioning their locus-audit rows and retaining the candidate-pack contract.
-          by=Path('/tmp/quartet/baseline/YOSHINOI/strict_recovered_loci.txt')
-          bs=Path('/tmp/quartet/baseline/SAIRAMENSE/strict_recovered_loci.txt')
-          loci=[]
-          for p in (by,bs):
-              for x in p.read_text().splitlines():
-                  x=x.strip()
-                  if x and x not in loci: loci.append(x)
-          # Both packs lose only strict failures from the frozen 241. prepare() only uses this as an ordered upper universe;
-          # the exact four-way intersection is determined from all four strict lists below.
-          print('\n'.join(loci))
-          PY
-            ) \
+            --locus-universe /tmp/quartet/reference_bundle/moreyra_conservative_241_no_warning_loci.txt \
             --baseline-yoshinoi /tmp/quartet/baseline/YOSHINOI \
             --ea01 /tmp/quartet/candidates/EA01 \
             --baseline-sairamense /tmp/quartet/baseline/SAIRAMENSE \
