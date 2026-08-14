@@ -1,111 +1,115 @@
 # East Asia public-SRA nuclear-tree augmentation gate — 2026-08-13
 
-## Purpose
+## Status update — 2026-08-14
 
-Continue the public-data-only maximum nuclear phylogeny before defining any new China field-sampling list. The baseline remains the deduplicated Japan-origin global panel v2: **294 unique biological tips / 295 unique public SRRs**. Japan-38 membership is provenance/sensitivity metadata, not a topology constraint.
+The original v1 gate treated EA01 and EA02 as two potentially independent biological replicates beyond the accepted 294-tip baseline. A real-read empirical audit on 2026-08-14 supersedes that **biological independence assumption for EA02** while retaining the original pack and v1 contract as provenance.
 
-This document defines the **EA01/EA02 public-SRA same-assay gate**. A separate natural-Ulleung *Cirsium nipponicum* genome-derived candidate is now handled by `docs/CIRSIUM_NIPPONICUM_PUBLIC_GENOME_AUGMENTATION_GATE_2026-08-13.md`; it is intentionally not mixed into this SRA mapping-sensitivity contract.
+Current evidence:
 
-## Public SRA pilot result now frozen in-repo
+- `data/evidence/public_candidate_empirical_quartet_2026-08-14.json`
+- `data/evidence/east_asia_public_candidate_disposition_v2.json`
 
-Successful workflow run `31684233834` recovered the five audited East Asian candidates against the frozen Compositae1061 241-locus universe after fixing the HybPiper `paralog_report.tsv` path contract.
+Current accepted primary remains **294 biological tips / 295 unique public SRRs / 270 analysis taxon labels**.
 
-- EA01 — `PUBEA001`, *Cirsium nipponicum var. yoshinoi*: **236/241 strict no-warning loci**, pilot-ready.
-- EA02 — `PUBEA002`, *Cirsium sairamense*: **239/241 strict no-warning loci**, pilot-ready.
-- EA03 — *C. japonicum* var. *spinossimum*: **0/241**, not pilot-ready.
-- EA04 — *C. setidens*: **0/241**, not pilot-ready.
-- EA05 — *C. japonicum* var. *ussuriense*: **0/241**, not pilot-ready.
+## Original public-SRA pilot
 
-EA01's BWA strict locus set is a complete subset of EA02's; their BWA candidate-only joint set is therefore **236 loci**. EA03–EA05 are not carried forward under the present Compositae1061 admission rule. Their workflow success is retained as evidence that the zero-locus outcome is a data/recovery result rather than a pipeline crash.
+Run `31684233834` recovered:
 
-Machine-readable evidence is `data/evidence/east_asia_public_sra_comp1061_pilot_results_2026-08-13.csv`. Artifact IDs and SHA256 digests are frozen there.
+- EA01 / `PUBEA001` — *Cirsium nipponicum* var. *yoshinoi*: **236/241** strict no-warning BWA loci;
+- EA02 / `PUBEA002` — *Cirsium sairamense*: **239/241** strict no-warning BWA loci;
+- EA03–EA05: 0/241, not carried forward.
 
-## Baseline taxon reconciliation
+The original v1 four-scenario design was:
 
-Both successful candidates duplicate analysis taxon labels already present in the 294-tip baseline.
+1. `baseline294`;
+2. `ea01_295`;
+3. `ea02_295`;
+4. `ea01_ea02_296`.
 
-- EA01 is an independent *C. nipponicum* var. *yoshinoi* sample. The baseline Moreyra sample is `SAMN44017955` / `SRR30887222`.
-- EA02 is an independent cross-study *C. sairamense* sample. The baseline Moreyra sample is `SAMN34240330` / `SRR25265647`, with the published locality `Tajikistan: Maijora`.
+Within each mapping mode the scenarios use one exact paired locus set. BWA and BLASTx remain separate mapping sensitivities, and no post-hoc locus/RF relaxation is allowed.
 
-Thus the SRA pilot adds potentially useful biological replicates and cross-study placement tests, but **adds zero new analysis taxon labels** to the 294-tip baseline.
+## Real-read baseline audit
 
-## Paired-tree rule
+Before committing HPC resources to the full 294-tip augmentation run, the exact same-taxon samples already present in the accepted baseline were re-recovered from public SRA using the pinned Compositae1061 / HybPiper 2.3.4 BWA path:
 
-No candidate is promoted from locus recovery alone. The next tree stage uses four scenarios:
+- `MRY_YOSHINOI` — *C. nipponicum* var. *yoshinoi*, `SRR30887222`: **236/241** strict loci;
+- `MRY_SAIRAMENSE` — *C. sairamense*, `SRR25265647`: **239/241** strict loci.
 
-1. `baseline294`
-2. `ea01_295`
-3. `ea02_295`
-4. `ea01_ea02_296`
+Both had zero strict paralog-warning loci.
 
-Within each mapping mode, all four use the exact same locus list:
+The two baseline packs and the frozen EA01/EA02 packs yielded:
 
-`accepted baseline-294 loci for that mapping ∩ EA01 strict loci for that mapping ∩ EA02 strict loci for that mapping`.
+- **235** four-way common strict loci;
+- **231** gene-tree-informative loci;
+- **105,086 nt** concatenated alignment;
+- **2,769** variable sites;
+- **2,199** parsimony-informative sites.
 
-At least 100 joint paired loci are required separately for BWA and BLASTx. The BWA and BLASTx accepted locus sets are allowed to differ because mapping sensitivity is itself part of the test. No post-hoc filter relaxation is allowed.
+All **231/231** per-locus ML trees supported:
 
-EA01 is an independent same-taxon target-capture replicate. Its role is assay/placement replication: it should recover the neighbourhood of the existing *C. nipponicum* var. *yoshinoi* public tip across mapping/tree sensitivities. EA02 is an independent cross-study same-taxon *C. sairamense* replicate, not a new taxon label. It should reproduce the existing *C. sairamense* neighbourhood across BWA and BLASTx concatenated trees and source-label ASTRAL sensitivity.
+`(MRY_YOSHINOI, PUBEA001) | (MRY_SAIRAMENSE, PUBEA002)`
 
-For every augmented concatenated tree, the 294 shared baseline focal tips are pruned conceptually and their unrooted Robinson–Foulds distance from the paired `baseline294` tree is recorded. RF is a diagnostic, not a loophole: a non-zero value must be interpreted rather than hidden by changing the locus set. The source-label ASTRAL backbone is evaluated separately on the baseline species IDs.
+The concatenated IQ-TREE topology agreed, with **SH-aLRT/UFBoot = 100/100** and BIC-selected model `TIM3+F+G4`.
 
-## Candidate-side mapping sensitivity
+This establishes strong expected same-taxon placement in the empirical four-tip sanity check. It is not a full 294-tip promotion test.
 
-The original successful public-SRA pilot used HybPiper/BWA for EA01 and EA02. Reusing those same candidate sequences in the BLASTx tree would test only the baseline mapping sensitivity and would therefore be asymmetric.
+## EA01 — independent candidate retained
 
-The full HPC handoff fixes that problem:
+EA01 and the baseline *C. nipponicum* var. *yoshinoi* sample are clearly different public libraries. Their before-filtering read counts, total bases, Q20/Q30 counts and GC differ substantially.
 
-- **BWA candidate side:** use the frozen successful EA01/EA02 BWA packs from run `31684233834` (236/241 and 239/241).
-- **BLASTx candidate side:** download the original EA01/EA02 SRRs again on HPC, run fresh HybPiper 2.3.4 without `--bwa`, rebuild strict frozen-241 packs, and require `pilot_locus_pack_ready=true` before BLASTx paired trees start.
+EA01 therefore remains an independent same-taxon candidate and must still pass the full BWA/BLASTx gate:
 
-Thus each mapping mode uses baseline and candidate sequences recovered under the same mapping strategy. Candidate BLASTx recovery is deliberately performed on HPC/local compute, not inferred from the BWA pack.
+1. shared-294 concatenated RF = 0;
+2. existing same-taxon baseline tip among nearest neighbours;
+3. shared-species ASTRAL RF = 0;
+4. agreement across both mapping modes.
 
-## Frozen cross-mapping promotion gate
+The original joint EA01+EA02 scenario may still be retained as a duplicate-control regression sensitivity, but it does not create a 296-tip biological state.
 
-`analysis/summarize_east_asia_public_augmentation_sensitivities.py` consumes both mapping-mode result sets after the paired trees finish. A candidate gets the strict automatic sample-tip promotion route only when all of the following hold in **both BWA and BLASTx**, in both its single-candidate and joint-candidate scenario:
+## EA02 — duplicate-control, not an independent tip
 
-- concatenated shared-294-tip RF = 0;
-- the existing same-taxon baseline tip is among the nearest baseline neighbours of the candidate;
-- source-label ASTRAL shared-species RF = 0.
+EA02 and the accepted baseline *C. sairamense* sample show multiple independent signatures of the same underlying public read data:
 
-If any check fails, the script returns `manual_review_required=true`; it does **not** relax an RF threshold or alter the locus gate automatically. This conservative rule distinguishes safe replicate enrichment from a candidate that changes the inferred backbone enough to require biological interpretation.
+- identical before-filtering total reads: **10,779,802**;
+- identical before-filtering total bases: **1,088,760,002**;
+- identical Q20/Q30 raw counts and rates;
+- identical read lengths and GC;
+- identical complete R1 and R2 before-filtering quality/base-content objects;
+- identical duplication profile;
+- identical insert-size profile;
+- identical **239/241** strict-locus set;
+- effectively zero terminal separation in the empirical concatenated ML tree.
 
-## Execution bundles
+Together these are overwhelmingly consistent with reuse/re-deposition of the same underlying raw read library. This does **not** assert the same physical herbarium specimen without explicit source provenance.
 
-`analysis/build_east_asia_public_augmentation_hpc_bundle.py` builds the paired-tree augmentation stage. `analysis/build_east_asia_public_full_hpc_handoff.py` then combines that stage with the validated 294-tip v2 baseline bundle and adds:
+Current disposition:
 
-- EA01/EA02 public-read fetch for candidate BLASTx sensitivity;
-- candidate HybPiper/BLASTx recovery and strict pack rebuilding;
-- mapping-aware paired-input preparation;
-- a **single Slurm orchestrator** for the complete SRA augmentation analysis.
+`duplicate_readset_pseudoreplicate_excluded_pending_explicit_provenance`
 
-The full orchestrator submits the following dependency graph:
+EA02 may be retained as a pipeline duplicate-control. Its topology checks are diagnostic only and **must not increment the biological-tip count**. `analysis/summarize_east_asia_public_augmentation_sensitivities.py` now enforces this disposition.
 
-1. prepare the frozen Compositae1061 reference/locus universe;
-2. download/trim the 295 baseline SRRs **once**;
-3. branch the same baseline reads into 294-tip BWA and BLASTx HybPiper recovery;
-4. fetch the two extra candidate SRRs and run their fresh BLASTx recovery in parallel;
-5. run mode-specific QC, locus admission, MAFFT, gene-tree IQ-TREE, concatenated IQ-TREE, ASTRAL and baseline acceptance;
-6. run `baseline294`, `ea01_295`, `ea02_295`, `ea01_ea02_296` under BWA and BLASTx, with strict pairing inside each mapping mode;
-7. evaluate shared-backbone RF and same-taxon neighbourhoods;
-8. write the final `cross_mapping_sensitivity_summary.json`.
+## Revised current boundary
 
-After building the full handoff, the intended HPC entry point is:
+For the same-assay SRA workstream:
 
-```bash
-export REPO_ROOT=/path/to/EAzami
-bash /path/to/full_handoff/submit_full_public_tree_and_augmentation.sh
-```
+- accepted primary: 294;
+- EA01: independent candidate;
+- EA02: duplicate-control only;
+- maximum biological tip count from this workstream if EA01 passes: **295**;
+- new analysis taxon labels: **0**.
 
-Optional `RESULT_ROOT` and `AUGMENT_ROOT` environment variables redirect large outputs to scratch storage.
+Across all current public sources, CNIPG remains the second defensible independent candidate. Therefore the broader public sample-level ceiling is now **296**, not 297, if EA01 and CNIPG both pass their full independent gates.
 
-The heavy read recovery/tree inference remains an HPC/large-memory-local task. GitHub Actions validates real artifacts, manifests, generated bundles, decision logic, and shell/Python contracts rather than serving as the heavy phylogenomics runner.
+A 296-tip state is not accepted by arithmetic. It requires an explicit common paired-locus combined analysis after independent admission.
 
-## Current boundary
+## Execution safety
 
-Within this **EA01/EA02 public-SRA gate**, the candidate sample-level ceiling is **296 tips**: 294 baseline + EA01 + EA02. Both candidates duplicate analysis taxon labels already present in the 294-tip baseline, so this gate adds **0 new taxon labels**. The 296 state is a replicate-enriched candidate tree, not a final accepted primary tree.
+The historical EA01/EA02 v1 builders and packs are retained because they are needed to reproduce the empirical audit and can serve as duplicate-control regression tests.
 
-Across all currently ready public augmentation sources, the separate natural-Ulleung genome candidate adds a third possible biological sample. Therefore the broader current public candidate ceiling is **297 tips if all independent gates pass**, still with 0 new analysis taxon labels. That broader 297 state is also not yet an accepted combined tree; it requires an explicit common paired-locus contract after independent admissions.
+However, the pre-empirical top-level 297-tip Slurm graph is no longer a supported heavy-execution route. `workflow/public_nuclear_maximum/prepare_and_submit.sh` now allows prepare-only reproduction but blocks real submission until a post-empirical EA01+CNIPG handoff is used.
 
-The remaining empirical blocker for this SRA gate is execution of the validated full HPC handoff. Once both baseline mapping modes, candidate BLASTx packs, paired trees and the cross-mapping sensitivity summary complete, EA01/EA02 can either be automatically admitted under the frozen exact-backbone rule or sent to manual biological review without changing thresholds.
+## Claim boundary
 
-New China sampling remains deliberately unfrozen.
+The real-read quartet changes candidate provenance/accounting, not the flower-colour evolutionary conclusion. It does not test the whole 294-tip backbone, does not replace the BWA/BLASTx + ASTRAL gates, and does not authorize EA01 or CNIPG promotion.
+
+New broad China sampling remains deliberately unfrozen until the revised public-only 294→296 ceiling is resolved.
