@@ -43,11 +43,18 @@ def materialize(candidate_id: str, output: Path, manifest_path: Path = DEFAULT_M
     except KeyError as exc:
         raise ValueError(f"unknown candidate: {candidate_id}") from exc
 
-    payload_path = ROOT / spec["payload_path"]
-    payload_bytes = payload_path.read_bytes()
-    if sha256_bytes(payload_bytes) != spec["payload_sha256"]:
-        raise ValueError(f"{candidate_id} durable payload checksum drift")
-    encoded = b"".join(payload_bytes.split())
+    encoded_parts: list[bytes] = []
+    for part in spec["payload_parts"]:
+        part_path = ROOT / part["path"]
+        part_bytes = part_path.read_bytes()
+        if len(part_bytes) != int(part["size_bytes"]):
+            raise ValueError(f"{candidate_id} durable payload shard size drift: {part_path.name}")
+        if sha256_bytes(part_bytes) != part["sha256"]:
+            raise ValueError(f"{candidate_id} durable payload shard checksum drift: {part_path.name}")
+        encoded_parts.append(part_bytes)
+    encoded = b"".join(encoded_parts)
+    if sha256_bytes(encoded) != spec["encoded_payload_sha256"]:
+        raise ValueError(f"{candidate_id} encoded payload checksum drift")
     compressed = base64.b64decode(encoded, validate=True)
     if sha256_bytes(compressed) != spec["gzip_sha256"]:
         raise ValueError(f"{candidate_id} gzip payload checksum drift")
