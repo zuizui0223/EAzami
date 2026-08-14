@@ -1,137 +1,113 @@
 # EAzami — East Asian *Cirsium* flower-colour evolution
 
-EAzami tests the evolutionary history of repeated floral anthocyanin loss and possible re-expression in East Asian *Cirsium*, while building the public nuclear phylogenetic framework needed to distinguish loss, regain, ancestral variation and reticulation.
+EAzami tests repeated floral anthocyanin loss and possible re-expression in East Asian *Cirsium*, while building the public nuclear framework needed to distinguish loss, regain, ancestral variation and reticulation.
 
 ## Start here
 
-The current operational state is:
+The operational source of truth is:
 
 **[`docs/CURRENT_STATE_2026-08-14.md`](docs/CURRENT_STATE_2026-08-14.md)**
 
-That document is the source of truth for accepted conclusions, current sample counts, public augmentation gates, active code paths and remaining blockers. Older implementation states should not be inferred from historical filenames alone.
+Do not infer current sample counts or supported execution paths from older versioned filenames alone.
 
 ## Current scientific state
 
 ### Flower-colour history
 
-- Repeated white-flower evolution is the current general interpretation across East Asian *Cirsium*.
-- The Arenicola context favours white-flower loss on the *C. brevicaule* lineage; current evidence does **not** establish regain in coloured *C. irumtiense*.
-- Taiwanese *C. japonicum* var. *takaoense* is a **topology-supported candidate regain**: the directly documented W/BP sample states and displayed topology require a W-to-coloured transition under the current coloured-root minimum-change model.
-- This is not molecular proof of anthocyanin-pathway loss and restoration. Introgression, ancestral standing variation, geographic structure and reticulation remain alternatives.
+- Repeated white-flower evolution remains the general interpretation across East Asian *Cirsium*.
+- Arenicola currently favours white loss on the *C. brevicaule* lineage; current evidence does **not** establish regain in coloured *C. irumtiense*.
+- Taiwanese *C. japonicum* var. *takaoense* remains a **topology-supported candidate regain**, not molecular proof of anthocyanin-pathway loss/restoration. Introgression, standing variation and reticulation remain alternatives.
 
-### Public nuclear backbone
+### Accepted public nuclear backbone
 
-The accepted primary public-data panel is:
+The accepted primary remains:
 
 - **294 biological tips**;
 - **295 unique public SRRs**;
 - **270 source-preserving analysis taxon labels**.
 
-The old 302-tip / 303-SRR inventory is obsolete because eight Taiwan RNA-seq BioSamples/SRRs reused across Chang 2025 and Chang 2026 had been double-counted.
+The old 302/303 inventory is obsolete because eight public Taiwan RNA-seq samples had been double-counted across Chang 2025/2026.
 
-Japan-38 membership is provenance/sensitivity metadata, not a topology constraint.
+## Real-read candidate audit — 2026-08-14
 
-## Ready public augmentation gates
+A real public-SRA/HybPiper/MAFFT/IQ-TREE pilot was run before launching the full 294-tip augmentation analysis.
 
-Three extra public samples are ready for paired-tree testing but are **not yet promoted**.
+Four tips were compared:
 
-| Candidate | Source | Strict loci | Role |
+- accepted baseline *C. nipponicum* var. *yoshinoi* + EA01 / `PUBEA001`;
+- accepted baseline *C. sairamense* + EA02 / `PUBEA002`.
+
+The exact four-way intersection contained **235 strict loci**; **231** were gene-tree informative. The concatenated alignment contained **105,086 nt**, 2,769 variable sites and 2,199 parsimony-informative sites.
+
+All **231/231** informative ML gene trees supported the same-taxon split, and the concatenated tree supported it with **SH-aLRT/UFBoot 100/100**.
+
+The crucial provenance result is asymmetric:
+
+- **EA01 is an independent public library** and remains a valid full-tree candidate.
+- **EA02 is overwhelmingly consistent with the same underlying raw read library already present in the 294-tip baseline**: identical raw before-filtering read/base/Q20/Q30/GC statistics, identical R1/R2 before-filtering profiles, identical duplication and insert-size profiles, identical 239-locus strict set, and effectively zero terminal distance in the empirical ML tree.
+
+EA02 is therefore frozen as `duplicate_readset_pseudoreplicate_excluded_pending_explicit_provenance`. Its data remain useful as a duplicate-control, but it no longer counts as an independent biological tip.
+
+Evidence:
+
+- `data/evidence/public_candidate_empirical_quartet_2026-08-14.json`
+- `data/evidence/east_asia_public_candidate_disposition_v2.json`
+
+## Revised public candidate ceiling
+
+Current defensible independent candidates beyond the accepted 294 are:
+
+| Candidate | Source | Strict loci | Current role |
 |---|---|---:|---|
-| EA01 / `PUBEA001` | *C. nipponicum* var. *yoshinoi* public SRA | 236/241 | same-taxon replicate |
-| EA02 / `PUBEA002` | *C. sairamense* public SRA | 239/241 | cross-study same-taxon replicate |
-| CNIPG / `AUG_ULLEUNG_CNIP2024` | natural-Ulleung *C. nipponicum* public genome | 180/241 | cross-data-type natural-island replicate |
+| EA01 / `PUBEA001` | *C. nipponicum* var. *yoshinoi* public SRA | 236/241 | independent same-taxon candidate |
+| CNIPG / `AUG_ULLEUNG_CNIP2024` | natural-Ulleung *C. nipponicum* public genome | 180/241 | independent cross-data-type candidate |
+| EA02 / `PUBEA002` | *C. sairamense* public SRA | 239/241 | duplicate-control only; not a biological tip |
 
-All three analysis taxon labels already occur in the 294-tip baseline. Therefore, even if all independent gates pass, the current candidate ceiling is **297 sample tips but 0 new analysis taxon labels**.
+If EA01 and CNIPG both pass their full independent gates, the current public ceiling is therefore **296 biological tips / 0 new analysis taxon labels**.
 
-The accepted primary remains 294 until the required paired concatenated/ASTRAL sensitivities pass. A combined 297-tip state is not accepted without an explicit common paired-locus analysis.
+That is still not an accepted combined 296-tip tree. A common paired-locus combined analysis is required before replacing the accepted 294-tip primary.
 
-## Promotion rule
+## Full promotion rules still required
 
-For the SRA candidates, BWA and BLASTx are evaluated separately and symmetrically. Within a mapping mode, baseline and augmented scenarios use exactly the same paired locus set.
+For EA01, BWA and BLASTx must each pass:
 
-Automatic promotion requires:
+1. shared-294 concatenated RF = 0;
+2. same-taxon baseline placement among nearest neighbours;
+3. shared-species ASTRAL RF = 0.
 
-1. RF = 0 on the shared 294-tip concatenated backbone;
-2. an existing same-taxon baseline tip among the candidate's nearest baseline neighbours;
-3. RF = 0 on the shared-species ASTRAL backbone.
+CNIPG uses the same safeguards in its separate cross-data-type comparison against both accepted baseline mapping modes.
 
-Any failure means manual biological review. Thresholds are not relaxed post hoc.
+The real four-tip pilot validates the candidate identities/placement signal; it does **not** authorize full-tree promotion.
 
-CNIPG uses the same logic as a separate cross-data-type sensitivity against both accepted baseline mapping modes.
+## Execution status
 
-## Durable baseline reconstruction
+The old top-level 297-tip orchestration is now a **reproducibility-only pre-empirical state**. `workflow/public_nuclear_maximum/prepare_and_submit.sh` can reconstruct it with `PREPARE_ONLY=1`, but real Slurm submission is fail-closed because EA02 is no longer an independent candidate.
 
-The 294-tip rebuild no longer depends on the expiring Moreyra Actions artifact.
+The next heavy-compute task is to build/run the post-empirical **EA01 + CNIPG** maximum-public handoff against the 294-tip baseline.
 
-The exact compact reconciliation input used by the current builder is frozen under:
+## Reference boundary
 
-- `data/evidence/moreyra2025_cirsium_reconciliation_v1/`
-- `analysis/materialize_frozen_moreyra_reconciliation.py`
-
-It contains 258 linked *Cirsium* reconciliation rows, preserves the known source-conflict exclusion, and carries source/artifact/per-shard checksums. The canonical reconstructed CSV SHA256 is:
-
-`cf3af71a1a77eee5bd177cef9cf8106b749b949eaacc0ad82bbb331978084505`
-
-The current panel-v2, HPC-v2, EA01/EA02 and CNIPG validation paths rebuild the 294/295 baseline from this repository evidence.
-
-## Main execution paths
-
-### 294-tip baseline
-
-- `analysis/build_japan_origin_global_public_panel_v2.py`
-- `analysis/build_japan_origin_global_hpc_bundle_v2.py`
-- `analysis/japan_origin_global_hpc_primitives.py`
-- `.github/workflows/build-japan-origin-global-public-panel-v2.yml`
-- `.github/workflows/validate-japan-origin-global-hpc-bundle-v2.yml`
-
-### EA01 / EA02
-
-- `analysis/build_east_asia_public_full_hpc_handoff.py`
-- `analysis/prepare_east_asia_public_augmentation_tree_inputs.py`
-- `analysis/evaluate_east_asia_public_augmentation_tree_pair.py`
-- `analysis/summarize_east_asia_public_augmentation_sensitivities.py`
-- `.github/workflows/validate-east-asia-public-augmentation-gate.yml`
-- [`docs/EAST_ASIA_PUBLIC_TREE_AUGMENTATION_GATE_2026-08-13.md`](docs/EAST_ASIA_PUBLIC_TREE_AUGMENTATION_GATE_2026-08-13.md)
-
-### Natural-Ulleung genome sensitivity
-
-- `analysis/build_cirsium_nipponicum_genome_augmentation_hpc_bundle.py`
-- `analysis/prepare_cirsium_nipponicum_augmentation_tree_inputs.py`
-- `analysis/summarize_cirsium_nipponicum_genome_augmentation_sensitivities.py`
-- `.github/workflows/validate-cirsium-nipponicum-public-genome-gate.yml`
-- [`docs/CIRSIUM_NIPPONICUM_PUBLIC_GENOME_AUGMENTATION_GATE_2026-08-13.md`](docs/CIRSIUM_NIPPONICUM_PUBLIC_GENOME_AUGMENTATION_GATE_2026-08-13.md)
-
-## Focused var. *takaoense* work
-
-The six published var. *takaoense* transcriptomes form a separate focused hypothesis/provenance workstream. Direct Figure 1 morph evidence is frozen and validated without repeatedly downloading publisher content.
-
-Read2Tree and the restartable transcriptome/gene-tree workflow remain live sensitivity paths. They are secondary to the maximum public nuclear backbone and should not be treated as substitutes for population-aware ancestry or functional anthocyanin evidence.
-
-## Reference and locus-space boundary
-
-The current compatibility target is the pinned original public Compositae1061 HybPiper reference:
+The active compatibility target remains the pinned public Compositae1061 reference:
 
 - 1,061 loci;
 - SHA256 `77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c`.
 
-The Moreyra-specific *C. tioganum* augmentation has not been recovered. Therefore current raw-read analyses are compatibility reanalyses, not exact reproduction of Moreyra preprocessing.
+The Moreyra-specific *C. tioganum* augmented target remains unrecovered, so current raw-read runs are compatibility reanalyses rather than exact Moreyra preprocessing reproduction.
 
-The useful public locus sets are 1,061 / reproducible 531-candidate / conservative 241.
+## What is deliberately not frozen
 
-## What is deliberately not frozen yet
+**A new broad China sampling list is still not frozen.**
 
-**A new broad China sampling list is not frozen.**
-
-The current priority is to exhaust the public-data nuclear tree first. New mainland sampling should target only branches that remain transition-critical after the public backbone and augmentation sensitivities are complete.
+Public-data nuclear inference is exhausted first; new mainland sampling should target only branch-specific gaps that remain important after the revised 294→296 public analysis.
 
 ## Repository layout
 
 - `analysis/` — live deterministic analysis/build/evaluation code
-- `data/evidence/` — frozen evidence, contracts, checksums and compact provenance
-- `docs/` — scientific claim boundaries and execution notes
-- `sampling/` — proposed/frozen sampling and reference sets
-- `workflow/` — larger workflow/HPC orchestration support
+- `data/evidence/` — frozen evidence, contracts and checksums
+- `docs/` — claim boundaries and current-state notes
+- `sampling/` — sampling/reference sets
+- `workflow/` — HPC/orchestration entry points
 - `tests/` — tests for live code
-- `.github/workflows/` — CI evidence/contract validation and lightweight bundle construction
+- `.github/workflows/` — lightweight CI and empirical public-data pilots
 
-Historical prototypes that have been removed from the working tree remain recoverable from Git history.
+Historical implementations and superseded planning states remain recoverable from Git history.
