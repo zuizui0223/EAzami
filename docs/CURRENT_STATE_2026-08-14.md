@@ -1,6 +1,6 @@
 # EAzami current state — 2026-08-14
 
-This is the operational source of truth for the repository. It separates accepted scientific conclusions, ready-but-not-promoted public candidates, durable evidence, active execution paths, completed cleanup, and remaining blockers. Historical implementations remain recoverable from Git history and topic-specific evidence documents.
+This is the operational source of truth for the repository. It separates accepted scientific conclusions, ready-but-not-promoted public candidates, durable evidence, supported execution paths, completed cleanup, and the remaining empirical/HPC work. Historical implementations remain recoverable from Git history and topic-specific evidence documents.
 
 ## 1. Accepted scientific state
 
@@ -36,7 +36,7 @@ The accepted primary remains **294 tips** until additional samples pass explicit
 - EA01's strict set is a complete subset of EA02's, giving 236 candidate-side joint BWA loci.
 - EA03–EA05 recovered 0/241 and are not carried forward under the current rule.
 
-Both successful candidates duplicate analysis taxon labels already present in the 294-tip baseline. They provide biological/cross-study replication and backbone-stability tests, not taxonomic expansion.
+Both successful candidates duplicate analysis taxon labels already present in the 294-tip baseline. They add biological/cross-study replication and backbone-stability tests, not new taxonomic coverage.
 
 Active scenarios are `baseline294`, `ea01_295`, `ea02_295`, and `ea01_ea02_296`. Within each mapping mode every scenario uses the exact same paired locus list. BWA and BLASTx are evaluated independently and symmetrically.
 
@@ -72,7 +72,7 @@ This is **not** an accepted combined 297-tip tree. A final combined state requir
 
 ### 294-tip baseline reconciliation
 
-The 294-tip rebuild no longer depends on the expiring Moreyra Actions artifact `9067368059`.
+The 294-tip rebuild no longer depends on the former Moreyra Actions artifact `9067368059`.
 
 The exact subset consumed by the v2 builder is frozen under:
 
@@ -80,34 +80,34 @@ The exact subset consumed by the v2 builder is frozen under:
 - `data/evidence/moreyra2025_cirsium_reconciliation_v1/part_001.csv` … `part_008.csv`
 - `analysis/materialize_frozen_moreyra_reconciliation.py`
 
-The durable copy contains **258 linked *Cirsium* reconciliation rows** and only the 11 columns consumed by the v2 builder. The manifest retains original workflow/artifact provenance and checksum lineage. Canonical reconstructed CSV SHA256:
+The durable copy contains **258 linked *Cirsium* reconciliation rows** and only the 11 columns consumed by the v2 builder. Canonical reconstructed CSV SHA256:
 
 `cf3af71a1a77eee5bd177cef9cf8106b749b949eaacc0ad82bbb331978084505`
 
 ### EA01 / EA02 / CNIPG locus packs
 
-The successful candidate locus packs also no longer depend on expiring Actions artifacts at runtime.
+The successful candidate locus packs are also durable and no longer require expiring Actions artifacts at runtime.
 
-Durable evidence is frozen under:
+Repository evidence:
 
 - `data/evidence/public_candidate_locus_packs_v1/manifest.json`
 - sharded base64(gzip(TSV)) payloads for EA01, EA02 and CNIPG;
 - `analysis/materialize_frozen_public_candidate_locus_pack.py`
 - `tests/test_materialize_frozen_public_candidate_locus_pack.py`
 
-The manifest retains the original artifact IDs, artifact ZIP SHA256 values, strict locus-list hashes, source summary hashes, canonical TSV hashes and every source per-locus FASTA hash. The original artifact expiry date, 2026-11-11, is retained as provenance only.
+The manifest retains original artifact IDs/ZIP checksums, strict-locus-list hashes, source-summary hashes, canonical TSV hashes and every source per-locus FASTA hash. The original 2026-11-11 artifact expiry is provenance only.
 
-The freeze audit verified the source artifact ZIP hashes first, then proved byte identity after materialization for:
+The freeze audit first verified the source artifact ZIP hashes and then proved byte identity for:
 
 - EA01: all **236** strict FASTAs plus strict locus list and source summary;
 - EA02: all **239** strict FASTAs plus strict locus list and source summary;
 - CNIPG: all **180** strict FASTAs plus strict locus list and source summary.
 
-Thus **655/655 source locus FASTAs** are exactly reconstructable from repository evidence. The normal EA01/EA02 and CNIPG validation workflows now use only this durable repository evidence; they no longer require `actions: read`, `GH_TOKEN`, or `/actions/artifacts/.../zip` downloads.
+Thus **655/655 source locus FASTAs** are exactly reconstructable from repository evidence. Normal EA01/EA02 and CNIPG validation no longer uses `actions: read`, `GH_TOKEN`, or `/actions/artifacts/.../zip` downloads.
 
-The CNIPG downstream bundle still requires the scientific tree inputs—frozen summary, strict 180-locus list and all 180 locus FASTAs. The historical per-locus audit CSV is treated only as an optional diagnostic and its presence/absence is recorded explicitly in the generated execution manifest rather than silently required.
+For CNIPG, the frozen summary, strict 180-locus list and all 180 locus FASTAs remain mandatory tree inputs. The historical per-locus audit CSV is diagnostic-only; its presence/absence is recorded explicitly in the execution manifest.
 
-## 4. Active implementation paths
+## 4. Supported execution paths
 
 ### Primary 294-tip nuclear backbone
 
@@ -119,7 +119,7 @@ The CNIPG downstream bundle still requires the scientific tree inputs—frozen s
 - `.github/workflows/validate-japan-origin-global-hpc-bundle-v2.yml`
 - `data/evidence/japan_origin_global_public_panel_contract_v2.json`
 
-The live Slurm-generation primitives are parameterized. Historical 302-sample counts and `0-301` arrays are no longer embedded in a live helper and corrected later by string replacement.
+The Slurm-generation primitives are parameterized. Historical 302-sample counts and `0-301` arrays are not embedded in the live helper and patched afterward.
 
 ### EA01 / EA02 augmentation
 
@@ -131,51 +131,61 @@ The live Slurm-generation primitives are parameterized. Historical 302-sample co
 - `analysis/build_east_asia_public_full_hpc_handoff.py`
 - `.github/workflows/validate-east-asia-public-augmentation-gate.yml`
 - `data/evidence/east_asia_public_tree_augmentation_contract_v1.json`
-- `docs/EAST_ASIA_PUBLIC_TREE_AUGMENTATION_GATE_2026-08-13.md`
 
 ### CNIPG augmentation
 
-- `data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json`
-- `data/evidence/cirsium_nipponicum_comp1061_locus_pack_result_2026-08-13.json`
-- `data/evidence/cirsium_nipponicum_public_genome_augmentation_gate_v1.json`
 - `analysis/prepare_cirsium_nipponicum_augmentation_tree_inputs.py`
 - `analysis/build_cirsium_nipponicum_genome_augmentation_hpc_bundle.py`
 - `analysis/summarize_cirsium_nipponicum_genome_augmentation_sensitivities.py`
 - `.github/workflows/validate-cirsium-nipponicum-public-genome-gate.yml`
-- `docs/CIRSIUM_NIPPONICUM_PUBLIC_GENOME_AUGMENTATION_GATE_2026-08-13.md`
+- `data/evidence/cirsium_nipponicum_public_genome_augmentation_gate_v1.json`
 
 The tree-pair evaluator is gate-generic and shared across the SRA and CNIPG paths.
 
-### Flower-colour state, bridge and HPC path
+### Flower-colour state and colour-rate compatibility path
 
-The active flower-colour atlas generation is v0.3. The frozen v0.2 atlas CSV remains because v0.3 explicitly consumes it as its evidence base.
+The active flower-colour atlas generation is v0.3. The frozen v0.2 atlas CSV remains because v0.3 explicitly consumes it as evidence input.
 
-The flower-colour Compositae1061 bridge has one supported public entry point:
+The Compositae1061 bridge has one supported public entry point:
 
 - `analysis/build_colour_rate_comp1061_bridge_panel.py`
 - `analysis/colour_rate_comp1061_bridge_primitives.py`
-- `tests/test_build_colour_rate_comp1061_bridge_panel.py`
-- `.github/workflows/build-colour-rate-comp1061-bridge-panel.yml`
 
-The corrected empirical source partition is frozen directly as Chang2025=3, Chang2026=10, Moreyra2025=7. The old bridge `_v0_2.py` monkey-patch wrapper has been removed.
+The corrected empirical source partition is Chang2025=3, Chang2026=10, Moreyra2025=7. The former `_v0_2` wrapper is retired.
 
-The colour-rate HPC bundle likewise has one supported public builder:
+The HPC compatibility bundle likewise has one supported public entry point:
 
 - `analysis/build_colour_rate_comp1061_hpc_bundle.py`
 - `analysis/colour_rate_comp1061_hpc_primitives.py`
-- `tests/test_build_colour_rate_comp1061_hpc_bundle.py`
 - `workflow/colour_rate_comp1061/prepare_hpc_bundle.sh`
-- `.github/workflows/validate-colour-rate-comp1061-hpc-bundle.yml`
 
-The canonical builder directly carries the corrected stage-0 contract: `RESULT_ROOT` is exported to inline Python; Moreyra locus filtering is summarized before export; and locus manifests use the real `--input` interface. The old HPC `_v0_2.py` wrapper and wrapper-only test have been removed. The complete bundle through current-paralog QC and tree-acceptance script generation passes CI without that wrapper.
+The internal primitive modules are now pure helpers: the bridge primitive module has no stale CLI/build path, and the HPC builder no longer monkey-patches an older implementation. The corrected stage-0 contract is owned directly by the canonical builder. Both bridge and HPC validation pass after this simplification.
 
-### var. takaoense focused topology/provenance work
+### var. takaoense transcriptome/gene-tree path
 
-The var. *takaoense* workstream is secondary to the maximum public backbone but scientifically live.
+There is now one supported transcriptome execution entry point:
 
-The Figure 1 provenance CI is validation-only and verifies the six vouchers, W/BP 3+3 assignment, direct panel B/C labels and frozen official-image checksum without repeatedly downloading publisher content.
+- `analysis/run_chang2026_restartable_transcriptome_assembly.py`
 
-The Read2Tree and restartable transcriptome/gene-tree contracts remain live. The graph-aligned main-branch organization has been integrated, including the current frozen hypothesis table, scoring contract, Read2Tree path fixes and workflow navigation.
+The former `run_chang2026_layout_aware_transcriptome_assembly.py` adapter and `run_chang2026_transcriptome_assembly.py` paired runner have been retired. Their live gates were moved into the canonical runner rather than discarded.
+
+The canonical runner directly requires:
+
+- exact expected panel size;
+- unique sample IDs and official runs;
+- verified/probable run reconciliation;
+- official `LibraryLayout=PAIRED`;
+- `de_novo_required=true` and `preferred_sequence_source == matched_run`;
+- for the six-sample pilot, exactly six focal rows and exactly **BP=3 / W=3**;
+- explicit failure on a future official `SINGLE` layout until a tested single-end branch exists.
+
+The current workflow contract is:
+
+`chang2026_gene_tree_workflow_v4_canonical_restartable_sra`
+
+The Snakemake DAG hashes only the live assembly/prefix/orthogroup/gene-tree/scoring scripts. After retirement of the two older runners, both the complete gene-tree workflow CI and restartable-pilot CI pass from source-backed public metadata through dry-run validation.
+
+The Figure 1 provenance path remains validation-only and does not repeatedly download publisher content.
 
 ## 5. Reference and locus-space boundary
 
@@ -191,7 +201,7 @@ Useful public locus sets remain 1,061 / reproducible 531-candidate / conservativ
 
 ## 6. Cleanup already applied
 
-Retired executable families include:
+Major retired executable families include:
 
 - incorrect Japan-origin global v1 302/303 inventory builder, contract and workflows;
 - old 302-sample HPC helper after extraction of parameterized primitives;
@@ -201,35 +211,31 @@ Retired executable families include:
 - broad/expanded Compositae1061 target-discovery implementations and tests;
 - obsolete COS763-as-target-readiness work;
 - monthly Moreyra final-tree repository monitor;
-- one-shot Elsevier/Moreyra supplement recovery wrappers and standalone Chang 2025 runinfo Action;
+- closed one-shot Elsevier/Moreyra supplement and source-recovery wrappers;
 - live Chang 2026 Figure 1 re-download/preprint fallback code;
-- one-shot *C. nipponicum* Figshare discovery code;
-- obsolete Chang BioSample morph-discovery code after direct Figure 1 evidence was frozen;
-- colour-rate bridge `_v0_2` monkey-patch wrapper and wrapper-only test;
-- colour-rate HPC `_v0_2` monkey-patch wrapper and wrapper-only test;
-- one-shot candidate-pack freeze/migration workflows after durable EA01/EA02/CNIPG evidence was committed and normal CI switched to repository materialization.
+- one-shot *C. nipponicum* Figshare discovery and obsolete BioSample morph-discovery code;
+- colour-rate bridge/HPC `_v0_2` public wrapper generations;
+- one-shot candidate-pack freeze/migration workflows after durable evidence was committed;
+- the two superseded Chang transcriptome runner generations and their adapter-specific test.
 
-The repository also retains the useful organizational structure from main: workstream navigation, data/schema documentation, capitulum-trait foundation, archived historical decision notes and separated request drafts. Cleanup-specific deletions were preserved when that structure was merged.
-
-Frozen scientific evidence and checksums required by current analyses were retained. Historical code remains recoverable from Git history.
+The repository retains the useful organizational structure from main: workstream navigation, data/schema documentation, capitulum-trait foundation, archived historical decision notes and separated request drafts. Frozen scientific evidence and checksums required by current analyses were retained. Historical code remains recoverable from Git history.
 
 ## 7. Remaining empirical blockers
 
 1. Run the validated EA01/EA02 full HPC/local handoff: baseline BWA + BLASTx recovery, fresh candidate BLASTx recovery, paired concatenated trees, source-label ASTRAL and cross-mapping summary.
 2. Run the CNIPG paired 294-vs-295 bundle against both accepted baseline mapping modes.
 3. If candidates pass independently, construct the explicit common paired-locus combined tree before promoting a 296/297 state.
+4. Separately, execute the Chang transcriptome/gene-tree heavy workflow if the var. *takaoense* candidate-regain mechanism workstream is advanced; CI currently validates its inputs, gates and DAG only.
 
-New China sampling remains deliberately unfrozen until this public-data ceiling is evaluated.
+New China sampling remains deliberately unfrozen until the public nuclear candidate ceiling is evaluated.
 
 ## 8. Remaining implementation debt
 
-### Internal colour-rate primitives
+For the audited active execution paths above, the known superseded wrapper/runner-generation debt has been removed. No threshold or accepted scientific result was changed to achieve the cleanup.
 
-Both `analysis/colour_rate_comp1061_bridge_primitives.py` and `analysis/colour_rate_comp1061_hpc_primitives.py` were initially extracted wholesale from older supported entry points so the public wrappers could be removed safely. They still contain historical entrypoint/build scaffolding that is no longer part of the supported interface. Slim these internal modules only after the canonical bridge/HPC CI remains stable; do not reintroduce public versioned wrappers.
+Future cleanup should be evidence-driven: if another executable looks old, first prove that no current workflow, contract, frozen result or downstream builder depends on it. Do not delete scientific outputs merely because their original generating implementation is historical.
 
-### Chang transcriptome runner generations
-
-The restartable layout-aware runner still imports earlier runner layers and the current workflow contract deliberately hashes/tests them. Consolidate first, then retire older generations.
+The main unresolved work is now empirical/heavy-compute rather than another versioned-wrapper migration.
 
 ## 9. Navigation
 
