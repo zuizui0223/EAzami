@@ -4,11 +4,13 @@ on:
   pull_request:
     paths:
       - "analysis/build_japan_origin_global_public_panel_v2.py"
+      - "analysis/materialize_frozen_moreyra_reconciliation.py"
       - "tests/test_build_japan_origin_global_public_panel_v2.py"
       - "data/evidence/japan_origin_global_public_panel_contract_v2.json"
       - "data/evidence/chang2025_public_run_manifest_v1.csv"
       - "data/evidence/chang2026_public_run_manifest_v1.csv"
       - "data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv"
+      - "data/evidence/moreyra2025_cirsium_reconciliation_v1/**"
       - ".github/workflows/build-japan-origin-global-public-panel-v2.yml"
   workflow_dispatch:
 
@@ -18,7 +20,6 @@ concurrency:
 
 permissions:
   contents: read
-  actions: read
 
 jobs:
   build-real-panel:
@@ -31,21 +32,16 @@ jobs:
           python-version: "3.12"
       - name: Compile and unit test
         run: |
-          python -m py_compile analysis/build_japan_origin_global_public_panel_v2.py
+          python -m py_compile \
+            analysis/build_japan_origin_global_public_panel_v2.py \
+            analysis/materialize_frozen_moreyra_reconciliation.py
           python -m unittest tests/test_build_japan_origin_global_public_panel_v2.py -v
-      - name: Recover frozen Moreyra reconciliation artifact
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Materialize durable frozen Moreyra Cirsium reconciliation
         run: |
-          mkdir -p /tmp/moreyra /tmp/japan_origin_global_v2
-          curl --fail --location \
-            -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9067368059/zip" \
-            -o /tmp/moreyra.zip
-          echo "a18e4867362fed7b509c351bc901a9456fe258f09c7e277b0069d8c257b6ed72  /tmp/moreyra.zip" | sha256sum -c -
-          unzip -q /tmp/moreyra.zip -d /tmp/moreyra
-          test -s /tmp/moreyra/moreyra_sample_audit_output/moreyra2025_all_sample_reconciliation.csv
+          mkdir -p /tmp/moreyra/moreyra_sample_audit_output /tmp/japan_origin_global_v2
+          python analysis/materialize_frozen_moreyra_reconciliation.py \
+            --output /tmp/moreyra/moreyra_sample_audit_output/moreyra2025_all_sample_reconciliation.csv
+          echo "cf3af71a1a77eee5bd177cef9cf8106b749b949eaacc0ad82bbb331978084505  /tmp/moreyra/moreyra_sample_audit_output/moreyra2025_all_sample_reconciliation.csv" | sha256sum -c -
       - name: Build and verify real deduplicated panel
         run: |
           python analysis/build_japan_origin_global_public_panel_v2.py \
