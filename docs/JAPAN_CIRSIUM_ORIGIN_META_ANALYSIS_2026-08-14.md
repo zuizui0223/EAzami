@@ -11,6 +11,8 @@ This document distinguishes **phylogenetic monophyly** from **biogeographic orig
 Evidence matrix:
 
 - `data/evidence/japan_cirsium_origin_evidence_matrix_v1.csv`
+- `data/evidence/japan_cirsium_origin_priority_public_sequences_v1.csv`
+- frozen result: `data/evidence/japan_cirsium_origin_meta_analysis_v1.json`
 
 Summarizer:
 
@@ -52,6 +54,13 @@ Japanese result:
 - *C. lineare* is inferred from an East-Asia-to-Japan range expansion at ~1.4 Ma (0.7–2.7 Ma).
 
 This is currently the **only broad, direct nuclear biogeographic reconstruction** with extensive Japanese sampling. It directly rejects a strict one-colonization model, but its two exceptional event assignments still require lineage-specific replication.
+
+The frozen Moreyra reconciliation now gives the exact public nuclear runs for the two critical exceptions:
+
+- *C. dipsacolepis*: `SAMN44017836 / SRX26291339 / SRR30887259`, Japan, Shikoku, Tokushima Pref., Mt. Shiozuka-mine;
+- *C. lineare*: `SAMN44017876 / SRX26291359 / SRR30887240`, Japan, voucher Miyoshi Furuse 52881 (`PE01293160`).
+
+These are therefore direct falsification targets in the current 294→296 public nuclear analysis rather than merely literature-listed taxa.
 
 ### Chang et al. 2025 — Nipponocirsium phylotranscriptomics
 
@@ -168,16 +177,16 @@ That distinction predicts different processes:
 The current maximum-public tree should explicitly test:
 
 1. whether the broad Japanese main radiation remains one coherent clade after the larger continental context is added;
-2. whether *C. lineare* remains outside that radiation under both BWA and BLASTx and under concatenation and ASTRAL;
-3. whether *C. dipsacolepis* remains outside the main radiation and which continental branch is its nearest nuclear neighbour;
+2. whether *C. lineare* (`SRR30887240`) remains outside that radiation under both BWA and BLASTx and under concatenation and ASTRAL;
+3. whether *C. dipsacolepis* (`SRR30887259`) remains outside the main radiation and which continental branch is its nearest nuclear neighbour;
 4. whether Arenicola falls within/sister to the main Japanese radiation or instead becomes an independently bracketed continental-derived lineage;
 5. whether Hokkaido-vs-southern chloroplast structure has a corresponding nuclear split or instead represents organellar capture/history;
 6. whether the inferred exception count changes under a network/discordance view rather than a forced strictly bifurcating tree.
 
 ## Highest-value additional public/sample targets
 
-1. **Replicate *C. dipsacolepis*** with an independent nuclear dataset or additional biological sample. This is the weakest link in the current three-history hypothesis.
-2. **Geographic *C. lineare* replication** spanning Japan and continental East Asia, because its phylogenetic exception is strong but the direct colonization assignment still comes from one broad range model.
+1. **Replicate *C. dipsacolepis*** with an independent nuclear dataset or additional biological sample. This is the weakest link in the current three-history hypothesis. Its existing Moreyra target-capture run is `SRR30887259`.
+2. **Geographic *C. lineare* replication** spanning Japan and continental East Asia. Its Japanese Moreyra run is `SRR30887240`, while the Chang transcriptome programme supplies independent phylogenetic replication; exact geographical replication should be the next provenance target.
 3. **Arenicola + closest Nipponocirsium/continental relatives** to decide whether the Ryukyu lineage belongs to the dominant radiation's ancestry or represents another entry.
 4. **Hokkaido boundary taxa** only after the nuclear tree identifies which chloroplast north–south split corresponds to a real nuclear branch.
 
