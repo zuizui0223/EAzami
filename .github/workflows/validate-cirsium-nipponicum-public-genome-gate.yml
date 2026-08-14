@@ -9,11 +9,16 @@ on:
       - "analysis/compare_east_asia_public_augmentation_astral_backbone.py"
       - "analysis/summarize_cirsium_nipponicum_genome_augmentation_sensitivities.py"
       - "analysis/materialize_frozen_moreyra_reconciliation.py"
+      - "analysis/materialize_frozen_public_candidate_locus_pack.py"
+      - "analysis/build_japan_origin_global_public_panel_v2.py"
+      - "analysis/build_japan_origin_global_hpc_bundle_v2.py"
       - "data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json"
       - "data/evidence/cirsium_nipponicum_comp1061_locus_pack_result_2026-08-13.json"
       - "data/evidence/cirsium_nipponicum_public_genome_augmentation_gate_v1.json"
       - "data/evidence/moreyra2025_cirsium_reconciliation_v1/**"
+      - "data/evidence/public_candidate_locus_packs_v1/**"
       - "tests/test_prepare_cirsium_nipponicum_augmentation_tree_inputs.py"
+      - "tests/test_materialize_frozen_public_candidate_locus_pack.py"
       - ".github/workflows/validate-cirsium-nipponicum-public-genome-gate.yml"
   workflow_dispatch:
 
@@ -23,7 +28,6 @@ concurrency:
 
 permissions:
   contents: read
-  actions: read
 
 jobs:
   validate:
@@ -35,7 +39,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Compile and unit-test live gate code
+      - name: Compile and unit-test durable gate code
         run: |
           python -m py_compile \
             analysis/build_cirsium_nipponicum_genome_augmentation_hpc_bundle.py \
@@ -43,32 +47,26 @@ jobs:
             analysis/evaluate_east_asia_public_augmentation_tree_pair.py \
             analysis/compare_east_asia_public_augmentation_astral_backbone.py \
             analysis/summarize_cirsium_nipponicum_genome_augmentation_sensitivities.py \
-            analysis/materialize_frozen_moreyra_reconciliation.py
-          python -m unittest tests/test_prepare_cirsium_nipponicum_augmentation_tree_inputs.py -v
+            analysis/materialize_frozen_moreyra_reconciliation.py \
+            analysis/materialize_frozen_public_candidate_locus_pack.py \
+            analysis/build_japan_origin_global_public_panel_v2.py \
+            analysis/build_japan_origin_global_hpc_bundle_v2.py
+          python -m unittest \
+            tests/test_prepare_cirsium_nipponicum_augmentation_tree_inputs.py \
+            tests/test_materialize_frozen_public_candidate_locus_pack.py -v
 
-      - name: Recover frozen Ulleung genome locus pack
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Materialize durable Ulleung genome locus pack
         run: |
           mkdir -p /tmp/cnipg_pack
-          curl --fail --location \
-            -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9174758977/zip" \
-            -o /tmp/cnipg.zip
-          echo "079e3bfaab1d5041ebc2dcb1919532c75eefde7ffe1f766ab0473845f2f9dd69  /tmp/cnipg.zip" | sha256sum -c -
-          unzip -q /tmp/cnipg.zip -d /tmp/cnipg_pack
-          test "$(wc -l < /tmp/cnipg_pack/strict_recovered_loci.txt)" -eq 180
-          test "$(find /tmp/cnipg_pack/loci -name '*.fasta' | wc -l)" -eq 180
-
-      - name: Validate frozen compact genome result and gate
-        run: |
+          python analysis/materialize_frozen_public_candidate_locus_pack.py \
+            --candidate CNIPG --output /tmp/cnipg_pack
           python - <<'PY'
           import json
           from pathlib import Path
           result=json.loads(Path('data/evidence/cirsium_nipponicum_comp1061_locus_pack_result_2026-08-13.json').read_text())
           gate=json.loads(Path('data/evidence/cirsium_nipponicum_public_genome_augmentation_gate_v1.json').read_text())
           pack=json.loads(Path('/tmp/cnipg_pack/cirsium_nipponicum_comp1061_locus_pack_summary.json').read_text())
+          durable=json.loads(Path('/tmp/cnipg_pack/durable_materialization.json').read_text())
           assert result['artifact_id']==9174758977
           assert result['strict_recovered_loci']==180
           assert result['augmentation_locus_pack_ready'] is True
@@ -76,6 +74,10 @@ jobs:
           assert pack['strict_recovered_loci']==180
           assert pack['augmentation_locus_pack_ready'] is True
           assert pack['tree_tip_promotion_allowed'] is False
+          assert durable['source_artifact_id']==9174758977
+          assert durable['strict_locus_count']==180
+          assert durable['source_artifact_expiry_no_longer_runtime_dependency'] is True
+          assert durable['all_per_locus_source_fasta_checksums_verified'] is True
           assert gate['contract_version']=='cirsium_nipponicum_public_genome_augmentation_v1'
           assert gate['candidates'][0]['tip_id']=='AUG_ULLEUNG_CNIP2024'
           assert gate['candidates'][0]['strict_no_warning_recovered_loci']==180
@@ -84,10 +86,11 @@ jobs:
           assert gate['new_analysis_taxon_labels_if_promoted']==0
           assert gate['combined_public_candidate_tip_ceiling_if_all_current_independent_gates_pass']==297
           assert gate['new_china_sampling_freeze_allowed'] is False
-          print(json.dumps({'strict_loci':180,'accepted_primary':294,'candidate_alone':295,'combined_candidate_ceiling':297},indent=2))
+          assert len(list(Path('/tmp/cnipg_pack/loci').glob('*.fasta')))==180
+          print(json.dumps({'strict_loci':180,'accepted_primary':294,'candidate_alone':295,'combined_candidate_ceiling':297,'runtime_artifact_download':False},indent=2))
           PY
 
-      - name: Materialize durable real baseline-v2 bundle dependency
+      - name: Rebuild real baseline and genome augmentation bundle
         run: |
           mkdir -p /tmp/moreyra/moreyra_sample_audit_output /tmp/panel /tmp/baseline_bundle /tmp/cnipg_bundle
           python analysis/materialize_frozen_moreyra_reconciliation.py \
@@ -163,8 +166,7 @@ jobs:
           assert s['astral_metadata_ready'] is True
           assert s['new_analysis_taxon_labels_added']==0
           aug=list(csv.DictReader((p/'augmented295/primary_runs.csv').open()))
-          assert len(aug)==295
-          assert aug[-1]['tip_id']=='AUG_ULLEUNG_CNIP2024'
+          assert len(aug)==295 and aug[-1]['tip_id']=='AUG_ULLEUNG_CNIP2024'
           species=list(csv.DictReader((p/'augmented295/astral_species_map.csv').open()))
           hits=[r for r in species if r['analysis_taxon_label']=='Cirsium nipponicum']
           assert len(hits)==1 and 'AUG_ULLEUNG_CNIP2024' in hits[0]['tip_ids']
@@ -172,16 +174,14 @@ jobs:
           print(json.dumps(s,indent=2))
           PY
 
-      - name: Exercise generalized shared-backbone evaluator for CNIPG
+      - name: Exercise shared-backbone and cross-data-type promotion gates
         run: |
           python - <<'PY'
-          import csv
+          import csv,json
           from pathlib import Path
           rows=list(csv.DictReader(Path('/tmp/baseline_bundle/sample_manifest.csv').open()))
           names=[r['tip_id'] for r in rows]
-          same=[r['tip_id'] for r in rows if r['analysis_taxon_label']=='Cirsium nipponicum']
-          assert same
-          focal=same[0]
+          focal=next(r['tip_id'] for r in rows if r['analysis_taxon_label']=='Cirsium nipponicum')
           def balanced(items):
               cur=list(items)
               while len(cur)>1:
@@ -189,6 +189,12 @@ jobs:
               return cur[0]+';'
           Path('/tmp/cnipg_base.tre').write_text(balanced(names))
           Path('/tmp/cnipg_aug.tre').write_text(balanced([f'({x},AUG_ULLEUNG_CNIP2024)' if x==focal else x for x in names]))
+          root=Path('/tmp/cnipg_sensitivity')
+          for mode,loci in [('bwa',120),('blastx',110)]:
+              p=root/mode/'paired_inputs'; e=root/mode/'evaluation'; p.mkdir(parents=True,exist_ok=True); e.mkdir(parents=True,exist_ok=True)
+              (p/'paired_augmentation_summary.json').write_text(json.dumps({'paired_overlap_loci':loci,'minimum_overlap_loci':100}))
+              (e/'cnipg_295_CNIPG_concat.json').write_text(json.dumps({'exact_shared_tip_backbone_invariance':True,'same_taxon_among_nearest_baseline_tips':True,'unrooted_rf_distance_on_shared_baseline_tips':0,'candidate_nearest_baseline_tip_ids':[focal],'baseline_exact_taxon_tip_ids':[focal]}))
+              (e/'cnipg_295_astral_backbone.json').write_text(json.dumps({'exact_shared_species_backbone_invariance':True,'unrooted_rf_distance_on_shared_species':0}))
           PY
           python analysis/evaluate_east_asia_public_augmentation_tree_pair.py \
             --baseline-tree /tmp/cnipg_base.tre \
@@ -197,6 +203,9 @@ jobs:
             --contract data/evidence/cirsium_nipponicum_public_genome_augmentation_gate_v1.json \
             --candidate-id CNIPG \
             --output /tmp/cnipg_eval.json
+          python analysis/summarize_cirsium_nipponicum_genome_augmentation_sensitivities.py \
+            --root /tmp/cnipg_sensitivity \
+            --output /tmp/cnipg_sensitivity/pass.json
           python - <<'PY'
           import json
           d=json.load(open('/tmp/cnipg_eval.json'))
@@ -204,42 +213,11 @@ jobs:
           assert d['unrooted_rf_distance_on_shared_baseline_tips']==0
           assert d['same_taxon_among_nearest_baseline_tips'] is True
           assert d['tree_tip_promotion_allowed_from_this_pair_alone'] is False
-          PY
-
-      - name: Exercise strict cross-data-type promotion summary
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          root=Path('/tmp/cnipg_sensitivity')
-          for mode,loci in [('bwa',120),('blastx',110)]:
-              p=root/mode/'paired_inputs'; e=root/mode/'evaluation'; p.mkdir(parents=True,exist_ok=True); e.mkdir(parents=True,exist_ok=True)
-              (p/'paired_augmentation_summary.json').write_text(json.dumps({'paired_overlap_loci':loci,'minimum_overlap_loci':100}))
-              (e/'cnipg_295_CNIPG_concat.json').write_text(json.dumps({'exact_shared_tip_backbone_invariance':True,'same_taxon_among_nearest_baseline_tips':True,'unrooted_rf_distance_on_shared_baseline_tips':0,'candidate_nearest_baseline_tip_ids':['JOG0001'],'baseline_exact_taxon_tip_ids':['JOG0001']}))
-              (e/'cnipg_295_astral_backbone.json').write_text(json.dumps({'exact_shared_species_backbone_invariance':True,'unrooted_rf_distance_on_shared_species':0}))
-          PY
-          python analysis/summarize_cirsium_nipponicum_genome_augmentation_sensitivities.py \
-            --root /tmp/cnipg_sensitivity \
-            --output /tmp/cnipg_sensitivity/pass.json
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          d=json.loads(Path('/tmp/cnipg_sensitivity/pass.json').read_text())
-          assert d['automatic_sample_tip_promotion_allowed'] is True
-          assert d['manual_review_required'] is False
-          assert d['resulting_sample_level_tip_count_if_promoted_alone']==295
-          assert d['new_analysis_taxon_labels_added_if_promoted']==0
-          assert d['combined_current_public_candidate_tip_ceiling_if_all_independent_gates_pass']==297
-          assert d['combined_ceiling_is_an_accepted_tree'] is False
-          bad=Path('/tmp/cnipg_sensitivity/blastx/evaluation/cnipg_295_CNIPG_concat.json')
-          x=json.loads(bad.read_text());x['exact_shared_tip_backbone_invariance']=False;x['unrooted_rf_distance_on_shared_baseline_tips']=2;bad.write_text(json.dumps(x))
-          PY
-          python analysis/summarize_cirsium_nipponicum_genome_augmentation_sensitivities.py \
-            --root /tmp/cnipg_sensitivity \
-            --output /tmp/cnipg_sensitivity/fail.json
-          python - <<'PY'
-          import json
-          d=json.load(open('/tmp/cnipg_sensitivity/fail.json'))
-          assert d['automatic_sample_tip_promotion_allowed'] is False
-          assert d['manual_review_required'] is True
+          s=json.load(open('/tmp/cnipg_sensitivity/pass.json'))
+          assert s['automatic_sample_tip_promotion_allowed'] is True
+          assert s['manual_review_required'] is False
+          assert s['resulting_sample_level_tip_count_if_promoted_alone']==295
+          assert s['new_analysis_taxon_labels_added_if_promoted']==0
+          assert s['combined_current_public_candidate_tip_ceiling_if_all_independent_gates_pass']==297
+          assert s['combined_ceiling_is_an_accepted_tree'] is False
           PY
