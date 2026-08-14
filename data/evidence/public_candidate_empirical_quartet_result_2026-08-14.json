@@ -1,0 +1,89 @@
+{
+  "contract_version": "public_candidate_empirical_quartet_result_v1",
+  "date": "2026-08-14",
+  "scope": "bounded real-read same-taxon placement sanity check for EA01 and EA02 against exact same-taxon samples already present in the accepted 294-tip baseline",
+  "source_runs": {
+    "real_baseline_recovery_workflow_run": 31788828923,
+    "iqtree3_resume_workflow_run": 31791886129,
+    "iqtree3_result_artifact_id": 9215812465,
+    "iqtree3_result_artifact_sha256": "c428adca84ab1ab42a6d1eb272fde5911f0d39fab43db834e5c83e09e3c1f5c4"
+  },
+  "samples": [
+    {
+      "tip_id": "MRY_YOSHINOI",
+      "role": "accepted_294_baseline",
+      "taxon": "Cirsium nipponicum var. yoshinoi",
+      "run": "SRR30887222",
+      "biosample": "SAMN44017955",
+      "strict_no_warning_loci": 236,
+      "paralog_warning_loci": 0
+    },
+    {
+      "tip_id": "PUBEA001",
+      "role": "EA01_public_candidate",
+      "taxon": "Cirsium nipponicum var. yoshinoi",
+      "run": "SRR30887223",
+      "biosample": "SAMN44017954",
+      "strict_no_warning_loci": 236
+    },
+    {
+      "tip_id": "MRY_SAIRAMENSE",
+      "role": "accepted_294_baseline",
+      "taxon": "Cirsium sairamense",
+      "run": "SRR25265647",
+      "biosample": "SAMN34240330",
+      "strict_no_warning_loci": 239,
+      "paralog_warning_loci": 0,
+      "baseline_voucher": "Susanna 2468"
+    },
+    {
+      "tip_id": "PUBEA002",
+      "role": "EA02_public_candidate",
+      "taxon": "Cirsium sairamense",
+      "run": "SRR9119112",
+      "biosample": "SAMN11585477",
+      "strict_no_warning_loci": 239
+    }
+  ],
+  "input_matrix": {
+    "frozen_candidate_locus_universe": 241,
+    "four_way_common_strict_loci": 235,
+    "all_four_samples_same_locus_set": true,
+    "aligned_columns": 105086,
+    "variable_sites": 2769,
+    "parsimony_informative_sites": 2199,
+    "gene_tree_informative_loci": 231
+  },
+  "iqtree3": {
+    "version": "3.1.3",
+    "sequence_type": "DNA",
+    "concatenated_best_fit_model_bic": "TIM3+F+G4",
+    "concatenated_tree_newick": "(MRY_YOSHINOI:0.0042830718,PUBEA001:0.0027471448,(MRY_SAIRAMENSE:0.0000009520,PUBEA002:0.0000009520)100/100:0.0288779095);",
+    "internal_split_sh_alrt": 100,
+    "internal_split_ultrafast_bootstrap": 100,
+    "concatenated_topology_class": "same_taxon_pairs"
+  },
+  "gene_tree_result": {
+    "gene_trees": 231,
+    "same_taxon_pairs": 231,
+    "baseline_vs_candidates": 0,
+    "crossed_pairs": 0,
+    "unresolved": 0,
+    "same_taxon_pair_fraction": 1.0
+  },
+  "interpretation": {
+    "EA01_same_taxon_placement_sanity_supported": true,
+    "EA02_same_taxon_placement_sanity_supported": true,
+    "pilot_signal": "consistent",
+    "EA02_independence_requires_provenance_reaudit": true,
+    "EA02_reaudit_reason": "Across the recovered common nuclear loci the accepted-baseline and EA02 C. sairamense sequences are exceptionally close; verify whether the two BioSamples represent independent biological material or cross-project reuse before treating EA02 as a new biological sample tip."
+  },
+  "claim_boundary": {
+    "full_294_tip_promotion_allowed_from_this_pilot": false,
+    "shared_294_rf_tested": false,
+    "full_panel_astral_tested": false,
+    "blastx_mapping_sensitivity_tested": false,
+    "new_china_sampling_freeze_allowed": false,
+    "flower_colour_history_changed": false
+  }
+}
