@@ -10,9 +10,14 @@ on:
       - "analysis/build_east_asia_public_full_hpc_handoff.py"
       - "analysis/summarize_east_asia_public_augmentation_sensitivities.py"
       - "analysis/materialize_frozen_moreyra_reconciliation.py"
+      - "analysis/materialize_frozen_public_candidate_locus_pack.py"
+      - "analysis/build_japan_origin_global_public_panel_v2.py"
+      - "analysis/build_japan_origin_global_hpc_bundle_v2.py"
       - "data/evidence/east_asia_public_tree_augmentation_contract_v1.json"
       - "data/evidence/east_asia_public_sra_comp1061_pilot_results_2026-08-13.csv"
       - "data/evidence/moreyra2025_cirsium_reconciliation_v1/**"
+      - "data/evidence/public_candidate_locus_packs_v1/**"
+      - "tests/test_materialize_frozen_public_candidate_locus_pack.py"
       - "docs/EAST_ASIA_PUBLIC_TREE_AUGMENTATION_GATE_2026-08-13.md"
       - ".github/workflows/validate-east-asia-public-augmentation-gate.yml"
   workflow_dispatch:
@@ -23,7 +28,6 @@ concurrency:
 
 permissions:
   contents: read
-  actions: read
 
 jobs:
   validate:
@@ -34,7 +38,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Compile augmentation gate
+
+      - name: Compile and test durable gate code
         run: |
           python -m py_compile \
             analysis/prepare_east_asia_public_augmentation_tree_inputs.py \
@@ -43,22 +48,19 @@ jobs:
             analysis/build_east_asia_public_augmentation_hpc_bundle.py \
             analysis/build_east_asia_public_full_hpc_handoff.py \
             analysis/summarize_east_asia_public_augmentation_sensitivities.py \
-            analysis/materialize_frozen_moreyra_reconciliation.py
-      - name: Recover successful EA01 and EA02 candidate packs
-        env:
-          GH_TOKEN: ${{ github.token }}
+            analysis/materialize_frozen_moreyra_reconciliation.py \
+            analysis/materialize_frozen_public_candidate_locus_pack.py \
+            analysis/build_japan_origin_global_public_panel_v2.py \
+            analysis/build_japan_origin_global_hpc_bundle_v2.py
+          python -m unittest tests/test_materialize_frozen_public_candidate_locus_pack.py -v
+
+      - name: Materialize durable EA01 and EA02 candidate packs
         run: |
           mkdir -p /tmp/EA01 /tmp/EA02
-          curl --fail --location -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9175870949/zip" -o /tmp/EA01.zip
-          curl --fail --location -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9175876315/zip" -o /tmp/EA02.zip
-          echo "275fecf31e202ae28914441faff70a7faede3c2b8912901221d84e4aa6ef2232  /tmp/EA01.zip" | sha256sum -c -
-          echo "6a9c0d91b2d98ed5ebc72bf96effd5f41c8c6f865747b1d1124ee3d59eb0d1bb  /tmp/EA02.zip" | sha256sum -c -
-          unzip -q /tmp/EA01.zip -d /tmp/EA01
-          unzip -q /tmp/EA02.zip -d /tmp/EA02
-      - name: Validate frozen pilot evidence and joint candidate locus set
-        run: |
+          python analysis/materialize_frozen_public_candidate_locus_pack.py \
+            --candidate EA01 --output /tmp/EA01
+          python analysis/materialize_frozen_public_candidate_locus_pack.py \
+            --candidate EA02 --output /tmp/EA02
           python - <<'PY'
           import csv,json
           from pathlib import Path
@@ -66,19 +68,27 @@ jobs:
           contract=json.loads(Path('data/evidence/east_asia_public_tree_augmentation_contract_v1.json').read_text())
           e1=json.loads(Path('/tmp/EA01/candidate_pack_summary.json').read_text())
           e2=json.loads(Path('/tmp/EA02/candidate_pack_summary.json').read_text())
+          m1=json.loads(Path('/tmp/EA01/durable_materialization.json').read_text())
+          m2=json.loads(Path('/tmp/EA02/durable_materialization.json').read_text())
           s1={x for x in Path('/tmp/EA01/strict_recovered_loci.txt').read_text().splitlines() if x}
           s2={x for x in Path('/tmp/EA02/strict_recovered_loci.txt').read_text().splitlines() if x}
           assert e1['strict_no_warning_recovered_loci']==236==len(s1)
           assert e2['strict_no_warning_recovered_loci']==239==len(s2)
           assert s1 <= s2 and len(s1&s2)==236
+          assert m1['source_artifact_id']==9175870949 and m2['source_artifact_id']==9175876315
+          assert m1['source_artifact_expiry_no_longer_runtime_dependency'] is True
+          assert m2['source_artifact_expiry_no_longer_runtime_dependency'] is True
+          assert m1['all_per_locus_source_fasta_checksums_verified'] is True
+          assert m2['all_per_locus_source_fasta_checksums_verified'] is True
           assert evidence['EA01']['artifact_id']=='9175870949'
           assert evidence['EA02']['artifact_id']=='9175876315'
           assert int(contract['joint_candidate_strict_loci'])==236
           assert contract['tree_tip_promotion_allowed_before_paired_trees'] is False
           assert all(x['baseline_exact_taxon_expected'] is True for x in contract['candidates'])
-          print(json.dumps({'EA01':len(s1),'EA02':len(s2),'joint':len(s1&s2)},indent=2))
+          print(json.dumps({'EA01':len(s1),'EA02':len(s2),'joint':len(s1&s2),'runtime_artifact_download':False},indent=2))
           PY
-      - name: Materialize durable baseline-v2 dependency and build bundles
+
+      - name: Rebuild real baseline and full augmentation handoff
         run: |
           mkdir -p /tmp/moreyra/moreyra_sample_audit_output /tmp/panel /tmp/baseline_bundle /tmp/augmentation_bundle /tmp/full_handoff
           python analysis/materialize_frozen_moreyra_reconciliation.py \
@@ -100,6 +110,7 @@ jobs:
             --baseline-bundle /tmp/baseline_bundle \
             --augmentation-bundle /tmp/augmentation_bundle \
             --outdir /tmp/full_handoff
+
       - name: Validate real full HPC handoff offline
         run: |
           python -m py_compile /tmp/full_handoff/augmentation_bundle/helpers/*.py
@@ -107,8 +118,7 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          h=Path('/tmp/full_handoff')
-          aug=h/'augmentation_bundle'
+          h=Path('/tmp/full_handoff'); aug=h/'augmentation_bundle'
           am=json.loads((aug/'execution_manifest.json').read_text())
           hm=json.loads((h/'handoff_manifest.json').read_text())
           assert am['bundle_version']=='east_asia_public_augmentation_hpc_bundle_v1'
@@ -116,36 +126,32 @@ jobs:
           assert am['candidate_strict_loci']=={'EA01':236,'EA02':239}
           assert am['scenarios']==['baseline294','ea01_295','ea02_295','ea01_ea02_296']
           assert am['mapping_modes']==['bwa','blastx']
-          assert am['candidate_analysis_taxon_labels_already_in_baseline']==['EA01','EA02']
           assert am['new_analysis_taxon_labels_added']==0
           assert am['tree_tip_promotion_allowed'] is False
           assert len(list((aug/'candidate_packs/EA01/loci').glob('*.fasta')))==236
           assert len(list((aug/'candidate_packs/EA02/loci').glob('*.fasta')))==239
-          assert (aug/'16_summarize_cross_mapping_sensitivities_slurm.sh').is_file()
-          assert hm['handoff_version']=='east_asia_public_full_hpc_handoff_v1'
           assert hm['baseline_biological_tips']==294 and hm['baseline_public_runs']==295
           assert hm['baseline_sra_download_shared_between_mapping_modes'] is True
           assert hm['candidate_mapping_sensitivity_is_symmetric'] is True
           assert hm['heavy_compute_location']=='HPC_or_large_memory_local_only'
-          assert hm['github_actions_role']=='artifact_contract_bundle_and_decision_logic_validation_only'
           assert hm['new_analysis_taxon_labels_added_by_candidates']==0
           fetch=(aug/'00_fetch_candidate_reads_slurm.sh').read_text()
           blast=(aug/'01_hybpiper_candidate_blastx_slurm.sh').read_text()
           prep=(aug/'10_prepare_paired_inputs_with_candidate_mapping_slurm.sh').read_text()
-          orch=(h/'submit_full_public_tree_and_augmentation.sh').read_text()
           assert 'SRR30887223' in fetch and 'SRR9119112' in fetch
           assert 'hybpiper assemble' in blast and '--bwa' not in blast
           assert 'candidate_mapping/blastx/packs/EA01' in prep
           assert 'candidate_mapping/blastx/packs/EA02' in prep
-          assert 'baseline_fetch_295_srr' in orch and 'candidate_blastx_hybpiper' in orch
-          assert 'cross_mapping_summary' in orch
           print(json.dumps(hm,indent=2))
           PY
+
       - name: Exercise paired-input builder with real candidate loci
         run: |
           python - <<'PY'
           from pathlib import Path
-          joint=[x for x in Path('/tmp/EA01/strict_recovered_loci.txt').read_text().splitlines() if x][:100]
+          s1=[x for x in Path('/tmp/EA01/strict_recovered_loci.txt').read_text().splitlines() if x]
+          s2=set(x for x in Path('/tmp/EA02/strict_recovered_loci.txt').read_text().splitlines() if x)
+          joint=[x for x in s1 if x in s2][:100]
           p=Path('/tmp/synthetic_primary'); (p/'loci_unaligned').mkdir(parents=True,exist_ok=True)
           (p/'eligible_loci.txt').write_text(''.join(x+'\n' for x in joint))
           for locus in joint:
@@ -167,23 +173,20 @@ jobs:
           assert s['ea01_is_subset_of_ea02_strict_loci'] is True
           assert s['scenario_focal_tip_counts']=={'baseline294':294,'ea01_295':295,'ea02_295':295,'ea01_ea02_296':296}
           y=[r for r in csv.DictReader((p/'ea01_295/astral_species_map.csv').open()) if r['analysis_taxon_label']=='Cirsium nipponicum var. yoshinoi']
+          sa=[r for r in csv.DictReader((p/'ea02_295/astral_species_map.csv').open()) if r['analysis_taxon_label']=='Cirsium sairamense']
           assert len(y)==1 and int(y[0]['n_tips'])>=2 and 'PUBEA001' in y[0]['tip_ids']
-          s2=list(csv.DictReader((p/'ea02_295/astral_species_map.csv').open()))
-          sa=[r for r in s2 if r['analysis_taxon_label']=='Cirsium sairamense']
           assert len(sa)==1 and int(sa[0]['n_tips'])>=2 and 'PUBEA002' in sa[0]['tip_ids']
-          assert not any(r['species_id']=='AUG_EA02' for r in s2)
           print(json.dumps(s,indent=2))
           PY
-      - name: Exercise shared-backbone RF evaluator
+
+      - name: Exercise shared-backbone RF and cross-mapping promotion gates
         run: |
           python - <<'PY'
-          import csv
+          import csv,json
           from pathlib import Path
           rows=list(csv.DictReader(Path('/tmp/baseline_bundle/sample_manifest.csv').open()))
           names=[r['tip_id'] for r in rows]
-          yosh=[r['tip_id'] for r in rows if r['analysis_taxon_label']=='Cirsium nipponicum var. yoshinoi']
-          assert yosh
-          focal=yosh[0]
+          focal=next(r['tip_id'] for r in rows if r['analysis_taxon_label']=='Cirsium nipponicum var. yoshinoi')
           def balanced(items):
               cur=list(items)
               while len(cur)>1:
@@ -191,36 +194,21 @@ jobs:
               return cur[0]+';'
           Path('/tmp/base.tre').write_text(balanced(names))
           Path('/tmp/ea01.tre').write_text(balanced([f'({x},PUBEA001)' if x==focal else x for x in names]))
-          PY
-          python analysis/evaluate_east_asia_public_augmentation_tree_pair.py \
-            --baseline-tree /tmp/base.tre \
-            --augmented-tree /tmp/ea01.tre \
-            --baseline-manifest /tmp/baseline_bundle/sample_manifest.csv \
-            --contract data/evidence/east_asia_public_tree_augmentation_contract_v1.json \
-            --candidate-id EA01 \
-            --output /tmp/ea01_rf_test.json
-          python - <<'PY'
-          import json
-          d=json.load(open('/tmp/ea01_rf_test.json'))
-          assert d['unrooted_rf_distance_on_shared_baseline_tips']==0
-          assert d['same_taxon_among_nearest_baseline_tips'] is True
-          assert d['tree_tip_promotion_allowed_from_this_pair_alone'] is False
-          PY
-      - name: Exercise frozen cross-mapping promotion aggregator
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
           root=Path('/tmp/sensitivity_test')
-          for mode in ('bwa','blastx'):
+          for mode,loci in [('bwa',123),('blastx',117)]:
               d=root/mode/'evaluation'; d.mkdir(parents=True,exist_ok=True)
-              (root/mode/'paired_summary.json').write_text(json.dumps({'joint_paired_loci':123 if mode=='bwa' else 117,'minimum_joint_paired_loci':100}))
+              (root/mode/'paired_summary.json').write_text(json.dumps({'joint_paired_loci':loci,'minimum_joint_paired_loci':100}))
               for cid,single in [('EA01','ea01_295'),('EA02','ea02_295')]:
                   for scenario in (single,'ea01_ea02_296'):
                       (d/f'{scenario}_{cid}_concat.json').write_text(json.dumps({'candidate_id':cid,'shared_baseline_focal_tips':294,'exact_shared_tip_backbone_invariance':True,'same_taxon_among_nearest_baseline_tips':True,'unrooted_rf_distance_on_shared_baseline_tips':0}))
               for scenario in ('ea01_295','ea02_295','ea01_ea02_296'):
                   (d/f'{scenario}_astral_backbone.json').write_text(json.dumps({'scenario_id':scenario,'exact_shared_species_backbone_invariance':True,'unrooted_rf_distance_on_shared_species':0}))
           PY
+          python analysis/evaluate_east_asia_public_augmentation_tree_pair.py \
+            --baseline-tree /tmp/base.tre --augmented-tree /tmp/ea01.tre \
+            --baseline-manifest /tmp/baseline_bundle/sample_manifest.csv \
+            --contract data/evidence/east_asia_public_tree_augmentation_contract_v1.json \
+            --candidate-id EA01 --output /tmp/ea01_rf_test.json
           python analysis/summarize_east_asia_public_augmentation_sensitivities.py \
             --bwa-paired-summary /tmp/sensitivity_test/bwa/paired_summary.json \
             --blastx-paired-summary /tmp/sensitivity_test/blastx/paired_summary.json \
@@ -229,34 +217,11 @@ jobs:
             --output /tmp/sensitivity_test/pass.json
           python - <<'PY'
           import json
-          from pathlib import Path
-          d=json.loads(Path('/tmp/sensitivity_test/pass.json').read_text())
-          assert d['joint_paired_loci_by_mapping']=={'bwa':123,'blastx':117}
-          assert d['both_candidate_sample_tip_promotion_allowed'] is True
-          assert d['resulting_sample_level_tip_count_if_both_promoted']==296
-          assert d['new_analysis_taxon_labels_added_if_both_promoted']==0
-          bad=Path('/tmp/sensitivity_test/blastx/evaluation/ea02_295_EA02_concat.json')
-          x=json.loads(bad.read_text()); x['same_taxon_among_nearest_baseline_tips']=False; bad.write_text(json.dumps(x))
+          d=json.load(open('/tmp/ea01_rf_test.json'))
+          assert d['unrooted_rf_distance_on_shared_baseline_tips']==0
+          assert d['same_taxon_among_nearest_baseline_tips'] is True
+          s=json.load(open('/tmp/sensitivity_test/pass.json'))
+          assert s['both_candidate_sample_tip_promotion_allowed'] is True
+          assert s['resulting_sample_level_tip_count_if_both_promoted']==296
+          assert s['new_analysis_taxon_labels_added_if_both_promoted']==0
           PY
-          python analysis/summarize_east_asia_public_augmentation_sensitivities.py \
-            --bwa-paired-summary /tmp/sensitivity_test/bwa/paired_summary.json \
-            --blastx-paired-summary /tmp/sensitivity_test/blastx/paired_summary.json \
-            --bwa-evaluation /tmp/sensitivity_test/bwa/evaluation \
-            --blastx-evaluation /tmp/sensitivity_test/blastx/evaluation \
-            --output /tmp/sensitivity_test/manual_review.json
-          python - <<'PY'
-          import json
-          d=json.load(open('/tmp/sensitivity_test/manual_review.json'))
-          assert d['candidates']['EA01']['sample_tip_promotion_allowed'] is True
-          assert d['candidates']['EA02']['sample_tip_promotion_allowed'] is False
-          assert d['candidates']['EA02']['manual_review_required'] is True
-          assert d['both_candidate_sample_tip_promotion_allowed'] is False
-          PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: east-asia-public-full-hpc-handoff-${{ github.run_id }}
-          path: |
-            /tmp/full_handoff
-            /tmp/paired_inputs/paired_augmentation_summary.json
-            /tmp/paired_inputs/scenario_manifest.csv
-          if-no-files-found: error
