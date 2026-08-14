@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -116,7 +117,8 @@ class Read2TreeHPCBundleTests(unittest.TestCase):
             ):
                 path = out / name
                 self.assertTrue(path.is_file())
-                self.assertTrue(path.stat().st_mode & 0o100)
+                if os.name != "nt":
+                    self.assertTrue(path.stat().st_mode & 0o100)
             self.assertTrue((out / PANEL.name).is_file())
             self.assertTrue((out / EVIDENCE.name).is_file())
             self.assertTrue((out / REFS.name).is_file())

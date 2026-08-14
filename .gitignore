@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+
+# Local workflow state
+.snakemake/
+.nextflow/
+work/
+tmp/
+temp/
+
+# Generated local knowledge graph
+graphify-out/

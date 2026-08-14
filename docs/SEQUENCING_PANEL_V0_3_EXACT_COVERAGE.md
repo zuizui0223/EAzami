@@ -63,7 +63,7 @@ These are secondary to the now-complete W/BP mapping.
 Files:
 
 - `docs/CHANG2026_TAKAOENSE_MORPH_EVIDENCE_AUDIT_2026-08-11.md`
-- `docs/CHANG2026_TAKAOENSE_MORPH_REQUEST_DRAFT.md`
+- `docs/requests/CHANG2026_TAKAOENSE_MORPH_REQUEST_DRAFT.md`
 - `data/evidence/chang2026_takaoense_figure1_morph_assignments_2026-08-11.csv`
 - `data/evidence/chang2026_takaoense_voucher_morph_evidence_2026-08-10.csv`
 - `data/evidence/chang2026_takaoense_ncbi_voucher_morph_audit_2026-08-11.csv`

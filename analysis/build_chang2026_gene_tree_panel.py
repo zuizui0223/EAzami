@@ -94,7 +94,7 @@ VALID_LIBRARY_LAYOUTS = {"PAIRED", "SINGLE"}
 
 
 def clean(value: object) -> str:
-    return str(value or "").strip()
+    return "" if value is None else str(value).strip()
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:

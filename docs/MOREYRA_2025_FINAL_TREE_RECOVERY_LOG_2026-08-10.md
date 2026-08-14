@@ -254,7 +254,7 @@ For new target-capture data, permitted matrix labels are:
 
 The remaining efficient route is direct author contact. A ready-to-send request has been prepared:
 
-- `docs/MOREYRA_2025_DATA_REQUEST_EMAIL.md`
+- `docs/requests/MOREYRA_2025_DATA_REQUEST_EMAIL.md`
 
 The request asks specifically for:
 
