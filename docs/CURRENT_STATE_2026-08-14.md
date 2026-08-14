@@ -1,17 +1,17 @@
 # EAzami current state — 2026-08-14
 
-This is the operational entry point for the repository. It separates accepted scientific conclusions, ready-but-not-promoted public candidates, active execution paths, and remaining implementation debt. Historical implementation details remain available in Git history and topic-specific evidence documents.
+This is the operational source of truth for the repository. It separates accepted scientific conclusions, ready-but-not-promoted public candidates, active execution paths, completed cleanup, and remaining blockers. Historical implementations remain recoverable from Git history and topic-specific evidence documents.
 
-## Accepted scientific state
+## 1. Accepted scientific state
 
 ### Flower-colour history
 
 Current evidence supports repeated white-flower evolution across East Asian *Cirsium* rather than one single white-flowered lineage.
 
 - Arenicola: the published context favours white-flower loss on the *C. brevicaule* lineage. Current evidence does **not** justify calling coloured *C. irumtiense* a regain.
-- Taiwanese *C. japonicum* var. *takaoense*: the six directly morph-labelled W/BP samples and published displayed topology make a W-to-coloured transition the minimum-change interpretation under the current coloured-root model. This is a **topology-supported candidate regain**, not molecular proof that an anthocyanin pathway was lost and restored.
+- Taiwanese *C. japonicum* var. *takaoense*: the six directly morph-labelled W/BP samples and displayed topology make a W-to-coloured transition the minimum-change interpretation under the current coloured-root model. This is a **topology-supported candidate regain**, not molecular proof that an anthocyanin pathway was lost and restored.
 - Introgression, ancestral coloured standing variation, geographic structure, short internodes and reticulation remain live alternatives.
-- A demonstrated molecular regain still requires population-aware nuclear ancestry plus explicit introgression/standing-variation tests and a genotype → expression → pigment → phenotype mechanism.
+- A demonstrated molecular regain still requires population-aware nuclear ancestry, explicit introgression/standing-variation tests, and a genotype → expression → pigment → phenotype mechanism.
 
 ### Accepted public nuclear baseline
 
@@ -23,41 +23,32 @@ The accepted public-data primary panel is:
 
 Japan-38 membership is provenance/sensitivity metadata, not a topology constraint.
 
-The old 302-tip / 303-SRR inventory is obsolete. Eight Taiwan RNA-seq BioSamples/SRRs reused across Chang 2025 and Chang 2026 had been counted twice. The current builder collapses those reused biological samples while retaining both source-paper provenances.
+The old 302-tip / 303-SRR inventory is obsolete because eight Taiwan RNA-seq BioSamples/SRRs reused across Chang 2025 and Chang 2026 had been counted twice. The current v2 builder collapses those reused biological samples while retaining source-paper provenance.
 
-The accepted primary tree remains **294 tips** until additional samples pass explicit paired-tree promotion gates.
+The accepted primary remains **294 tips** until additional samples pass explicit paired-tree promotion gates.
 
-## Ready public augmentation candidates
+## 2. Ready public augmentation candidates
 
-### EA01 / EA02 public-SRA gate
+### EA01 / EA02 same-assay public-SRA gate
 
-Two public-SRA candidates passed the conservative frozen-241 BWA recovery gate:
+- EA01 / `PUBEA001` — *C. nipponicum* var. *yoshinoi*: **236/241** strict no-warning BWA loci.
+- EA02 / `PUBEA002` — *C. sairamense*: **239/241** strict no-warning BWA loci.
+- EA01's strict set is a complete subset of EA02's, giving 236 candidate-side joint BWA loci.
+- EA03–EA05 recovered 0/241 and are not carried forward under the current rule.
 
-- EA01 / `PUBEA001` — *C. nipponicum* var. *yoshinoi*: **236/241** strict no-warning loci;
-- EA02 / `PUBEA002` — *C. sairamense*: **239/241** strict no-warning loci.
+Both successful candidates duplicate analysis taxon labels already present in the 294-tip baseline. They provide biological/cross-study replication and backbone-stability tests, not taxonomic expansion.
 
-EA01's strict set is a complete subset of EA02's; their candidate-side BWA intersection is 236 loci. EA03–EA05 recovered 0/241 and are not carried forward under the current rule.
+Active scenarios are `baseline294`, `ea01_295`, `ea02_295`, and `ea01_ea02_296`. Within each mapping mode every scenario uses the exact same paired locus list. BWA and BLASTx are evaluated independently and symmetrically.
 
-Both EA01 and EA02 duplicate analysis taxon labels already present in the 294-tip baseline. Their value is biological/cross-study replication and backbone-stability testing, not taxonomic expansion.
+Strict automatic promotion requires in both mapping modes and relevant single/joint scenarios:
 
-Active scenarios:
-
-1. `baseline294`
-2. `ea01_295`
-3. `ea02_295`
-4. `ea01_ea02_296`
-
-Within each mapping mode, every scenario uses the exact same paired locus list. BWA and BLASTx are evaluated independently and symmetrically. Automatic promotion requires in both mapping modes and relevant single/joint scenarios:
-
-- shared-294-tip concatenated RF = 0;
-- an existing same-taxon baseline tip among the candidate's nearest baseline neighbours;
-- shared-species ASTRAL RF = 0.
+1. shared-294-tip concatenated RF = 0;
+2. an existing same-taxon baseline tip among the candidate's nearest baseline neighbours;
+3. shared-species ASTRAL RF = 0.
 
 Any failure routes the candidate to manual biological review. Thresholds are not relaxed post hoc.
 
 ### CNIPG natural-Ulleung public-genome gate
-
-Cleanup recovered a third valid public nuclear candidate that had been omitted from the earlier maximum-public summary:
 
 - CNIPG / `AUG_ULLEUNG_CNIP2024` — natural-Ulleung *C. nipponicum* genome-derived CDS;
 - **180/241** strict loci;
@@ -65,15 +56,9 @@ Cleanup recovered a third valid public nuclear candidate that had been omitted f
 - locus pack ready: **true**;
 - tree-tip promotion before paired trees: **false**.
 
-Because CNIPG is genome-derived rather than an SRA HybPiper sample, it has a separate cross-data-type gate. For each accepted baseline mapping mode (`bwa`, `blastx`), `baseline294` and `cnipg_295` must use the exact intersection of that mode's accepted baseline loci and the frozen 180-locus genome pack, with at least 100 paired loci.
+CNIPG is a different data type and therefore has a separate cross-data-type sensitivity gate. For each accepted baseline mapping mode (`bwa`, `blastx`), `baseline294` and `cnipg_295` use the exact intersection of that mode's accepted baseline loci and the frozen 180-locus genome pack, with at least 100 paired loci.
 
-Automatic promotion requires in both baseline mapping modes:
-
-- shared-294-tip concatenated RF = 0;
-- an existing baseline *C. nipponicum* tip among the candidate's nearest baseline neighbours;
-- shared-species ASTRAL RF = 0.
-
-CNIPG also adds zero new analysis taxon labels. Its special value is the natural-Ulleung versus cultivated/garden-provenance comparison.
+Automatic promotion requires the same three safeguards: shared-294 RF=0, an existing baseline *C. nipponicum* tip among nearest neighbours, and shared-species ASTRAL RF=0 in both baseline mapping modes.
 
 ### Current maximum-public candidate ceiling
 
@@ -81,13 +66,13 @@ There are three ready public candidate samples beyond the accepted 294-tip basel
 
 If all independent gates pass, the current sample-level candidate ceiling is **297 tips**, still with **0 new analysis taxon labels**.
 
-This is **not** an accepted combined 297-tip tree. After independent admissions, a combined tree still requires an explicit common paired-locus contract across all admitted candidates. Until that analysis exists, the accepted primary remains 294 tips.
+This is **not** an accepted combined 297-tip tree. A final combined state requires an explicit common paired-locus contract across independently admitted candidates. Until then, the accepted primary remains 294 tips.
 
-## Durable baseline evidence
+## 3. Durable 294-tip baseline reconstruction
 
 The 294-tip rebuild no longer depends on the expiring Moreyra Actions artifact `9067368059`.
 
-The exact subset used by the v2 panel builder is now frozen under:
+The exact subset consumed by the v2 builder is frozen under:
 
 - `data/evidence/moreyra2025_cirsium_reconciliation_v1/manifest.json`
 - `data/evidence/moreyra2025_cirsium_reconciliation_v1/part_001.csv` … `part_008.csv`
@@ -95,19 +80,15 @@ The exact subset used by the v2 panel builder is now frozen under:
 
 The durable copy contains **258 linked *Cirsium* reconciliation rows** and only the 11 columns consumed by the v2 builder. The manifest retains the original workflow run, artifact ID, source-file checksum, artifact ZIP checksum, per-shard checksums and canonical reconstructed-CSV checksum.
 
-The materialized canonical CSV SHA256 is:
+Canonical reconstructed CSV SHA256:
 
 `cf3af71a1a77eee5bd177cef9cf8106b749b949eaacc0ad82bbb331978084505`
 
-Current panel-v2, HPC-v2, EA01/EA02 and CNIPG validation workflows rebuild the real 294/295 baseline from this repository evidence. Those validations passed after the switch.
+The panel-v2, HPC-v2, EA01/EA02 and CNIPG validation workflows rebuild the real 294/295 baseline from this repository evidence. The generic Moreyra metadata-recovery workflow can remain for source re-audit but is no longer a runtime dependency of the primary nuclear-tree CI path.
 
-The larger generic Moreyra metadata-recovery workflow may still be useful for source re-audit, but it is no longer a runtime dependency of the primary nuclear-tree CI path.
-
-## Active implementation paths
+## 4. Active implementation paths
 
 ### Primary 294-tip nuclear backbone
-
-Keep and develop:
 
 - `analysis/build_japan_origin_global_public_panel_v2.py`
 - `analysis/materialize_frozen_moreyra_reconciliation.py`
@@ -117,11 +98,9 @@ Keep and develop:
 - `.github/workflows/validate-japan-origin-global-hpc-bundle-v2.yml`
 - `data/evidence/japan_origin_global_public_panel_contract_v2.json`
 
-The live Slurm-generation primitives are parameterized. Historical 302-sample counts and `0-301` arrays are not embedded in the current helper and corrected later by string replacement.
+The live Slurm-generation primitives are parameterized. Historical 302-sample counts and `0-301` arrays are no longer embedded in a live helper and corrected later by string replacement.
 
 ### EA01 / EA02 augmentation
-
-Keep:
 
 - `analysis/prepare_east_asia_public_augmentation_tree_inputs.py`
 - `analysis/evaluate_east_asia_public_augmentation_tree_pair.py`
@@ -135,8 +114,6 @@ Keep:
 
 ### CNIPG augmentation
 
-Keep:
-
 - `data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json`
 - `data/evidence/cirsium_nipponicum_comp1061_locus_pack_result_2026-08-13.json`
 - `data/evidence/cirsium_nipponicum_public_genome_augmentation_gate_v1.json`
@@ -146,29 +123,30 @@ Keep:
 - `.github/workflows/validate-cirsium-nipponicum-public-genome-gate.yml`
 - `docs/CIRSIUM_NIPPONICUM_PUBLIC_GENOME_AUGMENTATION_GATE_2026-08-13.md`
 
-The tree-pair evaluator is gate-generic and shared with the EA01/EA02 path.
+The tree-pair evaluator is gate-generic and shared across the SRA and CNIPG paths.
 
-### Flower-colour state layer
+### Flower-colour state and rate bridge
 
-The active atlas generation is v0.3. The frozen v0.2 atlas CSV remains only because v0.3 explicitly consumes it as its evidence base.
+The active flower-colour atlas generation is v0.3. The frozen v0.2 atlas CSV remains because v0.3 explicitly consumes it as its evidence base.
 
-Keep:
+The flower-colour Compositae1061 bridge now has **one supported public entry point**:
 
-- `analysis/build_cirsium_flower_colour_atlas_v0_3.py`
-- `analysis/cirsium_flower_colour_atlas_v0_3_readiness.json`
-- `tests/test_cirsium_flower_colour_atlas_v0_3.py`
-- `.github/workflows/validate-cirsium-flower-colour-atlas-v0-3.yml`
-- `data/evidence/cirsium_flower_colour_atlas_v0_2.csv`
+- `analysis/build_colour_rate_comp1061_bridge_panel.py`
+- `analysis/colour_rate_comp1061_bridge_primitives.py`
+- `tests/test_build_colour_rate_comp1061_bridge_panel.py`
+- `.github/workflows/build-colour-rate-comp1061-bridge-panel.yml`
+
+The corrected empirical source partition is frozen directly as Chang2025=3, Chang2026=10, Moreyra2025=7. The old `_v0_2.py` wrapper that temporarily overwrote an older constant has been removed.
 
 ### var. takaoense focused topology/provenance work
 
-This workstream is secondary to the maximum public backbone but remains scientifically live.
+The var. *takaoense* workstream is secondary to the maximum public backbone but scientifically live.
 
-The Figure 1 provenance CI is validation-only: `.github/workflows/validate-chang2026-takaoense-figure-evidence.yml` verifies the six vouchers, W/BP 3+3 assignment, direct panel B/C labels and frozen official-image SHA256 without live Springer/Research Square re-download.
+The Figure 1 provenance CI is validation-only and verifies the six vouchers, W/BP 3+3 assignment, direct panel B/C labels and frozen official-image checksum without repeatedly downloading publisher content.
 
-The restartable transcriptome/gene-tree runner chain and Read2Tree sensitivity still have live contracts. Do not delete their older implementation layers until the current contract no longer imports/hashes them.
+The Read2Tree and restartable transcriptome/gene-tree contracts remain live. The graph-aligned main-branch organization has been integrated, including the current frozen hypothesis table, scoring contract, Read2Tree path fixes and workflow navigation.
 
-## Reference and locus-space state
+## 5. Reference and locus-space boundary
 
 The active compatibility target is the pinned original public Compositae1061 HybPiper reference:
 
@@ -178,15 +156,9 @@ The active compatibility target is the pinned original public Compositae1061 Hyb
 
 The Moreyra-specific *C. tioganum* augmentation remains unrecovered, so current runs are compatibility reanalyses rather than exact reproduction of Moreyra preprocessing.
 
-Useful public locus sets remain:
+Useful public locus sets remain 1,061 / reproducible 531-candidate / conservative 241.
 
-- 1,061 public named loci;
-- 531 reproducible warning/occupancy candidates;
-- 241 conservative no-warning/high-occupancy loci.
-
-The active maximum-public analyses use conservative frozen candidate rules plus current-sample QC.
-
-## Cleanup already applied
+## 6. Cleanup already applied
 
 Retired executable families include:
 
@@ -201,11 +173,14 @@ Retired executable families include:
 - one-shot Elsevier/Moreyra supplement recovery wrappers and standalone Chang 2025 runinfo Action;
 - live Chang 2026 Figure 1 re-download/preprint fallback code;
 - one-shot *C. nipponicum* Figshare discovery code;
-- obsolete Chang BioSample morph-discovery code after direct Figure 1 evidence was frozen.
+- obsolete Chang BioSample morph-discovery code after direct Figure 1 evidence was frozen;
+- colour-rate bridge `_v0_2` monkey-patch wrapper and wrapper-only test.
+
+The repository now also retains the useful organizational structure from main: workstream navigation, data/schema documentation, capitulum-trait foundation, archived historical decision notes and separated request drafts. Cleanup-specific deletions were preserved when that structure was merged.
 
 Frozen scientific evidence and checksums required by current analyses were retained. Historical code remains recoverable from Git history.
 
-## Remaining empirical blockers
+## 7. Remaining empirical blockers
 
 1. Run the validated EA01/EA02 full HPC/local handoff: baseline BWA + BLASTx recovery, fresh candidate BLASTx recovery, paired concatenated trees, source-label ASTRAL and cross-mapping summary.
 2. Run the CNIPG paired 294-vs-295 bundle against both accepted baseline mapping modes.
@@ -213,29 +188,36 @@ Frozen scientific evidence and checksums required by current analyses were retai
 
 New China sampling remains deliberately unfrozen until this public-data ceiling is evaluated.
 
-## Remaining implementation debt
+## 8. Remaining implementation debt
 
 ### Candidate pack durability
 
-EA01, EA02 and CNIPG validation still consume their successful locus-pack Actions artifacts:
+EA01, EA02 and CNIPG validation still consume successful locus-pack Actions artifacts:
 
 - EA01 artifact `9175870949`, SHA256 `275fecf31e202ae28914441faff70a7faede3c2b8912901221d84e4aa6ef2232`;
 - EA02 artifact `9175876315`, SHA256 `6a9c0d91b2d98ed5ebc72bf96effd5f41c8c6f865747b1d1124ee3d59eb0d1bb`;
 - CNIPG artifact `9174758977`, SHA256 `079e3bfaab1d5041ebc2dcb1919532c75eefde7ffe1f766ab0473845f2f9dd69`.
 
-All expire on 2026-11-11 under the current retention setting. Their provenance and compact result summaries are already frozen. Before expiry, preserve the actual small locus packs in a durable binary-capable repository/archive route or replace CI consumption with a deterministic durable source.
+They currently expire on 2026-11-11. Provenance and compact result summaries are frozen, but the actual small locus packs still need a durable binary-capable repository/archive route or a deterministic durable source before expiry.
 
-### Colour-rate bridge wrapper
+### Colour-rate bridge primitives
 
-`analysis/build_colour_rate_comp1061_bridge_panel_v0_2.py` still wraps the older implementation and temporarily overwrites its old source-study count constant. The corrected empirical partition is Chang2025=3, Chang2026=10, Moreyra2025=7. Consolidate this into one canonical builder before deleting the wrapper/base entry-point duplication.
+The public bridge entrypoint is now canonical, but `analysis/colour_rate_comp1061_bridge_primitives.py` was initially extracted from the old implementation wholesale. It still carries some historical entrypoint/build scaffolding that is no longer part of the supported interface. Slim that internal module only after the canonical bridge CI is stable.
 
-### Colour-rate HPC wrapper
+### Colour-rate HPC generations
 
-The colour-rate HPC path also retains base/v0.2 builder generations. Inspect and consolidate that pair separately; do not assume it is identical to the bridge wrapper.
+The colour-rate HPC path still has base/v0.2 builder generations. Inspect and consolidate that pair separately; do not assume it is identical to the bridge wrapper case.
 
 ### Chang transcriptome runner generations
 
 The restartable layout-aware runner still imports earlier runner layers and the current workflow contract deliberately hashes/tests them. Consolidate first, then retire older generations.
+
+## 9. Navigation
+
+- Repository entry point: `README.md`
+- Higher-level workstream/decision map: `PROJECT_STATUS.md`
+- Documentation map: `docs/README.md`
+- Current operational state: this file
 
 ## Cleanup rule
 
