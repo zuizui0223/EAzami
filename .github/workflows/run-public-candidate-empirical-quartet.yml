@@ -3,6 +3,7 @@ name: Run public-candidate empirical quartet
 on:
   pull_request:
     paths:
+      - "analysis/prepare_public_candidate_empirical_quartet.py"
       - "analysis/summarize_public_candidate_empirical_quartet.py"
       - "tests/test_summarize_public_candidate_empirical_quartet.py"
       - "analysis/build_public_sra_comp1061_candidate_pack.py"
@@ -35,6 +36,7 @@ jobs:
       - name: Compile and test empirical quartet code
         run: |
           python -m py_compile \
+            analysis/prepare_public_candidate_empirical_quartet.py \
             analysis/summarize_public_candidate_empirical_quartet.py \
             analysis/build_public_sra_comp1061_candidate_pack.py
           python -m unittest \
