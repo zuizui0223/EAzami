@@ -35,7 +35,7 @@ jobs:
           assert d['contract_version']=='japan_cirsium_origin_falsification_panel_v2'
           assert d['accepted_primary_tree_before_test']==294
           assert d['maximum_public_candidate_ceiling']==296
-          assert d['critical_sra_runs']==11
+          assert d['critical_sra_runs']==12
           assert d['critical_sra_runs_unique'] is True
           assert d['lineare']['japan_target_capture']['run']=='SRR30887240'
           assert {x['run'] for x in d['lineare']['taiwan_transcriptomes']}=={'SRR30617342','SRR30617347'}
