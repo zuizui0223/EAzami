@@ -32,11 +32,13 @@ class EmpiricalQuartetTests(unittest.TestCase):
             "unresolved",
         )
 
-    def test_summary_counts_gene_tree_votes(self):
+    def test_summary_counts_gene_tree_votes_on_informative_subset(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            loci = root / "loci.txt"
-            loci.write_text("L1\nL2\nL3\n")
+            common = root / "common.txt"
+            common.write_text("L1\nL2\nL3\nL4\n")
+            informative = root / "informative.txt"
+            informative.write_text("L1\nL2\nL3\n")
             trees = root / "trees"
             trees.mkdir()
             (trees / "L1.treefile").write_text("((MRY_YOSHINOI,PUBEA001),(MRY_SAIRAMENSE,PUBEA002));")
@@ -45,13 +47,25 @@ class EmpiricalQuartetTests(unittest.TestCase):
             concat = root / "concat.treefile"
             concat.write_text("((MRY_YOSHINOI,PUBEA001),(MRY_SAIRAMENSE,PUBEA002));")
             out = root / "summary.json"
-            summary = mod.summarize(loci, trees, concat, out)
+            summary = mod.summarize(common, trees, concat, out, informative)
+            self.assertEqual(summary["four_way_common_strict_loci"], 4)
+            self.assertEqual(summary["gene_tree_analysis_loci"], 3)
             self.assertEqual(summary["gene_tree_topology_counts"]["same_taxon_pairs"], 2)
             self.assertEqual(summary["gene_tree_topology_counts"]["baseline_vs_candidates"], 1)
             self.assertEqual(summary["same_taxon_pair_fraction_resolved"], 2 / 3)
             self.assertTrue(summary["concatenated_same_taxon_pairs"])
             self.assertEqual(summary["pilot_same_taxon_signal"], "consistent")
             self.assertFalse(summary["full_294_tip_promotion_allowed_from_this_pilot"])
+
+    def test_gene_tree_loci_must_be_subset_of_common(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            common = root / "common.txt"
+            common.write_text("L1\n")
+            informative = root / "informative.txt"
+            informative.write_text("L2\n")
+            with self.assertRaisesRegex(ValueError, "not a subset"):
+                mod.summarize(common, root, root / "x.treefile", root / "out.json", informative)
 
 
 if __name__ == "__main__":
