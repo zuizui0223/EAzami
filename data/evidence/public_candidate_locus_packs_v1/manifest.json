@@ -51,13 +51,30 @@
         "new_china_sampling_freeze_allowed": false
       },
       "payload_encoding": "base64(gzip(tsv))",
-      "gzip_sha256": "27f52c1b2d2f99fa48fb8af26007799ea3f96905732bf08148a747c841b61bf4",
+      "gzip_sha256": "c81463787980377b75d3cc24553d4e0fd17167edb9a8a25b4c52df13893a8053",
       "payload_parts": [
-        {"path": "data/evidence/public_candidate_locus_packs_v1/EA01.part01.b64", "sha256": "02a9074d237e50561607708195d6d160774d283181d91ae70b35397a62dddc89", "size_bytes": 24000},
-        {"path": "data/evidence/public_candidate_locus_packs_v1/EA01.part02.b64", "sha256": "ed1c87242d06f049f8c8d9ea5750fd6ad9b7b628d4cf569e388c7671592fcce4", "size_bytes": 24000},
-        {"path": "data/evidence/public_candidate_locus_packs_v1/EA01.part03.b64", "sha256": "bd12b2396db3a6e7f1d35cead005fe8057be19b9e72e21097ba137e238157ed7", "size_bytes": 7576}
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA01.part01.b64",
+          "sha256": "0648c24af1d6b27d621ad778b1f5dfa063098e61bd8fb81a56f950a6df70cc66",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA01.part02.b64",
+          "sha256": "f47646e852d1a3f8a77b3b1fa40503b429b1b5321516e1b2a0d6caf813179ba1",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA01.part03.b64",
+          "sha256": "84f58d79c129ba6120d2397d74db9b44985505808ef8671dd4fdc82f738e29d5",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA01.part04.b64",
+          "sha256": "bd12b2396db3a6e7f1d35cead005fe8057be19b9e72e21097ba137e238157ed7",
+          "size_bytes": 7576
+        }
       ],
-      "encoded_payload_sha256": "80a13e34cd9de5d5ff07aa3ddd3b9400be07b1d39742217bdaaa0312355475f6"
+      "encoded_payload_sha256": "a898763dc7c17ebce79d4060c3ceafe53f110161ac0a6d477370ff4411f6394f"
     },
     "EA02": {
       "tip_id": "PUBEA002",
@@ -98,13 +115,30 @@
         "new_china_sampling_freeze_allowed": false
       },
       "payload_encoding": "base64(gzip(tsv))",
-      "gzip_sha256": "e6669afbfc178df29c6d4bc2f5a62dec64d50aafce79e3f5926305b5d2106f32",
+      "gzip_sha256": "61e8b3440048b0de19ceb32636e4011734ad32a8109b77dc6755bad0eab06883",
       "payload_parts": [
-        {"path": "data/evidence/public_candidate_locus_packs_v1/EA02.part01.b64", "sha256": "918876dcad5fd94d51c4609d25f9cb2034147c325d3c5758a222663086fc28db", "size_bytes": 24000},
-        {"path": "data/evidence/public_candidate_locus_packs_v1/EA02.part02.b64", "sha256": "1ea58cb9eaaaf16edb24ea40bffdf611bd46063d05ab322988b826f8749d64e6", "size_bytes": 24000},
-        {"path": "data/evidence/public_candidate_locus_packs_v1/EA02.part03.b64", "sha256": "0ffe50b08e030651111a31f48ef75d50e9231152207d1339cf981904c50a9f46", "size_bytes": 10436}
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA02.part01.b64",
+          "sha256": "867f68cde3b820a96a28ef3cdca650b95ea821ea99cab6e0e915b6d0349b70d4",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA02.part02.b64",
+          "sha256": "f822f77608118ce370086cde914bb58263be411d04cd2e21d1cc256c00458b5a",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA02.part03.b64",
+          "sha256": "d92088ec129cc99014d9b77ce26ee9e285502864c66971c77a0f832d731d8494",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA02.part04.b64",
+          "sha256": "0ffe50b08e030651111a31f48ef75d50e9231152207d1339cf981904c50a9f46",
+          "size_bytes": 10436
+        }
       ],
-      "encoded_payload_sha256": "66b3d3188c0e16825257ff83cd5e13bac4a7dd6f7f350fb697ed95dc3a4699a3"
+      "encoded_payload_sha256": "6fb31dbd832404a63e53f81f877142079ad8d999809e9455950d8702369007bb"
     },
     "CNIPG": {
       "tip_id": "AUG_ULLEUNG_CNIP2024",
@@ -145,14 +179,40 @@
         "claim_limit": "A ready locus pack permits a predeclared 295-tip genome-augmentation tree. It does not modify the accepted 294-tip primary tree until placement is stable under cross-data-type sensitivity."
       },
       "payload_encoding": "base64(gzip(tsv))",
-      "gzip_sha256": "b49486f835dc5bf5da9e56e2e44700c67bd13e06837cb1595481cd94ca6526ff",
+      "gzip_sha256": "2424200bff598f08fc0ff810b859a8eb37ebe9df688df7d10eb4e1c068dccb8a",
       "payload_parts": [
-        {"path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part01.b64", "sha256": "fae1884144ecd2a97dd7bccddab4e37fecc5399cacc5bc13f7d1ade093cf323c", "size_bytes": 24000},
-        {"path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part02.b64", "sha256": "d247f13a93723b240df9f9ce9f969cf2f5907cc89b969b939070621a4a30849c", "size_bytes": 24000},
-        {"path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part03.b64", "sha256": "43d0ddb57b35bd206a9c61028e1b4df4d917fc67fa5bf7c758ccd7711c443e2a", "size_bytes": 24000},
-        {"path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part04.b64", "sha256": "de051485c40566e8f100d8219ee88a388c7eaefed9e3ba862c4aa4e5523e2beb", "size_bytes": 16756}
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part01.b64",
+          "sha256": "56bcdf2c07e7ada5a4ce92f823105bc52e95cb051cabcc4b8b75a2d85a193bc5",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part02.b64",
+          "sha256": "adbe6bcc8dce5731e565b429a79418e141bc297bcd07ad6825206422396a6262",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part03.b64",
+          "sha256": "68fa0885bebab6a467f704d37992dd44867a858ce2410b03a6b47aba6e75a62f",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part04.b64",
+          "sha256": "c30f35a0b0b11187851fc66498f25696401b6ffc16b5345a6dda3a9e33f8fe54",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part05.b64",
+          "sha256": "afb6f2f541c8f6df6edce25b1612471380abf87fdc08f407b60e18b24860b8fb",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part06.b64",
+          "sha256": "644ead985ef332292b0835b89991a4548a2f952739836372177543960defb3a9",
+          "size_bytes": 8756
+        }
       ],
-      "encoded_payload_sha256": "60723388d8e97ef3a26785f573c2d64bbff3a775ce07ad17375aa9d72d159dc7"
+      "encoded_payload_sha256": "b05ed2ce5b901188d56764e39b71d5b8567c8a753b508c46d23ac44d73cc7430"
     }
   }
 }
