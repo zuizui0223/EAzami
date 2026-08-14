@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Canonical corrected HPC builder for the 20-tip Compositae1061 rate tree.
+"""Canonical HPC builder for the 20-tip Compositae1061 rate-tree preflight.
 
-The original bundle froze the intended scientific inputs and BWA-primary / BLASTx
-mapping-sensitivity design, but its stage-0 generated shell had three execution
-contract bugs.  This supported entry point applies the corrected contract while
-keeping the frozen runs and scientific claim boundaries unchanged.
-
-Shared shell-generation primitives remain in
-``colour_rate_comp1061_hpc_primitives.py`` so the historical public v0.2 wrapper
-is no longer a supported entry point.
+This is the only supported HPC-bundle entry point. Shared read-recovery,
+HybPiper and QC shell generators live in ``colour_rate_comp1061_hpc_primitives``;
+this module owns argument parsing, corrected stage-0 preparation, manifest
+emission and the scientific stop rules. No runtime monkey-patching is used.
 """
 from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
 
 import colour_rate_comp1061_hpc_primitives as impl
 
@@ -25,21 +25,11 @@ validate = impl.validate
 write = impl.write
 runs_csv = impl.runs_csv
 env_yml = impl.env_yml
+common = impl.common
 fetch_script = impl.fetch_script
 hybpiper_script = impl.hybpiper_script
 qc_script = impl.qc_script
 submit_script = impl.submit_script
-
-ORIGINAL_COMMON = impl.common
-
-
-def common() -> str:
-    text = ORIGINAL_COMMON()
-    needle = 'ENV_PREFIX="${ENV_PREFIX:-$REPO_ROOT/.conda/eazami-colour-rate-comp1061}"\n'
-    replacement = needle + 'export REPO_ROOT RESULT_ROOT ENV_PREFIX\n'
-    if needle not in text:
-        raise RuntimeError("Unable to apply canonical environment export contract")
-    return text.replace(needle, replacement, 1)
 
 
 def prepare_script() -> str:
@@ -88,13 +78,65 @@ echo inputs_checkpoint=complete
 """
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--bridge-contract", type=Path, required=True)
+    parser.add_argument("--locus-manifest", type=Path, required=True)
+    parser.add_argument("--outdir", type=Path, required=True)
+    return parser.parse_args()
+
+
 def main() -> None:
-    # The historical generator resolves these module functions at call time.
-    # Keep that implementation private while exposing only this corrected public
-    # entry point; a later internal cleanup may inline/slim the primitives.
-    impl.common = common
-    impl.prepare_script = prepare_script
-    impl.main()
+    args = parse_args()
+    bridge = load(args.bridge_contract)
+    locus = load(args.locus_manifest)
+    tips = validate(bridge, locus)
+    args.outdir.mkdir(parents=True, exist_ok=True)
+
+    runs_csv(args.outdir / "primary_runs.csv", tips)
+    write(args.outdir / "env.yml", env_yml())
+    (args.outdir / "bridge_contract.json").write_bytes(args.bridge_contract.read_bytes())
+    (args.outdir / "locus_set_manifest.json").write_bytes(args.locus_manifest.read_bytes())
+
+    scripts = {
+        "00_prepare_inputs_slurm.sh": prepare_script(),
+        "01_fetch_trim_slurm.sh": fetch_script(),
+        "02_hybpiper_bwa_slurm.sh": hybpiper_script("bwa"),
+        "02b_hybpiper_blastx_slurm.sh": hybpiper_script("blastx"),
+        "03_retrieve_qc_slurm.sh": qc_script(),
+        "submit_bwa_chain.sh": submit_script("bwa"),
+        "submit_blastx_chain.sh": submit_script("blastx"),
+    }
+    for name, text in scripts.items():
+        write(args.outdir / name, text, 0o755)
+
+    manifest = {
+        "bundle_version": "colour_rate_comp1061_hpc_bundle_v1",
+        "taxa": 20,
+        "states": {"C": 17, "W": 3},
+        "primary_mapping": "bwa",
+        "mapping_sensitivity": "blastx",
+        "target_reference_sha256": REF_SHA,
+        "hybpiper_version": "2.3.4",
+        "astral_source": {
+            "commit": ASTRAL_COMMIT,
+            "zip_git_blob_sha1": ASTRAL_ZIP_BLOB_SHA1,
+        },
+        "current_stage_end": "retrieve_stats_paralog_qc",
+        "next_tree_stage": (
+            "apply current occupancy/paralog gates to frozen 241/531/1061 locus sets, "
+            "add reference outgroups, align, infer IQ-TREE gene/concat trees and ASTRAL sensitivity"
+        ),
+        "branch_length_tree_completed": False,
+        "rate_fit_execution_allowed": False,
+        "claim_limit": (
+            "Bundle execution through QC does not itself create an accepted branch-length rate tree. "
+            "Library-type occupancy, current paralogs, outgroup/Cirsium-monophyly and matrix "
+            "sensitivities must pass before tree promotion."
+        ),
+    }
+    write(args.outdir / "execution_manifest.json", json.dumps(manifest, indent=2) + "\n")
+    print(json.dumps(manifest, indent=2))
 
 
 if __name__ == "__main__":
