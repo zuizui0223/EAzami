@@ -2,12 +2,12 @@
 """Canonical corrected 20-taxon Compositae1061 flower-colour bridge builder.
 
 The first full official-SRA reconciliation corrected the pre-data publication
-bookkeeping used by the original prototype.  The current project partition is
-Chang2025=3, Chang2026=10 and Moreyra2025=7.  Taxon membership, colour states,
+bookkeeping used by the original prototype. The current project partition is
+Chang2025=3, Chang2026=10 and Moreyra2025=7. Taxon membership, colour states,
 run matching and the maximum-Spots primary-sample rule are unchanged.
 
 Shared parsing/reconciliation helpers live in
-``colour_rate_comp1061_bridge_primitives.py``.  This file is the only supported
+``colour_rate_comp1061_bridge_primitives.py``. This file is the only supported
 bridge entry point and freezes the corrected v0.2 scientific contract.
 """
 from __future__ import annotations
@@ -143,7 +143,8 @@ def build(
             "The bridge panel only freezes taxon/run selection in a shared "
             "Compositae1061 coordinate system. It does not imply equivalent locus "
             "recovery between target-capture and leaf RNA-seq, does not create a "
-            "branch-length tree, and does not permit empirical flower-colour "n            "transition-rate inference."
+            "branch-length tree, and does not permit empirical flower-colour "
+            "transition-rate inference."
         ),
     }
     return primary, replicates, summary
