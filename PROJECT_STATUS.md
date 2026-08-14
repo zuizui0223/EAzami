@@ -1,60 +1,85 @@
 # EAzami current resolution goal
 
-Status date: 2026-08-13
+Status date: 2026-08-14
 
 ## Goal
 
-Produce an accepted, sensitivity-tested common-locus nuclear backbone that decides whether the main Japanese *Cirsium* radiation is recovered as monophyletic while retaining the separate histories of *C. dipsacolepis*, *C. lineare* and Ryukyu Arenicola. Freeze new RAD-seq or target-capture priorities only from topological gaps that remain stable across the accepted sensitivity analyses.
+Produce an accepted, sensitivity-tested common-locus nuclear backbone before freezing any broad new China sampling list. The immediate decision is whether the public-data tree preserves the main Japanese radiation and the separate histories of *C. dipsacolepis*, *C. lineare* and Ryukyu Arenicola while remaining stable to mapping, tree-method and replicate sensitivities.
 
-This is the next decision gate because flower-colour direction, the priority of continental bridge samples and future trait mapping all depend on a defensible phylogenetic backbone. A single concatenated tree is a screening result, not an accepted answer.
+## Accepted baseline
+
+The current accepted public-data inventory is:
+
+- **294 unique biological tips**;
+- **295 unique public SRRs**;
+- **270 source-preserving analysis taxon labels**.
+
+The old 302/303 inventory is superseded because eight Taiwan RNA-seq BioSamples/SRRs reused across Chang 2025 and Chang 2026 had been double-counted.
+
+The accepted primary remains 294 tips until explicit promotion gates pass.
+
+## Ready public candidates
+
+Three additional public samples are ready for paired-tree testing:
+
+| Candidate | Source | Strict loci | New analysis label? |
+|---|---|---:|---|
+| EA01 / `PUBEA001` | *C. nipponicum* var. *yoshinoi* public SRA | 236/241 | no |
+| EA02 / `PUBEA002` | *C. sairamense* public SRA | 239/241 | no |
+| CNIPG / `AUG_ULLEUNG_CNIP2024` | natural-Ulleung *C. nipponicum* public genome | 180/241 | no |
+
+If all independent gates pass, the current sample-level candidate ceiling is **297 tips**, but that is not an accepted combined tree until an explicit common paired-locus analysis is run across all admitted candidates.
+
+## Promotion logic
+
+For each candidate gate, augmented and baseline trees must be compared on the exact same paired locus set. Automatic promotion requires:
+
+1. RF = 0 on the shared 294-tip concatenated backbone;
+2. an existing same-taxon baseline tip among the candidate's nearest baseline neighbours;
+3. RF = 0 on the shared-species ASTRAL backbone.
+
+EA01/EA02 must satisfy this in both BWA and BLASTx mapping modes and in relevant single/joint scenarios. CNIPG is evaluated separately as a cross-data-type sensitivity against both accepted baseline mapping modes.
+
+A failed criterion triggers manual biological review, not post-hoc threshold relaxation.
 
 ## Current claim ceiling
 
 - Repeated white-flower evolution is the best-supported general pattern in the current East Asian evidence.
-- var. *takaoense* is a topology-supported candidate regain under the displayed sample topology and coloured-root model.
-- Anthocyanin re-expression is not demonstrated until population history, pathway state, expression, pigment and genotype are linked in the same plants.
-- The public-data prior places 36 of 38 sampled Japanese taxa in a main rapid radiation and treats *C. dipsacolepis* and *C. lineare* as separate invasion histories. The cross-assay common-locus reconstruction needed to test that prior has not yet been accepted.
-- One tree cannot establish dispersal direction, colonisation count or timing, direct ancestry, or introgression.
+- Arenicola currently favours white loss on *C. brevicaule*; regain in *C. irumtiense* is not established.
+- var. *takaoense* is a topology-supported candidate regain under the directly documented W/BP sample states and displayed topology.
+- Molecular anthocyanin re-expression is not demonstrated until population history, introgression/standing variation, pathway state, expression, pigment and genotype are linked.
+- A single concatenated tree cannot establish dispersal direction, colonisation count or timing, direct ancestry, or introgression.
 
-## Acceptance gate
+## Durable public-first infrastructure
 
-The Japan-origin result becomes decision-grade only when all of the following are versioned and pass validation:
+The 294-tip baseline no longer depends on the expiring Moreyra Actions reconciliation artifact. The exact 258-row *Cirsium* reconciliation subset used by the v2 builder is frozen under `data/evidence/moreyra2025_cirsium_reconciliation_v1/` with source and per-shard checksums and is materialized by `analysis/materialize_frozen_moreyra_reconciliation.py`.
 
-1. The maximal public panel manifest and sample-name reconciliation are complete and reproducible.
-2. BWA-primary and BLASTx mapping-sensitivity results are compared.
-3. Concatenated and per-locus/coalescent results are compared, with support and discordance retained.
-4. The main Japanese radiation is classified as `supported_monophyletic`, `rejected`, or `unresolved`; Arenicola, *C. dipsacolepis* and *C. lineare* are reported separately.
-5. Name-conflicted tips affecting the relevant sister neighbourhoods are reviewed.
-6. Only gaps stable across those checks are promoted to new sampling targets.
+The flower-colour Compositae1061 bridge also now has one supported canonical entry point with the corrected empirical source partition Chang2025=3, Chang2026=10, Moreyra2025=7; the old monkey-patch wrapper has been retired.
 
-Until all six conditions pass, `new_china_sampling_freeze_allowed` remains false.
+## Remaining empirical gates
 
-## Execution order
+1. Run the validated 294-tip baseline BWA and BLASTx workflows.
+2. Run fresh EA01/EA02 BLASTx recovery and paired concatenated/ASTRAL sensitivities.
+3. Run CNIPG paired 294-vs-295 sensitivities in both baseline mapping modes.
+4. If independent candidates pass, run one explicit combined common-locus tree before promoting a 296/297 state.
+5. Only then rank unresolved mainland gaps by information gain and freeze the smallest informative new sampling set.
 
-1. Build and validate the common-locus public panel.
-2. Run the primary mapping and accepted-tree workflow.
-3. Run mapping and tree-method sensitivities.
-4. Apply the Japan-origin topology decision contract.
-5. Freeze the smallest informative Layer 1 and Layer 2 sampling updates.
-6. Re-evaluate flower-colour transitions, then advance var. *takaoense* and the other population-level systems to mechanism tests.
+Until these conditions pass, `new_china_sampling_freeze_allowed` remains false.
 
 ## Two-layer research backbone
 
 | Layer | Question | Data | Decision |
 |---|---|---|---|
-| 1. Common-locus species backbone | Which Japanese and East Asian lineages are stably placed? | Public reads and Compositae1061-compatible target capture | Species placement and genuine backbone gaps |
+| 1. Common-locus species backbone | Which Japanese and East Asian lineages are stably placed? | Public reads, public genome resources and Compositae1061-compatible recovery | Species placement and genuine backbone gaps |
 | 2. Population and morph history | Are apparent loss/regain histories caused by ancestry, gene flow, standing variation or transition? | RAD-seq/resequencing plus linked vouchers, colour, pigment and ploidy | Focal population sampling and molecular tests |
 
 Layer 2 does not substitute for missing species placement, and Layer 1 does not resolve local ancestry by itself.
 
-## Future capitulum-trait foundation
+## Navigation
 
-The same stable taxon, population, voucher and phylogeny-tip identifiers will support future tests of capitulum-trait adaptive radiation. The initial contract records orientation, size and supporting evidence without asserting repeated adaptation. See [the capitulum trait foundation](docs/CAPITULUM_TRAIT_FOUNDATION.md) and [its machine-readable schema](data/schema/capitulum_trait_records.csv).
-
-## Canonical navigation
-
-- Repository and workstream map: [docs/README.md](docs/README.md)
-- Durable research aims: [docs/RESEARCH_PLAN.md](docs/RESEARCH_PLAN.md)
+- Operational source of truth: [docs/CURRENT_STATE_2026-08-14.md](docs/CURRENT_STATE_2026-08-14.md)
+- Documentation/workstream map: [docs/README.md](docs/README.md)
 - Phylogenomics implementation: [docs/EAST_ASIA_CIRSIUM_PHYLOGENOMICS_IMPLEMENTATION_PLAN.md](docs/EAST_ASIA_CIRSIUM_PHYLOGENOMICS_IMPLEMENTATION_PLAN.md)
 - Japan-origin decision contract: [docs/JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md](docs/JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md)
 - Current sampling decisions: [docs/SEQUENCING_PANEL_V0_3_EXACT_COVERAGE.md](docs/SEQUENCING_PANEL_V0_3_EXACT_COVERAGE.md)
+- Capitulum-trait foundation: [docs/CAPITULUM_TRAIT_FOUNDATION.md](docs/CAPITULUM_TRAIT_FOUNDATION.md)
