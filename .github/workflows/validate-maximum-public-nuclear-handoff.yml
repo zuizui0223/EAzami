@@ -5,16 +5,21 @@ on:
     paths:
       - "analysis/build_maximum_public_nuclear_hpc_handoff.py"
       - "analysis/prepare_maximum_public_combined_tree_inputs.py"
+      - "analysis/build_ea01_public_augmentation_hpc_bundle.py"
+      - "analysis/build_ea01_public_full_hpc_handoff.py"
+      - "analysis/prepare_ea01_public_augmentation_tree_inputs.py"
+      - "analysis/summarize_ea01_public_augmentation_sensitivities.py"
       - "analysis/build_japan_origin_global_public_panel_v2.py"
       - "analysis/build_japan_origin_global_hpc_bundle_v2.py"
-      - "analysis/build_east_asia_public_augmentation_hpc_bundle.py"
-      - "analysis/build_east_asia_public_full_hpc_handoff.py"
       - "analysis/build_cirsium_nipponicum_genome_augmentation_hpc_bundle.py"
       - "analysis/materialize_frozen_moreyra_reconciliation.py"
       - "analysis/materialize_frozen_public_candidate_locus_pack.py"
       - "workflow/public_nuclear_maximum/**"
       - "data/evidence/japan_origin_global_public_panel_contract_v2.json"
+      - "data/evidence/ea01_public_tree_augmentation_contract_v2.json"
       - "data/evidence/east_asia_public_tree_augmentation_contract_v1.json"
+      - "data/evidence/east_asia_public_candidate_disposition_v2.json"
+      - "data/evidence/public_candidate_empirical_quartet_2026-08-14.json"
       - "data/evidence/cirsium_nipponicum_public_genome_augmentation_gate_v1.json"
       - "data/evidence/moreyra2025_cirsium_reconciliation_v1/**"
       - "data/evidence/public_candidate_locus_packs_v1/**"
@@ -33,73 +38,82 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Compile and build the unified handoff
+      - name: Compile and build current 296-ceiling handoff
         run: |
+          set -euo pipefail
           bash -n workflow/public_nuclear_maximum/prepare_and_submit.sh
           python -m py_compile \
             analysis/build_maximum_public_nuclear_hpc_handoff.py \
             analysis/prepare_maximum_public_combined_tree_inputs.py \
+            analysis/build_ea01_public_augmentation_hpc_bundle.py \
+            analysis/build_ea01_public_full_hpc_handoff.py \
+            analysis/prepare_ea01_public_augmentation_tree_inputs.py \
+            analysis/summarize_ea01_public_augmentation_sensitivities.py \
             analysis/build_japan_origin_global_public_panel_v2.py \
             analysis/build_japan_origin_global_hpc_bundle_v2.py \
-            analysis/build_east_asia_public_augmentation_hpc_bundle.py \
-            analysis/build_east_asia_public_full_hpc_handoff.py \
             analysis/build_cirsium_nipponicum_genome_augmentation_hpc_bundle.py \
             analysis/materialize_frozen_moreyra_reconciliation.py \
             analysis/materialize_frozen_public_candidate_locus_pack.py
           python analysis/build_maximum_public_nuclear_hpc_handoff.py \
             --outdir /tmp/maximum_public_nuclear_handoff
 
-      - name: Run bundle and post-admission input tests
+      - name: Run post-empirical handoff and combined-input tests
         run: |
+          set -euo pipefail
           python -m unittest \
             tests/test_build_maximum_public_nuclear_hpc_handoff.py \
             tests/test_prepare_maximum_public_combined_tree_inputs.py \
             -v
-          while IFS= read -r -d '' f; do
-            bash -n "$f"
-          done < <(find /tmp/maximum_public_nuclear_handoff -type f -name '*.sh' -print0)
+          while IFS= read -r -d '' f; do bash -n "$f"; done < <(find /tmp/maximum_public_nuclear_handoff -type f -name '*.sh' -print0)
 
-      - name: Validate frozen counts and no implicit combined-tree promotion
+      - name: Validate 296 ceiling and EA02 exclusion
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
           root=Path('/tmp/maximum_public_nuclear_handoff')
           m=json.loads((root/'handoff_manifest.json').read_text())
-          ea=json.loads((root/'ea01_ea02_handoff/handoff_manifest.json').read_text())
-          base=json.loads((root/'ea01_ea02_handoff/baseline_bundle/execution_manifest.json').read_text())
+          ea=json.loads((root/'ea01_handoff/handoff_manifest.json').read_text())
+          aug=json.loads((root/'ea01_handoff/augmentation_bundle/execution_manifest.json').read_text())
+          base=json.loads((root/'ea01_handoff/baseline_bundle/execution_manifest.json').read_text())
           cn=json.loads((root/'cnipg_bundle/execution_manifest.json').read_text())
-          assert m['handoff_version']=='maximum_public_nuclear_hpc_handoff_v1'
+          assert m['handoff_version']=='maximum_public_nuclear_hpc_handoff_v2'
           assert m['accepted_primary_before_empirical_candidate_gates']==294
           assert m['baseline_public_runs']==295
           assert m['analysis_taxon_labels']==270
-          assert m['candidates']['EA01']['strict_loci']==236
-          assert m['candidates']['EA02']['strict_loci']==239
-          assert m['candidates']['CNIPG']['strict_loci']==180
-          assert m['sample_level_candidate_ceiling']==297
+          assert set(m['independent_candidates'])=={'EA01','CNIPG'}
+          assert m['independent_candidates']['EA01']['strict_loci']==236
+          assert m['independent_candidates']['CNIPG']['strict_loci']==180
+          assert m['excluded_duplicate_controls']['EA02']['counts_as_independent_tip'] is False
+          assert m['sample_level_candidate_ceiling']==296
           assert m['new_analysis_taxon_labels_at_candidate_ceiling']==0
-          assert m['baseline_download_shared_across_all_independent_gates'] is True
-          assert m['all_inputs_materialized_from_repository_evidence'] is True
-          assert m['github_actions_artifact_runtime_dependency'] is False
-          assert m['heavy_compute_executed_by_builder'] is False
-          assert m['combined_296_or_297_tree_built_by_this_handoff'] is False
+          assert m['combined_296_tree_built_by_this_handoff'] is False
           assert m['combined_tree_requires_explicit_common_paired_locus_contract_after_independent_admission'] is True
           assert m['new_china_sampling_freeze_allowed'] is False
-          assert ea['baseline_biological_tips']==294 and ea['baseline_public_runs']==295
+          assert ea['candidate_ids']==['EA01']
+          assert ea['paired_scenarios']==['baseline294','ea01_295']
+          assert ea['ea02_enters_biological_tree_inputs'] is False
+          assert ea['ea02_public_read_downloaded'] is False
+          assert aug['bundle_version']=='ea01_public_augmentation_hpc_bundle_v2'
+          assert aug['scenarios']==['baseline294','ea01_295']
+          assert not (root/'ea01_handoff/augmentation_bundle/candidate_packs/EA02').exists()
           assert base['biological_samples']==294 and base['public_runs']==295
-          assert cn['genome_strict_loci']==180 and cn['combined_current_public_candidate_tip_ceiling']==297
+          assert cn['genome_strict_loci']==180
           top=(root/'submit_all_independent_public_gates.sh').read_text()
           assert 'baseline_bwa_accept' in top and 'baseline_blastx_accept' in top
+          assert 'ea01_cross_mapping_summary' in top
           assert 'cnipg_cross_data_type_summary' in top
-          assert 'maximum_public_independent_gate_summary' in top
+          assert 'EA02' not in top
           assert '/actions/artifacts/' not in top and 'GH_TOKEN' not in top
+          fetch=(root/'ea01_handoff/augmentation_bundle/00_fetch_candidate_reads_slurm.sh').read_text()
+          assert 'SRR30887223' in fetch and 'SRR9119112' not in fetch
           print(json.dumps(m,indent=2))
           PY
 
@@ -111,15 +125,14 @@ jobs:
           test -s /tmp/maximum_public_nuclear_handoff_via_wrapper/EXECUTE_ON_HPC.md
           test -x /tmp/maximum_public_nuclear_handoff_via_wrapper/submit_all_independent_public_gates.sh
 
-      - name: Exercise final independent-gate collector with all candidates passing
+      - name: Exercise final independent-gate collector with both candidates passing
         run: |
           mkdir -p /tmp/mock_ea /tmp/mock_cn /tmp/mock_max
           cat > /tmp/mock_ea/cross_mapping_sensitivity_summary.json <<'JSON'
           {
-            "candidates": {
-              "EA01": {"sample_tip_promotion_allowed": true, "manual_review_required": false},
-              "EA02": {"sample_tip_promotion_allowed": true, "manual_review_required": false}
-            }
+            "contract_version": "ea01_public_augmentation_sensitivity_summary_v2",
+            "sample_tip_promotion_allowed": true,
+            "manual_review_required": false
           }
           JSON
           cat > /tmp/mock_cn/cross_data_type_sensitivity_summary.json <<'JSON'
@@ -132,19 +145,21 @@ jobs:
           python - <<'PY'
           import json
           d=json.load(open('/tmp/mock_max/independent_gate_summary.json'))
-          assert d['independent_candidate_gate_results']=={'EA01':True,'EA02':True,'CNIPG':True}
-          assert d['all_three_independent_gates_passed'] is True
-          assert d['sample_level_candidate_ceiling_if_all_three_pass']==297
-          assert d['new_analysis_taxon_labels_if_all_three_pass']==0
-          assert d['combined_296_or_297_tree_accepted'] is False
+          assert d['contract_version']=='maximum_public_nuclear_independent_gate_summary_v2'
+          assert d['independent_candidate_gate_results']=={'EA01':True,'CNIPG':True}
+          assert d['both_independent_gates_passed'] is True
+          assert d['sample_level_candidate_ceiling_if_both_pass']==296
+          assert d['new_analysis_taxon_labels_if_both_pass']==0
+          assert d['combined_296_tree_accepted'] is False
           assert d['combined_common_paired_locus_tree_required'] is True
+          assert 'EA02' in d['excluded_duplicate_controls']
           assert d['new_china_sampling_freeze_allowed'] is False
-          assert d['next_action']=='build_explicit_common_paired_locus_combined_tree_before_any_296_or_297_acceptance'
+          assert d['next_action']=='build_explicit_common_paired_locus_296_tree_before_acceptance'
           PY
 
       - uses: actions/upload-artifact@v4
         with:
-          name: maximum-public-nuclear-handoff-${{ github.run_id }}
+          name: maximum-public-nuclear-handoff-v2-${{ github.run_id }}
           path: /tmp/maximum_public_nuclear_handoff/
           if-no-files-found: error
           retention-days: 30
