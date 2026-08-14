@@ -10,6 +10,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCENARIOS = ("baseline294", "cnipg_295")
+MANDATORY_GENOME_PACK_FILES = (
+    "cirsium_nipponicum_comp1061_locus_pack_summary.json",
+    "strict_recovered_loci.txt",
+)
+OPTIONAL_GENOME_PACK_DIAGNOSTICS = (
+    "cirsium_nipponicum_comp1061_locus_audit.csv",
+    "durable_materialization.json",
+)
 
 
 def write(path: Path, text: str, mode: int = 0o644) -> None:
@@ -195,12 +203,20 @@ def main() -> int:
     if dst.exists():
         shutil.rmtree(dst)
     dst.mkdir(parents=True)
-    for name in (
-        "cirsium_nipponicum_comp1061_locus_pack_summary.json",
-        "strict_recovered_loci.txt",
-        "cirsium_nipponicum_comp1061_locus_audit.csv",
-    ):
-        shutil.copy2(args.genome_pack / name, dst / name)
+    for name in MANDATORY_GENOME_PACK_FILES:
+        src = args.genome_pack / name
+        if not src.is_file():
+            raise ValueError(f"mandatory genome-pack tree input is missing: {name}")
+        shutil.copy2(src, dst / name)
+    optional_present: list[str] = []
+    optional_absent: list[str] = []
+    for name in OPTIONAL_GENOME_PACK_DIAGNOSTICS:
+        src = args.genome_pack / name
+        if src.is_file():
+            shutil.copy2(src, dst / name)
+            optional_present.append(name)
+        else:
+            optional_absent.append(name)
     shutil.copytree(args.genome_pack / "loci", dst / "loci")
 
     helpers = (
@@ -244,6 +260,10 @@ def main() -> int:
         "new_analysis_taxon_labels_added": 0,
         "combined_current_public_candidate_tip_ceiling": 297,
         "combined_ceiling_is_accepted_tree": False,
+        "genome_pack_tree_inputs_complete": True,
+        "genome_pack_mandatory_files": list(MANDATORY_GENOME_PACK_FILES),
+        "genome_pack_optional_diagnostics_present": optional_present,
+        "genome_pack_optional_diagnostics_absent": optional_absent,
     }
     write(args.outdir / "execution_manifest.json", json.dumps(manifest, indent=2) + "\n")
     print(json.dumps(manifest, indent=2))
