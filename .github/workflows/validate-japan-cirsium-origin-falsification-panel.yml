@@ -1,0 +1,58 @@
+name: Validate Japanese Cirsium origin falsification panel
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_japan_cirsium_origin_falsification_panel.py"
+      - "data/evidence/japan_cirsium_origin_priority_public_sequences_v1.csv"
+      - "data/evidence/chang2025_public_run_manifest_v1.csv"
+      - "data/evidence/chang2026_public_run_manifest_v1.csv"
+      - "data/evidence/moreyra2025_cirsium_reconciliation_v1/**"
+      - ".github/workflows/validate-japan-cirsium-origin-falsification-panel.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build accession-level falsification panel
+        run: |
+          python -m py_compile analysis/build_japan_cirsium_origin_falsification_panel.py
+          python analysis/build_japan_cirsium_origin_falsification_panel.py \
+            --output /tmp/japan_cirsium_origin_falsification_panel_v2.json
+      - name: Assert predeclared origin-model boundaries
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/japan_cirsium_origin_falsification_panel_v2.json'))
+          assert d['contract_version']=='japan_cirsium_origin_falsification_panel_v2'
+          assert d['accepted_primary_tree_before_test']==294
+          assert d['maximum_public_candidate_ceiling']==296
+          assert d['critical_sra_runs']==11
+          assert d['critical_sra_runs_unique'] is True
+          assert d['lineare']['japan_target_capture']['run']=='SRR30887240'
+          assert {x['run'] for x in d['lineare']['taiwan_transcriptomes']}=={'SRR30617342','SRR30617347'}
+          assert d['lineare']['china_hubei_nrdna']==['AF443727','AF443779']
+          assert d['lineare']['sequence_anchor_regions']==['Japan','Taiwan','China_Hubei']
+          assert d['dipsacolepis']['run']=='SRR30887259'
+          assert d['dipsacolepis']['independent_high_dimensional_replication_beyond_moreyra']==0
+          assert len(d['arenicola']['brevicaule_runs'])==3
+          assert len(d['arenicola']['irumtiense_runs'])==3
+          assert len(d['sinocirsium_bridge']['japanese_japonicum_runs'])==2
+          assert d['origin_model_decision_rule']['minimum_two_histories']=='supported_if_lineare_exception_is_retained'
+          assert 'dipsacolepis' in d['origin_model_decision_rule']['three_histories']
+          print(json.dumps(d,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan-cirsium-origin-falsification-panel-${{ github.run_id }}
+          path: /tmp/japan_cirsium_origin_falsification_panel_v2.json
+          if-no-files-found: error
+          retention-days: 90
