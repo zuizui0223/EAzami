@@ -1,0 +1,88 @@
+{
+  "contract_version": "japan_cirsium_origin_falsification_panel_v2",
+  "accepted_primary_tree_before_test": 294,
+  "maximum_public_candidate_ceiling": 296,
+  "critical_sra_runs": 12,
+  "critical_sra_runs_unique": true,
+  "lineare": {
+    "japan_target_capture": {
+      "run": "SRR30887240",
+      "biosample": "SAMN44017876",
+      "voucher": "Japan, 09.09.1984, Miyoshi Furuse 52881 (PE01293160)"
+    },
+    "taiwan_transcriptomes": [
+      {
+        "run": "SRR30617342",
+        "biosample": "SAMN43544261",
+        "voucher": "ccy3446",
+        "location": "Taiwan: Miaoli County, Xihu"
+      },
+      {
+        "run": "SRR30617347",
+        "biosample": "SAMN43544259",
+        "voucher": "ccy2770",
+        "location": "Taiwan: Miaoli County, Tongxiao"
+      }
+    ],
+    "china_hubei_nrdna": [
+      "AF443727",
+      "AF443779"
+    ],
+    "sequence_anchor_regions": [
+      "Japan",
+      "Taiwan",
+      "China_Hubei"
+    ],
+    "high_dimensional_data_generation_groups": [
+      "moreyra_target_capture",
+      "chang_transcriptome_program"
+    ],
+    "test": "C. lineare must remain outside the dominant Japanese radiation across BWA/BLASTx and concatenation/ASTRAL; Taiwan samples should remain with the same broad lineare lineage rather than Nipponocirsium."
+  },
+  "dipsacolepis": {
+    "run": "SRR30887259",
+    "biosample": "SAMN44017836",
+    "voucher": "Japan. SHIKOKU: Tokushima Pref.; Mt. shiozuka-mine, Kamimyo, Yamashiro-cho, Miyoshi-gun., , m, 7 Oct. 1989, Yutaka Oohira142102-a (MBK-0312393)",
+    "independent_high_dimensional_replication_beyond_moreyra": 0,
+    "test": "C. dipsacolepis must remain outside the dominant Japanese radiation and acquire a stable continental nearest-neighbour bracket before a third origin is promoted beyond working-hypothesis status."
+  },
+  "arenicola": {
+    "brevicaule_runs": [
+      "SRR35152725",
+      "SRR35152729",
+      "SRR35152730"
+    ],
+    "irumtiense_runs": [
+      "SRR35152724",
+      "SRR35152731",
+      "SRR35152732"
+    ],
+    "published_high_dimensional_state": "Arenicola_sister_to_Nipponocirsium",
+    "test": "Do not count a fourth colonization unless Arenicola is independently bracketed by a continental lineage outside the dominant Japanese radiation under the broad nuclear tree/network sensitivity."
+  },
+  "sinocirsium_bridge": {
+    "japanese_japonicum_runs": [
+      "SRR35152726",
+      "SRR35152727"
+    ],
+    "test": "Use the two Japanese C. japonicum var. japonicum transcriptomes to distinguish a Japan-main-radiation affinity from a separate Taiwan-East-Asia bridge history."
+  },
+  "origin_model_decision_rule": {
+    "strict_single_origin": "rejected_if_lineare_exception_is_retained",
+    "minimum_two_histories": "supported_if_lineare_exception_is_retained",
+    "three_histories": "promote_if_lineare_exception_and_dipsacolepis_secondary_placement_are_both_stable",
+    "four_or_more_histories": "promote_only_if_an_additional_lineage_such_as_Arenicola_is_independently_continental_bracketed"
+  },
+  "safeguards": [
+    "do not infer origin count from chloroplast structure alone",
+    "do not count Chang 2025 and Chang 2026 as independent data-generation programmes when samples/data are reused",
+    "do not relax locus or topology gates post hoc",
+    "do not freeze broad China sampling until continental sister branches are identified by the public nuclear tree"
+  ],
+  "validation": {
+    "workflow_run": 31806752296,
+    "artifact_id": 9221472767,
+    "artifact_sha256": "705094d675a883918e47d38f686fe0f544eb96ebf2515fb8e2dd32c1e4d967f7",
+    "conclusion": "success"
+  }
+}
