@@ -199,7 +199,45 @@ Generated validation artifact:
 
 This CI validates the execution graph and contracts; it does **not** claim that the heavy 294-tip BWA/BLASTx/ASTRAL analyses themselves have run.
 
-## 7. Reference boundary
+## 7. Japanese-origin meta-hypothesis — now a predeclared tree test
+
+Reproducible synthesis:
+
+- `docs/JAPAN_CIRSIUM_ORIGIN_META_ANALYSIS_2026-08-14.md`
+- `data/evidence/japan_cirsium_origin_evidence_matrix_v1.csv`
+- `data/evidence/japan_cirsium_origin_meta_analysis_v1.json`
+- `data/evidence/japan_cirsium_origin_priority_public_sequences_v1.csv`
+- `data/evidence/japan_cirsium_origin_falsification_panel_v2.json`
+
+The literature/public-sequence synthesis rejects a strict one-origin model for all Japanese *Cirsium* and instead supports an **oligophyletic colonization history dominated by one major Pleistocene radiation**.
+
+Current hierarchy:
+
+- **minimum defensible histories = 2**: dominant Japanese radiation + *C. lineare* lineage;
+- **best current point hypothesis = 3**: dominant radiation + *C. lineare* + *C. dipsacolepis* secondary arrival;
+- **4 or more histories = unresolved and currently unsupported**.
+
+Evidence asymmetry is explicit:
+
+- Moreyra's broad nuclear analysis places **36/38 Japanese species (94.74%)** in one dominant radiation;
+- *C. lineare* is the strongest replicated exception: 3/3 high-dimensional analyses support its exceptional placement across 2/2 independent high-dimensional data-generation groups;
+- *C. lineare* now has exact geographic sequence anchors from Japan target capture (`SRR30887240`), Taiwan transcriptomes (`SRR30617342`, `SRR30617347`) and mainland-China Hubei nrDNA (`AF443727`, `AF443779`);
+- *C. dipsacolepis* has exact Moreyra target-capture data (`SRR30887259`) but still lacks a second independent high-dimensional nuclear dataset, so the third-history state remains a working hypothesis rather than an established event count;
+- Arenicola is currently sister to Nipponocirsium in the focused phylotranscriptome and is **not** counted as a fourth colonization.
+
+The accession-level falsification panel contains **12 unique critical SRA runs** plus the Hubei *lineare* ITS/ETS anchors. Validation run `31806752296` passed; artifact `9221472767`, SHA256 `705094d675a883918e47d38f686fe0f544eb96ebf2515fb8e2dd32c1e4d967f7`.
+
+Predeclared origin-count decision rules for the maximum-public tree:
+
+1. retain *C. lineare* outside the main Japanese radiation across BWA/BLASTx and concatenation/ASTRAL → minimum **two histories** remains supported;
+2. additionally retain *C. dipsacolepis* outside the main radiation with a stable continental nearest-neighbour bracket → promote **three histories**;
+3. count a fourth or later history only if another Japanese lineage, such as Arenicola, is independently bracketed by a distinct continental source lineage;
+4. chloroplast structure alone never increments origin count;
+5. no topology/locus gate may be relaxed after seeing the result.
+
+This reframes the 294→296 heavy tree from a generic “largest tree” exercise into a direct falsification of **2 vs 3 vs 4+ Japanese colonization histories**.
+
+## 8. Reference boundary
 
 The active compatibility target remains the pinned original public Compositae1061 HybPiper reference:
 
@@ -210,7 +248,7 @@ The Moreyra-specific *C. tioganum* augmented target remains unrecovered. Current
 
 Useful public locus sets remain 1,061 / reproducible 531-candidate / conservative 241.
 
-## 8. Remaining empirical blockers
+## 9. Remaining empirical blockers
 
 The implementation blocker is resolved. The main public-nuclear blocker is now **actual heavy execution**:
 
@@ -218,14 +256,15 @@ The implementation blocker is resolved. The main public-nuclear blocker is now *
 2. obtain accepted baseline BWA and BLASTx trees;
 3. complete EA01 BWA/BLASTx paired concatenated + ASTRAL gates;
 4. complete CNIPG paired gates against both baseline modes;
-5. if EA01 and CNIPG both pass, execute the explicit common-locus `ea01_cnipg_296` combined-tree analysis before changing the accepted primary;
-6. freeze Japan-38, *dipsacolepis*, *lineare*, Arenicola and continental-neighbour placements with explicit uncertainty.
+5. score the frozen Japanese-origin falsification panel, especially `SRR30887240` (*lineare*), `SRR30887259` (*dipsacolepis*) and the six Arenicola transcriptomes;
+6. if EA01 and CNIPG both pass, execute the explicit common-locus `ea01_cnipg_296` combined-tree analysis before changing the accepted primary;
+7. freeze Japan-38, *dipsacolepis*, *lineare*, Arenicola and continental-neighbour placements with explicit uncertainty.
 
 Separately, the Chang transcriptome/gene-tree heavy workflow remains an optional downstream mechanism task for var. *takaoense*.
 
-**New broad China sampling remains deliberately unfrozen** until the revised public-only 294→296 ceiling is empirically resolved.
+**New broad China sampling remains deliberately unfrozen** until the public tree identifies the continental branches that actually bracket the unresolved Japanese histories.
 
-## 9. Cleanup / safety rule
+## 10. Cleanup / safety rule
 
 Keep frozen evidence even when later analysis changes its interpretation. Retire or replace obsolete execution assumptions without deleting the observed data that exposed them.
 
