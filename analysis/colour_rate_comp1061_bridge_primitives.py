@@ -1,29 +1,15 @@
 #!/usr/bin/env python3
-"""Build a 20-taxon cross-study Compositae1061 bridge panel.
+"""Shared parsing and reconciliation primitives for the colour-rate bridge.
 
-The flower-colour atlas v0.3 contains 20 fixed-state, rate-fit-eligible taxa,
-but they are split across Chang leaf RNA-seq and Moreyra target-capture data.
-This builder joins those taxa to official SRA runs without using flower colour
-or an inferred topology to choose samples.
-
-Primary sample rule (predeclared before locus recovery):
-
-1. source/taxon identity must match a frozen evidence route;
-2. official SRA metadata must resolve the run and library layout;
-3. for taxa with multiple eligible runs, choose the run with the *largest*
-   official Spots value to favour locus recovery;
-4. ties are broken by voucher/sample-code/run lexical order.
-
-All eligible replicates are retained in a second manifest so the primary
-single-tip tree can later be checked against replicate-inclusive sensitivity.
-
-This creates an execution input contract only.  It does not recover reads,
-run HybPiper, infer a tree, or unlock transition-rate fitting.
+This module intentionally has no executable entry point and no scientific
+source-study partition of its own. The canonical supported builder is
+``build_colour_rate_comp1061_bridge_panel.py``; it owns the corrected
+Chang2025=3 / Chang2026=10 / Moreyra2025=7 contract. Helpers here only perform
+source-backed parsing, run reconciliation, deterministic sample selection and
+CSV writing.
 """
-
 from __future__ import annotations
 
-import argparse
 import csv
 import json
 import re
@@ -34,7 +20,6 @@ from typing import Iterable, Mapping, Sequence
 EXPECTED_TAXA = 20
 EXPECTED_STATES = {"C": 17, "W": 3}
 EXPECTED_DATA_TYPES = {"leaf_rnaseq": 13, "target_capture": 7}
-EXPECTED_STUDIES = {"Chang2025": 6, "Chang2026": 7, "Moreyra2025": 7}
 EXPECTED_REFERENCE_SHA256 = "77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c"
 EXPECTED_REFERENCE_LOCI = 1061
 
@@ -252,9 +237,7 @@ def chang_reconciliation_candidates(
     reconciliation_path: Path,
     accession_audit_path: Path,
 ) -> list[dict[str, str]]:
-    target_by_canon = {
-        canonical_taxon(taxon): taxon for taxon in CHANG_RECON_TAXA
-    }
+    target_by_canon = {canonical_taxon(taxon): taxon for taxon in CHANG_RECON_TAXA}
     atlas_by_name = atlas_index(atlas_rows)
     voucher_audit = accession_audit_by_voucher(accession_audit_path)
     candidates: list[dict[str, str]] = []
@@ -311,9 +294,7 @@ def chang2025_direct_candidates(
     for source in read_csv(runinfo_path):
         scientific = value_field(source, "ScientificName")
         canonical = canonical_taxon(scientific)
-        accepted = next(
-            (taxon for taxon, names in aliases.items() if canonical in names), None
-        )
+        accepted = next((taxon for taxon, names in aliases.items() if canonical in names), None)
         if not accepted:
             continue
         candidates.append(
@@ -407,7 +388,9 @@ def moreyra_candidates(
     return candidates
 
 
-def choose_primary(candidates: Sequence[Mapping[str, str]]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+def choose_primary(
+    candidates: Sequence[Mapping[str, str]],
+) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     grouped: dict[str, list[dict[str, str]]] = defaultdict(list)
     seen_runs: set[str] = set()
     for source in candidates:
@@ -443,140 +426,9 @@ def choose_primary(candidates: Sequence[Mapping[str, str]]) -> tuple[list[dict[s
     return primary, all_rows
 
 
-def validate_primary(primary: Sequence[Mapping[str, str]]) -> dict[str, object]:
-    if len(primary) != EXPECTED_TAXA:
-        raise ValueError(f"Primary bridge must contain {EXPECTED_TAXA} tips")
-    if len({row["tip_id"] for row in primary}) != EXPECTED_TAXA:
-        raise ValueError("Primary tip IDs are not unique")
-    if len({row["run"] for row in primary}) != EXPECTED_TAXA:
-        raise ValueError("Primary bridge runs are not unique")
-    states = Counter(row["binary_colour_code"] for row in primary)
-    if dict(sorted(states.items())) != EXPECTED_STATES:
-        raise ValueError(f"Primary state counts drifted: {dict(states)}")
-    data_types = Counter(row["data_type"] for row in primary)
-    if dict(sorted(data_types.items())) != EXPECTED_DATA_TYPES:
-        raise ValueError(f"Primary data-type counts drifted: {dict(data_types)}")
-    studies = Counter(row["source_study"] for row in primary)
-    if dict(sorted(studies.items())) != EXPECTED_STUDIES:
-        raise ValueError(f"Primary source-study counts drifted: {dict(studies)}")
-    if any(row["primary_tip"] != "yes" for row in primary):
-        raise ValueError("Primary manifest contains non-primary row")
-    if any(row["accepted_taxon"].casefold().endswith("takaoense") for row in primary):
-        raise ValueError("Polymorphic var. takaoense leaked into fixed-state primary bridge")
-    return {
-        "taxon_count": len(primary),
-        "state_counts": dict(sorted(states.items())),
-        "data_type_counts": dict(sorted(data_types.items())),
-        "study_counts": dict(sorted(studies.items())),
-        "paired_runs": sum(row["library_layout"] == "PAIRED" for row in primary),
-        "single_runs": sum(row["library_layout"] == "SINGLE" for row in primary),
-        "total_spots": sum(int(row["spots"] or 0) for row in primary),
-        "total_bases": sum(int(row["bases"] or 0) for row in primary),
-    }
-
-
 def write_csv(path: Path, rows: Iterable[Mapping[str, object]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(FIELDS), extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
-
-
-def build(
-    *,
-    atlas_path: Path,
-    reference_contract_path: Path,
-    chang_reconciliation_path: Path,
-    chang_accession_audit_path: Path,
-    chang2025_runinfo_path: Path,
-    moreyra_audit_path: Path,
-    moreyra_runinfo_path: Path,
-) -> tuple[list[dict[str, str]], list[dict[str, str]], dict[str, object]]:
-    atlas_rows = atlas_eligible(atlas_path)
-    reference = frozen_reference_contract(reference_contract_path)
-    candidates = (
-        chang_reconciliation_candidates(
-            atlas_rows, chang_reconciliation_path, chang_accession_audit_path
-        )
-        + chang2025_direct_candidates(atlas_rows, chang2025_runinfo_path)
-        + moreyra_candidates(atlas_rows, moreyra_audit_path, moreyra_runinfo_path)
-    )
-    primary, replicates = choose_primary(candidates)
-    observed = validate_primary(primary)
-    summary = {
-        "contract_version": "colour_rate_comp1061_bridge_panel_v0_1",
-        "reference_contract": str(reference_contract_path),
-        "comp1061_reference_sha256": reference["sha256"],
-        "comp1061_locus_count": reference["locus_count"],
-        "primary_sample_rule": "maximum official Spots within each source-backed taxon; ties voucher/sample-code/run lexical; flower colour and topology excluded",
-        "primary": observed,
-        "replicate_candidate_rows": len(replicates),
-        "taxa_with_multiple_candidate_runs": sorted(
-            taxon
-            for taxon, count in Counter(row["accepted_taxon"] for row in replicates).items()
-            if count > 1
-        ),
-        "execution_ready_for_read_recovery": True,
-        "branch_length_tree_completed": False,
-        "rate_fit_execution_allowed": False,
-        "required_tree_sensitivities": [
-            "1061_all_public_reference_loci",
-            "531_reproducible_warning_occupancy_candidates_when_mappable",
-            "241_conservative_no_warning_high_occupancy_loci_when_mappable",
-            "replicate_inclusive_or_per_taxon_alternative_sample_sensitivity",
-            "target_capture_vs_leaf_rnaseq_occupancy_and_missingness_audit",
-            "paralog_copy_conflict_audit",
-        ],
-        "claim_limit": (
-            "The bridge panel only freezes taxon/run selection in a shared Compositae1061 coordinate system. "
-            "It does not imply equivalent locus recovery between target-capture and leaf RNA-seq, does not create "
-            "a branch-length tree, and does not permit empirical flower-colour transition-rate inference."
-        ),
-    }
-    return primary, replicates, summary
-
-
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--atlas", type=Path, required=True)
-    parser.add_argument("--reference-contract", type=Path, required=True)
-    parser.add_argument("--chang-reconciliation", type=Path, required=True)
-    parser.add_argument("--chang-accession-audit", type=Path, required=True)
-    parser.add_argument("--chang2025-runinfo", type=Path, required=True)
-    parser.add_argument("--moreyra-audit", type=Path, required=True)
-    parser.add_argument("--moreyra-runinfo", type=Path, required=True)
-    parser.add_argument("--outdir", type=Path, required=True)
-    return parser.parse_args()
-
-
-def main() -> int:
-    args = parse_args()
-    primary, replicates, summary = build(
-        atlas_path=args.atlas,
-        reference_contract_path=args.reference_contract,
-        chang_reconciliation_path=args.chang_reconciliation,
-        chang_accession_audit_path=args.chang_accession_audit,
-        chang2025_runinfo_path=args.chang2025_runinfo,
-        moreyra_audit_path=args.moreyra_audit,
-        moreyra_runinfo_path=args.moreyra_runinfo,
-    )
-    args.outdir.mkdir(parents=True, exist_ok=True)
-    write_csv(args.outdir / "colour_rate_comp1061_primary_20tip_panel.csv", primary)
-    write_csv(args.outdir / "colour_rate_comp1061_replicate_sensitivity_manifest.csv", replicates)
-    (args.outdir / "colour_rate_comp1061_bridge_summary.json").write_text(
-        json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
-    print(f"primary_taxa={summary['primary']['taxon_count']}")
-    print("state_counts=" + json.dumps(summary["primary"]["state_counts"], sort_keys=True))
-    print("data_type_counts=" + json.dumps(summary["primary"]["data_type_counts"], sort_keys=True))
-    print("study_counts=" + json.dumps(summary["primary"]["study_counts"], sort_keys=True))
-    print(f"replicate_candidate_rows={summary['replicate_candidate_rows']}")
-    print(f"comp1061_reference_sha256={summary['comp1061_reference_sha256']}")
-    print("branch_length_tree_completed=false")
-    print("rate_fit_execution_allowed=false")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
