@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 OUTDIR="${1:-$PWD/colour_rate_comp1061_hpc_bundle}"
 
-python "$REPO_ROOT/analysis/build_colour_rate_comp1061_hpc_bundle_v0_2.py" \
+python "$REPO_ROOT/analysis/build_colour_rate_comp1061_hpc_bundle.py" \
   --bridge-contract "$REPO_ROOT/data/evidence/colour_rate_comp1061_bridge_artifact_contract_v1.json" \
   --locus-manifest "$REPO_ROOT/data/evidence/moreyra_public_locus_set_manifest_v1.json" \
   --outdir "$OUTDIR"
