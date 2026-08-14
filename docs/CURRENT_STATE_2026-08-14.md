@@ -1,6 +1,6 @@
 # EAzami current state — 2026-08-14
 
-This is the operational source of truth for the repository. It separates accepted scientific conclusions, empirical public-candidate disposition, durable evidence, supported execution paths and remaining heavy-compute work. Historical implementations and superseded planning states remain recoverable from Git history and dated evidence files.
+This is the operational source of truth for the repository. It separates accepted scientific conclusions, empirical candidate disposition, current executable gates and remaining heavy-compute work. Historical implementations and superseded planning states remain recoverable from Git history and dated evidence.
 
 ## 1. Accepted scientific state
 
@@ -8,123 +8,84 @@ This is the operational source of truth for the repository. It separates accepte
 
 Current evidence supports repeated white-flower evolution across East Asian *Cirsium* rather than one single white-flowered lineage.
 
-- Arenicola: current published context favours white-flower loss on the *C. brevicaule* lineage. Current evidence does **not** establish regain in coloured *C. irumtiense*.
+- Arenicola: published context currently favours white-flower loss on the *C. brevicaule* lineage. Current evidence does **not** establish regain in coloured *C. irumtiense*.
 - Taiwanese *C. japonicum* var. *takaoense*: directly morph-labelled W/BP samples plus the displayed topology make a W-to-coloured transition the current minimum-change interpretation under a coloured-root model. This remains a **topology-supported candidate regain**, not molecular proof of pathway loss and restoration.
 - Introgression, ancestral coloured standing variation, geographic structure, short internodes and reticulation remain live alternatives.
-- A demonstrated molecular regain still requires population-aware nuclear ancestry, explicit introgression/standing-variation tests, and a genotype → expression → pigment → phenotype mechanism.
+- A demonstrated molecular regain still requires population-aware nuclear ancestry, explicit introgression/standing-variation tests and a genotype → expression → pigment → phenotype mechanism.
 
 ### Accepted public nuclear baseline
 
-The accepted public-data primary panel remains:
+The accepted primary remains:
 
-- **294 unique biological tips**;
+- **294 biological tips**;
 - **295 unique public SRRs**;
 - **270 source-preserving analysis taxon labels**.
 
-Japan-38 membership is provenance/sensitivity metadata, not a topology constraint. The old 302-tip / 303-SRR inventory remains obsolete because eight Taiwan RNA-seq BioSamples/SRRs reused across Chang 2025 and Chang 2026 had been double-counted.
+Japan-38 membership is provenance/sensitivity metadata, not a topology constraint. The old 302-tip / 303-SRR inventory is obsolete because eight Taiwan RNA-seq BioSamples/SRRs reused across Chang 2025 and Chang 2026 had been double-counted.
 
-No result below has yet superseded the accepted **294-tip** primary tree.
+No downstream result has yet superseded the accepted **294-tip** primary tree.
 
-## 2. Real-read public-candidate audit — new empirical result
-
-The pre-HPC candidate list originally treated EA01 and EA02 as two independent public-SRA replicates. A real-read empirical audit on 2026-08-14 changed that interpretation.
+## 2. Real-read candidate audit
 
 Frozen evidence:
 
 - `data/evidence/public_candidate_empirical_quartet_2026-08-14.json`
 - `data/evidence/east_asia_public_candidate_disposition_v2.json`
 
-### Real baseline recovery
+Two exact same-taxon samples already inside the 294-tip baseline were re-downloaded from SRA and rerun through the pinned Compositae1061/HybPiper 2.3.4 BWA path:
 
-Two exact same-taxon samples already inside the accepted 294-tip baseline were recovered directly from public SRA and rerun through the pinned Compositae1061/HybPiper 2.3.4 BWA path:
+- `MRY_YOSHINOI` — *C. nipponicum* var. *yoshinoi*, `SRR30887222`: **236/241** strict loci;
+- `MRY_SAIRAMENSE` — *C. sairamense*, `SRR25265647`: **239/241** strict loci.
 
-- `MRY_YOSHINOI` — *C. nipponicum* var. *yoshinoi*, `SRR30887222`: **236/241** strict no-warning loci;
-- `MRY_SAIRAMENSE` — *C. sairamense*, `SRR25265647`: **239/241** strict no-warning loci.
+The four-tip comparison against EA01/EA02 used:
 
-Both had zero current paralog-warning loci under the strict pilot rule.
+- **235** four-way common strict loci;
+- **231** informative gene-tree loci;
+- **105,086 nt** concatenated alignment;
+- **2,769** variable sites;
+- **2,199** parsimony-informative sites.
 
-### Four-tip empirical ML analysis
-
-The recovered baseline packs were compared to frozen real candidate packs EA01 and EA02 on one exact four-way locus intersection:
-
-- four-way common strict loci: **235**;
-- gene-tree-informative loci: **231**;
-- concatenated alignment: **105,086 nt**;
-- variable sites: **2,769**;
-- parsimony-informative sites: **2,199**.
-
-All **231/231** informative per-locus ML trees supported the same unrooted split:
+All **231/231** informative ML gene trees supported
 
 `(MRY_YOSHINOI, PUBEA001) | (MRY_SAIRAMENSE, PUBEA002)`
 
-The concatenated IQ-TREE analysis supported the same topology with **SH-aLRT/UFBoot = 100/100**. The BIC-selected model was `TIM3+F+G4`.
+and the concatenated IQ-TREE gave the same split with **SH-aLRT/UFBoot 100/100**, BIC-selected model `TIM3+F+G4`.
 
-This strongly validates that EA01 and EA02 both fall with their expected same-taxon baseline sample. It does **not** by itself test the full shared-294 backbone or source-label ASTRAL stability.
+### EA01 disposition
 
-### EA01 disposition — retain
+EA01 / `PUBEA001` remains an independent candidate. Its raw library differs clearly from the baseline *yoshinoi* library and its empirical placement is consistently same-taxon.
 
-EA01 / `PUBEA001` remains a genuine independent candidate:
+**Current role:** independent same-taxon SRA candidate. The full 294-tip BWA/BLASTx concatenated-RF + same-taxon-neighbour + source-label-ASTRAL gate is still required.
 
-- taxon: *C. nipponicum* var. *yoshinoi*;
-- strict loci: **236/241**;
-- baseline same-taxon sample: **236/241**;
-- raw public libraries are clearly different: before-filtering read counts, base counts, quality totals and GC differ substantially;
-- the empirical quartet gives 231/231 same-taxon gene-tree support.
+### EA02 disposition
 
-**Disposition:** retain EA01 for the full 294-tip BWA/BLASTx concatenated-RF + same-taxon-neighbour + source-label-ASTRAL gate. The quartet does not pre-authorize promotion.
+EA02 / `PUBEA002` and the accepted baseline *C. sairamense* sample share identical raw before-filtering read/base/Q20/Q30/read-length/GC summaries, identical full R1/R2 before-filtering profiles, identical duplication/insert-size profiles, identical 239-locus strict sets and effectively zero terminal separation.
 
-### EA02 disposition — exclude as independent tip
+This is overwhelmingly consistent with reuse/re-deposition of the same underlying raw read library. It does **not** by itself prove the same physical herbarium specimen.
 
-EA02 / `PUBEA002` no longer counts as an independent biological augmentation candidate.
+**Current role:** `duplicate_readset_pseudoreplicate_excluded_pending_explicit_provenance`. EA02 is retained as frozen evidence/duplicate-control but cannot increment biological-tip count.
 
-Against the accepted baseline *C. sairamense* sample:
+## 3. Current independent public candidates and ceiling
 
-- both recover exactly **239/241** strict loci;
-- strict-locus sets are identical;
-- before-filtering `fastp` summary is identical: **10,779,802 reads**, **1,088,760,002 bases**, identical Q20/Q30 counts and rates, read lengths and GC;
-- the complete raw R1 and R2 before-filtering quality/base-content objects are identical;
-- duplication and insert-size profiles are identical;
-- the concatenated ML tree gives effectively zero terminal branches for the *sairamense* pair.
+The defensible independent candidates beyond the accepted 294 are now only:
 
-These independent signatures are overwhelmingly consistent with reuse/re-deposition of the same underlying raw read library rather than an independent biological replicate. We do **not** claim the same physical specimen without explicit source provenance proving that identity.
+- EA01 / `PUBEA001`, *C. nipponicum* var. *yoshinoi*: **236/241** strict loci;
+- CNIPG / `AUG_ULLEUNG_CNIP2024`, natural-Ulleung *C. nipponicum* genome-derived CDS: **180/241** strict loci, zero cross-locus subject collisions.
 
-**Disposition:** `duplicate_readset_pseudoreplicate_excluded_pending_explicit_provenance`. EA02 may remain as a pipeline duplicate-control, but it must not increment biological-tip count and must not be promoted as a second *C. sairamense* sample.
-
-## 3. Current public augmentation candidates
-
-### EA01 — independent public-SRA candidate
-
-- `PUBEA001`, *C. nipponicum* var. *yoshinoi*;
-- **236/241** strict loci;
-- independent raw public library confirmed by empirical audit;
-- full 294-tip BWA/BLASTx + concatenated/ASTRAL gate still required.
-
-### CNIPG — independent cross-data-type genome candidate
-
-- `AUG_ULLEUNG_CNIP2024`, natural-Ulleung *C. nipponicum* genome-derived CDS;
-- **180/241** strict loci;
-- zero cross-locus subject collisions;
-- evaluated separately against both accepted baseline mapping modes;
-- full paired 294-vs-295 cross-data-type gate still required.
-
-### Revised maximum-public ceiling
-
-There are now **two**, not three, defensible independent candidates beyond the accepted 294-tip primary: EA01 and CNIPG.
-
-If both independently pass their full gates, the current public sample-level ceiling is therefore:
+If both pass their independent gates, the current public sample-level ceiling is:
 
 - **296 biological tips**;
 - **0 new analysis taxon labels**.
 
 This is **not** an accepted combined 296-tip tree. A common paired-locus combined analysis is still required after independent admission.
 
-The old **297-tip** ceiling is a superseded pre-empirical planning state and must not be used as the current biological-tip ceiling.
+The old 297-tip ceiling is a superseded pre-empirical planning state.
 
 ## 4. Durable evidence
 
-### 294-tip baseline reconciliation
+### Baseline
 
-The baseline rebuild is artifact-independent and uses:
+The 294-tip rebuild is artifact-independent:
 
 - `data/evidence/moreyra2025_cirsium_reconciliation_v1/`
 - `analysis/materialize_frozen_moreyra_reconciliation.py`
@@ -133,90 +94,139 @@ Canonical reconstructed Moreyra input SHA256:
 
 `cf3af71a1a77eee5bd177cef9cf8106b749b949eaacc0ad82bbb331978084505`
 
-### Candidate locus packs
+### Candidate packs
 
-All previously successful candidate packs remain reproducible from repository evidence:
+Durable repository materialization remains available for:
 
 - EA01: **236** strict FASTAs;
-- EA02: **239** strict FASTAs — retained as duplicate-control evidence, not an independent tip;
+- EA02: **239** strict FASTAs, retained only as duplicate-control evidence;
 - CNIPG: **180** strict FASTAs.
 
-The original candidate pack archive remains useful provenance even when a candidate is biologically excluded after downstream audit.
+### Empirical quartet
 
-### Empirical quartet outputs
+- real-read recovery run: `31788828923`;
+- final quartet ML run: `31792170949`;
+- result artifact digest: `sha256:a8069ba48efd89d1e922b5ff5f2b71f1db763e1f1ae32622c5bd995a15031ccf`.
 
-Real-read recovery run: `31788828923`.
+## 5. Current maximum-public execution path — implemented
 
-Final ML run: `31792170949`.
+The post-empirical maximum-public v2 graph is now implemented and validated.
 
-Frozen result artifact digest:
+Top-level entry point:
 
-`sha256:a8069ba48efd89d1e922b5ff5f2b71f1db763e1f1ae32622c5bd995a15031ccf`
+```bash
+export REPO_ROOT=/path/to/EAzami
+bash workflow/public_nuclear_maximum/prepare_and_submit.sh
+```
 
-Important result-file hashes are recorded in `public_candidate_empirical_quartet_2026-08-14.json`.
+`PREPARE_ONLY=1` builds/validates the handoff without Slurm submission.
 
-## 5. Supported execution paths
+### EA01 same-assay gate
 
-### Primary baseline
+Current files:
 
-- `analysis/build_japan_origin_global_public_panel_v2.py`
-- `analysis/build_japan_origin_global_hpc_bundle_v2.py`
-- `analysis/japan_origin_global_hpc_primitives.py`
+- `data/evidence/ea01_public_tree_augmentation_contract_v2.json`
+- `analysis/prepare_ea01_public_augmentation_tree_inputs.py`
+- `analysis/summarize_ea01_public_augmentation_sensitivities.py`
+- `analysis/build_ea01_public_augmentation_hpc_bundle.py`
+- `analysis/build_ea01_public_full_hpc_handoff.py`
 
-### Same-assay candidate diagnostics
+The biological tree scenarios are now only:
 
-The existing EA01/EA02 scenario builder remains useful for reproducing the pre-empirical pair and for using EA02 as a duplicate-control. Its current summarizer now enforces the post-empirical rule:
+- `baseline294`;
+- `ea01_295`.
 
-- EA01 can pass/fail a biological sample-tip promotion gate;
-- EA02 tree checks remain diagnostic;
-- EA02 `sample_tip_promotion_allowed` is always false under the current disposition.
+Within BWA and BLASTx separately, both scenarios use an identical paired locus list. EA01 gets a fresh BLASTx recovery from `SRR30887223`; the frozen successful BWA pack is used for BWA. **EA02 is not downloaded and never enters these tree inputs.**
 
-Key paths:
+EA01 automatic admission requires in both mapping modes:
 
-- `analysis/prepare_east_asia_public_augmentation_tree_inputs.py`
-- `analysis/evaluate_east_asia_public_augmentation_tree_pair.py`
-- `analysis/compare_east_asia_public_augmentation_astral_backbone.py`
-- `analysis/summarize_east_asia_public_augmentation_sensitivities.py`
+1. at least 100 paired loci;
+2. shared-294 concatenated RF = 0;
+3. existing same-taxon baseline tip among nearest neighbours;
+4. shared-species ASTRAL RF = 0.
 
-### CNIPG
+Any failure triggers manual biological review without threshold relaxation.
+
+### CNIPG cross-data-type gate
+
+Current files:
 
 - `analysis/prepare_cirsium_nipponicum_augmentation_tree_inputs.py`
 - `analysis/build_cirsium_nipponicum_genome_augmentation_hpc_bundle.py`
 - `analysis/summarize_cirsium_nipponicum_genome_augmentation_sensitivities.py`
+- `data/evidence/cirsium_nipponicum_public_genome_augmentation_gate_v1.json`
 
-### Maximum-public top-level wrapper
+CNIPG is evaluated independently against both accepted baseline mapping modes with the same RF / same-taxon-neighbour / ASTRAL safeguards.
 
-`workflow/public_nuclear_maximum/prepare_and_submit.sh` now treats the old 297-tip v1 orchestration as **reproducibility-only**. `PREPARE_ONLY=1` can still rebuild it, but real Slurm submission is fail-closed because that graph contains the superseded EA02-independent-tip assumption.
+### Top-level v2 handoff
 
-A post-empirical EA01+CNIPG execution handoff is the next implementation task before launching the maximum-public heavy run.
+`analysis/build_maximum_public_nuclear_hpc_handoff.py` now builds:
 
-### var. takaoense and colour-rate work
+- `ea01_handoff/` — EA01-only same-assay gate;
+- `cnipg_bundle/` — CNIPG cross-data-type gate;
+- `submit_all_independent_public_gates.sh` — shares the 295-SRR baseline BWA/BLASTx execution across both candidate gates;
+- `90_collect_independent_gate_summaries_slurm.sh` — emits `maximum_public_nuclear_independent_gate_summary_v2`.
 
-The canonical restartable Chang transcriptome runner and colour-rate bridge/HPC paths remain unchanged by this public-candidate audit. No flower-colour history claim is modified by the EA02 disposition.
+The final independent summary contains only `{EA01, CNIPG}` as candidate gates and records EA02 separately as an excluded duplicate-control. If both candidates pass, it reports a **296-tip candidate ceiling**, but keeps `combined_296_tree_accepted=false`.
 
-## 6. Reference and locus-space boundary
+### Post-admission combined-tree input gate
+
+`analysis/prepare_maximum_public_combined_tree_inputs.py` is now v2 and can run only after EA01 and CNIPG both pass independently. It constructs one identical baseline∩EA01∩CNIPG locus set for exactly four scenarios:
+
+- `baseline294`;
+- `ea01_295`;
+- `cnipg_295`;
+- `ea01_cnipg_296`.
+
+EA02 cannot enter the combined-tree builder.
+
+## 6. Validation state
+
+GitHub Actions run `31794226173` — **Validate maximum public nuclear HPC handoff** — passed completely at head `040816c2f5e2cc593c7f13de0d57ce615ed6b4be`.
+
+Validated steps included:
+
+- build current 296-ceiling handoff;
+- updated handoff and combined-tree unit tests;
+- explicit 296 ceiling and EA02 exclusion checks;
+- supported `PREPARE_ONLY=1` wrapper;
+- mocked final collector with both EA01 and CNIPG passing.
+
+Generated validation artifact:
+
+- artifact ID `9216698035`;
+- SHA256 `f63ccb87c652b0b4bc8ec02f6486f40295e7e4f623a1dbb38155d5319b788fd4`.
+
+This CI validates the execution graph and contracts; it does **not** claim that the heavy 294-tip BWA/BLASTx/ASTRAL analyses themselves have run.
+
+## 7. Reference boundary
 
 The active compatibility target remains the pinned original public Compositae1061 HybPiper reference:
 
 - **1,061 loci**;
 - SHA256 `77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c`.
 
-The Moreyra-specific *C. tioganum* augmented target remains unrecovered. Current raw-read analyses are compatibility reanalyses, not exact reproduction of Moreyra preprocessing.
+The Moreyra-specific *C. tioganum* augmented target remains unrecovered. Current analyses are compatibility reanalyses rather than exact reproduction of Moreyra preprocessing.
 
 Useful public locus sets remain 1,061 / reproducible 531-candidate / conservative 241.
 
-## 7. Remaining empirical blockers
+## 8. Remaining empirical blockers
 
-1. Build the post-empirical **EA01-only** same-assay heavy handoff; retain EA02 only as an optional duplicate-control diagnostic.
-2. Execute EA01 against the full 294-tip baseline under BWA and BLASTx, requiring shared-294 concatenated RF=0, same-taxon nearest-neighbour placement and shared-species ASTRAL RF=0.
-3. Execute CNIPG against the full 294-tip baseline under both accepted baseline mapping modes with the existing cross-data-type gate.
-4. If EA01 and CNIPG both pass independently, build a new explicit common paired-locus **296-tip** combined tree before changing the accepted primary.
-5. Separately, execute the Chang transcriptome/gene-tree heavy workflow if the var. *takaoense* candidate-regain mechanism workstream is advanced.
+The implementation blocker is resolved. The main public-nuclear blocker is now **actual heavy execution**:
 
-New broad China sampling remains deliberately unfrozen until this revised public-only ceiling is empirically resolved.
+1. execute the validated v2 maximum-public handoff on HPC/large-memory local compute;
+2. obtain accepted baseline BWA and BLASTx trees;
+3. complete EA01 BWA/BLASTx paired concatenated + ASTRAL gates;
+4. complete CNIPG paired gates against both baseline modes;
+5. if EA01 and CNIPG both pass, execute the explicit common-locus `ea01_cnipg_296` combined-tree analysis before changing the accepted primary;
+6. freeze Japan-38, *dipsacolepis*, *lineare*, Arenicola and continental-neighbour placements with explicit uncertainty.
 
-## 8. Cleanup / safety rule
+Separately, the Chang transcriptome/gene-tree heavy workflow remains an optional downstream mechanism task for var. *takaoense*.
 
-Keep frozen evidence even when later analysis changes its interpretation. Retire or block only the obsolete **claim or execution assumption**, not the underlying observed data.
+**New broad China sampling remains deliberately unfrozen** until the revised public-only 294→296 ceiling is empirically resolved.
 
-In particular, EA02's pack and historical candidate contract are retained because they document how the duplicate was detected. The current disposition layer supersedes its use as an independent biological tip.
+## 9. Cleanup / safety rule
+
+Keep frozen evidence even when later analysis changes its interpretation. Retire or replace obsolete execution assumptions without deleting the observed data that exposed them.
+
+EA02's durable pack and historical EA01/EA02 contract therefore remain useful provenance/duplicate-control evidence, while the current biological execution graph is strictly EA01 + CNIPG.
