@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
-"""Aggregate paired EA01/EA02 tree sensitivities into a frozen promotion gate.
+"""Aggregate EA01 tree sensitivities with EA02 retained only as a duplicate control.
 
-This is deliberately conservative. Exact shared-backbone invariance provides
-an automatic route; any non-zero RF or loss of same-taxon neighbourhood support
-forces manual review rather than post-hoc threshold relaxation.
+The 2026-08-14 real-read empirical quartet showed that EA02/PUBEA002 and the
+accepted 294-tip C. sairamense sample have indistinguishable raw-read summary
+profiles and essentially duplicate recovered nuclear sequence. EA02 therefore
+no longer represents an independent biological augmentation tip. Its paired
+tree scenarios remain useful as a pipeline duplicate-control sensitivity, but
+may never increment the accepted biological-tip count.
+
+EA01 remains an independent same-taxon candidate and still must pass the exact
+shared-294 backbone, same-taxon-neighbour and source-label ASTRAL checks in both
+BWA and BLASTx. Thresholds are not relaxed post hoc.
 """
 from __future__ import annotations
 import argparse,json
@@ -59,10 +66,9 @@ def main()->int:
             if x.get('scenario_id')!=scenario: raise ValueError(f'{path}: scenario drift')
             loaded[key]=(path,x)
 
-    candidate_out={}
+    diagnostic={}
     for cid in CANDIDATES:
-        checks={}
-        rf={}
+        checks={}; rf={}
         for mode in MODES:
             for scenario in (SINGLE[cid],JOINT):
                 path,x=loaded[(mode,cid,scenario,'concat')]
@@ -73,29 +79,43 @@ def main()->int:
                 path,x=loaded[(mode,'ASTRAL',scenario,'astral')]
                 checks[f'{mode}_{scenario}_astral_exact_backbone']=require_bool(x,'exact_shared_species_backbone_invariance',path)
                 rf[f'{mode}_{scenario}_astral_rf']=int(x.get('unrooted_rf_distance_on_shared_species',-1))
-        passed=all(checks.values())
-        candidate_out[cid]={
-            'checks':checks,
-            'rf_diagnostics':rf,
-            'strict_automatic_sample_tip_promotion_gate_passed':passed,
-            'sample_tip_promotion_allowed':passed,
-            'manual_review_required':not passed,
-            'new_analysis_taxon_label_added':False,
-        }
+        diagnostic[cid]={'checks':checks,'rf_diagnostics':rf,'all_tree_checks_pass':all(checks.values())}
 
-    both=all(candidate_out[c]['sample_tip_promotion_allowed'] for c in CANDIDATES)
+    ea01_pass=diagnostic['EA01']['all_tree_checks_pass']
+    candidate_out={
+        'EA01':{
+            **diagnostic['EA01'],
+            'independent_biological_tip_candidate':True,
+            'strict_automatic_sample_tip_promotion_gate_passed':ea01_pass,
+            'sample_tip_promotion_allowed':ea01_pass,
+            'manual_review_required':not ea01_pass,
+            'new_analysis_taxon_label_added':False,
+        },
+        'EA02':{
+            **diagnostic['EA02'],
+            'independent_biological_tip_candidate':False,
+            'disposition':'duplicate_readset_pseudoreplicate_excluded_pending_explicit_provenance',
+            'strict_automatic_sample_tip_promotion_gate_passed':False,
+            'sample_tip_promotion_allowed':False,
+            'manual_review_required':False,
+            'retained_as_pipeline_duplicate_control':True,
+            'new_analysis_taxon_label_added':False,
+        },
+    }
     out={
-        'contract_version':'east_asia_public_augmentation_sensitivity_summary_v1',
+        'contract_version':'east_asia_public_augmentation_sensitivity_summary_v2_post_empirical_disposition',
+        'empirical_disposition_evidence':'data/evidence/public_candidate_empirical_quartet_2026-08-14.json',
         'joint_paired_loci_by_mapping':joint_by_mode,
         'minimum_joint_paired_loci_by_mapping':minimum_by_mode,
         'mapping_modes':list(MODES),
         'tree_sensitivities':['concatenated_iqtree','source_label_astral'],
-        'automatic_gate_policy':'Exact shared-backbone invariance plus same-taxon nearest-neighbour replication in both BWA and BLASTx, in both single-candidate and joint-candidate scenarios. Any failure triggers manual review; thresholds are not relaxed automatically.',
+        'automatic_gate_policy':'EA01 must retain exact shared-backbone invariance plus same-taxon nearest-neighbour replication in BWA and BLASTx, with the EA02 duplicate-control joint scenario also stable. EA02 itself is not an independent biological tip and cannot be promoted.',
         'candidates':candidate_out,
-        'both_candidate_sample_tip_promotion_allowed':both,
-        'resulting_sample_level_tip_count_if_both_promoted':296 if both else None,
-        'new_analysis_taxon_labels_added_if_both_promoted':0,
-        'primary_294_tree_superseded':both,
+        'ea01_sample_tip_promotion_allowed':ea01_pass,
+        'ea02_counts_toward_biological_tip_total':False,
+        'resulting_sample_level_tip_count_if_ea01_promoted':295 if ea01_pass else 294,
+        'new_analysis_taxon_labels_added_if_ea01_promoted':0,
+        'primary_294_tree_superseded':ea01_pass,
         'new_china_sampling_freeze_allowed':False,
     }
     a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(out,indent=2)+'\n',encoding='utf-8');print(json.dumps(out,indent=2));return 0
