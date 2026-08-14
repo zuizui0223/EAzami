@@ -1,0 +1,65 @@
+{
+  "contract_version": "japan_cirsium_origin_meta_analysis_v1",
+  "evidence_units": 6,
+  "high_dimensional_nuclear_analyses": 3,
+  "independent_high_dimensional_nuclear_data_generation_groups": 2,
+  "direct_broad_nuclear_biogeographic_analyses": 1,
+  "dominant_main_radiation": {
+    "direct_study": "MOREYRA2025",
+    "japanese_species_sampled": 38,
+    "species_in_main_radiation": 36,
+    "proportion_in_main_radiation": 0.9473684210526315,
+    "focused_high_dimensional_nuclear_analyses_compatible": 2,
+    "interpretation": "one dominant Pleistocene Japanese radiation is directly supported by the broad target-capture range analysis and is compatible with the focused East-Asian transcriptome trees"
+  },
+  "cirsium_lineare": {
+    "analyses_tested": 3,
+    "analyses_supporting": 3,
+    "analyses_contradicting_or_not_supporting": 0,
+    "data_generation_groups_tested": 2,
+    "data_generation_groups_supporting": 2,
+    "supporting_evidence_ids": ["MOREYRA2025", "CHANG2025", "CHANG2026"],
+    "tested_data_generation_groups": ["chang_transcriptome_program", "moreyra_target_capture"],
+    "direct_biogeographic_event_analyses": 1,
+    "status": "very_strong_phylogenetic_exception_with_single_broad_direct_range_reconstruction"
+  },
+  "cirsium_dipsacolepis": {
+    "analyses_tested": 1,
+    "analyses_supporting": 1,
+    "analyses_contradicting_or_not_supporting": 0,
+    "data_generation_groups_tested": 1,
+    "data_generation_groups_supporting": 1,
+    "supporting_evidence_ids": ["MOREYRA2025"],
+    "direct_biogeographic_event_analyses": 1,
+    "status": "strong_but_single_study_secondary_arrival_hypothesis",
+    "public_target_capture_run": "SRR30887259",
+    "public_biosample": "SAMN44017836",
+    "public_experiment": "SRX26291339"
+  },
+  "arenicola": {
+    "analyses_tested": 1,
+    "analyses_supporting": 0,
+    "analyses_contradicting_or_not_supporting": 1,
+    "data_generation_groups_tested": 1,
+    "data_generation_groups_supporting": 0,
+    "status": "extra_colonization_not_established"
+  },
+  "model_comparison": {
+    "strict_single_origin_all_japanese_cirsium": "rejected",
+    "dominant_single_pleistocene_radiation_plus_rare_secondary_entries": "best_supported",
+    "many_independent_colonizations_without_dominant_radiation": "not_supported"
+  },
+  "origin_count_hypothesis": {
+    "minimum_defensible_histories": 2,
+    "minimum_defensible_components": ["dominant_main_japanese_radiation", "Cirsium_lineare_lineage"],
+    "best_current_point_hypothesis_histories": 3,
+    "best_current_point_components": ["dominant_main_japanese_radiation", "Cirsium_lineare_lineage", "Cirsium_dipsacolepis_secondary_arrival"],
+    "four_or_more_histories_status": "unresolved_not_supported_by_current_high_dimensional_evidence"
+  },
+  "priority_verified_public_runs": {
+    "Cirsium_dipsacolepis": "SRR30887259",
+    "Cirsium_lineare": "SRR30887240"
+  },
+  "preferred_hypothesis": "Japanese Cirsium has an oligophyletic colonization history: one dominant Middle-Asian-derived Pleistocene radiation accounts for most sampled Japanese species, with a replicated phylogenetic exception represented by C. lineare and a likely second secondary arrival represented by C. dipsacolepis; Arenicola should remain uncounted as an additional arrival until the broad nuclear range analysis resolves it.",
+  "claim_boundary": "Direct dispersal-event counts currently come from one broad ancestral-range analysis. Transcriptome studies replicate the phylogenetic exception structure, especially C. lineare, but are not double-counted as independent range reconstructions."
+}
