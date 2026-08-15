@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - "data/evidence/cnipponicum_flavonoid_reference_queries_v1.csv"
+      - "data/evidence/cnipponicum_flavonoid_reference_queries_v1.json"
+      - "data/evidence/cnipponicum_flavonoid_blast_candidate_summary_v1.json"
+      - "data/evidence/cnipponicum_flavonoid_top_candidates_v1.csv"
       - "analysis/materialize_flavonoid_reference_queries.py"
       - "analysis/summarize_cnipponicum_flavonoid_blast_candidates.py"
       - "data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json"
@@ -32,6 +35,9 @@ jobs:
           python analysis/materialize_flavonoid_reference_queries.py \
             --fasta /tmp/flavonoid_reference_queries_v1.faa \
             --summary /tmp/flavonoid_reference_queries_v1.json
+      - name: Require current UniProt materialization to match frozen query evidence
+        run: |
+          cmp /tmp/flavonoid_reference_queries_v1.json data/evidence/cnipponicum_flavonoid_reference_queries_v1.json
       - name: Download frozen C. nipponicum proteome
         run: |
           python - <<'PY'
@@ -73,12 +79,31 @@ jobs:
           assert q['query_count']==11
           assert d['contract_version']=='cnipponicum_flavonoid_blast_candidate_retrieval_v1'
           assert d['query_count']==11
+          assert d['raw_blast_alignment_rows']==224
+          assert d['queries_with_candidate_hit']==11
           for k in ['CHS_TT4','FLS1','DFR_TT3','ANS_TT18']:
               assert d['queries'][k]['retrieval_status']=='candidate_homolog_retrieved', (k,d['queries'][k])
-          assert d['queries_with_candidate_hit'] >= 8
+          assert d['queries']['DFR_TT3']['top_subject']=='Cn_g13756.t1'
+          assert d['queries']['ANS_TT18']['top_subject']=='Cn_g8152.t1'
+          assert 0 <= d['queries']['ANS_TT18']['top_qcov'] <= 1
+          assert 0 <= d['queries']['DFR_TT3']['top_qcov'] <= 1
+          assert len(d['large_family_queries_requiring_clade_or_domain_validation'])==7
           assert 'not one-to-one ortholog' in d['claim_boundary']
           print(json.dumps({'query_materialization':q,'retrieval':d},indent=2,ensure_ascii=False))
           PY
+      - name: Freeze BLAST summary and compact top-candidate ledger
+        run: |
+          cmp /tmp/cnipponicum_flavonoid_blast_candidate_summary_v1.json data/evidence/cnipponicum_flavonoid_blast_candidate_summary_v1.json
+          python - <<'PY'
+          import csv,json
+          d=json.load(open('/tmp/cnipponicum_flavonoid_blast_candidate_summary_v1.json'))
+          fields=['query_id','gene_family','module','candidate_class','reference_accession','top_subject','top_pident','top_qcov','top_scov','top_evalue','top_bitscore','second_to_top_bitscore_ratio','candidates_within_80pct_top_bitscore']
+          with open('/tmp/cnipponicum_flavonoid_top_candidates_v1.csv','w',encoding='utf-8',newline='') as h:
+              w=csv.DictWriter(h,fieldnames=fields);w.writeheader()
+              for q,v in d['queries'].items():
+                  w.writerow({f:(q if f=='query_id' else v.get(f,'')) for f in fields})
+          PY
+          cmp /tmp/cnipponicum_flavonoid_top_candidates_v1.csv data/evidence/cnipponicum_flavonoid_top_candidates_v1.csv
       - uses: actions/upload-artifact@v4
         with:
           name: cnipponicum-flavonoid-sequence-candidates-${{ github.run_id }}
@@ -88,5 +113,6 @@ jobs:
             /tmp/cnipponicum_flavonoid_blast_v1.tsv
             /tmp/cnipponicum_flavonoid_blast_candidates_v1.csv
             /tmp/cnipponicum_flavonoid_blast_candidate_summary_v1.json
+            /tmp/cnipponicum_flavonoid_top_candidates_v1.csv
           if-no-files-found: error
           retention-days: 90
