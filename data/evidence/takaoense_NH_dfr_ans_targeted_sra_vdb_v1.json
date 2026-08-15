@@ -1,0 +1,32 @@
+{
+  "contract_version": "targeted_takaoense_sra_vdb_screen_v1",
+  "sample_id": "NH_ccy3835",
+  "run": "SRR35152735",
+  "morph": "BP",
+  "queries": {
+    "CNIP_DFR": {
+      "alignment_rows": 4539,
+      "unique_subject_read_ids": 4539,
+      "best_pident": 97.959,
+      "best_aligned_aa": 49,
+      "best_query_local_coverage": 0.14244186046511628,
+      "best_evalue": 8.42e-27,
+      "best_bitscore": 105.0,
+      "detected_under_screen": true
+    },
+    "CNIP_ANS": {
+      "alignment_rows": 1071,
+      "unique_subject_read_ids": 1071,
+      "best_pident": 100.0,
+      "best_aligned_aa": 49,
+      "best_query_local_coverage": 0.13764044943820225,
+      "best_evalue": 4.17e-30,
+      "best_bitscore": 114.0,
+      "detected_under_screen": true
+    }
+  },
+  "total_alignment_rows": 5610,
+  "detected_queries": 2,
+  "interpretation": "This is a targeted translated-read detectability screen against one public young-leaf RNA-seq run. Alignment counts are not normalized expression estimates and cannot be interpreted as colour-associated differential expression.",
+  "claim_boundary": "A detected homologous read supports assay-level recoverability only. A non-detection is not genomic absence or pathway loss. This pilot does not establish floral expression, exact orthology in the RNA-seq sample, genotype, or causal involvement in white/coloured phenotype."
+}
