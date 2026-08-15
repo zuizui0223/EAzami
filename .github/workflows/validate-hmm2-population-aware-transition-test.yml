@@ -6,6 +6,7 @@ on:
       - "analysis/test_hmm2_population_aware_transition_bias.py"
       - "analysis/fitch_transition_sensitivity.csv"
       - "data/evidence/hmm2_population_aware_transition_testability_v1.csv"
+      - "data/evidence/hmm2_population_aware_transition_test_v1.json"
       - "data/evidence/cirsium_flower_colour_atlas_v0_2.csv"
       - "docs/HMM2_POPULATION_AWARE_TRANSITION_TEST_2026-08-15.md"
       - ".github/workflows/validate-hmm2-population-aware-transition-test.yml"
@@ -45,6 +46,8 @@ jobs:
           assert 'not proof' in d['claim_boundary'].lower()
           print(json.dumps(d,indent=2,ensure_ascii=False))
           PY
+      - name: Require regenerated result to equal frozen evidence
+        run: cmp /tmp/hmm2_population_aware_transition_test_v1.json data/evidence/hmm2_population_aware_transition_test_v1.json
       - uses: actions/upload-artifact@v4
         with:
           name: hmm2-population-aware-transition-test-${{ github.run_id }}
