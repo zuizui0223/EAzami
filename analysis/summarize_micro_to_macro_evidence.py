@@ -128,7 +128,7 @@ def main():
         },
         "HMM4": {
             "name": "reticulation-phenotypic-transition coupling",
-            "derived_from": ["P_MACRO_04_evidence_nonindependence"],
+            "derived_from": ["P_MACRO_01_colonization_diversification_asymmetry", "P_MACRO_04_evidence_nonindependence"],
             "prediction": "lineage-level gene-tree/cytonuclear discordance and ploidy/genome-size shifts positively covary with population-aware floral transition density",
             "falsifier": "transition density is unrelated or negatively related to discordance across supported topology ensembles and leave-one-clade-out analyses",
         },
