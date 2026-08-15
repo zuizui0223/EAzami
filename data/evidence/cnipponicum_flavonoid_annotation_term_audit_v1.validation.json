@@ -1,0 +1,14 @@
+{
+  "contract_version": "cnipponicum_flavonoid_annotation_term_audit_validation_v1",
+  "result_path": "data/evidence/cnipponicum_flavonoid_annotation_term_audit_v1.json",
+  "result_sha256": "c92fe7ef7957a16e845acd46200be3946b269be60afd20132fc3eebda27364c1",
+  "workflow_run": 31866872699,
+  "workflow_name": "Audit C. nipponicum flavonoid annotation terms",
+  "artifact_id": 9242282597,
+  "artifact_name": "cnipponicum-flavonoid-annotation-term-audit-31866872699",
+  "artifact_zip_sha256": "3994bc76bde210d599b66dd0096893872b2b334564bce428dd9e8035aeabe886",
+  "validation_state": "success",
+  "source_protein_md5": "5c76467d3ad7f15df94897463633ce4a",
+  "source_gff3_md5": "6bfb9bc256624aff95d03f9c67414bee",
+  "interpretation": "The distributed protein FASTA and GFF3 expose only structural IDs/coordinates, not functional product labels: even known pathway-control terms such as CHS/FLS/DFR produce zero text hits. Therefore zero terminal/regulatory term hits diagnose an annotation-linkage limitation and cannot be interpreted as gene absence."
+}
