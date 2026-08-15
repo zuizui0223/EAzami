@@ -1,0 +1,15 @@
+{
+  "contract_version": "targeted_takaoense_sra_vdb_screen_validation_v1",
+  "result_path": "data/evidence/takaoense_NH_dfr_ans_targeted_sra_vdb_v1.json",
+  "workflow_run": 31868280685,
+  "workflow_name": "Pilot takaoense targeted DFR ANS SRA-BLAST",
+  "artifact_id": 9242696708,
+  "artifact_name": "takaoense-targeted-dfr-ans-sra-vdb-31868280685",
+  "artifact_zip_sha256": "9fe06bb7fca72a38dec8324690f4f9be90c76ff6cd4e84b71478b08f9179dc3f",
+  "validation_state": "success",
+  "sample_id": "NH_ccy3835",
+  "run": "SRR35152735",
+  "morph": "BP",
+  "queries_detected": "2/2",
+  "claim_boundary": "The pilot validates remote assay-level recoverability through tblastn_vdb. Raw hit counts are not expression estimates and this result does not establish exact orthology, floral expression or a causal colour mechanism."
+}
