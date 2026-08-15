@@ -1,0 +1,92 @@
+name: Retrieve C. nipponicum flavonoid sequence candidates
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/cnipponicum_flavonoid_reference_queries_v1.csv"
+      - "analysis/materialize_flavonoid_reference_queries.py"
+      - "analysis/summarize_cnipponicum_flavonoid_blast_candidates.py"
+      - "data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json"
+      - ".github/workflows/retrieve-cnipponicum-flavonoid-sequence-candidates.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  retrieve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install BLAST+
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ncbi-blast+
+          blastp -version
+      - name: Materialize reviewed UniProt query panel
+        run: |
+          python -m py_compile analysis/materialize_flavonoid_reference_queries.py
+          python analysis/materialize_flavonoid_reference_queries.py \
+            --fasta /tmp/flavonoid_reference_queries_v1.faa \
+            --summary /tmp/flavonoid_reference_queries_v1.json
+      - name: Download frozen C. nipponicum proteome
+        run: |
+          python - <<'PY'
+          import hashlib, json, pathlib, urllib.request
+          c=json.load(open('data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json'))
+          x=c['public_files']['protein']
+          out='/tmp/C.nipponicum_aa.fa'
+          urllib.request.urlretrieve(x['download_url'],out)
+          md5=hashlib.md5(pathlib.Path(out).read_bytes()).hexdigest()
+          if md5 != x['md5']:
+              raise SystemExit(f'protein MD5 mismatch: {md5}')
+          print(pathlib.Path(out).stat().st_size, md5)
+          PY
+      - name: BLASTP reviewed queries against C. nipponicum proteome
+        run: |
+          makeblastdb -in /tmp/C.nipponicum_aa.fa -dbtype prot -parse_seqids -out /tmp/cnip_db
+          blastp \
+            -query /tmp/flavonoid_reference_queries_v1.faa \
+            -db /tmp/cnip_db \
+            -evalue 1e-5 \
+            -max_target_seqs 20 \
+            -seg yes \
+            -outfmt '6 qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore' \
+            -out /tmp/cnipponicum_flavonoid_blast_v1.tsv
+          wc -l /tmp/cnipponicum_flavonoid_blast_v1.tsv
+      - name: Summarize candidate retrieval
+        run: |
+          python -m py_compile analysis/summarize_cnipponicum_flavonoid_blast_candidates.py
+          python analysis/summarize_cnipponicum_flavonoid_blast_candidates.py \
+            --blast /tmp/cnipponicum_flavonoid_blast_v1.tsv \
+            --summary /tmp/cnipponicum_flavonoid_blast_candidate_summary_v1.json \
+            --candidates /tmp/cnipponicum_flavonoid_blast_candidates_v1.csv
+      - name: Assert retrieval and non-overclaiming boundaries
+        run: |
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/flavonoid_reference_queries_v1.json'))
+          d=json.load(open('/tmp/cnipponicum_flavonoid_blast_candidate_summary_v1.json'))
+          assert q['query_count']==11
+          assert d['contract_version']=='cnipponicum_flavonoid_blast_candidate_retrieval_v1'
+          assert d['query_count']==11
+          for k in ['CHS_TT4','FLS1','DFR_TT3','ANS_TT18']:
+              assert d['queries'][k]['retrieval_status']=='candidate_homolog_retrieved', (k,d['queries'][k])
+          assert d['queries_with_candidate_hit'] >= 8
+          assert 'not one-to-one ortholog' in d['claim_boundary']
+          print(json.dumps({'query_materialization':q,'retrieval':d},indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cnipponicum-flavonoid-sequence-candidates-${{ github.run_id }}
+          path: |
+            /tmp/flavonoid_reference_queries_v1.faa
+            /tmp/flavonoid_reference_queries_v1.json
+            /tmp/cnipponicum_flavonoid_blast_v1.tsv
+            /tmp/cnipponicum_flavonoid_blast_candidates_v1.csv
+            /tmp/cnipponicum_flavonoid_blast_candidate_summary_v1.json
+          if-no-files-found: error
+          retention-days: 90
