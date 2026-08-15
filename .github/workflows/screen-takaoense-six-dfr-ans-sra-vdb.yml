@@ -1,0 +1,171 @@
+name: Screen six takaoense DFR ANS SRA runs
+
+on:
+  pull_request:
+    paths:
+      - "analysis/extract_cnipponicum_flavonoid_candidate_proteins.py"
+      - "analysis/summarize_targeted_sra_vdb_hits.py"
+      - "analysis/summarize_takaoense_targeted_sra_panel.py"
+      - "data/evidence/takaoense_dfr_ans_targeted_sra_panel_v1.csv"
+      - "data/evidence/cnipponicum_flavonoid_family_validation_v2.json"
+      - "data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json"
+      - "data/evidence/takaoense_dfr_ans_targeted_sra_panel_summary_v1.json"
+      - ".github/workflows/screen-takaoense-six-dfr-ans-sra-vdb.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prepare-query:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download frozen C. nipponicum proteome and extract admitted DFR ANS queries
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib,urllib.request
+          c=json.load(open('data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json'))
+          x=c['public_files']['protein']; out='/tmp/C.nipponicum_aa.fa'
+          urllib.request.urlretrieve(x['download_url'],out)
+          md5=hashlib.md5(pathlib.Path(out).read_bytes()).hexdigest()
+          if md5 != x['md5']: raise SystemExit(f'MD5 mismatch: {md5}')
+          print(pathlib.Path(out).stat().st_size,md5)
+          PY
+          python -m py_compile analysis/extract_cnipponicum_flavonoid_candidate_proteins.py
+          python analysis/extract_cnipponicum_flavonoid_candidate_proteins.py \
+            --proteome /tmp/C.nipponicum_aa.fa \
+            --output /tmp/cnip_dfr_ans.faa \
+            --manifest /tmp/cnip_dfr_ans_query_manifest.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frozen-cnip-dfr-ans-query-${{ github.run_id }}
+          path: |
+            /tmp/cnip_dfr_ans.faa
+            /tmp/cnip_dfr_ans_query_manifest.json
+          if-no-files-found: error
+          retention-days: 90
+
+  screen:
+    needs: prepare-query
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - sample_id: NH_ccy3835
+            morph: BP
+            run: SRR35152735
+          - sample_id: TJ_ccy3807
+            morph: BP
+            run: SRR35152736
+          - sample_id: FC_ccy3559
+            morph: BP
+            run: SRR35152718
+          - sample_id: WY_ccy3560
+            morph: W
+            run: SRR35152717
+          - sample_id: FB_ccy3629
+            morph: W
+            run: SRR35152738
+          - sample_id: LT_ccy3839
+            morph: W
+            run: SRR35152734
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          name: frozen-cnip-dfr-ans-query-${{ github.run_id }}
+          path: /tmp/query
+      - name: Install pinned NCBI BLAST+ 2.17.0 with VDB executables
+        run: |
+          cd /tmp
+          URL='https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.17.0/ncbi-blast-2.17.0+-x64-linux.tar.gz'
+          curl -fsSLO "$URL"
+          curl -fsSLO "$URL.md5"
+          md5sum -c ncbi-blast-2.17.0+-x64-linux.tar.gz.md5
+          tar -xzf ncbi-blast-2.17.0+-x64-linux.tar.gz
+          echo "/tmp/ncbi-blast-2.17.0+/bin" >> "$GITHUB_PATH"
+          /tmp/ncbi-blast-2.17.0+/bin/tblastn_vdb -version
+      - name: Search frozen DFR ANS queries against ${{ matrix.run }}
+        run: |
+          tblastn_vdb \
+            -query /tmp/query/cnip_dfr_ans.faa \
+            -db '${{ matrix.run }}' \
+            -evalue 1e-5 \
+            -max_target_seqs 5000 \
+            -seg yes \
+            -outfmt '6 qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore' \
+            -out '/tmp/${{ matrix.sample_id }}_dfr_ans_vdb.tsv'
+          wc -l '/tmp/${{ matrix.sample_id }}_dfr_ans_vdb.tsv'
+      - name: Summarize assay-level detectability
+        run: |
+          python -m py_compile analysis/summarize_targeted_sra_vdb_hits.py
+          python analysis/summarize_targeted_sra_vdb_hits.py \
+            --hits '/tmp/${{ matrix.sample_id }}_dfr_ans_vdb.tsv' \
+            --run '${{ matrix.run }}' \
+            --sample-id '${{ matrix.sample_id }}' \
+            --morph '${{ matrix.morph }}' \
+            --output '/tmp/${{ matrix.sample_id }}_dfr_ans_vdb_summary.json'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: takaoense-targeted-dfr-ans-sample-${{ matrix.sample_id }}-${{ github.run_id }}
+          path: |
+            /tmp/${{ matrix.sample_id }}_dfr_ans_vdb.tsv
+            /tmp/${{ matrix.sample_id }}_dfr_ans_vdb_summary.json
+          if-no-files-found: error
+          retention-days: 90
+
+  aggregate:
+    needs: screen
+    if: ${{ always() && needs.screen.result == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: takaoense-targeted-dfr-ans-sample-*-${{ github.run_id }}
+          path: /tmp/panel
+          merge-multiple: true
+      - name: Aggregate six runs without expression inference
+        run: |
+          python -m py_compile analysis/summarize_takaoense_targeted_sra_panel.py
+          python analysis/summarize_takaoense_targeted_sra_panel.py \
+            --summary-dir /tmp/panel \
+            --output /tmp/takaoense_dfr_ans_targeted_sra_panel_summary_v1.json
+      - name: Assert six-sample identity and interpretation boundary
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/takaoense_dfr_ans_targeted_sra_panel_summary_v1.json'))
+          assert d['contract_version']=='takaoense_targeted_dfr_ans_sra_panel_v1'
+          assert d['samples']==6
+          assert d['morph_counts']=={'BP':3,'W':3}
+          assert len(d['sample_results'])==6
+          assert 'differential expression inference from raw hit counts' in d['forbidden_use']
+          print(json.dumps(d,indent=2,ensure_ascii=False))
+          PY
+      - name: Match frozen panel result when present
+        run: |
+          if [[ -f data/evidence/takaoense_dfr_ans_targeted_sra_panel_summary_v1.json ]]; then
+            cmp /tmp/takaoense_dfr_ans_targeted_sra_panel_summary_v1.json data/evidence/takaoense_dfr_ans_targeted_sra_panel_summary_v1.json
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: takaoense-targeted-dfr-ans-six-panel-${{ github.run_id }}
+          path: |
+            /tmp/takaoense_dfr_ans_targeted_sra_panel_summary_v1.json
+            /tmp/panel/*_dfr_ans_vdb_summary.json
+          if-no-files-found: error
+          retention-days: 90
