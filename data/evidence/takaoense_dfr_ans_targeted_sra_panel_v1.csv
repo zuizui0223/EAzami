@@ -1,0 +1,7 @@
+sample_id,morph,run,biosample,voucher,locality,role
+NH_ccy3835,BP,SRR35152735,SAMN50798027,ccy3835,"Taiwan: Taitung County, Nanheng",pilot_and_panel
+TJ_ccy3807,BP,SRR35152736,SAMN50798026,ccy3807,"Taiwan: Kaohsiung City, Tengji",panel
+FC_ccy3559,BP,SRR35152718,SAMN50798021,ccy3559,"Taiwan: Chiayi County, Fenchihu",panel
+WY_ccy3560,W,SRR35152717,SAMN50798022,ccy3560,"Taiwan: Pingtung County, Wutai",panel
+FB_ccy3629,W,SRR35152738,SAMN50798024,ccy3629,"Taiwan: Hualien County, Fengbin",panel
+LT_ccy3839,W,SRR35152734,SAMN50798028,ccy3839,"Taiwan: Taitung County, Ludao",panel
