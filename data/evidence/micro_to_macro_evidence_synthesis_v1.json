@@ -61,8 +61,14 @@
     "dominant_radiation_fraction": 0.9473684210526315,
     "dominant_radiation_species": 36,
     "japanese_species_sampled": 38,
-    "lineare_analysis_support": [3, 3],
-    "lineare_independent_group_support": [2, 2],
+    "lineare_analysis_support": [
+      3,
+      3
+    ],
+    "lineare_independent_group_support": [
+      2,
+      2
+    ],
     "dipsacolepis_independent_groups": 1,
     "arenicola_extra_colonization_supporting_analyses": 0
   },
@@ -72,8 +78,14 @@
     "regain_required_fraction": 0.2857142857142857,
     "published_history": "1L+1R",
     "published_no_regain_penalty": 2,
-    "bp_monophyletic_regain_required": [36, 45],
-    "w_monophyletic_regain_required": [0, 45]
+    "bp_monophyletic_regain_required": [
+      36,
+      45
+    ],
+    "w_monophyletic_regain_required": [
+      0,
+      45
+    ]
   },
   "EAzami_discovered_problems": {
     "P_MACRO_01_colonization_diversification_asymmetry": {
@@ -152,10 +164,5 @@
       "falsifier": "the same causal gene and homologous mutation class repeatedly explains independent white systems more strongly than module-level heterogeneity"
     }
   },
-  "claim_boundary": "Published conclusions, EAzami reanalysis findings, and EAzami hypotheses are stored separately. Hypotheses are derived from EAzami-observed cross-scale problems; they are not copied from the future-work sections of source papers.",
-  "validation": {
-    "workflow_run": 31863181892,
-    "artifact_id": 9241204922,
-    "artifact_sha256": "05fef1430d133b0de199e8a45619ff79c6cdea97270e4b3e9aafbcae975add02"
-  }
+  "claim_boundary": "Published conclusions, EAzami reanalysis findings, and EAzami hypotheses are stored separately. Hypotheses are derived from EAzami-observed cross-scale problems; they are not copied from the future-work sections of source papers."
 }
