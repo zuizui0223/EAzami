@@ -1,0 +1,153 @@
+{
+  "contract_version": "cnipponicum_flavonoid_reference_queries_v1",
+  "query_count": 11,
+  "query_ids": [
+    "CHS_TT4",
+    "FLS1",
+    "DFR_TT3",
+    "ANS_TT18",
+    "UGT75C1",
+    "UGT78D2",
+    "MYB75_PAP1",
+    "TT8",
+    "TTG1",
+    "GSTF12_TT19",
+    "TT12_DTX41"
+  ],
+  "combined_query_fasta_sha256": "37e50288ecfdef9806d48e33765230823319e470ea1f5456eabcc3089ceec70a",
+  "records": [
+    {
+      "query_id": "CHS_TT4",
+      "gene_family": "CHS",
+      "module": "flavonoid_core",
+      "uniprot_accession": "P13114",
+      "uniprot_header": "sp|P13114|CHSY_ARATH Chalcone synthase OS=Arabidopsis thaliana OX=3702 GN=CHS PE=1 SV=1",
+      "sequence_length_aa": 395,
+      "raw_uniprot_fasta_sha256": "0619a58cd14ade3e1994982a647ab9e9e5c99b21b394737412146fb1925d04ac",
+      "normalized_record_sha256": "ef6a0f3cf5dbf03db815d7225ff9153644bfe07b21cbe3679d1c65a2a100c1b3",
+      "candidate_class": "candidate_homolog",
+      "reference_role": "positive_control_core"
+    },
+    {
+      "query_id": "FLS1",
+      "gene_family": "FLS",
+      "module": "branch_competition",
+      "uniprot_accession": "Q96330",
+      "uniprot_header": "sp|Q96330|FLS1_ARATH Flavonol synthase/flavanone 3-hydroxylase OS=Arabidopsis thaliana OX=3702 GN=FLS1 PE=1 SV=1",
+      "sequence_length_aa": 336,
+      "raw_uniprot_fasta_sha256": "76a7f63458f9bd02d0c399ee6289ae9ddcc55e95ab502ef593221a6cd56ad714",
+      "normalized_record_sha256": "b8ac11570d706077410ad8c6b52f56bc3c134b977369bf4dee39713c47b17881",
+      "candidate_class": "candidate_homolog",
+      "reference_role": "positive_control_branch"
+    },
+    {
+      "query_id": "DFR_TT3",
+      "gene_family": "DFR",
+      "module": "anthocyanin_committed",
+      "uniprot_accession": "P51102",
+      "uniprot_header": "sp|P51102|DFRA_ARATH Dihydroflavonol 4-reductase OS=Arabidopsis thaliana OX=3702 GN=DFRA PE=1 SV=2",
+      "sequence_length_aa": 382,
+      "raw_uniprot_fasta_sha256": "d5a39168022afc74becfb21859e0291de2cd5d6f831ac4f98741946020095269",
+      "normalized_record_sha256": "ed47a2e503f43be7bbf2da12bb0695f5a60f233a396f9d47e7ec998a4979b469",
+      "candidate_class": "candidate_homolog",
+      "reference_role": "target_committed"
+    },
+    {
+      "query_id": "ANS_TT18",
+      "gene_family": "ANS_LDOX",
+      "module": "anthocyanin_terminal",
+      "uniprot_accession": "Q96323",
+      "uniprot_header": "sp|Q96323|LDOX_ARATH Leucoanthocyanidin dioxygenase OS=Arabidopsis thaliana OX=3702 GN=LDOX PE=1 SV=1",
+      "sequence_length_aa": 356,
+      "raw_uniprot_fasta_sha256": "b59d7413c1f1c8156d56f28713dbc3c64a136bb94f7c38c374b93833fd36db56",
+      "normalized_record_sha256": "996c14a43ade1d1ea7d29e5c418bfff32dbb4fe2174731db866c3c986a483443",
+      "candidate_class": "candidate_homolog",
+      "reference_role": "target_terminal"
+    },
+    {
+      "query_id": "UGT75C1",
+      "gene_family": "UFGT_like_5O",
+      "module": "anthocyanin_terminal",
+      "uniprot_accession": "Q0WW21",
+      "uniprot_header": "sp|Q0WW21|U75C1_ARATH UDP-glycosyltransferase 75C1 OS=Arabidopsis thaliana OX=3702 GN=UGT75C1 PE=2 SV=2",
+      "sequence_length_aa": 456,
+      "raw_uniprot_fasta_sha256": "29510e16054ab0de6fb21e5f81834383e3db87a87829200a256f94673ab78c5b",
+      "normalized_record_sha256": "79425f571b55628c9a4b256e14861245f5290ba916f8aadcb97fb0bd7c35659d",
+      "candidate_class": "family_candidate_not_orthology_proven",
+      "reference_role": "target_terminal_family"
+    },
+    {
+      "query_id": "UGT78D2",
+      "gene_family": "UFGT_like_3O",
+      "module": "anthocyanin_terminal",
+      "uniprot_accession": "Q9LFJ8",
+      "uniprot_header": "sp|Q9LFJ8|U78D2_ARATH Flavonol 3-O-glucosyltransferase OS=Arabidopsis thaliana OX=3702 GN=UGT78D2 PE=1 SV=1",
+      "sequence_length_aa": 460,
+      "raw_uniprot_fasta_sha256": "ed32e34a716c819614a90256ccc3ebeba210b8c03d15f098c0d14c66b8ceb31c",
+      "normalized_record_sha256": "02c2dd31decd900193e771a8ec754b0a6fdf08275296570067d70ee32127632b",
+      "candidate_class": "family_candidate_not_orthology_proven",
+      "reference_role": "target_terminal_family"
+    },
+    {
+      "query_id": "MYB75_PAP1",
+      "gene_family": "MYB",
+      "module": "regulatory",
+      "uniprot_accession": "Q9FE25",
+      "uniprot_header": "sp|Q9FE25|MYB75_ARATH Transcription factor MYB75 OS=Arabidopsis thaliana OX=3702 GN=MYB75 PE=1 SV=1",
+      "sequence_length_aa": 248,
+      "raw_uniprot_fasta_sha256": "8c9ea2739688a9c02822e1a71bb0af88efbbb027ea146bc311081ee38ecb45b8",
+      "normalized_record_sha256": "bd4be106a7672e19dbe11a0d393942e8ca04b4c705c0597eb961ba887c4f4637",
+      "candidate_class": "family_candidate_not_orthology_proven",
+      "reference_role": "target_regulatory_family"
+    },
+    {
+      "query_id": "TT8",
+      "gene_family": "bHLH",
+      "module": "regulatory",
+      "uniprot_accession": "Q9FT81",
+      "uniprot_header": "sp|Q9FT81|TT8_ARATH Transcription factor TT8 OS=Arabidopsis thaliana OX=3702 GN=TT8 PE=1 SV=2",
+      "sequence_length_aa": 518,
+      "raw_uniprot_fasta_sha256": "46a6ee562f138326188d7409f8cba3288e6dd9276631d0e7e0f30a4a66c8bff5",
+      "normalized_record_sha256": "8bc60baa1bbdf166f76fe8d79c790a708bd7e257aa6aed9daea9332d140cd4f9",
+      "candidate_class": "family_candidate_not_orthology_proven",
+      "reference_role": "target_regulatory_family"
+    },
+    {
+      "query_id": "TTG1",
+      "gene_family": "WD40",
+      "module": "regulatory",
+      "uniprot_accession": "Q9XGN1",
+      "uniprot_header": "sp|Q9XGN1|TTG1_ARATH Protein TRANSPARENT TESTA GLABRA 1 OS=Arabidopsis thaliana OX=3702 GN=TTG1 PE=1 SV=1",
+      "sequence_length_aa": 341,
+      "raw_uniprot_fasta_sha256": "94e35fc6383072b04172a4ed9172122bca951e80f35527d8f0822e66ac587aa9",
+      "normalized_record_sha256": "679fee57b941cb13666053ef0e10c8bf2e662280c257a86ce8ba7dfeb881c3c9",
+      "candidate_class": "family_candidate_not_orthology_proven",
+      "reference_role": "target_regulatory_family"
+    },
+    {
+      "query_id": "GSTF12_TT19",
+      "gene_family": "GST",
+      "module": "transport",
+      "uniprot_accession": "Q9FE46",
+      "uniprot_header": "sp|Q9FE46|GSTFC_ARATH Glutathione S-transferase F12 OS=Arabidopsis thaliana OX=3702 GN=GSTF12 PE=1 SV=1",
+      "sequence_length_aa": 214,
+      "raw_uniprot_fasta_sha256": "defb4c25776b476bf06fe7cea6158c409d2e6c06987221b7beb84124e745c86d",
+      "normalized_record_sha256": "f173a1e8c2bf06735ae2808d4c1d04def4a181b31bf310f1dfac6a532833dafa",
+      "candidate_class": "family_candidate_not_orthology_proven",
+      "reference_role": "target_transport_family"
+    },
+    {
+      "query_id": "TT12_DTX41",
+      "gene_family": "MATE",
+      "module": "transport",
+      "uniprot_accession": "Q9LYT3",
+      "uniprot_header": "sp|Q9LYT3|DTX41_ARATH Protein DETOXIFICATION 41 OS=Arabidopsis thaliana OX=3702 GN=DTX41 PE=2 SV=1",
+      "sequence_length_aa": 507,
+      "raw_uniprot_fasta_sha256": "c83695580ff26e49113e043996be6da330981584b87c7fc1d55e91d0ecb7af3c",
+      "normalized_record_sha256": "373cfbf4bf78885d27a0e9dc195ad2b389b5affd792607aaeba3ebce9c3345a0",
+      "candidate_class": "family_candidate_not_orthology_proven",
+      "reference_role": "target_transport_family"
+    }
+  ],
+  "claim_boundary": "Reviewed Arabidopsis proteins are candidate-retrieval anchors. Sequence similarity to C. nipponicum does not by itself establish one-to-one orthology or anthocyanin function in Cirsium."
+}
