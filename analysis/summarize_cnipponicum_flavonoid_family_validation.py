@@ -2,9 +2,11 @@
 """Summarize first-pass family discrimination for C. nipponicum candidates.
 
 Evidence layers:
-- ML family-tree distance to curated positive vs negative references;
-- reciprocal BLASTP to the Arabidopsis reference proteome.
+- unrooted ML-tree patristic distance to curated positive vs negative references;
+- reciprocal BLASTP to the reviewed Arabidopsis reference proteome.
 
+The IQ-TREE outputs are unrooted. We therefore do not use rooted
+candidate+positive common-ancestor membership as an orthology criterion.
 Neither layer alone or together is called exact one-to-one orthology.
 """
 from __future__ import annotations
@@ -13,6 +15,7 @@ import argparse
 import csv
 import json
 import re
+import statistics
 from pathlib import Path
 
 from Bio import Phylo
@@ -86,9 +89,8 @@ def main() -> None:
         neg_dist = {x: tree.distance(candidate, x) for x in negatives}
         nearest_pos = min(pos_dist, key=pos_dist.get)
         nearest_neg = min(neg_dist, key=neg_dist.get)
-        pair_ca = tree.common_ancestor(candidate, nearest_pos)
-        pair_members = sorted(t.name for t in pair_ca.get_terminals())
-        negative_in_pair_ca = sorted(set(pair_members) & set(negatives))
+        mean_pos = statistics.mean(pos_dist.values())
+        mean_neg = statistics.mean(neg_dist.values())
 
         rr = byq.get(candidate, [])
         top = rr[0] if rr else None
@@ -110,29 +112,32 @@ def main() -> None:
                 "expected_family_keyword_match": False,
             }
 
-        tree_consistent = pos_dist[nearest_pos] < neg_dist[nearest_neg]
-        pair_excludes_negative = not negative_in_pair_ca
+        nearest_positive_closer = pos_dist[nearest_pos] < neg_dist[nearest_neg]
+        mean_positive_closer = mean_pos < mean_neg
         reciprocal_consistent = bool(reciprocal.get("expected_family_keyword_match"))
-        if tree_consistent and pair_excludes_negative and reciprocal_consistent:
+        if nearest_positive_closer and mean_positive_closer and reciprocal_consistent:
             status = "family_consistent_first_pass"
-        elif tree_consistent and reciprocal_consistent:
-            status = "family_consistent_but_pair_clade_contains_or_spans_negative"
         else:
             status = "family_assignment_requires_manual_phylogenetic_review"
 
         families[family] = {
             "candidate": candidate,
             "treefile": str(tree_path),
+            "tree_interpretation": "unrooted_ml_tree_patristic_distance_only",
             "positive_references": positives,
             "negative_references": negatives,
+            "positive_reference_distances": pos_dist,
+            "negative_reference_distances": neg_dist,
             "nearest_positive_reference": nearest_pos,
             "nearest_positive_distance": pos_dist[nearest_pos],
             "nearest_negative_reference": nearest_neg,
             "nearest_negative_distance": neg_dist[nearest_neg],
-            "positive_distance_smaller_than_negative": tree_consistent,
-            "candidate_plus_nearest_positive_common_ancestor_members": pair_members,
-            "negative_references_inside_candidate_nearest_positive_common_ancestor": negative_in_pair_ca,
-            "candidate_nearest_positive_pair_excludes_negatives": pair_excludes_negative,
+            "nearest_positive_to_negative_distance_ratio": pos_dist[nearest_pos] / neg_dist[nearest_neg],
+            "mean_positive_distance": mean_pos,
+            "mean_negative_distance": mean_neg,
+            "mean_positive_to_negative_distance_ratio": mean_pos / mean_neg,
+            "nearest_positive_closer_than_nearest_negative": nearest_positive_closer,
+            "mean_positive_distance_smaller_than_mean_negative": mean_positive_closer,
             "reciprocal_arabidopsis": reciprocal,
             "first_pass_status": status,
         }
@@ -142,15 +147,16 @@ def main() -> None:
         status_counts[x["first_pass_status"]] = status_counts.get(x["first_pass_status"], 0) + 1
 
     result = {
-        "contract_version": "cnipponicum_flavonoid_family_validation_v1",
+        "contract_version": "cnipponicum_flavonoid_family_validation_v2",
         "families_tested": sorted(families),
         "arabidopsis_reference_proteome_query": "proteome:UP000006548 AND reviewed:true",
         "arabidopsis_reference_proteome_sha256": args.arabidopsis_proteome_sha256,
         "family_results": families,
         "status_counts": dict(sorted(status_counts.items())),
-        "interpretation": "This first-pass gate asks whether each top C. nipponicum candidate is more tree-proximal to curated functional positives than curated related negatives and whether reciprocal similarity to the reviewed Arabidopsis proteome returns the expected family label.",
+        "decision_rule": "For an unrooted ML tree, require both nearest-positive and mean-positive patristic distances to be smaller than their negative-reference counterparts, plus an expected-family reciprocal top hit in the reviewed Arabidopsis proteome. No rooted sister-clade criterion is applied.",
+        "interpretation": "This first-pass gate asks whether each top C. nipponicum candidate is consistently more similar to curated functional positives than curated related negatives in the unrooted ML distance structure, and whether reciprocal similarity to reviewed Arabidopsis proteins returns the expected family label.",
         "next_gate": "Candidates passing this screen still require broader multi-species family/clade sampling, domain architecture where informative, copy-number/homeolog review, and W/C-lineage comparison before exact orthology/function or evolutionary-mechanism claims.",
-        "claim_boundary": "family_consistent_first_pass is not one-to-one orthology. ML family-tree proximity and reciprocal BLAST annotation are screening evidence only; they do not demonstrate biochemical function or causal involvement in flower colour.",
+        "claim_boundary": "family_consistent_first_pass is not one-to-one orthology. Unrooted ML patristic-distance discrimination and reciprocal BLAST annotation are screening evidence only; they do not demonstrate biochemical function or causal involvement in flower colour.",
     }
     Path(args.output).write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps(result, indent=2, ensure_ascii=False))
