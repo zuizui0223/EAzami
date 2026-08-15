@@ -1,0 +1,279 @@
+{
+  "contract_version": "cirsium_flavonoid_molecular_bridge_v1",
+  "source_count": 2,
+  "sources": [
+    "PARK2020",
+    "ROY2018"
+  ],
+  "audit_panel_families": 17,
+  "source_summaries": {
+    "PARK2020": {
+      "rows": 17,
+      "directly_reported_families": 10,
+      "panel_families": 17,
+      "direct_fraction": 0.5882352941176471,
+      "by_module": {
+        "entry": {
+          "families_total": 3,
+          "directly_reported": 3,
+          "directly_reported_families": [
+            "4CL",
+            "C4H",
+            "PAL"
+          ],
+          "direct_fraction": 1.0
+        },
+        "flavonoid_core": {
+          "families_total": 4,
+          "directly_reported": 4,
+          "directly_reported_families": [
+            "CHI",
+            "CHS",
+            "F3'H",
+            "F3H"
+          ],
+          "direct_fraction": 1.0
+        },
+        "branch_competition": {
+          "families_total": 2,
+          "directly_reported": 2,
+          "directly_reported_families": [
+            "FLS",
+            "FSII"
+          ],
+          "direct_fraction": 1.0
+        },
+        "anthocyanin_committed": {
+          "families_total": 1,
+          "directly_reported": 1,
+          "directly_reported_families": [
+            "DFR"
+          ],
+          "direct_fraction": 1.0
+        },
+        "anthocyanin_terminal": {
+          "families_total": 2,
+          "directly_reported": 0,
+          "directly_reported_families": [],
+          "direct_fraction": 0.0
+        },
+        "regulatory": {
+          "families_total": 3,
+          "directly_reported": 0,
+          "directly_reported_families": [],
+          "direct_fraction": 0.0
+        },
+        "transport": {
+          "families_total": 2,
+          "directly_reported": 0,
+          "directly_reported_families": [],
+          "direct_fraction": 0.0
+        }
+      },
+      "status_counts": {
+        "not_in_named_29_ortholog_panel": 2,
+        "not_targeted_by_named_enzyme_panel": 5,
+        "reported_directly": 10
+      }
+    },
+    "ROY2018": {
+      "rows": 17,
+      "directly_reported_families": 7,
+      "panel_families": 17,
+      "direct_fraction": 0.4117647058823529,
+      "by_module": {
+        "entry": {
+          "families_total": 3,
+          "directly_reported": 3,
+          "directly_reported_families": [
+            "4CL",
+            "C4H",
+            "PAL"
+          ],
+          "direct_fraction": 1.0
+        },
+        "flavonoid_core": {
+          "families_total": 4,
+          "directly_reported": 4,
+          "directly_reported_families": [
+            "CHI",
+            "CHS",
+            "F3'H",
+            "F3H"
+          ],
+          "direct_fraction": 1.0
+        },
+        "branch_competition": {
+          "families_total": 2,
+          "directly_reported": 0,
+          "directly_reported_families": [],
+          "direct_fraction": 0.0
+        },
+        "anthocyanin_committed": {
+          "families_total": 1,
+          "directly_reported": 0,
+          "directly_reported_families": [],
+          "direct_fraction": 0.0
+        },
+        "anthocyanin_terminal": {
+          "families_total": 2,
+          "directly_reported": 0,
+          "directly_reported_families": [],
+          "direct_fraction": 0.0
+        },
+        "regulatory": {
+          "families_total": 3,
+          "directly_reported": 0,
+          "directly_reported_families": [],
+          "direct_fraction": 0.0
+        },
+        "transport": {
+          "families_total": 2,
+          "directly_reported": 0,
+          "directly_reported_families": [],
+          "direct_fraction": 0.0
+        }
+      },
+      "status_counts": {
+        "not_in_targeted_silymarin_table": 5,
+        "not_yet_audited_full_transcriptome": 5,
+        "reported_directly": 7
+      }
+    }
+  },
+  "cross_source_coverage": {
+    "directly_reported_in_at_least_one_source": 10,
+    "direct_fraction": 0.5882352941176471,
+    "by_module": {
+      "entry": {
+        "families_total": 3,
+        "directly_reported_in_at_least_one_source": 3,
+        "directly_reported_families": [
+          "4CL",
+          "C4H",
+          "PAL"
+        ],
+        "direct_fraction": 1.0
+      },
+      "flavonoid_core": {
+        "families_total": 4,
+        "directly_reported_in_at_least_one_source": 4,
+        "directly_reported_families": [
+          "CHI",
+          "CHS",
+          "F3'H",
+          "F3H"
+        ],
+        "direct_fraction": 1.0
+      },
+      "branch_competition": {
+        "families_total": 2,
+        "directly_reported_in_at_least_one_source": 2,
+        "directly_reported_families": [
+          "FLS",
+          "FSII"
+        ],
+        "direct_fraction": 1.0
+      },
+      "anthocyanin_committed": {
+        "families_total": 1,
+        "directly_reported_in_at_least_one_source": 1,
+        "directly_reported_families": [
+          "DFR"
+        ],
+        "direct_fraction": 1.0
+      },
+      "anthocyanin_terminal": {
+        "families_total": 2,
+        "directly_reported_in_at_least_one_source": 0,
+        "directly_reported_families": [],
+        "direct_fraction": 0.0
+      },
+      "regulatory": {
+        "families_total": 3,
+        "directly_reported_in_at_least_one_source": 0,
+        "directly_reported_families": [],
+        "direct_fraction": 0.0
+      },
+      "transport": {
+        "families_total": 2,
+        "directly_reported_in_at_least_one_source": 0,
+        "directly_reported_families": [],
+        "direct_fraction": 0.0
+      }
+    }
+  },
+  "micro_to_macro_gap": {
+    "upstream_core_branch_families": 9,
+    "upstream_core_branch_directly_reported": 9,
+    "upstream_core_branch_fraction": 1.0,
+    "anthocyanin_plus_regulatory_transport_families": 8,
+    "anthocyanin_plus_regulatory_transport_directly_reported": 1,
+    "anthocyanin_plus_regulatory_transport_fraction": 0.125,
+    "terminal_regulatory_transport_families": 7,
+    "terminal_regulatory_transport_directly_reported": 0,
+    "terminal_regulatory_transport_fraction": 0.0,
+    "interpretation": "Published Cirsium molecular studies directly anchor the entry/flavonoid-core/branch machinery and DFR, but their named targeted panels do not yet give comparable direct coverage of ANS/UFGT, MBW regulators, or anthocyanin transport. This is an assay/panel-resolution gap, not evidence that these genes are absent."
+  },
+  "published_expression_anchors": {
+    "PARK2020": {
+      "orthologs_in_named_phenylpropanoid_panel": 29,
+      "flavonoid_gene_flower_vs_leaf_range_fold": [
+        2.6,
+        500.0
+      ],
+      "examples": {
+        "CjCHS1_flower_vs_leaf": 500.0,
+        "CjCHS2_flower_vs_leaf": 112.0,
+        "CjF3Hprime_flower_vs_leaf": 16.6,
+        "CjCHI_flower_vs_leaf": 13.0,
+        "CjFLS_flower_vs_leaf": 5.6,
+        "CjFSII_flower_vs_leaf": 3.3,
+        "CjDFR_isoform_root_vs_leaf": [
+          22.0,
+          2.6
+        ]
+      }
+    },
+    "ROY2018": {
+      "assembled_unigenes": 51133,
+      "direct_panel_scope": "taxifolin/coniferyl/silymarin precursor enzymes"
+    }
+  },
+  "EAzami_problem": {
+    "id": "P_MICRO_MACRO_07_terminal_regulatory_resolution_gap",
+    "result": "The directly documented Cirsium molecular evidence is much denser for upstream/core flavonoid machinery than for the terminal anthocyanin + MBW + transport layers most diagnostic of reversible white/coloured switching.",
+    "why_problem": "A pathway can be demonstrably present and flower-biased while the evolutionary switch remains unresolved because the decisive terminal/regulatory layer is not comparably assayed across colour lineages.",
+    "linked_hypotheses": [
+      "HMM1",
+      "HMM5"
+    ]
+  },
+  "existing_data_next_test": {
+    "priority_1": [
+      "ANS",
+      "UFGT",
+      "MYB",
+      "bHLH",
+      "WD40",
+      "GST",
+      "MATE"
+    ],
+    "priority_2": [
+      "DFR"
+    ],
+    "priority_3_control": [
+      "4CL",
+      "C4H",
+      "CHI",
+      "CHS",
+      "F3'H",
+      "F3H",
+      "FLS",
+      "FSII",
+      "PAL"
+    ],
+    "action": "Mine the full published transcriptome/annotation resources and current public East-Asian RNA/genome data for ortholog presence, copy number, coding variation and gene trees; preserve tissue-specific non-expression as missing/assay-limited rather than deletion."
+  },
+  "claim_boundary": "This synthesis describes coverage of named/reviewed molecular evidence panels. 'Not targeted' or 'not reported' never means genomic absence. Existing C. japonicum tissue-expression data do not establish the historical cause of white/coloured evolution in takaoense, Arenicola, or other lineages."
+}
