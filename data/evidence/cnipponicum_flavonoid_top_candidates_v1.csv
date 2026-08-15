@@ -1,0 +1,12 @@
+query_id,gene_family,module,candidate_class,reference_accession,top_subject,top_pident,top_qcov,top_scov,top_evalue,top_bitscore,second_to_top_bitscore_ratio,candidates_within_80pct_top_bitscore
+CHS_TT4,CHS,flavonoid_core,candidate_homolog,P13114,Cn_g13733.t1,84.694,0.9924050632911392,0.9630541871921182,0.0,708.0,0.9872881355932204,4
+FLS1,FLS,branch_competition,candidate_homolog,Q96330,Cn_g15577.t1,67.066,0.9940476190476191,0.9940476190476191,7.4e-162,455.0,0.5472527472527473,1
+DFR_TT3,DFR,anthocyanin_committed,candidate_homolog,P51102,Cn_g13756.t1,71.118,0.8429319371727748,0.936046511627907,4.45e-179,501.0,0.5588822355289421,1
+ANS_TT18,ANS_LDOX,anthocyanin_terminal,candidate_homolog,Q96323,Cn_g8152.t1,74.636,0.9634831460674157,0.9578651685393258,1.12e-177,496.0,0.46975806451612906,1
+UGT75C1,UFGT_like_5O,anthocyanin_terminal,family_candidate_not_orthology_proven,Q0WW21,Cn_g25623.t1,48.421,0.9736842105263158,0.9510204081632653,2.18e-130,385.0,0.8,2
+UGT78D2,UFGT_like_3O,anthocyanin_terminal,family_candidate_not_orthology_proven,Q9LFJ8,Cn_g22782.t1,52.62,0.9782608695652174,0.9616204690831557,1.09e-159,459.0,0.5882352941176471,1
+MYB75_PAP1,MYB,regulatory,family_candidate_not_orthology_proven,Q9FE25,Cn_g7052.t1,63.889,0.5806451612903226,0.5366795366795367,1.01e-53,174.0,0.8333333333333334,4
+TT8,bHLH,regulatory,family_candidate_not_orthology_proven,Q9FT81,Cn_g9210.t2,60.28,0.3841698841698842,0.3370967741935484,6.08e-74,245.0,0.763265306122449,1
+TTG1,WD40,regulatory,family_candidate_not_orthology_proven,Q9XGN1,Cn_g24396.t1,77.616,1.0,0.9970588235294118,0.0,554.0,0.796028880866426,1
+GSTF12_TT19,GST,transport,family_candidate_not_orthology_proven,Q9FE46,Cn_g6533.t1,52.133,0.985981308411215,0.985981308411215,1.11e-75,226.0,0.7699115044247787,1
+TT12_DTX41,MATE,transport,family_candidate_not_orthology_proven,Q9LYT3,Cn_g2629.t1,48.073,0.9723865877712031,0.9439071566731141,1.73e-146,429.0,0.9883449883449883,6
