@@ -1,0 +1,127 @@
+name: Validate C. nipponicum flavonoid family discrimination
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/cnipponicum_flavonoid_family_reference_panel_v1.csv"
+      - "data/evidence/cnipponicum_flavonoid_top_candidates_v1.csv"
+      - "analysis/prepare_cnipponicum_flavonoid_family_validation.py"
+      - "analysis/summarize_cnipponicum_flavonoid_family_validation.py"
+      - "data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json"
+      - "data/evidence/cnipponicum_flavonoid_family_validation_v1.json"
+      - ".github/workflows/validate-cnipponicum-flavonoid-family-discrimination.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install phylogenetic tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ncbi-blast+ mafft iqtree
+          python -m pip install --quiet biopython
+          blastp -version
+          mafft --version || true
+          if command -v iqtree2 >/dev/null 2>&1; then iqtree2 -version; else iqtree -version; fi
+      - name: Download frozen C. nipponicum proteome
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib,urllib.request
+          c=json.load(open('data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json'))
+          x=c['public_files']['protein']; out='/tmp/C.nipponicum_aa.fa'
+          urllib.request.urlretrieve(x['download_url'],out)
+          md5=hashlib.md5(pathlib.Path(out).read_bytes()).hexdigest()
+          if md5 != x['md5']: raise SystemExit(f'MD5 mismatch: {md5}')
+          print(pathlib.Path(out).stat().st_size,md5)
+          PY
+      - name: Prepare family reference/candidate sets
+        run: |
+          mkdir -p /tmp/family_validation
+          python -m py_compile analysis/prepare_cnipponicum_flavonoid_family_validation.py
+          python analysis/prepare_cnipponicum_flavonoid_family_validation.py \
+            --proteome /tmp/C.nipponicum_aa.fa \
+            --outdir /tmp/family_validation
+      - name: Download reviewed Arabidopsis reference-proteome subset
+        run: |
+          python - <<'PY'
+          import hashlib,pathlib,urllib.parse,urllib.request
+          query=urllib.parse.quote('(proteome:UP000006548) AND (reviewed:true)')
+          url='https://rest.uniprot.org/uniprotkb/stream?compressed=false&format=fasta&query='+query
+          out=pathlib.Path('/tmp/arabidopsis_reviewed_reference_proteome.faa')
+          with urllib.request.urlopen(url,timeout=180) as r: out.write_bytes(r.read())
+          sha=hashlib.sha256(out.read_bytes()).hexdigest()
+          pathlib.Path('/tmp/arabidopsis_reviewed_reference_proteome.sha256').write_text(sha+'\n')
+          print(out.stat().st_size,sha)
+          PY
+          makeblastdb -in /tmp/arabidopsis_reviewed_reference_proteome.faa -dbtype prot -parse_seqids -out /tmp/at_reviewed
+      - name: Reciprocal BLASTP top Cirsium candidates to Arabidopsis
+        run: |
+          blastp \
+            -query /tmp/family_validation/cnip_top_four_candidates.faa \
+            -db /tmp/at_reviewed \
+            -evalue 1e-5 \
+            -max_target_seqs 10 \
+            -seg yes \
+            -outfmt '6 qseqid sseqid pident length qlen slen evalue bitscore stitle' \
+            -out /tmp/family_validation/reciprocal_arabidopsis.tsv
+          wc -l /tmp/family_validation/reciprocal_arabidopsis.tsv
+      - name: Infer four family discrimination trees
+        run: |
+          if command -v iqtree2 >/dev/null 2>&1; then IQ=iqtree2; else IQ=iqtree; fi
+          for fam in DFR ANS FLS CHS; do
+            mafft --auto /tmp/family_validation/${fam}.family.faa > /tmp/family_validation/${fam}.aln.faa
+            "$IQ" -s /tmp/family_validation/${fam}.aln.faa \
+              -m MFP -bb 1000 -alrt 1000 -nt 1 -seed 20260815 \
+              -pre /tmp/family_validation/${fam}.aln.faa
+          done
+      - name: Summarize first-pass family validation
+        run: |
+          python -m py_compile analysis/summarize_cnipponicum_flavonoid_family_validation.py
+          SHA=$(cat /tmp/arabidopsis_reviewed_reference_proteome.sha256)
+          python analysis/summarize_cnipponicum_flavonoid_family_validation.py \
+            --input-manifest /tmp/family_validation/input_manifest.json \
+            --rbh /tmp/family_validation/reciprocal_arabidopsis.tsv \
+            --tree-dir /tmp/family_validation \
+            --arabidopsis-proteome-sha256 "$SHA" \
+            --output /tmp/cnipponicum_flavonoid_family_validation_v1.json
+      - name: Assert complete non-overclaiming result
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/cnipponicum_flavonoid_family_validation_v1.json'))
+          assert d['contract_version']=='cnipponicum_flavonoid_family_validation_v1'
+          assert set(d['families_tested'])=={'DFR','ANS','FLS','CHS'}
+          for fam,x in d['family_results'].items():
+              assert x['candidate'].startswith('CNIP_'+fam+'_')
+              assert x['positive_references'] and x['negative_references']
+              assert x['reciprocal_arabidopsis']['reported_hits'] > 0
+              assert x['first_pass_status']
+          assert 'not one-to-one orthology' in d['claim_boundary']
+          print(json.dumps(d,indent=2,ensure_ascii=False))
+          PY
+      - name: Match frozen result when present
+        run: |
+          if [[ -f data/evidence/cnipponicum_flavonoid_family_validation_v1.json ]]; then
+            cmp /tmp/cnipponicum_flavonoid_family_validation_v1.json data/evidence/cnipponicum_flavonoid_family_validation_v1.json
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cnipponicum-flavonoid-family-validation-${{ github.run_id }}
+          path: |
+            /tmp/family_validation/input_manifest.json
+            /tmp/family_validation/*.aln.faa
+            /tmp/family_validation/*.treefile
+            /tmp/family_validation/*.iqtree
+            /tmp/family_validation/reciprocal_arabidopsis.tsv
+            /tmp/arabidopsis_reviewed_reference_proteome.sha256
+            /tmp/cnipponicum_flavonoid_family_validation_v1.json
+          if-no-files-found: error
+          retention-days: 90
