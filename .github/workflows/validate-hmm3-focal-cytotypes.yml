@@ -1,0 +1,55 @@
+name: Validate HMM3 focal cytotype synthesis
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/hmm3_japan_radiation_focal_cytotypes_v1.csv"
+      - "analysis/summarize_hmm3_focal_cytotypes.py"
+      - "data/evidence/hmm3_japan_radiation_focal_cytotype_summary_v1.json"
+      - ".github/workflows/validate-hmm3-focal-cytotypes.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build focal cytotype synthesis
+        run: |
+          python -m py_compile analysis/summarize_hmm3_focal_cytotypes.py
+          python analysis/summarize_hmm3_focal_cytotypes.py \
+            --output /tmp/hmm3_japan_radiation_focal_cytotype_summary_v1.json
+      - name: Assert HMM3 refinement and claim boundaries
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/hmm3_japan_radiation_focal_cytotype_summary_v1.json'))
+          assert d['contract_version']=='hmm3_focal_japan_radiation_cytotype_synthesis_v1'
+          assert d['focal_taxa']==5
+          assert d['dominant_radiation_focal_taxa']==4
+          assert d['dominant_radiation_ploidy_states_x']==[2,4,6]
+          assert d['dominant_radiation_2n_states']==[34,68,102]
+          assert d['dominant_radiation_contains_multiple_ploidy_states'] is True
+          assert d['secondary_arrival_candidate']=={'taxon':'Cirsium dipsacolepis','ploidy_x':2,'cytotype_2n':34}
+          assert d['EAzami_problem']['id']=='P_MACRO_08_radiation_not_single_ploidy_state'
+          assert 'not a complete Japan-38 cytotype census' in d['claim_boundary']
+          assert 'not assigned to the exact Moreyra sequenced individuals' in d['claim_boundary']
+          print(json.dumps(d,indent=2,ensure_ascii=False))
+          PY
+      - name: Match frozen result when present
+        run: |
+          if [[ -f data/evidence/hmm3_japan_radiation_focal_cytotype_summary_v1.json ]]; then
+            cmp /tmp/hmm3_japan_radiation_focal_cytotype_summary_v1.json data/evidence/hmm3_japan_radiation_focal_cytotype_summary_v1.json
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hmm3-focal-cytotype-synthesis-${{ github.run_id }}
+          path: /tmp/hmm3_japan_radiation_focal_cytotype_summary_v1.json
+          if-no-files-found: error
+          retention-days: 90
