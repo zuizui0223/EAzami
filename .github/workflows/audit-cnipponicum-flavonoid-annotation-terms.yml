@@ -5,6 +5,7 @@ on:
     paths:
       - "analysis/audit_cnipponicum_flavonoid_annotation_terms.py"
       - "data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json"
+      - "data/evidence/cnipponicum_flavonoid_annotation_term_audit_v1.json"
       - ".github/workflows/audit-cnipponicum-flavonoid-annotation-terms.yml"
   workflow_dispatch:
 
@@ -46,12 +47,16 @@ jobs:
           import json
           d=json.load(open('/tmp/cnipponicum_flavonoid_annotation_term_audit_v1.json'))
           assert d['contract_version']=='cnipponicum_flavonoid_annotation_term_audit_v1'
-          assert d['protein_headers_scanned'] > 10000
-          assert d['gff_records_scanned'] > 10000
+          assert d['protein_headers_scanned']==31263
+          assert d['gff_records_scanned']==554761
+          assert d['total_hit_rows']==0
+          assert all(v==0 for v in d['term_hit_counts'].values())
           assert 'never evidence of genomic absence' in d['interpretation_rule']
           assert d['next_gate']
           print(json.dumps(d,indent=2,ensure_ascii=False))
           PY
+      - name: Require regenerated result to equal frozen evidence
+        run: cmp /tmp/cnipponicum_flavonoid_annotation_term_audit_v1.json data/evidence/cnipponicum_flavonoid_annotation_term_audit_v1.json
       - uses: actions/upload-artifact@v4
         with:
           name: cnipponicum-flavonoid-annotation-term-audit-${{ github.run_id }}
