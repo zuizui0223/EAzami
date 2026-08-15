@@ -1,0 +1,12 @@
+{
+  "contract_version": "micro_to_macro_evidence_synthesis_validation_v2",
+  "result_path": "data/evidence/micro_to_macro_evidence_synthesis_v2.json",
+  "result_sha256": "467a1026e1319408e6f9f3673f5b138bfc9d32af4184747000475fa550380f92",
+  "workflow_run": 31863699348,
+  "workflow_name": "Validate micro-to-macro hypothesis program v2",
+  "artifact_id": 9241344927,
+  "artifact_name": "micro-to-macro-evidence-synthesis-v2-31863699348",
+  "artifact_zip_sha256": "9fdb444f9c951bb7159bb6813aa0f0c09b721dba1eee39142235033705f0172a",
+  "validation_state": "success",
+  "note": "The v2 synthesis adds a provenance-frozen own preliminary macro-trait result and HMM6 while preserving v1 as an immutable earlier synthesis."
+}
