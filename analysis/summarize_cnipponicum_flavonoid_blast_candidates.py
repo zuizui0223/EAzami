@@ -27,6 +27,8 @@ def read_hits(path: str):
     with Path(path).open(encoding="utf-8", newline="") as h:
         for row in csv.DictReader(h, delimiter="\t", fieldnames=FIELDS):
             x = dict(row)
+            x["qseqid_raw"] = x["qseqid"]
+            x["qseqid"] = x["qseqid"].split("|", 1)[0]
             for k in ["pident", "length", "qlen", "slen", "qstart", "qend", "sstart", "send", "evalue", "bitscore"]:
                 x[k] = float(x[k])
             x["qcov"] = x["length"] / x["qlen"] if x["qlen"] else 0.0
@@ -45,6 +47,9 @@ def main() -> None:
 
     manifest = read_manifest(args.manifest)
     hits = read_hits(args.blast)
+    unknown = sorted({h["qseqid"] for h in hits} - set(manifest))
+    if unknown:
+        raise ValueError(f"BLAST query IDs not in frozen manifest after normalization: {unknown}")
     byq = defaultdict(list)
     for h in hits:
         byq[h["qseqid"]].append(h)
@@ -126,6 +131,7 @@ def main() -> None:
     result = {
         "contract_version": "cnipponicum_flavonoid_blast_candidate_retrieval_v1",
         "query_count": len(manifest),
+        "raw_blast_alignment_rows": len(hits),
         "queries_with_candidate_hit": recovered,
         "queries_without_hit_under_settings": len(manifest) - recovered,
         "blast_screen_settings": {
