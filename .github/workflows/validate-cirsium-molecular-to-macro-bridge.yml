@@ -1,0 +1,61 @@
+name: Validate Cirsium molecular-to-macro bridge
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/cirsium_flavonoid_molecular_bridge_v1.csv"
+      - "analysis/summarize_cirsium_flavonoid_molecular_bridge.py"
+      - "data/evidence/cirsium_flavonoid_molecular_bridge_summary_v1.json"
+      - "docs/CIRSIUM_MOLECULAR_TO_MACRO_BRIDGE_2026-08-15.md"
+      - ".github/workflows/validate-cirsium-molecular-to-macro-bridge.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build molecular bridge summary
+        run: |
+          python -m py_compile analysis/summarize_cirsium_flavonoid_molecular_bridge.py
+          python analysis/summarize_cirsium_flavonoid_molecular_bridge.py \
+            --output /tmp/cirsium_flavonoid_molecular_bridge_summary_v1.json
+      - name: Assert molecular claim boundaries
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/cirsium_flavonoid_molecular_bridge_summary_v1.json'))
+          assert d['contract_version']=='cirsium_flavonoid_molecular_bridge_v1'
+          assert d['source_count']==2
+          assert d['audit_panel_families']==17
+          assert d['source_summaries']['PARK2020']['directly_reported_families']==10
+          assert d['source_summaries']['ROY2018']['directly_reported_families']==7
+          g=d['micro_to_macro_gap']
+          assert g['upstream_core_branch_families']==9
+          assert g['upstream_core_branch_directly_reported']==9
+          assert g['anthocyanin_plus_regulatory_transport_families']==8
+          assert g['anthocyanin_plus_regulatory_transport_directly_reported']==1
+          assert g['terminal_regulatory_transport_families']==7
+          assert g['terminal_regulatory_transport_directly_reported']==0
+          assert d['EAzami_problem']['id']=='P_MICRO_MACRO_07_terminal_regulatory_resolution_gap'
+          assert set(d['EAzami_problem']['linked_hypotheses'])=={'HMM1','HMM5'}
+          assert 'never means genomic absence' in d['claim_boundary']
+          print(json.dumps(d,indent=2,ensure_ascii=False))
+          PY
+      - name: Match frozen result when present
+        run: |
+          if [[ -f data/evidence/cirsium_flavonoid_molecular_bridge_summary_v1.json ]]; then
+            cmp /tmp/cirsium_flavonoid_molecular_bridge_summary_v1.json data/evidence/cirsium_flavonoid_molecular_bridge_summary_v1.json
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cirsium-molecular-to-macro-bridge-${{ github.run_id }}
+          path: /tmp/cirsium_flavonoid_molecular_bridge_summary_v1.json
+          if-no-files-found: error
+          retention-days: 90
