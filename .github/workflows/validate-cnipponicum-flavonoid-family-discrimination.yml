@@ -8,7 +8,7 @@ on:
       - "analysis/prepare_cnipponicum_flavonoid_family_validation.py"
       - "analysis/summarize_cnipponicum_flavonoid_family_validation.py"
       - "data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json"
-      - "data/evidence/cnipponicum_flavonoid_family_validation_v1.json"
+      - "data/evidence/cnipponicum_flavonoid_family_validation_v2.json"
       - ".github/workflows/validate-cnipponicum-flavonoid-family-discrimination.yml"
   workflow_dispatch:
 
@@ -73,7 +73,7 @@ jobs:
             -outfmt '6 qseqid sseqid pident length qlen slen evalue bitscore stitle' \
             -out /tmp/family_validation/reciprocal_arabidopsis.tsv
           wc -l /tmp/family_validation/reciprocal_arabidopsis.tsv
-      - name: Infer four family discrimination trees
+      - name: Infer four unrooted family discrimination trees
         run: |
           if command -v iqtree2 >/dev/null 2>&1; then IQ=iqtree2; else IQ=iqtree; fi
           for fam in DFR ANS FLS CHS; do
@@ -82,7 +82,7 @@ jobs:
               -m MFP -bb 1000 -alrt 1000 -nt 1 -seed 20260815 \
               -pre /tmp/family_validation/${fam}.aln.faa
           done
-      - name: Summarize first-pass family validation
+      - name: Summarize unrooted distance-based family validation
         run: |
           python -m py_compile analysis/summarize_cnipponicum_flavonoid_family_validation.py
           SHA=$(cat /tmp/arabidopsis_reviewed_reference_proteome.sha256)
@@ -91,30 +91,34 @@ jobs:
             --rbh /tmp/family_validation/reciprocal_arabidopsis.tsv \
             --tree-dir /tmp/family_validation \
             --arabidopsis-proteome-sha256 "$SHA" \
-            --output /tmp/cnipponicum_flavonoid_family_validation_v1.json
+            --output /tmp/cnipponicum_flavonoid_family_validation_v2.json
       - name: Assert complete non-overclaiming result
         run: |
           python - <<'PY'
           import json
-          d=json.load(open('/tmp/cnipponicum_flavonoid_family_validation_v1.json'))
-          assert d['contract_version']=='cnipponicum_flavonoid_family_validation_v1'
+          d=json.load(open('/tmp/cnipponicum_flavonoid_family_validation_v2.json'))
+          assert d['contract_version']=='cnipponicum_flavonoid_family_validation_v2'
           assert set(d['families_tested'])=={'DFR','ANS','FLS','CHS'}
+          assert d['status_counts'].get('family_consistent_first_pass')==4
           for fam,x in d['family_results'].items():
               assert x['candidate'].startswith('CNIP_'+fam+'_')
+              assert x['tree_interpretation']=='unrooted_ml_tree_patristic_distance_only'
               assert x['positive_references'] and x['negative_references']
-              assert x['reciprocal_arabidopsis']['reported_hits'] > 0
-              assert x['first_pass_status']
+              assert x['nearest_positive_closer_than_nearest_negative'] is True
+              assert x['mean_positive_distance_smaller_than_mean_negative'] is True
+              assert x['reciprocal_arabidopsis']['expected_family_keyword_match'] is True
+              assert x['first_pass_status']=='family_consistent_first_pass'
           assert 'not one-to-one orthology' in d['claim_boundary']
           print(json.dumps(d,indent=2,ensure_ascii=False))
           PY
       - name: Match frozen result when present
         run: |
-          if [[ -f data/evidence/cnipponicum_flavonoid_family_validation_v1.json ]]; then
-            cmp /tmp/cnipponicum_flavonoid_family_validation_v1.json data/evidence/cnipponicum_flavonoid_family_validation_v1.json
+          if [[ -f data/evidence/cnipponicum_flavonoid_family_validation_v2.json ]]; then
+            cmp /tmp/cnipponicum_flavonoid_family_validation_v2.json data/evidence/cnipponicum_flavonoid_family_validation_v2.json
           fi
       - uses: actions/upload-artifact@v4
         with:
-          name: cnipponicum-flavonoid-family-validation-${{ github.run_id }}
+          name: cnipponicum-flavonoid-family-validation-v2-${{ github.run_id }}
           path: |
             /tmp/family_validation/input_manifest.json
             /tmp/family_validation/*.aln.faa
@@ -122,6 +126,6 @@ jobs:
             /tmp/family_validation/*.iqtree
             /tmp/family_validation/reciprocal_arabidopsis.tsv
             /tmp/arabidopsis_reviewed_reference_proteome.sha256
-            /tmp/cnipponicum_flavonoid_family_validation_v1.json
+            /tmp/cnipponicum_flavonoid_family_validation_v2.json
           if-no-files-found: error
           retention-days: 90
