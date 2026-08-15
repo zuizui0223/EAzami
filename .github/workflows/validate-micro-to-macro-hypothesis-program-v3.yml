@@ -1,0 +1,73 @@
+name: Validate micro-to-macro hypothesis program v3
+
+on:
+  pull_request:
+    paths:
+      - "analysis/extend_micro_to_macro_with_molecular_resolution_v3.py"
+      - "data/evidence/micro_to_macro_evidence_matrix_v3.csv"
+      - "data/evidence/micro_to_macro_evidence_synthesis_v2.json"
+      - "data/evidence/hmm2_population_aware_transition_test_v1.json"
+      - "data/evidence/cirsium_flavonoid_molecular_bridge_summary_v1.json"
+      - "data/evidence/cnipponicum_flavonoid_annotation_term_audit_v1.json"
+      - "data/evidence/cnipponicum_flavonoid_blast_candidate_summary_v1.json"
+      - "data/evidence/micro_to_macro_evidence_synthesis_v3.json"
+      - "docs/ideas/MICRO_TO_MACRO_HYPOTHESIS_PROGRAM_V3_2026-08-15.md"
+      - ".github/workflows/validate-micro-to-macro-hypothesis-program-v3.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build v3 synthesis
+        run: |
+          python -m py_compile analysis/extend_micro_to_macro_with_molecular_resolution_v3.py
+          python analysis/extend_micro_to_macro_with_molecular_resolution_v3.py \
+            --output /tmp/micro_to_macro_evidence_synthesis_v3.json
+      - name: Assert evidence and hypothesis boundaries
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/micro_to_macro_evidence_synthesis_v3.json'))
+          assert d['contract_version']=='micro_to_macro_evidence_synthesis_v3'
+          assert d['evidence_matrix']['rows']==14
+          assert d['evidence_matrix']['class_counts']['published_conclusion']==4
+          assert d['evidence_matrix']['class_counts']['EAzami_reanalysis']==9
+          assert d['evidence_matrix']['class_counts']['own_preliminary_result']==1
+          assert set(d['EAzami_hypotheses'])=={'HMM1','HMM2','HMM3','HMM4','HMM5','HMM6'}
+          p7=d['EAzami_discovered_problems']['P_MICRO_MACRO_07_annotation_to_orthology_resolution_ladder']
+          assert p7['reported_panel_stage']['directly_reported_in_named_targeted_panels']==0
+          assert p7['distributed_genome_annotation_stage']['functional_term_hit_rows']==0
+          assert p7['distributed_genome_annotation_stage']['positive_controls_also_zero'] is True
+          assert p7['sequence_homology_stage']['reviewed_queries']==11
+          assert p7['sequence_homology_stage']['queries_with_candidate_hit']==11
+          assert p7['sequence_homology_stage']['DFR_top_candidate']=='Cn_g13756.t1'
+          assert p7['sequence_homology_stage']['ANS_top_candidate']=='Cn_g8152.t1'
+          assert d['HMM2_staged_test']['state_compression_systems']==[4,4]
+          assert d['HMM2_staged_test']['transition_count_testable_systems']==[1,4]
+          assert d['HMM2_staged_test']['takaoense_minimum_transition_change']==[1,2]
+          assert d['HMM2_staged_test']['transition_rate_testable_systems']==[0,4]
+          assert abs(d['HMM2_staged_test']['morph_genotype_linkage_fraction']-0.25)<1e-12
+          assert 'plausibility_strengthened' in d['hypothesis_evidence_status']['HMM1']['status']
+          assert 'cross_lineage_convergence_unresolved' in d['hypothesis_evidence_status']['HMM5']['status']
+          assert 'does not change HMM1-HMM6 provenance' in d['claim_boundary']
+          print(json.dumps(d,indent=2,ensure_ascii=False))
+          PY
+      - name: Match frozen v3 result when present
+        run: |
+          if [[ -f data/evidence/micro_to_macro_evidence_synthesis_v3.json ]]; then
+            cmp /tmp/micro_to_macro_evidence_synthesis_v3.json data/evidence/micro_to_macro_evidence_synthesis_v3.json
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: micro-to-macro-evidence-synthesis-v3-${{ github.run_id }}
+          path: /tmp/micro_to_macro_evidence_synthesis_v3.json
+          if-no-files-found: error
+          retention-days: 90
