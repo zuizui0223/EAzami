@@ -1,0 +1,59 @@
+name: Validate micro-to-macro hypothesis program v2
+
+on:
+  pull_request:
+    paths:
+      - "analysis/extend_micro_to_macro_with_own_preliminary_v2.py"
+      - "data/evidence/micro_to_macro_evidence_matrix_v2.csv"
+      - "data/evidence/azami_ch1_macro_trait_snapshot_v1.json"
+      - "data/evidence/micro_to_macro_evidence_synthesis_v1.json"
+      - "docs/ideas/MICRO_TO_MACRO_HYPOTHESIS_PROGRAM_V2_2026-08-15.md"
+      - ".github/workflows/validate-micro-to-macro-hypothesis-program-v2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build v2 cross-scale synthesis
+        run: |
+          python -m py_compile analysis/extend_micro_to_macro_with_own_preliminary_v2.py
+          python analysis/extend_micro_to_macro_with_own_preliminary_v2.py \
+            --output /tmp/micro_to_macro_evidence_synthesis_v2.json
+      - name: Assert own-preliminary and HMM6 boundaries
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/micro_to_macro_evidence_synthesis_v2.json'))
+          assert d['contract_version']=='micro_to_macro_evidence_synthesis_v2'
+          assert d['evidence_matrix']['rows']==10
+          cc=d['evidence_matrix']['class_counts']
+          assert cc['published_conclusion']==4
+          assert cc['EAzami_reanalysis']==5
+          assert cc['own_preliminary_result']==1
+          p=d['own_preliminary_macro_trait_result']
+          assert p['n_taxa']==216 and p['n_observations']==3725 and p['n_heads']==6626
+          assert abs(p['noise_adjusted_rho'] - (-0.05686662783925451)) < 1e-12
+          assert abs(p['hierarchical_p'] - 0.7320248138283185) < 1e-12
+          assert 'P_MACRO_06_species_mean_scale_compression' in d['EAzami_discovered_problems']
+          assert set(d['EAzami_hypotheses'])=={'HMM1','HMM2','HMM3','HMM4','HMM5','HMM6'}
+          h=d['EAzami_hypotheses']['HMM6']
+          assert h['derived_from']==['P_MACRO_03_species_tip_state_aggregation','P_MACRO_06_species_mean_scale_compression']
+          assert h['prediction'] and h['falsifier']
+          forbidden=set(p['forbidden_inference'])
+          assert {'genetic variance','phenotypic plasticity','local adaptation','evolutionary rate'} <= forbidden
+          print(json.dumps(d,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: micro-to-macro-evidence-synthesis-v2-${{ github.run_id }}
+          path: /tmp/micro_to_macro_evidence_synthesis_v2.json
+          if-no-files-found: error
+          retention-days: 90
