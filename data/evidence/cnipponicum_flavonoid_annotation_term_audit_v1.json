@@ -34,19 +34,58 @@
     "FLS": 0
   },
   "term_hit_counts_by_source": {
-    "ANS": {"protein_fasta_header": 0, "gff3": 0},
-    "UFGT": {"protein_fasta_header": 0, "gff3": 0},
-    "MYB_generic": {"protein_fasta_header": 0, "gff3": 0},
-    "bHLH_generic": {"protein_fasta_header": 0, "gff3": 0},
-    "WD40_generic": {"protein_fasta_header": 0, "gff3": 0},
-    "GST_generic": {"protein_fasta_header": 0, "gff3": 0},
-    "MATE_generic": {"protein_fasta_header": 0, "gff3": 0},
-    "DFR": {"protein_fasta_header": 0, "gff3": 0},
-    "CHS": {"protein_fasta_header": 0, "gff3": 0},
-    "CHI": {"protein_fasta_header": 0, "gff3": 0},
-    "F3H": {"protein_fasta_header": 0, "gff3": 0},
-    "F3primeH": {"protein_fasta_header": 0, "gff3": 0},
-    "FLS": {"protein_fasta_header": 0, "gff3": 0}
+    "ANS": {
+      "protein_fasta_header": 0,
+      "gff3": 0
+    },
+    "UFGT": {
+      "protein_fasta_header": 0,
+      "gff3": 0
+    },
+    "MYB_generic": {
+      "protein_fasta_header": 0,
+      "gff3": 0
+    },
+    "bHLH_generic": {
+      "protein_fasta_header": 0,
+      "gff3": 0
+    },
+    "WD40_generic": {
+      "protein_fasta_header": 0,
+      "gff3": 0
+    },
+    "GST_generic": {
+      "protein_fasta_header": 0,
+      "gff3": 0
+    },
+    "MATE_generic": {
+      "protein_fasta_header": 0,
+      "gff3": 0
+    },
+    "DFR": {
+      "protein_fasta_header": 0,
+      "gff3": 0
+    },
+    "CHS": {
+      "protein_fasta_header": 0,
+      "gff3": 0
+    },
+    "CHI": {
+      "protein_fasta_header": 0,
+      "gff3": 0
+    },
+    "F3H": {
+      "protein_fasta_header": 0,
+      "gff3": 0
+    },
+    "F3primeH": {
+      "protein_fasta_header": 0,
+      "gff3": 0
+    },
+    "FLS": {
+      "protein_fasta_header": 0,
+      "gff3": 0
+    }
   },
   "total_hit_rows": 0,
   "interpretation_rule": "A text hit is a candidate annotation only, not an orthology assignment. Zero text hits means the public FASTA/GFF text does not expose the term; it is never evidence of genomic absence.",
