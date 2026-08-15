@@ -1,0 +1,26 @@
+{
+  "contract_version": "cnipponicum_flavonoid_blast_candidate_retrieval_validation_v1",
+  "query_manifest": "data/evidence/cnipponicum_flavonoid_reference_queries_v1.csv",
+  "query_materialization_path": "data/evidence/cnipponicum_flavonoid_reference_queries_v1.json",
+  "query_materialization_sha256": "041e27f8ea607082353ebece63111ce621604bbb43239053e637108eecf7dd28",
+  "result_path": "data/evidence/cnipponicum_flavonoid_blast_candidate_summary_v1.json",
+  "result_sha256": "ba12ea20c4fb60389be56f7c149bf8f215773f8bd7faa12aa5697e5965beafa6",
+  "compact_candidate_ledger": "data/evidence/cnipponicum_flavonoid_top_candidates_v1.csv",
+  "workflow_run": 31867697547,
+  "workflow_name": "Retrieve C. nipponicum flavonoid sequence candidates",
+  "artifact_id": 9242504877,
+  "artifact_name": "cnipponicum-flavonoid-sequence-candidates-31867697547",
+  "artifact_zip_sha256": "9554045d9e497e12b7909078cee5bb4c07cae29e3298d952d3c72994abadc5c8",
+  "validation_state": "success",
+  "query_byte_equality": true,
+  "summary_byte_equality": true,
+  "compact_candidate_ledger_byte_equality": true,
+  "retrieved_queries": "11/11",
+  "priority_candidates": {
+    "DFR": "Cn_g13756.t1",
+    "ANS_LDOX": "Cn_g8152.t1",
+    "FLS": "Cn_g15577.t1",
+    "CHS_top": "Cn_g13733.t1"
+  },
+  "claim_boundary": "These are frozen sequence-homology candidates only. Exact orthology, biochemical function and causal involvement in flower-colour evolution require downstream family/domain and W/C-lineage validation."
+}
