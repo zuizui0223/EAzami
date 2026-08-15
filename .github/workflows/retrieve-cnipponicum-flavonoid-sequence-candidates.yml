@@ -99,7 +99,7 @@ jobs:
           d=json.load(open('/tmp/cnipponicum_flavonoid_blast_candidate_summary_v1.json'))
           fields=['query_id','gene_family','module','candidate_class','reference_accession','top_subject','top_pident','top_qcov','top_scov','top_evalue','top_bitscore','second_to_top_bitscore_ratio','candidates_within_80pct_top_bitscore']
           with open('/tmp/cnipponicum_flavonoid_top_candidates_v1.csv','w',encoding='utf-8',newline='') as h:
-              w=csv.DictWriter(h,fieldnames=fields);w.writeheader()
+              w=csv.DictWriter(h,fieldnames=fields,lineterminator='\n');w.writeheader()
               for q,v in d['queries'].items():
                   w.writerow({f:(q if f=='query_id' else v.get(f,'')) for f in fields})
           PY
