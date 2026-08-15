@@ -1,0 +1,62 @@
+name: Audit C. nipponicum flavonoid annotation terms
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_cnipponicum_flavonoid_annotation_terms.py"
+      - "data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json"
+      - ".github/workflows/audit-cnipponicum-flavonoid-annotation-terms.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download frozen public protein and annotation files
+        run: |
+          python - <<'PY'
+          import hashlib, json, pathlib, urllib.request
+          c=json.load(open('data/evidence/cirsium_nipponicum_public_genome_comp1061_contract_v1.json'))
+          for key,out in [('protein','/tmp/C.nipponicum_aa.fa'),('annotation','/tmp/C.nipponicum.gff3')]:
+              x=c['public_files'][key]
+              urllib.request.urlretrieve(x['download_url'],out)
+              md5=hashlib.md5(pathlib.Path(out).read_bytes()).hexdigest()
+              if md5 != x['md5']:
+                  raise SystemExit(f'{key} MD5 mismatch: {md5}')
+              print(key, pathlib.Path(out).stat().st_size, md5)
+          PY
+      - name: Audit annotation terms
+        run: |
+          python -m py_compile analysis/audit_cnipponicum_flavonoid_annotation_terms.py
+          python analysis/audit_cnipponicum_flavonoid_annotation_terms.py \
+            --protein /tmp/C.nipponicum_aa.fa \
+            --gff /tmp/C.nipponicum.gff3 \
+            --summary /tmp/cnipponicum_flavonoid_annotation_term_audit_v1.json \
+            --hits /tmp/cnipponicum_flavonoid_annotation_term_hits_v1.csv
+      - name: Assert non-overclaiming contract
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/cnipponicum_flavonoid_annotation_term_audit_v1.json'))
+          assert d['contract_version']=='cnipponicum_flavonoid_annotation_term_audit_v1'
+          assert d['protein_headers_scanned'] > 10000
+          assert d['gff_records_scanned'] > 10000
+          assert 'never evidence of genomic absence' in d['interpretation_rule']
+          assert d['next_gate']
+          print(json.dumps(d,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cnipponicum-flavonoid-annotation-term-audit-${{ github.run_id }}
+          path: |
+            /tmp/cnipponicum_flavonoid_annotation_term_audit_v1.json
+            /tmp/cnipponicum_flavonoid_annotation_term_hits_v1.csv
+          if-no-files-found: error
+          retention-days: 90
