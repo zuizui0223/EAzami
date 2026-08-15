@@ -5,6 +5,8 @@ on:
     paths:
       - "analysis/summarize_micro_to_macro_evidence.py"
       - "data/evidence/micro_to_macro_evidence_matrix_v1.csv"
+      - "data/evidence/micro_to_macro_evidence_synthesis_v1.json"
+      - "data/evidence/micro_to_macro_evidence_synthesis_v1.validation.json"
       - "data/evidence/cirsium_flower_colour_atlas_v0_2.csv"
       - "data/evidence/japan_cirsium_origin_meta_analysis_v1.json"
       - "analysis/chang2026_takaoense_topology_robustness_summary.json"
@@ -52,6 +54,20 @@ jobs:
               assert h['prediction'] and h['falsifier'] and h['derived_from']
           assert 'future-work' in d['claim_boundary'] or 'future work' in d['claim_boundary']
           print(json.dumps(d,indent=2,ensure_ascii=False))
+          PY
+      - name: Require regenerated result to equal frozen evidence
+        run: |
+          cmp /tmp/micro_to_macro_evidence_synthesis_v1.json \
+            data/evidence/micro_to_macro_evidence_synthesis_v1.json
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          result=Path('data/evidence/micro_to_macro_evidence_synthesis_v1.json')
+          manifest=json.loads(Path('data/evidence/micro_to_macro_evidence_synthesis_v1.validation.json').read_text())
+          digest=hashlib.sha256(result.read_bytes()).hexdigest()
+          assert digest == manifest['result_sha256'], (digest, manifest['result_sha256'])
+          assert manifest['validation_state'] == 'success'
+          print('frozen_result_sha256='+digest)
           PY
       - uses: actions/upload-artifact@v4
         with:
