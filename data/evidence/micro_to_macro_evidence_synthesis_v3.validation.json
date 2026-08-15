@@ -1,0 +1,13 @@
+{
+  "contract_version": "micro_to_macro_evidence_synthesis_validation_v3",
+  "result_path": "data/evidence/micro_to_macro_evidence_synthesis_v3.json",
+  "result_sha256": "bc87d281dde0d5566c861a64cf6f3fc5d90e033eb0a9f733ec44a514c1ff23d3",
+  "workflow_run": 31867603726,
+  "workflow_name": "Validate micro-to-macro hypothesis program v3",
+  "artifact_id": 9242473366,
+  "artifact_name": "micro-to-macro-evidence-synthesis-v3-31867603726",
+  "artifact_zip_sha256": "6c3d9c2844a3483bea4ed773d6408f46493edc834b75102c240f73d63727431a",
+  "validation_state": "success",
+  "byte_equality_to_frozen_result": true,
+  "note": "v3 preserves HMM1-HMM6 provenance and adds P7 as a molecular evidence-resolution problem: named targeted panel omission, distributed genome annotation labels, sequence homology, orthology/function, and colour-lineage causation remain distinct evidence levels."
+}
