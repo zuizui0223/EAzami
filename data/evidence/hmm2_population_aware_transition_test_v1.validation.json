@@ -1,0 +1,13 @@
+{
+  "contract_version": "hmm2_population_aware_transition_test_validation_v1",
+  "result_path": "data/evidence/hmm2_population_aware_transition_test_v1.json",
+  "result_sha256": "145354b64049a7df12c467f93ddd65b5ff47557844289e5827d3b9e8384cb53b",
+  "workflow_run": 31866304726,
+  "workflow_name": "Validate HMM2 population-aware transition test",
+  "artifact_id": 9242127633,
+  "artifact_name": "hmm2-population-aware-transition-test-31866304726",
+  "artifact_zip_sha256": "3946567ade1d257ef0c40dd8289036857a095fc1422ae9919911cfb3218316da",
+  "validation_state": "success",
+  "byte_equality_to_frozen_result": true,
+  "note": "The staged HMM2 result is partial support: state compression in 4/4 source-backed polymorphic systems, minimum-transition-count direction in 1/1 currently morph-linked system, and no replicated transition-rate test yet."
+}
