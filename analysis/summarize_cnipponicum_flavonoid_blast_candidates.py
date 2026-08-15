@@ -31,8 +31,10 @@ def read_hits(path: str):
             x["qseqid"] = x["qseqid"].split("|", 1)[0]
             for k in ["pident", "length", "qlen", "slen", "qstart", "qend", "sstart", "send", "evalue", "bitscore"]:
                 x[k] = float(x[k])
-            x["qcov"] = x["length"] / x["qlen"] if x["qlen"] else 0.0
-            x["scov"] = x["length"] / x["slen"] if x["slen"] else 0.0
+            qspan = abs(x["qend"] - x["qstart"]) + 1
+            sspan = abs(x["send"] - x["sstart"]) + 1
+            x["qcov"] = qspan / x["qlen"] if x["qlen"] else 0.0
+            x["scov"] = sspan / x["slen"] if x["slen"] else 0.0
             out.append(x)
     return out
 
@@ -138,6 +140,7 @@ def main() -> None:
             "evalue": 1e-5,
             "max_target_seqs": 20,
             "ranking": "bitscore desc, then evalue, then percent identity",
+            "coverage_definition": "aligned query/subject coordinate span divided by full query/subject length; BLAST alignment length is not used because it includes gaps",
         },
         "queries": summary_queries,
         "positive_control_and_enzyme_queries": controls,
