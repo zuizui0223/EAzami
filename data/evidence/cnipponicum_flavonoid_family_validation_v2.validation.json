@@ -1,0 +1,20 @@
+{
+  "contract_version": "cnipponicum_flavonoid_family_validation_validation_v2",
+  "result_path": "data/evidence/cnipponicum_flavonoid_family_validation_v2.json",
+  "result_sha256": "ef58f5c12a88d708c2001517822020f72aab77a8fa53892ada45feb490af7a60",
+  "workflow_run": 31868124522,
+  "workflow_name": "Validate C. nipponicum flavonoid family discrimination",
+  "artifact_id": 9242621026,
+  "artifact_name": "cnipponicum-flavonoid-family-validation-v2-31868124522",
+  "artifact_zip_sha256": "e804b8be5f11b35aacd558e1da7589715db1ef5a279fff7cac562d47469bedeb",
+  "validation_state": "success",
+  "families_consistent_first_pass": "4/4",
+  "decision_rule": "unrooted ML patristic distances to curated positive vs negative references plus expected-family reciprocal BLAST to the reviewed Arabidopsis proteome",
+  "priority_candidates": {
+    "DFR": "Cn_g13756.t1",
+    "ANS_LDOX": "Cn_g8152.t1",
+    "FLS": "Cn_g15577.t1",
+    "CHS_top": "Cn_g13733.t1"
+  },
+  "claim_boundary": "family_consistent_first_pass is screening evidence, not one-to-one orthology, biochemical function, or causal flower-colour mechanism."
+}
