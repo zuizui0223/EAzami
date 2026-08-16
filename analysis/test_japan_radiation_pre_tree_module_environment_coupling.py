@@ -14,11 +14,21 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from analysis.test_japan_radiation_pre_tree_trait_environment_coupling import (
-    ENV,
-    distance_matrix,
-    rank_correlation,
-)
+try:
+    from analysis.test_japan_radiation_pre_tree_trait_environment_coupling import (
+        ENV,
+        distance_matrix,
+        rank_correlation,
+    )
+except ModuleNotFoundError:
+    # Direct execution via ``python analysis/<script>.py`` puts ``analysis/``
+    # rather than the repository root on sys.path. Keep the same helpers
+    # available in both direct-script and package-import execution modes.
+    from test_japan_radiation_pre_tree_trait_environment_coupling import (
+        ENV,
+        distance_matrix,
+        rank_correlation,
+    )
 
 MODULES = {
     "orientation": ["orientation_angle_degrees_median_taxon_median"],
