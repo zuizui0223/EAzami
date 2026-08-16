@@ -1,10 +1,11 @@
-name: Build Japan-38 NMNS capitulum trait bridge
+name: Validate Japan-38 NMNS capitulum trait seed
 
 on:
   pull_request:
     paths:
       - "analysis/build_japan38_nmns_capitulum_trait_bridge.py"
       - "tests/test_build_japan38_nmns_capitulum_trait_bridge.py"
+      - "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv"
       - "data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv"
       - ".github/workflows/build-japan38-nmns-capitulum-trait-bridge.yml"
   workflow_dispatch:
@@ -13,7 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,42 +23,56 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: python -m pip install pandas requests lxml
-      - name: Compile and test
+      - name: Compile and test parser primitives
         run: |
           python -m py_compile analysis/build_japan38_nmns_capitulum_trait_bridge.py
           python -m unittest tests/test_build_japan38_nmns_capitulum_trait_bridge.py -v
-      - name: Build authority trait bridge
-        run: |
-          python analysis/build_japan38_nmns_capitulum_trait_bridge.py \
-            --japan38 data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv \
-            --out-dir nmns_bridge
-      - name: Validate conservative coverage
+      - name: Validate curated authority-state seed
         run: |
           python - <<'PY'
-          import json
           import pandas as pd
-          from pathlib import Path
-          summary = json.loads(Path("nmns_bridge/japan38_nmns_capitulum_trait_bridge_v1.json").read_text())
-          table = pd.read_csv("nmns_bridge/japan38_nmns_capitulum_trait_bridge_v1.csv")
-          meta = json.loads(Path("nmns_bridge/nmns_source_metadata.json").read_text())
-          assert summary["n_paper_concepts"] == 38
-          assert len(table) == 38
-          assert meta["n_source_rows"] >= 100
-          assert summary["n_authority_matched_concepts"] >= 20
-          assert summary["n_orientation_states_recovered"] >= 15
-          assert table["paper_japan_member_id"].nunique() == 38
-          # infraspecific paper concepts must never be silently matched to a broad species row
-          bad = table[
-              table["paper_normalized_concept"].str.contains(r"\bvar\.|\bsubsp\.|\bssp\.|\bf\.", regex=True)
-              & table["authority_match_status"].eq("unique_binomial_authority_match")
-          ]
-          assert bad.empty
-          print(summary)
-          print(meta)
+
+          seed = pd.read_csv('data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv', dtype=str, keep_default_na=False)
+          membership = pd.read_csv('data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv', dtype=str, keep_default_na=False)
+          if seed['paper_japan_member_id'].duplicated().any():
+              raise SystemExit('Duplicate Japan-38 concept in authority seed')
+          if not set(seed['paper_japan_member_id']).issubset(set(membership['paper_japan_member_id'])):
+              raise SystemExit('Authority seed contains non-Japan38 concept')
+          if len(seed) < 20:
+              raise SystemExit('Authority seed unexpectedly sparse')
+          if seed['source_url'].eq('').any():
+              raise SystemExit('Every authority state requires a source URL')
+          if (~seed['authority_match_status'].eq('exact_authority_concept_match')).any():
+              raise SystemExit('Curated primary seed must contain exact authority concepts only')
+          known_orientation = ~seed['orientation_state'].isin(['unknown', 'source_conflict_index_downward_detail_erect'])
+          if known_orientation.sum() < 15:
+              raise SystemExit('Too few source-backed orientation states')
+          # Keep source conflict explicit instead of choosing a direction post hoc.
+          maritimum = seed.loc[seed['paper_japan_member_id'].eq('JPN_17')].iloc[0]
+          if not maritimum['orientation_state'].startswith('source_conflict_'):
+              raise SystemExit('C. maritimum source conflict was silently resolved')
+          # Broad C. nipponicum must not be reused for its paper varieties.
+          if set(seed.loc[seed['paper_taxon_concept'].str.contains('nipponicum var.', regex=False), 'paper_japan_member_id']):
+              raise SystemExit('Broad C. nipponicum must not substitute for paper varieties')
+          print({
+              'seed_rows': len(seed),
+              'known_orientation': int(known_orientation.sum()),
+              'known_phyllary': int((~seed['phyllary_posture'].eq('unknown')).sum()),
+              'known_stickiness': int((~seed['stickiness_state'].eq('unknown')).sum()),
+          })
           PY
+      - name: Record live-source limitation
+        run: |
+          cat > nmns_live_source_note.txt <<'EOF'
+          GitHub-hosted requests to the NMNS legacy list/detail pages do not expose the rendered database table reliably.
+          CI therefore validates a source-URL-backed derived-state seed rather than scraping prose live.
+          The live parser remains diagnostic code; source prose is not vendored into the repository.
+          EOF
       - uses: actions/upload-artifact@v4
         with:
-          name: japan38-nmns-capitulum-trait-bridge-${{ github.run_id }}
-          path: nmns_bridge
+          name: japan38-nmns-capitulum-trait-seed-${{ github.run_id }}
+          path: |
+            data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv
+            nmns_live_source_note.txt
           if-no-files-found: error
           retention-days: 90
