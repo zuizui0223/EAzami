@@ -10,7 +10,8 @@
         "within_assigned_species_image_variation",
         "spatial_environment_trait_association",
         "among_species_trait_structure",
-        "historical_sensitivity_only"
+        "historical_sensitivity_only",
+        "exploratory_involucre_and_spine_image_proxies"
       ],
       "forbidden_promotions": [
         "resolved_species_tree",
@@ -19,7 +20,8 @@
         "pollinator_causation",
         "herbivore_causation",
         "local_adaptation",
-        "molecular_regain_mechanism"
+        "molecular_regain_mechanism",
+        "equating_image_proxy_with_botanical_phyllary_state_without_validation"
       ],
       "status": "macro_screen_established_submission_gates_remain"
     },
@@ -36,6 +38,7 @@
         "repeated_white_coloured_transitions",
         "orientation_transition_history",
         "continuous_shape_history",
+        "phylogenetic_history_of_existing_involucre_spine_proxies",
         "modular_vs_correlated_capitulum_evolution"
       ],
       "status": "execution_ready_heavy_nuclear_tree_not_yet_run"
@@ -62,13 +65,33 @@
     }
   },
   "trait_modules": {
-    "current": ["orientation", "visible_colour", "outline_shape"],
-    "next_generation": [
-      "phyllary_angle_spreading_recurvature",
-      "spine_length_and_orientation",
+    "chapter1_primary": [
+      "orientation",
+      "visible_colour",
+      "outline_shape"
+    ],
+    "chapter1_auxiliary_exploratory_already_analysed": [
+      "involucre_projection_roughness",
+      "involucre_spread_fraction",
+      "spine_peak_count_proxy",
+      "spine_relative_length_max_proxy"
+    ],
+    "downstream_refinement_or_new": [
+      "botanically_validated_phyllary_spreading_recurvature_angle",
+      "actual_spine_length_orientation_and_stiffness",
       "involucral_stickiness_or_glandularity",
       "capitulum_size_and_display_architecture"
     ]
+  },
+  "proxy_rules": {
+    "involucre_spine_chapter1_status": "already_analysed_as_exploratory_image_geometry_proxies",
+    "do_not_relabel_as": [
+      "direct_phyllary_angle",
+      "direct_spine_length",
+      "direct_spine_orientation",
+      "direct_defence_measure"
+    ],
+    "next_step": "map_existing_proxies_to_accepted_nuclear_tree_then_validate_against_direct_botanical_measurements"
   },
   "trait_bridge_required_fields": [
     "source_taxon_name",
@@ -82,6 +105,7 @@
     "n_populations_or_spatial_units",
     "evidence_source",
     "assessability_status",
+    "proxy_status",
     "phylogeny_tip_match_status",
     "claim_boundary"
   ],
@@ -94,10 +118,11 @@
   "current_work_order": [
     "keep_azami_chapter1_on_submission_and_validity_gates",
     "execute_eazami_maximum_public_nuclear_tree",
-    "build_cross_repo_trait_tip_bridge",
+    "build_cross_repo_trait_tip_bridge_including_existing_auxiliary_involucre_spine_proxies",
     "freeze_supported_topology_ensemble_and_taxon_crosswalk",
-    "run_colour_then_orientation_then_shape_ancestral_state_analysis",
-    "build_next_generation_phyllary_spine_stickiness_ontology",
+    "run_colour_then_orientation_then_shape_then_involucre_spine_history",
+    "validate_proxy_to_botanical_phyllary_spine_correspondence",
+    "add_genuinely_new_stickiness_or_other_traits_only_after_assessability_work",
     "promote_high_information_transitions_to_population_and_fitness_tests"
   ],
   "stop_rules": [
@@ -105,6 +130,7 @@
     "no_definitive_asr_from_azami_grafted_historical_tree",
     "no_adaptation_from_macro_correlation_alone",
     "no_pathway_loss_from_missing_annotation_alone",
-    "no_new_chapter1_trait_expansion_unless_required_for_validity"
+    "do_not_call_existing_involucre_spine_proxy_layer_unanalysed",
+    "do_not_equate_image_proxy_with_botanical_state_without_validation"
   ]
 }
