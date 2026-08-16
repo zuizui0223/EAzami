@@ -1,0 +1,58 @@
+{
+  "contract_version": "azami_eazami_trait_bridge_coverage_summary_v1",
+  "date": "2026-08-16",
+  "azami_source": {
+    "repo": "zuizui0223/azami",
+    "branch": "agent/macro-to-micro-handoff-20260816",
+    "head_sha": "0ea26b04bdd0e9c7e18f4f36b559895965eea691",
+    "workflow_run": 31945648323,
+    "artifact_id": 9263201963,
+    "artifact_digest": "sha256:855de30e6d164d4f70016e71668cc22d5c05c9c6a2136c457a4113167b8e8d1c",
+    "handoff_csv_sha256": "7ba3bae5916c857011983982691ff1f24fa3d3f12fca6ca4bfd0fdd299d3e298",
+    "n_taxa": 216,
+    "n_taxa_with_colour": 215,
+    "n_taxa_with_shape": 215,
+    "n_taxa_with_orientation": 214,
+    "n_taxa_with_auxiliary_involucre_spine": 210
+  },
+  "exact_nuclear_name_overlap": {
+    "moreyra2025_exact_azami_taxa": 111,
+    "chang2025_2026_additional_exact_azami_taxa": 5,
+    "union_exact_nuclear_matched_azami_taxa": 116,
+    "union_exact_fraction_of_azami_taxa": 0.5370370370370371,
+    "chang_additional_taxa": [
+      "Cirsium brevicaule",
+      "Cirsium irumtiense",
+      "Cirsium kawakamii",
+      "Cirsium morii",
+      "Cirsium tatakaense"
+    ]
+  },
+  "japan38_trait_coverage": {
+    "paper_taxon_concepts": 38,
+    "concepts_with_any_azami_binomial_trait_coverage": 11,
+    "concepts_with_exact_azami_taxon_concept_coverage": 10,
+    "concepts_without_azami_binomial_trait_coverage": 27,
+    "covered_binomial_taxa": [
+      "Cirsium aomorense",
+      "Cirsium japonicum",
+      "Cirsium kamtschaticum",
+      "Cirsium lineare",
+      "Cirsium maritimum",
+      "Cirsium oligophyllum",
+      "Cirsium pendulum",
+      "Cirsium sieboldii",
+      "Cirsium suzukaense",
+      "Cirsium verutum",
+      "Cirsium yezoense"
+    ],
+    "important_boundary": "Cirsium japonicum var. horridum has only broad Cirsium japonicum image-trait coverage, so it is retained as binomial-level sensitivity and not an exact infraspecific trait assignment."
+  },
+  "new_bottleneck": {
+    "finding": "The global Azami trait atlas can be linked directly to more than half of its taxa in current nuclear resources, but the Japanese 38-concept radiation is much more sparsely covered by image traits.",
+    "consequence": "A radiation-wide Japanese trait-rate analysis cannot rely on the current Azami Chapter 1 trait atlas alone. Missing Japanese trait data are a trait-coverage gap, not a reason to resequence already represented species for phylogenetic placement.",
+    "next_public_data_action": "Before new field sampling, search public images/herbarium/flora evidence specifically for the 27 Japan-38 concepts lacking Azami binomial coverage and assess whether orientation/colour/outline/involucre proxies can be recovered under the existing measurement ontology.",
+    "tree_dependency": "Formal trait-rate and ancestral-state tests still wait for the accepted EAzami nuclear topology ensemble and branch lengths."
+  },
+  "claim_boundary": "Exact normalized taxon-name overlap is a coverage audit only. It does not establish voucher equivalence, population phenotype identity, direct ancestry, evolutionary rate, adaptation or an ancestral state."
+}
