@@ -22,6 +22,12 @@ ENV = [
     "env_chelsa_bio15_species_median",
 ]
 
+SOURCE = {
+    "azami_integrated_source_run": 29089276791,
+    "azami_integrated_source_artifact_id": 8226070460,
+    "azami_integrated_source_artifact_digest": "sha256:398561508a534ca8108412dbc0944d82b1a54f8007b643e53e16aa8edf9eead9",
+}
+
 
 def distance(a: pd.Series, b: pd.Series) -> float:
     return float(np.linalg.norm(a.to_numpy(dtype=float)-b.to_numpy(dtype=float)))
@@ -80,6 +86,7 @@ def build(frame: pd.DataFrame, secondary_taxon: str="Cirsium lineare") -> dict:
             "environmental-position space. The largest dominant-radiation leave-one-out displacement and "
             "largest within-dominant pairwise distance exceed the corresponding secondary-history distances."
         ),
+        "source": SOURCE,
         "claim_boundary":(
             "Species medians from the Azami public-image occurrence context are not complete niche distributions. "
             "C. lineare has only three balanced observations. This result does not estimate niche evolutionary rate, "
