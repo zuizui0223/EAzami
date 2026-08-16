@@ -1,0 +1,137 @@
+{
+  "contract_version": "japan_radiation_pretree_meta_synthesis_v1",
+  "date": "2026-08-16",
+  "scope": "existing_public_and_authority_data_before_accepted_294_296_branch_length_tree",
+  "radiation_context": {
+    "japanese_paper_taxon_concepts": 38,
+    "dominant_radiation_taxa": 36,
+    "dominant_fraction": 0.9473684210526315,
+    "sampled_exceptions": 2,
+    "dominant_to_all_exceptions_sampled_richness_ratio": 18.0,
+    "status": "strong_descriptive_radiation_success_asymmetry_not_age_corrected_rate"
+  },
+  "coverage": {
+    "japan38_distinct_species_binomials": 36,
+    "azami_exhaustive_trait_binomials": 18,
+    "japan38_paper_concepts_with_binomial_trait_coverage": 20,
+    "authority_categorical_trait_concepts": 22,
+    "source_backed_cytotype_concepts": 9,
+    "quantitative_pretree_comparison_taxa": 9
+  },
+  "phenotype_disparity": {
+    "secondary_comparator": "Cirsium lineare",
+    "lineare_distance_to_dominant_centroid": 4.842008140294934,
+    "largest_dominant_leave_one_out_taxon": "Cirsium sieboldii",
+    "largest_dominant_leave_one_out_distance": 8.103302838178129,
+    "largest_within_dominant_pairwise_distance": 6.75093401641527,
+    "largest_lineare_to_dominant_pairwise_distance": 6.275072558660394,
+    "result": "current capitulum phenotype distance is not monotonic with colonization-history separation"
+  },
+  "environment_disparity": {
+    "secondary_comparator": "Cirsium lineare",
+    "lineare_balanced_environment_observations": 3,
+    "lineare_distance_to_dominant_centroid": 1.187668115058642,
+    "largest_dominant_leave_one_out_taxon": "Cirsium pendulum",
+    "largest_dominant_leave_one_out_distance": 6.3577592046410425,
+    "largest_within_dominant_pairwise_distance": 5.623215171255535,
+    "largest_lineare_to_dominant_pairwise_distance": 3.7194741309862804,
+    "result": "current four-variable environment position is not monotonic with colonization-history separation"
+  },
+  "trait_environment_coupling": {
+    "n_taxa": 9,
+    "n_pairs": 36,
+    "all_trait_axes_spearman_rho": -0.21544401544401542,
+    "positive_coupling_permutation_p": 0.7318,
+    "two_sided_permutation_p": 0.4916,
+    "leave_one_taxon_out_all_negative": true,
+    "module_rho": {
+      "orientation": -0.012097812097812096,
+      "colour": -0.003346203346203347,
+      "shape": -0.2808236808236808
+    },
+    "module_two_sided_permutation_p": {
+      "orientation": 0.967,
+      "colour": 0.9873,
+      "shape": 0.3134
+    },
+    "shape_leave_one_taxon_out_all_negative": true,
+    "result": "no positive broad-current-climate distance coupling is detected for the combined capitulum trait space or any module in the current subset"
+  },
+  "cytotype_trait_overlap": {
+    "dominant_radiation_cytotype_concepts": 8,
+    "dominant_ploidy_counts": {"2x": 5, "4x": 2, "6x": 1},
+    "upward_or_ascending_observed_ploidy_levels": [2, 4, 6],
+    "diploid_orientation_states": ["downward_or_nodding", "upward_or_erect"],
+    "result": "current orientation states are not deterministically mapped to ploidy class"
+  },
+  "authority_module_combinations": {
+    "dominant_seed_concepts": 20,
+    "secondary_seed_concepts": 2,
+    "dominant_orientation_counts": {
+      "downward_or_nodding": 6,
+      "upward_or_ascending": 1,
+      "upward_or_erect": 10
+    },
+    "dominant_known_stickiness_counts": {
+      "nonsticky_or_nearly_nonsticky": 5,
+      "sticky": 5
+    },
+    "dominant_orientation_stickiness_combinations": 4,
+    "secondary_orientation_stickiness_combinations": 2,
+    "secondary_result": "both secondary comparators are upward/erect but one is sticky and one non-sticky",
+    "result": "colonization-history class does not correspond to one observed capitulum-state syndrome"
+  },
+  "simple_models_weakened_before_tree": [
+    {
+      "model": "deeper_or_separate_colonization_history_implies_greater_current_capitulum_distance",
+      "status": "weakened_by_current_subset"
+    },
+    {
+      "model": "greater_broad_current_climate_distance_implies_greater_capitulum_distance",
+      "status": "not_supported_in_current_subset"
+    },
+    {
+      "model": "ploidy_class_deterministically_sets_capitulum_orientation",
+      "status": "inconsistent_with_source_backed_panel"
+    },
+    {
+      "model": "each_colonization_history_has_one_capitulum_state_syndrome",
+      "status": "inconsistent_with_source_backed_panel"
+    }
+  ],
+  "live_explanations_after_pretree_meta": [
+    "rapid_modular_trait_change_within_the_dominant_radiation",
+    "biotic_interaction_axes_not_captured_by_four_broad_CHELSA_variables",
+    "fine_scale_or_unmeasured_ecological_axes",
+    "standing_ancestral_variation_and_incomplete_lineage_sorting",
+    "introgression_or_reticulation_reusing_existing_variants",
+    "regulatory_reuse_of_retained_developmental_or_pigment_pathways",
+    "historical_contingency_and_trait_specific_constraints"
+  ],
+  "next_public_data_tests_after_accepted_tree": [
+    "branch_scaled_trait_disparity_and_rate_comparison_with_topology_uncertainty",
+    "full_occurrence_niche_divergence_not_species_median_environment_positions",
+    "gene_tree_concordance_discordance_and_reduced_network_metrics",
+    "cytotype_and_genome_size_transition_mapping_where_source_backed",
+    "population_aware_colour_orientation_and_involucre_state_history",
+    "age_sampling_corrected_dominant_vs_secondary_radiation_success_comparison"
+  ],
+  "new_biological_data_still_required_for": [
+    "morph_genotype_linkage_beyond_takaoense",
+    "standing_variation_vs_introgression",
+    "population_cytotype_distribution_and_ploidy_aware_local_ancestry",
+    "trait_to_interaction_to_fitness_causation",
+    "genotype_to_floral_expression_to_pigment_to_phenotype_mechanism"
+  ],
+  "current_verdict": {
+    "rapid_radiation": "strong",
+    "radiation_success_asymmetry": "strong_descriptive",
+    "large_within_radiation_current_trait_disparity": "supported_in_coverage_limited_subset",
+    "large_within_radiation_current_environment_disparity": "supported_in_coverage_limited_subset",
+    "simple_broad_climate_matching_of_capitulum_distance": "not_supported_in_current_subset",
+    "simple_ploidy_syndrome": "not_supported_as_deterministic_explanation",
+    "modular_evolvability": "strengthened_hypothesis_not_demonstrated",
+    "adaptive_radiation": "unresolved"
+  },
+  "claim_boundary": "These pre-tree results compare present trait/environment states and sparse taxon-level cytotypes. They do not estimate evolutionary rates, phylogenetic independent contrasts, niche evolution, selection, convergence, causal ploidy effects or adaptive radiation."
+}
