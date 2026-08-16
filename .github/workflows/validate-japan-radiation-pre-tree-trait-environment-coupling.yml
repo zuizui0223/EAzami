@@ -1,0 +1,52 @@
+name: Validate Japan radiation pre-tree trait-environment coupling
+
+on:
+  pull_request:
+    paths:
+      - "analysis/test_japan_radiation_pre_tree_trait_environment_coupling.py"
+      - "tests/test_japan_radiation_pre_tree_trait_environment_coupling.py"
+      - "data/evidence/japan_radiation_pre_tree_trait_environment_snapshot_v1.csv"
+      - "data/evidence/japan_radiation_pre_tree_trait_environment_coupling_v1.json"
+      - ".github/workflows/validate-japan-radiation-pre-tree-trait-environment-coupling.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install pandas numpy
+      - name: Compile and test
+        run: |
+          python -m py_compile analysis/test_japan_radiation_pre_tree_trait_environment_coupling.py
+          python -m unittest tests/test_japan_radiation_pre_tree_trait_environment_coupling.py -v
+      - name: Rebuild 9999-permutation result
+        run: |
+          python analysis/test_japan_radiation_pre_tree_trait_environment_coupling.py \
+            --snapshot data/evidence/japan_radiation_pre_tree_trait_environment_snapshot_v1.csv \
+            --out /tmp/japan_radiation_pre_tree_trait_environment_coupling_v1.json \
+            --permutations 9999 --seed 20260816
+      - name: Compare semantic result
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('/tmp/japan_radiation_pre_tree_trait_environment_coupling_v1.json').read_text())
+          b=json.loads(Path('data/evidence/japan_radiation_pre_tree_trait_environment_coupling_v1.json').read_text())
+          assert a==b, (a,b)
+          assert a['observed_spearman_rho'] < 0
+          assert a['positive_coupling_permutation_p'] > 0.05
+          assert a['leave_one_taxon_out_all_negative'] is True
+          print(json.dumps(a,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan-radiation-pre-tree-trait-environment-coupling-${{ github.run_id }}
+          path: data/evidence/japan_radiation_pre_tree_trait_environment_coupling_v1.json
+          retention-days: 90
