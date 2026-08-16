@@ -1,0 +1,52 @@
+name: Validate Japan radiation pre-tree trait disparity
+
+on:
+  pull_request:
+    paths:
+      - "analysis/summarize_japan_radiation_pre_tree_trait_disparity.py"
+      - "tests/test_summarize_japan_radiation_pre_tree_trait_disparity.py"
+      - "data/evidence/japan_radiation_pre_tree_trait_disparity_v1.json"
+      - ".github/workflows/validate-japan-radiation-pre-tree-trait-disparity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install minimal dependencies
+        run: python -m pip install pandas numpy
+      - name: Compile and run algorithm tests
+        run: |
+          python -m py_compile analysis/summarize_japan_radiation_pre_tree_trait_disparity.py
+          python -m unittest tests/test_summarize_japan_radiation_pre_tree_trait_disparity.py -v
+      - name: Validate frozen result and claim boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("data/evidence/japan_radiation_pre_tree_trait_disparity_v1.json")
+          s = json.loads(p.read_text())
+          assert s["contract_version"] == "japan_radiation_pre_tree_trait_disparity_v1"
+          assert s["n_eligible_trait_taxa"] == 9
+          assert s["n_dominant_radiation_trait_taxa"] == 8
+          assert s["secondary_history_comparator"] == "Cirsium lineare"
+          assert s["circular_hue_components_excluded"] is True
+          assert s["largest_dominant_leave_one_out_distance"]["taxon"] == "Cirsium sieboldii"
+          assert s["largest_dominant_leave_one_out_distance"]["distance"] > s["secondary_distance_to_dominant_centroid"]
+          assert s["within_dominant_pairwise"]["maximum"]["distance"] > s["secondary_to_dominant_pairwise"]["maximum_distance"]
+          boundary = s["claim_boundary"].lower()
+          for required in ["does not estimate evolutionary rate", "adaptation"]:
+              assert required in boundary
+          print(json.dumps(s, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan-radiation-pre-tree-trait-disparity-${{ github.run_id }}
+          path: data/evidence/japan_radiation_pre_tree_trait_disparity_v1.json
