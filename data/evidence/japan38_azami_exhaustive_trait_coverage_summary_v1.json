@@ -1,0 +1,43 @@
+{
+  "contract_version": "japan38_azami_exhaustive_trait_coverage_summary_v1",
+  "date": "2026-08-16",
+  "source": {
+    "repo": "zuizui0223/azami",
+    "workflow_run": 29306454759,
+    "artifact_id": 8301295025,
+    "artifact_name": "ch1-strict-spatial-cohort-only-20260713",
+    "artifact_digest": "sha256:f453e36b1867bbb0a239253c2cdfa4a4a6b8f6117a9e814db7224e8b060a440a",
+    "cohort": "strict_spatial_thinned_observations",
+    "n_observations": 46276,
+    "n_taxa": 259
+  },
+  "japan38_coverage": {
+    "paper_taxon_concepts": 38,
+    "distinct_azami_binomial_trait_taxa_present": 15,
+    "paper_concepts_represented_at_binomial_level": 17,
+    "paper_concepts_with_exact_taxon_concept_trait_match": 14,
+    "distinct_trait_taxa_with_at_least_10_observations": 6,
+    "distinct_trait_taxa_with_at_least_20_observations": 4,
+    "distinct_trait_taxa_with_at_least_50_observations": 3,
+    "taxa_with_at_least_10_observations": [
+      "Cirsium japonicum",
+      "Cirsium kamtschaticum",
+      "Cirsium pendulum",
+      "Cirsium oligophyllum",
+      "Cirsium maritimum",
+      "Cirsium sieboldii"
+    ],
+    "additional_taxa_recovered_beyond_balanced_216_taxon_atlas": [
+      "Cirsium buergeri",
+      "Cirsium nipponicum",
+      "Cirsium norikurense",
+      "Cirsium spicatum"
+    ]
+  },
+  "interpretation": {
+    "positive": "Reusing the existing exhaustive spatial cohort increases Japanese primary-trait coverage beyond the balanced Chapter 1 atlas without any new biological sampling.",
+    "limitation": "Coverage is still too sparse for a radiation-wide Japanese trait-rate claim: only six distinct Japan-38 trait taxa have at least ten strict spatial observations, and broad C. japonicum / C. nipponicum image concepts cannot be silently assigned to paper varieties.",
+    "next_action": "Use the exhaustive cohort as the first primary-trait recovery layer, then target the remaining Japan-38 trait gaps with existing public images/herbarium evidence before field collection. Auxiliary involucre/spine proxies remain limited to the high-resolution Chapter 1 layer unless separately re-extracted."
+  },
+  "claim_boundary": "This is a trait-coverage audit, not an evolutionary-rate result. Observation counts do not establish independent populations, genetic variation, taxon-concept identity, adaptation or ancestral state."
+}
