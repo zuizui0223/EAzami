@@ -1,0 +1,40 @@
+{
+  "contract_version": "japan_radiation_pre_tree_environment_disparity_v1",
+  "analysis_scope": "descriptive_species_median_CHELSA_environment_space",
+  "environment_variables": [
+    "env_chelsa_bio01_species_median",
+    "env_chelsa_bio04_species_median",
+    "env_chelsa_bio12_species_median",
+    "env_chelsa_bio15_species_median"
+  ],
+  "n_taxa": 9,
+  "n_dominant_radiation_taxa": 8,
+  "secondary_history_comparator": "Cirsium lineare",
+  "secondary_balanced_observation_count": 3,
+  "secondary_distance_to_dominant_centroid": 1.187668115058642,
+  "largest_dominant_leave_one_out_distance": {
+    "taxon": "Cirsium pendulum",
+    "distance": 6.3577592046410425
+  },
+  "within_dominant_pairwise": {
+    "n_pairs": 28,
+    "median_distance": 2.55871536369575,
+    "maximum": {
+      "taxon_a": "Cirsium maritimum",
+      "taxon_b": "Cirsium pendulum",
+      "distance": 5.623215171255535
+    }
+  },
+  "secondary_to_dominant_pairwise": {
+    "minimum_distance": 0.6677396135842164,
+    "median_distance": 2.073842685004947,
+    "maximum_distance": 3.71947413098628
+  },
+  "descriptive_result": "The replicated secondary-history comparator is not uniquely isolated in the current four-variable environmental-position space. The largest dominant-radiation leave-one-out displacement and largest within-dominant pairwise distance exceed the corresponding secondary-history distances.",
+  "source": {
+    "azami_integrated_source_run": 29089276791,
+    "azami_integrated_source_artifact_id": 8226070460,
+    "azami_integrated_source_artifact_digest": "sha256:398561508a534ca8108412dbc0944d82b1a54f8007b643e53e16aa8edf9eead9"
+  },
+  "claim_boundary": "Species medians from the Azami public-image occurrence context are not complete niche distributions. C. lineare has only three balanced observations. This result does not estimate niche evolutionary rate, ecological opportunity, selection or adaptation."
+}
