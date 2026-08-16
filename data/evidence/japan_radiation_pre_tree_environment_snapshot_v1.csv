@@ -1,0 +1,10 @@
+taxon_name,japan_origin_role,n_azami_balanced_observations,env_chelsa_bio01_species_median,env_chelsa_bio04_species_median,env_chelsa_bio12_species_median,env_chelsa_bio15_species_median,source_scope,claim_boundary
+Cirsium aomorense,dominant_main_japanese_radiation,10,2838.0,8702.0,1642.5,215.5,azami_balanced_species_environment_summary,"species median from public-image occurrence context; not full niche distribution"
+Cirsium japonicum,dominant_main_japanese_radiation,36,2888.0,7583.0,1489.5,539.0,azami_balanced_species_environment_summary,"broad taxon concept; not var. horridum-specific niche"
+Cirsium kamtschaticum,dominant_main_japanese_radiation,34,2748.0,9164.5,1101.5,301.0,azami_balanced_species_environment_summary,"species median from public-image occurrence context; not full niche distribution"
+Cirsium lineare,lineare_replicated_exception,3,2889.0,8661.0,1229.0,567.0,azami_balanced_species_environment_summary,"only 3 balanced observations; use as descriptive comparator, not precise niche estimate"
+Cirsium maritimum,dominant_main_japanese_radiation,18,2908.5,6231.0,2314.5,416.5,azami_balanced_species_environment_summary,"species median from public-image occurrence context; not full niche distribution"
+Cirsium oligophyllum,dominant_main_japanese_radiation,18,2849.0,7642.0,1559.5,449.0,azami_balanced_species_environment_summary,"species median from public-image occurrence context; not full niche distribution"
+Cirsium pendulum,dominant_main_japanese_radiation,28,2754.5,13779.0,581.5,940.5,azami_balanced_species_environment_summary,"species median from public-image occurrence context; not full niche distribution"
+Cirsium sieboldii,dominant_main_japanese_radiation,14,2862.5,7914.0,2127.5,451.0,azami_balanced_species_environment_summary,"species median from public-image occurrence context; not full niche distribution"
+Cirsium verutum,dominant_main_japanese_radiation,15,2857.0,5231.0,2094.0,1095.0,azami_balanced_species_environment_summary,"species median from public-image occurrence context; not full niche distribution"
