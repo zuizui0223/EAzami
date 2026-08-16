@@ -28,7 +28,7 @@
   "secondary_to_dominant_pairwise": {
     "minimum_distance": 0.6677396135842164,
     "median_distance": 2.073842685004947,
-    "maximum_distance": 3.71947413098628
+    "maximum_distance": 3.7194741309862804
   },
   "descriptive_result": "The replicated secondary-history comparator is not uniquely isolated in the current four-variable environmental-position space. The largest dominant-radiation leave-one-out displacement and largest within-dominant pairwise distance exceed the corresponding secondary-history distances.",
   "source": {
