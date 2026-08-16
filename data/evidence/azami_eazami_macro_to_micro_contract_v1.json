@@ -26,7 +26,7 @@
     "stage2_eazami": {
       "role": "east_asian_nuclear_history_and_trait_transition_reconstruction",
       "accepted_public_baseline_tips": 294,
-      "accepted_public_srRs": 295,
+      "accepted_public_srrs": 295,
       "analysis_taxon_labels": 270,
       "current_independent_candidates": ["EA01", "CNIPG"],
       "excluded_duplicate_controls": ["EA02"],
