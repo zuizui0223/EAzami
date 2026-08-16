@@ -1,0 +1,28 @@
+{
+  "contract_version": "japan_radiation_pre_tree_trait_environment_coupling_v1",
+  "n_taxa": 9,
+  "n_pairwise_distances": 36,
+  "n_trait_axes": 7,
+  "n_environment_axes": 4,
+  "circular_hue_components_excluded": true,
+  "observed_spearman_rho": -0.21544401544401542,
+  "taxon_label_permutations": 9999,
+  "permutation_seed": 20260816,
+  "positive_coupling_permutation_p": 0.7318,
+  "two_sided_permutation_p": 0.4916,
+  "leave_one_taxon_out_rho": {
+    "Cirsium aomorense": -0.2517788724685276,
+    "Cirsium japonicum": -0.4039408866995074,
+    "Cirsium kamtschaticum": -0.11439518336070059,
+    "Cirsium lineare": -0.18226600985221672,
+    "Cirsium maritimum": -0.16091954022988503,
+    "Cirsium oligophyllum": -0.33278598795840175,
+    "Cirsium pendulum": -0.16365626710454295,
+    "Cirsium sieboldii": -0.06951286261631089,
+    "Cirsium verutum": -0.2047071702244116
+  },
+  "leave_one_taxon_out_all_negative": true,
+  "descriptive_result": "The current small pre-tree subset does not show positive coupling between multivariate capitulum-trait distance and four-variable environmental distance. The observed association is weakly negative and remains negative in every leave-one-taxon-out comparison.",
+  "interpretation": "A simple model in which taxa occupying more different current climate positions necessarily have more different capitulum phenotypes is not supported in this subset. Biotic interactions, unmeasured ecological axes, historical contingency and modular trait evolution remain live alternatives.",
+  "claim_boundary": "Only nine taxa are included and C. lineare has sparse balanced environmental coverage. Pairwise distances are not phylogenetically independent. This is not evidence against all ecological adaptation, nor is it a test of evolutionary rates or adaptive radiation."
+}
