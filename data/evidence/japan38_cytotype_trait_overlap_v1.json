@@ -1,0 +1,20 @@
+{
+  "contract_version": "japan38_cytotype_trait_overlap_v1",
+  "n_source_backed_cytotype_concepts": 9,
+  "n_dominant_radiation_cytotype_concepts": 8,
+  "dominant_radiation_ploidy_levels": [2, 4, 6],
+  "dominant_radiation_ploidy_counts": {"2": 5, "4": 2, "6": 1},
+  "n_dominant_with_known_orientation": 7,
+  "upward_or_ascending_observed_ploidy_levels": [2, 4, 6],
+  "diploid_observed_orientation_states": ["downward_or_nodding", "upward_or_erect"],
+  "secondary_history_cytotypes": [
+    {
+      "taxon": "Cirsium dipsacolepis",
+      "japan_origin_role": "secondary_japanese_arrival_candidate",
+      "ploidy_x": 2,
+      "orientation_state": "upward_or_erect"
+    }
+  ],
+  "descriptive_result": "The current source-backed panel is inconsistent with a deterministic one-to-one mapping between ploidy and capitulum orientation: upward/ascending heads occur in 2x, 4x and 6x dominant-radiation taxa, while diploid dominant-radiation taxa include both upward and downward/nodding states.",
+  "claim_boundary": "Sparse taxon-level records only. This does not estimate cytotype or trait transition rates, does not show independence statistically, and does not test whether ploidy promotes radiation success."
+}
