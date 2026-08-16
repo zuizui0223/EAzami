@@ -59,28 +59,29 @@ jobs:
           from pathlib import Path
           b=Path('/tmp/maximum_public_combined_bundle')
           m=json.loads((b/'execution_manifest.json').read_text())
-          assert m['bundle_version']=='maximum_public_combined_hpc_bundle_v1'
-          assert m['prerequisite_independent_gate_contract']=='maximum_public_nuclear_independent_gate_summary_v1'
-          assert m['independent_candidates_required_to_pass']==['EA01','EA02','CNIPG']
+          assert m['bundle_version']=='maximum_public_combined_hpc_bundle_v2'
+          assert m['source_maximum_handoff_version']=='maximum_public_nuclear_hpc_handoff_v2'
+          assert m['prerequisite_independent_gate_contract']=='maximum_public_nuclear_independent_gate_summary_v2'
+          assert m['independent_candidates_required_to_pass']==['EA01','CNIPG']
+          assert m['excluded_duplicate_controls']==['EA02']
           assert m['baseline_focal_tips']==294
-          assert m['scenario_count']==8
-          assert m['scenarios']==[
-            'baseline294','ea01_295','ea02_295','cnipg_295',
-            'ea01_ea02_296','ea01_cnipg_296','ea02_cnipg_296','ea01_ea02_cnipg_297'
-          ]
+          assert m['scenario_count']==4
+          assert m['scenarios']==['baseline294','ea01_295','cnipg_295','ea01_cnipg_296']
           assert m['mapping_modes']==['bwa','blastx']
-          assert m['minimum_four_way_common_loci']==100
+          assert m['minimum_common_loci']==100
           assert m['all_scenarios_same_locus_set_within_mode'] is True
-          assert m['bwa_candidate_packs_frozen_in_bundle'] is True
-          assert m['blastx_ea01_ea02_packs_from_independent_heavy_run'] is True
+          assert m['bwa_ea01_pack_frozen_in_bundle'] is True
+          assert m['blastx_ea01_pack_from_independent_heavy_run'] is True
           assert m['cnipg_pack_fixed_across_mapping_modes'] is True
-          assert m['combined_297_acceptance_pre_authorized'] is False
+          assert m['ea02_enters_biological_tree_inputs'] is False
+          assert m['combined_296_acceptance_pre_authorized'] is False
           assert m['new_analysis_taxon_labels_added']==0
           assert m['new_china_sampling_freeze_allowed'] is False
           submit=(b/'submit_combined_after_independent_pass.sh').read_text()
-          assert "independent_candidate_gate_results']=={'EA01':True,'EA02':True,'CNIPG':True}" in submit
+          assert "independent_candidate_gate_results']=={'EA01':True,'CNIPG':True}" in submit
           assert 'submit_mode bwa' in submit and 'submit_mode blastx' in submit
           assert 'combined_cross_mapping_summary' in submit
+          assert "'EA02':True" not in submit
           print(json.dumps(m,indent=2))
           PY
 
@@ -89,10 +90,11 @@ jobs:
           mkdir -p /tmp/mock_max_fail
           cat > /tmp/mock_max_fail/independent_gate_summary.json <<'JSON'
           {
-            "contract_version": "maximum_public_nuclear_independent_gate_summary_v1",
-            "independent_candidate_gate_results": {"EA01": true, "EA02": false, "CNIPG": true},
-            "all_three_independent_gates_passed": false,
-            "combined_296_or_297_tree_accepted": false,
+            "contract_version": "maximum_public_nuclear_independent_gate_summary_v2",
+            "independent_candidate_gate_results": {"EA01": true, "CNIPG": false},
+            "excluded_duplicate_controls": {"EA02": "duplicate_readset_pseudoreplicate_excluded_pending_explicit_provenance"},
+            "both_independent_gates_passed": false,
+            "combined_296_tree_accepted": false,
             "combined_common_paired_locus_tree_required": false,
             "new_china_sampling_freeze_allowed": false
           }
@@ -118,12 +120,13 @@ jobs:
           for mode,n in [('bwa',120),('blastx',110)]:
               paired=root/mode/'paired_inputs'; ev=root/mode/'evaluation'; paired.mkdir(parents=True,exist_ok=True); ev.mkdir(parents=True,exist_ok=True)
               (paired/'combined_input_summary.json').write_text(json.dumps({
-                'contract_version':'maximum_public_combined_tree_inputs_v1',
+                'contract_version':'maximum_public_combined_tree_inputs_v2',
                 'independent_gate_prerequisite_passed':True,
-                'four_way_common_paired_loci':n,
-                'minimum_four_way_common_loci':100,
-                'all_eight_scenarios_use_identical_locus_set':True,
-                'scenario_count':8,
+                'baseline_ea01_cnipg_common_paired_loci':n,
+                'minimum_common_loci':100,
+                'all_four_scenarios_use_identical_locus_set':True,
+                'scenario_count':4,
+                'ea02_enters_combined_tree':False,
                 'combined_tree_acceptance_pre_authorized':False,
               }))
               for scenario,candidates in s.SCENARIOS.items():
@@ -141,9 +144,10 @@ jobs:
                   }))
           result=s.summarize(root)
           assert result['all_modes_all_subset_scenarios_passed'] is True
-          assert result['combined_297_sample_tree_acceptance_allowed'] is True
-          assert result['resulting_sample_level_tip_count_if_accepted']==297
+          assert result['combined_296_sample_tree_acceptance_allowed'] is True
+          assert result['resulting_sample_level_tip_count_if_accepted']==296
           assert result['new_analysis_taxon_labels_added_if_accepted']==0
+          assert result['ea02_enters_biological_tree_inputs'] is False
           assert result['new_china_sampling_freeze_allowed'] is False
           assert result['flower_colour_history_claim_changed_by_this_gate'] is False
           print(json.dumps(result,indent=2))
