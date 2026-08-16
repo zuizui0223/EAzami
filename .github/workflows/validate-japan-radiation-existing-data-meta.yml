@@ -1,0 +1,43 @@
+name: Validate Japan radiation existing-data meta-analysis
+
+on:
+  pull_request:
+    paths:
+      - "analysis/summarize_japan_radiation_existing_data_meta.py"
+      - "tests/test_summarize_japan_radiation_existing_data_meta.py"
+      - "data/evidence/japan_radiation_existing_data_meta_v1.json"
+      - "data/evidence/japan_cirsium_origin_meta_analysis_v1.json"
+      - "data/evidence/hmm2_population_aware_transition_testability_v1.csv"
+      - "data/evidence/hmm3_japan_radiation_focal_cytotypes_v1.csv"
+      - "data/evidence/azami_ch1_macro_trait_snapshot_v1.json"
+      - "data/evidence/japan_adaptive_radiation_evidence_ladder_v1.csv"
+      - ".github/workflows/validate-japan-radiation-existing-data-meta.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile and test
+        run: |
+          python -m py_compile analysis/summarize_japan_radiation_existing_data_meta.py
+          python -m unittest tests/test_summarize_japan_radiation_existing_data_meta.py -v
+      - name: Regenerate summary
+        run: |
+          mkdir -p meta_out
+          python analysis/summarize_japan_radiation_existing_data_meta.py \
+            --repo-root . \
+            --out meta_out/japan_radiation_existing_data_meta_v1.json
+          cmp meta_out/japan_radiation_existing_data_meta_v1.json data/evidence/japan_radiation_existing_data_meta_v1.json
+      - name: Upload meta-analysis summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: japan-radiation-existing-data-meta-${{ github.run_id }}
+          path: meta_out/japan_radiation_existing_data_meta_v1.json
