@@ -35,15 +35,31 @@ jobs:
       - name: Compare semantic result
         run: |
           python - <<'PY'
-          import json
+          import json, math
           from pathlib import Path
-          a=json.loads(Path('/tmp/japan_radiation_pre_tree_trait_environment_coupling_v1.json').read_text())
-          b=json.loads(Path('data/evidence/japan_radiation_pre_tree_trait_environment_coupling_v1.json').read_text())
-          assert a==b, (a,b)
-          assert a['observed_spearman_rho'] < 0
-          assert a['positive_coupling_permutation_p'] > 0.05
-          assert a['leave_one_taxon_out_all_negative'] is True
-          print(json.dumps(a,indent=2,ensure_ascii=False))
+
+          rebuilt=json.loads(Path('/tmp/japan_radiation_pre_tree_trait_environment_coupling_v1.json').read_text())
+          frozen=json.loads(Path('data/evidence/japan_radiation_pre_tree_trait_environment_coupling_v1.json').read_text())
+
+          def compare(a, b, path='root'):
+              if isinstance(a, dict) and isinstance(b, dict):
+                  assert set(a) == set(b), (path, set(a) ^ set(b))
+                  for key in a:
+                      compare(a[key], b[key], f'{path}.{key}')
+              elif isinstance(a, list) and isinstance(b, list):
+                  assert len(a) == len(b), (path, len(a), len(b))
+                  for i, (x, y) in enumerate(zip(a, b)):
+                      compare(x, y, f'{path}[{i}]')
+              elif isinstance(a, (int, float)) and isinstance(b, (int, float)) and not isinstance(a, bool) and not isinstance(b, bool):
+                  assert math.isclose(float(a), float(b), rel_tol=1e-12, abs_tol=1e-12), (path, a, b)
+              else:
+                  assert a == b, (path, a, b)
+
+          compare(rebuilt, frozen)
+          assert rebuilt['observed_spearman_rho'] < 0
+          assert rebuilt['positive_coupling_permutation_p'] > 0.05
+          assert rebuilt['leave_one_taxon_out_all_negative'] is True
+          print(json.dumps(rebuilt,indent=2,ensure_ascii=False))
           PY
       - uses: actions/upload-artifact@v4
         with:
