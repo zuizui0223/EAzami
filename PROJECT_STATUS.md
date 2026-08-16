@@ -6,7 +6,9 @@ Status date: 2026-08-16
 
 EAzami is the evolutionary-resolution layer downstream of the global public-image macro screen in `zuizui0223/azami`.
 
-The immediate goal is to produce an accepted, sensitivity-tested common-locus East Asian nuclear backbone and then use that framework to convert global trait hypotheses into explicit evolutionary histories.
+The current scientific problem is now broader than building an East-Asian tree:
+
+> **Why did one young Japanese *Cirsium* entry generate a large radiation, and how could closely related lineages acquire large capitulum and ecological disparity so quickly?**
 
 Program order:
 
@@ -15,13 +17,14 @@ Azami Chapter 1
 Global public-image macro pattern / hypothesis generation
         ↓
 EAzami nuclear history
-Japanese origins + independent capitulum transitions
+Japanese origins + branch-scaled trait / niche histories
         ↓
 Focal population / mechanism studies
-Ancestry + gene flow + expression + pigment + interaction + fitness
+Ancestry + gene flow + cytotype + expression + pigment + interaction + fitness
 ```
 
-Cross-project source of truth: `docs/AZAMI_EAZAMI_MACRO_TO_MICRO_ROADMAP_2026-08-16.md`.
+Cross-project roadmap: `docs/AZAMI_EAZAMI_MACRO_TO_MICRO_ROADMAP_2026-08-16.md`.
+Pre-tree synthesis: `docs/JAPAN_RADIATION_PRETREE_META_SYNTHESIS_2026-08-16.md`.
 
 ## Accepted public nuclear baseline
 
@@ -31,133 +34,237 @@ The current accepted inventory is:
 - **295 unique public SRRs**;
 - **270 source-preserving analysis taxon labels**.
 
-The old 302/303 inventory is superseded because eight Taiwan RNA-seq BioSamples/SRRs reused across Chang 2025 and Chang 2026 had been double-counted.
+Independent public augmentation candidates are **EA01 + CNIPG**. EA02 is a duplicate-readset control only and cannot increment biological-tip count.
 
-The accepted primary remains 294 tips until explicit promotion gates pass.
+If EA01 and CNIPG both pass their independent gates, the maximum current public ceiling is **296 biological tips / 0 new analysis labels**. This is not accepted by arithmetic; one explicit common-locus combined analysis must also pass.
 
-## Current independent augmentation candidates
+The supported Slurm/large-memory handoff exists and its execution contracts are validated. The actual heavy 294-tip BWA/BLASTx + IQ-TREE + source-label ASTRAL analysis has **not** been executed in this environment.
 
-| Candidate | Source | Strict loci | Biological-tip role |
-|---|---|---:|---|
-| EA01 / `PUBEA001` | *C. nipponicum* var. *yoshinoi* public SRA | 236/241 | independent candidate |
-| CNIPG / `AUG_ULLEUNG_CNIP2024` | natural-Ulleung *C. nipponicum* public genome | 180/241 | independent cross-data-type candidate |
-| EA02 / `PUBEA002` | *C. sairamense* public SRA | 239/241 | duplicate-readset control only; **not** an independent biological tip |
+## Japanese-origin state
 
-EA02 and the accepted baseline *C. sairamense* library have effectively identical raw-library and recovered-locus profiles. EA02 remains durable provenance / duplicate-control evidence but does not increment the biological-tip count.
+The working hierarchy is:
 
-If EA01 and CNIPG both pass their independent gates, the maximum public candidate ceiling is **296 tips / 0 new analysis labels**. This is not an accepted 296-tip tree until an explicit common paired-locus combined analysis also passes.
+- **36/38 sampled Japanese paper taxon concepts** in one dominant radiation;
+- *C. lineare*: replicated phylogenetic exception in 3/3 high-dimensional analyses and 2/2 independent high-dimensional data-generation groups;
+- *C. dipsacolepis*: strong but still single-independent-group secondary-arrival candidate;
+- Arenicola: not established as an additional Japanese colonization.
 
-## Current promotion logic
+Current origin-count hierarchy:
 
-For each independent candidate, augmented and baseline trees are compared on identical paired locus sets.
+- minimum defensible = 2 histories;
+- best point hypothesis = 3 histories;
+- 4+ = unresolved / not currently supported.
 
-Automatic promotion requires the predeclared backbone safeguards, including:
+The current 36:1:1 occupancy under the 3-history point hypothesis is a **descriptive radiation-success asymmetry**, not an age-corrected diversification-rate estimate.
 
-1. RF = 0 on the shared 294-tip concatenated backbone;
-2. an existing same-taxon baseline tip among the candidate's nearest baseline neighbours;
-3. RF = 0 on the shared-species ASTRAL backbone;
-4. consistency across the required BWA / BLASTx or cross-data-type sensitivities.
+## Pre-tree radiation meta result
 
-A failed criterion triggers manual biological review, not post-hoc threshold relaxation.
+Existing public/authority data now constrain several simple explanations before the accepted branch-length tree exists.
 
-If both independent gates pass, the combined analysis uses exactly four scenarios on one baseline∩EA01∩CNIPG common-locus set within each accepted mapping mode:
+### 1. Colonization separation does not order current capitulum disparity
 
-- `baseline294`;
-- `ea01_295`;
-- `cnipg_295`;
-- `ea01_cnipg_296`.
+Nine Japan-38 trait taxa currently have >=10 detector-positive public-image observations for a seven-axis non-circular comparison.
 
-EA02 cannot enter these combined-tree inputs.
+With *C. lineare* as the replicated secondary-history comparator:
 
-## Latest execution validation
+- *lineare* → dominant-radiation trait centroid = **4.842**;
+- largest dominant-radiation leave-one-out displacement = **8.103**, *C. sieboldii*;
+- largest within-dominant pairwise trait distance = **6.751**;
+- largest observed *lineare*→dominant pairwise distance = **6.275**.
 
-The current 296-tip contracts are green:
+Thus a separate colonization history is not a monotonic proxy for present capitulum distance in the current subset.
 
-- `Validate maximum public nuclear HPC handoff` run `31937355788` — success; artifact `9261030108`, digest `sha256:d8c4c3ff219a56f87e1deb411c02684b0d843e38096c3d144d78e1bc902a5d68`;
-- `Validate maximum public combined-tree handoff` run `31937355816` — success; artifact `9261031804`, digest `sha256:e353612e5db39ac0416a1b3292074f0e58355dbfedfb6dee835eb7938d5f42ea`.
+Frozen result: `data/evidence/japan_radiation_pre_tree_trait_disparity_v1.json`.
 
-These runs validate code, contracts and fail-closed execution graphs. They do **not** mean the heavy 294-tip BWA/BLASTx + IQ-TREE + ASTRAL analysis has completed.
+### 2. Colonization separation does not order broad current environmental position
 
-## Current Japanese-origin hypothesis
+Using the same nine taxa and four Azami CHELSA species-median descriptors:
 
-The working historical hierarchy is no longer a simple Japanese-monophyly question.
+- *lineare* → dominant-radiation environmental centroid = **1.188**;
+- largest dominant leave-one-out displacement = **6.358**, *C. pendulum*;
+- largest within-dominant environmental distance = **5.623**;
+- largest observed *lineare*→dominant distance = **3.719**.
 
-Current synthesis favours one dominant Japanese radiation plus rare secondary histories:
+This is a present environmental-position screen, not a full niche analysis. *C. lineare* has only three balanced Azami environment observations.
 
-- **minimum defensible = 2 histories**: dominant radiation + *C. lineare*;
-- **best current point hypothesis = 3 histories**: add *C. dipsacolepis*;
-- **4+ histories = unresolved and not currently supported**.
+Frozen result: `data/evidence/japan_radiation_pre_tree_environment_disparity_v1.json`.
 
-The maximum-public nuclear tree is therefore a falsification test of 2 vs 3 vs 4+ histories, including explicit continental-neighbour placement and uncertainty.
+### 3. Broad climate distance does not positively track capitulum distance in the current subset
 
-Arenicola is not currently counted as a fourth entry without an independently bracketed continental source lineage.
+Seven-axis capitulum distance × four-axis CHELSA distance:
+
+- Spearman rho = **-0.215**;
+- positive-coupling taxon-label permutation P = **0.732**;
+- two-sided P = **0.492**;
+- all leave-one-taxon-out correlations remain negative.
+
+Module-specific screens:
+
+- orientation rho ≈ **-0.012**;
+- visible colour rho ≈ **-0.003**;
+- outline shape rho ≈ **-0.281**.
+
+No module shows positive broad-current-climate distance coupling. This does **not** reject ecological adaptation on biotic, microclimatic or unmeasured environmental axes.
+
+Frozen results:
+
+- `data/evidence/japan_radiation_pre_tree_trait_environment_coupling_v1.json`;
+- `data/evidence/japan_radiation_pre_tree_module_environment_coupling_v1.json`.
+
+### 4. Ploidy does not define one head-orientation syndrome
+
+Current source-backed dominant-radiation cytotype concepts:
+
+- 2x = 5;
+- 4x = 2;
+- 6x = 1.
+
+Upward/ascending capitula occur in 2x, 4x and 6x taxa, while diploid dominant-radiation taxa include both upward/erect and downward/nodding states.
+
+Therefore ploidy is not used as a deterministic morphology explanation. Any role for polyploidy in evolvability must be tested through transition history, homeolog ancestry, genomic novelty, gene flow or diversification association.
+
+Frozen result: `data/evidence/japan38_cytotype_trait_overlap_v1.json`.
+
+### 5. Origin history does not define one capitulum syndrome
+
+The current source-backed authority seed contains 20 dominant-radiation concepts plus the two secondary comparators.
+
+The dominant sample contains both upward and downward/nodding heads, both sticky and non-sticky involucres, and four observed orientation × stickiness combinations. The two secondary comparators are both upward/erect but differ in stickiness.
+
+Frozen result: `data/evidence/japan38_authority_module_combinations_v1.json`.
+
+## Current adaptive-radiation verdict
+
+### Strong now
+
+- a young rapid Japanese radiation exists;
+- radiation success is strongly asymmetric among current Japanese histories;
+- large present capitulum disparity exists inside the dominant young radiation;
+- substantial current environmental-position disparity also exists inside it;
+- ILS/reticulation and cytogenetic change are real in East-Asian *Cirsium*;
+- species-tip coding under-resolves documented W/C polymorphism.
+
+### Simple explanations already weakened
+
+- deeper/separate colonization history → greater current capitulum distance;
+- greater broad current climate distance → greater capitulum distance;
+- one ploidy class → one head orientation;
+- one colonization history → one capitulum syndrome.
+
+### Still hypotheses
+
+- the dominant radiation has elevated **branch-scaled trait or niche evolutionary rates**;
+- standing variation / reticulation / polyploidy increased evolvability;
+- particular capitulum modules were adaptive drivers of diversification;
+- Japanese *Cirsium* meets a strict causal definition of adaptive radiation.
+
+Preferred wording remains **rapid Japanese radiation**, **radiation-success asymmetry**, and **adaptive-radiation / evolvability hypothesis**.
+
+## Azami → EAzami trait bridge state
+
+The bridge is now real data, not only a schema.
+
+General Chapter-1 handoff:
+
+- 216 taxa;
+- usable colour = 215;
+- shape = 215;
+- orientation = 214;
+- auxiliary involucre/spine = 210.
+
+Japan-38 exhaustive public-image recovery:
+
+- 36 distinct Japan-38 species binomials;
+- **18 binomials** present in the original exhaustive Azami detector-positive source;
+- **20/38 paper concepts** represented at binomial level;
+- 9 trait taxa with >=10 detector-positive observations.
+
+Continuous image traits and authority-backed categorical traits remain separate evidence layers. Broad species image records are not silently assigned to paper varieties.
+
+## Involucre / spine correction
+
+Phyllary/involucre/spine are **not new to Chapter 1**.
+
+Azami already analysed exploratory high-resolution image proxies:
+
+- `involucre_projection_roughness`;
+- `involucre_spread_fraction`;
+- `spine_peak_count_proxy`;
+- `spine_relative_length_max_proxy`.
+
+EAzami carries these existing proxies into the nuclear-history layer and later validates them against direct botanical phyllary angle, actual spine length/orientation/stiffness and field function. Visible stickiness/glandularity is a separate categorical/functional layer.
 
 ## Current flower-colour inference
 
-- Repeated white-flower evolution remains the best-supported general pattern in the current East Asian evidence.
-- Arenicola currently favours white loss on *C. brevicaule*; regain in *C. irumtiense* is not established.
-- var. *takaoense* remains a topology-supported candidate regain under directly documented W/BP sample states.
-- species-level state compression is already demonstrable: the current population/sample-aware *takaoense* screen requires more minimum colour transitions than the collapsed species-tip treatment.
-- DFR / ANS homologous reads are recoverable at assay level in the current three W and three BP young-leaf public RNA runs, but this is not differential floral expression or causal proof.
+- repeated white-flower evolution remains the best-supported broad pattern;
+- Arenicola currently favours white loss on *C. brevicaule*; regain in *C. irumtiense* is not established;
+- var. *takaoense* remains a topology-supported candidate regain;
+- four reviewed W/C-polymorphic systems all lose state multiplicity under one species-tip `P` code;
+- only *takaoense* currently has morph-linked high-dimensional W/C nuclear samples;
+- in that one system, minimum transition count changes from 1 to 2 under population/sample-aware coding;
+- replicated rate inflation remains unresolved because morph↔genotype linkage is only 1/4 among the reviewed polymorphic systems.
 
-Molecular anthocyanin re-expression remains unresolved until population history, candidate orthology/coding state, floral expression, pigment and phenotype are linked.
+DFR / ANS homologous reads are recoverable from current W and BP young-leaf public RNA runs, but this is not floral differential expression or causal proof.
 
-## Azami → EAzami trait transition program
+## Existing-data priority before new biological sampling
 
-After the accepted nuclear topology ensemble is available, the analysis order is:
+Use public/authority data first for:
 
-1. **flower colour** — estimate independent W↔C histories first;
-2. **orientation** — map the global macro hypothesis onto the same supported nuclear framework;
-3. **continuous head shape** — reconstruct history with measurement uncertainty rather than treating image variance as evolutionary variance;
-4. **module coupling** — test whether colour, orientation and shape transitions are correlated or remain partly independent;
-5. **next-generation defensive traits** — add phyllary spreading/recurvature, spine architecture, visible stickiness/glandularity and display architecture only after ontology and assessability are defined.
+1. accepted branch-length/topology ensemble from the maximum-public nuclear analysis;
+2. branch-scaled trait disparity/rates for colour, orientation, outline and existing involucre/spine proxies;
+3. full-occurrence niche divergence rather than current species-median climate positions;
+4. gene-tree concordance/discordance and reduced-network metrics;
+5. source-backed cytotype/genome-size transition mapping;
+6. age/sampling-corrected dominant-vs-secondary radiation success.
 
-The bridge schema is frozen in:
+Trait-gap recovery priorities:
 
-- `data/evidence/azami_eazami_macro_to_micro_contract_v1.json`;
-- `data/evidence/azami_eazami_trait_bridge_template_v1.csv`.
+- A0: *C. dipsacolepis* — nuclear placement exists; recover quantitative phenotype before more species-placement sequencing;
+- A1: *C. alpicola* — dominant-radiation 6x comparator;
+- manual identity gates: *C. yuki-uenoanum* / `C. waldsteinii`, *C. effusum* / `C. pulchellum`;
+- remaining gaps: rank by branch information after the accepted tree.
 
-Issue #23 tracks the actual bridge / ancestral-state implementation.
+Authority descriptions already recover major categorical states for *dipsacolepis* and *alpicola*; continuous image distributions remain missing.
 
-## Sampling decisions that do not need to wait for a broad mainland tree
+## New biological data required only for non-identifiable questions
 
-Population-level sampling can already prioritize:
+Phase-A population data are reserved for questions public data cannot answer:
 
-- *C. japonicum* var. *takaoense* W/BP populations;
-- Japanese W/coloured *C. pendulum*;
-- Japanese W/coloured *C. sieboldii*;
-- *C. brevicaule* + *C. irumtiense* Arenicola populations;
-- var. *albescens* plus coloured Taiwan controls.
+- morph↔genotype ancestry beyond *takaoense*;
+- standing ancestral variation versus introgression;
+- population cytotype distributions;
+- ploidy-aware local ancestry / homeolog histories;
+- trait → interaction → fitness causation;
+- genotype → floral expression → pigment → phenotype mechanisms.
 
-These are population-history / mechanism systems, not generic species-backbone completion.
-
-Broad new China sampling remains deliberately unfrozen until the maximum-public tree identifies the continental branches that actually bracket unresolved Japanese histories.
+Current population-RAD target remains **222 minimum / 298 recommended individuals** across *C. pendulum*, *C. sieboldii*, *C. lineare*, *C. dipsacolepis*, *C. brevicaule* and *C. irumtiense*. RAD is the population-history layer, not the universal cross-ploidy species backbone.
 
 ## Remaining mainline gates
 
-1. Execute the validated 294-tip baseline BWA and BLASTx workflows on HPC / large-memory compute.
-2. Accept or reject the baseline concatenated and source-label ASTRAL trees under the frozen gates.
-3. Complete EA01 independent paired-tree tests.
-4. Complete CNIPG independent paired-tree tests.
-5. If both pass, run the explicit 296 common-locus combined analysis.
-6. Freeze the supported topology ensemble and taxon crosswalk for Japan-38, *lineare*, *dipsacolepis*, Arenicola and continental neighbours.
-7. Populate the Azami→EAzami trait bridge without forcing polymorphic taxa to fixed states.
-8. Run colour → orientation → shape ancestral-state / transition-history analyses.
-9. Promote only replicated/high-information transitions to population genomics and ecological mechanism experiments.
+1. Execute the validated 294-tip BWA/BLASTx + concatenated/source-label ASTRAL handoff on Slurm / large-memory compute.
+2. Freeze accepted branch lengths and topology ensemble; accept/reject EA01 and CNIPG under predeclared gates.
+3. Run branch-scaled radiation-success, trait-rate, niche and discordance analyses.
+4. Recover only branch-informative missing public traits/taxa.
+5. Then collect the Phase-A population panel for histories that remain non-identifiable.
+6. Promote only replicated high-information transitions to functional/fitness experiments.
 
 ## Stop rules
 
-- `new_china_sampling_freeze_allowed` remains false until the public nuclear tree resolves the relevant mainland brackets.
-- The current Azami grafted mega-tree is not the definitive ancestral-state tree.
-- Species-level polymorphism is not collapsed to one fixed state for convenience.
-- Macro correlations do not establish adaptation.
-- Missing annotation or pathway-table coverage does not establish pathway loss.
-- New defensive capitulum traits do not reopen Chapter 1; they form the next comparative layer unless required for a validity repair.
+- broad new China sampling remains unfrozen until the public nuclear tree identifies the relevant mainland brackets;
+- the Azami grafted tree is not the definitive ancestral-state tree;
+- polymorphic taxa are not collapsed to one fixed state for convenience;
+- image vertical is not treated as true gravity without validation;
+- macro/state-space correlations do not establish adaptation or evolutionary rates;
+- ploidy and 2C genome size remain separate evidence variables;
+- organelle history remains separate from the nuclear organismal-history layer.
 
 ## Navigation
 
-- Operational nuclear state: [docs/CURRENT_STATE_2026-08-14.md](docs/CURRENT_STATE_2026-08-14.md)
-- Macro→micro roadmap: [docs/AZAMI_EAZAMI_MACRO_TO_MICRO_ROADMAP_2026-08-16.md](docs/AZAMI_EAZAMI_MACRO_TO_MICRO_ROADMAP_2026-08-16.md)
-- Trait bridge contract: [data/evidence/azami_eazami_macro_to_micro_contract_v1.json](data/evidence/azami_eazami_macro_to_micro_contract_v1.json)
-- Current sampling decisions: [sampling/SEQUENCING_PANEL_V0_3_EXACT_COVERAGE.csv](sampling/SEQUENCING_PANEL_V0_3_EXACT_COVERAGE.csv)
-- Capitulum-trait foundation: [docs/CAPITULUM_TRAIT_FOUNDATION.md](docs/CAPITULUM_TRAIT_FOUNDATION.md)
+- Operational nuclear state: `docs/CURRENT_STATE_2026-08-14.md`
+- Macro→micro roadmap: `docs/AZAMI_EAZAMI_MACRO_TO_MICRO_ROADMAP_2026-08-16.md`
+- Pre-tree synthesis: `docs/JAPAN_RADIATION_PRETREE_META_SYNTHESIS_2026-08-16.md`
+- Adaptive-radiation evidence ladder: `docs/JAPAN_ADAPTIVE_RADIATION_EVIDENCE_STATUS_2026-08-16.md`
+- Japan RAD Phase A: `docs/JAPAN_RADSEQ_PHASE_A_SAMPLING_PLAN_2026-08-16.md`
+- Trait-gap / pre-tree disparity idea: `docs/ideas/JAPAN_RADIATION_TRAIT_COVERAGE_AND_PRETREE_DISPARITY_2026-08-16.md`
+- Issue #21: macro radiation / reticulation tests
+- Issue #23: Azami→EAzami trait bridge and ASR pipeline
