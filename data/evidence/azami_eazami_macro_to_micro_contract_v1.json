@@ -1,0 +1,110 @@
+{
+  "contract_version": "azami_eazami_macro_to_micro_v1",
+  "date": "2026-08-16",
+  "program_direction": "macro_to_meso_to_micro",
+  "stages": {
+    "stage1_azami_chapter1": {
+      "role": "global_public_image_hypothesis_generation",
+      "canonical_scope": [
+        "visible_trait_distribution",
+        "within_assigned_species_image_variation",
+        "spatial_environment_trait_association",
+        "among_species_trait_structure",
+        "historical_sensitivity_only"
+      ],
+      "forbidden_promotions": [
+        "resolved_species_tree",
+        "ancestral_state_claim",
+        "transition_count_claim",
+        "pollinator_causation",
+        "herbivore_causation",
+        "local_adaptation",
+        "molecular_regain_mechanism"
+      ],
+      "status": "macro_screen_established_submission_gates_remain"
+    },
+    "stage2_eazami": {
+      "role": "east_asian_nuclear_history_and_trait_transition_reconstruction",
+      "accepted_public_baseline_tips": 294,
+      "accepted_public_srRs": 295,
+      "analysis_taxon_labels": 270,
+      "current_independent_candidates": ["EA01", "CNIPG"],
+      "excluded_duplicate_controls": ["EA02"],
+      "candidate_ceiling_tips": 296,
+      "primary_questions": [
+        "2_vs_3_vs_4plus_japanese_colonization_histories",
+        "repeated_white_coloured_transitions",
+        "orientation_transition_history",
+        "continuous_shape_history",
+        "modular_vs_correlated_capitulum_evolution"
+      ],
+      "status": "execution_ready_heavy_nuclear_tree_not_yet_run"
+    },
+    "stage3_focal": {
+      "role": "population_history_mechanism_and_fitness",
+      "priority_systems": [
+        "Cirsium japonicum var. takaoense W_vs_BP",
+        "Cirsium pendulum Japanese W_vs_coloured",
+        "Cirsium sieboldii Japanese W_vs_coloured",
+        "Cirsium brevicaule_vs_Cirsium_irumtiense",
+        "Cirsium japonicum var. albescens_plus_coloured_Taiwan_controls"
+      ],
+      "mechanistic_ladder": [
+        "population_ancestry_and_gene_flow",
+        "coding_or_structural_candidate_state",
+        "floral_expression",
+        "pigment_chemistry",
+        "visible_phenotype",
+        "biotic_interaction",
+        "fitness"
+      ],
+      "status": "partly_testable_existing_data_population_sampling_needed"
+    }
+  },
+  "trait_modules": {
+    "current": ["orientation", "visible_colour", "outline_shape"],
+    "next_generation": [
+      "phyllary_angle_spreading_recurvature",
+      "spine_length_and_orientation",
+      "involucral_stickiness_or_glandularity",
+      "capitulum_size_and_display_architecture"
+    ]
+  },
+  "trait_bridge_required_fields": [
+    "source_taxon_name",
+    "accepted_analysis_taxon",
+    "trait_module",
+    "trait_endpoint",
+    "state_type",
+    "estimate_or_state",
+    "uncertainty_or_range",
+    "n_observations",
+    "n_populations_or_spatial_units",
+    "evidence_source",
+    "assessability_status",
+    "phylogeny_tip_match_status",
+    "claim_boundary"
+  ],
+  "ancestral_state_rules": {
+    "discrete": "compare_transition_models_and_sample_histories_across_supported_tree_ensemble",
+    "continuous": "retain_continuous_values_and_propagate_within_taxon_measurement_uncertainty",
+    "circular": "use_joint_circular_treatment_not_independent_component_counting",
+    "polymorphism": "do_not_force_polymorphic_taxa_to_one_fixed_state"
+  },
+  "current_work_order": [
+    "keep_azami_chapter1_on_submission_and_validity_gates",
+    "execute_eazami_maximum_public_nuclear_tree",
+    "build_cross_repo_trait_tip_bridge",
+    "freeze_supported_topology_ensemble_and_taxon_crosswalk",
+    "run_colour_then_orientation_then_shape_ancestral_state_analysis",
+    "build_next_generation_phyllary_spine_stickiness_ontology",
+    "promote_high_information_transitions_to_population_and_fitness_tests"
+  ],
+  "stop_rules": [
+    "no_broad_new_china_sampling_freeze_before_public_nuclear_tree_brackets_unresolved_histories",
+    "no_definitive_asr_from_azami_grafted_historical_tree",
+    "no_adaptation_from_macro_correlation_alone",
+    "no_pathway_loss_from_missing_annotation_alone",
+    "no_new_chapter1_trait_expansion_unless_required_for_validity"
+  ]
+}
