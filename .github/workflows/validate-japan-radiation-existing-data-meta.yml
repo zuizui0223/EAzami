@@ -35,7 +35,14 @@ jobs:
           python analysis/summarize_japan_radiation_existing_data_meta.py \
             --repo-root . \
             --out meta_out/japan_radiation_existing_data_meta_v1.json
-          cmp meta_out/japan_radiation_existing_data_meta_v1.json data/evidence/japan_radiation_existing_data_meta_v1.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          generated = json.loads(Path('meta_out/japan_radiation_existing_data_meta_v1.json').read_text())
+          frozen = json.loads(Path('data/evidence/japan_radiation_existing_data_meta_v1.json').read_text())
+          if generated != frozen:
+              raise SystemExit('Regenerated meta-analysis differs semantically from frozen summary')
+          PY
       - name: Upload meta-analysis summary
         uses: actions/upload-artifact@v4
         with:
