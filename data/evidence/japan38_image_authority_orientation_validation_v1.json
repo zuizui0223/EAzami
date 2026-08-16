@@ -1,0 +1,14 @@
+{
+  "contract_version": "japan38_image_authority_orientation_validation_v1",
+  "n_taxa": 8,
+  "n_upward_authority_taxa": 4,
+  "n_downward_authority_taxa": 4,
+  "upward_group_image_angle_median": 78.7148546760284,
+  "downward_group_image_angle_median": 90.884897052052,
+  "down_minus_up_median_angle_difference": 12.170042376023602,
+  "exact_label_permutations": 70,
+  "directional_positive_permutation_p": 0.15714285714285714,
+  "two_sided_permutation_p": 0.3142857142857143,
+  "descriptive_result": "The Azami image-orientation proxy is directionally consistent with the authority categories in this small overlap set: authority-downward taxa have a larger median image angle than authority-upward taxa.",
+  "claim_boundary": "The overlap contains only eight taxa and the exact permutation test is not significant at 0.05. Image vertical remains a proxy rather than gravity, authority categories can contain population variation, and this check does not calibrate individual measurements or validate ancestral states."
+}
