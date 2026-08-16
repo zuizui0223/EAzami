@@ -1,0 +1,58 @@
+name: Validate Japan-38 authority module combinations
+
+on:
+  pull_request:
+    paths:
+      - "analysis/summarize_japan38_authority_module_combinations.py"
+      - "tests/test_summarize_japan38_authority_module_combinations.py"
+      - "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv"
+      - ".github/workflows/validate-japan38-authority-module-combinations.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install pandas
+      - name: Compile and test
+        run: |
+          python -m py_compile analysis/summarize_japan38_authority_module_combinations.py
+          python -m unittest tests/test_summarize_japan38_authority_module_combinations.py -v
+      - name: Build descriptive state-combination meta result
+        run: |
+          python analysis/summarize_japan38_authority_module_combinations.py \
+            --seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --out-dir module_meta
+      - name: Validate boundaries
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('module_meta/japan38_authority_module_combinations_v1.json').read_text())
+          assert s['n_authority_seed_concepts'] == 22
+          assert s['n_dominant_seed_concepts'] == 20
+          assert s['n_secondary_seed_concepts'] == 2
+          assert s['dominant_orientation_counts']['upward_or_erect'] == 10
+          assert s['dominant_orientation_counts']['upward_or_ascending'] == 1
+          assert s['dominant_orientation_counts']['downward_or_nodding'] == 6
+          assert s['dominant_stickiness_counts']['sticky'] == 5
+          assert s['dominant_stickiness_counts']['nonsticky_or_nearly_nonsticky'] == 5
+          assert s['secondary_orientation_counts'] == {'upward_or_erect': 2}
+          assert s['secondary_stickiness_counts'] == {'nonsticky_or_nearly_nonsticky': 1, 'sticky': 1}
+          assert s['n_dominant_orientation_stickiness_combinations'] >= 3
+          assert s['n_secondary_orientation_stickiness_combinations'] == 2
+          assert 'does not' in s['claim_boundary']
+          print(json.dumps(s, indent=2, ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-authority-module-combinations-${{ github.run_id }}
+          path: module_meta
+          retention-days: 90
