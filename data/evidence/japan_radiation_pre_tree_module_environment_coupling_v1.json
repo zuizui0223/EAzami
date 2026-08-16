@@ -1,0 +1,69 @@
+{
+  "contract_version": "japan_radiation_pre_tree_module_environment_coupling_v1",
+  "n_taxa": 9,
+  "environment_axes": 4,
+  "taxon_label_permutations": 9999,
+  "permutation_seed": 20260816,
+  "modules": {
+    "orientation": {
+      "n_axes": 1,
+      "observed_spearman_rho": -0.012097812097812096,
+      "positive_coupling_permutation_p": 0.4783,
+      "two_sided_permutation_p": 0.967,
+      "leave_one_taxon_out_rho": {
+        "Cirsium aomorense": 0.062397372742200335,
+        "Cirsium japonicum": -0.14668856048166393,
+        "Cirsium kamtschaticum": 0.025725232621784347,
+        "Cirsium lineare": -0.06896551724137931,
+        "Cirsium maritimum": 0.11932129173508485,
+        "Cirsium oligophyllum": -0.13738368910782706,
+        "Cirsium pendulum": 0.05199781061850027,
+        "Cirsium sieboldii": 0.17952928297755882,
+        "Cirsium verutum": -0.1417624521072797
+      },
+      "leave_one_out_all_negative": false,
+      "leave_one_out_signs_mixed": true
+    },
+    "colour": {
+      "n_axes": 2,
+      "observed_spearman_rho": -0.003346203346203347,
+      "positive_coupling_permutation_p": 0.4584,
+      "two_sided_permutation_p": 0.9873,
+      "leave_one_taxon_out_rho": {
+        "Cirsium aomorense": -0.05747126436781609,
+        "Cirsium japonicum": -0.21018062397372742,
+        "Cirsium kamtschaticum": 0.20142309797482214,
+        "Cirsium lineare": -0.011494252873563218,
+        "Cirsium maritimum": -0.016420361247947456,
+        "Cirsium oligophyllum": -0.10727969348659004,
+        "Cirsium pendulum": -0.003284072249589491,
+        "Cirsium sieboldii": 0.2255062944718117,
+        "Cirsium verutum": 0.08045977011494251
+      },
+      "leave_one_out_all_negative": false,
+      "leave_one_out_signs_mixed": true
+    },
+    "shape": {
+      "n_axes": 4,
+      "observed_spearman_rho": -0.2808236808236808,
+      "positive_coupling_permutation_p": 0.8349,
+      "two_sided_permutation_p": 0.3134,
+      "leave_one_taxon_out_rho": {
+        "Cirsium aomorense": -0.2676518883415435,
+        "Cirsium japonicum": -0.3169129720853858,
+        "Cirsium kamtschaticum": -0.26327312534209085,
+        "Cirsium lineare": -0.29009304871373837,
+        "Cirsium maritimum": -0.19211822660098524,
+        "Cirsium oligophyllum": -0.3568691844553913,
+        "Cirsium pendulum": -0.2255062944718117,
+        "Cirsium sieboldii": -0.30268199233716475,
+        "Cirsium verutum": -0.24849480021893816
+      },
+      "leave_one_out_all_negative": true,
+      "leave_one_out_signs_mixed": false
+    }
+  },
+  "descriptive_result": "No module shows positive current climate-distance coupling in this nine-taxon pre-tree subset. Orientation and colour are approximately uncoupled and leave-one-out signs are mixed; the shape-distance association is negative and remains negative after removing any one taxon, although its permutation test is not significant.",
+  "interpretation": "This weakens a single-axis climate-matching explanation for capitulum disparity and supports testing ecological drivers by trait module rather than treating the capitulum as one syndrome.",
+  "claim_boundary": "Nine taxa, four broad CHELSA descriptors and species-median image traits are insufficient to exclude ecological adaptation on unmeasured abiotic or biotic axes. Pairwise observations are not phylogenetically independent; no evolutionary rate or adaptation is inferred."
+}
