@@ -32,18 +32,21 @@ class MaximumPublicCombinedHPCBundleTests(unittest.TestCase):
 
     def test_bundle_contract_is_fail_closed(self):
         m = self.manifest
-        self.assertEqual(m["bundle_version"], "maximum_public_combined_hpc_bundle_v1")
-        self.assertEqual(m["prerequisite_independent_gate_contract"], "maximum_public_nuclear_independent_gate_summary_v1")
-        self.assertEqual(m["independent_candidates_required_to_pass"], ["EA01", "EA02", "CNIPG"])
+        self.assertEqual(m["bundle_version"], "maximum_public_combined_hpc_bundle_v2")
+        self.assertEqual(m["prerequisite_independent_gate_contract"], "maximum_public_nuclear_independent_gate_summary_v2")
+        self.assertEqual(m["independent_candidates_required_to_pass"], ["EA01", "CNIPG"])
+        self.assertEqual(m["excluded_duplicate_controls"], ["EA02"])
         self.assertEqual(m["baseline_focal_tips"], 294)
-        self.assertEqual(m["scenario_count"], 8)
-        self.assertEqual(m["final_scenario"], "ea01_ea02_cnipg_297")
+        self.assertEqual(m["scenario_count"], 4)
+        self.assertEqual(m["final_scenario"], "ea01_cnipg_296")
         self.assertEqual(m["mapping_modes"], ["bwa", "blastx"])
-        self.assertEqual(m["minimum_four_way_common_loci"], 100)
+        self.assertEqual(m["minimum_common_loci"], 100)
         self.assertTrue(m["all_scenarios_same_locus_set_within_mode"])
-        self.assertTrue(m["blastx_ea01_ea02_packs_from_independent_heavy_run"])
+        self.assertTrue(m["bwa_ea01_pack_frozen_in_bundle"])
+        self.assertTrue(m["blastx_ea01_pack_from_independent_heavy_run"])
         self.assertTrue(m["cnipg_pack_fixed_across_mapping_modes"])
-        self.assertFalse(m["combined_297_acceptance_pre_authorized"])
+        self.assertFalse(m["ea02_enters_biological_tree_inputs"])
+        self.assertFalse(m["combined_296_acceptance_pre_authorized"])
         self.assertEqual(m["new_analysis_taxon_labels_added"], 0)
         self.assertFalse(m["new_china_sampling_freeze_allowed"])
         self.assertFalse(m["heavy_compute_executed_by_builder"])
@@ -61,10 +64,11 @@ class MaximumPublicCombinedHPCBundleTests(unittest.TestCase):
         self.assertTrue(required <= {p.name for p in self.bundle.glob("*.sh")})
         submit = (self.bundle / "submit_combined_after_independent_pass.sh").read_text()
         self.assertIn("independent_candidate_gate_results", submit)
-        self.assertIn("combined_296_or_297_tree_accepted", submit)
+        self.assertIn("combined_296_tree_accepted", submit)
         self.assertIn("combined_common_paired_locus_tree_required", submit)
         self.assertIn("submit_mode bwa", submit)
         self.assertIn("submit_mode blastx", submit)
+        self.assertNotIn("'EA02':True", submit)
 
     def _synthetic_mode(self, root: Path, mode: str, *, fail_scenario: str | None = None) -> None:
         mode_root = root / mode
@@ -73,12 +77,13 @@ class MaximumPublicCombinedHPCBundleTests(unittest.TestCase):
         paired.mkdir(parents=True)
         evaluation.mkdir(parents=True)
         (paired / "combined_input_summary.json").write_text(json.dumps({
-            "contract_version": "maximum_public_combined_tree_inputs_v1",
+            "contract_version": "maximum_public_combined_tree_inputs_v2",
             "independent_gate_prerequisite_passed": True,
-            "four_way_common_paired_loci": 120 if mode == "bwa" else 110,
-            "minimum_four_way_common_loci": 100,
-            "all_eight_scenarios_use_identical_locus_set": True,
-            "scenario_count": 8,
+            "baseline_ea01_cnipg_common_paired_loci": 120 if mode == "bwa" else 110,
+            "minimum_common_loci": 100,
+            "all_four_scenarios_use_identical_locus_set": True,
+            "scenario_count": 4,
+            "ea02_enters_combined_tree": False,
             "combined_tree_acceptance_pre_authorized": False,
         }))
         for scenario, candidates in summarizer.SCENARIOS.items():
@@ -103,9 +108,10 @@ class MaximumPublicCombinedHPCBundleTests(unittest.TestCase):
         self._synthetic_mode(root, "blastx")
         result = summarizer.summarize(root)
         self.assertTrue(result["all_modes_all_subset_scenarios_passed"])
-        self.assertTrue(result["combined_297_sample_tree_acceptance_allowed"])
-        self.assertEqual(result["resulting_sample_level_tip_count_if_accepted"], 297)
+        self.assertTrue(result["combined_296_sample_tree_acceptance_allowed"])
+        self.assertEqual(result["resulting_sample_level_tip_count_if_accepted"], 296)
         self.assertEqual(result["new_analysis_taxon_labels_added_if_accepted"], 0)
+        self.assertFalse(result["ea02_enters_biological_tree_inputs"])
         self.assertFalse(result["new_china_sampling_freeze_allowed"])
         self.assertFalse(result["flower_colour_history_claim_changed_by_this_gate"])
         self.assertFalse(result["manual_review_required"])
@@ -116,7 +122,7 @@ class MaximumPublicCombinedHPCBundleTests(unittest.TestCase):
         self._synthetic_mode(root, "blastx", fail_scenario="ea01_cnipg_296")
         result = summarizer.summarize(root)
         self.assertFalse(result["all_modes_all_subset_scenarios_passed"])
-        self.assertFalse(result["combined_297_sample_tree_acceptance_allowed"])
+        self.assertFalse(result["combined_296_sample_tree_acceptance_allowed"])
         self.assertEqual(result["resulting_sample_level_tip_count_if_accepted"], 294)
         self.assertTrue(result["manual_review_required"])
 
