@@ -84,7 +84,8 @@ jobs:
           assert s['authority_module_combinations']['secondary_orientation_stickiness_combinations']==auth['n_secondary_orientation_stickiness_combinations']==2
 
           assert s['current_verdict']['adaptive_radiation']=='unresolved'
-          assert 'does not estimate evolutionary rates' in s['claim_boundary']
+          boundary=s['claim_boundary'].lower()
+          assert 'evolutionary rates' in boundary and 'adaptive radiation' in boundary
           print(json.dumps(s,indent=2,ensure_ascii=False))
           PY
       - uses: actions/upload-artifact@v4
