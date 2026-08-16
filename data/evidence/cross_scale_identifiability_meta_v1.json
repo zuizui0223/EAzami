@@ -1,0 +1,122 @@
+{
+  "contract_version": "cross_scale_identifiability_meta_v1",
+  "generated_date": "2026-08-16",
+  "analysis_type": "descriptive evidence synthesis; not an effect-size meta-analysis",
+  "purpose": "Push existing/public evidence to its current inference ceiling and separate analysis-limited unknowns from unknowns that require newly linked biological data.",
+  "sources": [
+    "docs/ideas/MICRO_TO_MACRO_HYPOTHESIS_PROGRAM_V3_2026-08-15.md",
+    "docs/HMM2_POPULATION_AWARE_TRANSITION_TEST_2026-08-15.md",
+    "docs/JAPAN_ADAPTIVE_RADIATION_EVIDENCE_STATUS_2026-08-16.md",
+    "data/evidence/japan_adaptive_radiation_evidence_ladder_v1.csv",
+    "docs/JAPAN_RADSEQ_PHASE_A_SAMPLING_PLAN_2026-08-16.md",
+    "data/evidence/cirsium_flavonoid_molecular_bridge_summary_v1.json",
+    "issue #22 molecular-family validation updates"
+  ],
+  "japanese_history_concentration": {
+    "sampled_taxon_concepts": 38,
+    "history_class_counts": {
+      "dominant_Japanese_radiation": 36,
+      "Cirsium_lineare_history": 1,
+      "Cirsium_dipsacolepis_history": 1
+    },
+    "dominant_share": 0.9473684210526315,
+    "dominant_to_pooled_secondary_ratio": 18.0,
+    "simpson_concentration_sum_p_squared": 0.8988919667590026,
+    "effective_number_of_history_classes_inverse_simpson": 1.1124807395993839,
+    "interpretation": "The sampled Japanese taxon concepts are extremely concentrated in one inferred history class.",
+    "claim_boundary": "These are descriptive concentration statistics over the sampled taxon concepts. They are not diversification-rate estimates and do not correct for branch duration, extinction, or sampling fraction."
+  },
+  "adaptive_radiation_evidence_ceiling": {
+    "component_or_presence_nodes": {
+      "ids": ["E1", "E2", "E3", "E4", "E5", "E6", "E7"],
+      "total": 7,
+      "non_unresolved": 7
+    },
+    "higher_order_coupling_nodes": {
+      "ids": ["E8", "E9", "E10"],
+      "total": 3,
+      "unresolved": 3
+    },
+    "interpretation": "Current evidence is substantially richer for the presence of the radiation, trait/ecology variation, discordance and cytotype heterogeneity than for causal coupling among those layers."
+  },
+  "hmm2_linkage_ceiling": {
+    "reviewed_polymorphic_systems": 4,
+    "systems_with_state_resolution_compression": 4,
+    "systems_with_direct_morph_linked_public_nuclear_samples": 1,
+    "direct_morph_genotype_linkage_fraction": 0.25,
+    "systems_still_linkage_limited": 3,
+    "currently_testable_system_result": {
+      "taxon": "Cirsium japonicum var. takaoense",
+      "species_level_minimum_transitions": 1,
+      "sample_aware_minimum_transitions": 2,
+      "delta": 1
+    },
+    "claim_boundary": "The one-system 2x minimum-count sensitivity is not a replicated transition-rate estimate. The replicated test is blocked by morph-genotype linkage and genealogy/branch-length information."
+  },
+  "molecular_ceiling": {
+    "published_panel_result": {
+      "upstream_core_branch_families_directly_reported": 9,
+      "upstream_core_branch_families_total": 9,
+      "terminal_regulatory_transport_families_directly_reported": 0,
+      "terminal_regulatory_transport_families_total": 7
+    },
+    "public_genome_validation_status_from_issue_22": {
+      "reference_rows_with_C_nipponicum_candidates": "11/11",
+      "first_pass_family_discrimination": "4/4 (DFR, ANS/LDOX, CHS, FLS)"
+    },
+    "interpretation": "General pathway-family presence and candidate sequence mapping are no longer the main unknown. The unresolved layer is direct white-versus-coloured causation, regulatory mechanism, locus reuse, and same-individual genotype-expression-pigment linkage.",
+    "claim_boundary": "Candidate recovery or family discrimination does not establish the historical cause of white/coloured evolution."
+  },
+  "program_level_result": {
+    "id": "P8_cross_scale_linkage_bottleneck",
+    "type": "identifiability_result_not_biological_hypothesis",
+    "result": "The dominant remaining uncertainty is cross-layer linkage rather than component presence: molecular, phenotype, phylogeny, ploidy and macroevolutionary signals often exist separately, but higher-order claims remain unidentified because measurements are not linked on the same biological units.",
+    "study_design_implication": "Prioritize matched individual/population/lineage measurements over adding more unlinked taxa or literature records when the target claim is causal or cross-scale."
+  },
+  "irreducible_or_near_irreducible_data_gates": [
+    {
+      "id": "G1",
+      "gate": "replicated morph-genotype linkage",
+      "needed": "Same-individual colour morph + DNA + voucher + coordinates/elevation for replicated white/coloured populations, with C. pendulum and C. sieboldii as high-value Phase-A targets.",
+      "why_existing_data_stop": "Three of four reviewed polymorphic systems lack direct morph-linked public nuclear samples."
+    },
+    {
+      "id": "G2",
+      "gate": "same-sample ploidy/cytotype linkage",
+      "needed": "Ploidy tissue or measurement linked to the same sampled individuals/populations used for genomic and phenotype analyses.",
+      "why_existing_data_stop": "Published cytotype diversity supports presence, but exact sample-level ploidy for the focal sampling targets was not recoverable in the current public-data audit."
+    },
+    {
+      "id": "G3",
+      "gate": "direct white-versus-coloured molecular causation",
+      "needed": "Homologous candidate-locus comparison in fixed-white and coloured lineages with phenotype and DNA linked to the same individuals; add floral RNA/pigment assays when genomic association or a direct regulatory hypothesis warrants them.",
+      "why_existing_data_stop": "Current public sequence evidence resolves pathway-family presence better than W/C causal contrast."
+    },
+    {
+      "id": "G4",
+      "gate": "time- and sampling-corrected diversification inference",
+      "needed": "Accepted dated branch-length tree plus explicit sampling fractions/coverage for the compared history classes.",
+      "why_existing_data_stop": "The 36:1:1 history distribution is descriptive and cannot by itself estimate diversification rate. This gate may be satisfiable by recovering/computing the existing tree artifact rather than new field sampling."
+    },
+    {
+      "id": "G5",
+      "gate": "strict local-adaptation or selection causation",
+      "needed": "If the intended claim is measured adaptation/selection rather than ecological divergence, link phenotype and environment to fitness, selection gradients, or reciprocal/common-garden evidence in focal radiation populations.",
+      "why_existing_data_stop": "Co-occurrence of rapid radiation, ecological divergence and trait variation does not by itself identify a fitness-mediated causal mechanism."
+    },
+    {
+      "id": "G6",
+      "gate": "Azami macro-to-micro mechanism",
+      "needed": "Populate trait-bridge rows that link the chapter-1 macro state to specimen/population-level molecular or regulatory measurements in phylogenetically positioned Cirsium units.",
+      "why_existing_data_stop": "Macro A2/lambda/BM/OU states constrain evolutionary pattern but do not identify the responsible genes or regulatory events."
+    }
+  ],
+  "priority_order": [
+    "G1+G2: highest immediate cross-layer information gain and already aligned with RAD-seq Phase A",
+    "G4: complete from existing tree/HPC/public artifacts if possible before collecting biology",
+    "G3: direct W/C molecular bridge after or alongside genomic sampling",
+    "G6: fill macro-to-micro trait bridge as matched data become available",
+    "G5: collect only if a strict fitness-mediated adaptive claim is an explicit paper goal"
+  ],
+  "decision_rule": "Do not conflate 'unknown because the analysis has not yet been run' with 'unknown because linked data do not exist'. Exhaust recoverable public/computational gates first; collect new biological data only for claims whose identifiability remains blocked after that audit."
+}
