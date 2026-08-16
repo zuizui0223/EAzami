@@ -1,0 +1,56 @@
+name: Validate Japan-38 cytotype-trait overlap
+
+on:
+  pull_request:
+    paths:
+      - "analysis/summarize_japan38_cytotype_trait_overlap.py"
+      - "tests/test_summarize_japan38_cytotype_trait_overlap.py"
+      - "data/evidence/japan38_existing_cytotype_meta_v1.csv"
+      - "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv"
+      - ".github/workflows/validate-japan38-cytotype-trait-overlap.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependency
+        run: python -m pip install pandas
+      - name: Compile and test
+        run: |
+          python -m py_compile analysis/summarize_japan38_cytotype_trait_overlap.py
+          python -m unittest tests/test_summarize_japan38_cytotype_trait_overlap.py -v
+      - name: Build source-backed overlap summary
+        run: |
+          python analysis/summarize_japan38_cytotype_trait_overlap.py \
+            --cytotypes data/evidence/japan38_existing_cytotype_meta_v1.csv \
+            --traits data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --out-dir cytotype_trait_meta
+      - name: Validate frozen descriptive boundaries
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('cytotype_trait_meta/japan38_cytotype_trait_overlap_v1.json').read_text())
+          assert s['n_source_backed_cytotype_concepts'] == 9
+          assert s['n_dominant_radiation_cytotype_concepts'] == 8
+          assert s['dominant_radiation_ploidy_levels'] == [2,4,6]
+          assert s['dominant_radiation_ploidy_counts'] == {'2':5,'4':2,'6':1}
+          assert set(s['upward_or_ascending_observed_ploidy_levels']) == {2,4,6}
+          assert 'upward_or_erect' in s['diploid_observed_orientation_states']
+          assert 'downward_or_nodding' in s['diploid_observed_orientation_states']
+          assert 'does not estimate' in s['claim_boundary']
+          print(json.dumps(s,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-cytotype-trait-overlap-${{ github.run_id }}
+          path: cytotype_trait_meta
+          retention-days: 90
