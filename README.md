@@ -1,101 +1,100 @@
-# EAzami — East Asian *Cirsium* hypothesis-resolution layer
+# EAzami — rapid Japanese *Cirsium* radiation
 
-EAzami is no longer organized around “build the largest tree first.” Its current purpose is to use existing East Asian/Japanese evidence to identify **which evolutionary hypotheses are already constrained, which remain non-identifiable, and exactly what biological data must be collected next**.
+EAzami is organized around one doctoral-level question:
+
+> **Why did one young Japanese *Cirsium* radiation generate such large capitulum and ecological diversity so quickly, despite shallow lineage divergence?**
+
+## Central hypothesis
+
+**Modular evolvability:** standing ancestral variation, gene flow/introgression and cytotype/genome changes allowed pre-existing genetic/developmental modules to be reused and recombined, so capitulum phenotype could diverge faster than genome-wide lineage sorting.
+
+This is the main thesis hypothesis. The older ten-row hypothesis registry is retained only as a supporting evidence register.
+
+## Three doctoral Aims
+
+1. **Aim 1 — Historical/genomic source of rapid phenotypic divergence**  
+   Determine whether repeated capitulum states come from standing variation, introgression and population ancestry, with matched plastid and cytotype evidence.
+2. **Aim 2 — Adaptive function of capitulum modules**  
+   Test whether orientation, colour and involucre/spine modules alter interactions, protection and reproductive fitness.
+3. **Aim 3 — Flower-colour reversibility as a mechanistic case**  
+   Test whether repeated W↔coloured transitions reuse a retained anthocyanin pathway through regulatory/expression changes.
+
+Full program: `docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md`  
+Machine-readable program: `data/evidence/doctoral_core_program_v1.csv`
+
+## What is premise, not a separate thesis Aim
+
+Existing data are already strong enough to treat the following as system justification:
+
+- 36/38 sampled Japanese paper taxon concepts fall in one dominant young radiation;
+- *C. lineare* is the strongest replicated secondary-history exception;
+- *C. dipsacolepis* remains a secondary-arrival candidate;
+- large current capitulum and environmental disparity occurs inside the dominant radiation.
+
+A full 294/296-tip raw-read rebuild is therefore **not a prerequisite for doctoral sampling**. It remains available if branch-scaled rate inference later becomes publication-critical.
+
+## How the old operational questions are used
+
+`data/evidence/preliminary_hypothesis_registry_v1.csv` remains useful for bookkeeping, but its ten rows are not ten equal hypotheses.
+
+- radiation asymmetry = premise;
+- evolvability / standing variation / introgression / cytonuclear / ploidy / colour compression / Ryukyu history = Aim 1 diagnostics;
+- broad climate = weakened simple alternative informing Aim 2;
+- trait→fitness = Aim 2;
+- anthocyanin pathway reuse = Aim 3.
+
+Supporting map: `docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md`
+
+## Sampling priority
+
+### Core first: 190 minimum
+
+- *C. brevicaule*: 60
+- *C. irumtiense*: 60
+- *C. pendulum*: 40
+- *C. sieboldii*: 30
+
+These four are the biological core because they test repeated rapid phenotype change at population scale.
+
+### Comparative controls: +32
+
+- *C. lineare*: 16
+- *C. dipsacolepis*: 16
+
+Full minimum = **222 individuals**. The controls should not reduce replication in the core 190.
+
+Each population-genomic individual should link, where possible:
+
+`individual_id -> locality/voucher/photo -> colour/orientation/involucre -> nuclear ancestry -> plastid haplotype -> flow-cytometry cytotype`
+
+Aim 3 focal individuals additionally link floral RNA, pigment and standardized colour.
+
+## Preliminary-analysis stop rule
+
+New preliminary work is allowed only when it changes one of three decisions:
+
+1. which population/system to sample;
+2. which competing mechanism can be discriminated;
+3. which claim boundary can be advanced.
+
+More broad CHELSA screens, taxon-level ploidy correlations, untargeted SRA/BLAST fishing and routine heavy tree rebuilding are not current mainline work.
 
 ## Start here
 
-1. **Hypothesis → preliminary analysis → missing data map**  
-   `docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md`
-2. **Machine-readable hypothesis registry**  
-   `data/evidence/preliminary_hypothesis_registry_v1.csv`
-3. **Current project state**  
-   `PROJECT_STATUS.md`
-4. **Full population-sampling design**  
-   `docs/JAPAN_RADSEQ_PHASE_A_SAMPLING_PLAN_2026-08-16.md`
-5. **Deferred heavy-compute policy**  
-   `docs/DEFERRED_HEAVY_ANALYSES.md`
-
-## Scientific program
-
-```text
-Azami Chapter 1
-Global public-image macro patterns
-        ↓ hypotheses
-EAzami preliminary resolution
-Existing-data tests + explicit non-identifiability
-        ↓ only discriminating new data
-Population / mechanism studies
-ancestry + plastid + cytotype + trait + expression + pigment + interaction + fitness
-```
-
-## What is already supported enough for sampling decisions
-
-- A young Japanese rapid radiation is strongly supported.
-- 36/38 sampled Japanese paper taxon concepts fall in the dominant radiation; `C. lineare` is the strongest replicated secondary-history exception and `C. dipsacolepis` remains a secondary-arrival candidate.
-- Large current capitulum disparity occurs inside the dominant radiation.
-- A separate colonization history is not automatically the most morphologically or environmentally divergent.
-- Broad current CHELSA distance does not positively track capitulum distance in the current nine-taxon subset.
-- Ploidy does not deterministically set head orientation.
-- One colonization history does not correspond to one capitulum syndrome.
-- Species-tip coding compresses documented W/C polymorphism; only takaoense currently has direct morph-linked high-dimensional nuclear samples.
-- Anthocyanin-pathway retention/regulatory reuse is biologically plausible, but mechanism is not demonstrated.
-
-These are **preliminary decision results**, not proof of adaptive radiation, evolutionary-rate acceleration, or causal evolvability.
-
-## Current live hypotheses
-
-The canonical registry contains ten operational questions:
-
-- `H-RAD1` — radiation-success asymmetry;
-- `H-EVOL1` — modular evolvability inside the dominant radiation;
-- `H-CLIM1` — broad-climate explanation of capitulum disparity;
-- `H-PL1` — ploidy as deterministic morphology explanation;
-- `H-COL1` — species-tip compression of colour transitions;
-- `H-RET1` — standing variation / introgression as trait-reuse mechanisms;
-- `H-MECH1` — anthocyanin pathway retention/regulatory reuse;
-- `H-CYTO1` — focal cytonuclear discordance;
-- `H-ADAPT1` — trait → interaction → fitness causation;
-- `H-RYK1` — Arenicola island-population colour history.
-
-Each hypothesis has an explicit current verdict, existing-data limit, next data requirement, and stop rule in `data/evidence/preliminary_hypothesis_registry_v1.csv`.
-
-## Preliminary-analysis policy
-
-A new preliminary analysis is added only if its outcome changes the next observation or claim boundary.
-
-Routine PR CI is limited to committed-evidence validation and small deterministic analyses. Repeated SRA downloads, transcriptome assembly, large HybPiper/IQ-TREE/ASTRAL/Read2Tree runs, and already-frozen proteome/BLAST recovery are **not routine preliminary CI**.
-
-The corresponding heavy execution code and scientific evidence remain available under `analysis/`, `workflow/`, `data/evidence/`, and Git history. See `docs/DEFERRED_HEAVY_ANALYSES.md`.
-
-## Heavy nuclear tree status
-
-The accepted public inventory remains **294 biological tips / 295 unique SRRs / 270 source-preserving labels**, with EA01 and CNIPG as independent augmentation candidates and EA02 excluded as a duplicate-readset pseudoreplicate.
-
-The Slurm/large-memory 294→296 reconstruction path is preserved, but **it is deferred and is not a prerequisite for the current sampling plan**. It should be reopened only if branch-scaled diversification/trait-rate inference or candidate admission becomes decision-critical.
-
-## What new data are actually needed
-
-Current non-identifiable questions require linked biological observations, not more broad preliminary computation:
-
-- morph↔genotype linkage beyond takaoense;
-- standing variation vs introgression;
-- population cytotype distributions and ploidy-aware ancestry;
-- same-individual nuclear + plastid histories;
-- trait → interaction → fitness effects;
-- genotype → floral expression → pigment → phenotype mechanisms.
-
-The full population-history target remains **222 minimum / 298 recommended individuals** across `C. pendulum`, `C. sieboldii`, `C. lineare`, `C. dipsacolepis`, `C. brevicaule`, and `C. irumtiense`.
-
-A staged first tranche can prioritize takaoense W/BP, pendulum W/coloured, and brevicaule/irumtiense if field logistics require a smaller first collection.
+1. `docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md` — central question, central hypothesis and three Aims
+2. `PROJECT_STATUS.md` — current evidence and next action
+3. `data/evidence/doctoral_core_program_v1.csv` — machine-readable doctoral hierarchy
+4. `docs/JAPAN_RADSEQ_PHASE_A_SAMPLING_PLAN_2026-08-16.md` — detailed population design
+5. `docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md` — supporting evidence lanes
+6. `docs/DEFERRED_HEAVY_ANALYSES.md` — deferred heavy-compute policy
 
 ## Repository layout
 
-- `data/evidence/` — frozen results, contracts, hypothesis registry
-- `docs/` — current scientific interpretation, claim boundaries, sampling logic
+- `data/evidence/` — frozen evidence plus doctoral/supporting registries
+- `docs/` — central program, claim boundaries and sampling logic
 - `analysis/` — deterministic analysis code retained for reproducibility
 - `sampling/` — focal sampling/reference panels
 - `workflow/` — deferred/manual/HPC execution paths
-- `tests/` — local deterministic tests
-- `.github/workflows/` — **lightweight active CI only**
+- `.github/workflows/` — lightweight active CI only
 
-Historical exploratory workflow implementations remain available from Git history rather than running as parallel routine CI.
+The target end point is not “the biggest tree.” It is a causal explanation linking **where reusable variation came from → how capitulum modules affect fitness → how a focal module can switch repeatedly at molecular scale**.
