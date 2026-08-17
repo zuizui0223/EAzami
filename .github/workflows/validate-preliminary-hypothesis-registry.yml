@@ -1,0 +1,68 @@
+name: Validate preliminary hypothesis registry
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/preliminary_hypothesis_registry_v1.csv"
+      - "docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md"
+      - "docs/DEFERRED_HEAVY_ANALYSES.md"
+      - "PROJECT_STATUS.md"
+      - "README.md"
+      - ".github/workflows/README.md"
+      - ".github/workflows/validate-preliminary-hypothesis-registry.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate hypothesis-to-analysis-to-data contract
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          path=Path('data/evidence/preliminary_hypothesis_registry_v1.csv')
+          rows=list(csv.DictReader(path.open(encoding='utf-8',newline='')))
+          expected={
+            'H-RAD1','H-EVOL1','H-CLIM1','H-PL1','H-COL1',
+            'H-RET1','H-MECH1','H-CYTO1','H-ADAPT1','H-RYK1'
+          }
+          assert len(rows)==10, len(rows)
+          ids=[r['hypothesis_id'] for r in rows]
+          assert set(ids)==expected and len(ids)==len(set(ids))
+          allowed_status={
+            'strong_descriptive','strengthened_not_demonstrated','not_supported_current_subset',
+            'rejected_as_deterministic','partial_support','unresolved','plausibility_only',
+            'directional_history_only'
+          }
+          allowed_priority={'A','B'}
+          for r in rows:
+              assert r['question'].strip()
+              assert r['preliminary_analyses'].strip()
+              assert r['evidence'].strip()
+              assert r['current_status'] in allowed_status, (r['hypothesis_id'],r['current_status'])
+              assert r['current_inference'].strip()
+              assert r['existing_data_limit'].strip()
+              assert r['next_data_required'].strip()
+              assert r['priority'] in allowed_priority
+              assert r['preliminary_stop_rule'].strip()
+              assert r['heavy_compute_policy'].strip()
+          text=Path('docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md').read_text(encoding='utf-8')
+          for hid in sorted(expected):
+              assert hid in text, hid
+          assert 'No routine heavy preliminary compute' in text
+          assert '222 minimum / 298 recommended' in text
+          status=Path('PROJECT_STATUS.md').read_text(encoding='utf-8')
+          assert 'heavy reconstruction path is preserved but **deferred**' in status
+          print('hypothesis_registry_rows=10')
+          print('heavy_preliminary_compute_deferred=true')
+          print('sampling_decision_is_mainline=true')
+          PY
