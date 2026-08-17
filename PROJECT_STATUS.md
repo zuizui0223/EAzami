@@ -2,155 +2,158 @@
 
 Status date: 2026-08-17
 
-## Main goal
+## Doctoral center
 
-The current mainline is **not** to maximize preliminary computation or to finish a 294/296-tip raw-read reconstruction before making biological decisions.
+The project now has **one central question**, not ten parallel thesis hypotheses:
 
-The current goal is:
+> **Why did one young Japanese *Cirsium* radiation generate such large capitulum and ecological diversity so quickly, despite shallow lineage divergence?**
 
-> identify which hypotheses about the Japanese *Cirsium* radiation are already constrained by existing data, state exactly why the remaining hypotheses are non-identifiable, and collect only the biological data that discriminate those alternatives.
+Central hypothesis:
 
-Canonical decision map:
+> **Modular evolvability** — standing ancestral variation, introgression/gene flow and cytotype/genome changes allow pre-existing genetic/developmental modules to be reused and recombined, so phenotype can diverge faster than genome-wide lineage sorting.
 
-- `docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md`
-- `data/evidence/preliminary_hypothesis_registry_v1.csv`
+Canonical program:
 
-## Accepted historical / public state
+- `docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md`
+- `data/evidence/doctoral_core_program_v1.csv`
 
-The public nuclear inventory remains:
+The ten-row preliminary registry is now explicitly a **supporting evidence register**, not the doctoral architecture.
 
-- **294 biological tips**;
-- **295 unique public SRRs**;
-- **270 source-preserving analysis taxon labels**.
+## Three Aims and priority
 
-EA01 and CNIPG remain independent augmentation candidates. EA02 remains a duplicate-readset control and does not increment biological-tip count. The maximum public candidate ceiling remains 296 tips if both independent gates eventually pass.
+### Aim 1 — historical/genomic source of rapid phenotype divergence
 
-This heavy reconstruction path is preserved but **deferred**. It is no longer a prerequisite for Phase-A sampling.
+**Priority 1 / indispensable.**
 
-## Preliminary conclusions already sufficient for decisions
+Resolve standing variation vs introgression vs lineage-specific change using population ancestry, same-individual plastid and cytotype data.
 
-### H-RAD1 — radiation-success asymmetry
+Core systems:
 
-- 36/38 sampled Japanese paper taxon concepts are in the dominant radiation.
-- `C. lineare` is the strongest replicated secondary-history exception.
-- `C. dipsacolepis` remains a secondary-arrival candidate.
-- 36:1:1 under the three-history point hypothesis is descriptive occupancy, not an age-corrected diversification rate.
+- *C. brevicaule* + *C. irumtiense* — Ryukyu focal pair;
+- *C. pendulum* W/coloured — independent mainland replicate;
+- *C. sieboldii* W/coloured — second replicate when feasible;
+- *takaoense* W/BP — molecular/public anchor.
 
-**Decision:** sufficient to choose dominant-radiation and secondary-history focal contrasts. Do not delay sampling for a full raw-read tree.
+`C. lineare` and `C. dipsacolepis` are comparative controls, not standalone doctoral questions.
 
-### H-EVOL1 — modular evolvability
+### Aim 2 — adaptive function of capitulum modules
 
-Current pre-tree trait data show large capitulum disparity within the dominant radiation. The secondary-history comparator `C. lineare` is not uniquely isolated in trait space, and the authority seed contains multiple orientation/stickiness combinations within the dominant history.
+**Priority 2 / indispensable for an adaptive-radiation claim.**
 
-**Decision:** modular evolvability is strengthened as a hypothesis, not demonstrated. The next evidence must link morphology to population ancestry rather than add more broad trait-space screens.
+Test ancestry-resolved populations for:
 
-### H-CLIM1 — broad current climate explanation
+- orientation -> rain/UV/pollen protection vs pollinator presentation;
+- colour -> pollinator attraction and abiotic effects;
+- involucre/phyllary/spine -> antagonist defence vs pollinator access;
+- reproductive-fitness consequences.
 
-For the current nine-taxon quantitative subset, seven-axis capitulum distance × four-axis CHELSA distance gives Spearman rho about **-0.215** with no positive-coupling support. Orientation and colour are approximately uncoupled from broad climate distance; shape is negative but not a significant adaptation result.
+Broad CHELSA correlation is no longer a mainline substitute for functional evidence.
 
-**Decision:** stop expanding broad CHELSA-only preliminary models. Add microhabitat and biotic interaction data in focal systems instead.
+### Aim 3 — flower-colour reversibility as a mechanistic case
 
-### H-PL1 — deterministic ploidy explanation
+**Priority 3 / mechanistic flagship.**
 
-Source-backed dominant-radiation cytotypes include 2x, 4x and 6x. Upward/ascending heads occur across all three ploidy levels and diploids include both upward and downward states.
+Test whether recurrent W↔coloured changes use retained anthocyanin machinery through regulatory/expression change.
 
-**Decision:** ploidy does not deterministically set capitulum orientation. Future ploidy work must use population-linked flow cytometry and ancestry if testing facilitation/evolvability.
+Required chain:
 
-### H-COL1 — species-tip colour compression
+`population ancestry -> coding/regulatory haplotype -> floral RNA -> pigment -> standardized colour`
 
-Four reviewed W/C-polymorphic systems all lose state multiplicity under one species-tip `P` code. Only takaoense currently has morph-linked high-dimensional nuclear samples; there the minimum transition count changes from 1 to 2 when sample states are retained.
+Existing DFR/ANS screens remain plausibility evidence only.
 
-**Decision:** stop additional species-tip colour ASR as a preliminary exercise. Obtain morph↔genotype linkage in additional systems.
+## Premise already strong enough
 
-### H-RET1 — standing variation vs introgression
+The rapid-radiation premise is sufficient for sampling decisions:
 
-Current public data establish plausibility of ILS/reticulation and show state compression, but cannot assign the origin of recurrent trait variants.
+- 36/38 sampled Japanese paper taxon concepts belong to the dominant radiation;
+- `C. lineare` is the strongest replicated secondary-history exception;
+- `C. dipsacolepis` is a secondary-arrival candidate;
+- large present capitulum and environmental disparity already occurs within the dominant young radiation.
 
-**Decision:** population RAD/resequencing + same-individual plastid is required. More broad phylogenomic fishing does not identify the mechanism.
+The 36:1:1 point-hypothesis occupancy is descriptive, not an age-corrected diversification-rate estimate. A heavy branch-length rebuild is optional unless rate acceleration itself becomes decision-critical.
 
-### H-MECH1 — retained pathway / regulatory reuse
+## Preliminary results that now serve the three Aims
 
-C. nipponicum candidate homologs are recovered across the reviewed pathway panel; DFR/ANS homologous reads are detectable in both W and BP takaoense public young-leaf RNA runs.
+### Supports Aim 1 framing
 
-**Decision:** pathway retention is plausible only. Stop repeated untargeted SRA/BLAST screens. Next evidence is matched coding haplotypes + floral RNA + pigment + phenotype.
+- separate colonization history does not monotonically order current capitulum disparity;
+- one colonization history does not define one capitulum syndrome;
+- 2x/4x/6x occur in the dominant radiation, but ploidy does not deterministically set orientation;
+- all four reviewed W/C-polymorphic systems lose state multiplicity under one species-tip `P` code;
+- only `takaoense` currently has morph-linked high-dimensional W/C nuclear samples;
+- ILS/reticulation are plausible, but species-level data cannot assign standing variation vs introgression.
 
-### H-ADAPT1 — adaptive radiation
+### Narrows Aim 2
 
-Current macro/pre-tree analyses show disparity and reject several simple explanations, but do not establish selection or fitness effects.
+In the current nine-taxon subset, broad four-axis CHELSA distance does not positively track capitulum distance. This weakens a simple broad-climate explanation and shifts new ecology toward microclimate, pollinators, florivores/seed predators and fitness.
 
-**Decision:** no further macro correlation is allowed to substitute for adaptation. The decisive step is focal trait → interaction → reproductive-fitness experimentation after ancestry is resolved.
+### Supports Aim 3 plausibility
 
-## Active preliminary CI
+Anthocyanin-pathway homologs are recoverable from *C. nipponicum* and DFR/ANS homologous reads are detectable in W and BP `takaoense` young-leaf public RNA. This is compatible with pathway retention but does not demonstrate floral regulation or causation.
 
-Routine pull-request checks should now focus on lightweight, hypothesis-linked validation:
+## Sampling priority
 
-- Japanese-origin meta/falsification summaries;
-- pre-tree trait and environmental disparity;
-- total and module-specific trait×environment coupling;
-- HMM2 population-aware colour sensitivity;
-- HMM3 focal cytotype synthesis;
-- Japan-38 cytotype/authority/trait joins;
-- current micro-to-macro v3 synthesis;
-- canonical preliminary hypothesis registry.
+### Core 190 minimum
 
-## Deferred heavy computation
+- *C. brevicaule*: 60
+- *C. irumtiense*: 60
+- *C. pendulum*: 40
+- *C. sieboldii*: 30
 
-The following categories are not current preliminary requirements:
+The core 190 has higher doctoral value than spreading effort thinly over every Japanese species.
 
-- public SRA reacquisition and VDB screens;
-- transcriptome assembly/resource planning;
-- large HybPiper + IQ-TREE + ASTRAL reconstruction;
-- Read2Tree / large orthology pipelines;
-- repeated HPC bundle construction;
-- re-downloading proteomes/references to reproduce already frozen candidate screens.
+### Controls +32
 
-See `docs/DEFERRED_HEAVY_ANALYSES.md`.
+- *C. lineare*: 16
+- *C. dipsacolepis*: 16
 
-## New biological data required
+Full minimum = **222**. Recommended fuller design remains **298** where population replication can be increased.
 
-### Highest-information first tranche
+Do not reduce core population replication merely to complete the control set.
 
-A staged first collection can prioritize:
+## What is no longer an independent doctoral hypothesis
 
-1. takaoense W/BP — morph-linked ancestry and mechanism anchor;
-2. pendulum W/coloured — independent Japanese replicate;
-3. brevicaule + irumtiense — Ryukyu population-history/colour system.
+- `H-RAD1` — premise/system justification;
+- `H-CLIM1` — weakened simple alternative;
+- `H-PL1` — modifier/diagnostic inside Aim 1;
+- `H-CYTO1` — diagnostic inside Aim 1;
+- `H-RYK1` — focal system inside Aim 1 and Aim 3;
+- `H-COL1` — transition-resolution diagnostic shared by Aim 1 and Aim 3;
+- `H-EVOL1/H-RET1` — direct support lanes for Aim 1;
+- `H-ADAPT1` — Aim 2;
+- `H-MECH1` — Aim 3.
 
-If logistics require a compact first tranche, approximately **100 individuals** across those systems is enough to begin discriminating H-COL1/H-RET1/H-RYK1, while remaining explicitly a pilot/staged tranche rather than the final panel.
+Supporting ledger: `data/evidence/preliminary_hypothesis_registry_v1.csv`.
 
-### Full population-history design
+## Heavy-compute state
 
-The current full target remains **222 minimum / 298 recommended individuals** across:
+The accepted public nuclear inventory remains **294 biological tips / 295 SRRs / 270 source-preserving labels**. EA01 and CNIPG remain candidates; EA02 remains excluded as a duplicate-readset control.
 
-- `C. pendulum`;
-- `C. sieboldii`;
-- `C. lineare`;
-- `C. dipsacolepis`;
-- `C. brevicaule`;
-- `C. irumtiense`.
+The 294→296 Slurm reconstruction path is preserved but **deferred**. It is not a prerequisite for Aim 1 sampling. Reopen it only if:
 
-Each individual should link, where feasible:
-
-`individual_id → GPS/locality → voucher/photo → colour/orientation/involucre traits → nuclear ancestry → plastid haplotype → cytotype`
-
-Focal colour-mechanism samples additionally link floral RNA and pigment.
+- branch-scaled diversification/trait rate becomes a primary result;
+- candidate admission changes a focal-system decision;
+- a reviewer/journal requires the reconstruction for a specific claim.
 
 ## Stop rules
 
-- Do not run a preliminary analysis unless it maps to a registry hypothesis and changes a decision.
-- Do not repeat a weakened broad-climate model with more similar raster combinations.
-- Do not use taxon-level ploidy correlations to infer causal evolvability.
-- Do not collapse polymorphic taxa to fixed species states for convenience.
-- Do not treat image geometry as direct botanical truth without validation.
-- Do not use a heavy nuclear tree as a prerequisite for sampling unless a branch-scaled rate/topology result changes the sampling decision.
-- Do not call the current Japanese radiation a demonstrated adaptive radiation.
+- Do not turn supporting evidence lanes into new thesis Aims.
+- Do not add broad descriptive analyses unless they change focal sampling or a claim boundary.
+- Do not use more broad climate rasters as a substitute for Aim 2 functional ecology.
+- Do not use taxon-level ploidy as causal evidence; link cytotype to Aim 1 individuals.
+- Do not build a separate plastid megatree instead of matched cytonuclear sampling.
+- Do not call the radiation adaptive until Aim 2 yields fitness evidence.
+- Do not claim regulatory reuse until Aim 3 connects genotype/expression/pigment/phenotype.
+
+## Next action
+
+**Finish the Aim 1 collection design first.** Protect population replication for the Ryukyu focal pair and mainland W/C replicates, then add comparative controls. Functional experiments and floral molecular sampling should be nested within those same ancestry-resolved populations wherever possible.
 
 ## Navigation
 
-- Hypothesis map: `docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md`
-- Registry: `data/evidence/preliminary_hypothesis_registry_v1.csv`
+- Doctoral core: `docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md`
+- Core machine-readable program: `data/evidence/doctoral_core_program_v1.csv`
+- Supporting preliminary lanes: `docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md`
+- Supporting registry: `data/evidence/preliminary_hypothesis_registry_v1.csv`
+- Detailed RAD plan: `docs/JAPAN_RADSEQ_PHASE_A_SAMPLING_PLAN_2026-08-16.md`
 - Deferred heavy analyses: `docs/DEFERRED_HEAVY_ANALYSES.md`
-- Pre-tree synthesis: `docs/JAPAN_RADIATION_PRETREE_META_SYNTHESIS_2026-08-16.md`
-- Sampling plan: `docs/JAPAN_RADSEQ_PHASE_A_SAMPLING_PLAN_2026-08-16.md`
-- Macro→micro roadmap: `docs/AZAMI_EAZAMI_MACRO_TO_MICRO_ROADMAP_2026-08-16.md`
-- Historical full nuclear execution state: `docs/CURRENT_STATE_2026-08-14.md`
