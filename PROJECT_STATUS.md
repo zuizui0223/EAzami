@@ -1,10 +1,10 @@
 # EAzami current state
 
-Status date: 2026-08-17
+Status date: 2026-08-18
 
 ## Doctoral center
 
-The project now has **one central question**, not ten parallel thesis hypotheses:
+The project has **one central question**, not ten parallel thesis hypotheses:
 
 > **Why did one young Japanese *Cirsium* radiation generate such large capitulum and ecological diversity so quickly, despite shallow lineage divergence?**
 
@@ -17,7 +17,7 @@ Canonical program:
 - `docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md`
 - `data/evidence/doctoral_core_program_v1.csv`
 
-The ten-row preliminary registry is now explicitly a **supporting evidence register**, not the doctoral architecture.
+The ten-row preliminary registry is a **supporting evidence register**, not the doctoral architecture.
 
 ## Three Aims and priority
 
@@ -46,6 +46,23 @@ Test ancestry-resolved populations for:
 - colour -> pollinator attraction and abiotic effects;
 - involucre/phyllary/spine -> antagonist defence vs pollinator access;
 - reproductive-fitness consequences.
+
+The first *Cirsium* interaction evidence map is now frozen at:
+
+- `docs/AIM2_CIRSIUM_INTERACTION_EVIDENCE_MAP_2026-08-18.md`;
+- `data/evidence/cirsium_interaction_evidence_seed_v1.csv`;
+- `data/evidence/cirsium_interaction_evidence_summary_v1.json`.
+
+The bounded primary-literature seed contains **10 independent studies, 9 taxa and 11 taxon-study rows**. It separates pollinator behaviour, effective pollination, florivory, pre-dispersal seed predation and foliar-herbivory context rather than pooling them.
+
+Current Aim 2 decision:
+
+1. **head-orientation manipulation first** — no direct *Cirsium* orientation -> interaction/protection -> fitness study was recovered in the bounded seed;
+2. **W/coloured functional comparison second** — no direct *Cirsium* colour -> interaction -> fitness chain was recovered, and this can share individuals/material with Aim 3;
+3. **phyllary/spine conditional third** — proceed only after direct botanical validation and repeatable focal-population variation;
+4. **stickiness lower priority** — the one recovered direct manipulation was null.
+
+A pooled effect-size meta-analysis is **not yet authorized**. It requires at least five independent studies and three taxa for one harmonized contrast/outcome, with original-study deduplication and sampling variance.
 
 Broad CHELSA correlation is no longer a mainline substitute for functional evidence.
 
@@ -87,6 +104,13 @@ The 36:1:1 point-hypothesis occupancy is descriptive, not an age-corrected diver
 
 In the current nine-taxon subset, broad four-axis CHELSA distance does not positively track capitulum distance. This weakens a simple broad-climate explanation and shifts new ecology toward microclimate, pollinators, florivores/seed predators and fitness.
 
+The new evidence map adds a second narrowing step:
+
+- display size and floral scent already have direct *Cirsium* interaction evidence, but generally incomplete fitness chains;
+- seed predators can substantially reduce reproductive output and may track capitulum size or position;
+- the focal Azami modules orientation, colour and phyllary/spine remain direct functional gaps in the bounded seed;
+- therefore the next work is not another broad correlation but ancestry-resolved manipulation and fitness measurement.
+
 ### Supports Aim 3 plausibility
 
 Anthocyanin-pathway homologs are recoverable from *C. nipponicum* and DFR/ANS homologous reads are detectable in W and BP `takaoense` young-leaf public RNA. This is compatible with pathway retention but does not demonstrate floral regulation or causation.
@@ -100,7 +124,7 @@ Anthocyanin-pathway homologs are recoverable from *C. nipponicum* and DFR/ANS ho
 - *C. pendulum*: 40
 - *C. sieboldii*: 30
 
-The core 190 has higher doctoral value than spreading effort thinly over every Japanese species.
+The **190 core individuals** have higher doctoral value than spreading effort thinly over every Japanese species.
 
 ### Controls +32
 
@@ -110,6 +134,8 @@ The core 190 has higher doctoral value than spreading effort thinly over every J
 Full minimum = **222**. Recommended fuller design remains **298** where population replication can be increased.
 
 Do not reduce core population replication merely to complete the control set.
+
+Aim 2 measurements should be nested within the same focal populations wherever possible. Orientation, colour, visitor/antagonist observations and fitness do not require every RAD individual to enter a manipulation, but all experimental plants must retain population and ancestry linkage.
 
 ## What is no longer an independent doctoral hypothesis
 
@@ -140,6 +166,9 @@ The 294→296 Slurm reconstruction path is preserved but **deferred**. It is not
 - Do not turn supporting evidence lanes into new thesis Aims.
 - Do not add broad descriptive analyses unless they change focal sampling or a claim boundary.
 - Do not use more broad climate rasters as a substitute for Aim 2 functional ecology.
+- Do not pool visitor abundance, effective pollination, florivory, seed predation and foliar herbivory into one effect.
+- Do not treat an interaction-database record as an effect size without verifying the original study.
+- Do not infer functional absence merely because a module is absent from the bounded interaction seed.
 - Do not use taxon-level ploidy as causal evidence; link cytotype to Aim 1 individuals.
 - Do not build a separate plastid megatree instead of matched cytonuclear sampling.
 - Do not call the radiation adaptive until Aim 2 yields fitness evidence.
@@ -147,11 +176,14 @@ The 294→296 Slurm reconstruction path is preserved but **deferred**. It is not
 
 ## Next action
 
-**Finish the Aim 1 collection design first.** Protect population replication for the Ryukyu focal pair and mainland W/C replicates, then add comparative controls. Functional experiments and floral molecular sampling should be nested within those same ancestry-resolved populations wherever possible.
+**Finish the Aim 1 collection design while embedding the Aim 2 measurements that cannot be added later.** Protect population replication for the Ryukyu focal pair and mainland W/C replicates; pre-register orientation, colour, visitor, antagonist and fitness measurements for those same populations. Continue the full interaction census only to sharpen those field contrasts, not to create a separate thesis Aim.
 
 ## Navigation
 
 - Doctoral core: `docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md`
+- Aim 2 interaction evidence map: `docs/AIM2_CIRSIUM_INTERACTION_EVIDENCE_MAP_2026-08-18.md`
+- Aim 2 frozen evidence seed: `data/evidence/cirsium_interaction_evidence_seed_v1.csv`
+- Aim 2 summary: `data/evidence/cirsium_interaction_evidence_summary_v1.json`
 - Core machine-readable program: `data/evidence/doctoral_core_program_v1.csv`
 - Supporting preliminary lanes: `docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md`
 - Supporting registry: `data/evidence/preliminary_hypothesis_registry_v1.csv`
