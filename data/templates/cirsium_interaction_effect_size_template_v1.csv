@@ -1,0 +1,1 @@
+study_id,effect_id,taxon,population_or_site,year,interaction_domain,capitulum_module,contrast,design,response_type,effect_metric,mean_treatment,sd_treatment,n_treatment,mean_control,sd_control,n_control,events_treatment,total_treatment,events_control,total_control,reported_effect,reported_se,reported_ci_low,reported_ci_high,source_location,independence_cluster,notes
