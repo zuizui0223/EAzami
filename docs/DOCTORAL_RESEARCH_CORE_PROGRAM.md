@@ -1,6 +1,6 @@
 # Doctoral research core program
 
-Status: 2026-08-17
+Status: 2026-08-18
 
 ## One central question
 
@@ -95,6 +95,31 @@ Required evidence:
 - manipulative or quasi-manipulative comparison;
 - reproductive-fitness response such as pollen viability, fruit/achene set, seed set or damage-mediated fitness.
 
+### Cirsium interaction evidence map
+
+The first bounded, source-backed evidence map is now frozen in:
+
+- `docs/AIM2_CIRSIUM_INTERACTION_EVIDENCE_MAP_2026-08-18.md`;
+- `data/evidence/cirsium_interaction_evidence_seed_v1.csv`;
+- `data/evidence/cirsium_interaction_evidence_summary_v1.json`.
+
+It contains 10 independent studies across 9 *Cirsium* taxa and 11 taxon-study rows. The evidence is not pooled across incompatible levels: visitor behaviour, effective pollination, florivory, pre-dispersal seed predation and foliar herbivory remain separate.
+
+The current seed supports three design decisions:
+
+1. capitulum display and floral scent already affect pollinator or mutualist–antagonist behaviour in *Cirsium*, although the fitness chain is often incomplete;
+2. pre-dispersal seed predators can strongly reduce seed output and can associate with capitulum size or position;
+3. the primary Azami modules head orientation, flower colour and phyllary/spine architecture remain direct functional gaps in the bounded seed.
+
+Therefore the field sequence is:
+
+1. **orientation manipulation first** — connect natural/manipulated angle to rain exposure, pollen condition, effective visits and seed set;
+2. **W/coloured comparison second** — share ancestry-resolved individuals and floral material with Aim 3;
+3. **phyllary/spine conditional third** — launch only after direct botanical validation and repeatable population variation;
+4. **stickiness lower priority** — the one recovered direct manipulation was null, so it is not assumed to be a defence syndrome.
+
+A formal effect-size meta-analysis is not yet authorized. One harmonized contrast/outcome must first reach at least five independent studies and three taxa with original-study deduplication and sampling variance. Until then, this product is an evidence map and field-design gate.
+
 Success criterion:
 
 A replicated trait -> interaction/environment -> fitness link for at least one module, preferably with the same functional direction in more than one ancestry-resolved population or lineage.
@@ -174,6 +199,8 @@ First tranche priority:
 
 Public *takaoense* W/BP samples remain a useful discovery/molecular anchor; new Taiwan sampling is valuable but is not allowed to block the Japanese/Ryukyu core.
 
+Aim 2 manipulation plants are nested inside these ancestry-resolved populations rather than collected as a disconnected ecological sample. Orientation and colour measurements must be attached to population/individual IDs before treatment assignment.
+
 # Thesis logic
 
 ```text
@@ -198,6 +225,9 @@ Together, the three Aims test one explanation for rapid radiation: **modular reu
 
 - A branch-length 294/296-tip rebuild is not a doctoral prerequisite.
 - Broad climate correlations are not expanded unless a genuinely new ecological axis is added.
+- Pollinator visitation is not treated as effective pollination or fitness without contact/pollen/reproduction evidence.
+- Florivory, pre-dispersal seed predation and foliar herbivory are not pooled as one antagonist effect.
+- An interaction-database record is discovery evidence, not an effect size, until its original study is verified.
 - Taxon-level ploidy correlations are not treated as a chapter.
 - A separate plastid megatree is not substituted for matched cytonuclear sampling.
 - Additional SRA/BLAST fishing is not a mechanism study.
