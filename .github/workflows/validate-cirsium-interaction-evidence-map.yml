@@ -10,6 +10,8 @@ on:
       - "data/evidence/cirsium_interaction_search_sources_v1.csv"
       - "data/templates/cirsium_interaction_effect_size_template_v1.csv"
       - "docs/AIM2_CIRSIUM_INTERACTION_EVIDENCE_MAP_2026-08-18.md"
+      - "docs/AIM2_FIELD_NESTING_PLAN_2026-08-18.md"
+      - "sampling/aim2_capitulum_field_ledger_v1.csv"
       - "docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md"
       - "data/evidence/doctoral_core_program_v1.csv"
       - "PROJECT_STATUS.md"
@@ -36,9 +38,10 @@ jobs:
             --output /tmp/cirsium_interaction_evidence_summary_v1.json
           cmp /tmp/cirsium_interaction_evidence_summary_v1.json \
             data/evidence/cirsium_interaction_evidence_summary_v1.json
-      - name: Assert doctoral decision gates
+      - name: Assert doctoral and field-decision gates
         run: |
           python - <<'PY'
+          import csv
           import json
           from pathlib import Path
 
@@ -50,9 +53,25 @@ jobs:
           assert d['aim2_module_gate']['involucre_spine']['direct_rows']==0
           assert d['aim2_module_gate']['stickiness']['manipulative_rows']==1
           assert d['effect_size_meta_analysis_gate']['status']=='not_yet_authorized'
+
           core=Path('docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md').read_text()
+          field=Path('docs/AIM2_FIELD_NESTING_PLAN_2026-08-18.md').read_text()
           assert 'orientation manipulation first' in core
           assert 'Cirsium interaction evidence map' in core
+          assert 'Aim 2 is not a separate field campaign' in field
+          assert 'do not fix final experimental sample size before pilot variance' in field
+
+          with Path('sampling/aim2_capitulum_field_ledger_v1.csv').open(newline='') as handle:
+              fields=next(csv.reader(handle))
+          required={
+              'individual_id','population_id','ancestry_sample_id','plastid_sample_id',
+              'cytotype_sample_id','capitulum_id','natural_orientation_deg',
+              'orientation_treatment','visible_colour_standard','uv_reflectance_file',
+              'involucre_spread_deg','spine_length_mm','effective_contact_count',
+              'florivory_damage_fraction','seed_predator_damage_fraction','filled_achenes'
+          }
+          assert required <= set(fields), required-set(fields)
           print('aim2_evidence_map_valid=true')
+          print('aim2_field_nesting_valid=true')
           print('formal_pooling_authorized=false')
           PY
