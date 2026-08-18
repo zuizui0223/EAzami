@@ -22,6 +22,25 @@ This is the main thesis hypothesis. The older ten-row hypothesis registry is ret
 Full program: `docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md`  
 Machine-readable program: `data/evidence/doctoral_core_program_v1.csv`
 
+## Aim 2 interaction bridge
+
+The current Aim 2 bridge is a **systematic evidence map**, not a pooled meta-analysis:
+
+- protocol and decision map: `docs/AIM2_CIRSIUM_INTERACTION_EVIDENCE_MAP_2026-08-18.md`;
+- frozen primary-literature seed: `data/evidence/cirsium_interaction_evidence_seed_v1.csv`;
+- machine-readable diagnosis: `data/evidence/cirsium_interaction_evidence_summary_v1.json`.
+
+The bounded seed contains 10 independent studies across 9 *Cirsium* taxa. It separates pollinator behaviour, effective pollination, florivory, pre-dispersal seed predation and foliar-herbivory context.
+
+Current field order is:
+
+1. head-orientation manipulation;
+2. W/coloured function comparison nested with Aim 3;
+3. phyllary/spine only after direct trait validation;
+4. stickiness opportunistically.
+
+Formal effect-size pooling remains blocked until one harmonized outcome contains at least five independent studies and three taxa.
+
 ## What is premise, not a separate thesis Aim
 
 Existing data are already strong enough to treat the following as system justification:
@@ -67,7 +86,7 @@ Each population-genomic individual should link, where possible:
 
 `individual_id -> locality/voucher/photo -> colour/orientation/involucre -> nuclear ancestry -> plastid haplotype -> flow-cytometry cytotype`
 
-Aim 3 focal individuals additionally link floral RNA, pigment and standardized colour.
+Aim 3 focal individuals additionally link floral RNA, pigment and standardized colour. Aim 2 experiments should be nested in the same ancestry-resolved populations.
 
 ## Preliminary-analysis stop rule
 
@@ -83,14 +102,16 @@ More broad CHELSA screens, taxon-level ploidy correlations, untargeted SRA/BLAST
 
 1. `docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md` — central question, central hypothesis and three Aims
 2. `PROJECT_STATUS.md` — current evidence and next action
-3. `data/evidence/doctoral_core_program_v1.csv` — machine-readable doctoral hierarchy
-4. `docs/JAPAN_RADSEQ_PHASE_A_SAMPLING_PLAN_2026-08-16.md` — detailed population design
-5. `docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md` — supporting evidence lanes
-6. `docs/DEFERRED_HEAVY_ANALYSES.md` — deferred heavy-compute policy
+3. `docs/AIM2_CIRSIUM_INTERACTION_EVIDENCE_MAP_2026-08-18.md` — pollination/antagonist evidence bridge and experiment priorities
+4. `data/evidence/doctoral_core_program_v1.csv` — machine-readable doctoral hierarchy
+5. `docs/JAPAN_RADSEQ_PHASE_A_SAMPLING_PLAN_2026-08-16.md` — detailed population design
+6. `docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md` — supporting evidence lanes
+7. `docs/DEFERRED_HEAVY_ANALYSES.md` — deferred heavy-compute policy
 
 ## Repository layout
 
 - `data/evidence/` — frozen evidence plus doctoral/supporting registries
+- `data/templates/` — prospective extraction templates
 - `docs/` — central program, claim boundaries and sampling logic
 - `analysis/` — deterministic analysis code retained for reproducibility
 - `sampling/` — focal sampling/reference panels
