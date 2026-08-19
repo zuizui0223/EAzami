@@ -53,15 +53,16 @@ jobs:
           assert 'Aim 1 — Historical/genomic source' in doc
           assert 'Aim 2 — Adaptive function' in doc
           assert 'Aim 3 — Flower-colour reversibility' in doc
-          assert 'Core population panel — 190 individuals before controls' in doc
-          assert 'Total full minimum = **222**' in doc
-          assert 'ten-row preliminary registry is retained as a **supporting evidence register**' in doc
+          assert '**Core = 190 individuals.**' in doc
+          assert '**Full minimum = 222; recommended = 298.**' in doc
+          assert 'Supporting lanes, not extra Aims' in doc
+          assert '12 independent studies, 10 taxa and 14 taxon-study rows' in doc
 
           readme=Path('README.md').read_text(encoding='utf-8')
           status=Path('PROJECT_STATUS.md').read_text(encoding='utf-8')
           support_map=Path('docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md').read_text(encoding='utf-8')
           assert 'one doctoral-level question' in readme
-          assert 'one central question' in status.lower()
+          assert 'doctoral center' in status.lower()
           assert 'not the doctoral hypothesis hierarchy' in support_map
           assert '190 core individuals' in support_map
           print('doctoral_centers=1')
