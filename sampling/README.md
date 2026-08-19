@@ -1,10 +1,20 @@
 # Sampling decisions
 
-Sampling files are decision products, not interchangeable versions of one table.
+Current doctoral sampling source of truth:
 
-- [SEQUENCING_PANEL_V0_3_EXACT_COVERAGE.csv](SEQUENCING_PANEL_V0_3_EXACT_COVERAGE.csv) is the current exact-coverage panel.
-- `RADSEQ_PANEL_V0_1.csv` and `RADSEQ_PANEL_V0_2_EIG.csv` preserve earlier ranking lineage.
-- `FIXED_WHITE_TARGET_CAPTURE_PANEL_V0_1.csv` is a conditional Layer 1 panel, not a replacement for population-level RAD-seq.
-- Chang/Read2Tree files are existing-data execution panels.
+1. `../data/evidence/doctoral_next_data_minimum_v1.csv` — the three unresolved new-data gates;
+2. `SAMPLING_DESIGN.md` — field/material collection rules;
+3. `../data/evidence/japan_radseq_phase_a_sampling_targets_v1.csv` — exact population-genomic counts;
+4. `aim2_capitulum_field_ledger_v1.csv` — focal capitulum/treatment outcomes;
+5. `aim2_plant_display_predation_ledger_v1.csv` — plant-level seasonal display/predation outcomes.
 
-Promote a new version only when its decision rule, source coverage and differences from the preceding version are documented. The active Japan-origin gate in [PROJECT_STATUS.md](../PROJECT_STATUS.md) must pass before continental collection targets are frozen.
+Core rule: protect the 190-individual focal population panel before adding controls or sensitivity sampling.
+
+Historical/conditional files remain for provenance but are not equal-priority sampling plans:
+
+- `RADSEQ_PANEL_V0_1.csv`, `RADSEQ_PANEL_V0_2_EIG.csv` — earlier ranking lineage;
+- `FIXED_WHITE_TARGET_CAPTURE_PANEL_V0_1.csv` — conditional target-capture layer;
+- `SEQUENCING_PANEL_V0_3_EXACT_COVERAGE.csv` — prior exact-coverage design;
+- Chang/Read2Tree files — existing-data execution, not new field sampling.
+
+Do not freeze broad continental collection targets until a current doctoral gate requires them.
