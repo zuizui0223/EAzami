@@ -52,7 +52,8 @@ jobs:
           assert d['effect_size_meta_analysis_gate']['status']=='not_yet_authorized'
           core=Path('docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md').read_text()
           assert 'orientation manipulation first' in core
-          assert 'Cirsium palustre' in core
+          assert 'C. palustre' in core
+          assert 'flower colour is **not** a direct-interaction evidence blank' in core
           print('aim2_evidence_map_valid=true')
           print('colour_pollination_prior_present=true')
           print('formal_pooling_authorized=false')
