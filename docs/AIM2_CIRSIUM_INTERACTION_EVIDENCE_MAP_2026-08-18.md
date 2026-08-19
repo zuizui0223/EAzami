@@ -1,23 +1,23 @@
 # EAzami Aim 2 — *Cirsium* pollination–antagonist evidence map
 
-Status date: 2026-08-18
+Status date: 2026-08-19
 
 ## Purpose
 
-This work is the evidence bridge between:
+This is a supporting evidence layer for doctoral Aim 2:
 
 ```text
 Azami Chapter 1
 global capitulum modules and within-taxon distributions
         ↓
-EAzami Aim 2
-which modules plausibly alter interactions and fitness?
+EAzami Aim 2 evidence map
+which modules already have functional evidence?
         ↓
-ancestry-resolved field manipulation
+ancestry-resolved focal field tests
 trait -> interaction / protection -> reproductive fitness
 ```
 
-It does **not** reopen Azami Chapter 1 and does not add another doctoral Aim. It narrows Aim 2 to experiments that are not already answered by published *Cirsium* work.
+It does not reopen Azami Chapter 1 and does not create another doctoral Aim.
 
 Canonical files:
 
@@ -25,179 +25,134 @@ Canonical files:
 - `data/evidence/cirsium_interaction_evidence_summary_v1.json`
 - `analysis/summarize_cirsium_interaction_evidence.py`
 - `data/templates/cirsium_interaction_effect_size_template_v1.csv`
+- `docs/AIM2_FIELD_NESTING_PLAN_2026-08-18.md`
 
-## Central Aim 2 question
+## Evidence classes
 
-> Do rapidly divergent capitulum modules alter pollination, abiotic protection, florivory or pre-dispersal seed predation, and do those changes reach reproductive fitness?
+Keep these separate:
 
-The operational model is a trade-off:
+1. pollinator visitation/behaviour;
+2. effective pollination (contact, pollen deposition/export/viability);
+3. florivory;
+4. pre-dispersal seed predation;
+5. vegetative herbivory as demographic context.
 
-```text
-pollinator presentation / access
-              ↕
-rain, UV, florivore and seed-predator protection
-```
+Evidence is promoted only along:
 
-A structure that looks defensive is not called an adaptation without a functional comparison.
+`trait -> interaction/protection -> pollen/damage -> achene/seed output -> demography`
 
-## Interaction classes
+Visitor counts alone are not effective pollination or fitness.
 
-Keep these classes separate throughout extraction and analysis.
+## Current bounded primary-literature seed
 
-1. **Pollinator visitation**
-   - visitor abundance, visitation rate, residence time and movement.
-   - This is not automatically effective pollination.
+After the targeted 2026-08-19 recheck:
 
-2. **Effective pollination**
-   - stigma/anther contact, pollen deposition, pollen export, pollen-tube growth or pollen viability.
+- **12 independent studies**
+- **10 *Cirsium* taxa**
+- **14 taxon-study rows**
+- **12 direct capitulum-interaction rows**
+- **2 contextual foliar-herbivory rows**
 
-3. **Florivory**
-   - consumption of florets, reproductive tissues or floral signals during flowering.
+This is still a bounded source-backed seed, not an exhaustive census.
 
-4. **Pre-dispersal seed predation**
-   - damage or consumption within capitula before seed dispersal.
+### New correction: flower colour is not an evidence blank
 
-5. **Foliar/vegetative herbivory**
-   - retained as demographic context, not pooled with direct capitulum antagonism.
+Mogford (1974), *Flower colour polymorphism in Cirsium palustre 2. Pollination*
+(DOI `10.1038/hdy.1974.91`) reports preferential pollination of white-flowered
+plants in a natural colour polymorphism.
 
-## Outcome hierarchy
+Therefore the earlier wording “no direct *Cirsium* flower-colour interaction
+study” is withdrawn.
 
-Evidence is promoted in this order:
+The correct boundary is:
 
-```text
-interaction occurrence
-    ↓
-visitor / antagonist behaviour or abundance
-    ↓
-pollen transfer or damage
-    ↓
-fruit, achene or seed production
-    ↓
-recruitment or population growth
-```
+> direct colour→pollination evidence exists, but the bounded seed still lacks
+> replicated ancestry-controlled colour→effective-pollination→reproductive-
+> fitness evidence.
 
-A study that reports only visitors cannot support a fitness claim.
+No numerical effect size is frozen from this paper until the full statistics
+needed for sampling variance are verified.
 
-## Bounded primary-literature seed
+### Predation evidence strengthened
 
-The current seed contains:
+Van Leeuwen (1983), DOI `10.1007/BF00399214`, adds source-backed evidence for
+*C. palustre* and *C. vulgare*: natural predation caused substantial reductions
+in achene production. This strengthens the case that antagonists can matter for
+fitness, but it does not identify selection on a particular phyllary/spine
+module.
 
-- **10 independent studies**;
-- **9 *Cirsium* species**;
-- **11 taxon–study rows**;
-- **9 direct capitulum-interaction rows**;
-- **2 contextual foliar-herbivory rows**.
+## Module diagnosis and field order
 
-Current direct evidence includes:
+### 1. Head orientation — highest priority
 
-- two Japanese *C. purpuratum* studies linking floral display to bumble-bee foraging and revisitation;
-- two studies showing that *Cirsium* floral scent can attract or temporally partition pollinators and florivores;
-- four independent studies quantifying pre-dispersal seed predation;
-- one direct stickiness manipulation in *C. discolor*, with a null result for seed-predator defence and seed production.
+No direct *Cirsium* orientation manipulation linked through rain/pollination to
+reproductive fitness was recovered in the bounded targeted search.
 
-This is a bounded, verified seed rather than an exhaustive review. Absence from this table is never treated as biological absence.
+Field chain:
 
-## Current module diagnosis
+`orientation -> wetting / presentation -> pollen or effective contact -> seed set`
 
-### Head orientation — highest field priority
+This remains the cleanest novel experiment tied directly to a primary Azami
+trait.
 
-No direct *Cirsium* study was recovered in the bounded seed that manipulated head orientation and followed:
+### 2. Flower colour — second priority, now with a published pollination prior
 
-`orientation -> rain/pollinator response -> reproductive fitness`
+The *C. palustre* result means pollinator discrimination by colour is plausible
+within *Cirsium*. The doctoral gap is now sharper, not weaker:
 
-This is therefore the cleanest novel Aim 2 experiment and directly uses an Azami Chapter 1 trait.
+`ancestry-resolved W/C state -> effective pollination / abiotic response -> fitness`
 
-Required focal design:
+The Japanese W/C systems are valuable because Aim 1 ancestry and Aim 3
+molecular data can be attached to the same colour comparison.
 
-- natural orientation recorded continuously;
-- temporary, non-destructive reorientation where feasible;
-- rain exposure / pollen wetting / pollen viability;
-- visitor guild, visit rate and contact effectiveness;
-- achene/seed set;
-- ancestry-resolved population identity.
+### 3. Involucre/phyllary/spine — conditional third
 
-### Flower colour — second priority and Aim 3 bridge
+No direct phyllary/spine manipulation linked to both antagonist access and
+pollinator access was recovered.
 
-No direct *Cirsium* W/coloured comparison was recovered that connected colour through pollination or abiotic performance to fitness.
+Proceed only after:
 
-Required focal design:
+1. direct botanical measurements validate the image proxy in the focal system;
+2. repeatable natural variation exists;
+3. manipulation can avoid a dominant wound artifact.
 
-- standardized visible + UV reflectance;
-- natural W/coloured population pairs after Aim 1 ancestry resolution;
-- pollinator guild and effective contact;
-- floral temperature/UV or water-stress responses where biologically justified;
-- pigment chemistry and seed set;
-- matched Aim 3 floral material.
+Then measure both antagonist damage and pollinator-access cost, followed by seed
+output.
 
-### Involucre/phyllary/spine — conditional third priority
+### 4. Stickiness — lower priority
 
-The bounded seed recovered effects of capitulum size and position on seed-predator attack, but no direct phyllary/spine manipulation.
+One recovered direct manipulation was null for the tested defence/seed-output
+effect. Stickiness is therefore measured opportunistically rather than assumed
+to define a defence syndrome.
 
-Do not launch a large experiment merely because the proxy exists in Azami. First confirm repeatable focal-population variation and botanical validity of:
+## Effect-size pooling gate
 
-- phyllary angle;
-- actual spine length, direction and stiffness;
-- pollinator-access geometry.
+Formal pooling remains **not authorized**.
 
-Then test both sides of the same manipulation:
+For one harmonized contrast/outcome require at minimum:
 
-- antagonist entry/damage;
-- pollinator landing/access/contact;
-- seed output.
-
-### Stickiness — lower priority unless focal variation is strong
-
-The single recovered direct manipulation was null. Stickiness is therefore not assumed to be a defence syndrome. It is measured opportunistically but does not displace orientation or colour from the core field design.
-
-### Display size and scent — established interaction candidates, incomplete fitness chains
-
-Published *Cirsium* studies already show effects on pollinator behaviour and mutualist–antagonist attraction. New EAzami work should use these findings to record both pollinators and antagonists, rather than repeating display-only visitor models without fitness.
-
-## Discovery sources
-
-Use interaction databases for discovery and coverage diagnostics:
-
-- Global Biotic Interactions (GloBI);
-- Mangal;
-- Web of Life.
-
-For research inference:
-
-- use a stable/versioned data release where available;
-- retain original dataset and paper identifiers;
-- deduplicate at the original-study level;
-- verify each candidate against the primary source;
-- never use a database interaction record as an effect size by itself.
-
-GloBI API or browser results are exploratory and dynamic. A frozen source release or a dated derivative must be archived before quantitative publication use.
-
-## Effect-size promotion gate
-
-A pooled effect is not yet authorized.
-
-For one harmonized contrast/outcome, pooling requires at minimum:
-
-- five independent studies;
-- three *Cirsium* taxa;
-- compatible biological contrasts and response scales;
+- >=5 independent studies;
+- >=3 *Cirsium* taxa;
+- compatible biological contrast and response scale;
 - original-study deduplication;
-- sampling variance or enough raw summary statistics;
-- visitor abundance separated from effective pollination;
-- florivory, seed predation and foliar herbivory separated;
+- sampling variance or recoverable summary statistics;
 - null results retained.
 
-Until a stratum passes this gate, the product remains a systematic evidence map and field-design tool.
+Do not pool visitor abundance, effective pollination, florivory,
+pre-dispersal seed predation and foliar herbivory into one effect.
 
 ## Current doctoral decision
 
-The existing literature changes field priority as follows:
-
-1. **orientation manipulation first**;
-2. **W/coloured functional comparison second**, nested with Aim 3;
-3. **phyllary/spine only after direct trait validation and focal variation are confirmed**;
-4. **stickiness opportunistic/lower priority**;
-5. record pollinators and floral/seed antagonists together because the same signal can recruit both.
+1. orientation manipulation first;
+2. W/coloured functional comparison second, now informed by the *C. palustre*
+   pollination prior and nested with Aim 3;
+3. phyllary/spine only after direct validation;
+4. stickiness lower priority;
+5. record pollinators and floral/seed antagonists together, but analyse their
+   response classes separately.
 
 ## Claim boundary
 
-The current seed shows that the meta-analytic program is feasible and that published evidence is uneven across modules. It does not estimate a pooled effect, prove adaptive radiation, or demonstrate that orientation/colour/phyllary studies do not exist outside the bounded search.
+This bounded evidence map prioritizes doctoral observations and experiments. It
+does not estimate a pooled effect, prove adaptive radiation, or show that an
+unrecovered study/interaction is absent.

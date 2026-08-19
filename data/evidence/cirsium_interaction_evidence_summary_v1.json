@@ -1,53 +1,55 @@
 {
   "contract_version": "cirsium_interaction_evidence_summary_v1",
-  "status_date": "2026-08-18",
+  "status_date": "2026-08-19",
   "scope": "bounded_primary_literature_seed_for_EAzami_Aim2_not_exhaustive_meta_analysis",
   "coverage": {
-    "evidence_rows": 11,
-    "independent_studies": 10,
-    "taxa": 9,
+    "evidence_rows": 14,
+    "independent_studies": 12,
+    "taxa": 10,
     "taxon_names": [
       "Cirsium altissimum",
       "Cirsium arvense",
       "Cirsium canescens",
       "Cirsium decussatum",
       "Cirsium discolor",
+      "Cirsium palustre",
       "Cirsium pitcheri",
       "Cirsium purpuratum",
       "Cirsium repandum",
       "Cirsium vulgare"
     ],
-    "direct_capitulum_rows": 9,
+    "direct_capitulum_rows": 12,
     "contextual_herbivory_rows": 2
   },
   "interaction_domain_rows": {
     "foliar_herbivory_context": 2,
-    "pollination": 2,
+    "pollination": 3,
     "pollination_florivory_tradeoff": 3,
-    "pre_dispersal_seed_predation": 4
+    "pre_dispersal_seed_predation": 6
   },
   "interaction_domain_independent_studies": {
     "foliar_herbivory_context": 2,
-    "pollination": 2,
+    "pollination": 3,
     "pollination_florivory_tradeoff": 2,
-    "pre_dispersal_seed_predation": 4
+    "pre_dispersal_seed_predation": 5
   },
   "direct_module_rows": {
     "capitulum_position_and_size": 1,
     "capitulum_size": 1,
     "display_size": 2,
     "floral_scent": 3,
-    "none_interaction_only": 1,
+    "flower_colour": 1,
+    "none_interaction_only": 3,
     "stickiness": 1
   },
   "response_chain_rows": {
-    "interaction_to_fitness": 1,
-    "trait_to_interaction": 5,
+    "interaction_to_fitness": 3,
+    "trait_to_interaction": 6,
     "trait_to_interaction_and_fitness": 3,
     "treatment_to_demography": 2
   },
   "fitness_coverage": {
-    "rows_with_reproductive_or_demographic_fitness": 6,
+    "rows_with_reproductive_or_demographic_fitness": 8,
     "direct_trait_interaction_fitness_rows": 3,
     "direct_trait_interaction_fitness_studies": 3
   },
@@ -59,8 +61,8 @@
       "manipulative_rows": 0
     },
     "flower_colour": {
-      "direct_rows": 0,
-      "independent_studies": 0,
+      "direct_rows": 1,
+      "independent_studies": 1,
       "fitness_rows": 0,
       "manipulative_rows": 0
     },
@@ -96,21 +98,22 @@
     }
   },
   "current_inference": [
-    "Cirsium evidence already supports capitulum display effects on pollinator behaviour and shows that floral signals can attract both mutualists and florivores.",
-    "Predispersal seed predators can strongly reduce seed output and may track capitulum size or position.",
+    "Cirsium evidence supports capitulum display effects on pollinator behaviour and shows that floral signals can attract both mutualists and florivores.",
+    "A classic Cirsium palustre natural colour-polymorphism study reports preferential pollination of white flowers, so flower colour is not an interaction-evidence blank; the bounded evidence still lacks a replicated ancestry-controlled colour-to-effective-pollination-to-reproductive-fitness chain.",
+    "Predispersal seed predators can strongly reduce achene or seed output; the expanded seed also confirms fitness costs in Cirsium palustre and Cirsium vulgare, while trait-specific defensive mechanisms remain unresolved.",
     "The only recovered direct stickiness manipulation was null, so visible defensive-looking structures cannot be assigned a defence function without manipulation.",
-    "The bounded seed recovered no direct Cirsium head-orientation or flower-colour manipulation linked through interaction to fitness."
+    "No direct Cirsium head-orientation or phyllary/spine manipulation linked through interaction to reproductive fitness was recovered in the bounded targeted search."
   ],
   "field_experiment_priorities": [
     {
       "rank": 1,
       "module": "head_orientation",
-      "reason": "No direct Cirsium orientation study was recovered in the bounded seed; it is a primary Azami trait and requires a pollination/rain/fitness manipulation in ancestry-resolved focal populations."
+      "reason": "No direct Cirsium orientation study was recovered in the bounded targeted search; it is a primary Azami trait and requires a pollination/rain/fitness manipulation in ancestry-resolved focal populations."
     },
     {
       "rank": 2,
       "module": "flower_colour",
-      "reason": "No direct Cirsium colour-to-interaction-to-fitness study was recovered; repeated W/coloured systems make this both an Aim 2 function test and an Aim 3 mechanism bridge."
+      "reason": "Cirsium palustre provides direct natural colour-morph pollination evidence, but the bounded seed still lacks replicated ancestry-controlled colour-to-effective-pollination-to-reproductive-fitness evidence. Repeated W/coloured systems make this both an Aim 2 function test and an Aim 3 mechanism bridge."
     },
     {
       "rank": 3,

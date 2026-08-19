@@ -6,7 +6,6 @@ import tempfile
 import unittest
 from pathlib import Path
 
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = REPO_ROOT / "analysis" / "summarize_cirsium_interaction_evidence.py"
 INPUT = REPO_ROOT / "data" / "evidence" / "cirsium_interaction_evidence_seed_v1.csv"
@@ -18,14 +17,7 @@ class CirsiumInteractionEvidenceTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             output = Path(tmp) / "summary.json"
             subprocess.run(
-                [
-                    sys.executable,
-                    str(SCRIPT),
-                    "--input",
-                    str(INPUT),
-                    "--output",
-                    str(output),
-                ],
+                [sys.executable, str(SCRIPT), "--input", str(INPUT), "--output", str(output)],
                 check=True,
             )
             self.assertEqual(
@@ -38,31 +30,20 @@ class CirsiumInteractionEvidenceTest(unittest.TestCase):
             rows = list(csv.DictReader(handle))
         summary = json.loads(FROZEN.read_text(encoding="utf-8"))
 
-        self.assertEqual(len(rows), 11)
-        self.assertEqual(summary["coverage"]["independent_studies"], 10)
-        self.assertEqual(summary["coverage"]["taxa"], 9)
-        self.assertEqual(summary["coverage"]["direct_capitulum_rows"], 9)
+        self.assertEqual(len(rows), 14)
+        self.assertEqual(summary["coverage"]["independent_studies"], 12)
+        self.assertEqual(summary["coverage"]["taxa"], 10)
+        self.assertEqual(summary["coverage"]["direct_capitulum_rows"], 12)
         self.assertEqual(
-            summary["interaction_domain_independent_studies"][
-                "pre_dispersal_seed_predation"
-            ],
-            4,
+            summary["interaction_domain_independent_studies"]["pre_dispersal_seed_predation"], 5
         )
+        self.assertEqual(summary["aim2_module_gate"]["head_orientation"]["direct_rows"], 0)
+        self.assertEqual(summary["aim2_module_gate"]["flower_colour"]["direct_rows"], 1)
+        self.assertEqual(summary["aim2_module_gate"]["flower_colour"]["fitness_rows"], 0)
+        self.assertEqual(summary["aim2_module_gate"]["involucre_spine"]["direct_rows"], 0)
+        self.assertEqual(summary["aim2_module_gate"]["stickiness"]["manipulative_rows"], 1)
         self.assertEqual(
-            summary["aim2_module_gate"]["head_orientation"]["direct_rows"], 0
-        )
-        self.assertEqual(
-            summary["aim2_module_gate"]["flower_colour"]["direct_rows"], 0
-        )
-        self.assertEqual(
-            summary["aim2_module_gate"]["involucre_spine"]["direct_rows"], 0
-        )
-        self.assertEqual(
-            summary["aim2_module_gate"]["stickiness"]["manipulative_rows"], 1
-        )
-        self.assertEqual(
-            summary["effect_size_meta_analysis_gate"]["status"],
-            "not_yet_authorized",
+            summary["effect_size_meta_analysis_gate"]["status"], "not_yet_authorized"
         )
 
 

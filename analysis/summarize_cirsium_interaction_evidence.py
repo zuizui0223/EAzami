@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Summarize the bounded Cirsium interaction evidence seed.
 
-This is intentionally lightweight and offline. It validates the extraction
-schema, summarizes the current source-backed seed, and identifies module-level
-evidence gaps that change EAzami Aim 2 field priorities.
+This lightweight offline step validates the source-backed extraction table,
+summarizes evidence by interaction class and capitulum module, and keeps the
+EAzami Aim 2 field priorities synchronized with the current evidence ceiling.
 """
 
 from __future__ import annotations
@@ -16,25 +16,11 @@ from pathlib import Path
 from typing import Iterable
 
 REQUIRED_COLUMNS = [
-    "evidence_id",
-    "study_id",
-    "year",
-    "taxon",
-    "region",
-    "interaction_domain",
-    "partner_guild",
-    "capitulum_module",
-    "design",
-    "trait_or_treatment",
-    "response_chain",
-    "fitness_endpoint",
-    "direction",
-    "quantitative_extraction_status",
-    "direct_capitulum_relevance",
-    "doctoral_use",
-    "doi",
-    "primary_source_title",
-    "claim_boundary",
+    "evidence_id", "study_id", "year", "taxon", "region",
+    "interaction_domain", "partner_guild", "capitulum_module", "design",
+    "trait_or_treatment", "response_chain", "fitness_endpoint", "direction",
+    "quantitative_extraction_status", "direct_capitulum_relevance",
+    "doctoral_use", "doi", "primary_source_title", "claim_boundary",
 ]
 
 ALLOWED_INTERACTION_DOMAINS = {
@@ -43,7 +29,6 @@ ALLOWED_INTERACTION_DOMAINS = {
     "pre_dispersal_seed_predation",
     "foliar_herbivory_context",
 }
-
 ALLOWED_RELEVANCE = {"direct", "contextual"}
 
 AIM2_TARGET_MODULES = {
@@ -62,8 +47,7 @@ def read_rows(path: Path) -> list[dict[str, str]]:
         reader = csv.DictReader(handle)
         if reader.fieldnames != REQUIRED_COLUMNS:
             raise ValueError(
-                "Unexpected columns. "
-                f"Expected {REQUIRED_COLUMNS}; observed {reader.fieldnames}"
+                f"Unexpected columns. Expected {REQUIRED_COLUMNS}; observed {reader.fieldnames}"
             )
         rows = list(reader)
     if not rows:
@@ -73,8 +57,8 @@ def read_rows(path: Path) -> list[dict[str, str]]:
 
 def validate(rows: Iterable[dict[str, str]]) -> list[dict[str, str]]:
     rows = list(rows)
-    evidence_ids = [row["evidence_id"] for row in rows]
-    if len(evidence_ids) != len(set(evidence_ids)):
+    ids = [r["evidence_id"] for r in rows]
+    if len(ids) != len(set(ids)):
         raise ValueError("evidence_id must be unique.")
 
     for row in rows:
@@ -82,26 +66,16 @@ def validate(rows: Iterable[dict[str, str]]) -> list[dict[str, str]]:
         if missing:
             raise ValueError(f"{row['evidence_id']} has empty fields: {missing}")
         if row["interaction_domain"] not in ALLOWED_INTERACTION_DOMAINS:
-            raise ValueError(
-                f"{row['evidence_id']} has invalid interaction_domain "
-                f"{row['interaction_domain']}"
-            )
+            raise ValueError(f"{row['evidence_id']} invalid interaction_domain")
         if row["direct_capitulum_relevance"] not in ALLOWED_RELEVANCE:
-            raise ValueError(
-                f"{row['evidence_id']} has invalid relevance "
-                f"{row['direct_capitulum_relevance']}"
-            )
-        try:
-            year = int(row["year"])
-        except ValueError as exc:
-            raise ValueError(f"{row['evidence_id']} has invalid year") from exc
+            raise ValueError(f"{row['evidence_id']} invalid relevance")
+        year = int(row["year"])
         if not 1900 <= year <= 2100:
             raise ValueError(f"{row['evidence_id']} year outside expected range")
         if not row["taxon"].startswith("Cirsium "):
             raise ValueError(f"{row['evidence_id']} is not a Cirsium taxon")
         if not row["doi"].startswith("10."):
             raise ValueError(f"{row['evidence_id']} DOI is not normalized")
-
     return rows
 
 
@@ -112,8 +86,8 @@ def summarize(rows: list[dict[str, str]]) -> dict:
 
     domain_rows = Counter(r["interaction_domain"] for r in rows)
     domain_studies = {
-        domain: len({r["study_id"] for r in rows if r["interaction_domain"] == domain})
-        for domain in sorted(domain_rows)
+        d: len({r["study_id"] for r in rows if r["interaction_domain"] == d})
+        for d in sorted(domain_rows)
     }
     module_rows = Counter(r["capitulum_module"] for r in direct)
     response_chains = Counter(r["response_chain"] for r in rows)
@@ -132,48 +106,9 @@ def summarize(rows: list[dict[str, str]]) -> dict:
             "manipulative_rows": sum("manipulation" in r["design"] for r in matched),
         }
 
-    priorities = [
-        {
-            "rank": 1,
-            "module": "head_orientation",
-            "reason": (
-                "No direct Cirsium orientation study was recovered in the bounded "
-                "seed; it is a primary Azami trait and requires a pollination/rain/"
-                "fitness manipulation in ancestry-resolved focal populations."
-            ),
-        },
-        {
-            "rank": 2,
-            "module": "flower_colour",
-            "reason": (
-                "No direct Cirsium colour-to-interaction-to-fitness study was "
-                "recovered; repeated W/coloured systems make this both an Aim 2 "
-                "function test and an Aim 3 mechanism bridge."
-            ),
-        },
-        {
-            "rank": 3,
-            "module": "involucre_spine",
-            "reason": (
-                "No direct phyllary/spine manipulation was recovered. Test only "
-                "after focal populations show repeatable, measurable variation; "
-                "record both antagonist exclusion and pollinator-access costs."
-            ),
-        },
-        {
-            "rank": 4,
-            "module": "stickiness",
-            "reason": (
-                "One direct manipulation was recovered and was null, so stickiness "
-                "is not assumed to be defensive and is lower priority unless the "
-                "Ryukyu focal taxa provide strong natural replication."
-            ),
-        },
-    ]
-
     return {
         "contract_version": "cirsium_interaction_evidence_summary_v1",
-        "status_date": "2026-08-18",
+        "status_date": "2026-08-19",
         "scope": "bounded_primary_literature_seed_for_EAzami_Aim2_not_exhaustive_meta_analysis",
         "coverage": {
             "evidence_rows": len(rows),
@@ -196,26 +131,34 @@ def summarize(rows: list[dict[str, str]]) -> dict:
         },
         "aim2_module_gate": module_gate,
         "current_inference": [
-            (
-                "Cirsium evidence already supports capitulum display effects on "
-                "pollinator behaviour and shows that floral signals can attract "
-                "both mutualists and florivores."
-            ),
-            (
-                "Predispersal seed predators can strongly reduce seed output and "
-                "may track capitulum size or position."
-            ),
-            (
-                "The only recovered direct stickiness manipulation was null, so "
-                "visible defensive-looking structures cannot be assigned a defence "
-                "function without manipulation."
-            ),
-            (
-                "The bounded seed recovered no direct Cirsium head-orientation or "
-                "flower-colour manipulation linked through interaction to fitness."
-            ),
+            "Cirsium evidence supports capitulum display effects on pollinator behaviour and shows that floral signals can attract both mutualists and florivores.",
+            "A classic Cirsium palustre natural colour-polymorphism study reports preferential pollination of white flowers, so flower colour is not an interaction-evidence blank; the bounded evidence still lacks a replicated ancestry-controlled colour-to-effective-pollination-to-reproductive-fitness chain.",
+            "Predispersal seed predators can strongly reduce achene or seed output; the expanded seed also confirms fitness costs in Cirsium palustre and Cirsium vulgare, while trait-specific defensive mechanisms remain unresolved.",
+            "The only recovered direct stickiness manipulation was null, so visible defensive-looking structures cannot be assigned a defence function without manipulation.",
+            "No direct Cirsium head-orientation or phyllary/spine manipulation linked through interaction to reproductive fitness was recovered in the bounded targeted search.",
         ],
-        "field_experiment_priorities": priorities,
+        "field_experiment_priorities": [
+            {
+                "rank": 1,
+                "module": "head_orientation",
+                "reason": "No direct Cirsium orientation study was recovered in the bounded targeted search; it is a primary Azami trait and requires a pollination/rain/fitness manipulation in ancestry-resolved focal populations.",
+            },
+            {
+                "rank": 2,
+                "module": "flower_colour",
+                "reason": "Cirsium palustre provides direct natural colour-morph pollination evidence, but the bounded seed still lacks replicated ancestry-controlled colour-to-effective-pollination-to-reproductive-fitness evidence. Repeated W/coloured systems make this both an Aim 2 function test and an Aim 3 mechanism bridge.",
+            },
+            {
+                "rank": 3,
+                "module": "involucre_spine",
+                "reason": "No direct phyllary/spine manipulation was recovered. Test only after focal populations show repeatable, measurable variation; record both antagonist exclusion and pollinator-access costs.",
+            },
+            {
+                "rank": 4,
+                "module": "stickiness",
+                "reason": "One direct manipulation was recovered and was null, so stickiness is not assumed to be defensive and is lower priority unless the Ryukyu focal taxa provide strong natural replication.",
+            },
+        ],
         "effect_size_meta_analysis_gate": {
             "status": "not_yet_authorized",
             "minimum_independent_studies_per_harmonized_outcome": 5,
@@ -227,17 +170,9 @@ def summarize(rows: list[dict[str, str]]) -> dict:
                 "separate florivory from pre-dispersal seed predation and foliar herbivory",
                 "retain null results and study-level sampling variance",
             ],
-            "current_use": (
-                "systematic evidence map and field-design prioritization; do not "
-                "pool heterogeneous visitor, damage and fitness outcomes."
-            ),
+            "current_use": "systematic evidence map and field-design prioritization; do not pool heterogeneous visitor, damage and fitness outcomes.",
         },
-        "claim_boundary": (
-            "This bounded, source-backed seed demonstrates feasibility and identifies "
-            "doctoral field gaps. It is not an exhaustive literature census, does not "
-            "estimate pooled effect sizes, and absence from the seed is not evidence "
-            "that an interaction or study does not exist."
-        ),
+        "claim_boundary": "This bounded, source-backed seed demonstrates feasibility and identifies doctoral field gaps. It is not an exhaustive literature census, does not estimate pooled effect sizes, and absence from the seed is not evidence that an interaction or study does not exist.",
     }
 
 
@@ -246,13 +181,10 @@ def main() -> None:
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-
-    rows = validate(read_rows(args.input))
-    result = summarize(rows)
+    result = summarize(validate(read_rows(args.input)))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
-        json.dumps(result, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
+        json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
 
 
