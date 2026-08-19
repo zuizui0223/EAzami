@@ -1,0 +1,33 @@
+{
+  "contract_version": "cirsium_floral_herbivory_lnrr_meta_v2",
+  "status_date": "2026-08-19",
+  "estimand": "seed_output_under_reduced_insect_herbivory_relative_to_ambient_herbivory",
+  "effect_definition": "lnRR=ln(mean_seed_output_reduced_herbivory/mean_seed_output_ambient_herbivory)",
+  "coverage": {"effect_rows":9,"independent_study_clusters":4,"taxa_or_taxon_concepts":["Cirsium canescens","Cirsium occidentale var. occidentale"]},
+  "effect_level": [
+    {"study":"Maron2002","effect_id":"MARON_OLD_DUNE","taxon":"Cirsium occidentale var. occidentale","stratum":"old_dune","lnRR":1.424901137899,"var_lnRR":0.054168355101,"response_ratio":4.157446808511,"source":"primary_article_Table1"},
+    {"study":"Maron2002","effect_id":"MARON_NEW_DUNE","taxon":"Cirsium occidentale var. occidentale","stratum":"new_dune","lnRR":0.890402960922,"var_lnRR":0.137382821195,"response_ratio":2.436111111111,"source":"primary_article_Table1"},
+    {"study":"LoudaPotvin1995","effect_id":"LOUDA_BLOWOUTS","taxon":"Cirsium canescens","stratum":"blowouts","lnRR":0.953430278824,"var_lnRR":0.047545970802,"response_ratio":2.594594594595,"source":"Maron2002_Table1_comparative_reproduction"},
+    {"study":"LoudaPotvin1995","effect_id":"LOUDA_GRASS","taxon":"Cirsium canescens","stratum":"grass_matrix","lnRR":0.443003027427,"var_lnRR":0.145780935188,"response_ratio":1.55737704918,"source":"Maron2002_Table1_comparative_reproduction"},
+    {"study":"WestLouda2018","effect_id":"WEST_APICAL_NO_DAMAGE","taxon":"Cirsium canescens","stratum":"apical_no_damage","lnRR":0.647291514909,"var_lnRR":0.044199514316,"response_ratio":1.910359634997,"source":"primary_article_Table1"},
+    {"study":"WestLouda2018","effect_id":"WEST_APICAL_DAMAGED","taxon":"Cirsium canescens","stratum":"apical_damaged","lnRR":1.450693363597,"var_lnRR":0.09136426726,"response_ratio":4.266071428571,"source":"primary_article_Table1"},
+    {"study":"RussellTaylorLouda2025","effect_id":"RUSSELL2025_2017","taxon":"Cirsium canescens","stratum":"experiment_year_2017","lnRR":0.558351339828,"var_lnRR":0.019804428182,"response_ratio":1.747788614198,"source":"primary_article_Table4"},
+    {"study":"RussellTaylorLouda2025","effect_id":"RUSSELL2025_2018","taxon":"Cirsium canescens","stratum":"experiment_year_2018","lnRR":0.978299053925,"var_lnRR":0.01747047672,"response_ratio":2.659927997785,"source":"primary_article_Table4"},
+    {"study":"RussellTaylorLouda2025","effect_id":"RUSSELL2025_2019","taxon":"Cirsium canescens","stratum":"experiment_year_2019","lnRR":1.162191038628,"var_lnRR":0.008479347187,"response_ratio":3.196930205618,"source":"primary_article_Table4"}
+  ],
+  "study_level": [
+    {"study":"LoudaPotvin1995","n_effects_collapsed":2,"taxa":["Cirsium canescens"],"lnRR":0.827898040736,"var_lnRR":0.035852723409,"response_ratio":2.288503340354},
+    {"study":"Maron2002","n_effects_collapsed":2,"taxa":["Cirsium occidentale var. occidentale"],"lnRR":1.273751520281,"var_lnRR":0.038850199655,"response_ratio":3.574236261875},
+    {"study":"RussellTaylorLouda2025","n_effects_collapsed":3,"taxa":["Cirsium canescens"],"lnRR":0.980436306476,"var_lnRR":0.00443131225,"response_ratio":2.665619015088},
+    {"study":"WestLouda2018","n_effects_collapsed":2,"taxa":["Cirsium canescens"],"lnRR":0.909234425469,"var_lnRR":0.029788607191,"response_ratio":2.482421327177}
+  ],
+  "random_effects": {"k":4,"pooled_lnRR":0.983439536754,"se_lnRR":0.057573298982,"ci95_lnRR":[0.87059587075,1.096283202758],"response_ratio":2.673636515996,"ci95_response_ratio":[2.388333567719,2.993020872917],"ambient_seed_output_reduction_fraction":0.625977579968,"ambient_seed_output_reduction_fraction_ci95":[0.581298017364,0.665889399887],"Q":3.031058626954,"Q_df":3,"tau2_lnRR":0.000218888219,"I2_percent":1.024679188896,"z_test":17.081521367516,"p_two_sided":0.0},
+  "leave_one_study_out": [
+    {"omitted_study":"LoudaPotvin1995","response_ratio":2.734229227666,"ci95_response_ratio":[2.372425297978,3.151209640106],"I2_percent":12.712242103378},
+    {"omitted_study":"Maron2002","response_ratio":2.604638764177,"ci95_response_ratio":[2.320133566556,2.92403126684],"I2_percent":0.0},
+    {"omitted_study":"RussellTaylorLouda2025","response_ratio":2.704876727017,"ci95_response_ratio":[2.088200009836,3.503667308638],"I2_percent":33.868619504929},
+    {"omitted_study":"WestLouda2018","response_ratio":2.728133778504,"ci95_response_ratio":[2.277331471913,3.26817330073],"I2_percent":29.193697918561}
+  ],
+  "current_inference": "Across four independent Cirsium data-generation studies with directly reported seed-output means and SEs, experimentally reducing insect herbivory increases viable/mature seed output by about 2.7-fold on average; the direction and magnitude are stable to leave-one-study-out removal.",
+  "claim_boundary": "This is a direct quantitative seed-output meta-analysis. Within-study strata/years are collapsed before across-study pooling. It estimates the antagonist fitness cost, not the adaptive effect of any particular capitulum trait. Correlation among within-study contrasts, differences in experimental protocol, and numerical provenance of older Louda/Potvin means remain sensitivity considerations."
+}

@@ -1,0 +1,36 @@
+name: Validate Cirsium floral-herbivory direct lnRR meta v2
+on:
+  pull_request:
+    paths:
+      - "analysis/meta_analyze_cirsium_floral_herbivory_lnrr_v2.py"
+      - "tests/test_meta_analyze_cirsium_floral_herbivory_lnrr_v2.py"
+      - "data/evidence/cirsium_floral_herbivory_lnrr_effects_v2.csv"
+      - "data/evidence/cirsium_floral_herbivory_lnrr_meta_v2.json"
+      - ".github/workflows/validate-cirsium-floral-herbivory-lnrr-meta-v2.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Rebuild direct seed-output meta
+        run: |
+          python -m py_compile analysis/meta_analyze_cirsium_floral_herbivory_lnrr_v2.py
+          python -m unittest tests/test_meta_analyze_cirsium_floral_herbivory_lnrr_v2.py -v
+          python analysis/meta_analyze_cirsium_floral_herbivory_lnrr_v2.py --input data/evidence/cirsium_floral_herbivory_lnrr_effects_v2.csv --output /tmp/v2.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rebuilt=json.loads(Path('/tmp/v2.json').read_text(encoding='utf-8'))
+          frozen=json.loads(Path('data/evidence/cirsium_floral_herbivory_lnrr_meta_v2.json').read_text(encoding='utf-8'))
+          assert rebuilt == frozen
+          d=frozen
+          assert d['coverage']['independent_study_clusters']==4
+          assert 2.3 < d['random_effects']['response_ratio'] < 3.1
+          assert d['random_effects']['ci95_response_ratio'][0] > 1
+          assert d['random_effects']['I2_percent'] < 5
+          print('direct_seed_output_meta_valid=true')
+          PY
