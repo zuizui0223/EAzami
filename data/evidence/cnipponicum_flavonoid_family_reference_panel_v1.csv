@@ -1,0 +1,19 @@
+family,reference_id,role,reference_taxon,uniprot_accession,function_label,official_fasta_url,notes
+DFR,AT_DFR,positive,Arabidopsis thaliana,P51102,dihydroflavonol_4_reductase,https://rest.uniprot.org/uniprotkb/P51102.fasta,reviewed anchor
+DFR,GERBERA_DFR,positive,Gerbera hybrida,P51105,dihydroflavonol_4_reductase,https://rest.uniprot.org/uniprotkb/P51105.fasta,Asteraceae reviewed DFR anchor
+DFR,TOMATO_DFR,positive,Solanum lycopersicum,A6N6K9,dihydroflavonol_4_reductase,https://rest.uniprot.org/uniprotkb/A6N6K9.fasta,experimentally described DFR family anchor
+DFR,AT_BAN,negative,Arabidopsis thaliana,Q9SEV0,anthocyanidin_reductase,https://rest.uniprot.org/uniprotkb/Q9SEV0.fasta,related flavonoid reductase negative comparator
+ANS,AT_ANS,positive,Arabidopsis thaliana,Q96323,anthocyanidin_synthase_LDOX,https://rest.uniprot.org/uniprotkb/Q96323.fasta,reviewed ANS anchor
+ANS,PETUNIA_ANS,positive,Petunia hybrida,P51092,anthocyanidin_synthase_LDOX,https://rest.uniprot.org/uniprotkb/P51092.fasta,experimentally described ANS anchor
+ANS,SOY_ANS2,positive,Glycine max,C6TCJ0,anthocyanidin_synthase,https://rest.uniprot.org/uniprotkb/C6TCJ0.fasta,ANS family anchor
+ANS,AT_FLS1,negative,Arabidopsis thaliana,Q96330,flavonol_synthase,https://rest.uniprot.org/uniprotkb/Q96330.fasta,2OG dioxygenase negative comparator
+ANS,PETUNIA_F3H,negative,Petunia hybrida,Q07353,flavanone_3_hydroxylase,https://rest.uniprot.org/uniprotkb/Q07353.fasta,2OG dioxygenase negative comparator
+FLS,AT_FLS1,positive,Arabidopsis thaliana,Q96330,flavonol_synthase,https://rest.uniprot.org/uniprotkb/Q96330.fasta,reviewed FLS anchor
+FLS,AT_FLS3,positive,Arabidopsis thaliana,Q9FFQ5,flavonol_synthase,https://rest.uniprot.org/uniprotkb/Q9FFQ5.fasta,second Arabidopsis FLS anchor
+FLS,AT_ANS,negative,Arabidopsis thaliana,Q96323,anthocyanidin_synthase_LDOX,https://rest.uniprot.org/uniprotkb/Q96323.fasta,2OG dioxygenase negative comparator
+FLS,PETUNIA_F3H,negative,Petunia hybrida,Q07353,flavanone_3_hydroxylase,https://rest.uniprot.org/uniprotkb/Q07353.fasta,2OG dioxygenase negative comparator
+CHS,AT_CHS,positive,Arabidopsis thaliana,P13114,chalcone_synthase,https://rest.uniprot.org/uniprotkb/P13114.fasta,reviewed CHS anchor
+CHS,PETUNIA_CHSA,positive,Petunia hybrida,P08894,chalcone_synthase,https://rest.uniprot.org/uniprotkb/P08894.fasta,reviewed/experimental CHS anchor
+CHS,PETUNIA_CHS_ALT,positive,Petunia hybrida,Q43040,chalcone_synthase,https://rest.uniprot.org/uniprotkb/Q43040.fasta,additional CHS anchor
+CHS,STRAWBERRY_CHS,positive,Fragaria ananassa,P51076,chalcone_synthase,https://rest.uniprot.org/uniprotkb/P51076.fasta,additional CHS anchor
+CHS,GERBERA_2PS,negative,Gerbera hybrida,P48391,2_pyrone_synthase,https://rest.uniprot.org/uniprotkb/P48391.fasta,Asteraceae type-III polyketide synthase negative comparator

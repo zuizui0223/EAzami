@@ -1,0 +1,62 @@
+name: Audit Japan-38 cytotypes from NMNS
+
+on:
+  pull_request:
+    paths:
+      - "analysis/recover_japan38_kahaku_cytotypes_v2.py"
+      - "data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_2.csv"
+      - "data/evidence/moreyra_japan38_kahaku_cytotypes_v2.csv"
+      - "data/evidence/moreyra_japan38_kahaku_cytotype_summary_v2.json"
+      - ".github/workflows/audit-japan38-kahaku-cytotypes.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install parser
+        run: python -m pip install --quiet beautifulsoup4
+      - name: Recover source-backed cytotypes from exact atlas URLs
+        run: |
+          python -m py_compile analysis/recover_japan38_kahaku_cytotypes_v2.py
+          python analysis/recover_japan38_kahaku_cytotypes_v2.py \
+            --output /tmp/moreyra_japan38_kahaku_cytotypes_v2.csv \
+            --summary /tmp/moreyra_japan38_kahaku_cytotype_summary_v2.json
+      - name: Assert conservative admission rules
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/moreyra_japan38_kahaku_cytotype_summary_v2.json'))
+          assert d['contract_version']=='moreyra_japan38_kahaku_cytotype_audit_v2'
+          assert d['japan38_concepts']==38
+          assert d['concepts_with_unique_exact_atlas_kahaku_url'] > 0
+          assert 0 <= d['exact_name_with_chromosome_evidence'] <= d['concepts_with_unique_exact_atlas_kahaku_url']
+          assert 'not the exact sequenced individual' in d['interpretation_rule']
+          assert 'not evidence that ploidy caused radiation success' in d['interpretation_rule']
+          assert d['next_gate']
+          print(json.dumps(d,indent=2,ensure_ascii=False))
+          PY
+      - name: Match frozen evidence when present
+        run: |
+          if [[ -f data/evidence/moreyra_japan38_kahaku_cytotypes_v2.csv ]]; then
+            cmp /tmp/moreyra_japan38_kahaku_cytotypes_v2.csv data/evidence/moreyra_japan38_kahaku_cytotypes_v2.csv
+          fi
+          if [[ -f data/evidence/moreyra_japan38_kahaku_cytotype_summary_v2.json ]]; then
+            cmp /tmp/moreyra_japan38_kahaku_cytotype_summary_v2.json data/evidence/moreyra_japan38_kahaku_cytotype_summary_v2.json
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-kahaku-cytotype-audit-v2-${{ github.run_id }}
+          path: |
+            /tmp/moreyra_japan38_kahaku_cytotypes_v2.csv
+            /tmp/moreyra_japan38_kahaku_cytotype_summary_v2.json
+          if-no-files-found: error
+          retention-days: 90

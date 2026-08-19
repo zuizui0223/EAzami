@@ -1,0 +1,39 @@
+{
+  "contract_version": "east_asia_public_candidate_disposition_v2",
+  "date": "2026-08-14",
+  "supersedes_planning_assumption": "EA01 + EA02 + CNIPG could each contribute one independent biological tip beyond the 294-tip baseline",
+  "evidence": "data/evidence/public_candidate_empirical_quartet_2026-08-14.json",
+  "accepted_primary_tips": 294,
+  "candidates": {
+    "EA01": {
+      "tip_id": "PUBEA001",
+      "taxon": "Cirsium nipponicum var. yoshinoi",
+      "independent_biological_tip_candidate": true,
+      "strict_loci": 236,
+      "disposition": "retain_for_full_294_tip_gate",
+      "counts_toward_public_tip_ceiling": true
+    },
+    "EA02": {
+      "tip_id": "PUBEA002",
+      "taxon": "Cirsium sairamense",
+      "independent_biological_tip_candidate": false,
+      "strict_loci": 239,
+      "disposition": "duplicate_readset_pseudoreplicate_excluded_pending_explicit_provenance",
+      "counts_toward_public_tip_ceiling": false,
+      "allowed_use": "pipeline_duplicate_control_only"
+    },
+    "CNIPG": {
+      "tip_id": "AUG_ULLEUNG_CNIP2024",
+      "taxon": "Cirsium nipponicum",
+      "independent_biological_tip_candidate": true,
+      "strict_loci": 180,
+      "disposition": "retain_for_cross_data_type_294_tip_gate",
+      "counts_toward_public_tip_ceiling": true
+    }
+  },
+  "independent_candidates_beyond_primary": ["EA01", "CNIPG"],
+  "revised_sample_level_candidate_ceiling": 296,
+  "new_analysis_taxon_labels_at_ceiling": 0,
+  "combined_296_is_accepted_tree": false,
+  "promotion_policy": "EA01 and CNIPG still require their predeclared full 294-tip paired-tree gates. EA02 may not be promoted as a second C. sairamense biological tip while the duplicate-readset evidence remains unresolved. Thresholds are not relaxed and the 294 accepted primary is unchanged."
+}

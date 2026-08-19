@@ -1,0 +1,3 @@
+paper_japan_member_id,paper_taxon_concept,conflicting_alias_in_public_metadata,azami_alias_source_present,n_all_observations,n_detected_observations,identity_status,allowed_use,forbidden_use
+JPN_31,Cirsium yuki-uenoanum Kadota,Cirsium waldsteinii,yes,148,114,"critical Japan-vs-Ukraine BioSample/name conflict already frozen in Moreyra audit","trait-coverage sensitivity only after voucher/taxon review","do not relabel C. waldsteinii images as C. yuki-uenoanum or use them in primary ASR"
+JPN_33,Cirsium effusum Matsm.,Cirsium pulchellum,yes,3,3,"cultivated Japanese taxon with unresolved tree-code/NCBI name conflict","trait-coverage sensitivity only after accepted-name/voucher review","do not relabel C. pulchellum images as C. effusum or use them in primary ASR"

@@ -1,0 +1,34 @@
+{
+  "contract_version": "moreyra2025_cirsium_reconciliation_v1",
+  "source_workflow_run": 31400324674,
+  "source_artifact_id": 9067368059,
+  "source_artifact_zip_sha256": "a18e4867362fed7b509c351bc901a9456fe258f09c7e277b0069d8c257b6ed72",
+  "source_full_reconciliation_file": "moreyra_sample_audit_output/moreyra2025_all_sample_reconciliation.csv",
+  "source_full_reconciliation_sha256": "ddaea27991fed2b55ac5d12b6da470711fa957d134ab31d7b76ac4bc89a2330e",
+  "frozen_scope": "linked_runinfo rows whose tree_code starts with Cirsium; only columns consumed by japan_origin_global_public_panel_v2",
+  "rows": 258,
+  "columns": [
+    "tree_code",
+    "biosample",
+    "run",
+    "experiment",
+    "voucher_and_herbarium",
+    "region_class",
+    "geographic_location",
+    "sra_link_status",
+    "scope_class",
+    "tree_code_vs_sra_name",
+    "name_reconciliation_priority"
+  ],
+  "combined_canonical_csv_sha256": "cf3af71a1a77eee5bd177cef9cf8106b749b949eaacc0ad82bbb331978084505",
+  "parts": [
+    {"file":"part_001.csv","rows":33,"sha256":"9ff1619b32657b7d87da04ab1c2308f94c34afdece0f39aad0adb7303cca0bcb","bytes":7544},
+    {"file":"part_002.csv","rows":33,"sha256":"dac8f1f402e007a292176f631819446a93e1e077c2c1a3b0940847989765d0d9","bytes":7382},
+    {"file":"part_003.csv","rows":33,"sha256":"1bd4bdbb98096163868069605eec08c359229378db61928dc9d8a153c0ffd6e9","bytes":7346},
+    {"file":"part_004.csv","rows":33,"sha256":"5fbde5acd999a7a301494bd255582a46c03856e6e21a08af1c4c8d03cb373dd0","bytes":7608},
+    {"file":"part_005.csv","rows":33,"sha256":"45caae8c514c36d0690f417e02aa8103a96c997315d44fd238dad94dd1fff425","bytes":7811},
+    {"file":"part_006.csv","rows":33,"sha256":"fc3c54926342ae2d6f52cdfca62ef75c35b3f262283cd1f0120d2f00c3566f9b","bytes":7956},
+    {"file":"part_007.csv","rows":33,"sha256":"92ee3a36eea2ab923babd4dd03f762ebec0c28c0d152aa3ff1c665bf4551cf30","bytes":7679},
+    {"file":"part_008.csv","rows":27,"sha256":"79c9244d77217689541cbbb28455cbdc665cf93e083a347342f8c08064b4d88b","bytes":6079}
+  ]
+}

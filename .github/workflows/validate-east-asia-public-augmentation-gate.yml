@@ -1,0 +1,163 @@
+name: Validate East Asia public augmentation gate
+
+on:
+  pull_request:
+    paths:
+      - "analysis/prepare_east_asia_public_augmentation_tree_inputs.py"
+      - "analysis/evaluate_east_asia_public_augmentation_tree_pair.py"
+      - "analysis/compare_east_asia_public_augmentation_astral_backbone.py"
+      - "analysis/build_east_asia_public_augmentation_hpc_bundle.py"
+      - "analysis/build_east_asia_public_full_hpc_handoff.py"
+      - "analysis/summarize_east_asia_public_augmentation_sensitivities.py"
+      - "analysis/materialize_frozen_moreyra_reconciliation.py"
+      - "analysis/materialize_frozen_public_candidate_locus_pack.py"
+      - "analysis/build_japan_origin_global_public_panel_v2.py"
+      - "analysis/build_japan_origin_global_hpc_bundle_v2.py"
+      - "data/evidence/east_asia_public_tree_augmentation_contract_v1.json"
+      - "data/evidence/east_asia_public_candidate_disposition_v2.json"
+      - "data/evidence/public_candidate_empirical_quartet_2026-08-14.json"
+      - "data/evidence/moreyra2025_cirsium_reconciliation_v1/**"
+      - "data/evidence/public_candidate_locus_packs_v1/**"
+      - "tests/test_materialize_frozen_public_candidate_locus_pack.py"
+      - "docs/EAST_ASIA_PUBLIC_TREE_AUGMENTATION_GATE_2026-08-13.md"
+      - ".github/workflows/validate-east-asia-public-augmentation-gate.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: east-asia-public-augmentation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile live gate code
+        run: |
+          python -m py_compile \
+            analysis/prepare_east_asia_public_augmentation_tree_inputs.py \
+            analysis/evaluate_east_asia_public_augmentation_tree_pair.py \
+            analysis/compare_east_asia_public_augmentation_astral_backbone.py \
+            analysis/build_east_asia_public_augmentation_hpc_bundle.py \
+            analysis/build_east_asia_public_full_hpc_handoff.py \
+            analysis/summarize_east_asia_public_augmentation_sensitivities.py \
+            analysis/materialize_frozen_moreyra_reconciliation.py \
+            analysis/materialize_frozen_public_candidate_locus_pack.py \
+            analysis/build_japan_origin_global_public_panel_v2.py \
+            analysis/build_japan_origin_global_hpc_bundle_v2.py
+          python -m unittest tests/test_materialize_frozen_public_candidate_locus_pack.py -v
+
+      - name: Materialize EA01 and EA02 and enforce empirical disposition
+        run: |
+          set -euo pipefail
+          python analysis/materialize_frozen_public_candidate_locus_pack.py --candidate EA01 --output /tmp/EA01
+          python analysis/materialize_frozen_public_candidate_locus_pack.py --candidate EA02 --output /tmp/EA02
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('data/evidence/east_asia_public_candidate_disposition_v2.json').read_text())
+          q=json.loads(Path('data/evidence/public_candidate_empirical_quartet_2026-08-14.json').read_text())
+          e1=json.loads(Path('/tmp/EA01/durable_materialization.json').read_text())
+          e2=json.loads(Path('/tmp/EA02/durable_materialization.json').read_text())
+          assert e1['strict_locus_count']==236
+          assert e2['strict_locus_count']==239
+          assert d['accepted_primary_tips']==294
+          assert d['candidates']['EA01']['independent_biological_tip_candidate'] is True
+          assert d['candidates']['EA02']['independent_biological_tip_candidate'] is False
+          assert d['candidates']['EA02']['counts_toward_public_tip_ceiling'] is False
+          assert d['independent_candidates_beyond_primary']==['EA01','CNIPG']
+          assert d['revised_sample_level_candidate_ceiling']==296
+          assert q['quartet_ml_analysis']['gene_tree_topology_counts']['same_taxon_pairs']==231
+          assert q['quartet_ml_analysis']['gene_tree_topology_counts']['baseline_vs_candidates']==0
+          assert q['quartet_ml_analysis']['gene_tree_topology_counts']['crossed_pairs']==0
+          assert q['candidate_disposition_after_empirical_analysis']['EA02']['independent_biological_tip_candidate'] is False
+          print(json.dumps({'EA01':'independent_candidate','EA02':'duplicate_control','public_ceiling':296},indent=2))
+          PY
+
+      - name: Rebuild 294 baseline and historical duplicate-control bundle
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/panel /tmp/baseline_bundle /tmp/augmentation_bundle /tmp/full_handoff
+          python analysis/materialize_frozen_moreyra_reconciliation.py --output /tmp/moreyra.csv
+          echo "cf3af71a1a77eee5bd177cef9cf8106b749b949eaacc0ad82bbb331978084505  /tmp/moreyra.csv" | sha256sum -c -
+          python analysis/build_japan_origin_global_public_panel_v2.py \
+            --moreyra-reconciliation /tmp/moreyra.csv --outdir /tmp/panel
+          python analysis/build_japan_origin_global_hpc_bundle_v2.py \
+            --panel /tmp/panel/japan_origin_global_public_panel_v2.csv --outdir /tmp/baseline_bundle
+          python analysis/build_east_asia_public_augmentation_hpc_bundle.py \
+            --baseline-bundle /tmp/baseline_bundle \
+            --ea01-pack /tmp/EA01 \
+            --ea02-pack /tmp/EA02 \
+            --contract data/evidence/east_asia_public_tree_augmentation_contract_v1.json \
+            --outdir /tmp/augmentation_bundle
+          python analysis/build_east_asia_public_full_hpc_handoff.py \
+            --baseline-bundle /tmp/baseline_bundle \
+            --augmentation-bundle /tmp/augmentation_bundle \
+            --outdir /tmp/full_handoff
+          python -m py_compile /tmp/full_handoff/augmentation_bundle/helpers/*.py
+          while IFS= read -r -d '' f; do bash -n "$f"; done < <(find /tmp/full_handoff -type f -name '*.sh' -print0)
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          b=json.loads(Path('/tmp/baseline_bundle/execution_manifest.json').read_text())
+          a=json.loads(Path('/tmp/augmentation_bundle/execution_manifest.json').read_text())
+          assert b['biological_samples']==294 and b['public_runs']==295
+          assert a['candidate_strict_loci']=={'EA01':236,'EA02':239}
+          assert a['tree_tip_promotion_allowed'] is False
+          print('historical_duplicate_control_bundle=valid')
+          PY
+
+      - name: Exercise post-empirical sensitivity summary
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/sensitivity')
+          for mode,loci in [('bwa',123),('blastx',117)]:
+              d=root/mode/'evaluation'; d.mkdir(parents=True,exist_ok=True)
+              (root/mode/'paired.json').write_text(json.dumps({'joint_paired_loci':loci,'minimum_joint_paired_loci':100}))
+              for cid,single in [('EA01','ea01_295'),('EA02','ea02_295')]:
+                  for scenario in (single,'ea01_ea02_296'):
+                      (d/f'{scenario}_{cid}_concat.json').write_text(json.dumps({
+                          'candidate_id':cid,
+                          'shared_baseline_focal_tips':294,
+                          'exact_shared_tip_backbone_invariance':True,
+                          'same_taxon_among_nearest_baseline_tips':True,
+                          'unrooted_rf_distance_on_shared_baseline_tips':0
+                      }))
+              for scenario in ('ea01_295','ea02_295','ea01_ea02_296'):
+                  (d/f'{scenario}_astral_backbone.json').write_text(json.dumps({
+                      'scenario_id':scenario,
+                      'exact_shared_species_backbone_invariance':True,
+                      'unrooted_rf_distance_on_shared_species':0
+                  }))
+          PY
+          python analysis/summarize_east_asia_public_augmentation_sensitivities.py \
+            --bwa-paired-summary /tmp/sensitivity/bwa/paired.json \
+            --blastx-paired-summary /tmp/sensitivity/blastx/paired.json \
+            --bwa-evaluation /tmp/sensitivity/bwa/evaluation \
+            --blastx-evaluation /tmp/sensitivity/blastx/evaluation \
+            --output /tmp/sensitivity/result.json
+          python - <<'PY'
+          import json
+          s=json.load(open('/tmp/sensitivity/result.json'))
+          assert s['contract_version']=='east_asia_public_augmentation_sensitivity_summary_v2_post_empirical_disposition'
+          assert s['candidates']['EA01']['sample_tip_promotion_allowed'] is True
+          assert s['candidates']['EA01']['independent_biological_tip_candidate'] is True
+          assert s['candidates']['EA02']['sample_tip_promotion_allowed'] is False
+          assert s['candidates']['EA02']['independent_biological_tip_candidate'] is False
+          assert s['candidates']['EA02']['retained_as_pipeline_duplicate_control'] is True
+          assert s['ea02_counts_toward_biological_tip_total'] is False
+          assert s['resulting_sample_level_tip_count_if_ea01_promoted']==295
+          assert s['new_analysis_taxon_labels_added_if_ea01_promoted']==0
+          print(json.dumps(s,indent=2))
+          PY

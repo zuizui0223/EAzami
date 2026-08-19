@@ -1,446 +1,55 @@
 #!/usr/bin/env python3
-"""Build a 20-taxon cross-study Compositae1061 bridge panel.
+"""Canonical corrected 20-taxon Compositae1061 flower-colour bridge builder.
 
-The flower-colour atlas v0.3 contains 20 fixed-state, rate-fit-eligible taxa,
-but they are split across Chang leaf RNA-seq and Moreyra target-capture data.
-This builder joins those taxa to official SRA runs without using flower colour
-or an inferred topology to choose samples.
+The first full official-SRA reconciliation corrected the pre-data publication
+bookkeeping used by the original prototype. The current project partition is
+Chang2025=3, Chang2026=10 and Moreyra2025=7. Taxon membership, colour states,
+run matching and the maximum-Spots primary-sample rule are unchanged.
 
-Primary sample rule (predeclared before locus recovery):
-
-1. source/taxon identity must match a frozen evidence route;
-2. official SRA metadata must resolve the run and library layout;
-3. for taxa with multiple eligible runs, choose the run with the *largest*
-   official Spots value to favour locus recovery;
-4. ties are broken by voucher/sample-code/run lexical order.
-
-All eligible replicates are retained in a second manifest so the primary
-single-tip tree can later be checked against replicate-inclusive sensitivity.
-
-This creates an execution input contract only.  It does not recover reads,
-run HybPiper, infer a tree, or unlock transition-rate fitting.
+Shared parsing/reconciliation helpers live in
+``colour_rate_comp1061_bridge_primitives.py``. This file is the only supported
+bridge entry point and freezes the corrected v0.2 scientific contract.
 """
-
 from __future__ import annotations
 
 import argparse
-import csv
 import json
-import re
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
-from typing import Iterable, Mapping, Sequence
+from typing import Mapping, Sequence
 
-EXPECTED_TAXA = 20
-EXPECTED_STATES = {"C": 17, "W": 3}
-EXPECTED_DATA_TYPES = {"leaf_rnaseq": 13, "target_capture": 7}
-EXPECTED_STUDIES = {"Chang2025": 6, "Chang2026": 7, "Moreyra2025": 7}
-EXPECTED_REFERENCE_SHA256 = "77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c"
-EXPECTED_REFERENCE_LOCI = 1061
+import colour_rate_comp1061_bridge_primitives as core
 
-CHANG_RECON_TAXA = {
-    "Cirsium brevicaule",
-    "Cirsium irumtiense",
-    "Cirsium japonicum var. albescens",
-    "Cirsium japonicum var. australe",
-    "Cirsium japonicum var. fukienense",
-    "Cirsium japonicum var. japonicum",
-    "Cirsium kawakamii",
-    "Cirsium morii",
-    "Cirsium pengii",
-    "Cirsium tatakaense",
-}
-CHANG2025_DIRECT_TAXA = {
-    "Cirsium suffultum",
-    "Cirsium nipponicum var. incomptum",
-    "Cirsium kujuense",
-}
-MOREYRA_TAXA = {
-    "Cirsium alpicola",
-    "Cirsium fanjingshanense",
-    "Cirsium gyojanum",
-    "Cirsium kamtschaticum",
-    "Cirsium maritimum",
-    "Cirsium nippoense",
-    "Cirsium yezoense",
-}
-CHANG2025_SRA_ALIASES = {
-    "Cirsium suffultum": {"Cirsium suffultum"},
-    "Cirsium nipponicum var. incomptum": {
-        "Cirsium nipponicum var. incomptum",
-        "Cirsium incomptum",
-    },
-    "Cirsium kujuense": {"Cirsium kujuense"},
-}
+EXPECTED_TAXA = core.EXPECTED_TAXA
+EXPECTED_STATES = core.EXPECTED_STATES
+EXPECTED_DATA_TYPES = core.EXPECTED_DATA_TYPES
+EXPECTED_STUDIES = {"Chang2025": 3, "Chang2026": 10, "Moreyra2025": 7}
+EXPECTED_REFERENCE_SHA256 = core.EXPECTED_REFERENCE_SHA256
+EXPECTED_REFERENCE_LOCI = core.EXPECTED_REFERENCE_LOCI
+CHANG_RECON_TAXA = core.CHANG_RECON_TAXA
+CHANG2025_DIRECT_TAXA = core.CHANG2025_DIRECT_TAXA
+MOREYRA_TAXA = core.MOREYRA_TAXA
+CHANG2025_SRA_ALIASES = core.CHANG2025_SRA_ALIASES
+FIELDS = core.FIELDS
 
-FIELDS = (
-    "tip_id",
-    "accepted_taxon",
-    "binary_colour_code",
-    "atlas_record_id",
-    "phylogeny_context",
-    "source_study",
-    "source_bioproject",
-    "data_type",
-    "run",
-    "experiment",
-    "biosample",
-    "voucher",
-    "source_sample_code",
-    "sra_scientific_name",
-    "library_layout",
-    "spots",
-    "bases",
-    "primary_tip",
-    "sample_selection_rule",
-    "source_evidence",
-    "claim_limit",
-)
-
-
-def clean(value: object) -> str:
-    return str(value or "").strip()
-
-
-def read_csv(path: Path) -> list[dict[str, str]]:
-    with path.open(encoding="utf-8-sig", newline="") as handle:
-        return [
-            {key: clean(value) for key, value in row.items()}
-            for row in csv.DictReader(handle)
-            if any(clean(value) for value in row.values())
-        ]
-
-
-def canonical_taxon(value: object) -> str:
-    text = clean(value).replace("_", " ")
-    text = re.sub(r"^C\.\s*", "Cirsium ", text, flags=re.IGNORECASE)
-    text = re.sub(r"\s+", " ", text).strip()
-    return text.casefold()
-
-
-def safe_tip_id(taxon: str) -> str:
-    value = re.sub(r"[^A-Za-z0-9]+", "_", taxon).strip("_")
-    if not value:
-        raise ValueError(f"Cannot construct tip ID for {taxon!r}")
-    return value
-
-
-def integer_field(row: Mapping[str, str], *names: str) -> int:
-    lower = {key.casefold(): value for key, value in row.items()}
-    for name in names:
-        value = clean(lower.get(name.casefold()))
-        if value:
-            try:
-                return int(float(value.replace(",", "")))
-            except ValueError as exc:
-                raise ValueError(f"Invalid integer field {name}={value!r}") from exc
-    return 0
-
-
-def value_field(row: Mapping[str, str], *names: str) -> str:
-    lower = {key.casefold(): value for key, value in row.items()}
-    for name in names:
-        value = clean(lower.get(name.casefold()))
-        if value:
-            return value
-    return ""
-
-
-def atlas_eligible(path: Path) -> list[dict[str, str]]:
-    rows = [row for row in read_csv(path) if row.get("rate_fit_eligible") == "yes"]
-    if len(rows) != EXPECTED_TAXA:
-        raise ValueError(f"Expected {EXPECTED_TAXA} eligible atlas taxa, observed {len(rows)}")
-    taxa = [row["accepted_taxon"] for row in rows]
-    if len(taxa) != len(set(taxa)):
-        raise ValueError("Rate-fit atlas has duplicate eligible taxon-level records")
-    states = Counter(row["binary_colour_code"] for row in rows)
-    if dict(sorted(states.items())) != EXPECTED_STATES:
-        raise ValueError(f"Expected eligible states {EXPECTED_STATES}, observed {dict(states)}")
-    if any(row.get("observation_unit") != "taxon" for row in rows):
-        raise ValueError("Bridge panel may use only taxon-level eligible atlas records")
-    if any(row.get("binary_colour_code") not in {"C", "W"} for row in rows):
-        raise ValueError("Polymorphic/unknown atlas records leaked into the bridge panel")
-
-    expected_partition = CHANG_RECON_TAXA | CHANG2025_DIRECT_TAXA | MOREYRA_TAXA
-    if set(taxa) != expected_partition:
-        missing = sorted(expected_partition - set(taxa))
-        extra = sorted(set(taxa) - expected_partition)
-        raise ValueError(f"Atlas/source partition drifted; missing={missing}, extra={extra}")
-    return sorted(rows, key=lambda row: row["accepted_taxon"])
-
-
-def frozen_reference_contract(path: Path) -> dict[str, object]:
-    x = json.loads(path.read_text(encoding="utf-8"))
-    if x.get("compatibility_reanalysis_usable") is not True:
-        raise ValueError("Frozen original Compositae1061 reference is not compatibility-usable")
-    if x.get("sha256") != EXPECTED_REFERENCE_SHA256:
-        raise ValueError("Original Compositae1061 SHA256 drifted")
-    if x.get("locus_count") != EXPECTED_REFERENCE_LOCI:
-        raise ValueError("Original Compositae1061 locus count drifted")
-    if x.get("moreyra_augmented_reference_recovered") is not False:
-        raise ValueError("Original reference was incorrectly promoted to Moreyra augmented reference")
-    return x
-
-
-def atlas_index(rows: Sequence[Mapping[str, str]]) -> dict[str, Mapping[str, str]]:
-    return {clean(row["accepted_taxon"]): row for row in rows}
-
-
-def accession_audit_by_voucher(path: Path) -> dict[str, dict[str, str]]:
-    rows = read_csv(path)
-    output: dict[str, dict[str, str]] = {}
-    for row in rows:
-        voucher = clean(row.get("voucher"))
-        if not voucher:
-            continue
-        if voucher in output:
-            raise ValueError(f"Duplicate Chang accession-audit voucher: {voucher}")
-        output[voucher] = row
-    return output
-
-
-def make_row(
-    *,
-    atlas: Mapping[str, str],
-    study: str,
-    bioproject: str,
-    data_type: str,
-    run: str,
-    experiment: str,
-    biosample: str,
-    voucher: str,
-    source_sample_code: str,
-    scientific_name: str,
-    library_layout: str,
-    spots: int,
-    bases: int,
-    source_evidence: str,
-) -> dict[str, str]:
-    if not run.startswith(("SRR", "ERR", "DRR")):
-        raise ValueError(f"Unexpected run accession for {atlas['accepted_taxon']}: {run}")
-    if library_layout.upper() not in {"PAIRED", "SINGLE"}:
-        raise ValueError(
-            f"Unsupported official library layout for {atlas['accepted_taxon']}: {library_layout!r}"
-        )
-    return {
-        "tip_id": safe_tip_id(atlas["accepted_taxon"]),
-        "accepted_taxon": atlas["accepted_taxon"],
-        "binary_colour_code": atlas["binary_colour_code"],
-        "atlas_record_id": atlas["record_id"],
-        "phylogeny_context": atlas["phylogeny_context"],
-        "source_study": study,
-        "source_bioproject": bioproject,
-        "data_type": data_type,
-        "run": run,
-        "experiment": experiment,
-        "biosample": biosample,
-        "voucher": voucher,
-        "source_sample_code": source_sample_code,
-        "sra_scientific_name": scientific_name,
-        "library_layout": library_layout.upper(),
-        "spots": str(spots),
-        "bases": str(bases),
-        "primary_tip": "no",
-        "sample_selection_rule": "maximum official Spots among source-backed eligible runs; ties voucher/sample-code/run lexical; flower colour and topology excluded from selection",
-        "source_evidence": source_evidence,
-        "claim_limit": "Common-locus execution input only; cross-library recovery/occupancy bias and paralogy must be tested before interpreting branch lengths or colour-transition rates.",
-    }
-
-
-def chang_reconciliation_candidates(
-    atlas_rows: Sequence[Mapping[str, str]],
-    reconciliation_path: Path,
-    accession_audit_path: Path,
-) -> list[dict[str, str]]:
-    target_by_canon = {
-        canonical_taxon(taxon): taxon for taxon in CHANG_RECON_TAXA
-    }
-    atlas_by_name = atlas_index(atlas_rows)
-    voucher_audit = accession_audit_by_voucher(accession_audit_path)
-    candidates: list[dict[str, str]] = []
-    for source in read_csv(reconciliation_path):
-        accepted = target_by_canon.get(canonical_taxon(source.get("taxon")))
-        if not accepted:
-            continue
-        if source.get("match_confidence") not in {"verified", "probable"}:
-            continue
-        voucher = clean(source.get("voucher"))
-        evidence = voucher_audit.get(voucher)
-        if not evidence:
-            raise ValueError(f"No Chang source audit row for reconciled voucher {voucher}")
-        bioproject = clean(evidence.get("bioproject"))
-        if bioproject not in {"PRJNA1311153", "PRJNA1158676"}:
-            raise ValueError(f"Unexpected Chang BioProject for {voucher}: {bioproject}")
-        study = "Chang2026" if bioproject == "PRJNA1311153" else "Chang2025"
-        candidates.append(
-            make_row(
-                atlas=atlas_by_name[accepted],
-                study=study,
-                bioproject=bioproject,
-                data_type="leaf_rnaseq",
-                run=source["matched_run"],
-                experiment=source.get("matched_experiment", ""),
-                biosample=source.get("matched_biosample", ""),
-                voucher=voucher,
-                source_sample_code=source.get("code", ""),
-                scientific_name=source.get("matched_scientific_name", ""),
-                library_layout=source.get("matched_library_layout", ""),
-                spots=integer_field(source, "matched_spots"),
-                bases=0,
-                source_evidence="chang2026_sample_run_reconciliation + chang2026_east_asia_accession_audit",
-            )
-        )
-    observed = {row["accepted_taxon"] for row in candidates}
-    if observed != CHANG_RECON_TAXA:
-        raise ValueError(
-            f"Chang complete reconciliation did not cover required taxa; missing={sorted(CHANG_RECON_TAXA-observed)}"
-        )
-    return candidates
-
-
-def chang2025_direct_candidates(
-    atlas_rows: Sequence[Mapping[str, str]],
-    runinfo_path: Path,
-) -> list[dict[str, str]]:
-    atlas_by_name = atlas_index(atlas_rows)
-    aliases = {
-        taxon: {canonical_taxon(alias) for alias in values}
-        for taxon, values in CHANG2025_SRA_ALIASES.items()
-    }
-    candidates: list[dict[str, str]] = []
-    for source in read_csv(runinfo_path):
-        scientific = value_field(source, "ScientificName")
-        canonical = canonical_taxon(scientific)
-        accepted = next(
-            (taxon for taxon, names in aliases.items() if canonical in names), None
-        )
-        if not accepted:
-            continue
-        candidates.append(
-            make_row(
-                atlas=atlas_by_name[accepted],
-                study="Chang2025",
-                bioproject="PRJNA1158676",
-                data_type="leaf_rnaseq",
-                run=value_field(source, "Run"),
-                experiment=value_field(source, "Experiment"),
-                biosample=value_field(source, "BioSample"),
-                voucher=value_field(source, "isolate", "SampleName", "LibraryName"),
-                source_sample_code=value_field(source, "LibraryName", "SampleName"),
-                scientific_name=scientific,
-                library_layout=value_field(source, "LibraryLayout"),
-                spots=integer_field(source, "spots"),
-                bases=integer_field(source, "bases"),
-                source_evidence="official PRJNA1158676 SRA runinfo exact accepted-name/declared-synonym match",
-            )
-        )
-    observed = {row["accepted_taxon"] for row in candidates}
-    if observed != CHANG2025_DIRECT_TAXA:
-        raise ValueError(
-            f"PRJNA1158676 runinfo did not cover direct Chang2025 taxa; missing={sorted(CHANG2025_DIRECT_TAXA-observed)}"
-        )
-    return candidates
-
-
-def runinfo_by_run(path: Path) -> dict[str, dict[str, str]]:
-    output: dict[str, dict[str, str]] = {}
-    for row in read_csv(path):
-        run = value_field(row, "Run")
-        if not run:
-            continue
-        if run in output:
-            raise ValueError(f"Duplicate official runinfo row: {run}")
-        output[run] = row
-    return output
-
-
-def moreyra_candidates(
-    atlas_rows: Sequence[Mapping[str, str]],
-    audit_path: Path,
-    runinfo_path: Path,
-) -> list[dict[str, str]]:
-    atlas_by_name = atlas_index(atlas_rows)
-    runinfo = runinfo_by_run(runinfo_path)
-    audit_by_taxon: dict[str, list[dict[str, str]]] = defaultdict(list)
-    for row in read_csv(audit_path):
-        tree_code = clean(row.get("tree_code"))
-        if tree_code in MOREYRA_TAXA:
-            audit_by_taxon[tree_code].append(row)
-    if set(audit_by_taxon) != MOREYRA_TAXA:
-        raise ValueError(
-            f"Moreyra sample audit missing bridge taxa: {sorted(MOREYRA_TAXA-set(audit_by_taxon))}"
-        )
-
-    candidates: list[dict[str, str]] = []
-    for accepted in sorted(MOREYRA_TAXA):
-        rows = audit_by_taxon[accepted]
-        if len(rows) != 1:
-            raise ValueError(f"Expected one frozen Moreyra audit row for {accepted}, observed {len(rows)}")
-        audit = rows[0]
-        run = audit["run"]
-        official = runinfo.get(run)
-        if not official:
-            raise ValueError(f"Moreyra audit run absent from PRJNA957074 runinfo: {run}")
-        official_biosample = value_field(official, "BioSample")
-        if audit.get("biosample") and official_biosample != audit["biosample"]:
-            raise ValueError(
-                f"Moreyra audit/runinfo BioSample mismatch for {accepted}: {audit['biosample']} != {official_biosample}"
-            )
-        candidates.append(
-            make_row(
-                atlas=atlas_by_name[accepted],
-                study="Moreyra2025",
-                bioproject="PRJNA957074",
-                data_type="target_capture",
-                run=run,
-                experiment=value_field(official, "Experiment"),
-                biosample=official_biosample,
-                voucher=audit.get("voucher_and_herbarium", ""),
-                source_sample_code=audit.get("library_name", ""),
-                scientific_name=value_field(official, "ScientificName"),
-                library_layout=value_field(official, "LibraryLayout"),
-                spots=integer_field(official, "spots"),
-                bases=integer_field(official, "bases"),
-                source_evidence="moreyra2025_east_ne_asia_sample_audit + official PRJNA957074 SRA runinfo",
-            )
-        )
-    return candidates
-
-
-def choose_primary(candidates: Sequence[Mapping[str, str]]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
-    grouped: dict[str, list[dict[str, str]]] = defaultdict(list)
-    seen_runs: set[str] = set()
-    for source in candidates:
-        row = dict(source)
-        run = row["run"]
-        if run in seen_runs:
-            raise ValueError(f"Run reused across bridge candidates: {run}")
-        seen_runs.add(run)
-        grouped[row["accepted_taxon"]].append(row)
-
-    if len(grouped) != EXPECTED_TAXA:
-        raise ValueError(f"Expected candidates for {EXPECTED_TAXA} taxa, observed {len(grouped)}")
-
-    primary: list[dict[str, str]] = []
-    all_rows: list[dict[str, str]] = []
-    for taxon in sorted(grouped):
-        rows = sorted(
-            grouped[taxon],
-            key=lambda row: (
-                -int(row["spots"] or 0),
-                row["voucher"],
-                row["source_sample_code"],
-                row["run"],
-            ),
-        )
-        selected_run = rows[0]["run"]
-        for row in rows:
-            row = dict(row)
-            row["primary_tip"] = "yes" if row["run"] == selected_run else "no"
-            all_rows.append(row)
-            if row["primary_tip"] == "yes":
-                primary.append(row)
-    return primary, all_rows
+# Public helper surface retained for tests/downstream callers.
+clean = core.clean
+read_csv = core.read_csv
+canonical_taxon = core.canonical_taxon
+safe_tip_id = core.safe_tip_id
+integer_field = core.integer_field
+value_field = core.value_field
+atlas_eligible = core.atlas_eligible
+frozen_reference_contract = core.frozen_reference_contract
+atlas_index = core.atlas_index
+accession_audit_by_voucher = core.accession_audit_by_voucher
+make_row = core.make_row
+chang_reconciliation_candidates = core.chang_reconciliation_candidates
+chang2025_direct_candidates = core.chang2025_direct_candidates
+runinfo_by_run = core.runinfo_by_run
+moreyra_candidates = core.moreyra_candidates
+choose_primary = core.choose_primary
+write_csv = core.write_csv
 
 
 def validate_primary(primary: Sequence[Mapping[str, str]]) -> dict[str, object]:
@@ -475,14 +84,6 @@ def validate_primary(primary: Sequence[Mapping[str, str]]) -> dict[str, object]:
     }
 
 
-def write_csv(path: Path, rows: Iterable[Mapping[str, object]]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(FIELDS), extrasaction="ignore")
-        writer.writeheader()
-        writer.writerows(rows)
-
-
 def build(
     *,
     atlas_path: Path,
@@ -504,12 +105,22 @@ def build(
     )
     primary, replicates = choose_primary(candidates)
     observed = validate_primary(primary)
-    summary = {
-        "contract_version": "colour_rate_comp1061_bridge_panel_v0_1",
+    summary: dict[str, object] = {
+        "contract_version": "colour_rate_comp1061_bridge_panel_v0_2",
         "reference_contract": str(reference_contract_path),
         "comp1061_reference_sha256": reference["sha256"],
         "comp1061_locus_count": reference["locus_count"],
-        "primary_sample_rule": "maximum official Spots within each source-backed taxon; ties voucher/sample-code/run lexical; flower colour and topology excluded",
+        "source_study_partition": dict(EXPECTED_STUDIES),
+        "v0_1_correction": (
+            "The first full official-SRA build showed ten eligible taxa represented "
+            "by PRJNA1311153/Chang2026 and three additional taxa by "
+            "PRJNA1158676/Chang2025. The old 7/6 Chang split was pre-data "
+            "bookkeeping; taxon/run matching and the maximum-Spots rule are unchanged."
+        ),
+        "primary_sample_rule": (
+            "maximum official Spots within each source-backed taxon; ties "
+            "voucher/sample-code/run lexical; flower colour and topology excluded"
+        ),
         "primary": observed,
         "replicate_candidate_rows": len(replicates),
         "taxa_with_multiple_candidate_runs": sorted(
@@ -529,9 +140,11 @@ def build(
             "paralog_copy_conflict_audit",
         ],
         "claim_limit": (
-            "The bridge panel only freezes taxon/run selection in a shared Compositae1061 coordinate system. "
-            "It does not imply equivalent locus recovery between target-capture and leaf RNA-seq, does not create "
-            "a branch-length tree, and does not permit empirical flower-colour transition-rate inference."
+            "The bridge panel only freezes taxon/run selection in a shared "
+            "Compositae1061 coordinate system. It does not imply equivalent locus "
+            "recovery between target-capture and leaf RNA-seq, does not create a "
+            "branch-length tree, and does not permit empirical flower-colour "
+            "transition-rate inference."
         ),
     }
     return primary, replicates, summary
@@ -563,10 +176,14 @@ def main() -> int:
     )
     args.outdir.mkdir(parents=True, exist_ok=True)
     write_csv(args.outdir / "colour_rate_comp1061_primary_20tip_panel.csv", primary)
-    write_csv(args.outdir / "colour_rate_comp1061_replicate_sensitivity_manifest.csv", replicates)
+    write_csv(
+        args.outdir / "colour_rate_comp1061_replicate_sensitivity_manifest.csv",
+        replicates,
+    )
     (args.outdir / "colour_rate_comp1061_bridge_summary.json").write_text(
         json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
+    print("contract_version=colour_rate_comp1061_bridge_panel_v0_2")
     print(f"primary_taxa={summary['primary']['taxon_count']}")
     print("state_counts=" + json.dumps(summary["primary"]["state_counts"], sort_keys=True))
     print("data_type_counts=" + json.dumps(summary["primary"]["data_type_counts"], sort_keys=True))

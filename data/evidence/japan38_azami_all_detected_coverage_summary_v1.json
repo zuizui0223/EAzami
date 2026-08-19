@@ -1,0 +1,54 @@
+{
+  "contract_version": "japan38_azami_all_detected_coverage_summary_v1",
+  "date": "2026-08-16",
+  "source": {
+    "repo": "zuizui0223/azami",
+    "full_exhaustive_run": 29216617585,
+    "full_exhaustive_artifact_id": 8269246732,
+    "full_exhaustive_artifact_name": "ch1-exhaustive-continuous-merged-all_photos_20260711_v1-recovery",
+    "full_exhaustive_artifact_digest": "sha256:5f18b42d18cfcb81691c38ce0f04bcef754e6a67382025ea90110dbc50ae194b",
+    "compact_summary_run": 29226543364,
+    "compact_summary_artifact_id": 8269975324,
+    "compact_summary_artifact_digest": "sha256:59daf0cd749a3064397b458e3dba1b5e8c8e3bbe1b2d1c982f02b64855f5a4ea",
+    "species_audit_rows": 288,
+    "detector_positive_taxa": 286
+  },
+  "japan38": {
+    "paper_taxon_concepts": 38,
+    "distinct_species_binomials": 36,
+    "distinct_binomials_present_in_azami_exhaustive_source": 18,
+    "paper_concepts_represented_at_binomial_level": 20,
+    "distinct_binomials_in_strict_spatial_trait_cohort": 15,
+    "detected_but_removed_before_strict_spatial_cohort": [
+      "Cirsium amplexifolium",
+      "Cirsium matsumurae",
+      "Cirsium microspicatum"
+    ],
+    "absent_from_current_azami_exhaustive_source_pool": [
+      "Cirsium abukumense",
+      "Cirsium aidzuense",
+      "Cirsium alpicola",
+      "Cirsium dipsacolepis",
+      "Cirsium domonii",
+      "Cirsium effusum",
+      "Cirsium funagataense",
+      "Cirsium gyojanum",
+      "Cirsium ishidatense",
+      "Cirsium ishizuchiense",
+      "Cirsium kasaianum",
+      "Cirsium kiotoense",
+      "Cirsium magofukui",
+      "Cirsium nippoense",
+      "Cirsium pseudosuffultum",
+      "Cirsium shidokimontanum",
+      "Cirsium uzenense",
+      "Cirsium yuki-uenoanum"
+    ]
+  },
+  "interpretation": {
+    "finding": "Half of the 36 distinct Japan-38 species binomials are already present in the original exhaustive Azami public-image source stream. Three additional binomials are lost only by strict spatial filtering and can be recovered for non-spatial trait summaries without any new biological sampling.",
+    "true_current_image_source_gap": "The other 18 binomials are absent from the current Azami exhaustive source pool rather than merely lost by detector or coordinate filtering.",
+    "next_action_before_field_sampling": "Run a targeted synonym-aware public-image/herbarium recovery for the 18 source-pool gaps, prioritizing taxa that are direct nuclear tips and that increase representation of internal branches of the dominant Japanese radiation."
+  },
+  "claim_boundary": "Source-pool presence is not taxonomic validation, adequate replication, independent-population coverage, evolutionary rate or adaptation. Broad binomial image records cannot be silently assigned to infraspecific Japan-38 paper concepts."
+}

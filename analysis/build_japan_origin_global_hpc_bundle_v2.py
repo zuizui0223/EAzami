@@ -17,14 +17,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location(
-    "jog_legacy", ROOT / "analysis/build_japan_origin_global_hpc_bundle.py"
+    "jog_hpc_primitives", ROOT / "analysis/japan_origin_global_hpc_primitives.py"
 )
 assert SPEC and SPEC.loader
-legacy = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(legacy)
+primitives = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(primitives)
 
 EXPECTED_SAMPLES = 294
 EXPECTED_RUNS = 295
+RESULT_NAMESPACE = "japan_origin_global_v2"
+SAMPLE_LAST_INDEX = EXPECTED_SAMPLES - 1
 
 
 def clean(value: object) -> str:
@@ -139,29 +141,6 @@ def species_map(outdir: Path, data: list[dict[str, str]]) -> list[dict[str, str]
     return rows
 
 
-def patch(text: str) -> str:
-    """Convert already-tested v1 shell primitives to the corrected v2 inventory."""
-    return (
-        text.replace("--array=0-301", "--array=0-293")
-        .replace("results/japan_origin_global", "results/japan_origin_global_v2")
-        .replace(
-            "$REPO_ROOT/analysis/summarize_japan_origin_global_comp1061_qc.py",
-            "$BUNDLE_DIR/helpers/summarize_japan_origin_global_comp1061_qc_v2.py",
-        )
-        .replace(
-            "$REPO_ROOT/analysis/prepare_japan_origin_global_comp1061_tree_inputs.py",
-            "$BUNDLE_DIR/helpers/prepare_japan_origin_global_comp1061_tree_inputs_v2.py",
-        )
-        .replace(
-            "$REPO_ROOT/analysis/validate_japan_origin_global_tree.py",
-            "$BUNDLE_DIR/helpers/validate_japan_origin_global_tree_v2.py",
-        )
-        .replace("302 public biological samples / 303 runs", "294 unique biological samples / 295 unique runs")
-        .replace("EAzami 302-sample", "EAzami 294-tip")
-        .replace("all 302 samples", "all 294 samples")
-    )
-
-
 def helper_sources(outdir: Path) -> None:
     generated = {
         "summarize_japan_origin_global_comp1061_qc.py": "summarize_japan_origin_global_comp1061_qc_v2.py",
@@ -186,7 +165,7 @@ def helper_sources(outdir: Path) -> None:
 
 
 def env_yml() -> str:
-    text = legacy.env_yml()
+    text = primitives.env_yml()
     if "astral-tree" not in text:
         text = text.replace("  - biopython\n", "  - biopython\n  - astral-tree=5.7.8\n")
     return text
@@ -200,7 +179,7 @@ def astral_script() -> str:
 #SBATCH --mem=96G
 #SBATCH --time=12:00:00
 """
-        + patch(legacy.common())
+        + primitives.common(RESULT_NAMESPACE)
         + """MODE="${MODE:-bwa}"
 TREE="$RESULT_ROOT/tree_$MODE"
 OUT="$TREE/astral"
@@ -232,7 +211,7 @@ def accept_script() -> str:
 #SBATCH --mem=8G
 #SBATCH --time=02:00:00
 """
-        + patch(legacy.common())
+        + primitives.common(RESULT_NAMESPACE)
         + """MODE="${MODE:-bwa}"
 TREE="$RESULT_ROOT/tree_$MODE"
 TREEFILE="$TREE/concat/japan_origin_global_concat.treefile"
@@ -284,19 +263,23 @@ def main() -> int:
     write(args.outdir / "env.yml", env_yml())
 
     scripts = {
-        "00_prepare_inputs_slurm.sh": patch(legacy.prep()),
-        "01_fetch_trim_slurm.sh": patch(legacy.fetch()),
-        "02_hybpiper_bwa_slurm.sh": patch(legacy.hyb("bwa")),
-        "02b_hybpiper_blastx_slurm.sh": patch(legacy.hyb("blastx")),
-        "03_retrieve_qc_slurm.sh": patch(legacy.qc()),
-        "04_prepare_tree_inputs_slurm.sh": patch(legacy.treeprep()),
-        "05_align_loci_slurm.sh": patch(legacy.align()),
-        "06_gene_trees_slurm.sh": patch(legacy.gene()),
-        "07_concat_tree_slurm.sh": patch(legacy.concat()),
+        "00_prepare_inputs_slurm.sh": primitives.prep(RESULT_NAMESPACE),
+        "01_fetch_trim_slurm.sh": primitives.fetch(RESULT_NAMESPACE, SAMPLE_LAST_INDEX),
+        "02_hybpiper_bwa_slurm.sh": primitives.hyb("bwa", RESULT_NAMESPACE, SAMPLE_LAST_INDEX),
+        "02b_hybpiper_blastx_slurm.sh": primitives.hyb("blastx", RESULT_NAMESPACE, SAMPLE_LAST_INDEX),
+        "03_retrieve_qc_slurm.sh": primitives.qc(RESULT_NAMESPACE),
+        "04_prepare_tree_inputs_slurm.sh": primitives.treeprep(
+            RESULT_NAMESPACE,
+            "$BUNDLE_DIR/helpers/summarize_japan_origin_global_comp1061_qc_v2.py",
+            "$BUNDLE_DIR/helpers/prepare_japan_origin_global_comp1061_tree_inputs_v2.py",
+        ),
+        "05_align_loci_slurm.sh": primitives.align(RESULT_NAMESPACE),
+        "06_gene_trees_slurm.sh": primitives.gene(RESULT_NAMESPACE),
+        "07_concat_tree_slurm.sh": primitives.concat(RESULT_NAMESPACE),
         "08_astral_species_tree_slurm.sh": astral_script(),
         "09_accept_trees_slurm.sh": accept_script(),
-        "submit_bwa_chain.sh": patch(legacy.submit_data("bwa")),
-        "submit_blastx_chain.sh": patch(legacy.submit_data("blastx")),
+        "submit_bwa_chain.sh": primitives.submit_data("bwa"),
+        "submit_blastx_chain.sh": primitives.submit_data("blastx"),
         "submit_tree_chain.sh": submit_tree(),
     }
     for name, text in scripts.items():

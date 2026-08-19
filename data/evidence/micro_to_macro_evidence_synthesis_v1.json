@@ -1,0 +1,169 @@
+{
+  "contract_version": "micro_to_macro_evidence_synthesis_v1",
+  "evidence_matrix": {
+    "rows": 9,
+    "class_counts": {
+      "EAzami_reanalysis": 5,
+      "published_conclusion": 4
+    },
+    "scale_counts": {
+      "cytogenetic_lineage": 1,
+      "evidence_method": 1,
+      "lineage_population": 1,
+      "molecular": 1,
+      "population_to_lineage": 1,
+      "regional_macroevolution": 2,
+      "regional_trait_pattern": 1,
+      "trait_coding": 1
+    },
+    "independent_data_generation_groups_by_class": {
+      "EAzami_reanalysis": [
+        "EAzami_accession_provenance",
+        "EAzami_cross_study_synthesis",
+        "EAzami_source_backed_trait_atlas",
+        "EAzami_topology_enumeration",
+        "EAzami_trait_history_screen"
+      ],
+      "published_conclusion": [
+        "chang_transcriptome_program",
+        "cj2020_transcriptome_metabolome",
+        "moreyra_target_capture"
+      ]
+    }
+  },
+  "macro_trait_atlas": {
+    "reviewed_assessable_taxon_records": 18,
+    "taxon_state_counts": {
+      "C": 11,
+      "P": 4,
+      "W": 3
+    },
+    "white_or_polymorphic_phylogeny_contexts": [
+      "Arenicola",
+      "Moreyra2025_Japan38",
+      "Nipponocirsium",
+      "Sinocirsium",
+      "Sinocirsium/takaoense_within_variety"
+    ],
+    "polymorphic_taxa": [
+      "Cirsium aomorense",
+      "Cirsium japonicum var. takaoense",
+      "Cirsium pendulum",
+      "Cirsium sieboldii"
+    ],
+    "takaoense_reviewed_sample_records": 6,
+    "takaoense_sample_state_counts": {
+      "C": 3,
+      "W": 3
+    }
+  },
+  "japan_origin_meta": {
+    "dominant_radiation_fraction": 0.9473684210526315,
+    "dominant_radiation_species": 36,
+    "japanese_species_sampled": 38,
+    "lineare_analysis_support": [
+      3,
+      3
+    ],
+    "lineare_independent_group_support": [
+      2,
+      2
+    ],
+    "dipsacolepis_independent_groups": 1,
+    "arenicola_extra_colonization_supporting_analyses": 0
+  },
+  "takaoense_topology_meta": {
+    "rooted_topologies": 945,
+    "regain_required": 270,
+    "regain_required_fraction": 0.2857142857142857,
+    "published_history": "1L+1R",
+    "published_no_regain_penalty": 2,
+    "bp_monophyletic_regain_required": [
+      36,
+      45
+    ],
+    "w_monophyletic_regain_required": [
+      0,
+      45
+    ]
+  },
+  "EAzami_discovered_problems": {
+    "P_MACRO_01_colonization_diversification_asymmetry": {
+      "basis": "EAzami Japan-origin meta-analysis",
+      "result": "36/38 sampled Japanese species are in one dominant radiation while rare exceptional histories remain",
+      "why_problem": "arrival count is not equivalent to diversification success",
+      "hypothesis": "HMM3"
+    },
+    "P_MACRO_02_topology_direction_identifiability": {
+      "basis": "EAzami exhaustive takaoense topology screen",
+      "result": "270/945 rooted resolutions require regain; the rest permit a no-regain optimum",
+      "why_problem": "directional trait-history claims depend on topology support, not phenotype coding alone",
+      "hypothesis": "HMM1|HMM2"
+    },
+    "P_MACRO_03_species_tip_state_aggregation": {
+      "basis": "EAzami colour atlas + preliminary Fitch screen",
+      "result": "reviewed source-backed polymorphic taxon records=4; takaoense sample states W=3 C=3",
+      "why_problem": "one-state-per-species coding can erase within-lineage transitions",
+      "hypothesis": "HMM2"
+    },
+    "P_MACRO_04_evidence_nonindependence": {
+      "basis": "EAzami source-typed evidence matrix",
+      "result": "published rows=4 but independent published data-generation groups=3",
+      "why_problem": "paper counts and accession rows can overstate independent replication",
+      "hypothesis": "HMM3|HMM4"
+    },
+    "P_MACRO_05_phenotype_mechanism_scale_gap": {
+      "basis": "EAzami source-backed colour atlas + molecular literature",
+      "result": "white/polymorphic states occur across 5 reviewed phylogeny-context labels, while causal molecular mechanisms are not comparably resolved across those lineages",
+      "why_problem": "phenotypic convergence can be strong even when molecular convergence is unknown or heterogeneous",
+      "hypothesis": "HMM1|HMM5"
+    }
+  },
+  "EAzami_hypotheses": {
+    "HMM1": {
+      "name": "latent-pathway / regulatory reversibility",
+      "derived_from": [
+        "P_MACRO_02_topology_direction_identifiability",
+        "P_MACRO_05_phenotype_mechanism_scale_gap"
+      ],
+      "prediction": "recent independent white lineages often retain structural flavonoid machinery and differ at regulatory/expression nodes more often than by shared destructive pathway loss",
+      "falsifier": "multiple well-resolved recent white lineages independently show irreversible loss/disruption of core pathway genes with no retained functional route"
+    },
+    "HMM2": {
+      "name": "population-aware transition-rate inflation relative to species-tip coding",
+      "derived_from": [
+        "P_MACRO_02_topology_direction_identifiability",
+        "P_MACRO_03_species_tip_state_aggregation"
+      ],
+      "prediction": "population/sample-aware coding yields more and younger W<->C transitions than one-state-per-species coding across replicated polymorphic systems",
+      "falsifier": "after topology uncertainty is propagated, population-aware coding does not increase transition count or shifts only one idiosyncratic system"
+    },
+    "HMM3": {
+      "name": "radiation-success / evolvability",
+      "derived_from": [
+        "P_MACRO_01_colonization_diversification_asymmetry",
+        "P_MACRO_04_evidence_nonindependence"
+      ],
+      "prediction": "the dominant Japanese radiation shows higher genomic discordance/reticulation and-or faster trait or niche diversification than secondary histories after age and sampling controls",
+      "falsifier": "secondary histories show comparable evolvability metrics and diversification after age/sampling correction, leaving colonization timing/opportunity sufficient"
+    },
+    "HMM4": {
+      "name": "reticulation-phenotypic-transition coupling",
+      "derived_from": [
+        "P_MACRO_01_colonization_diversification_asymmetry",
+        "P_MACRO_04_evidence_nonindependence"
+      ],
+      "prediction": "lineage-level gene-tree/cytonuclear discordance and ploidy/genome-size shifts positively covary with population-aware floral transition density",
+      "falsifier": "transition density is unrelated or negatively related to discordance across supported topology ensembles and leave-one-clade-out analyses"
+    },
+    "HMM5": {
+      "name": "phenotypic convergence / molecular heterogeneity",
+      "derived_from": [
+        "P_MACRO_05_phenotype_mechanism_scale_gap"
+      ],
+      "prediction": "convergence is stronger at phenotype/pathway/module level than at exact gene/nucleotide level across independent white systems",
+      "falsifier": "the same causal gene and homologous mutation class repeatedly explains independent white systems more strongly than module-level heterogeneity"
+    }
+  },
+  "claim_boundary": "Published conclusions, EAzami reanalysis findings, and EAzami hypotheses are stored separately. Hypotheses are derived from EAzami-observed cross-scale problems; they are not copied from the future-work sections of source papers."
+}

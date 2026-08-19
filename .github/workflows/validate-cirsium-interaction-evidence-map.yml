@@ -1,0 +1,55 @@
+name: Validate Cirsium interaction evidence map
+on:
+  pull_request:
+    paths:
+      - "analysis/summarize_cirsium_interaction_evidence.py"
+      - "tests/test_summarize_cirsium_interaction_evidence.py"
+      - "data/evidence/cirsium_interaction_evidence_seed_v1.csv"
+      - "data/evidence/cirsium_interaction_evidence_summary_v1.json"
+      - "data/evidence/cirsium_interaction_search_sources_v1.csv"
+      - "data/templates/cirsium_interaction_effect_size_template_v1.csv"
+      - "docs/AIM2_CIRSIUM_INTERACTION_EVIDENCE_MAP_2026-08-18.md"
+      - "docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md"
+      - "PROJECT_STATUS.md"
+      - ".github/workflows/validate-cirsium-interaction-evidence-map.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Rebuild and test offline evidence map
+        run: |
+          python -m py_compile analysis/summarize_cirsium_interaction_evidence.py
+          python -m unittest tests/test_summarize_cirsium_interaction_evidence.py -v
+          python analysis/summarize_cirsium_interaction_evidence.py --input data/evidence/cirsium_interaction_evidence_seed_v1.csv --output /tmp/summary.json
+          python - <<'PY'
+          import json
+          assert json.load(open('/tmp/summary.json')) == json.load(open('data/evidence/cirsium_interaction_evidence_summary_v1.json'))
+          PY
+      - name: Assert doctoral gates
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('data/evidence/cirsium_interaction_evidence_summary_v1.json').read_text())
+          assert d['coverage']['evidence_rows']==15
+          assert d['coverage']['independent_studies']==13
+          assert d['coverage']['taxa']==10
+          assert d['interaction_domain_independent_studies']['pre_dispersal_seed_predation']==6
+          assert d['aim2_module_gate']['head_orientation']['direct_rows']==0
+          assert d['aim2_module_gate']['flower_colour']['direct_rows']==1
+          assert d['aim2_module_gate']['flower_colour']['fitness_rows']==0
+          assert d['aim2_module_gate']['involucre_spine']['direct_rows']==0
+          assert d['effect_size_meta_analysis_gate']['status']=='not_yet_authorized'
+          core=Path('docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md').read_text()
+          assert 'orientation manipulation first' in core
+          assert '13 independent studies' in core
+          assert 'C. purpuratum' in core
+          print('aim2_evidence_map_valid=true')
+          print('formal_pooling_authorized=false')
+          PY

@@ -45,6 +45,16 @@ class ColourRateComp1061BridgeTests(unittest.TestCase):
             | bridge.MOREYRA_TAXA,
         )
 
+    def test_corrected_official_project_partition_is_canonical(self):
+        self.assertEqual(
+            bridge.EXPECTED_STUDIES,
+            {"Chang2025": 3, "Chang2026": 10, "Moreyra2025": 7},
+        )
+        self.assertEqual(sum(bridge.EXPECTED_STUDIES.values()), 20)
+        self.assertEqual(len(bridge.CHANG_RECON_TAXA), 10)
+        self.assertEqual(len(bridge.CHANG2025_DIRECT_TAXA), 3)
+        self.assertEqual(len(bridge.MOREYRA_TAXA), 7)
+
     def test_frozen_reference_is_compatibility_only(self):
         x = bridge.frozen_reference_contract(
             ROOT / "data/evidence/comp1061_original_reference_contract_v1.json"
@@ -81,7 +91,14 @@ class ColourRateComp1061BridgeTests(unittest.TestCase):
                 candidates += [("SRR00B", "20", "a"), ("SRR00C", "20", "b")]
             for run, spots, voucher in candidates:
                 row = dict(base)
-                row.update({"run": run, "spots": spots, "voucher": voucher, "source_sample_code": voucher})
+                row.update(
+                    {
+                        "run": run,
+                        "spots": spots,
+                        "voucher": voucher,
+                        "source_sample_code": voucher,
+                    }
+                )
                 rows.append(row)
         primary, all_rows = bridge.choose_primary(rows)
         first = next(row for row in primary if row["accepted_taxon"] == "Taxon 00")

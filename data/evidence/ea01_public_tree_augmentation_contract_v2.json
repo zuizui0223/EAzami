@@ -1,0 +1,54 @@
+{
+  "contract_version": "ea01_public_tree_augmentation_v2",
+  "baseline": {
+    "panel_contract_version": "japan_origin_global_public_panel_v2",
+    "biological_tips": 294,
+    "public_runs": 295,
+    "minimum_primary_loci_to_launch": 100
+  },
+  "candidate": {
+    "candidate_id": "EA01",
+    "tip_id": "PUBEA001",
+    "scientific_name": "Cirsium nipponicum var. yoshinoi",
+    "biosample": "SAMN44017954",
+    "run": "SRR30887223",
+    "strict_no_warning_recovered_loci": 236,
+    "baseline_exact_taxon_expected": true,
+    "baseline_same_taxon_reference": {
+      "biosample": "SAMN44017955",
+      "run": "SRR30887222",
+      "analysis_taxon_label": "Cirsium nipponicum var. yoshinoi"
+    }
+  },
+  "empirical_disposition": {
+    "evidence": "data/evidence/public_candidate_empirical_quartet_2026-08-14.json",
+    "status": "independent_biological_candidate_retained",
+    "gene_tree_informative_loci": 231,
+    "same_taxon_gene_tree_support": "231/231",
+    "quartet_pilot_pre_authorizes_promotion": false
+  },
+  "minimum_paired_loci": 100,
+  "scenarios": [
+    {"scenario_id": "baseline294", "candidate_ids": []},
+    {"scenario_id": "ea01_295", "candidate_ids": ["EA01"]}
+  ],
+  "locus_rule": "Within each mapping mode, baseline294 and ea01_295 use the exact intersection of the accepted baseline loci and the EA01 strict locus pack recovered under that same mapping strategy.",
+  "mapping_modes": ["bwa", "blastx"],
+  "automatic_filter_relaxation_allowed": false,
+  "tree_tip_promotion_allowed_before_paired_trees": false,
+  "promotion_requires": [
+    "retain at least 100 paired loci under each frozen baseline mapping mode",
+    "run baseline294 and ea01_295 on an identical paired locus set within each mapping mode",
+    "shared-294-tip concatenated unrooted RF distance equals zero in both BWA and BLASTx",
+    "the existing baseline Cirsium nipponicum var. yoshinoi tip is among EA01's nearest baseline neighbours in both mapping modes",
+    "shared-species source-label ASTRAL RF distance equals zero in both mapping modes",
+    "do not weaken locus or topology gates post hoc to admit EA01"
+  ],
+  "ea02_disposition": {
+    "status": "duplicate_readset_pseudoreplicate_excluded_pending_explicit_provenance",
+    "counts_as_independent_tip": false,
+    "may_be_used_as_pipeline_duplicate_control": true,
+    "evidence": "data/evidence/east_asia_public_candidate_disposition_v2.json"
+  },
+  "new_china_sampling_freeze_allowed": false
+}

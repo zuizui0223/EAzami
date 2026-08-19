@@ -1,0 +1,67 @@
+name: Validate Japan radiation pre-tree environment disparity
+
+on:
+  pull_request:
+    paths:
+      - "analysis/summarize_japan_radiation_pre_tree_environment_disparity.py"
+      - "tests/test_summarize_japan_radiation_pre_tree_environment_disparity.py"
+      - "data/evidence/japan_radiation_pre_tree_environment_snapshot_v1.csv"
+      - "data/evidence/japan_radiation_pre_tree_environment_disparity_v1.json"
+      - ".github/workflows/validate-japan-radiation-pre-tree-environment-disparity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install pandas numpy
+      - name: Compile and test
+        run: |
+          python -m py_compile analysis/summarize_japan_radiation_pre_tree_environment_disparity.py
+          python -m unittest tests/test_summarize_japan_radiation_pre_tree_environment_disparity.py -v
+      - name: Rebuild summary
+        run: |
+          python analysis/summarize_japan_radiation_pre_tree_environment_disparity.py \
+            --snapshot data/evidence/japan_radiation_pre_tree_environment_snapshot_v1.csv \
+            --out /tmp/japan_radiation_pre_tree_environment_disparity_v1.json
+      - name: Compare semantic result
+        run: |
+          python - <<'PY'
+          import json, math
+          from pathlib import Path
+          rebuilt=json.loads(Path('/tmp/japan_radiation_pre_tree_environment_disparity_v1.json').read_text())
+          frozen=json.loads(Path('data/evidence/japan_radiation_pre_tree_environment_disparity_v1.json').read_text())
+
+          def compare(a, b, path='root'):
+              if isinstance(a, dict) and isinstance(b, dict):
+                  assert set(a) == set(b), (path, set(a) ^ set(b))
+                  for key in a:
+                      compare(a[key], b[key], f'{path}.{key}')
+              elif isinstance(a, list) and isinstance(b, list):
+                  assert len(a) == len(b), (path, len(a), len(b))
+                  for i, (x, y) in enumerate(zip(a, b)):
+                      compare(x, y, f'{path}[{i}]')
+              elif isinstance(a, (int, float)) and isinstance(b, (int, float)) and not isinstance(a, bool) and not isinstance(b, bool):
+                  assert math.isclose(float(a), float(b), rel_tol=1e-12, abs_tol=1e-12), (path, a, b)
+              else:
+                  assert a == b, (path, a, b)
+
+          compare(rebuilt, frozen)
+          assert rebuilt['largest_dominant_leave_one_out_distance']['taxon']=='Cirsium pendulum'
+          assert rebuilt['largest_dominant_leave_one_out_distance']['distance'] > rebuilt['secondary_distance_to_dominant_centroid']
+          assert rebuilt['within_dominant_pairwise']['maximum']['distance'] > rebuilt['secondary_to_dominant_pairwise']['maximum_distance']
+          assert rebuilt['secondary_balanced_observation_count']==3
+          print(json.dumps(rebuilt,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan-radiation-pre-tree-environment-disparity-${{ github.run_id }}
+          path: data/evidence/japan_radiation_pre_tree_environment_disparity_v1.json
+          retention-days: 90

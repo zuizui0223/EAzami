@@ -1,0 +1,46 @@
+{
+  "contract_version": "hmm2_population_aware_transition_test_v1",
+  "hypothesis": "HMM2_population_aware_transition_count_rate_bias",
+  "focal_polymorphic_systems": 4,
+  "stage_A_state_compression": {
+    "systems_exposing_W_C_multiplicity_hidden_by_one_P_tip": 4,
+    "systems_total": 4,
+    "fraction": 1.0,
+    "interpretation": "All four reviewed polymorphic systems contain W and C information that a one-tip P code cannot represent as separate extant states. This is state-resolution evidence, not a transition-rate estimate."
+  },
+  "stage_B_minimum_transition_count": {
+    "systems_with_morph_linked_nuclear_genealogy": 1,
+    "systems_total": 4,
+    "takaoense_species_tip_minimum": 1,
+    "takaoense_population_sample_minimum": 2,
+    "takaoense_delta": 1,
+    "takaoense_ratio": 2.0,
+    "interpretation": "In the only currently testable morph-linked system, population/sample-aware coding doubles the minimum count from 1 to 2. This is single-system direct support for the direction predicted by HMM2, not replicated proof."
+  },
+  "stage_C_transition_rate": {
+    "systems_rate_testable_now": 0,
+    "systems_total": 4,
+    "status": "blocked",
+    "reason": "A replicated rate comparison requires morph-linked population genealogies and branch lengths/topology weights for multiple polymorphic systems."
+  },
+  "morph_genotype_linkage": {
+    "systems_with_any_morph_linked_nuclear_samples": 1,
+    "systems_without_morph_linked_nuclear_samples": 3,
+    "blocked_systems": {
+      "Cirsium aomorense": {
+        "nuclear_tip_or_runs": "SRR30887235",
+        "reason": "The sequenced Moreyra tip is not morph-linked; do not assign it W or C. Targeted public-DB search did not recover a morph-linked white-form sequence, which is not proof of absence."
+      },
+      "Cirsium sieboldii": {
+        "nuclear_tip_or_runs": "SRR30887308",
+        "reason": "The sequenced tip is from cultivation and is not morph-linked; do not assign it W or C. Targeted public-DB search did not recover a morph-linked white-form sequence, which is not proof of absence."
+      },
+      "Cirsium pendulum": {
+        "nuclear_tip_or_runs": "SRR25265649",
+        "reason": "The Moreyra sample is from Russia and is not morph-linked; do not assign it W or C. Targeted public-DB search did not recover a morph-linked white-form sequence, which is not proof of absence."
+      }
+    }
+  },
+  "hmm2_current_status": "partial_support_state_compression_4_of_4_and_transition_count_direction_1_of_1_testable; replicated_transition_rate_test_unresolved",
+  "claim_boundary": "Do not convert documented within-species W/C polymorphism into a counted evolutionary transition without a genealogy. Do not assign Moreyra tips to white or coloured states when morph linkage is absent. Targeted database non-recovery is not proof that no sequence exists."
+}

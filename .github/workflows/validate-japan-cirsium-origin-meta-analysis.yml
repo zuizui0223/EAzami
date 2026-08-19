@@ -1,0 +1,56 @@
+name: Validate Japanese Cirsium origin meta-analysis
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/japan_cirsium_origin_evidence_matrix_v1.csv"
+      - "analysis/summarize_japan_cirsium_origin_meta_analysis.py"
+      - "docs/JAPAN_CIRSIUM_ORIGIN_META_ANALYSIS_2026-08-14.md"
+      - ".github/workflows/validate-japan-cirsium-origin-meta-analysis.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run structured evidence synthesis
+        run: |
+          python -m py_compile analysis/summarize_japan_cirsium_origin_meta_analysis.py
+          python analysis/summarize_japan_cirsium_origin_meta_analysis.py \
+            --matrix data/evidence/japan_cirsium_origin_evidence_matrix_v1.csv \
+            --output /tmp/japan_cirsium_origin_meta_analysis_v1.json
+      - name: Assert hypothesis boundaries
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/japan_cirsium_origin_meta_analysis_v1.json'))
+          assert d['contract_version']=='japan_cirsium_origin_meta_analysis_v1'
+          assert d['high_dimensional_nuclear_analyses']==3
+          assert d['independent_high_dimensional_nuclear_data_generation_groups']==2
+          m=d['dominant_main_radiation']
+          assert m['japanese_species_sampled']==38
+          assert m['species_in_main_radiation']==36
+          assert abs(m['proportion_in_main_radiation'] - 36/38) < 1e-12
+          assert d['cirsium_lineare']['analyses_supporting']==3
+          assert d['cirsium_lineare']['data_generation_groups_supporting']==2
+          assert d['cirsium_dipsacolepis']['analyses_supporting']==1
+          assert d['arenicola']['analyses_supporting']==0
+          assert d['model_comparison']['strict_single_origin_all_japanese_cirsium']=='rejected'
+          assert d['model_comparison']['dominant_single_pleistocene_radiation_plus_rare_secondary_entries']=='best_supported'
+          assert d['origin_count_hypothesis']['minimum_defensible_histories']==2
+          assert d['origin_count_hypothesis']['best_current_point_hypothesis_histories']==3
+          print(json.dumps(d, indent=2, ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan-cirsium-origin-meta-analysis-${{ github.run_id }}
+          path: /tmp/japan_cirsium_origin_meta_analysis_v1.json
+          if-no-files-found: error
+          retention-days: 90

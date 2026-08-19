@@ -1,0 +1,218 @@
+{
+  "contract_version": "public_candidate_locus_packs_v1",
+  "fasta_reconstruction": {
+    "header_template": ">{tip_id}",
+    "line_width": 80,
+    "final_newline": true
+  },
+  "tsv_columns": [
+    "locus",
+    "sequence_length",
+    "fasta_sha256",
+    "sequence"
+  ],
+  "candidates": {
+    "EA01": {
+      "tip_id": "PUBEA001",
+      "artifact_id": 9175870949,
+      "artifact_sha256": "275fecf31e202ae28914441faff70a7faede3c2b8912901221d84e4aa6ef2232",
+      "artifact_size_bytes": 302827,
+      "source_artifact_expires_on": "2026-11-11",
+      "summary_filename": "candidate_pack_summary.json",
+      "summary_sha256": "0b9f1794db603832c0794e3412c6f5e424750ac7a1d706e065c3bdb2b1920349",
+      "strict_recovered_loci_sha256": "e652dc59bf084087f66bf6b53af7fc684930a6f587930813141836f80ace5a48",
+      "strict_locus_count": 236,
+      "tsv_sha256": "2cda3b71f6d9d2962c812ee27e12835208ffdbe07ea2ec47a6ec06754e8b7535",
+      "source_summary": {
+        "contract_version": "public_sra_comp1061_candidate_pack_v1",
+        "candidate_id": "EA01",
+        "tip_id": "PUBEA001",
+        "scientific_name": "Cirsium nipponicum var. yoshinoi",
+        "biosample": "SAMN44017954",
+        "run": "SRR30887223",
+        "bioproject": "PRJNA957074",
+        "library_strategy": "Targeted-Capture",
+        "frozen_candidate_loci": 241,
+        "recovered_frozen_loci": 236,
+        "recovered_fraction": 0.979253112033195,
+        "paralog_warning_loci": 0,
+        "strict_no_warning_recovered_loci": 236,
+        "strict_fraction": 0.979253112033195,
+        "minimum_strict_loci_for_pilot_pack": 100,
+        "pilot_locus_pack_ready": true,
+        "primary_294_panel_changed": false,
+        "tree_tip_promotion_allowed": false,
+        "promotion_requires": [
+          "intersect this pack with the accepted 294-tip current strict locus set",
+          "retain at least 100 paired loci or use a separately versioned missing-data contract",
+          "rerun the paired baseline-versus-augmentation tree on the identical locus set",
+          "verify placement is not driven by assay type or a single conflicting public sample"
+        ],
+        "new_china_sampling_freeze_allowed": false
+      },
+      "payload_encoding": "base64(gzip(tsv))",
+      "gzip_sha256": "c81463787980377b75d3cc24553d4e0fd17167edb9a8a25b4c52df13893a8053",
+      "payload_parts": [
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA01.part01.b64",
+          "sha256": "0648c24af1d6b27d621ad778b1f5dfa063098e61bd8fb81a56f950a6df70cc66",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA01.part02.b64",
+          "sha256": "f47646e852d1a3f8a77b3b1fa40503b429b1b5321516e1b2a0d6caf813179ba1",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA01.part03.b64",
+          "sha256": "84f58d79c129ba6120d2397d74db9b44985505808ef8671dd4fdc82f738e29d5",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA01.part04.b64",
+          "sha256": "bd12b2396db3a6e7f1d35cead005fe8057be19b9e72e21097ba137e238157ed7",
+          "size_bytes": 7576
+        }
+      ],
+      "encoded_payload_sha256": "a898763dc7c17ebce79d4060c3ceafe53f110161ac0a6d477370ff4411f6394f"
+    },
+    "EA02": {
+      "tip_id": "PUBEA002",
+      "artifact_id": 9175876315,
+      "artifact_sha256": "6a9c0d91b2d98ed5ebc72bf96effd5f41c8c6f865747b1d1124ee3d59eb0d1bb",
+      "artifact_size_bytes": 308899,
+      "source_artifact_expires_on": "2026-11-11",
+      "summary_filename": "candidate_pack_summary.json",
+      "summary_sha256": "0d4ac4cfd685d61baaea94bf7fe753bb731e791d151e535bedb99f1481615843",
+      "strict_recovered_loci_sha256": "1bf8089a14c2a3a6a5561e52d1cd732a7c10123c881e8b13fa42539c4cb9159b",
+      "strict_locus_count": 239,
+      "tsv_sha256": "fbbaf2f1bcc631be7120ad64913b7254765cbe63cb25a6adf00fb69026c8fde6",
+      "source_summary": {
+        "contract_version": "public_sra_comp1061_candidate_pack_v1",
+        "candidate_id": "EA02",
+        "tip_id": "PUBEA002",
+        "scientific_name": "Cirsium sairamense",
+        "biosample": "SAMN11585477",
+        "run": "SRR9119112",
+        "bioproject": "PRJNA540287",
+        "library_strategy": "Targeted-Capture",
+        "frozen_candidate_loci": 241,
+        "recovered_frozen_loci": 239,
+        "recovered_fraction": 0.991701244813278,
+        "paralog_warning_loci": 0,
+        "strict_no_warning_recovered_loci": 239,
+        "strict_fraction": 0.991701244813278,
+        "minimum_strict_loci_for_pilot_pack": 100,
+        "pilot_locus_pack_ready": true,
+        "primary_294_panel_changed": false,
+        "tree_tip_promotion_allowed": false,
+        "promotion_requires": [
+          "intersect this pack with the accepted 294-tip current strict locus set",
+          "retain at least 100 paired loci or use a separately versioned missing-data contract",
+          "rerun the paired baseline-versus-augmentation tree on the identical locus set",
+          "verify placement is not driven by assay type or a single conflicting public sample"
+        ],
+        "new_china_sampling_freeze_allowed": false
+      },
+      "payload_encoding": "base64(gzip(tsv))",
+      "gzip_sha256": "61e8b3440048b0de19ceb32636e4011734ad32a8109b77dc6755bad0eab06883",
+      "payload_parts": [
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA02.part01.b64",
+          "sha256": "867f68cde3b820a96a28ef3cdca650b95ea821ea99cab6e0e915b6d0349b70d4",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA02.part02.b64",
+          "sha256": "f822f77608118ce370086cde914bb58263be411d04cd2e21d1cc256c00458b5a",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA02.part03.b64",
+          "sha256": "d92088ec129cc99014d9b77ce26ee9e285502864c66971c77a0f832d731d8494",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/EA02.part04.b64",
+          "sha256": "0ffe50b08e030651111a31f48ef75d50e9231152207d1339cf981904c50a9f46",
+          "size_bytes": 10436
+        }
+      ],
+      "encoded_payload_sha256": "6fb31dbd832404a63e53f81f877142079ad8d999809e9455950d8702369007bb"
+    },
+    "CNIPG": {
+      "tip_id": "AUG_ULLEUNG_CNIP2024",
+      "artifact_id": 9174758977,
+      "artifact_sha256": "079e3bfaab1d5041ebc2dcb1919532c75eefde7ffe1f766ab0473845f2f9dd69",
+      "artifact_size_bytes": 109192,
+      "source_artifact_expires_on": "2026-11-11",
+      "summary_filename": "cirsium_nipponicum_comp1061_locus_pack_summary.json",
+      "summary_sha256": "c13f9214915d2f977ad32f5b651901b7dbcef1aa0b0d5cdb54d224f1cc1a1ddd",
+      "strict_recovered_loci_sha256": "080356d51ef61010761476c565810bb382f203bbf867ff66a655da85a2311f63",
+      "strict_locus_count": 180,
+      "tsv_sha256": "e53dcff6ab137015537d3790641ec12fb5c0e8126bdf1d796401be7184ecdf8d",
+      "source_summary": {
+        "contract_version": "cirsium_nipponicum_comp1061_locus_pack_v1",
+        "frozen_candidate_loci": 241,
+        "strict_recovered_loci": 180,
+        "strict_recovered_fraction": 0.7468879668049793,
+        "minimum_strict_loci_for_augmentation": 100,
+        "augmentation_locus_pack_ready": true,
+        "tip_id": "AUG_ULLEUNG_CNIP2024",
+        "minimum_reference_queries": 2,
+        "maximum_second_to_best_score_ratio": 0.9,
+        "minimum_query_coverage_percent": 50.0,
+        "cross_locus_subject_collisions": 0,
+        "reason_counts": {
+          "eligible": 180,
+          "fewer_than_two_reference_queries": 2,
+          "fewer_than_two_reference_queries|near_tie_second_subject": 2,
+          "near_tie_second_subject": 45,
+          "no_diamond_hit|fewer_than_two_reference_queries|query_coverage_below_threshold|best_subject_missing_gffread_protein|best_subject_missing_gffread_cds": 4,
+          "query_coverage_below_threshold": 5,
+          "query_coverage_below_threshold|near_tie_second_subject": 3
+        },
+        "published_proteome_unique_sequence_count": 30668,
+        "gffread_protein_record_count": 31263,
+        "gffread_cds_record_count": 31263,
+        "tree_tip_promotion_allowed": false,
+        "claim_limit": "A ready locus pack permits a predeclared 295-tip genome-augmentation tree. It does not modify the accepted 294-tip primary tree until placement is stable under cross-data-type sensitivity."
+      },
+      "payload_encoding": "base64(gzip(tsv))",
+      "gzip_sha256": "2424200bff598f08fc0ff810b859a8eb37ebe9df688df7d10eb4e1c068dccb8a",
+      "payload_parts": [
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part01.b64",
+          "sha256": "56bcdf2c07e7ada5a4ce92f823105bc52e95cb051cabcc4b8b75a2d85a193bc5",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part02.b64",
+          "sha256": "adbe6bcc8dce5731e565b429a79418e141bc297bcd07ad6825206422396a6262",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part03.b64",
+          "sha256": "68fa0885bebab6a467f704d37992dd44867a858ce2410b03a6b47aba6e75a62f",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part04.b64",
+          "sha256": "c30f35a0b0b11187851fc66498f25696401b6ffc16b5345a6dda3a9e33f8fe54",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part05.b64",
+          "sha256": "afb6f2f541c8f6df6edce25b1612471380abf87fdc08f407b60e18b24860b8fb",
+          "size_bytes": 16000
+        },
+        {
+          "path": "data/evidence/public_candidate_locus_packs_v1/CNIPG.part06.b64",
+          "sha256": "644ead985ef332292b0835b89991a4548a2f952739836372177543960defb3a9",
+          "size_bytes": 8756
+        }
+      ],
+      "encoded_payload_sha256": "b05ed2ce5b901188d56764e39b71d5b8567c8a753b508c46d23ac44d73cc7430"
+    }
+  }
+}

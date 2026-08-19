@@ -1,0 +1,336 @@
+{
+  "contract_version": "micro_to_macro_evidence_synthesis_v3",
+  "evidence_matrix": {
+    "rows": 14,
+    "class_counts": {
+      "EAzami_reanalysis": 9,
+      "own_preliminary_result": 1,
+      "published_conclusion": 4
+    },
+    "scale_counts": {
+      "cytogenetic_lineage": 1,
+      "evidence_method": 1,
+      "global_trait_variation": 1,
+      "lineage_population": 1,
+      "molecular": 1,
+      "molecular_annotation_resolution": 1,
+      "molecular_coverage": 1,
+      "molecular_homology_resolution": 1,
+      "population_to_lineage": 1,
+      "regional_macroevolution": 2,
+      "regional_trait_pattern": 1,
+      "trait_coding": 1,
+      "trait_genealogy_resolution": 1
+    },
+    "independent_data_generation_groups_by_class": {
+      "EAzami_reanalysis": [
+        "EAzami_HMM2_staged_test",
+        "EAzami_accession_provenance",
+        "EAzami_cross_study_synthesis",
+        "EAzami_molecular_coverage_synthesis",
+        "EAzami_public_genome_annotation_audit",
+        "EAzami_public_genome_homology_screen",
+        "EAzami_source_backed_trait_atlas",
+        "EAzami_topology_enumeration",
+        "EAzami_trait_history_screen"
+      ],
+      "own_preliminary_result": [
+        "azami_public_image_phenomics"
+      ],
+      "published_conclusion": [
+        "chang_transcriptome_program",
+        "cj2020_transcriptome_metabolome",
+        "moreyra_target_capture"
+      ]
+    }
+  },
+  "macro_trait_atlas": {
+    "reviewed_assessable_taxon_records": 18,
+    "taxon_state_counts": {
+      "C": 11,
+      "P": 4,
+      "W": 3
+    },
+    "white_or_polymorphic_phylogeny_contexts": [
+      "Arenicola",
+      "Moreyra2025_Japan38",
+      "Nipponocirsium",
+      "Sinocirsium",
+      "Sinocirsium/takaoense_within_variety"
+    ],
+    "polymorphic_taxa": [
+      "Cirsium aomorense",
+      "Cirsium japonicum var. takaoense",
+      "Cirsium pendulum",
+      "Cirsium sieboldii"
+    ],
+    "takaoense_reviewed_sample_records": 6,
+    "takaoense_sample_state_counts": {
+      "C": 3,
+      "W": 3
+    }
+  },
+  "japan_origin_meta": {
+    "dominant_radiation_fraction": 0.9473684210526315,
+    "dominant_radiation_species": 36,
+    "japanese_species_sampled": 38,
+    "lineare_analysis_support": [
+      3,
+      3
+    ],
+    "lineare_independent_group_support": [
+      2,
+      2
+    ],
+    "dipsacolepis_independent_groups": 1,
+    "arenicola_extra_colonization_supporting_analyses": 0
+  },
+  "takaoense_topology_meta": {
+    "rooted_topologies": 945,
+    "regain_required": 270,
+    "regain_required_fraction": 0.2857142857142857,
+    "published_history": "1L+1R",
+    "published_no_regain_penalty": 2,
+    "bp_monophyletic_regain_required": [
+      36,
+      45
+    ],
+    "w_monophyletic_regain_required": [
+      0,
+      45
+    ]
+  },
+  "EAzami_discovered_problems": {
+    "P_MACRO_01_colonization_diversification_asymmetry": {
+      "basis": "EAzami Japan-origin meta-analysis",
+      "result": "36/38 sampled Japanese species are in one dominant radiation while rare exceptional histories remain",
+      "why_problem": "arrival count is not equivalent to diversification success",
+      "hypothesis": "HMM3"
+    },
+    "P_MACRO_02_topology_direction_identifiability": {
+      "basis": "EAzami exhaustive takaoense topology screen",
+      "result": "270/945 rooted resolutions require regain; the rest permit a no-regain optimum",
+      "why_problem": "directional trait-history claims depend on topology support, not phenotype coding alone",
+      "hypothesis": "HMM1|HMM2"
+    },
+    "P_MACRO_03_species_tip_state_aggregation": {
+      "basis": "EAzami colour atlas + preliminary Fitch screen",
+      "result": "reviewed source-backed polymorphic taxon records=4; takaoense sample states W=3 C=3",
+      "why_problem": "one-state-per-species coding can erase within-lineage transitions",
+      "hypothesis": "HMM2"
+    },
+    "P_MACRO_04_evidence_nonindependence": {
+      "basis": "EAzami source-typed evidence matrix",
+      "result": "published rows=4 but independent published data-generation groups=3",
+      "why_problem": "paper counts and accession rows can overstate independent replication",
+      "hypothesis": "HMM3|HMM4"
+    },
+    "P_MACRO_05_phenotype_mechanism_scale_gap": {
+      "basis": "EAzami source-backed colour atlas + molecular literature",
+      "result": "white/polymorphic states occur across 5 reviewed phylogeny-context labels, while causal molecular mechanisms are not comparably resolved across those lineages",
+      "why_problem": "phenotypic convergence can be strong even when molecular convergence is unknown or heterogeneous",
+      "hypothesis": "HMM1|HMM5"
+    },
+    "P_MACRO_06_species_mean_scale_compression": {
+      "basis": "own cross-project image-phenomics preliminary analysis (zuizui0223/azami)",
+      "result": "Across nine image-derived endpoints, at least about half of visible variance remains below assigned-species means under photo-balance sensitivities, while precision-aware variation-vs-climate association is near zero (rho=-0.0569; hierarchical b=-0.0416, P=0.732).",
+      "why_problem": "species means and a single trait-lability axis collapse distinct within-species, environment-association, and macroevolutionary scales",
+      "hypothesis": "HMM2|HMM6"
+    },
+    "P_MICRO_MACRO_07_annotation_to_orthology_resolution_ladder": {
+      "basis": "EAzami molecular coverage + public genome annotation + sequence-homology screens",
+      "reported_panel_stage": {
+        "terminal_regulatory_transport_families": 7,
+        "directly_reported_in_named_targeted_panels": 0
+      },
+      "distributed_genome_annotation_stage": {
+        "protein_headers_scanned": 31263,
+        "gff_records_scanned": 554761,
+        "functional_term_hit_rows": 0,
+        "positive_controls_also_zero": true
+      },
+      "sequence_homology_stage": {
+        "reviewed_queries": 11,
+        "queries_with_candidate_hit": 11,
+        "DFR_top_candidate": "Cn_g13756.t1",
+        "DFR_top_identity": 71.118,
+        "DFR_top_qcov": 0.8429319371727748,
+        "ANS_top_candidate": "Cn_g8152.t1",
+        "ANS_top_identity": 74.636,
+        "ANS_top_qcov": 0.9634831460674157,
+        "large_family_queries_needing_clade_domain_validation": [
+          "UGT75C1",
+          "UGT78D2",
+          "MYB75_PAP1",
+          "TT8",
+          "TTG1",
+          "GSTF12_TT19",
+          "TT12_DTX41"
+        ]
+      },
+      "why_problem": "The apparent molecular gap changes qualitatively with evidence resolution: absence from a named pathway panel, absence of functional labels in distributed genome files, and absence of sequence homologs are not equivalent observations.",
+      "hypothesis_tested": [
+        "HMM1",
+        "HMM5"
+      ]
+    }
+  },
+  "EAzami_hypotheses": {
+    "HMM1": {
+      "name": "latent-pathway / regulatory reversibility",
+      "derived_from": [
+        "P_MACRO_02_topology_direction_identifiability",
+        "P_MACRO_05_phenotype_mechanism_scale_gap"
+      ],
+      "prediction": "recent independent white lineages often retain structural flavonoid machinery and differ at regulatory/expression nodes more often than by shared destructive pathway loss",
+      "falsifier": "multiple well-resolved recent white lineages independently show irreversible loss/disruption of core pathway genes with no retained functional route"
+    },
+    "HMM2": {
+      "name": "population-aware transition-rate inflation relative to species-tip coding",
+      "derived_from": [
+        "P_MACRO_02_topology_direction_identifiability",
+        "P_MACRO_03_species_tip_state_aggregation"
+      ],
+      "prediction": "population/sample-aware coding yields more and younger W<->C transitions than one-state-per-species coding across replicated polymorphic systems",
+      "falsifier": "after topology uncertainty is propagated, population-aware coding does not increase transition count or shifts only one idiosyncratic system"
+    },
+    "HMM3": {
+      "name": "radiation-success / evolvability",
+      "derived_from": [
+        "P_MACRO_01_colonization_diversification_asymmetry",
+        "P_MACRO_04_evidence_nonindependence"
+      ],
+      "prediction": "the dominant Japanese radiation shows higher genomic discordance/reticulation and-or faster trait or niche diversification than secondary histories after age and sampling controls",
+      "falsifier": "secondary histories show comparable evolvability metrics and diversification after age/sampling correction, leaving colonization timing/opportunity sufficient"
+    },
+    "HMM4": {
+      "name": "reticulation-phenotypic-transition coupling",
+      "derived_from": [
+        "P_MACRO_01_colonization_diversification_asymmetry",
+        "P_MACRO_04_evidence_nonindependence"
+      ],
+      "prediction": "lineage-level gene-tree/cytonuclear discordance and ploidy/genome-size shifts positively covary with population-aware floral transition density",
+      "falsifier": "transition density is unrelated or negatively related to discordance across supported topology ensembles and leave-one-clade-out analyses"
+    },
+    "HMM5": {
+      "name": "phenotypic convergence / molecular heterogeneity",
+      "derived_from": [
+        "P_MACRO_05_phenotype_mechanism_scale_gap"
+      ],
+      "prediction": "convergence is stronger at phenotype/pathway/module level than at exact gene/nucleotide level across independent white systems",
+      "falsifier": "the same causal gene and homologous mutation class repeatedly explains independent white systems more strongly than module-level heterogeneity"
+    },
+    "HMM6": {
+      "name": "cross-scale trait decoupling",
+      "derived_from": [
+        "P_MACRO_03_species_tip_state_aggregation",
+        "P_MACRO_06_species_mean_scale_compression"
+      ],
+      "prediction": "after measurement and topology uncertainty are propagated, within-species visible dispersion, population-aware discrete transition density, within-species environment-trait association, and among-species niche/trait divergence remain only partially coupled rather than collapsing to one universal lability axis",
+      "falsifier": "validated cross-trait analyses recover a strong, consistent mapping from within-species dispersion to population transition density and among-species ecological/phylogenetic divergence across modules and clades"
+    }
+  },
+  "claim_boundary": "Published conclusions, EAzami reanalyses, and own preliminary results remain separate. v3 adds a molecular resolution ladder but does not change HMM1-HMM6 provenance. A targeted-panel omission, missing functional annotation label, BLAST homology candidate, validated ortholog, functional gene, and causal colour-transition locus are distinct evidence levels and must not be collapsed.",
+  "own_preliminary_macro_trait_result": {
+    "evidence_class": "own_preliminary_result",
+    "source_repo": "zuizui0223/azami",
+    "source_commit": "934342730c2b36505aa5a0e5044fdbacbdaf4dd6",
+    "analysis_release": "2026-07-reviewer-reanalysis-candidate-4",
+    "n_taxa": 216,
+    "n_observations": 3725,
+    "n_heads": 6626,
+    "n_endpoints": 9,
+    "one_head_per_photo_within_fraction_range": [
+      0.5815708655068837,
+      0.8985099254849123
+    ],
+    "balanced_10_photo_within_fraction_range": [
+      0.5284185457672588,
+      0.8791369865510499
+    ],
+    "noise_adjusted_rho": -0.05686662783925451,
+    "noise_adjusted_rho_ci95": [
+      -0.2652427899441521,
+      0.15483770145148418
+    ],
+    "hierarchical_effect": -0.04160792485278784,
+    "hierarchical_ci95": [
+      -0.27434304176516855,
+      0.20042869071450004
+    ],
+    "hierarchical_p": 0.7320248138283185,
+    "allowed_interpretation": "Across the current image-derived endpoints, large visible variation below assigned-species means persists under photo-balance sensitivities, while no common cross-module coupling with within-species spatial climatic association remains after slope uncertainty is modelled.",
+    "forbidden_inference": [
+      "genetic variance",
+      "phenotypic plasticity",
+      "local adaptation",
+      "evolutionary rate",
+      "pollinator causation",
+      "resolved Cirsium species tree"
+    ]
+  },
+  "HMM2_staged_test": {
+    "state_compression_systems": [
+      4,
+      4
+    ],
+    "transition_count_testable_systems": [
+      1,
+      4
+    ],
+    "takaoense_minimum_transition_change": [
+      1,
+      2
+    ],
+    "transition_rate_testable_systems": [
+      0,
+      4
+    ],
+    "morph_genotype_linkage_fraction": 0.25,
+    "status": "partial_support_state_compression_4_of_4_and_transition_count_direction_1_of_1_testable; replicated_transition_rate_test_unresolved"
+  },
+  "molecular_resolution_ladder": {
+    "named_targeted_panel": "terminal anthocyanin + MBW + transport direct named coverage 0/7",
+    "distributed_genome_text_annotation": "0/13 requested functional term groups, including positive-control CHS/FLS/DFR; file exposes structural IDs rather than functional product labels",
+    "sequence_homology": "11/11 reviewed query anchors recover at least one C. nipponicum candidate homolog under frozen BLASTP settings",
+    "orthology_function": "not yet established; enzyme and large-family candidates require domain/clade/reciprocal validation",
+    "colour_lineage_causation": "not yet tested; candidates must be compared across morph-linked W/C lineages and against genome-wide ancestry/expression/pigment evidence"
+  },
+  "hypothesis_evidence_status": {
+    "HMM1": {
+      "status": "mechanistic_plausibility_strengthened_direct_white_lineage_test_unresolved",
+      "supporting_EAzami_results": [
+        "P_MACRO_05_phenotype_mechanism_scale_gap",
+        "P_MICRO_MACRO_07_annotation_to_orthology_resolution_ladder"
+      ],
+      "what_changed": "Existing-data analysis now recovers Cirsium genome candidates for DFR, ANS and all seven previously unlabelled terminal/regulatory/transport query families. This makes retained machinery testable and argues against treating reporting/annotation gaps as pathway loss, but it does not show that a white lineage retains functional copies or that regulation caused white colour.",
+      "next_falsification_gate": "validate candidate orthology/domain architecture, then test structural integrity/coding/expression in morph-linked white versus coloured lineages"
+    },
+    "HMM2": {
+      "status": "partial_support_state_resolution_and_single_testable_transition_count_rate_hypothesis_unresolved",
+      "supporting_EAzami_results": [
+        "P_MACRO_03_species_tip_state_aggregation"
+      ],
+      "what_changed": "4/4 reviewed polymorphic systems expose state compression; 1/1 currently morph-linked system increases minimum count from 1 to 2; 0/4 support a replicated branch-length transition-rate comparison.",
+      "next_falsification_gate": "recover or generate morph-linked population genealogies for at least two additional polymorphic systems"
+    },
+    "HMM3": {
+      "status": "unchanged_waiting_for_294_296_tree_and_age_sampling_control"
+    },
+    "HMM4": {
+      "status": "unchanged_waiting_for_tree_discordance_and_transition_density_table"
+    },
+    "HMM5": {
+      "status": "molecular_hierarchy_now_executable_cross_lineage_convergence_unresolved",
+      "supporting_EAzami_results": [
+        "P_MACRO_05_phenotype_mechanism_scale_gap",
+        "P_MICRO_MACRO_07_annotation_to_orthology_resolution_ladder"
+      ],
+      "what_changed": "Candidate homologs are recoverable for terminal, regulatory and transport families, enabling gene/module-level comparisons; no replicated white-lineage mechanism set exists yet.",
+      "next_falsification_gate": "validate ortholog/clade assignments and compare independent white systems at nucleotide, gene, module and pathway levels"
+    },
+    "HMM6": {
+      "status": "unchanged_preliminary_measurement_validation_and_full_tree_still_required"
+    }
+  }
+}

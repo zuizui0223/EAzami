@@ -1,0 +1,192 @@
+{
+  "contract_version": "cnipponicum_flavonoid_family_validation_v2",
+  "families_tested": [
+    "ANS",
+    "CHS",
+    "DFR",
+    "FLS"
+  ],
+  "arabidopsis_reference_proteome_query": "proteome:UP000006548 AND reviewed:true",
+  "arabidopsis_reference_proteome_sha256": "5ab306e7040bfbc7a755c83f5a8f88ab24efe3220508e232ffd1faee5be4b1d2",
+  "family_results": {
+    "DFR": {
+      "candidate": "CNIP_DFR_Cn_g13756.t1",
+      "treefile": "/tmp/family_validation/DFR.aln.faa.treefile",
+      "tree_interpretation": "unrooted_ml_tree_patristic_distance_only",
+      "positive_references": [
+        "REF_POSITIVE_AT_DFR",
+        "REF_POSITIVE_GERBERA_DFR",
+        "REF_POSITIVE_TOMATO_DFR"
+      ],
+      "negative_references": [
+        "REF_NEGATIVE_AT_BAN"
+      ],
+      "positive_reference_distances": {
+        "REF_POSITIVE_AT_DFR": 0.4834488263,
+        "REF_POSITIVE_GERBERA_DFR": 0.1892459028,
+        "REF_POSITIVE_TOMATO_DFR": 1.4921939626
+      },
+      "negative_reference_distances": {
+        "REF_NEGATIVE_AT_BAN": 1.2737424208
+      },
+      "nearest_positive_reference": "REF_POSITIVE_GERBERA_DFR",
+      "nearest_positive_distance": 0.1892459028,
+      "nearest_negative_reference": "REF_NEGATIVE_AT_BAN",
+      "nearest_negative_distance": 1.2737424208,
+      "nearest_positive_to_negative_distance_ratio": 0.1485747037310261,
+      "mean_positive_distance": 0.7216295639,
+      "mean_negative_distance": 1.2737424208,
+      "mean_positive_to_negative_distance_ratio": 0.566542773574869,
+      "nearest_positive_closer_than_nearest_negative": true,
+      "mean_positive_distance_smaller_than_mean_negative": true,
+      "reciprocal_arabidopsis": {
+        "top_subject_id": "sp|P51102|DFRA_ARATH",
+        "top_accession": "P51102",
+        "top_title": "Dihydroflavonol 4-reductase OS=Arabidopsis thaliana OX=3702 GN=DFRA PE=1 SV=2",
+        "top_pident": 71.118,
+        "top_evalue": 2.47e-179,
+        "top_bitscore": 501.0,
+        "expected_family_keyword_match": true,
+        "reported_hits": 10
+      },
+      "first_pass_status": "family_consistent_first_pass"
+    },
+    "ANS": {
+      "candidate": "CNIP_ANS_Cn_g8152.t1",
+      "treefile": "/tmp/family_validation/ANS.aln.faa.treefile",
+      "tree_interpretation": "unrooted_ml_tree_patristic_distance_only",
+      "positive_references": [
+        "REF_POSITIVE_AT_ANS",
+        "REF_POSITIVE_PETUNIA_ANS",
+        "REF_POSITIVE_SOY_ANS2"
+      ],
+      "negative_references": [
+        "REF_NEGATIVE_AT_FLS1",
+        "REF_NEGATIVE_PETUNIA_F3H"
+      ],
+      "positive_reference_distances": {
+        "REF_POSITIVE_AT_ANS": 0.50105872,
+        "REF_POSITIVE_PETUNIA_ANS": 0.32631258669999996,
+        "REF_POSITIVE_SOY_ANS2": 0.4135031377
+      },
+      "negative_reference_distances": {
+        "REF_NEGATIVE_AT_FLS1": 1.8763431542000002,
+        "REF_NEGATIVE_PETUNIA_F3H": 2.8121483522
+      },
+      "nearest_positive_reference": "REF_POSITIVE_PETUNIA_ANS",
+      "nearest_positive_distance": 0.32631258669999996,
+      "nearest_negative_reference": "REF_NEGATIVE_AT_FLS1",
+      "nearest_negative_distance": 1.8763431542000002,
+      "nearest_positive_to_negative_distance_ratio": 0.1739088001944543,
+      "mean_positive_distance": 0.41362481479999996,
+      "mean_negative_distance": 2.3442457532,
+      "mean_positive_to_negative_distance_ratio": 0.1764425996017626,
+      "nearest_positive_closer_than_nearest_negative": true,
+      "mean_positive_distance_smaller_than_mean_negative": true,
+      "reciprocal_arabidopsis": {
+        "top_subject_id": "sp|Q96323|LDOX_ARATH",
+        "top_accession": "Q96323",
+        "top_title": "Leucoanthocyanidin dioxygenase OS=Arabidopsis thaliana OX=3702 GN=LDOX PE=1 SV=1",
+        "top_pident": 74.203,
+        "top_evalue": 7.74e-169,
+        "top_bitscore": 474.0,
+        "expected_family_keyword_match": true,
+        "reported_hits": 10
+      },
+      "first_pass_status": "family_consistent_first_pass"
+    },
+    "FLS": {
+      "candidate": "CNIP_FLS_Cn_g15577.t1",
+      "treefile": "/tmp/family_validation/FLS.aln.faa.treefile",
+      "tree_interpretation": "unrooted_ml_tree_patristic_distance_only",
+      "positive_references": [
+        "REF_POSITIVE_AT_FLS1",
+        "REF_POSITIVE_AT_FLS3"
+      ],
+      "negative_references": [
+        "REF_NEGATIVE_AT_ANS",
+        "REF_NEGATIVE_PETUNIA_F3H"
+      ],
+      "positive_reference_distances": {
+        "REF_POSITIVE_AT_FLS1": 0.5986962057999999,
+        "REF_POSITIVE_AT_FLS3": 0.9295845359999999
+      },
+      "negative_reference_distances": {
+        "REF_NEGATIVE_AT_ANS": 1.6085045852,
+        "REF_NEGATIVE_PETUNIA_F3H": 2.3311785536
+      },
+      "nearest_positive_reference": "REF_POSITIVE_AT_FLS1",
+      "nearest_positive_distance": 0.5986962057999999,
+      "nearest_negative_reference": "REF_NEGATIVE_AT_ANS",
+      "nearest_negative_distance": 1.6085045852,
+      "nearest_positive_to_negative_distance_ratio": 0.37220671380651277,
+      "mean_positive_distance": 0.7641403708999999,
+      "mean_negative_distance": 1.9698415694,
+      "mean_positive_to_negative_distance_ratio": 0.3879197102804322,
+      "nearest_positive_closer_than_nearest_negative": true,
+      "mean_positive_distance_smaller_than_mean_negative": true,
+      "reciprocal_arabidopsis": {
+        "top_subject_id": "sp|Q96330|FLS1_ARATH",
+        "top_accession": "Q96330",
+        "top_title": "Flavonol synthase/flavanone 3-hydroxylase OS=Arabidopsis thaliana OX=3702 GN=FLS1 PE=1 SV=1",
+        "top_pident": 67.066,
+        "top_evalue": 5.47e-151,
+        "top_bitscore": 427.0,
+        "expected_family_keyword_match": true,
+        "reported_hits": 10
+      },
+      "first_pass_status": "family_consistent_first_pass"
+    },
+    "CHS": {
+      "candidate": "CNIP_CHS_Cn_g13733.t1",
+      "treefile": "/tmp/family_validation/CHS.aln.faa.treefile",
+      "tree_interpretation": "unrooted_ml_tree_patristic_distance_only",
+      "positive_references": [
+        "REF_POSITIVE_AT_CHS",
+        "REF_POSITIVE_PETUNIA_CHSA",
+        "REF_POSITIVE_PETUNIA_CHS_ALT",
+        "REF_POSITIVE_STRAWBERRY_CHS"
+      ],
+      "negative_references": [
+        "REF_NEGATIVE_GERBERA_2PS"
+      ],
+      "positive_reference_distances": {
+        "REF_POSITIVE_AT_CHS": 0.2008924235,
+        "REF_POSITIVE_PETUNIA_CHSA": 0.21558089900000002,
+        "REF_POSITIVE_PETUNIA_CHS_ALT": 0.2209879528,
+        "REF_POSITIVE_STRAWBERRY_CHS": 0.3302115911
+      },
+      "negative_reference_distances": {
+        "REF_NEGATIVE_GERBERA_2PS": 0.3978087791
+      },
+      "nearest_positive_reference": "REF_POSITIVE_AT_CHS",
+      "nearest_positive_distance": 0.2008924235,
+      "nearest_negative_reference": "REF_NEGATIVE_GERBERA_2PS",
+      "nearest_negative_distance": 0.3978087791,
+      "nearest_positive_to_negative_distance_ratio": 0.5049974612287284,
+      "mean_positive_distance": 0.2419182166,
+      "mean_negative_distance": 0.3978087791,
+      "mean_positive_to_negative_distance_ratio": 0.6081268923911488,
+      "nearest_positive_closer_than_nearest_negative": true,
+      "mean_positive_distance_smaller_than_mean_negative": true,
+      "reciprocal_arabidopsis": {
+        "top_subject_id": "sp|P13114|CHSY_ARATH",
+        "top_accession": "P13114",
+        "top_title": "Chalcone synthase OS=Arabidopsis thaliana OX=3702 GN=CHS PE=1 SV=1",
+        "top_pident": 84.694,
+        "top_evalue": 0.0,
+        "top_bitscore": 686.0,
+        "expected_family_keyword_match": true,
+        "reported_hits": 4
+      },
+      "first_pass_status": "family_consistent_first_pass"
+    }
+  },
+  "status_counts": {
+    "family_consistent_first_pass": 4
+  },
+  "decision_rule": "For an unrooted ML tree, require both nearest-positive and mean-positive patristic distances to be smaller than their negative-reference counterparts, plus an expected-family reciprocal top hit in the reviewed Arabidopsis proteome. No rooted sister-clade criterion is applied.",
+  "interpretation": "This first-pass gate asks whether each top C. nipponicum candidate is consistently more similar to curated functional positives than curated related negatives in the unrooted ML distance structure, and whether reciprocal similarity to reviewed Arabidopsis proteins returns the expected family label.",
+  "next_gate": "Candidates passing this screen still require broader multi-species family/clade sampling, domain architecture where informative, copy-number/homeolog review, and W/C-lineage comparison before exact orthology/function or evolutionary-mechanism claims.",
+  "claim_boundary": "family_consistent_first_pass is not one-to-one orthology. Unrooted ML patristic-distance discrimination and reciprocal BLAST annotation are screening evidence only; they do not demonstrate biochemical function or causal involvement in flower colour."
+}

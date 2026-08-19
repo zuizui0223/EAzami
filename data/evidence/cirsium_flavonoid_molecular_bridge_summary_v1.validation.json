@@ -1,0 +1,13 @@
+{
+  "contract_version": "cirsium_flavonoid_molecular_bridge_validation_v1",
+  "result_path": "data/evidence/cirsium_flavonoid_molecular_bridge_summary_v1.json",
+  "result_sha256": "ae3dec72fe1facbdc4de46941ace24d27536a12be3839f577c8bd3da32d3c3b2",
+  "workflow_run": 31866621350,
+  "workflow_name": "Validate Cirsium molecular-to-macro bridge",
+  "artifact_id": 9242203139,
+  "artifact_name": "cirsium-molecular-to-macro-bridge-31866621350",
+  "artifact_zip_sha256": "21170f9877e74d69b5660b907f83f4c49107aa0b2f19bd65d416a42dc174e16f",
+  "validation_state": "success",
+  "byte_equality_to_frozen_result": true,
+  "note": "The frozen 17-family molecular bridge reproduces exactly. Direct coverage is 9/9 for entry+core+branch genes, 1/8 for anthocyanin+regulatory+transport families (DFR only), and 0/7 for terminal anthocyanin+MBW+transport in the named targeted panels. These are panel-coverage statements, never gene-absence claims."
+}

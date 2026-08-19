@@ -1,0 +1,67 @@
+{
+  "contract_version": "japan_radiation_pre_tree_trait_disparity_v1",
+  "analysis_scope": "descriptive_pre_tree_public_image_trait_space",
+  "min_detector_positive_observations": 10,
+  "endpoint_names": [
+    "orientation",
+    "lightness",
+    "chroma",
+    "aspect_ratio",
+    "circularity",
+    "solidity",
+    "width_cv"
+  ],
+  "circular_hue_components_excluded": true,
+  "n_eligible_trait_taxa": 9,
+  "n_dominant_radiation_trait_taxa": 8,
+  "secondary_history_comparator": "Cirsium lineare",
+  "eligible_taxa": [
+    "Cirsium aomorense",
+    "Cirsium japonicum",
+    "Cirsium kamtschaticum",
+    "Cirsium lineare",
+    "Cirsium maritimum",
+    "Cirsium oligophyllum",
+    "Cirsium pendulum",
+    "Cirsium sieboldii",
+    "Cirsium verutum"
+  ],
+  "secondary_distance_to_dominant_centroid": 4.842008140294934,
+  "dominant_leave_one_out_distances": {
+    "Cirsium aomorense": 3.028812969658594,
+    "Cirsium japonicum": 2.0197535252149654,
+    "Cirsium kamtschaticum": 2.0418935564046774,
+    "Cirsium maritimum": 2.5726602614669054,
+    "Cirsium oligophyllum": 3.168425896459789,
+    "Cirsium pendulum": 2.471736193158243,
+    "Cirsium sieboldii": 8.103302838178129,
+    "Cirsium verutum": 3.1874052094611054
+  },
+  "largest_dominant_leave_one_out_distance": {
+    "taxon": "Cirsium sieboldii",
+    "distance": 8.103302838178129
+  },
+  "within_dominant_pairwise": {
+    "n_pairs": 28,
+    "median_distance": 3.479346394844812,
+    "maximum": {
+      "taxon_a": "Cirsium sieboldii",
+      "taxon_b": "Cirsium verutum",
+      "distance": 6.75093401641527
+    }
+  },
+  "secondary_to_dominant_pairwise": {
+    "n_pairs": 8,
+    "minimum_distance": 3.8494657867330786,
+    "median_distance": 5.597703219470136,
+    "maximum_distance": 6.275072558660394
+  },
+  "descriptive_result": "The secondary-history comparator is not uniquely outside the current dominant-radiation image-trait disparity envelope: at least one dominant-radiation taxon has a larger leave-one-out multivariate displacement, and the largest within-dominant pairwise distance exceeds the largest observed secondary-to-dominant pairwise distance.",
+  "source": {
+    "azami_workflow_run": 31946204603,
+    "azami_artifact_id": 9263360258,
+    "azami_artifact_digest": "sha256:1fa35c17d4aba672e2f8a2a0c33a3792715f7a09e1dd64d3871b25a6c7524b19",
+    "input_contract": "azami_eazami_japan38_exhaustive_traits_v1"
+  },
+  "claim_boundary": "This small, coverage-filtered public-image comparison does not estimate evolutionary rate, prove phenotypic convergence, resolve phylogeny, or demonstrate adaptation. It motivates the branch-length/topology-aware trait analysis after the EAzami nuclear tree is accepted."
+}

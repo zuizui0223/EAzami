@@ -1,0 +1,48 @@
+{
+  "contract_version": "cirsium_interaction_evidence_summary_v1",
+  "status_date": "2026-08-19",
+  "scope": "bounded_primary_literature_seed_for_EAzami_Aim2_not_exhaustive_meta_analysis",
+  "coverage": {
+    "evidence_rows": 15,
+    "independent_studies": 13,
+    "taxa": 10,
+    "taxon_names": ["Cirsium altissimum","Cirsium arvense","Cirsium canescens","Cirsium decussatum","Cirsium discolor","Cirsium palustre","Cirsium pitcheri","Cirsium purpuratum","Cirsium repandum","Cirsium vulgare"],
+    "direct_capitulum_rows": 13,
+    "contextual_herbivory_rows": 2
+  },
+  "interaction_domain_rows": {"foliar_herbivory_context":2,"pollination":3,"pollination_florivory_tradeoff":3,"pre_dispersal_seed_predation":7},
+  "interaction_domain_independent_studies": {"foliar_herbivory_context":2,"pollination":3,"pollination_florivory_tradeoff":2,"pre_dispersal_seed_predation":6},
+  "direct_module_rows": {"capitulum_position_and_size":1,"capitulum_size":1,"display_size":2,"floral_scent":3,"flower_colour":1,"flower_production":1,"none_interaction_only":3,"stickiness":1},
+  "response_chain_rows": {"interaction_to_fitness":3,"trait_to_interaction":6,"trait_to_interaction_and_fitness":4,"treatment_to_demography":2},
+  "fitness_coverage": {"rows_with_reproductive_or_demographic_fitness":9,"direct_trait_interaction_fitness_rows":4,"direct_trait_interaction_fitness_studies":4},
+  "aim2_module_gate": {
+    "head_orientation":{"direct_rows":0,"independent_studies":0,"fitness_rows":0,"manipulative_rows":0},
+    "flower_colour":{"direct_rows":1,"independent_studies":1,"fitness_rows":0,"manipulative_rows":0},
+    "involucre_spine":{"direct_rows":0,"independent_studies":0,"fitness_rows":0,"manipulative_rows":0},
+    "stickiness":{"direct_rows":1,"independent_studies":1,"fitness_rows":1,"manipulative_rows":1},
+    "display_size":{"direct_rows":2,"independent_studies":2,"fitness_rows":0,"manipulative_rows":0},
+    "floral_scent":{"direct_rows":3,"independent_studies":2,"fitness_rows":0,"manipulative_rows":0},
+    "capitulum_size_position":{"direct_rows":2,"independent_studies":2,"fitness_rows":2,"manipulative_rows":0}
+  },
+  "current_inference": [
+    "Cirsium evidence supports capitulum display effects on pollinator behaviour and shows that floral signals can attract both mutualists and florivores.",
+    "Cirsium palustre provides direct natural colour-morph pollination evidence, but replicated ancestry-controlled colour-to-effective-pollination-to-reproductive-fitness evidence remains absent from the bounded seed.",
+    "Predispersal seed predators can strongly reduce achene or seed output; Japanese Cirsium purpuratum also shows that greater seasonal flower production can increase predation and counteract reproductive gains, supporting a mutualist-attraction versus antagonist-cost trade-off framing.",
+    "The only recovered direct stickiness manipulation was null, so visible defensive-looking structures cannot be assigned a defence function without manipulation.",
+    "No direct Cirsium head-orientation or phyllary/spine manipulation linked through interaction to reproductive fitness was recovered in the bounded targeted search."
+  ],
+  "field_experiment_priorities": [
+    {"rank":1,"module":"head_orientation","reason":"No direct Cirsium orientation study was recovered in the bounded targeted search; it remains the cleanest primary Azami-trait functional gap."},
+    {"rank":2,"module":"flower_colour","reason":"Cirsium palustre provides direct natural colour-morph pollination evidence, but ancestry-controlled colour-to-effective-pollination-to-fitness evidence remains unresolved; this also bridges Aim 3."},
+    {"rank":3,"module":"involucre_spine","reason":"No direct phyllary/spine manipulation was recovered; test only after focal botanical validation and repeatable variation."},
+    {"rank":4,"module":"stickiness","reason":"One direct manipulation was recovered and was null, so stickiness remains opportunistic/lower priority."}
+  ],
+  "effect_size_meta_analysis_gate": {
+    "status":"not_yet_authorized",
+    "minimum_independent_studies_per_harmonized_outcome":5,
+    "minimum_taxa_per_harmonized_outcome":3,
+    "requirements":["same biological contrast and response scale","original-study deduplication","separate visitor abundance from effective pollination","separate florivory from pre-dispersal seed predation and foliar herbivory","retain null results and study-level sampling variance"],
+    "current_use":"systematic evidence map and field-design prioritization; six seed-predation studies do not automatically authorize pooling because their traits, contrasts and outcomes remain heterogeneous."
+  },
+  "claim_boundary":"This bounded, source-backed seed identifies doctoral field gaps and trade-off priors. It is not an exhaustive literature census and does not estimate pooled effect sizes."
+}

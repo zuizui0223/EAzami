@@ -1,0 +1,39 @@
+paper_japan_member_id,paper_taxon_concept,normalized_paper_concept,species_binomial,azami_trait_taxa,azami_binomial_coverage,azami_exact_concept_coverage,trait_taxon_has_direct_exact_nuclear_match,phase_a_trait_action
+JPN_01,Cirsium abukumense Kadota,Cirsium abukumense,Cirsium abukumense,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_02,Cirsium aidzuense,Cirsium aidzuense,Cirsium aidzuense,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_03,Cirsium alpicola Nakai,Cirsium alpicola,Cirsium alpicola,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_04,Cirsium amplexifolium,Cirsium amplexifolium,Cirsium amplexifolium,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_05,Cirsium aomorense Nakai,Cirsium aomorense,Cirsium aomorense,Cirsium aomorense,yes,yes,yes,carry_exact_trait_to_tree
+JPN_06,Cirsium dipsacolepis Matsum.,Cirsium dipsacolepis,Cirsium dipsacolepis,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_07,Cirsium domonii Kadota,Cirsium domonii,Cirsium domonii,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_08,Cirsium funagataense Kadota,Cirsium funagataense,Cirsium funagataense,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_09,Cirsium gyojanum Kitam.,Cirsium gyojanum,Cirsium gyojanum,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_10,Cirsium ishidatense,Cirsium ishidatense,Cirsium ishidatense,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_11,Cirsium ishizuchiense,Cirsium ishizuchiense,Cirsium ishizuchiense,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_12,Cirsium japonicum var. horridum,Cirsium japonicum var. horridum,Cirsium japonicum,Cirsium japonicum,yes,no,yes,binomial_trait_sensitivity_only
+JPN_13,Cirsium kasaianum,Cirsium kasaianum,Cirsium kasaianum,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_14,Cirsium kiotoense,Cirsium kiotoense,Cirsium kiotoense,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_15,Cirsium lineare,Cirsium lineare,Cirsium lineare,Cirsium lineare,yes,yes,yes,carry_exact_trait_to_tree
+JPN_16,Cirsium magofukui,Cirsium magofukui,Cirsium magofukui,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_17,Cirsium maritimum,Cirsium maritimum,Cirsium maritimum,Cirsium maritimum,yes,yes,yes,carry_exact_trait_to_tree
+JPN_18,Cirsium matsumurae var. dubium,Cirsium matsumurae var. dubium,Cirsium matsumurae,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_19,Cirsium nippoense,Cirsium nippoense,Cirsium nippoense,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_20,Cirsium nipponicum var. incomptum,Cirsium nipponicum var. incomptum,Cirsium nipponicum,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_21,Cirsium nipponicum var. yoshinoi,Cirsium nipponicum var. yoshinoi,Cirsium nipponicum,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_22,Cirsium norikurense,Cirsium norikurense,Cirsium norikurense,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_23,Cirsium oligophyllum,Cirsium oligophyllum,Cirsium oligophyllum,Cirsium oligophyllum,yes,yes,yes,carry_exact_trait_to_tree
+JPN_24,Cirsium pseudosuffultum,Cirsium pseudosuffultum,Cirsium pseudosuffultum,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_25,Cirsium shidokimontanum,Cirsium shidokimontanum,Cirsium shidokimontanum,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_26,Cirsium spicatum,Cirsium spicatum,Cirsium spicatum,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_27,Cirsium suzukaense,Cirsium suzukaense,Cirsium suzukaense,Cirsium suzukaense,yes,yes,yes,carry_exact_trait_to_tree
+JPN_28,Cirsium uzenense,Cirsium uzenense,Cirsium uzenense,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_29,Cirsium verutum,Cirsium verutum,Cirsium verutum,Cirsium verutum,yes,yes,yes,carry_exact_trait_to_tree
+JPN_30,Cirsium yezoense,Cirsium yezoense,Cirsium yezoense,Cirsium yezoense,yes,yes,yes,carry_exact_trait_to_tree
+JPN_31,Cirsium yuki-uenoanum,Cirsium yuki-uenoanum,Cirsium yuki-uenoanum,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_32,Cirsium buergeri,Cirsium buergeri,Cirsium buergeri,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_33,Cirsium effusum,Cirsium effusum,Cirsium effusum,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_34,Cirsium microspicatum,Cirsium microspicatum,Cirsium microspicatum,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_35,Cirsium nipponicum,Cirsium nipponicum,Cirsium nipponicum,,no,no,no,trait_data_gap_not_phylogeny_gap
+JPN_36,Cirsium sieboldii,Cirsium sieboldii,Cirsium sieboldii,Cirsium sieboldii,yes,yes,yes,carry_exact_trait_to_tree
+JPN_37,Cirsium kamtschaticum,Cirsium kamtschaticum,Cirsium kamtschaticum,Cirsium kamtschaticum,yes,yes,yes,carry_exact_trait_to_tree
+JPN_38,Cirsium pendulum,Cirsium pendulum,Cirsium pendulum,Cirsium pendulum,yes,yes,yes,carry_exact_trait_to_tree

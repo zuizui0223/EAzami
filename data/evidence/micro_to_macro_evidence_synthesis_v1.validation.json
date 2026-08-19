@@ -1,0 +1,12 @@
+{
+  "contract_version": "micro_to_macro_evidence_synthesis_validation_v1",
+  "result_path": "data/evidence/micro_to_macro_evidence_synthesis_v1.json",
+  "result_sha256": "fae4f94fb7e8ce405a00d9507578d65a13fbc9e2380e1860bb29ecaeee8bae1c",
+  "workflow_run": 31863473786,
+  "workflow_name": "Validate micro-to-macro hypothesis program",
+  "artifact_id": 9241283977,
+  "artifact_name": "micro-to-macro-evidence-synthesis-31863473786",
+  "artifact_zip_sha256": "ea7e15b3510880910666d04667511c3711bd7c91ea465b50c8f6628856b183a0",
+  "validation_state": "success",
+  "note": "This run regenerated the synthesis, asserted evidence-class and hypothesis boundaries, and passed byte-for-byte comparison against the frozen scientific result. Validation metadata is kept outside the scientific-result JSON."
+}

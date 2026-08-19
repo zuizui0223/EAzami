@@ -1,0 +1,97 @@
+name: Validate Japan radiation pre-tree meta synthesis
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/japan_radiation_pretree_meta_synthesis_v1.json"
+      - "data/evidence/japan_cirsium_origin_meta_analysis_v1.json"
+      - "data/evidence/japan_radiation_pre_tree_trait_disparity_v1.json"
+      - "data/evidence/japan_radiation_pre_tree_environment_disparity_v1.json"
+      - "data/evidence/japan_radiation_pre_tree_trait_environment_coupling_v1.json"
+      - "data/evidence/japan_radiation_pre_tree_module_environment_coupling_v1.json"
+      - "data/evidence/japan38_cytotype_trait_overlap_v1.json"
+      - "data/evidence/japan38_authority_module_combinations_v1.json"
+      - "data/evidence/japan38_azami_all_detected_coverage_summary_v1.json"
+      - "docs/JAPAN_RADIATION_PRETREE_META_SYNTHESIS_2026-08-16.md"
+      - ".github/workflows/validate-japan-radiation-pretree-meta-synthesis.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate synthesis against frozen source results
+        run: |
+          python - <<'PY'
+          import json, math
+          from pathlib import Path
+
+          def load(path):
+              return json.loads(Path(path).read_text())
+          def close(a,b):
+              assert math.isclose(float(a),float(b),rel_tol=1e-12,abs_tol=1e-12),(a,b)
+
+          s=load('data/evidence/japan_radiation_pretree_meta_synthesis_v1.json')
+          origin=load('data/evidence/japan_cirsium_origin_meta_analysis_v1.json')
+          trait=load('data/evidence/japan_radiation_pre_tree_trait_disparity_v1.json')
+          env=load('data/evidence/japan_radiation_pre_tree_environment_disparity_v1.json')
+          coupling=load('data/evidence/japan_radiation_pre_tree_trait_environment_coupling_v1.json')
+          module=load('data/evidence/japan_radiation_pre_tree_module_environment_coupling_v1.json')
+          cyt=load('data/evidence/japan38_cytotype_trait_overlap_v1.json')
+          auth=load('data/evidence/japan38_authority_module_combinations_v1.json')
+          cov=load('data/evidence/japan38_azami_all_detected_coverage_summary_v1.json')
+
+          assert s['contract_version']=='japan_radiation_pretree_meta_synthesis_v1'
+          assert s['radiation_context']['japanese_paper_taxon_concepts']==origin['dominant_main_radiation']['japanese_species_sampled']==38
+          assert s['radiation_context']['dominant_radiation_taxa']==origin['dominant_main_radiation']['species_in_main_radiation']==36
+          close(s['radiation_context']['dominant_fraction'],origin['dominant_main_radiation']['proportion_in_main_radiation'])
+          assert s['coverage']['azami_exhaustive_trait_binomials']==cov['japan38']['distinct_binomials_present_in_azami_exhaustive_source']==18
+          assert s['coverage']['japan38_paper_concepts_with_binomial_trait_coverage']==cov['japan38']['paper_concepts_represented_at_binomial_level']==20
+
+          close(s['phenotype_disparity']['lineare_distance_to_dominant_centroid'],trait['secondary_distance_to_dominant_centroid'])
+          assert s['phenotype_disparity']['largest_dominant_leave_one_out_taxon']==trait['largest_dominant_leave_one_out_distance']['taxon']
+          close(s['phenotype_disparity']['largest_dominant_leave_one_out_distance'],trait['largest_dominant_leave_one_out_distance']['distance'])
+          close(s['phenotype_disparity']['largest_within_dominant_pairwise_distance'],trait['within_dominant_pairwise']['maximum']['distance'])
+          close(s['phenotype_disparity']['largest_lineare_to_dominant_pairwise_distance'],trait['secondary_to_dominant_pairwise']['maximum_distance'])
+
+          close(s['environment_disparity']['lineare_distance_to_dominant_centroid'],env['secondary_distance_to_dominant_centroid'])
+          assert s['environment_disparity']['largest_dominant_leave_one_out_taxon']==env['largest_dominant_leave_one_out_distance']['taxon']
+          close(s['environment_disparity']['largest_dominant_leave_one_out_distance'],env['largest_dominant_leave_one_out_distance']['distance'])
+          close(s['environment_disparity']['largest_within_dominant_pairwise_distance'],env['within_dominant_pairwise']['maximum']['distance'])
+          close(s['environment_disparity']['largest_lineare_to_dominant_pairwise_distance'],env['secondary_to_dominant_pairwise']['maximum_distance'])
+
+          close(s['trait_environment_coupling']['all_trait_axes_spearman_rho'],coupling['observed_spearman_rho'])
+          close(s['trait_environment_coupling']['positive_coupling_permutation_p'],coupling['positive_coupling_permutation_p'])
+          assert s['trait_environment_coupling']['leave_one_taxon_out_all_negative']==coupling['leave_one_taxon_out_all_negative'] is True
+          for key in ['orientation','colour','shape']:
+              close(s['trait_environment_coupling']['module_rho'][key],module['modules'][key]['observed_spearman_rho'])
+              close(s['trait_environment_coupling']['module_two_sided_permutation_p'][key],module['modules'][key]['two_sided_permutation_p'])
+          assert s['trait_environment_coupling']['shape_leave_one_taxon_out_all_negative']==module['modules']['shape']['leave_one_out_all_negative'] is True
+
+          assert s['cytotype_trait_overlap']['dominant_radiation_cytotype_concepts']==cyt['n_dominant_radiation_cytotype_concepts']==8
+          assert s['cytotype_trait_overlap']['dominant_ploidy_counts']=={'2x':5,'4x':2,'6x':1}
+          assert cyt['dominant_radiation_ploidy_counts']=={'2':5,'4':2,'6':1}
+          assert s['cytotype_trait_overlap']['upward_or_ascending_observed_ploidy_levels']==cyt['upward_or_ascending_observed_ploidy_levels']
+
+          assert s['authority_module_combinations']['dominant_seed_concepts']==auth['n_dominant_seed_concepts']==20
+          assert s['authority_module_combinations']['secondary_seed_concepts']==auth['n_secondary_seed_concepts']==2
+          assert s['authority_module_combinations']['dominant_orientation_counts']==auth['dominant_orientation_counts']
+          assert s['authority_module_combinations']['dominant_orientation_stickiness_combinations']==auth['n_dominant_orientation_stickiness_combinations']==4
+          assert s['authority_module_combinations']['secondary_orientation_stickiness_combinations']==auth['n_secondary_orientation_stickiness_combinations']==2
+
+          assert s['current_verdict']['adaptive_radiation']=='unresolved'
+          boundary=s['claim_boundary'].lower()
+          assert 'evolutionary rates' in boundary and 'adaptive radiation' in boundary
+          print(json.dumps(s,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan-radiation-pretree-meta-synthesis-${{ github.run_id }}
+          path: |
+            data/evidence/japan_radiation_pretree_meta_synthesis_v1.json
+            docs/JAPAN_RADIATION_PRETREE_META_SYNTHESIS_2026-08-16.md
+          retention-days: 90

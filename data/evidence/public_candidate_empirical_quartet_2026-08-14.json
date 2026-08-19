@@ -1,0 +1,165 @@
+{
+  "contract_version": "public_candidate_empirical_quartet_evidence_v1",
+  "date": "2026-08-14",
+  "purpose": "Real-read sanity check of EA01 and EA02 against the exact same-taxon samples already present in the accepted 294-tip public baseline before launching the full 294-tip augmentation gate.",
+  "accepted_primary_before_this_analysis": {
+    "biological_tips": 294,
+    "public_srrs": 295,
+    "analysis_taxon_labels": 270
+  },
+  "real_read_recovery": {
+    "workflow_run": 31788828923,
+    "method": "public SRA prefetch -> vdb-validate -> fasterq-dump -> fastp -> HybPiper 2.3.4 BWA -> retrieve_sequences -> paralog_retriever -> strict conservative-241 pack",
+    "baseline_samples": [
+      {
+        "tip_id": "MRY_YOSHINOI",
+        "analysis_taxon": "Cirsium nipponicum var. yoshinoi",
+        "biosample": "SAMN44017955",
+        "run": "SRR30887222",
+        "bioproject": "PRJNA957074",
+        "strict_no_warning_loci": 236,
+        "paralog_warning_loci": 0,
+        "artifact_id": 9215591156,
+        "artifact_sha256": "b7fa78fa57f438a31096d5f84e259443ac30e92b2edd8295b83d951076db3bcd"
+      },
+      {
+        "tip_id": "MRY_SAIRAMENSE",
+        "analysis_taxon": "Cirsium sairamense",
+        "biosample": "SAMN34240330",
+        "run": "SRR25265647",
+        "bioproject": "PRJNA957074",
+        "strict_no_warning_loci": 239,
+        "paralog_warning_loci": 0,
+        "artifact_id": 9215462934,
+        "artifact_sha256": "e27a2a6fcd4c9ef0aa088c19208e435b041be8927855fddf9a909ea668febe8c"
+      }
+    ]
+  },
+  "candidate_sources": {
+    "EA01": {
+      "tip_id": "PUBEA001",
+      "analysis_taxon": "Cirsium nipponicum var. yoshinoi",
+      "biosample": "SAMN44017954",
+      "run": "SRR30887223",
+      "bioproject": "PRJNA957074",
+      "strict_no_warning_loci": 236,
+      "source_artifact_id": 9175870949
+    },
+    "EA02": {
+      "tip_id": "PUBEA002",
+      "analysis_taxon": "Cirsium sairamense",
+      "biosample": "SAMN11585477",
+      "run": "SRR9119112",
+      "bioproject": "PRJNA540287",
+      "strict_no_warning_loci": 239,
+      "source_artifact_id": 9175876315
+    }
+  },
+  "quartet_ml_analysis": {
+    "tree_only_workflow_run": 31792170949,
+    "result_artifact_id": 9215923897,
+    "result_artifact_sha256": "a8069ba48efd89d1e922b5ff5f2b71f1db763e1f1ae32622c5bd995a15031ccf",
+    "four_way_common_strict_loci": 235,
+    "gene_tree_informative_loci": 231,
+    "concatenated_alignment_nt": 105086,
+    "variable_sites": 2769,
+    "parsimony_informative_sites": 2199,
+    "gene_tree_topology_counts": {
+      "same_taxon_pairs": 231,
+      "baseline_vs_candidates": 0,
+      "crossed_pairs": 0,
+      "unresolved": 0
+    },
+    "same_taxon_pair_fraction_resolved_gene_trees": 1.0,
+    "concatenated_topology": "(MRY_YOSHINOI,PUBEA001)|(MRY_SAIRAMENSE,PUBEA002)",
+    "concatenated_model_bic": "TIM3+F+G4",
+    "concatenated_internal_support_sh_alrt_ufboot": "100/100",
+    "concatenated_newick": "(MRY_YOSHINOI:0.0042830718,PUBEA001:0.0027471448,(MRY_SAIRAMENSE:0.0000009520,PUBEA002:0.0000009520)100/100:0.0288779095);",
+    "result_file_sha256": {
+      "empirical_quartet_summary.json": "d4649603c0bfc5128fe963a120fe0458287df547fa9684473798eb263b99fd5b",
+      "quartet_concat.treefile": "ef99b37f8d9007a8126d3aa640729c5f5e7a7c9c910caf5d9619dde0bea06b54",
+      "quartet_concat.iqtree": "a793cbf09e5897cb202b10a1fb03177d3ebdfcf850e93b37ce97b43f4ef614f4",
+      "four_way_common_strict_loci.txt": "ef0062e86b247ae7940ddaae8df036b4c93b5cb3a9c0b6fb04c30a20739b65b7",
+      "informative_loci.txt": "67e89ee32bc4ca370ab437cf1d29a94540d0251dd146a20027fe504b8c87e031",
+      "locus_information.csv": "0018d4e6805d814b070a121495a5d0e52b67cfe7ceb6203f93594eb7bcfed663"
+    }
+  },
+  "raw_read_identity_audit": {
+    "EA01_vs_MRY_YOSHINOI": {
+      "baseline_fastp_before_filtering": {
+        "total_reads": 2631980,
+        "total_bases": 397428980,
+        "q20_bases": 375990362,
+        "q30_bases": 353334132,
+        "read1_mean_length": 151,
+        "read2_mean_length": 151,
+        "gc_content": 0.452404
+      },
+      "candidate_fastp_before_filtering": {
+        "total_reads": 3377298,
+        "total_bases": 509971998,
+        "q20_bases": 479454596,
+        "q30_bases": 448056216,
+        "read1_mean_length": 151,
+        "read2_mean_length": 151,
+        "gc_content": 0.481604
+      },
+      "raw_read_summary_identical": false,
+      "interpretation": "Distinct public read libraries; EA01 remains a biologically informative independent same-taxon replication candidate."
+    },
+    "EA02_vs_MRY_SAIRAMENSE": {
+      "shared_fastp_before_filtering": {
+        "total_reads": 10779802,
+        "total_bases": 1088760002,
+        "q20_bases": 1045887246,
+        "q30_bases": 997066847,
+        "q20_rate": 0.960622,
+        "q30_rate": 0.915782,
+        "read1_mean_length": 101,
+        "read2_mean_length": 101,
+        "gc_content": 0.414222
+      },
+      "raw_read_summary_identical": true,
+      "fastp_read1_before_filtering_object_identical": true,
+      "fastp_read2_before_filtering_object_identical": true,
+      "fastp_duplication_object_identical": true,
+      "fastp_insert_size_object_identical": true,
+      "strict_locus_sets_identical": true,
+      "baseline_strict_loci": 239,
+      "candidate_strict_loci": 239,
+      "concatenated_terminal_branch_lengths": {
+        "MRY_SAIRAMENSE": 0.0000009520,
+        "PUBEA002": 0.0000009520
+      },
+      "interpretation": "The two accessions are overwhelmingly consistent with re-deposition/reuse of the same underlying raw read library rather than an independent biological replicate. Until explicit provenance demonstrates otherwise, EA02 must be treated as a pseudoreplicate/duplicate-control and not as an additional biological tree tip."
+    }
+  },
+  "candidate_disposition_after_empirical_analysis": {
+    "EA01": {
+      "independent_biological_tip_candidate": true,
+      "full_294_tip_gate_still_required": true,
+      "quartet_pilot_promotes_tip": false,
+      "next_step": "Run the full 294-tip paired BWA/BLASTx concatenated RF + same-taxon-neighbour + source-label ASTRAL gate."
+    },
+    "EA02": {
+      "independent_biological_tip_candidate": false,
+      "status": "duplicate_readset_pseudoreplicate_excluded_pending_explicit_provenance",
+      "may_be_retained_as_pipeline_duplicate_control": true,
+      "counts_toward_public_tip_ceiling": false,
+      "full_294_tip_promotion_gate_should_not_be_run_as_an_independent_tip": true
+    },
+    "CNIPG": {
+      "independent_biological_tip_candidate": true,
+      "status_unchanged_by_quartet": true,
+      "full_cross_data_type_gate_still_required": true
+    }
+  },
+  "revised_public_candidate_ceiling": {
+    "accepted_primary": 294,
+    "independent_candidates_beyond_primary": ["EA01", "CNIPG"],
+    "maximum_sample_level_ceiling_if_both_pass": 296,
+    "new_analysis_taxon_labels": 0,
+    "combined_296_is_accepted_tree": false
+  },
+  "claim_boundary": "This empirical quartet strongly validates EA01 as an independent same-taxon public replicate and detects EA02 as a likely re-deposited duplicate readset. It does not itself authorize EA01 or CNIPG promotion, does not test the full 294-tip backbone or ASTRAL stability, and does not alter any flower-colour loss/regain inference."
+}

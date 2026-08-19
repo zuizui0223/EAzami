@@ -1,0 +1,56 @@
+name: Validate HMM2 population-aware transition test
+
+on:
+  pull_request:
+    paths:
+      - "analysis/test_hmm2_population_aware_transition_bias.py"
+      - "analysis/fitch_transition_sensitivity.csv"
+      - "data/evidence/hmm2_population_aware_transition_testability_v1.csv"
+      - "data/evidence/hmm2_population_aware_transition_test_v1.json"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_2.csv"
+      - "docs/HMM2_POPULATION_AWARE_TRANSITION_TEST_2026-08-15.md"
+      - ".github/workflows/validate-hmm2-population-aware-transition-test.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run staged HMM2 test
+        run: |
+          python -m py_compile analysis/test_hmm2_population_aware_transition_bias.py
+          python analysis/test_hmm2_population_aware_transition_bias.py \
+            --output /tmp/hmm2_population_aware_transition_test_v1.json
+      - name: Assert claim boundaries
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/hmm2_population_aware_transition_test_v1.json'))
+          assert d['contract_version']=='hmm2_population_aware_transition_test_v1'
+          assert d['focal_polymorphic_systems']==4
+          assert d['stage_A_state_compression']['systems_exposing_W_C_multiplicity_hidden_by_one_P_tip']==4
+          assert d['stage_B_minimum_transition_count']['systems_with_morph_linked_nuclear_genealogy']==1
+          assert d['stage_B_minimum_transition_count']['takaoense_species_tip_minimum']==1
+          assert d['stage_B_minimum_transition_count']['takaoense_population_sample_minimum']==2
+          assert d['stage_B_minimum_transition_count']['takaoense_delta']==1
+          assert d['stage_C_transition_rate']['systems_rate_testable_now']==0
+          assert d['morph_genotype_linkage']['systems_without_morph_linked_nuclear_samples']==3
+          assert 'partial_support' in d['hmm2_current_status']
+          assert 'not proof' in d['claim_boundary'].lower()
+          print(json.dumps(d,indent=2,ensure_ascii=False))
+          PY
+      - name: Require regenerated result to equal frozen evidence
+        run: cmp /tmp/hmm2_population_aware_transition_test_v1.json data/evidence/hmm2_population_aware_transition_test_v1.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hmm2-population-aware-transition-test-${{ github.run_id }}
+          path: /tmp/hmm2_population_aware_transition_test_v1.json
+          if-no-files-found: error
+          retention-days: 90

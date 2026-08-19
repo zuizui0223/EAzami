@@ -1,0 +1,49 @@
+{
+  "contract_version": "japan38_authority_module_combinations_v1",
+  "n_authority_seed_concepts": 22,
+  "n_dominant_seed_concepts": 20,
+  "n_secondary_seed_concepts": 2,
+  "dominant_orientation_counts": {
+    "downward_or_nodding": 6,
+    "upward_or_ascending": 1,
+    "upward_or_erect": 10
+  },
+  "dominant_phyllary_counts": {
+    "appressed": 1,
+    "appressed_or_ascending": 2,
+    "ascending": 4,
+    "ascending_or_recurved": 1,
+    "spreading": 1
+  },
+  "dominant_stickiness_counts": {
+    "nonsticky_or_nearly_nonsticky": 5,
+    "sticky": 5
+  },
+  "secondary_orientation_counts": {
+    "upward_or_erect": 2
+  },
+  "secondary_phyllary_counts": {
+    "spreading_or_recurved": 1
+  },
+  "secondary_stickiness_counts": {
+    "nonsticky_or_nearly_nonsticky": 1,
+    "sticky": 1
+  },
+  "dominant_orientation_stickiness_combinations": [
+    "downward_or_nodding + nonsticky_or_nearly_nonsticky",
+    "upward_or_ascending + sticky",
+    "upward_or_erect + nonsticky_or_nearly_nonsticky",
+    "upward_or_erect + sticky"
+  ],
+  "secondary_orientation_stickiness_combinations": [
+    "upward_or_erect + nonsticky_or_nearly_nonsticky",
+    "upward_or_erect + sticky"
+  ],
+  "n_dominant_orientation_stickiness_combinations": 4,
+  "n_secondary_orientation_stickiness_combinations": 2,
+  "descriptive_result": "The current authority-backed dominant-radiation sample contains both upward/erect and downward/nodding orientation states and both sticky and non-sticky involucres. The two secondary-history comparators are both upward/erect but differ in stickiness. Thus origin history does not map to one observed capitulum-state combination in this source-backed sample.",
+  "source_validation_run": 31947704255,
+  "source_validation_artifact": 9263783464,
+  "source_validation_artifact_digest": "sha256:d3fa8e93bd4268ce3e1ee359207e03c325d53ac7841a352b7aba90df749ae66f",
+  "claim_boundary": "State diversity only. Without the accepted tree and complete taxon coverage, this does not estimate transition counts, correlated evolution, convergence, selection or adaptation."
+}

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""Restartable local/HPC runner for the Chang 2026 transcriptome panel.
+"""Canonical restartable local/HPC runner for the Chang 2026 transcriptome panel.
 
-The PR-level workflow only dry-runs the heavy pipeline.  This runner is the
-execution path for the public RNA-seq data.  It keeps the validated sample/run
-mapping, uses restartable SRA ``prefetch`` plus ``vdb-validate``, converts local
-accessions with an explicit fasterq scratch directory, and deliberately keeps
-Trinity's working directory.  ``--full_cleanup`` is not used because Trinity
-renames the final FASTA and removes restart state when that option is enabled.
+This is the execution path for the public RNA-seq data. It validates the frozen
+panel directly from reconciled official SRA metadata, requires official
+``LibraryLayout=PAIRED``, uses restartable ``prefetch`` plus ``vdb-validate``,
+converts local accessions with an explicit fasterq scratch directory, and keeps
+Trinity's working directory so restart state and ``Trinity.fasta`` survive.
+
+The six-takaoense pilot additionally remains frozen at BP=3 / W=3. Heavy
+execution is external/HPC; PR CI exercises dry-run and restart contracts only.
 """
 
 from __future__ import annotations
@@ -24,8 +26,6 @@ from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Iterable, Mapping, Sequence
-
-import run_chang2026_layout_aware_transcriptome_assembly as panel_contract
 
 DEFAULT_OUTDIR = Path("results/chang2026_transcriptomes_restartable")
 STAGES = (
@@ -45,6 +45,15 @@ def clean(value: object) -> str:
     return str(value or "").strip()
 
 
+def read_csv(path: Path) -> list[dict[str, str]]:
+    with path.open(encoding="utf-8-sig", newline="") as handle:
+        return [
+            {key: clean(value) for key, value in row.items()}
+            for row in csv.DictReader(handle)
+            if any(clean(value) for value in row.values())
+        ]
+
+
 def write_csv(path: Path, rows: Iterable[Mapping[str, object]], fields: Sequence[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
@@ -54,11 +63,99 @@ def write_csv(path: Path, rows: Iterable[Mapping[str, object]], fields: Sequence
 
 
 def validate_panel(path: Path, *, expected_samples: int) -> list[dict[str, str]]:
-    return panel_contract.validate_panel(path, expected_samples=expected_samples)
+    """Validate the frozen panel using reconciled official SRA metadata."""
+    if expected_samples < 1:
+        raise ValueError("expected_samples must be >= 1")
+    rows = read_csv(path)
+    if not rows:
+        raise ValueError(f"No panel rows in {path}")
+    if len(rows) != expected_samples:
+        raise ValueError(f"Expected {expected_samples} panel samples, observed {len(rows)}")
+
+    sample_ids = [clean(row.get("sample_id")) for row in rows]
+    runs = [clean(row.get("matched_run")) for row in rows]
+    if any(not value for value in sample_ids + runs):
+        raise ValueError("One or more panel rows lack sample_id or matched_run")
+    if len(sample_ids) != len(set(sample_ids)):
+        raise ValueError("Panel sample_id values are not unique")
+    if len(runs) != len(set(runs)):
+        raise ValueError("Official SRA run values are not unique")
+
+    unresolved = [
+        row for row in rows
+        if clean(row.get("run_match_confidence")) not in {"verified", "probable"}
+    ]
+    if unresolved:
+        raise ValueError(
+            "Panel contains unresolved run mappings: "
+            + "|".join(clean(row.get("sample_id")) for row in unresolved)
+        )
+
+    wrong_source = [
+        row for row in rows
+        if clean(row.get("de_novo_required")) != "true"
+        or clean(row.get("preferred_sequence_source")) != clean(row.get("matched_run"))
+    ]
+    if wrong_source:
+        raise ValueError(
+            "Current workflow expects official-SRA de novo input for every sample: "
+            + "|".join(clean(row.get("sample_id")) for row in wrong_source)
+        )
+
+    missing_layout = [
+        clean(row.get("sample_id"))
+        for row in rows
+        if not clean(row.get("library_layout"))
+    ]
+    if missing_layout:
+        raise ValueError(
+            "Panel rows lack official SRA LibraryLayout: " + "|".join(missing_layout)
+        )
+
+    unsupported = [
+        f"{clean(row.get('sample_id'))}:{clean(row.get('library_layout')).upper()}"
+        for row in rows
+        if clean(row.get("library_layout")).upper() != "PAIRED"
+    ]
+    if unsupported:
+        raise ValueError(
+            "Current assembly implementation is paired-end only; official SRA "
+            "LibraryLayout is not PAIRED for: " + "|".join(unsupported)
+        )
+
+    if expected_samples == 6:
+        roles = Counter(clean(row.get("panel_role")) for row in rows)
+        morphs = Counter(clean(row.get("morph")).upper() for row in rows)
+        if roles != {"focal_colour_morph": 6}:
+            raise ValueError(
+                "Six-sample pilot must contain only focal_colour_morph rows: "
+                f"{dict(roles)}"
+            )
+        if morphs != {"BP": 3, "W": 3}:
+            raise ValueError(
+                "Six-sample pilot must contain three BP and three W samples: "
+                f"{dict(morphs)}"
+            )
+
+    return sorted(rows, key=lambda row: row["sample_id"])
 
 
-def select_rows(rows: Sequence[Mapping[str, str]], sample_ids: Sequence[str] | None) -> list[dict[str, str]]:
-    return panel_contract.select_panel_rows(rows, sample_ids)
+def select_rows(
+    rows: Sequence[Mapping[str, str]], sample_ids: Sequence[str] | None
+) -> list[dict[str, str]]:
+    """Select stable sample IDs only after the complete input panel is validated."""
+    requested = [clean(value) for value in (sample_ids or []) if clean(value)]
+    if not requested:
+        return [dict(row) for row in rows]
+    if len(requested) != len(set(requested)):
+        raise ValueError("--sample-id values must be unique")
+    index = {clean(row.get("sample_id")): dict(row) for row in rows}
+    missing = [sample_id for sample_id in requested if sample_id not in index]
+    if missing:
+        raise ValueError(
+            "Requested sample IDs are absent from the validated panel: " + "|".join(missing)
+        )
+    return [index[sample_id] for sample_id in requested]
 
 
 def command_plan(
@@ -167,17 +264,15 @@ def execute_one(
         raw1u = Path(str(plan["raw_read_1_uncompressed"])); raw2u = Path(str(plan["raw_read_2_uncompressed"])); raw1 = Path(str(plan["raw_read_1"])); raw2 = Path(str(plan["raw_read_2"]))
         trim1 = Path(str(plan["trimmed_read_1"])); trim2 = Path(str(plan["trimmed_read_2"])); fastp_json = Path(str(plan["fastp_json"])); trinity = Path(str(plan["trinity_fasta"])); copied = Path(str(plan["copied_trinity_fasta"])); peptide = Path(str(plan["transdecoder_peptide_fasta"])); prefixed = Path(str(plan["prefixed_proteome_fasta"]))
         if force: _remove([Path(str(plan["state_dir"])), prefixed])
-        # prefetch is explicitly repeatable; rerunning the same command resumes an interrupted download.
         if force or not marker(plan, "prefetch").exists(): run_stage(plan, "prefetch"); completed = "prefetch"
         if not sra_dir.is_dir(): raise RuntimeError(f"prefetch accession directory missing: {sra_dir}")
         if force or not marker(plan, "vdb_validate").exists(): run_stage(plan, "vdb_validate"); completed = "vdb_validate"
-        # gzip pair is a completed raw state. A partial gzip or uncompressed state is never silently overwritten.
         gz_state = (nonempty(raw1), nonempty(raw2)); u_state = (nonempty(raw1u), nonempty(raw2u))
         if gz_state in {(True, False), (False, True)} or u_state in {(True, False), (False, True)}:
             raise RuntimeError("Partial paired FASTQ state detected; inspect before restart")
         if not all(gz_state):
             if any(u_state): raise RuntimeError("Uncompressed FASTQ pair exists without completed compression; inspect before restart")
-            raw1.parent.mkdir(parents=True, exist_ok=True); Path(str(plan["sample_root"])) .joinpath("scratch", "fasterq").mkdir(parents=True, exist_ok=True)
+            raw1.parent.mkdir(parents=True, exist_ok=True); Path(str(plan["sample_root"])).joinpath("scratch", "fasterq").mkdir(parents=True, exist_ok=True)
             run_stage(plan, "fasterq"); completed = "fasterq"; require_nonempty(raw1u, "fasterq R1"); require_nonempty(raw2u, "fasterq R2")
             run_stage(plan, "pigz"); completed = "pigz"
         require_nonempty(raw1, "raw R1.gz"); require_nonempty(raw2, "raw R2.gz")
@@ -216,24 +311,27 @@ def capture_versions(plan: Mapping[str, object], outdir: Path) -> dict[str, obje
         item = {"command": shlex.join(command), "executable_found": found, "returncode": None, "output": "executable_not_found"}
         if found:
             try:
-                p = subprocess.run(command, capture_output=True, text=True, timeout=30, check=False); item.update(returncode=p.returncode, output=(p.stdout + "\n" + p.stderr).strip()[:4000])
-            except Exception as exc: item["output"] = f"{type(exc).__name__}: {exc}"
+                process = subprocess.run(command, capture_output=True, text=True, timeout=30, check=False)
+                item.update(returncode=process.returncode, output=(process.stdout + "\n" + process.stderr).strip()[:4000])
+            except Exception as exc:
+                item["output"] = f"{type(exc).__name__}: {exc}"
         payload["tools"][name] = item
     outdir.mkdir(parents=True, exist_ok=True); (outdir / "software_versions.json").write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return payload
 
 
 def disk_preflight(path: Path, required_gib: float) -> dict[str, float]:
-    path.mkdir(parents=True, exist_ok=True); d = shutil.disk_usage(path); free = d.free / 1024**3
-    if required_gib > 0 and free < required_gib: raise RuntimeError(f"Insufficient free disk: {free:.1f} GiB available; {required_gib:.1f} GiB required")
-    return {"total_gib": d.total/1024**3, "used_gib": d.used/1024**3, "free_gib": free, "required_gib": required_gib}
+    path.mkdir(parents=True, exist_ok=True); disk = shutil.disk_usage(path); free = disk.free / 1024**3
+    if required_gib > 0 and free < required_gib:
+        raise RuntimeError(f"Insufficient free disk: {free:.1f} GiB available; {required_gib:.1f} GiB required")
+    return {"total_gib": disk.total/1024**3, "used_gib": disk.used/1024**3, "free_gib": free, "required_gib": required_gib}
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(); p.add_argument("--panel", type=Path, required=True); p.add_argument("--expected-panel-samples", type=int, default=19); p.add_argument("--sample-id", action="append", default=[]); p.add_argument("--outdir", type=Path, default=DEFAULT_OUTDIR); p.add_argument("--jobs", type=int, default=1)
-    p.add_argument("--fasterq-threads", type=int, default=8); p.add_argument("--fastp-threads", type=int, default=8); p.add_argument("--trinity-threads", type=int, default=16); p.add_argument("--trinity-memory-gb", type=int, default=96); p.add_argument("--min-free-disk-gib", type=float, default=0)
-    p.add_argument("--prefetch", default="prefetch"); p.add_argument("--vdb-validate", default="vdb-validate"); p.add_argument("--fasterq", default="fasterq-dump"); p.add_argument("--pigz", default="pigz"); p.add_argument("--fastp", default="fastp"); p.add_argument("--trinity", default="Trinity"); p.add_argument("--transdecoder-longorfs", default="TransDecoder.LongOrfs"); p.add_argument("--transdecoder-predict", default="TransDecoder.Predict"); p.add_argument("--python", default=sys.executable); p.add_argument("--prefix-script", type=Path, default=Path(__file__).with_name("prefix_fasta_headers.py"))
-    p.add_argument("--dry-run", action="store_true"); p.add_argument("--preflight-only", action="store_true"); p.add_argument("--force", action="store_true"); p.add_argument("--delete-raw-after-success", action="store_true"); p.add_argument("--delete-sra-after-success", action="store_true"); return p.parse_args()
+    parser = argparse.ArgumentParser(); parser.add_argument("--panel", type=Path, required=True); parser.add_argument("--expected-panel-samples", type=int, default=19); parser.add_argument("--sample-id", action="append", default=[]); parser.add_argument("--outdir", type=Path, default=DEFAULT_OUTDIR); parser.add_argument("--jobs", type=int, default=1)
+    parser.add_argument("--fasterq-threads", type=int, default=8); parser.add_argument("--fastp-threads", type=int, default=8); parser.add_argument("--trinity-threads", type=int, default=16); parser.add_argument("--trinity-memory-gb", type=int, default=96); parser.add_argument("--min-free-disk-gib", type=float, default=0)
+    parser.add_argument("--prefetch", default="prefetch"); parser.add_argument("--vdb-validate", default="vdb-validate"); parser.add_argument("--fasterq", default="fasterq-dump"); parser.add_argument("--pigz", default="pigz"); parser.add_argument("--fastp", default="fastp"); parser.add_argument("--trinity", default="Trinity"); parser.add_argument("--transdecoder-longorfs", default="TransDecoder.LongOrfs"); parser.add_argument("--transdecoder-predict", default="TransDecoder.Predict"); parser.add_argument("--python", default=sys.executable); parser.add_argument("--prefix-script", type=Path, default=Path(__file__).with_name("prefix_fasta_headers.py"))
+    parser.add_argument("--dry-run", action="store_true"); parser.add_argument("--preflight-only", action="store_true"); parser.add_argument("--force", action="store_true"); parser.add_argument("--delete-raw-after-success", action="store_true"); parser.add_argument("--delete-sra-after-success", action="store_true"); return parser.parse_args()
 
 
 def main() -> int:
@@ -256,8 +354,26 @@ def main() -> int:
             for future in as_completed(futures): results.append(future.result())
         results.sort(key=lambda row: str(row["sample_id"]))
     write_csv(args.outdir / "restartable_run_manifest.csv", results, RUN_FIELDS)
-    statuses = Counter(str(row["status"]) for row in results); summary = {"runner_version": "chang2026_restartable_heavy_runner_v1", "input_panel_sample_count": len(validated), "selected_sample_count": len(rows), "selected_sample_ids": [row["sample_id"] for row in rows], "status_counts": dict(sorted(statuses.items())), "failed_count": statuses.get("failed", 0), "dry_run": args.dry_run, "delete_raw_after_success": args.delete_raw_after_success, "delete_sra_after_success": args.delete_sra_after_success, "disk_preflight": disk, "sra_strategy": "prefetch -> vdb-validate -> fasterq-dump local accession directory", "trinity_cleanup": "disabled_to_preserve_Trinity.fasta_and_restart_state", "claim_limit": "Completion establishes execution of the public RNA-seq assembly pipeline only; it does not establish transcriptome completeness, orthology, introgression, or anthocyanin-pathway reactivation."}
-    (args.outdir / "restartable_run_summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8"); print(f"selected_sample_count={len(rows)}"); print("selected_sample_ids=" + "|".join(row["sample_id"] for row in rows)); print("status_counts=" + json.dumps(summary["status_counts"], sort_keys=True)); return 1 if summary["failed_count"] else 0
+    statuses = Counter(str(row["status"]) for row in results)
+    summary = {
+        "runner_version": "chang2026_restartable_heavy_runner_v2_self_contained",
+        "input_panel_sample_count": len(validated),
+        "selected_sample_count": len(rows),
+        "selected_sample_ids": [row["sample_id"] for row in rows],
+        "status_counts": dict(sorted(statuses.items())),
+        "failed_count": statuses.get("failed", 0),
+        "dry_run": args.dry_run,
+        "delete_raw_after_success": args.delete_raw_after_success,
+        "delete_sra_after_success": args.delete_sra_after_success,
+        "disk_preflight": disk,
+        "library_layout_source": "official NCBI SRA LibraryLayout",
+        "sra_execution_contract": "prefetch -> vdb-validate -> fasterq-dump local accession directory with explicit scratch",
+        "trinity_cleanup": "disabled_to_preserve_Trinity.fasta_and_restart_state",
+        "claim_limit": "Completion establishes execution of the public RNA-seq assembly pipeline only; it does not establish transcriptome completeness, orthology, introgression, or anthocyanin-pathway reactivation.",
+    }
+    (args.outdir / "restartable_run_summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    print(f"selected_sample_count={len(rows)}"); print("selected_sample_ids=" + "|".join(row["sample_id"] for row in rows)); print("status_counts=" + json.dumps(summary["status_counts"], sort_keys=True)); return 1 if summary["failed_count"] else 0
 
 
-if __name__ == "__main__": raise SystemExit(main())
+if __name__ == "__main__":
+    raise SystemExit(main())
