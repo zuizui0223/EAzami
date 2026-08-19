@@ -1,98 +1,159 @@
-# Sampling design
+# Sampling design — doctoral mainline
+
+Status: 2026-08-19
 
 ## Principle
 
-Sampling follows the evolutionary transition screen. Broad taxon sampling is used to identify transitions; dense population sampling is reserved for mechanistic focal systems.
+Collect only biological data that the existing public/meta layer cannot reconstruct.
 
-## Tier 1 — East Asian transition atlas
+Sampling is organized around three doctoral gates, not a broad East Asian taxon atlas:
 
-Goal: score flower colour and establish phylogenetic placement across Japan, Ryukyu, Taiwan and China.
+1. **Aim 1 — source of variation**;
+2. **Aim 2 — ecological function and fitness**;
+3. **Aim 3 — fast colour-switching mechanism**.
 
-Per taxon/population target:
+Canonical minimum-new-data table:
 
-- 2–5 independent colour observations minimum for screening;
-- more observations for taxa suspected to be polymorphic;
-- voucher/literature provenance retained for every state assignment.
+`data/evidence/doctoral_next_data_minimum_v1.csv`
 
-Tier 1 does not require WGS.
+Detailed rationale:
 
-## Tier 2 — Population-level transition validation
+`docs/DOCTORAL_NEXT_DATA_GATE_2026-08-19.md`
 
-For each high-priority white/coloured sister pair or polymorphic lineage:
+## Aim 1 — population ancestry first
 
-- 3–5 populations per focal lineage where geography permits;
-- 15–20 individuals per population for population genomics;
-- standardized flower photographs and reflectance for all flowering individuals;
-- silica-dried leaf tissue for DNA;
-- voucher or voucher-linked material.
+The core population panel is protected before comparative controls.
 
-Within-taxon white/coloured polymorphic populations are especially valuable because they reduce genome-wide species confounding.
+### Core 190
 
-## Tier 3 — Molecular mechanism subset
+| Taxon | Minimum populations | Individuals / population | Minimum total |
+|---|---:|---:|---:|
+| *C. brevicaule* | 4 | 15 | 60 |
+| *C. irumtiense* | 4 | 15 | 60 |
+| *C. pendulum* | 4 | 10 | 40 |
+| *C. sieboldii* | 2 | 15 | 30 |
 
-For 3–5 replicated transition systems:
+**Core = 190 individuals.**
 
-- 2–3 populations per colour state;
-- 6–10 biological individuals per population/state for expression/pigment work;
-- matched developmental stage whenever possible;
-- collect from the same individual: DNA leaf, floral RNA tissue, pigment tissue, standardized colour record and voucher link.
+Then, if resources remain:
 
-### Floral developmental sampling
+- *C. lineare*: 2 × 8 = 16;
+- *C. dipsacolepis*: 2 × 8 = 16.
 
-Prefer at least two stages:
+**Full minimum = 222; recommended fuller panel = 298.**
 
-1. late bud / pigmentation onset;
-2. pre-anthesis or fresh anthesis.
+Do not reduce focal-population replication merely to complete the controls.
 
-A third earlier bud stage can be added if pilot RNA-seq suggests that regulatory divergence precedes visible colour.
+### Immutable individual identity
 
-## Focal system priorities
+Every sampled individual receives one `individual_id` linking:
 
-### Ryukyu Arenicola
-
-- *C. brevicaule* — geographically distributed white populations
-- *C. irumtiense* — geographically distributed coloured populations
-
-The purpose is not to rebuild their species phylogeny, but to test population history, candidate colour haplotypes and possible reactivation/retention scenarios.
-
-### Taiwan *C. japonicum* complex
-
-Highest priority:
-
-- var. *albescens* — white
-- var. *takaoense* — white and coloured populations/individuals
-
-A within-variety white/coloured comparison in *takaoense* is especially informative for association and expression analyses.
-
-### Japan/China discovery systems
-
-Prioritize taxa showing one of:
-
-- stable white vs coloured sister lineages;
-- repeated white populations in otherwise coloured taxa;
-- sympatric or geographically close white/coloured polymorphism;
-- phylogenetically replicated white origins.
-
-## Sample identity rule
-
-Every field individual receives one immutable `individual_id` linking:
-
-- coordinates;
-- taxon determination;
-- field colour and standardized photograph;
-- reflectance spectrum;
+- coordinates and population;
+- taxon determination and voucher/voucher-linked images;
+- standardized visible colour and UV record where feasible;
+- natural capitulum orientation;
+- direct phyllary spread, spine length/direction and stickiness score;
 - DNA sample;
-- RNA sample(s);
-- pigment sample;
-- voucher;
-- eventual sequencing libraries.
+- plastid companion;
+- flow-cytometry/cytotype material;
+- later Aim 2 and Aim 3 samples when the individual enters those subsets.
+
+### Biological material to secure now
+
+For core population-genomic individuals:
+
+- silica-dried leaf tissue for DNA;
+- fresh leaf material suitable for flow cytometry, with appropriate reference material recorded;
+- voucher or voucher-linked material;
+- standardized capitulum photographs/reflectance for flowering individuals.
+
+The purpose is to discriminate standing ancestral variation, introgression/gene flow and lineage-specific origin. RAD/resequencing is a shallow population layer, not the universal species backbone.
+
+## Aim 2 — nested functional subset
+
+Aim 2 is **not a separate field campaign**. Functional plants remain linked to Aim 1 populations and ancestry.
+
+### Experiment order
+
+1. **Head orientation first**
+   - natural angle;
+   - non-destructive reorientation/sham where feasible;
+   - rain/wetting exposure;
+   - pollen wetting/viability;
+   - visitor guild and effective contact;
+   - reproductive output.
+
+2. **W/coloured function second**
+   - ancestry-resolved W/C comparisons;
+   - visible + UV phenotype;
+   - effective pollination and relevant abiotic response;
+   - achene/seed output;
+   - share material with Aim 3.
+
+3. **Phyllary/spine conditional third**
+   - only after direct botanical measurement validates the Azami image proxies;
+   - only if repeatable focal-population variation exists;
+   - only if manipulation can avoid a dominant wound artifact.
+
+4. **Stickiness lower priority**
+   - record opportunistically;
+   - do not displace orientation or colour.
+
+### Two linked data levels
+
+Focal capitulum/treatment:
+
+`sampling/aim2_capitulum_field_ledger_v1.csv`
+
+Plant × phenology / seasonal display and predation:
+
+`sampling/aim2_plant_display_predation_ledger_v1.csv`
+
+Do not collapse these levels. Head orientation is a capitulum-level trait; seasonal display and cumulative seed-predator load are plant-level quantities.
+
+### Replication
+
+An orientation feasibility pilot may begin at about 10 experimental units per treatment per population where feasible. Final replication is set after pilot variance, treatment loss and the feasible experimental unit (capitulum or plant) are known.
+
+## Aim 3 — flowering-stage mechanistic subset
+
+Aim 3 material must be collected during flowering because it cannot be reconstructed from DNA later.
+
+Use at least two independent W/C transitions. Priority systems:
+
+- *C. brevicaule* / *C. irumtiense*;
+- *C. pendulum* or *C. sieboldii* as an independent Japanese replicate;
+- *takaoense* remains a molecular/public anchor rather than a prerequisite for field completion.
+
+From the same `individual_id`, collect:
+
+- DNA/ancestry link from Aim 1;
+- floral RNA tissue at late bud / pigmentation onset;
+- floral RNA tissue at pre-anthesis or fresh anthesis;
+- separate pigment tissue;
+- calibrated visible/UV phenotype;
+- voucher link.
+
+Use a lab-approved RNA-preservation protocol (for example immediate freezing or an RNA-preservation reagent) consistently within a comparison. Record preservation time and method rather than mixing undocumented protocols.
+
+Where feasible, target 2–3 populations per colour state and 6–10 biological individuals per population/state for expression/pigment work. Final allocation can be adjusted after RNA-quality and variance pilots.
+
+## Do not expand now
+
+The following are explicitly deferred unless they change one of the three doctoral gates:
+
+- Japan38 × 3 same-library RAD sensitivity;
+- broad China/Taiwan collection just to increase taxon count;
+- heavy 294→296 nuclear reconstruction as a sampling prerequisite;
+- more broad-climate-only models;
+- additional SRA/BLAST fishing in place of morph-linked population/floral data.
 
 ## Stop rule
 
-Do not increase sequencing scale simply to maximize sample number. Expand sampling only when it resolves one of these uncertainties:
+Before adding a taxon, population, assay or analysis, ask which gate it changes:
 
-- transition direction;
-- ancestral polymorphism;
-- introgression;
-- candidate-locus association;
-- repeated use of the same molecular pathway.
+- **Gate 1:** source of reusable variation;
+- **Gate 2:** trait → interaction/protection → fitness;
+- **Gate 3:** retained pathway → floral regulation → pigment/colour.
+
+If it changes none of them, defer it.
