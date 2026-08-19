@@ -44,6 +44,34 @@ Ohashi & Yahara (2000), DOI `10.1139/b99-182`, studied two Japanese *C. purpurat
 
 This is especially important for the doctoral framing: more conspicuous or larger reproductive display can improve mutualist attraction yet simultaneously increase antagonist cost. Seasonal flower production is not treated as identical to a single-capitulum structural trait, so this study is a trade-off prior rather than a direct test of orientation or phyllary/spine function.
 
+## Narrow quantitative meta-analysis now added
+
+The previous prohibition applied to pooling the heterogeneous interaction evidence as though visitation, florivory, seed predation and different capitulum traits were one response. That prohibition remains.
+
+A **narrow experimental estimand** is now sufficiently coherent for a quantitative pilot:
+
+> benefit to reproductive output when insect herbivory on reproductive or apical tissues is experimentally reduced.
+
+Canonical quantitative files:
+
+- `data/evidence/cirsium_floral_herbivory_experimental_effects_v1.csv`
+- `analysis/meta_analyze_cirsium_floral_herbivory.py`
+- `data/evidence/cirsium_floral_herbivory_meta_pilot_v1.json`
+- `docs/AIM2_CIRSIUM_FLORAL_HERBIVORY_META_PILOT_2026-08-19.md`
+
+Current pool: **5 effect rows / 4 independent study clusters / 3 taxa or taxon concepts**.
+
+Random-effects pilot result:
+
+- pooled standardized `r = 0.3809`;
+- 95% CI `0.2208–0.5210`;
+- approximate equivalent standardized mean difference `= 0.8239`;
+- `I^2 = 68.35%`.
+
+Every leave-one-study-out pooled estimate remains positive. Thus the evidence has moved beyond a study count: the currently harmonizable experimental *Cirsium* literature shows a consistent reproductive benefit when insect herbivory is reduced.
+
+This magnitude remains provisional because two newer effects use test-statistic-to-partial-r variance approximations and only four independent studies are currently pooled. Public raw data from Adhikari & Russell 2014 and West & Louda 2021 are the immediate route to >=5–6 independently reanalysed experiments.
+
 ## Module diagnosis
 
 ### 1. Head orientation — highest priority
@@ -68,18 +96,11 @@ No direct phyllary/spine manipulation linked to antagonist exclusion, pollinator
 
 The recovered direct manipulation was null for the tested defence/seed-output effect, so stickiness is not assumed to define a defence syndrome.
 
-## Effect-size pooling gate
+## Pooling boundary
 
-Formal pooling remains **not authorized**. One harmonized contrast/outcome must have:
+**Broad heterogeneous interaction pooling remains unauthorized.** Do not combine pollinator visitation, effective pollination, florivory, seed predation, foliar herbivory or unrelated trait contrasts into one effect.
 
-- >=5 independent studies
-- >=3 taxa
-- compatible contrasts and response scales
-- original-study deduplication
-- sampling variance or recoverable summary statistics
-- retained null results
-
-There are now six independent pre-dispersal seed-predation studies in the bounded seed, but they do **not** form one harmonized effect: some quantify flower production, capitulum size/position, stickiness or interaction-only predation. The count alone does not authorize pooling.
+The new floral/reproductive-herbivory quantitative pilot is a separate, explicitly narrow estimand. It is allowed as a pilot but is not yet a definitive publication-grade genus-wide magnitude.
 
 ## Current doctoral decision
 
@@ -91,4 +112,4 @@ There are now six independent pre-dispersal seed-predation studies in the bounde
 
 ## Claim boundary
 
-The evidence map identifies functional priors and gaps. It does not estimate a pooled effect, prove adaptive radiation, or infer that an unrecovered study is absent.
+The evidence map identifies functional priors and gaps. The separate narrow meta-analysis quantitatively supports a reproductive cost of insect herbivory in the currently extractable experiments, but it does not prove adaptive radiation or identify which capitulum module caused that cost.
