@@ -10,6 +10,7 @@ on:
       - "docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md"
       - "sampling/SAMPLING_DESIGN.md"
       - "sampling/README.md"
+      - "sampling/aim13_individual_sample_ledger_v1.csv"
       - "PROJECT_STATUS.md"
       - "README.md"
       - ".github/workflows/validate-preliminary-hypothesis-registry.yml"
@@ -23,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - name: Validate one-center three-Aim doctoral hierarchy and next-data gates
+      - name: Validate one-center three-Aim hierarchy, next-data gates and sample identity
         run: |
           python - <<'PY'
           import csv
@@ -50,6 +51,21 @@ jobs:
           assert 'at least 2 independent W/C transitions' in by['AIM3']['minimum_scale']
           assert 'late bud/pigmentation onset' in by['AIM3']['collect_now']
 
+          ledger_path=Path('sampling/aim13_individual_sample_ledger_v1.csv')
+          with ledger_path.open(encoding='utf-8',newline='') as handle:
+              fields=next(csv.reader(handle))
+          required={
+              'individual_id','population_id','taxon','voucher_id',
+              'visible_colour_standard','uv_reflectance_file','natural_orientation_deg',
+              'involucre_spread_deg','spine_length_mm','dna_sample_id',
+              'plastid_source_sample_id','flow_cytometry_sample_id','flow_cytometry_reference_id',
+              'aim2_capitulum_ids','floral_rna_late_bud_sample_id',
+              'floral_rna_late_bud_preservation','floral_rna_anthesis_sample_id',
+              'floral_rna_anthesis_preservation','pigment_sample_id','pigment_preservation'
+          }
+          assert required <= set(fields), required-set(fields)
+          assert fields.count('individual_id')==1
+
           support=list(csv.DictReader(Path('data/evidence/preliminary_hypothesis_registry_v1.csv').open(encoding='utf-8',newline='')))
           expected={'H-RAD1','H-EVOL1','H-CLIM1','H-PL1','H-COL1','H-RET1','H-MECH1','H-CYTO1','H-ADAPT1','H-RYK1'}
           assert {r['hypothesis_id'] for r in support}==expected
@@ -63,7 +79,7 @@ jobs:
           status=Path('PROJECT_STATUS.md').read_text(encoding='utf-8')
           for phrase in ['The only three unresolved doctoral gates','Core = 190','head orientation first','at least **two independent W/C transitions**']:
               assert phrase in gate, phrase
-          for phrase in ['Sampling design — doctoral mainline','**Core = 190 individuals.**','Aim 2 is **not a separate field campaign**','Aim 3 material must be collected during flowering','Japan38 × 3 same-library RAD sensitivity']:
+          for phrase in ['Sampling design — doctoral mainline','**Core = 190 individuals.**','Aim 2 is **not a separate field campaign**','Aim 3 material must be collected during flowering','aim13_individual_sample_ledger_v1.csv','Japan38 × 3 same-library RAD sensitivity']:
               assert phrase in sampling, phrase
           assert 'three unresolved new-data gates' in status
 
@@ -75,5 +91,6 @@ jobs:
           print('doctoral_centers=1')
           print('doctoral_aims=3')
           print('next_data_gates=3')
+          print('cross_aim_individual_ledger_valid=true')
           print('full_minimum_population_panel=222')
           PY
