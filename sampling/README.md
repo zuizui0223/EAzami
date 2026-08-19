@@ -5,10 +5,13 @@ Current doctoral sampling source of truth:
 1. `../data/evidence/doctoral_next_data_minimum_v1.csv` — the three unresolved new-data gates;
 2. `SAMPLING_DESIGN.md` — field/material collection rules;
 3. `../data/evidence/japan_radseq_phase_a_sampling_targets_v1.csv` — exact population-genomic counts;
-4. `aim2_capitulum_field_ledger_v1.csv` — focal capitulum/treatment outcomes;
-5. `aim2_plant_display_predation_ledger_v1.csv` — plant-level seasonal display/predation outcomes.
+4. `aim13_individual_sample_ledger_v1.csv` — one biological individual linking DNA, plastid, cytotype, Aim 2 IDs, floral RNA and pigment;
+5. `aim2_capitulum_field_ledger_v1.csv` — focal capitulum/treatment outcomes;
+6. `aim2_plant_display_predation_ledger_v1.csv` — plant-level seasonal display/predation outcomes.
 
 Core rule: protect the 190-individual focal population panel before adding controls or sensitivity sampling.
+
+Identity rule: `individual_id` is immutable across Aims. RNA, pigment, cytotype and treatment IDs do not create new biological-individual identities.
 
 Historical/conditional files remain for provenance but are not equal-priority sampling plans:
 
