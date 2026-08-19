@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-"""Pilot quantitative meta-analysis of experimental Cirsium floral/reproductive herbivory.
+"""Quantitative pilot meta-analysis of experimental Cirsium reproductive herbivory.
 
-Primary estimand: standardized benefit to reproductive output when insect herbivory
-on reproductive/apical tissues is experimentally reduced. Positive effects mean
-higher reproductive output under reduced herbivory.
+Estimand: benefit to reproductive output when insect herbivory on reproductive or
+apical tissues is experimentally reduced. Positive effects mean higher reproductive
+output under reduced herbivory.
 
-This script intentionally keeps publication-grade and provisional inputs separate.
-Published Hedges d values are transformed exactly to Fisher z. Newer t/F model
+Published Hedges-d values are transformed exactly to Fisher z. Newer t/F model
 statistics are transformed to partial-r/Fisher-z with a documented denominator-df
-variance approximation; they must be replaced by raw-data/model-covariance effects
-before a definitive publication-level pooled estimate is claimed.
+variance approximation. The latter must be replaced by raw-data/model-covariance
+effects before a definitive publication-level magnitude is claimed.
 """
 
 from __future__ import annotations
@@ -27,34 +26,25 @@ def rf(x: float) -> float:
 
 
 def d_to_z(d: float, var_d: float) -> tuple[float, float, float]:
-    """Convert standardized mean difference to r then Fisher z.
-
-    atanh(d/sqrt(d^2+4)) == asinh(d/2). Delta-method var(z)=var(d)/(d^2+4).
-    """
     r = d / math.sqrt(d * d + 4.0)
     z = math.atanh(r)
-    var_z = var_d / (d * d + 4.0)
-    return r, z, var_z
+    return r, z, var_d / (d * d + 4.0)
 
 
 def t_to_z(t: float, df: float) -> tuple[float, float, float]:
     r = abs(t) / math.sqrt(t * t + df)
-    z = math.atanh(r)
-    var_z = 1.0 / (df - 1.0)
-    return r, z, var_z
+    return r, math.atanh(r), 1.0 / (df - 1.0)
 
 
 def f_to_z(f_value: float, df_error: float) -> tuple[float, float, float]:
     r = math.sqrt(f_value / (f_value + df_error))
-    z = math.atanh(r)
-    var_z = 1.0 / (df_error - 1.0)
-    return r, z, var_z
+    return r, math.atanh(r), 1.0 / (df_error - 1.0)
 
 
 def inverse_variance_combine(items: list[dict]) -> tuple[float, float]:
     weights = [1.0 / x["var_z"] for x in items]
-    pooled = sum(w * x["z"] for w, x in zip(weights, items)) / sum(weights)
-    return pooled, 1.0 / sum(weights)
+    z = sum(w * x["z"] for w, x in zip(weights, items)) / sum(weights)
+    return z, 1.0 / sum(weights)
 
 
 def dl_random_effects(studies: list[dict]) -> dict:
@@ -70,14 +60,11 @@ def dl_random_effects(studies: list[dict]) -> dict:
     pooled = sum(wi * x["z"] for wi, x in zip(wr, studies)) / sum(wr)
     var = 1.0 / sum(wr)
     se = math.sqrt(var)
-    lo = pooled - 1.96 * se
-    hi = pooled + 1.96 * se
+    lo, hi = pooled - 1.96 * se, pooled + 1.96 * se
     z_stat = pooled / se
     p_two = math.erfc(abs(z_stat) / math.sqrt(2.0))
     i2 = max(0.0, (q - (k - 1)) / q) * 100.0 if q > 0 else 0.0
-    r = math.tanh(pooled)
-    r_lo = math.tanh(lo)
-    r_hi = math.tanh(hi)
+    r, r_lo, r_hi = math.tanh(pooled), math.tanh(lo), math.tanh(hi)
 
     def r_to_d(value: float) -> float:
         return 2.0 * value / math.sqrt(1.0 - value * value)
@@ -91,10 +78,7 @@ def dl_random_effects(studies: list[dict]) -> dict:
         "pooled_r": rf(r),
         "ci95_r": [rf(r_lo), rf(r_hi)],
         "approx_equivalent_standardized_mean_difference": rf(r_to_d(r)),
-        "approx_equivalent_standardized_mean_difference_ci95": [
-            rf(r_to_d(r_lo)),
-            rf(r_to_d(r_hi)),
-        ],
+        "approx_equivalent_standardized_mean_difference_ci95": [rf(r_to_d(r_lo)), rf(r_to_d(r_hi))],
         "z_test": rf(z_stat),
         "p_two_sided": rf(p_two),
         "Q": rf(q),
@@ -107,18 +91,16 @@ def dl_random_effects(studies: list[dict]) -> dict:
 def load_effects(path: Path) -> tuple[list[dict], list[dict]]:
     with path.open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
-    included = []
-    pending = []
+    included, pending = [], []
     for row in rows:
         if row["primary_meta_status"] != "include":
             pending.append(row)
             continue
         test_type = row["test_type"]
         if test_type == "reported_Hedges_d":
-            # Source d is damage-vs-undamaged; reverse sign so positive means benefit of reducing herbivory.
+            # Source d is damage-vs-undamaged. Reverse sign so positive means benefit of reducing herbivory.
             d = -float(row["reported_hedges_d"])
-            var_d = float(row["reported_var_d"])
-            r, z, var_z = d_to_z(d, var_d)
+            r, z, var_z = d_to_z(d, float(row["reported_var_d"]))
             variance_basis = "exact_delta_from_published_Hedges_d_variance"
         elif test_type == "t":
             r, z, var_z = t_to_z(float(row["test_stat"]), float(row["df_error"]))
@@ -128,21 +110,18 @@ def load_effects(path: Path) -> tuple[list[dict], list[dict]]:
             variance_basis = "approx_1_over_df_minus_1_from_one_df_F"
         else:
             raise ValueError(f"Unsupported included test type: {test_type}")
-        included.append(
-            {
-                "study_id": row["study_id"],
-                "effect_id": row["effect_id"],
-                "study_cluster": row["study_cluster"],
-                "taxon": row["taxon"],
-                "year": int(row["year"]),
-                "test_type": test_type,
-                "r": r,
-                "z": z,
-                "var_z": var_z,
-                "variance_basis": variance_basis,
-                "source_locator": row["source_locator"],
-            }
-        )
+        included.append({
+            "study_cluster": row["study_cluster"],
+            "effect_id": row["effect_id"],
+            "taxon": row["taxon"],
+            "year": int(row["year"]),
+            "test_type": test_type,
+            "r": r,
+            "z": z,
+            "var_z": var_z,
+            "variance_basis": variance_basis,
+            "source_locator": row["source_locator"],
+        })
     return included, pending
 
 
@@ -156,60 +135,47 @@ def summarize(input_path: Path) -> dict:
     for cluster in sorted(by_study):
         items = by_study[cluster]
         z, var_z = inverse_variance_combine(items)
-        study_level.append(
-            {
-                "study_cluster": cluster,
-                "n_effects_collapsed": len(items),
-                "fisher_z": z,
-                "var_z": var_z,
-                "r": math.tanh(z),
-                "taxa": sorted({x["taxon"] for x in items}),
-            }
-        )
+        study_level.append({
+            "study_cluster": cluster,
+            "n_effects_collapsed": len(items),
+            "z": z,
+            "var_z": var_z,
+            "r": math.tanh(z),
+            "taxa": sorted({x["taxon"] for x in items}),
+        })
 
     pooled = dl_random_effects(study_level)
     leave_one_out = []
     for omitted in sorted(x["study_cluster"] for x in study_level):
-        subset = [x for x in study_level if x["study_cluster"] != omitted]
-        loo = dl_random_effects(subset)
-        leave_one_out.append(
-            {
-                "omitted_study": omitted,
-                "pooled_r": loo["pooled_r"],
-                "ci95_r": loo["ci95_r"],
-                "I2_percent": loo["I2_percent"],
-            }
-        )
+        loo = dl_random_effects([x for x in study_level if x["study_cluster"] != omitted])
+        leave_one_out.append({
+            "omitted_study": omitted,
+            "pooled_r": loo["pooled_r"],
+            "ci95_r": loo["ci95_r"],
+            "I2_percent": loo["I2_percent"],
+        })
 
-    effect_out = []
-    for x in effects:
-        effect_out.append(
-            {
-                "study_cluster": x["study_cluster"],
-                "effect_id": x["effect_id"],
-                "taxon": x["taxon"],
-                "year": x["year"],
-                "test_type": x["test_type"],
-                "r": rf(x["r"]),
-                "fisher_z": rf(x["z"]),
-                "var_z": rf(x["var_z"]),
-                "variance_basis": x["variance_basis"],
-                "source_locator": x["source_locator"],
-            }
-        )
+    effect_out = [{
+        "study_cluster": x["study_cluster"],
+        "effect_id": x["effect_id"],
+        "taxon": x["taxon"],
+        "year": x["year"],
+        "test_type": x["test_type"],
+        "r": rf(x["r"]),
+        "fisher_z": rf(x["z"]),
+        "var_z": rf(x["var_z"]),
+        "variance_basis": x["variance_basis"],
+        "source_locator": x["source_locator"],
+    } for x in effects]
 
-    study_out = []
-    for x in study_level:
-        study_out.append(
-            {
-                "study_cluster": x["study_cluster"],
-                "n_effects_collapsed": x["n_effects_collapsed"],
-                "fisher_z": rf(x["fisher_z"]),
-                "var_z": rf(x["var_z"]),
-                "r": rf(x["r"]),
-                "taxa": x["taxa"],
-            }
-        )
+    study_out = [{
+        "study_cluster": x["study_cluster"],
+        "n_effects_collapsed": x["n_effects_collapsed"],
+        "fisher_z": rf(x["z"]),
+        "var_z": rf(x["var_z"]),
+        "r": rf(x["r"]),
+        "taxa": x["taxa"],
+    } for x in study_level]
 
     return {
         "contract_version": "cirsium_floral_herbivory_meta_pilot_v1",
@@ -226,11 +192,7 @@ def summarize(input_path: Path) -> dict:
         "study_level": study_out,
         "random_effects": pooled,
         "leave_one_study_out": leave_one_out,
-        "current_quantitative_inference": (
-            "In this four-study pilot, experimentally reducing reproductive/apical insect herbivory "
-            "has a consistently positive standardized association with reproductive output. The "
-            "random-effects pooled direction remains positive in every leave-one-study-out analysis."
-        ),
+        "current_quantitative_inference": "In this four-study pilot, experimentally reducing reproductive/apical insect herbivory has a consistently positive standardized association with reproductive output. The random-effects pooled direction remains positive in every leave-one-study-out analysis.",
         "publication_gate": {
             "status": "pilot_quantitative_meta_not_publication_grade",
             "reasons": [
@@ -246,12 +208,7 @@ def summarize(input_path: Path) -> dict:
                 "then fit a multilevel random-effects model with study and taxon/tissue moderators",
             ],
         },
-        "claim_boundary": (
-            "This is a real quantitative pilot meta-analysis, not an evidence count, but it is not yet "
-            "a definitive pooled effect size. It supports a robust direction of reproductive cost from "
-            "insect herbivory in the currently extractable Cirsium experiments; magnitude and moderators "
-            "remain provisional until raw-data harmonization expands the independent-study set."
-        ),
+        "claim_boundary": "This is a real quantitative pilot meta-analysis, not an evidence count, but it is not yet a definitive pooled effect size. It supports a robust direction of reproductive cost from insect herbivory in the currently extractable Cirsium experiments; magnitude and moderators remain provisional until raw-data harmonization expands the independent-study set.",
     }
 
 
