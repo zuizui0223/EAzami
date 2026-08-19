@@ -21,10 +21,13 @@ jobs:
           python -m py_compile analysis/meta_analyze_cirsium_floral_herbivory_lnrr_v2.py
           python -m unittest tests/test_meta_analyze_cirsium_floral_herbivory_lnrr_v2.py -v
           python analysis/meta_analyze_cirsium_floral_herbivory_lnrr_v2.py --input data/evidence/cirsium_floral_herbivory_lnrr_effects_v2.csv --output /tmp/v2.json
-          cmp /tmp/v2.json data/evidence/cirsium_floral_herbivory_lnrr_meta_v2.json
           python - <<'PY'
           import json
-          d=json.load(open('data/evidence/cirsium_floral_herbivory_lnrr_meta_v2.json'))
+          from pathlib import Path
+          rebuilt=json.loads(Path('/tmp/v2.json').read_text(encoding='utf-8'))
+          frozen=json.loads(Path('data/evidence/cirsium_floral_herbivory_lnrr_meta_v2.json').read_text(encoding='utf-8'))
+          assert rebuilt == frozen
+          d=frozen
           assert d['coverage']['independent_study_clusters']==4
           assert 2.3 < d['random_effects']['response_ratio'] < 3.1
           assert d['random_effects']['ci95_response_ratio'][0] > 1
