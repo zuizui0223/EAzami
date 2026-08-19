@@ -1,0 +1,65 @@
+{
+  "contract_version": "cirsium_floral_herbivory_meta_pilot_v1",
+  "status_date": "2026-08-19",
+  "estimand": "benefit_to_reproductive_output_when_insect_herbivory_on_reproductive_or_apical_tissues_is_experimentally_reduced",
+  "effect_direction": "positive_means_higher_reproductive_output_under_reduced_herbivory",
+  "effect_level": [
+    {"study_cluster":"Maron2002","effect_id":"MARON_OLD_DUNE","taxon":"Cirsium occidentale var. occidentale","year":2002,"test_type":"reported_Hedges_d","r":0.685103349982,"fisher_z":0.838668843198,"var_z":0.015255710246,"variance_basis":"exact_delta_from_published_Hedges_d_variance","source_locator":"doi:10.1371/journal.pone.0146437_table1"},
+    {"study_cluster":"Maron2002","effect_id":"MARON_NEW_DUNE","taxon":"Cirsium occidentale var. occidentale","year":2002,"test_type":"reported_Hedges_d","r":0.343702731609,"fisher_z":0.358285237721,"var_z":0.019621572618,"variance_basis":"exact_delta_from_published_Hedges_d_variance","source_locator":"doi:10.1371/journal.pone.0146437_table1"},
+    {"study_cluster":"LoudaPotvin1995","effect_id":"LOUDA_POTVIN","taxon":"Cirsium canescens","year":1995,"test_type":"reported_Hedges_d","r":0.378957126933,"fisher_z":0.398841334518,"var_z":0.010276697951,"variance_basis":"exact_delta_from_published_Hedges_d_variance","source_locator":"doi:10.1371/journal.pone.0146437_table1"},
+    {"study_cluster":"WestLouda2018","effect_id":"WEST_PER_HEAD","taxon":"Cirsium canescens","year":2018,"test_type":"t","r":0.241209671493,"fisher_z":0.246058116194,"var_z":0.007936507937,"variance_basis":"approx_1_over_df_minus_1_from_mixed_model_t","source_locator":"doi:10.1007/s00442-017-4027-9_appendix"},
+    {"study_cluster":"RussellHouseman2019","effect_id":"RUSSELL_INSECT_CONTRAST","taxon":"Cirsium altissimum","year":2019,"test_type":"F","r":0.306968018692,"fisher_z":0.317194548439,"var_z":0.016393442623,"variance_basis":"approx_1_over_df_minus_1_from_one_df_F","source_locator":"doi:10.1093/jpe/rty045_results_seed_production"}
+  ],
+  "coverage": {
+    "included_effect_rows": 5,
+    "independent_study_clusters": 4,
+    "included_taxa": ["Cirsium altissimum","Cirsium canescens","Cirsium occidentale var. occidentale"],
+    "pending_raw_data_studies": ["AdhikariRussell2014","WestLouda2021"]
+  },
+  "study_level": [
+    {"study_cluster":"LoudaPotvin1995","n_effects_collapsed":1,"fisher_z":0.398841334518,"var_z":0.010276697951,"r":0.378957126933,"taxa":["Cirsium canescens"]},
+    {"study_cluster":"Maron2002","n_effects_collapsed":2,"fisher_z":0.628543727648,"var_z":0.008582693428,"r":0.557048643988,"taxa":["Cirsium occidentale var. occidentale"]},
+    {"study_cluster":"RussellHouseman2019","n_effects_collapsed":1,"fisher_z":0.317194548439,"var_z":0.016393442623,"r":0.306968018692,"taxa":["Cirsium altissimum"]},
+    {"study_cluster":"WestLouda2018","n_effects_collapsed":1,"fisher_z":0.246058116194,"var_z":0.007936507937,"r":0.241209671493,"taxa":["Cirsium canescens"]}
+  ],
+  "random_effects": {
+    "method": "DerSimonian-Laird_random_effects_pilot",
+    "k_independent_studies": 4,
+    "pooled_fisher_z": 0.40112051437,
+    "se_fisher_z": 0.090127936064,
+    "ci95_fisher_z": [0.224469759685,0.577771269056],
+    "pooled_r": 0.380907309405,
+    "ci95_r": [0.220774131228,0.521043655081],
+    "approx_equivalent_standardized_mean_difference": 0.82392788209,
+    "approx_equivalent_standardized_mean_difference_ci95": [0.452719123693,1.220914643191],
+    "z_test": 4.450568068988,
+    "p_two_sided": 0.000008564344,
+    "Q": 9.47944724705,
+    "Q_df": 3,
+    "tau2_fisher_z": 0.022006261019,
+    "I2_percent": 68.352585105279
+  },
+  "leave_one_study_out": [
+    {"omitted_study":"LoudaPotvin1995","pooled_r":0.380377728769,"ci95_r":[0.148466217179,0.572632308263],"I2_percent":78.890301275572},
+    {"omitted_study":"Maron2002","pooled_r":0.303720135768,"ci95_r":[0.194847454497,0.405199615861],"I2_percent":0.0},
+    {"omitted_study":"RussellHouseman2019","pooled_r":0.400156177542,"ci95_r":[0.195977904927,0.571079538444],"I2_percent":77.585300201384},
+    {"omitted_study":"WestLouda2018","pooled_r":0.431001259399,"ci95_r":[0.267463593179,0.5704039831],"I2_percent":58.572334152329}
+  ],
+  "current_quantitative_inference": "In this four-study pilot, experimentally reducing reproductive/apical insect herbivory has a consistently positive standardized association with reproductive output. The random-effects pooled direction remains positive in every leave-one-study-out analysis.",
+  "publication_gate": {
+    "status": "pilot_quantitative_meta_not_publication_grade",
+    "reasons": [
+      "only four independent study clusters are currently pooled",
+      "two newer studies use test-statistic-to-partial-r variance approximations",
+      "tissue targeted by insect manipulation differs among floral heads, broader insect exclusion and apical meristems",
+      "raw-data reanalysis is available for additional studies and should replace approximations where possible"
+    ],
+    "next_required": [
+      "reanalyse Adhikari_Russell_2014 Dryad individual data to the same reproductive-output estimand",
+      "reanalyse West_Louda_2021 public plant/head data to the same estimand",
+      "recover raw/group-level variance for West_Louda_2018 and Russell_Houseman_2019 where possible",
+      "then fit a multilevel random-effects model with study and taxon/tissue moderators"
+    ]
+  },
+  "claim_boundary": "This is a real quantitative pilot meta-analysis, not an evidence count, but it is not yet a definitive pooled effect size. It supports a robust direction of reproductive cost from insect herbivory in the currently extractable Cirsium experiments; magnitude and moderators remain provisional until raw-data harmonization expands the independent-study set."
+}
