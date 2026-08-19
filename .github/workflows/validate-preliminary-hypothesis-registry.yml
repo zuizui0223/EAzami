@@ -1,5 +1,4 @@
 name: Validate doctoral core program
-
 on:
   pull_request:
     paths:
@@ -11,62 +10,39 @@ on:
       - "README.md"
       - ".github/workflows/validate-preliminary-hypothesis-registry.yml"
   workflow_dispatch:
-
 permissions:
   contents: read
-
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+        with: {python-version: "3.12"}
       - name: Validate one-center three-Aim doctoral hierarchy
         run: |
           python - <<'PY'
           import csv
           from pathlib import Path
-
           core=list(csv.DictReader(Path('data/evidence/doctoral_core_program_v1.csv').open(encoding='utf-8',newline='')))
-          centers=[r for r in core if r['level']=='central']
-          aims=[r for r in core if r['level']=='aim']
+          centers=[r for r in core if r['level']=='central']; aims=[r for r in core if r['level']=='aim']
           assert len(centers)==1 and centers[0]['id']=='CORE'
           assert [r['id'] for r in sorted(aims,key=lambda r:int(r['priority']))]==['AIM1','AIM2','AIM3']
           assert aims[0]['role']=='indispensable'
           assert aims[1]['role']=='indispensable_for_adaptive_claim'
           assert aims[2]['role']=='mechanistic_flagship'
           for r in centers+aims:
-              assert r['core_question'].strip()
-              assert r['prediction'].strip()
-              assert r['required_data'].strip()
-              assert r['success_criterion'].strip()
-
+              assert r['core_question'].strip() and r['prediction'].strip() and r['required_data'].strip() and r['success_criterion'].strip()
           support=list(csv.DictReader(Path('data/evidence/preliminary_hypothesis_registry_v1.csv').open(encoding='utf-8',newline='')))
           expected={'H-RAD1','H-EVOL1','H-CLIM1','H-PL1','H-COL1','H-RET1','H-MECH1','H-CYTO1','H-ADAPT1','H-RYK1'}
           assert {r['hypothesis_id'] for r in support}==expected
-
           doc=Path('docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md').read_text(encoding='utf-8')
-          assert 'One central question' in doc
-          assert 'One central hypothesis' in doc
-          assert 'Aim 1 — Historical/genomic source' in doc
-          assert 'Aim 2 — Adaptive function' in doc
-          assert 'Aim 3 — Flower-colour reversibility' in doc
-          assert '**Core = 190 individuals.**' in doc
-          assert '**Full minimum = 222; recommended = 298.**' in doc
-          assert 'Supporting lanes, not extra Aims' in doc
-          assert '12 independent studies, 10 taxa and 14 taxon-study rows' in doc
-
-          readme=Path('README.md').read_text(encoding='utf-8')
-          status=Path('PROJECT_STATUS.md').read_text(encoding='utf-8')
-          support_map=Path('docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md').read_text(encoding='utf-8')
+          for phrase in ['One central question','One central hypothesis','Aim 1 — Historical/genomic source','Aim 2 — Adaptive function','Aim 3 — Flower-colour reversibility','**Core = 190 individuals.**','**Full minimum = 222; recommended = 298.**','Supporting lanes, not extra Aims','13 independent studies, 10 taxa and 15 taxon-study rows']:
+              assert phrase in doc, phrase
+          readme=Path('README.md').read_text(encoding='utf-8'); status=Path('PROJECT_STATUS.md').read_text(encoding='utf-8'); support_map=Path('docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md').read_text(encoding='utf-8')
           assert 'one doctoral-level question' in readme
           assert 'doctoral center' in status.lower()
           assert 'not the doctoral hypothesis hierarchy' in support_map
           assert '190 core individuals' in support_map
-          print('doctoral_centers=1')
-          print('doctoral_aims=3')
-          print('support_lanes=10')
-          print('full_minimum_population_panel=222')
+          print('doctoral_centers=1'); print('doctoral_aims=3'); print('support_lanes=10'); print('full_minimum_population_panel=222')
           PY

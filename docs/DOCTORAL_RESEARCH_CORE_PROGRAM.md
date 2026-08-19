@@ -22,16 +22,9 @@ Question:
 
 > Are repeated capitulum states produced by standing ancestral variation and/or introgression, with cytotype and cytonuclear history modifying the reusable variation pool?
 
-Core systems:
+Core systems: *C. brevicaule* + *C. irumtiense*, W/coloured *C. pendulum*, W/coloured *C. sieboldii*, with W/BP *takaoense* as molecular/public anchor. *C. lineare* and *C. dipsacolepis* are controls.
 
-- *C. brevicaule* + *C. irumtiense*
-- W/coloured *C. pendulum*
-- W/coloured *C. sieboldii*
-- W/BP *takaoense* as molecular/public anchor
-
-Controls: *C. lineare* and *C. dipsacolepis*.
-
-Required individual chain:
+Required chain:
 
 `standardized phenotype -> nuclear population ancestry -> plastid haplotype -> cytotype`
 
@@ -45,32 +38,27 @@ Question:
 
 > Do rapidly divergent capitulum modules alter pollination, abiotic protection, antagonistic interactions and reproductive fitness?
 
-Current broad-climate tests do not provide a simple positive explanation, so new ecology targets function rather than more CHELSA-only correlations.
+The 2026-08-19 bounded interaction seed now contains **13 independent studies, 10 taxa and 15 taxon-study rows**.
 
-### Current *Cirsium* interaction evidence map
+Current priors:
 
-The 2026-08-19 bounded seed contains **12 independent studies, 10 taxa and 14 taxon-study rows**. Pollinator behaviour, effective pollination, florivory, pre-dispersal seed predation and vegetative-herbivory context remain separate.
-
-The targeted recheck corrected one earlier overstatement:
-
-- a classic *C. palustre* natural colour-polymorphism study reports preferential pollination of white flowers;
-- therefore flower colour is **not** a direct-interaction evidence blank;
-- however the bounded seed still has no replicated ancestry-controlled colour→effective-pollination→reproductive-fitness chain.
-
-Predation evidence also includes *C. palustre* and *C. vulgare* achene-production costs, strengthening antagonist relevance without assigning that cost to a specific spine/phyllary mechanism.
+- *C. palustre* provides direct natural flower-colour→pollination evidence, but not a replicated ancestry-controlled colour→effective-pollination→fitness chain.
+- *C. palustre* and *C. vulgare* show substantial predation-associated achene losses.
+- Japanese *C. purpuratum* shows that greater seasonal flower production can increase pre-dispersal seed predation and counteract reproductive gains, directly supporting a mutualist-attraction versus antagonist-cost trade-off framing.
+- no direct *Cirsium* head-orientation or phyllary/spine manipulation linked through interaction to reproductive fitness was recovered in the bounded targeted search.
 
 Current field order:
 
-1. **orientation manipulation first** — no direct *Cirsium* orientation→interaction/protection→fitness experiment recovered;
-2. **W/coloured comparison second** — now informed by the *C. palustre* pollination prior and nested with Aim 3;
-3. **phyllary/spine conditional third** — only after direct botanical validation and repeatable focal variation;
-4. **stickiness lower priority** — recovered direct manipulation was null.
+1. **orientation manipulation first**;
+2. **W/coloured comparison second**, informed by the *C. palustre* pollination prior and nested with Aim 3;
+3. **phyllary/spine conditional third**, only after direct botanical validation;
+4. **stickiness lower priority**.
 
 Required evidence:
 
 `trait -> interaction/protection -> reproductive fitness`
 
-A pooled effect-size meta-analysis remains unauthorized until one harmonized outcome reaches >=5 independent studies and >=3 taxa with sampling variance and original-study deduplication.
+Formal pooling remains unauthorized. Six seed-predation studies do not form one harmonized effect because their traits and outcomes differ.
 
 Canonical Aim 2 files:
 
@@ -89,17 +77,15 @@ Question:
 
 > Are repeated white↔coloured transitions enabled by retention and regulatory reuse of anthocyanin machinery rather than repeated pathway destruction and rebuilding?
 
-Required same-individual chain:
+Required chain:
 
 `population ancestry -> coding/regulatory haplotype -> floral RNA -> pigment -> standardized colour`
 
-The *C. palustre* pollination result strengthens the ecological motivation for colour, but it does not answer the molecular or fitness question. Existing DFR/ANS homology/young-leaf signals remain pathway-retention plausibility only.
+The *C. palustre* pollination result strengthens the ecological motivation for colour but does not answer its molecular mechanism or fitness consequence. Existing DFR/ANS evidence remains pathway-retention plausibility only.
 
 Success criterion: at least two independent W/C transitions resolve whether regulatory reuse is recurrent.
 
 # Sampling priority
-
-Core minimum before controls:
 
 - *C. brevicaule* 60
 - *C. irumtiense* 60
@@ -108,28 +94,21 @@ Core minimum before controls:
 
 **Core = 190 individuals.**
 
-Controls:
-
-- *C. lineare* 16
-- *C. dipsacolepis* 16
+Controls: *C. lineare* 16 + *C. dipsacolepis* 16.
 
 **Full minimum = 222; recommended = 298.**
 
-Aim 2 experiments are nested inside the same ancestry-resolved focal populations. Do not reduce Aim 1 population replication to create a separate interaction-only campaign.
+Aim 2 experiments are nested inside the same ancestry-resolved populations. Do not reduce Aim 1 population replication to create a separate interaction-only campaign.
 
 # Supporting lanes, not extra Aims
 
-- radiation asymmetry = premise
-- reticulation/cytonuclear/ploidy/colour compression/Ryukyu history = Aim 1 diagnostics
-- broad climate = weakened simple alternative informing Aim 2
-- interaction evidence map = Aim 2 design support
-- anthocyanin pathway evidence = Aim 3 support
+Radiation asymmetry is premise; reticulation/cytonuclear/ploidy/colour compression/Ryukyu history are Aim 1 diagnostics; broad climate and the interaction evidence map support Aim 2 design; anthocyanin evidence supports Aim 3.
 
 # Stop rules
 
 - Do not create new thesis Aims from supporting analyses.
 - Do not use visitor abundance as effective pollination or fitness.
-- Do not pool distinct antagonist classes.
+- Do not pool distinct antagonist classes or heterogeneous seed-predation contrasts.
 - Do not infer functional absence from a bounded literature search.
 - Do not substitute more broad climate models for Aim 2 experiments.
 - Do not call the radiation adaptive until Aim 2 reaches reproductive fitness.
