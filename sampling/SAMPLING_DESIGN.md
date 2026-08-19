@@ -58,6 +58,12 @@ Every sampled individual receives one `individual_id` linking:
 - flow-cytometry/cytotype material;
 - later Aim 2 and Aim 3 samples when the individual enters those subsets.
 
+The canonical cross-Aim individual/sample ledger is:
+
+`sampling/aim13_individual_sample_ledger_v1.csv`
+
+Use **one row per biological individual**. Do not create a second individual identifier when that plant enters Aim 2 or Aim 3. Aim 2 capitulum IDs and Aim 3 RNA/pigment sample IDs must point back to this row.
+
 ### Biological material to secure now
 
 For core population-genomic individuals:
@@ -99,7 +105,11 @@ Aim 2 is **not a separate field campaign**. Functional plants remain linked to A
    - record opportunistically;
    - do not displace orientation or colour.
 
-### Two linked data levels
+### Three linked data levels
+
+Individual/sample identity across Aim 1 and Aim 3:
+
+`sampling/aim13_individual_sample_ledger_v1.csv`
 
 Focal capitulum/treatment:
 
@@ -109,7 +119,7 @@ Plant × phenology / seasonal display and predation:
 
 `sampling/aim2_plant_display_predation_ledger_v1.csv`
 
-Do not collapse these levels. Head orientation is a capitulum-level trait; seasonal display and cumulative seed-predator load are plant-level quantities.
+Do not collapse these levels. Head orientation is a capitulum-level trait; seasonal display and cumulative seed-predator load are plant-level quantities; DNA/cytotype/RNA/pigment identity belongs to the biological individual.
 
 ### Replication
 
@@ -133,6 +143,8 @@ From the same `individual_id`, collect:
 - separate pigment tissue;
 - calibrated visible/UV phenotype;
 - voucher link.
+
+Record the actual sample IDs, collection time and preservation method in `aim13_individual_sample_ledger_v1.csv` at collection time. A freezer label or notebook-only mapping is not treated as the canonical identity record.
 
 Use a lab-approved RNA-preservation protocol (for example immediate freezing or an RNA-preservation reagent) consistently within a comparison. Record preservation time and method rather than mixing undocumented protocols.
 
