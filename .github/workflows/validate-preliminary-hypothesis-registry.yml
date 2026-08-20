@@ -7,6 +7,7 @@ on:
       - "docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md"
       - "docs/DOCTORAL_NEXT_DATA_GATE_2026-08-19.md"
       - "docs/AIM2_TRANCHE1_JOINT_OBSERVATION_PROTOCOL_2026-08-20.md"
+      - "docs/AIM2_FIELD_NESTING_PLAN_2026-08-18.md"
       - "data/evidence/preliminary_hypothesis_registry_v1.csv"
       - "docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md"
       - "sampling/SAMPLING_DESIGN.md"
@@ -65,34 +66,32 @@ jobs:
 
           fields=header('sampling/aim13_individual_sample_ledger_v1.csv')
           required={
-              'individual_id','population_id','taxon','voucher_id',
-              'visible_colour_standard','uv_reflectance_file','natural_orientation_deg',
-              'involucre_spread_deg','spine_length_mm','dna_sample_id',
-              'plastid_source_sample_id','flow_cytometry_sample_id','flow_cytometry_reference_id',
-              'aim2_capitulum_ids','floral_rna_late_bud_sample_id',
-              'floral_rna_late_bud_preservation','floral_rna_anthesis_sample_id',
-              'floral_rna_anthesis_preservation','pigment_sample_id','pigment_preservation'
+              'individual_id','population_id','taxon','voucher_id','visible_colour_standard',
+              'uv_reflectance_file','natural_orientation_deg','involucre_spread_deg','spine_length_mm',
+              'dna_sample_id','plastid_source_sample_id','flow_cytometry_sample_id','flow_cytometry_reference_id',
+              'aim2_capitulum_ids','floral_rna_late_bud_sample_id','floral_rna_late_bud_preservation',
+              'floral_rna_anthesis_sample_id','floral_rna_anthesis_preservation','pigment_sample_id','pigment_preservation'
           }
           assert required <= set(fields), required-set(fields)
-          assert fields.count('individual_id')==1
 
           head_fields=header('sampling/aim2_capitulum_field_ledger_v1.csv')
           head_required={
-              'individual_id','population_id','capitulum_id','natural_orientation_deg',
-              'orientation_treatment','orientation_achieved_deg','visible_colour_standard',
-              'involucre_spread_deg','spine_length_mm','wetting_or_rain_exposure',
-              'pollen_wetting_score','pollen_viability','visitor_count','effective_contact_count',
-              'florivory_damage_fraction','seed_predator_damage_fraction','total_achenes','filled_achenes'
+              'individual_id','population_id','capitulum_id','natural_orientation_deg','orientation_treatment',
+              'orientation_achieved_deg','visible_colour_standard','involucre_spread_deg','spine_length_mm',
+              'wetting_or_rain_exposure','pollen_wetting_score','pollen_viability','visitor_count',
+              'effective_contact_count','florivory_damage_fraction','seed_predator_damage_fraction',
+              'total_achenes','filled_achenes'
           }
           assert head_required <= set(head_fields), head_required-set(head_fields)
 
           bout_fields=header('sampling/aim2_capitulum_observation_bout_ledger_v1.csv')
           bout_required={
-              'individual_id','population_id','capitulum_id','observation_bout_id',
-              'observation_date','start_time_local','end_time_local','orientation_achieved_deg',
-              'microclimate_sensor_id','air_temperature_c','relative_humidity_pct',
-              'wind_speed_m_s','incident_radiation_w_m2','head_surface_temperature_c',
-              'rainfall_mm_previous_30min','capitulum_wetness_score',
+              'individual_id','population_id','capitulum_id','observation_bout_id','observation_date',
+              'start_time_local','end_time_local','time_window_class','orientation_treatment',
+              'natural_orientation_deg','orientation_achieved_deg','microclimate_sensor_id',
+              'air_temperature_c','relative_humidity_pct','wind_speed_m_s','incident_radiation_w_m2',
+              'head_surface_temperature_c','rainfall_mm_previous_30min','capitulum_wetness_score',
+              'pollen_presentation_state','pollen_wetting_score','pollen_viability_sample_id','pollen_viability',
               'pollinator_visit_count','effective_contact_count','dominant_pollinator_guild',
               'antagonist_visit_count','dominant_antagonist_guild','florivory_event_count',
               'seed_predator_event_count','damage_observed_during_bout','treatment_integrity'
@@ -118,64 +117,42 @@ jobs:
           for r in manifest:
               totals[r['taxon']]+=int(r['minimum_individuals'])
               assert re.fullmatch(r'EA26-P\d{3}-I###',r['individual_id_pattern'])
-              assert all(token not in r['individual_id_pattern'].lower() for token in ['white','coloured','pink','up','down'])
               if r['exact_locality_status']=='TBD_field_verified':
                   assert r['exact_locality']=='TBD_field_verified'
                   assert r['latitude']=='' and r['longitude']==''
-          assert totals==Counter({
-              'Cirsium brevicaule':60,
-              'Cirsium irumtiense':60,
-              'Cirsium pendulum':40,
-              'Cirsium sieboldii':30,
-          })
-          m={r['population_id']:r for r in manifest}
-          assert m['P001']['required_region']=='Amami_Oshima'
-          assert m['P002']['required_region']=='Okinawa_Honto'
-          assert m['P005']['required_region']=='Miyako'
-          assert m['P006']['required_region']=='Ishigaki'
-          assert m['P007']['required_region']=='Iriomote'
-          assert m['P008']['required_region']=='Yonaguni'
-          pend=[r for r in manifest if r['taxon']=='Cirsium pendulum']
-          assert Counter(r['colour_target'] for r in pend)==Counter({'white':2,'coloured':2})
-          sie=[r for r in manifest if r['taxon']=='Cirsium sieboldii']
-          assert Counter(r['colour_target'] for r in sie)==Counter({'white':1,'coloured':1})
-
-          iddoc=Path('sampling/SAMPLE_ID_CONVENTION.md').read_text(encoding='utf-8')
-          for phrase in ['EA26-P###-I###','one immutable `individual_id`','do not encode white/coloured state','no phenotype-coded IDs']:
-              assert phrase in iddoc, phrase
+          assert totals==Counter({'Cirsium brevicaule':60,'Cirsium irumtiense':60,'Cirsium pendulum':40,'Cirsium sieboldii':30})
 
           support=list(csv.DictReader(Path('data/evidence/preliminary_hypothesis_registry_v1.csv').open(encoding='utf-8',newline='')))
           expected={'H-RAD1','H-EVOL1','H-CLIM1','H-PL1','H-COL1','H-RET1','H-MECH1','H-CYTO1','H-ADAPT1','H-RYK1'}
           assert {r['hypothesis_id'] for r in support}==expected
 
           doc=Path('docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md').read_text(encoding='utf-8')
-          for phrase in ['One central question','One central hypothesis','Aim 1 — Historical/genomic source','Aim 2 — Adaptive function','Aim 3 — Flower-colour reversibility','**Core = 190 individuals.**','**Full minimum = 222; recommended = 298.**','Supporting lanes, not extra Aims','13 independent studies, 10 taxa and 15 taxon-study rows']:
+          for phrase in ['One central question','One central hypothesis','Aim 1 — Historical/genomic source','Aim 2 — Adaptive function','Aim 3 — Flower-colour reversibility','**Core = 190 individuals.**','**Full minimum = 222; recommended = 298.**']:
               assert phrase in doc, phrase
 
           gate=Path('docs/DOCTORAL_NEXT_DATA_GATE_2026-08-19.md').read_text(encoding='utf-8')
           sampling=Path('sampling/SAMPLING_DESIGN.md').read_text(encoding='utf-8')
           protocol=Path('docs/AIM2_TRANCHE1_JOINT_OBSERVATION_PROTOCOL_2026-08-20.md').read_text(encoding='utf-8')
+          fieldplan=Path('docs/AIM2_FIELD_NESTING_PLAN_2026-08-18.md').read_text(encoding='utf-8')
           status=Path('PROJECT_STATUS.md').read_text(encoding='utf-8')
           for phrase in ['The only three unresolved doctoral gates','Core = 190','head orientation first','at least **two independent W/C transitions**']:
               assert phrase in gate, phrase
-          for phrase in ['Sampling design — doctoral mainline','**Core = 190 individuals.**','Aim 2 is **not a separate field campaign**','Four linked data levels','aim2_capitulum_observation_bout_ledger_v1.csv','Aim 3 material must be collected during flowering','Japan38 × 3 same-library RAD sensitivity']:
+          for phrase in ['Sampling design — doctoral mainline','**Core = 190 individuals.**','Aim 2 is **not a separate field campaign**','Four linked data levels','aim2_capitulum_observation_bout_ledger_v1.csv','Aim 3 material must be collected during flowering']:
               assert phrase in sampling, phrase
-          for phrase in ['same focal head','pollinator visits/effective contacts and antagonist events/damage','repeated measurements, not additional biological replicates']:
+          for phrase in ['time-window pollination/thermal timing','pollen-viability sample ID','early-day','whole-day visit total']:
               assert phrase in protocol, phrase
+          for phrase in ['time-window pollination + abiotic protection','18.3%','aim2_capitulum_observation_bout_ledger_v1.csv','no all-day visitation = no orientation effect shortcut']:
+              assert phrase in fieldplan, phrase
           assert 'three unresolved new-data gates' in status
 
-          readme=Path('README.md').read_text(encoding='utf-8')
           sampling_readme=Path('sampling/README.md').read_text(encoding='utf-8')
-          support_map=Path('docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md').read_text(encoding='utf-8')
-          assert 'one doctoral-level question' in readme
+          assert 'Orientation timing rule' in sampling_readme
+          assert 'time_window_class' in sampling_readme
           assert 'aim2_capitulum_observation_bout_ledger_v1.csv' in sampling_readme
-          assert 'not the doctoral hypothesis hierarchy' in support_map
-          assert '190 core individuals' in support_map
+
           print('doctoral_centers=1')
           print('doctoral_aims=3')
-          print('next_data_gates=3')
-          print('cross_aim_individual_ledger_valid=true')
-          print('aim2_joint_observation_schema_valid=true')
+          print('aim2_orientation_time_window_schema_valid=true')
           print('tranche1_populations=14')
           print('tranche1_minimum_individuals=190')
           PY

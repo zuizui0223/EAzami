@@ -1,4 +1,4 @@
-# Aim 2 field nesting plan — 2026-08-19
+# Aim 2 field nesting plan — 2026-08-20
 
 ## Decision
 
@@ -14,135 +14,145 @@ population / individual identity
         + reproductive fitness
 ```
 
-This preserves the doctoral mainline: explain where variation came from, then test what it does.
+## Keep biological and temporal levels separate
 
-## Two biological levels must remain separate
+Aim 2 uses three linked field levels:
 
-The 2026-08-19 interaction recheck added a Japanese *C. purpuratum* result showing that greater seasonal flower production can increase pre-dispersal seed predation and counteract reproductive gains. That is a **plant-level seasonal display trade-off**, not the same quantity as a focal capitulum's orientation, colour or phyllary geometry.
+1. `sampling/aim2_capitulum_field_ledger_v1.csv` — focal capitulum/treatment and final fitness;
+2. `sampling/aim2_capitulum_observation_bout_ledger_v1.csv` — repeated focal-head observation bouts, including explicit time window, microclimate, pollen state and interaction channels;
+3. `sampling/aim2_plant_display_predation_ledger_v1.csv` — plant × phenology census and seasonal display/predation.
 
-Therefore Aim 2 uses two linked ledgers:
+All link through `individual_id`, `population_id` and, for the first two levels, `capitulum_id`. Repeated bouts are not new biological replicates.
 
-1. `sampling/aim2_capitulum_field_ledger_v1.csv` — one focal capitulum/treatment outcome;
-2. `sampling/aim2_plant_display_predation_ledger_v1.csv` — one plant × phenology census, with final seasonal flower production and plant-level predation/reproductive output when available.
+Do not copy plant-level display effects into a capitulum structural model and do not collapse early-window orientation effects into a single all-day visit count before testing timing.
 
-Both link through `individual_id` and `population_id`. Do not copy a plant-level display effect into a capitulum-level structural model.
+## Baseline focal measurements
 
-## Baseline measurements attached to focal individuals
+At flowering retain, where feasible:
 
-At flowering, every focal individual should retain, where feasible:
-
-- `individual_id`, population and locality;
+- immutable individual/population/capitulum IDs;
 - voucher-linked whole-plant and capitulum images;
 - phenological stage;
-- natural capitulum orientation as a continuous angle plus categorical audit state;
-- standardized visible colour and UV reflectance where available;
-- capitulum diameter and current display size;
-- direct phyllary spread angle, spine length/direction and stickiness score;
-- treatment eligibility and capitulum identity;
-- plant-level counts of buds/open/post-anthesis/mature capitula at repeated censuses;
-- later achene/seed outcome.
+- natural orientation and achieved treatment angle;
+- standardized visible colour and UV reflectance;
+- capitulum diameter/current display size;
+- direct phyllary spread, spine length/direction and stickiness;
+- later total/filled achene outcome.
 
-Image proxies from Azami are not substituted for direct focal botanical measurements.
+Azami image proxies are not substituted for direct focal botanical measurements.
 
 ## Experiment 1 — orientation first
 
-Primary system: Ryukyu *C. brevicaule* / *C. irumtiense* populations, expanded to another ancestry-resolved lineage only after feasibility is demonstrated.
+Primary system: Ryukyu *C. brevicaule* / *C. irumtiense* populations, expanded only after feasibility is demonstrated.
 
-Design hierarchy:
+### Design
 
-1. use comparable capitula within the same plant for paired control/manipulation where plant architecture permits;
-2. otherwise use randomized plant/block assignment with a sham-handling control;
+1. paired comparable capitula within a plant where architecture permits;
+2. otherwise randomized plant/block assignment with sham handling;
 3. record natural angle before treatment and achieved angle after treatment;
-4. retain population and ancestry effects rather than pooling them away.
+4. retain population and ancestry effects.
 
-Required chain:
+### Mechanism-reduction result governing measurements
 
-`orientation -> rain/wetting or pollinator presentation -> pollen/contact response -> achene/seed set`
+`docs/ORIENTATION_MECHANISM_REDUCTION_RESULT_V1.md` compares five reduced mechanism families against:
 
-Minimum measurements:
+- Azami orientation–temperature association positive;
+- *Cremanthodium* natural nodding/artificial erect achene-set RR ≈ **3.59**;
+- no detected *Cremanthodium* pollinator orientation preference;
+- sunflower early-morning orientation effect positive;
+- sunflower all-day landing effect near null.
 
-- rainfall or standardized wetting exposure;
-- pollen wetting and viability where feasible;
-- visitor guild, visit count and effective stigma/anther contact;
-- florivory and seed-predator damage;
-- total and filled achenes/seeds.
+The only family that robustly reproduced all five core targets was **time-window pollination + abiotic protection**. In 1,500 prior draws its full-core match rate was **18.3%**; abiotic-only and timing-only models each stopped at 4/5.
 
-A small feasibility pilot may begin with about 10 experimental units per treatment per population. Final replication is determined from pilot variance, treatment loss and whether the experimental unit is capitulum or plant.
+This does not prove that *Cirsium* uses either comparison-system mechanism. It means the field test must separate two candidate pathways rather than represent orientation by one static visitation coefficient.
+
+### Pathway A — time-dependent pollinator presentation
+
+Use `aim2_capitulum_observation_bout_ledger_v1.csv` and record by explicit observation bout:
+
+- local start/end time and `time_window_class`;
+- natural/achieved orientation;
+- head-surface temperature and ambient temperature;
+- pollen-presentation state;
+- visitor guild/count;
+- effective stigma/anther contact.
+
+At minimum retain early-day bouts separately from later/all-day aggregation. An all-day null is not evidence that a timing effect is absent.
+
+### Pathway B — rain / UV / wetting protection
+
+In the same bout ledger record:
+
+- recent rainfall or standardized wetting exposure;
+- head wetness;
+- pollen wetting;
+- pollen-viability sample ID and viability where feasible.
+
+Reconnect both pathways to final total/filled achenes in `aim2_capitulum_field_ledger_v1.csv`.
+
+Required causal chain:
+
+`orientation -> timing and/or protection -> pollen/contact response -> achene/seed fitness`
+
+Florivory and seed-predator events remain separate channels so an orientation treatment is not mistakenly interpreted as pollination/protection when it altered antagonist exposure.
+
+A small feasibility pilot may begin around 10 experimental units per treatment per population. Final replication follows pilot variance, treatment loss and feasible experimental unit.
 
 ## Experiment 2 — W/coloured function comparison
 
-Primary contrasts:
+Priority contrasts:
 
-- W/coloured *C. pendulum* populations;
-- W/coloured *C. sieboldii* where reproducible populations are secured;
-- *C. brevicaule* / *C. irumtiense* only with ancestry/species-history interpretation retained;
-- *takaoense* as an external/public mechanistic anchor.
-
-Published *C. palustre* colour-dependent pollination is treated as a prior, not as a substitute for the focal test.
+- W/coloured *C. pendulum*;
+- W/coloured *C. sieboldii*;
+- *C. brevicaule* / *C. irumtiense* with ancestry/species-history interpretation retained;
+- *takaoense* as external/public mechanistic anchor.
 
 Required chain:
 
 `ancestry-resolved colour -> effective pollination / abiotic response -> reproductive fitness`
 
-Measurements:
-
-- calibrated visible and UV reflectance;
-- pigment-linked sampling for Aim 3 focal individuals;
-- visitor guild and effective contact;
-- floral temperature/UV/water response only where directly measurable;
-- achene/seed set.
-
-Distant white and coloured populations are not treated as a colour experiment without ancestry, geography and environment controls.
+Retain calibrated visible/UV phenotype, visitor/effective-contact data, relevant local abiotic measurements and achene/seed output. Distant white/coloured populations are not treated as a colour experiment without ancestry/geography/environment controls.
 
 ## Experiment 3 — phyllary/spine conditional gate
 
 Do not manipulate phyllaries/spines until:
 
-1. direct measurements validate that Azami image proxies track botanical angle/length in the focal system;
-2. repeatable among-individual or among-population variation exists;
+1. direct measurements validate the Azami image proxies in the focal system;
+2. repeatable focal variation exists;
 3. manipulation can alter antagonist access without a dominant wound artifact.
 
-When admitted, record both:
+When admitted, measure both antagonist exclusion/damage and pollinator access/effective contact through final seed output. The large antagonist-cost meta result establishes biological pressure, not that any image proxy is a defence trait.
 
-- florivore/seed-predator entry and damage;
-- pollinator landing/access/effective contact;
-- seed outcome.
+## Antagonist monitoring
 
-## Antagonist monitoring common to all experiments
+Score focal capitula across bud/pre-anthesis, anthesis, seed development and mature-achene stages. Keep florivory, pre-dispersal seed predation and vegetative herbivory separate.
 
-Score focal capitula repeatedly at:
-
-1. bud/pre-anthesis;
-2. anthesis;
-3. post-anthesis/seed development;
-4. mature achene collection.
-
-At the same visits, census whole-plant reproductive display so seasonal flower production and the fraction of attacked capitula can be reconstructed without conflating plant and capitulum scales.
-
-Keep florivory, pre-dispersal seed predation and vegetative herbivory as separate outcomes.
+At the same field visits census whole-plant reproductive display so seasonal production and attacked-head fraction can be reconstructed without conflating plant and capitulum scales.
 
 ## Data model
 
-- `aim2_capitulum_field_ledger_v1.csv`: focal head/treatment level.
-- `aim2_plant_display_predation_ledger_v1.csv`: individual × census level.
+- `aim2_capitulum_field_ledger_v1.csv`: head/treatment + final fitness;
+- `aim2_capitulum_observation_bout_ledger_v1.csv`: head × time-window microclimate/pollen/pollinator/antagonist process;
+- `aim2_plant_display_predation_ledger_v1.csv`: plant × census seasonal context.
 
-Repeated visitor/antagonist event logs can later be keyed by `individual_id + capitulum_id`. Final plant-level seasonal production values are recorded only after the reproductive season is sufficiently complete and the estimation method is explicit.
+Fine-grained event tables may be added later only if needed; they must retain `individual_id + capitulum_id + time`.
 
 ## Priority under limited field capacity
 
-1. preserve Aim 1 population replication;
-2. obtain direct baseline capitulum and plant-display measurements;
-3. run orientation feasibility/manipulation;
-4. add W/coloured functional comparisons;
-5. add phyllary/spine manipulation only after validity gates;
-6. measure stickiness opportunistically.
+1. protect Aim 1 population replication;
+2. baseline capitulum/plant measurements;
+3. orientation feasibility with explicit timing + abiotic pathways;
+4. W/coloured function;
+5. phyllary/spine only after validation;
+6. stickiness opportunistically.
 
 ## Stop rules
 
-- no separate interaction-only sample with no ancestry linkage;
+- no interaction-only sample without ancestry linkage;
 - no visitation = effective pollination shortcut;
-- no adaptation claim from damage/visitor counts without reproductive outcome;
-- no pooling of antagonist classes;
-- no mixing plant-level seasonal display with focal-capitulum structural traits;
-- no final sample-size fixation before pilot variance/experimental-unit feasibility;
+- no all-day visitation = no orientation effect shortcut;
+- no adaptation claim without reproductive outcome;
+- no pooled antagonist classes;
+- no mixing seasonal plant display with focal-head traits;
+- no final sample-size fixation before pilot variance/feasibility;
 - no reduction of core population-genomic replication to fund Aim 2 manipulation.
