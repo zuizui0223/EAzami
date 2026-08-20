@@ -99,6 +99,8 @@ Aim 2 measurements remain nested within the same ancestry-resolved populations.
 
 ## Three unresolved new-data gates
 
+Doctoral execution remains compressed to **three unresolved new-data gates**; the quantitative antagonist result changes Gate 2's question but does not add a fourth gate.
+
 1. **Aim 1:** same-individual phenotype + population ancestry + plastid + cytotype to resolve standing variation vs introgression vs lineage-specific origin.
 2. **Aim 2:** determine which ancestry-linked capitulum modules alter the now-quantified antagonist cost, pollination/protection pathways and reproductive fitness.
 3. **Aim 3:** same-individual floral-stage RNA + coding/regulatory haplotype + pigment + calibrated colour in at least two independent W/C transitions.
