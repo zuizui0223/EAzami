@@ -34,7 +34,7 @@ Success criterion: at least two independent focal systems discriminate among lin
 
 **Priority 2 / indispensable for the word “adaptive”.**
 
-The bounded interaction evidence map still contains **13 independent studies, 10 taxa and 15 taxon-study rows**. It remains the broad source map; the quantitative conclusion below comes from a narrower harmonized experimental subset.
+The bounded interaction evidence map still contains **13 independent studies, 10 taxa and 15 taxon-study rows**. It remains the broad source map; the quantitative conclusion below comes from a narrower harmonized experimental subset. The map also retains the Japanese *C. purpuratum* prior that increasing seasonal floral display can increase pre-dispersal seed-predator exposure, making mutualist attraction versus antagonist cost a concrete trade-off rather than a purely conceptual one.
 
 ### Updated question
 
