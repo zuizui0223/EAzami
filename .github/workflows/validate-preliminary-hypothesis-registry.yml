@@ -139,7 +139,7 @@ jobs:
               assert phrase in gate, phrase
           for phrase in ['Sampling design — doctoral mainline','**Core = 190 individuals.**','Aim 2 is **not a separate field campaign**','Four linked data levels','aim2_capitulum_observation_bout_ledger_v1.csv','Aim 3 material must be collected during flowering']:
               assert phrase in sampling, phrase
-          for phrase in ['time-window pollination/thermal timing','pollen-viability sample ID','early-day','all-day visit total']:
+          for phrase in ['time-window pollination/thermal timing','pollen-viability sample ID','early-day','whole-day visit total']:
               assert phrase in protocol, phrase
           for phrase in ['time-window pollination + abiotic protection','18.3%','aim2_capitulum_observation_bout_ledger_v1.csv','no all-day visitation = no orientation effect shortcut']:
               assert phrase in fieldplan, phrase
