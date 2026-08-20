@@ -17,15 +17,16 @@ spec.loader.exec_module(mod)
 class PatternReductionTest(unittest.TestCase):
     def test_target_registry_layers_and_critical_values(self):
         rows = list(csv.DictReader(TARGETS.open(encoding="utf-8", newline="")))
-        self.assertEqual(len(rows), 26)
+        self.assertEqual(len(rows), 27)
         by_id = {r["target_id"]: r for r in rows}
         self.assertEqual(sum(r["evidence_layer"] == "azami_global" for r in rows), 8)
-        self.assertEqual(sum(r["evidence_layer"].startswith("cirsium_") for r in rows), 14)
+        self.assertEqual(sum(r["evidence_layer"].startswith("cirsium_") for r in rows), 15)
         self.assertEqual(sum(r["evidence_layer"] == "asteraceae_primary" for r in rows), 4)
         self.assertAlmostEqual(float(by_id["CIR_HERB_RR_01"]["estimate"]), 2.67364, places=5)
         self.assertAlmostEqual(float(by_id["CIR_HERB_RR_01"]["lower"]), 2.38833, places=5)
         self.assertAlmostEqual(float(by_id["CIR_DISPLAY_PRED_NIKKO"]["estimate"]), 0.000063, places=8)
         self.assertAlmostEqual(float(by_id["CIR_DISPLAY_PRED_KAWA"]["estimate"]), 0.0000075, places=9)
+        self.assertEqual(by_id["CIR_DISPLAY_REVISIT_01"]["direction"], "both_increase_with_display")
         self.assertAlmostEqual(float(by_id["AST_NOD_ACHENE_01"]["estimate"]), 56.3 / 15.7, places=5)
         self.assertEqual(by_id["AST_NOD_ACHENE_01"]["use_in_simulation"], "hard")
         self.assertIn("External Asteraceae calibration", by_id["AST_NOD_ACHENE_01"]["claim_boundary"])
