@@ -1,0 +1,42 @@
+name: Validate cross-layer capitulum pattern reduction v2
+on:
+  pull_request:
+    paths:
+      - "analysis/simulate_capitulum_pattern_reduction_v2.py"
+      - "tests/test_simulate_capitulum_pattern_reduction_v2.py"
+      - "data/evidence/capitulum_pattern_reduction_targets_v2.csv"
+      - "data/evidence/capitulum_pattern_reduction_simulation_v2_summary.json"
+      - "docs/CROSS_LAYER_CAPITULUM_PATTERN_REDUCTION_V2_2026-08-20.md"
+      - ".github/workflows/validate-capitulum-pattern-reduction-v2.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Validate uncertainty-weighted reduction ranking
+        run: |
+          python -m py_compile analysis/simulate_capitulum_pattern_reduction_v2.py
+          python -m unittest tests/test_simulate_capitulum_pattern_reduction_v2.py -v
+          python analysis/simulate_capitulum_pattern_reduction_v2.py \
+            --targets data/evidence/capitulum_pattern_reduction_targets_v2.csv \
+            --output /tmp/pattern_reduction_v2.json \
+            --draws 1500
+          python - <<'PY'
+          import json
+          observed=json.load(open('/tmp/pattern_reduction_v2.json'))
+          frozen=json.load(open('data/evidence/capitulum_pattern_reduction_simulation_v2_summary.json'))
+          assert observed['target_registry']['rows']==36
+          assert observed['target_registry']['layer_counts']==frozen['target_layers']
+          assert observed['full_model_factorial_ranking']==frozen['full_factorial_ranking']
+          assert observed['full_model_factorial_ranking'][0]=='FULL_MODULAR_HET'
+          assert observed['models']['FULL_MODULAR_HET']['best_distance'] < observed['models']['FULL_MODULAR_GLOBAL']['best_distance']
+          assert observed['models']['FULL_MODULAR_GLOBAL']['best_distance'] < observed['models']['FULL_COUPLED_GLOBAL']['best_distance']
+          assert max(observed['models']['FULL_MODULAR_HET']['best_distance_components'], key=observed['models']['FULL_MODULAR_HET']['best_distance_components'].get) == 'cirsium_population_pollinator_regime'
+          print('pattern_reduction_v2_valid=true')
+          print('best_model=FULL_MODULAR_HET')
+          print('best_distance=', observed['models']['FULL_MODULAR_HET']['best_distance'])
+          PY
