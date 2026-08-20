@@ -1,5 +1,4 @@
 import csv
-import importlib.util
 import pathlib
 import sys
 import unittest
@@ -13,7 +12,8 @@ import simulate_macro_interaction_pattern_reduction_v2 as v2
 class PatternReductionV2Test(unittest.TestCase):
     def test_target_registry_has_observation_and_interaction_layers(self):
         path = ROOT / "data/evidence/macro_interaction_pattern_targets_v2.csv"
-        rows = list(csv.DictReader(path.open(encoding="utf-8", newline="")))
+        with path.open(encoding="utf-8", newline="") as handle:
+            rows = list(csv.DictReader(handle))
         self.assertGreaterEqual(len(rows), 30)
         roles = {r["simulation_role"] for r in rows}
         self.assertTrue({"fit_target", "heldout_numeric", "heldout_sign", "context_target", "structural_gap"} <= roles)
