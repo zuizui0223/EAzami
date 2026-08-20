@@ -5,7 +5,9 @@ on:
       - "analysis/simulate_macro_interaction_pattern_reduction.py"
       - "tests/test_macro_interaction_pattern_reduction.py"
       - "data/evidence/macro_interaction_pattern_targets_v1.csv"
+      - "data/evidence/macro_interaction_pattern_reduction_result_v1.json"
       - "docs/MACRO_INTERACTION_PATTERN_REDUCTION_PROGRAM.md"
+      - "docs/MACRO_INTERACTION_PATTERN_REDUCTION_RESULT_V1.md"
       - ".github/workflows/validate-macro-interaction-pattern-reduction.yml"
   workflow_dispatch:
 permissions: {contents: read}
@@ -20,7 +22,7 @@ jobs:
         run: |
           python -m py_compile analysis/simulate_macro_interaction_pattern_reduction.py
           python -m unittest tests/test_macro_interaction_pattern_reduction.py -v
-      - name: Run prior-predictive model-family screen
+      - name: Rebuild prior-predictive model-family screen
         run: |
           python analysis/simulate_macro_interaction_pattern_reduction.py \
             --targets data/evidence/macro_interaction_pattern_targets_v1.csv \
@@ -30,14 +32,24 @@ jobs:
           python - <<'PY'
           import json
           d=json.load(open('/tmp/pattern_reduction_v1.json'))
+          frozen=json.load(open('data/evidence/macro_interaction_pattern_reduction_result_v1.json'))
           assert d['target_rows_total'] >= 20
           assert d['fit_target_rows'] == 11
           assert d['simulation_targets_scored'] == 11
           assert len(d['families']) == 5
           assert len(d['ranking']) == 5
+          assert d['ranking'] == frozen['ranking']
+          live={x['family']:x for x in d['families']}
+          for f in frozen['families']:
+              x=live[f['family']]
+              assert x['best_match_count'] == f['best_match_count']
+              assert abs(x['best_pattern_distance']-f['best_pattern_distance']) < 1e-6
+              assert abs(x['full_match_rate']-f['full_match_rate']) < 1e-12
+              if 'best_summary' in f:
+                  for k,v in f['best_summary'].items():
+                      assert abs(x['best_summary'][k]-v) < 1e-6, (f['family'],k,x['best_summary'][k],v)
           print('pattern_reduction_valid=true')
           print('ranking=' + ' > '.join(d['ranking']))
           for x in sorted(d['families'], key=lambda z:(-z['best_match_count'], z['best_pattern_distance'])):
               print(x['family'], 'best=', x['best_match_count'], '/', x['n_targets'], 'distance=', x['best_pattern_distance'], 'full_match_rate=', x['full_match_rate'])
-              print('best_summary=', x['best_summary'])
           PY
