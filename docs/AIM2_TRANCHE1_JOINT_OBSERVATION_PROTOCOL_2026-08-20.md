@@ -53,18 +53,41 @@ The bout table stores process measurements. Final reproductive output remains in
 
 `orientation → timing/protection → pollen/contact → total/filled achenes`.
 
+## Pollinator context / density update
+
+The four published *C. purpuratum* probing slopes show residual when one annual mean and one density ratio are forced across 1997/1998. A follow-up shrinkage/leave-one-out check finds only about **2.3% predictive RMSE improvement** from adding year/context deviations, so unpooled temporal parameters are not promoted into the full simulation.
+
+The field consequence is to collect the missing discriminator rather than make the model more complex now.
+
+For comparable pollinator-response bouts, retain when feasible:
+
+- `phenology_census_id` linking the bout to the plant-level census;
+- `focal_open_capitula_current` as the contemporaneous focal display;
+- `density_context_id`;
+- `density_measurement_area_m2`;
+- `local_conspecific_flowering_plants`;
+- `local_conspecific_open_capitula`;
+- `pollinator_visit_count` as plant-level foraging visits entering the focal individual/display;
+- `heads_probed_total` across those visits;
+- effective contacts separately.
+
+This permits direct reconstruction of `heads probed per visit = heads_probed_total / pollinator_visit_count` and local plant/head density from counts plus measured area. Do not encode only a subjective `high/low density` label when quantitative counts and area can be obtained.
+
+Repeated bouts across populations/time windows can later be analyzed with partial pooling. Until those replicated contexts exist, do not fit one unconstrained pollinator-response parameter per year or site.
+
 ## Channel separation
 
 Never collapse these into one generic insect variable:
 
 - pollinator visit count;
+- heads probed per visit;
 - effective pollination contact;
 - antagonist visit/event count;
 - florivory;
 - pre-dispersal seed predation;
 - final seed output.
 
-Likewise, temperature/wetting and visitor responses are separate candidate mediators; one is not used as a proxy for the other.
+Likewise, temperature/wetting, focal display, local density and visitor responses are separate candidate drivers/mediators; one is not used as a proxy for another.
 
 ## Field order
 
@@ -80,6 +103,8 @@ The first orientation field model should compare candidate mediation paths rathe
 - `orientation → wetting/pollen viability`;
 - both paths → reproductive fitness.
 
+The pollinator-context layer should test `focal display × local density/context → heads probed per visit / effective contact` with population/time context partially pooled rather than treated as four unrelated parameters.
+
 Population/ancestry and individual/capitulum dependence must remain explicit.
 
 ## Stop rules
@@ -87,6 +112,8 @@ Population/ancestry and individual/capitulum dependence must remain explicit.
 - bouts are not independent plants;
 - no all-day-null shortcut;
 - no visitor-count = fitness shortcut;
+- no subjective density class when quantitative counts/area are feasible;
+- no unpooled year/site pollinator parameter without replicated contexts;
 - no environment raster substitution for missing head-scale measurements;
-- no adaptation claim until a focal orientation effect reaches reproductive output;
+- no adaptation claim until a focal trait effect reaches reproductive output;
 - no claim that the comparison-system mechanism operates in *Cirsium* until tested directly.
