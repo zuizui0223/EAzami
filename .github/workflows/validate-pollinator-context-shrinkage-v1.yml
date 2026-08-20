@@ -5,6 +5,9 @@ on:
       - "analysis/validate_pollinator_context_shrinkage_v1.py"
       - "data/evidence/pollinator_context_shrinkage_v1.json"
       - "data/evidence/capitulum_pattern_reduction_targets_v2.csv"
+      - "docs/POLLINATOR_CONTEXT_SHRINKAGE_VALIDATION_2026-08-20.md"
+      - "docs/AIM2_TRANCHE1_JOINT_OBSERVATION_PROTOCOL_2026-08-20.md"
+      - "sampling/aim2_capitulum_observation_bout_ledger_v1.csv"
       - "tests/test_pollinator_context_shrinkage_v1.py"
       - ".github/workflows/validate-pollinator-context-shrinkage-v1.yml"
   workflow_dispatch:
