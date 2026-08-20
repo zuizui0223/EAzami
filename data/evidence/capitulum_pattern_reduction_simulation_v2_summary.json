@@ -1,0 +1,68 @@
+{
+  "contract_version": "capitulum_pattern_reduction_simulation_v2_summary",
+  "status_date": "2026-08-20",
+  "draws_per_model": 1500,
+  "target_registry_rows": 36,
+  "target_layers": {
+    "azami_global": 8,
+    "cirsium": 17,
+    "asteraceae_primary": 10,
+    "external_conceptual": 1
+  },
+  "model_best_distance": {
+    "ENV_ONLY": 1439.33804607,
+    "ENV_POLL": 591.11012615,
+    "ENV_ANT": 878.34013528,
+    "FULL_COUPLED_GLOBAL": 29.82553610,
+    "FULL_MODULAR_GLOBAL": 18.95153120,
+    "FULL_COUPLED_HET": 25.49242814,
+    "FULL_MODULAR_HET": 7.60943207
+  },
+  "model_distance_p01": {
+    "ENV_ONLY": 1446.00259606,
+    "ENV_POLL": 602.31533771,
+    "ENV_ANT": 887.82227468,
+    "FULL_COUPLED_GLOBAL": 42.26196624,
+    "FULL_MODULAR_GLOBAL": 25.82714823,
+    "FULL_COUPLED_HET": 35.78525104,
+    "FULL_MODULAR_HET": 15.42607183
+  },
+  "overall_ranking": [
+    "FULL_MODULAR_HET",
+    "FULL_MODULAR_GLOBAL",
+    "FULL_COUPLED_HET",
+    "FULL_COUPLED_GLOBAL",
+    "ENV_POLL",
+    "ENV_ANT",
+    "ENV_ONLY"
+  ],
+  "full_factorial_ranking": [
+    "FULL_MODULAR_HET",
+    "FULL_MODULAR_GLOBAL",
+    "FULL_COUPLED_HET",
+    "FULL_COUPLED_GLOBAL"
+  ],
+  "factorial_distance_improvements": {
+    "add_modularity_under_global_regime": 10.87400491,
+    "add_interaction_heterogeneity_to_coupled_model": 4.33310796,
+    "add_interaction_heterogeneity_to_modular_model": 11.34209913,
+    "add_modularity_under_heterogeneous_regime": 17.88299608
+  },
+  "best_FULL_MODULAR_HET": {
+    "within_taxon_fraction_min": 0.57224910,
+    "within_taxon_fraction_max": 0.82235489,
+    "cross_module_lability_correlation": -0.14769809,
+    "herbivory_removal_seed_output_RR": 2.65304299,
+    "Asteraceae_size_predation_r": 0.69128152,
+    "C_purpuratum_attack_A_Nikko": 0.0000681907,
+    "C_purpuratum_attack_A_Kawamata": 0.00000824759,
+    "C_purpuratum_probe_slopes": [0.10735060, 0.41064844, 0.10630221, 0.45353641],
+    "visit_R2": 0.68941747,
+    "probe_R2": 0.43549643,
+    "C_pitcheri_seed_loss_fraction": 0.63581697,
+    "external_nodding_fitness_RR": 3.30853287,
+    "largest_remaining_distance_component": "cirsium_population_pollinator_regime"
+  },
+  "headline": "Within this minimal mechanism family, module-specific within-taxon variation and population-specific interaction regimes each improve the joint reduction of Azami observation patterns and interaction/fitness literature patterns; allowing both gives the lowest distance.",
+  "claim_boundary": "This is an uncertainty-weighted prior-predictive pattern-reduction screen, not ABC posterior inference, parameter estimation, or proof that these are the unique biological mechanisms. Several descriptive uncertainty scales are operational screening weights."
+}
