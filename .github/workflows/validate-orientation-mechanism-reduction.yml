@@ -26,13 +26,19 @@ jobs:
             --draws 1500 --seed 20260820 --output /tmp/orientation.json
           python - <<'PY'
           import json
-          d=json.load(open('/tmp/orientation.json'))
-          print('ORIENTATION_RESULT=' + json.dumps(d, sort_keys=True, separators=(',',':')))
-          assert d['target_rows']==7
-          assert d['core_targets']==5 and d['heldout_targets']==2
-          assert len(d['families'])==5
-          assert set(d['ranking'])=={
-              'static_pollinator_only','abiotic_protection_only','thermal_timing_only',
-              'combined_static_pollinator_abiotic','combined_time_abiotic'
-          }
+          observed=json.load(open('/tmp/orientation.json'))
+          frozen=json.load(open('data/evidence/orientation_mechanism_reduction_result_v1.json'))
+          assert observed == frozen
+          assert observed['target_rows']==7
+          assert observed['core_targets']==5 and observed['heldout_targets']==2
+          fam={x['family']:x for x in observed['families']}
+          assert observed['ranking'][0]=='combined_time_abiotic'
+          assert fam['combined_time_abiotic']['accepted_core_match_median']==5
+          assert fam['combined_time_abiotic']['full_core_match_rate'] > 0.15
+          assert fam['combined_time_abiotic']['heldout_mean']==1.0
+          assert fam['abiotic_protection_only']['accepted_core_match_median']==4
+          assert fam['thermal_timing_only']['accepted_core_match_median']==4
+          assert fam['static_pollinator_only']['full_core_match_rate']==0
+          print('orientation_mechanism_reduction_frozen=true')
+          print('full_match_rate=', fam['combined_time_abiotic']['full_core_match_rate'])
           PY
