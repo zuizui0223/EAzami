@@ -1,0 +1,69 @@
+{
+  "contract_version": "capitulum_pattern_reduction_simulation_v1",
+  "status_date": "2026-08-20",
+  "purpose": "coarse_pattern_reduction_not_parameter_inference",
+  "draws_per_model": 500,
+  "constraints": {
+    "AZ_VAR_01": "all simulated module within-taxon fractions fall inside observed Azami range 0.5886-0.9307",
+    "AZ_LAB_01": "absolute median cross-module lability correlation <=0.15",
+    "AZ_ENV_MODULE_ORDER": "orientation, colour and defence environment correlations >0.2 while shape max correlation <0.3",
+    "CIR_HERB_RR_01": "simulated herbivory-removal seed-output RR falls inside 2.388-2.993",
+    "CIR_DISPLAY_PRED": "display-predation correlation >0.25",
+    "CIR_DISPLAY_POLL": "pollination response to display is positive but decelerating: log-log slope 0.05-0.85",
+    "AST_NOD_ACHENE_01": "high-stress orientation protection yields >2-fold nodding/erect fitness ratio as a soft external Asteraceae calibration"
+  },
+  "models": {
+    "ENV_ONLY": {
+      "accepted": 0,
+      "draws": 500,
+      "acceptance_rate": 0.0,
+      "best": {
+        "violations": ["AZ_LAB_01", "CIR_HERB_RR_01", "CIR_DISPLAY_PRED", "CIR_DISPLAY_POLL"],
+        "params": {"env": 0.34630888, "poll": 0.8911674, "ant": 0.61211199, "within": 0.57619286, "poll_sat": 0.00070476, "pred_A": 0.00008805, "orient_protect": 3.10517938},
+        "summary": {"within_min": 0.63014944, "within_max": 0.77614605, "lability": 0.67573887, "corr_ot": 0.76433672, "corr_cp": 0.62088637, "corr_ds": 0.7269702, "corr_shape": 0.10626539, "herb_rr": 1, "pred_corr": 0, "poll_slope": 0, "nodding_rr": 2.48201629}
+      }
+    },
+    "ENV_POLL": {
+      "accepted": 0,
+      "draws": 500,
+      "acceptance_rate": 0.0,
+      "best": {
+        "violations": ["AZ_LAB_01", "CIR_HERB_RR_01", "CIR_DISPLAY_PRED"],
+        "params": {"env": 0.42734287, "poll": 0.21151378, "ant": 0.70796958, "within": 1.32556301, "poll_sat": 0.00082785, "pred_A": 0.00011714, "orient_protect": 3.71158129},
+        "summary": {"within_min": 0.80975685, "within_max": 0.87553011, "lability": 0.6007796, "corr_ot": 0.80747275, "corr_cp": 0.71808844, "corr_ds": 0.77297847, "corr_shape": 0.04805386, "herb_rr": 1, "pred_corr": 0, "poll_slope": 0.37965099, "nodding_rr": 2.67948615}
+      }
+    },
+    "ENV_ANT": {
+      "accepted": 0,
+      "draws": 500,
+      "acceptance_rate": 0.0,
+      "best": {
+        "violations": ["AZ_LAB_01", "CIR_DISPLAY_POLL"],
+        "params": {"env": 0.4912158, "poll": 0.28074862, "ant": 0.98195893, "within": 0.89270676, "poll_sat": 0.0000491, "pred_A": 0.0004167, "orient_protect": 2.42846339},
+        "summary": {"within_min": 0.63822146, "within_max": 0.81471318, "lability": 0.6527316, "corr_ot": 0.86382061, "corr_cp": 0.73825399, "corr_ds": 0.79497894, "corr_shape": 0.22934104, "herb_rr": 2.50648287, "pred_corr": 0.80498159, "poll_slope": 0, "nodding_rr": 2.24179783}
+      }
+    },
+    "FULL_COUPLED": {
+      "accepted": 0,
+      "draws": 500,
+      "acceptance_rate": 0.0,
+      "best": {
+        "violations": ["AZ_LAB_01"],
+        "params": {"env": 0.25480582, "poll": 0.4562899, "ant": 0.27800598, "within": 1.17116897, "poll_sat": 0.00057664, "pred_A": 0.00035191, "orient_protect": 4.76990144},
+        "summary": {"within_min": 0.80187741, "within_max": 0.81425323, "lability": 0.60672116, "corr_ot": 0.6917679, "corr_cp": 0.51036615, "corr_ds": 0.64332196, "corr_shape": 0.20606891, "herb_rr": 2.56023056, "pred_corr": 0.80424587, "poll_slope": 0.48138727, "nodding_rr": 3.01956918}
+      }
+    },
+    "FULL_MODULAR": {
+      "accepted": 2,
+      "draws": 500,
+      "acceptance_rate": 0.004,
+      "best": {
+        "violations": [],
+        "params": {"env": 0.34270796, "poll": 1.14451856, "ant": 0.32827052, "within": 1.13983407, "poll_sat": 0.00016915, "pred_A": 0.00030065, "orient_protect": 4.64560326},
+        "summary": {"within_min": 0.73868879, "within_max": 0.84094162, "lability": -0.0294037, "corr_ot": 0.70576908, "corr_cp": 0.55343378, "corr_ds": 0.76772363, "corr_shape": 0.22312223, "herb_rr": 2.494095, "pred_corr": 0.80807538, "poll_slope": 0.79698999, "nodding_rr": 2.97879274}
+      }
+    }
+  },
+  "headline_result": "Only FULL_MODULAR produced any accepted parameter draws under the joint Azami + interaction target set; FULL_COUPLED could approach all interaction and environment constraints but retained an unrealistically strong common lability axis.",
+  "interpretation": "This is a mechanism-screening reduction test. In this deliberately minimal model family, jointly matching the selected patterns requires environmental response, pollinator benefit, antagonist cost and module-specific within-taxon variance. It does not estimate biological parameters or prove modular evolvability."
+}
