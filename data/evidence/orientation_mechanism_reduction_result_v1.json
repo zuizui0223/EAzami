@@ -1,0 +1,136 @@
+{
+  "contract_version": "orientation_mechanism_reduction_v1",
+  "status_date": "2026-08-20",
+  "purpose": "minimal_pathway_sufficiency_for_orientation_scale_dependence",
+  "target_rows": 7,
+  "core_targets": 5,
+  "heldout_targets": 2,
+  "draws_per_family": 1500,
+  "seed": 20260820,
+  "families": [
+    {
+      "family": "static_pollinator_only",
+      "draws": 1500,
+      "best_core_match": 4,
+      "best_distance": 0.546759,
+      "full_core_match_rate": 0.0,
+      "accepted_core_match_median": 3,
+      "accepted_distance_median": 0.808988,
+      "heldout_pass_rates": {
+        "crem_exposure_reduces_pollen_viability": 0.0,
+        "helianthus_siring_positive": 0.8133
+      },
+      "heldout_mean": 0.4067,
+      "best_summary": {
+        "crem_nodding_vs_erect_achene_RR": 1.003351,
+        "crem_pollinator_difference": 0.002951,
+        "crem_protected_vs_exposed_viability_RR": 1.0,
+        "helianthus_all_day_visit_RR": 1.069691,
+        "helianthus_early_visit_RR": 1.123615,
+        "helianthus_siring_RR": 1.067988,
+        "orientation_temperature_r": 0.542276
+      }
+    },
+    {
+      "family": "abiotic_protection_only",
+      "draws": 1500,
+      "best_core_match": 4,
+      "best_distance": 0.100303,
+      "full_core_match_rate": 0.0,
+      "accepted_core_match_median": 4,
+      "accepted_distance_median": 0.127302,
+      "heldout_pass_rates": {
+        "crem_exposure_reduces_pollen_viability": 1.0,
+        "helianthus_siring_positive": 0.0
+      },
+      "heldout_mean": 0.5,
+      "best_summary": {
+        "crem_nodding_vs_erect_achene_RR": 3.583785,
+        "crem_pollinator_difference": 0.0,
+        "crem_protected_vs_exposed_viability_RR": 3.583785,
+        "helianthus_all_day_visit_RR": 1.0,
+        "helianthus_early_visit_RR": 1.0,
+        "helianthus_siring_RR": 1.0,
+        "orientation_temperature_r": 0.282583
+      }
+    },
+    {
+      "family": "thermal_timing_only",
+      "draws": 1500,
+      "best_core_match": 4,
+      "best_distance": 0.400028,
+      "full_core_match_rate": 0.0,
+      "accepted_core_match_median": 4,
+      "accepted_distance_median": 0.402129,
+      "heldout_pass_rates": {
+        "crem_exposure_reduces_pollen_viability": 0.0,
+        "helianthus_siring_positive": 1.0
+      },
+      "heldout_mean": 0.5,
+      "best_summary": {
+        "crem_nodding_vs_erect_achene_RR": 1.0,
+        "crem_pollinator_difference": 0.0,
+        "crem_protected_vs_exposed_viability_RR": 1.0,
+        "helianthus_all_day_visit_RR": 1.000014,
+        "helianthus_early_visit_RR": 1.771133,
+        "helianthus_siring_RR": 1.424123,
+        "orientation_temperature_r": 0.536784
+      }
+    },
+    {
+      "family": "combined_static_pollinator_abiotic",
+      "draws": 1500,
+      "best_core_match": 5,
+      "best_distance": 0.333184,
+      "full_core_match_rate": 0.001333,
+      "accepted_core_match_median": 3,
+      "accepted_distance_median": 0.555515,
+      "heldout_pass_rates": {
+        "crem_exposure_reduces_pollen_viability": 1.0,
+        "helianthus_siring_positive": 0.7333
+      },
+      "heldout_mean": 0.8667,
+      "best_summary": {
+        "crem_nodding_vs_erect_achene_RR": 3.687939,
+        "crem_pollinator_difference": -0.07114,
+        "crem_protected_vs_exposed_viability_RR": 3.922696,
+        "helianthus_all_day_visit_RR": 1.070753,
+        "helianthus_early_visit_RR": 1.113289,
+        "helianthus_siring_RR": 1.062309,
+        "orientation_temperature_r": 0.636317
+      }
+    },
+    {
+      "family": "combined_time_abiotic",
+      "draws": 1500,
+      "best_core_match": 5,
+      "best_distance": 0.005218,
+      "full_core_match_rate": 0.183333,
+      "accepted_core_match_median": 5,
+      "accepted_distance_median": 0.039446,
+      "heldout_pass_rates": {
+        "crem_exposure_reduces_pollen_viability": 1.0,
+        "helianthus_siring_positive": 1.0
+      },
+      "heldout_mean": 1.0,
+      "best_summary": {
+        "crem_nodding_vs_erect_achene_RR": 3.618385,
+        "crem_pollinator_difference": 0.0,
+        "crem_protected_vs_exposed_viability_RR": 3.618385,
+        "helianthus_all_day_visit_RR": 1.000391,
+        "helianthus_early_visit_RR": 1.58416,
+        "helianthus_siring_RR": 1.321288,
+        "orientation_temperature_r": 0.182219
+      }
+    }
+  ],
+  "ranking": [
+    "combined_time_abiotic",
+    "abiotic_protection_only",
+    "thermal_timing_only",
+    "combined_static_pollinator_abiotic",
+    "static_pollinator_only"
+  ],
+  "best_family": "combined_time_abiotic",
+  "claim_boundary": "The screen tests whether static pollinator preference, abiotic protection and/or time-window thermal timing are structurally sufficient for a cross-study orientation pattern. Cremanthodium nodding and Helianthus azimuth are not treated as homologous traits, and the model is not fitted to Cirsium fitness data."
+}
