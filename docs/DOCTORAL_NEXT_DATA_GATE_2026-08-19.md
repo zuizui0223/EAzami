@@ -1,4 +1,4 @@
-# Doctoral next-data gate — 2026-08-19
+# Doctoral next-data gate — updated 2026-08-20
 
 ## Decision
 
@@ -13,7 +13,8 @@ The existing public/meta layer is already sufficient to justify the system and c
 - broad current-climate distance does not simply order current capitulum disparity in the present subset;
 - current ploidy class does not deterministically specify head orientation;
 - species-tip coding compresses known W/C polymorphism;
-- pollination and pre-dispersal seed predation both matter in *Cirsium*, but published evidence does not resolve the focal trait-to-fitness mechanisms needed here.
+- pollinator responses and display-related antagonist exposure occur in *Cirsium*;
+- a narrow experimental seed-output meta-analysis now shows that reducing insect herbivory raises viable/mature seed output by **2.674-fold** on average (95% CI **2.388–2.993**), equivalent to an estimated **62.6%** loss of potential seed output under ambient herbivory in the harmonizable experiments.
 
 These are premises and design constraints, not additional thesis Aims.
 
@@ -51,15 +52,15 @@ Decision after data:
 
 At least two independent focal systems must distinguish standing variation, introgression/gene flow and lineage-specific origin well enough to explain where repeated phenotype states came from.
 
-## Gate 2 — ecological function and fitness (Aim 2)
+## Gate 2 — which module mediates ecological cost and benefit? (Aim 2)
 
 Question:
 
-> Do the capitulum modules that diverged rapidly actually change pollination, protection, antagonist attack and reproductive fitness?
+> **Which capitulum modules change the now-quantified antagonist fitness cost, and what pollination or abiotic trade-offs accompany that change?**
 
 Why existing data stop:
 
-The evidence map shows pollinator behaviour, colour discrimination and seed-predator costs, but it does not provide the ancestry-linked causal chain for the focal modules.
+The antagonist cost itself is no longer an evidence blank: direct experimental seed-output synthesis indicates a large, repeatable cost. Existing studies still do not provide the ancestry-linked causal chain from **orientation, colour or validated phyllary/spine architecture** through mutualist/antagonist access or abiotic protection to reproductive fitness.
 
 Field order:
 
@@ -85,16 +86,18 @@ Also collect the plant-level seasonal context:
 - attacked-head fraction;
 - plant-level reproductive output.
 
-Use the existing linked ledgers:
+Use the linked ledgers:
 
 - `sampling/aim2_capitulum_field_ledger_v1.csv`;
 - `sampling/aim2_plant_display_predation_ledger_v1.csv`.
 
 A feasibility orientation pilot can begin at about 10 experimental units per treatment per population where feasible. Final replication is determined from pilot variance, treatment loss and whether the experimental unit is a capitulum or plant.
 
+Do **not** spend the field experiment merely repeating generic insect exclusion. The experimental treatment must identify a focal capitulum module or pathway.
+
 Decision after data:
 
-A replicated `trait -> interaction/protection -> reproductive fitness` link for at least one module is the minimum gate for an adaptive-function claim.
+A replicated `trait -> mutualist/antagonist or abiotic pathway -> reproductive fitness` link for at least one module is the minimum gate for an adaptive-function claim. For defence hypotheses, quantify any pollinator-access cost at the same time.
 
 ## Gate 3 — fast switching mechanism (Aim 3)
 
@@ -132,7 +135,8 @@ Determine whether pathway retention plus regulatory/expression change recurs acr
 - no heavy 294→296 tree as a field-sampling prerequisite;
 - no more broad CHELSA-only variants;
 - no extra SRA/BLAST fishing as a substitute for morph-linked population or floral data;
-- no pooled visitor/florivory/seed-predation effect simply because the bibliography becomes larger.
+- no broad pooled visitor/florivory/seed-predation effect simply because the bibliography becomes larger;
+- no generic repeat of the already established antagonist seed-output effect without a focal trait mechanism.
 
 ## Operational rule
 
