@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Diagnose the remaining C. purpuratum pollinator-regime residual in pattern reduction v2.
 
-The four frozen head-probing slopes admit an exact least-squares solution in log space for
-all four nested parameterizations tested here. A deterministic random search is retained only
-as a convergence/sanity check; biological interpretation uses the exact minima.
+The four frozen head-probing slopes admit exact least-squares solutions in log space for
+four nested parameterizations. A deterministic random search is retained only as a
+convergence/sanity check. Raw residual distance is used as a structural diagnostic, not as
+model selection: the four-parameter structure is saturated for four observations.
 
-This is a structural diagnostic, not a fit of the full capitulum model and not posterior
-inference.
+This is not a fit of the full capitulum model and not posterior inference.
 """
 from __future__ import annotations
 
@@ -29,6 +29,12 @@ MODES = [
     "COMMON_MEAN_YEAR_RATIO",
     "YEAR_MEAN_YEAR_RATIO",
 ]
+PARAMETER_COUNTS = {
+    "COMMON_MEAN_COMMON_RATIO": 2,
+    "YEAR_MEAN_COMMON_RATIO": 3,
+    "COMMON_MEAN_YEAR_RATIO": 3,
+    "YEAR_MEAN_YEAR_RATIO": 4,
+}
 MEAN_BOUNDS = (0.05, 0.30)
 RATIO_BOUNDS = (1.0, 5.0)
 SCORE_SCALE = 0.35
@@ -152,7 +158,10 @@ def run(targets: Path, draws=100000):
     for mode in MODES:
         pred, pars, exact_distance, bounds_ok = exact_fit(mode, obs)
         random_distance = random_search_best(mode, obs, draws)
+        k = PARAMETER_COUNTS[mode]
         results[mode] = {
+            "parameter_count": k,
+            "residual_df": len(obs) - k,
             "exact_min_distance": exact_distance,
             "exact_predicted_slopes": pred,
             "exact_parameters": pars,
@@ -161,32 +170,47 @@ def run(targets: Path, draws=100000):
             "random_search_gap": random_distance - exact_distance,
         }
 
-    ranking = sorted(MODES, key=lambda mode: results[mode]["exact_min_distance"])
+    shared_distance = results["COMMON_MEAN_COMMON_RATIO"]["exact_min_distance"]
+    for mode in MODES:
+        results[mode]["raw_distance_reduction_vs_shared"] = (
+            (shared_distance - results[mode]["exact_min_distance"]) / shared_distance
+            if shared_distance > 0
+            else 0.0
+        )
+
+    raw_distance_ranking = sorted(MODES, key=lambda mode: results[mode]["exact_min_distance"])
+    nonsaturated = [mode for mode in MODES if results[mode]["residual_df"] > 0]
+    nonsaturated_raw_ranking = sorted(nonsaturated, key=lambda mode: results[mode]["exact_min_distance"])
+
     return {
-        "contract_version": "pollinator_regime_structure_v1_exact",
+        "contract_version": "pollinator_regime_structure_v1_exact_df_audit",
         "status_date": "2026-08-20",
         "observed_slopes": dict(zip(TARGET_IDS, obs)),
+        "observation_count": len(obs),
         "random_draws_per_structure": draws,
         "score_scale_log": SCORE_SCALE,
         "mean_bounds": list(MEAN_BOUNDS),
         "density_ratio_bounds": list(RATIO_BOUNDS),
         "results": results,
-        "ranking": ranking,
+        "raw_distance_ranking": raw_distance_ranking,
+        "nonsaturated_raw_ranking": nonsaturated_raw_ranking,
         "headline": (
-            "The fully context-specific structure fits all four probing slopes exactly within the "
-            "predeclared parameter bounds; either year-specific mean response or year-specific density "
-            "ratio alone reduces, but does not eliminate, the shared-structure residual."
+            "Both one-axis context extensions reduce the shared pollinator residual. The fully "
+            "context-specific four-parameter structure interpolates all four slopes exactly, but it is "
+            "saturated (residual df = 0) and therefore cannot be preferred from raw fit alone."
         ),
         "interpretation": (
-            "The v2 pollinator-regime residual is generated largely by forcing one mean probing response "
-            "and one density ratio across 1997 and 1998. The next full-model upgrade should allow "
-            "pollinator response to vary among replicated temporal/population contexts rather than using "
-            "one density multiplier."
+            "The v2 pollinator-regime residual is genuinely associated with forcing shared response "
+            "structure across 1997 and 1998: year-specific mean response reduces raw distance by about "
+            "62%, and year-specific density ratio by about 38%. The next full-model upgrade should "
+            "represent context heterogeneity with shrinkage or replicated-data validation rather than "
+            "adding an unconstrained parameter for every observed context."
         ),
         "claim_boundary": (
-            "This diagnostic uses four published slopes from one C. purpuratum study system. Exact fit "
-            "shows structural flexibility, not evidence for a general year effect, a unique biological "
-            "mechanism, or posterior parameter estimates."
+            "This diagnostic uses four published slopes from one C. purpuratum study system. The "
+            "four-parameter exact fit is algebraically expected for four observations and is not model-"
+            "selection evidence. The operational 0.35 score scale is not a validated sampling-error SE, "
+            "so AIC/posterior-style inference is not claimed."
         ),
     }
 
