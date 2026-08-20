@@ -1,0 +1,42 @@
+name: Validate macro-interaction pattern reduction v2
+on:
+  pull_request:
+    paths:
+      - "data/evidence/macro_interaction_pattern_targets_v2.csv"
+      - "analysis/simulate_macro_interaction_pattern_reduction_v2.py"
+      - "tests/test_simulate_macro_interaction_pattern_reduction_v2.py"
+      - "data/evidence/macro_interaction_pattern_reduction_result_v2.json"
+      - "docs/MACRO_INTERACTION_PATTERN_REDUCTION_RESULT_V2.md"
+      - ".github/workflows/validate-macro-interaction-pattern-reduction-v2.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Test and run robust pattern reduction
+        run: |
+          python -m py_compile analysis/simulate_macro_interaction_pattern_reduction.py analysis/simulate_macro_interaction_pattern_reduction_v2.py
+          python -m unittest tests/test_simulate_macro_interaction_pattern_reduction_v2.py -v
+          python analysis/simulate_macro_interaction_pattern_reduction_v2.py \
+            --targets data/evidence/macro_interaction_pattern_targets_v2.csv \
+            --draws-per-seed 180 \
+            --seeds 20260820,20261820,20262820,20263820 \
+            --accept-fraction 0.05 \
+            --output /tmp/pattern_v2.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/pattern_v2.json'))
+          print('PATTERN_V2_RESULT=' + json.dumps(d, sort_keys=True, separators=(',',':')))
+          assert d['target_rows_total'] >= 30
+          assert d['heldout_checks_represented'] == 5
+          assert len(d['families']) == 5
+          assert set(d['ranking']) == {
+              'environment_only','pollinator_only','antagonist_only',
+              'full_tradeoff_common_lability','full_tradeoff_modular_evolvability'
+          }
+          assert 'orientation_time_window' in d['structural_gaps']
+          PY
