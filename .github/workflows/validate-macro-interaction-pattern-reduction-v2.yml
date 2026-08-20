@@ -1,0 +1,59 @@
+name: Validate macro-interaction pattern reduction v2
+on:
+  pull_request:
+    paths:
+      - "data/evidence/macro_interaction_pattern_targets_v2.csv"
+      - "data/evidence/interaction_quantitative_pattern_ledger_v1.csv"
+      - "analysis/simulate_macro_interaction_pattern_reduction_v2.py"
+      - "tests/test_simulate_macro_interaction_pattern_reduction_v2.py"
+      - "data/evidence/macro_interaction_pattern_reduction_result_v2.json"
+      - "docs/MACRO_INTERACTION_PATTERN_REDUCTION_RESULT_V2.md"
+      - "docs/INTERACTION_QUANTITATIVE_PATTERN_SYNTHESIS_V1.md"
+      - ".github/workflows/validate-macro-interaction-pattern-reduction-v2.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Test and run robust pattern reduction
+        run: |
+          python -m py_compile analysis/simulate_macro_interaction_pattern_reduction.py analysis/simulate_macro_interaction_pattern_reduction_v2.py
+          python -m unittest tests/test_simulate_macro_interaction_pattern_reduction_v2.py -v
+          python analysis/simulate_macro_interaction_pattern_reduction_v2.py \
+            --targets data/evidence/macro_interaction_pattern_targets_v2.csv \
+            --draws-per-seed 180 \
+            --seeds 20260820,20261820,20262820,20263820 \
+            --accept-fraction 0.05 \
+            --output /tmp/pattern_v2.json
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          observed=json.load(open('/tmp/pattern_v2.json'))
+          frozen=json.load(open('data/evidence/macro_interaction_pattern_reduction_result_v2.json'))
+          assert observed == frozen
+          assert observed['target_rows_total'] == 31
+          assert observed['heldout_checks_represented'] == 5
+          assert len(observed['families']) == 5
+          assert observed['ranking'][:2] == [
+              'full_tradeoff_modular_evolvability','full_tradeoff_common_lability'
+          ]
+          fam={x['family']:x for x in observed['families']}
+          assert fam['full_tradeoff_modular_evolvability']['accepted_core_distance_median'] < 0.30
+          assert fam['full_tradeoff_common_lability']['accepted_core_distance_median'] < 0.31
+          assert fam['environment_only']['heldout_mean_reproduction_rate'] < 0.2
+          assert 'orientation_time_window' in observed['structural_gaps']
+          with Path('data/evidence/interaction_quantitative_pattern_ledger_v1.csv').open(encoding='utf-8', newline='') as handle:
+              ledger=list(csv.DictReader(handle))
+          assert len(ledger) >= 25
+          ids={r['pattern_id'] for r in ledger}
+          assert {'IQ01','IQ10','IQ12','IQ18','IQ19','IQ20','IQ22'} <= ids
+          print('pattern_reduction_v2_frozen=true')
+          print('best_family=', observed['best_family_by_robust_pattern_score'])
+          print('modular_heldout=', fam['full_tradeoff_modular_evolvability']['heldout_mean_reproduction_rate'])
+          print('common_heldout=', fam['full_tradeoff_common_lability']['heldout_mean_reproduction_rate'])
+          PY
