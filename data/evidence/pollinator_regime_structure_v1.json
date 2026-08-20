@@ -1,11 +1,28 @@
 {
-  "contract_version": "pollinator_regime_structure_v1_exact_df_audit",
+  "contract_version": "pollinator_regime_structure_v1_exact_df_provenance_audit",
   "status_date": "2026-08-20",
   "observed_slopes": {
     "CIR_DISPLAY_PROBE_97HD": 0.11,
     "CIR_DISPLAY_PROBE_97LD": 0.25,
     "CIR_DISPLAY_PROBE_98HD": 0.078,
     "CIR_DISPLAY_PROBE_98LD": 0.24
+  },
+  "source_design": {
+    "source_id": "10.1046/j.1365-2435.2002.00644.x",
+    "taxonomic_scope": "Cirsium_purpuratum",
+    "module": "display",
+    "driver": "flowering_heads",
+    "response": "heads_probed_per_visit",
+    "target_kind": "linear_slope",
+    "scale": "plant_visit",
+    "provenance": "primary_article",
+    "design": "2 years x 2 density stands",
+    "target_ids": [
+      "CIR_DISPLAY_PROBE_97HD",
+      "CIR_DISPLAY_PROBE_97LD",
+      "CIR_DISPLAY_PROBE_98HD",
+      "CIR_DISPLAY_PROBE_98LD"
+    ]
   },
   "observation_count": 4,
   "random_draws_per_structure": 100000,
@@ -70,6 +87,6 @@
     "COMMON_MEAN_COMMON_RATIO"
   ],
   "headline": "Both one-axis context extensions reduce the shared pollinator residual. The fully context-specific four-parameter structure interpolates all four slopes exactly, but it is saturated (residual df = 0) and therefore cannot be preferred from raw fit alone.",
-  "interpretation": "The v2 pollinator-regime residual is genuinely associated with forcing shared response structure across 1997 and 1998: year-specific mean response reduces raw distance by about 62%, and year-specific density ratio by about 38%. The next full-model upgrade should represent context heterogeneity with shrinkage or replicated-data validation rather than adding an unconstrained parameter for every observed context.",
+  "interpretation": "The four slopes are directly comparable primary-study measurements in a 2-year x 2-density-stand design. The v2 residual is associated with forcing shared response structure across those contexts: year-specific mean response reduces raw distance by about 62%, and year-specific density ratio by about 38%. The next full-model upgrade should represent context heterogeneity with shrinkage or replicated-data validation rather than adding an unconstrained parameter for every observed context.",
   "claim_boundary": "This diagnostic uses four published slopes from one C. purpuratum study system. The four-parameter exact fit is algebraically expected for four observations and is not model-selection evidence. The operational 0.35 score scale is not a validated sampling-error SE, so AIC/posterior-style inference is not claimed."
 }
