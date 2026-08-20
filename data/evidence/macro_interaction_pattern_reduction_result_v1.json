@@ -1,0 +1,85 @@
+{
+  "contract_version": "macro_interaction_pattern_reduction_result_v1",
+  "status_date": "2026-08-20",
+  "draws_per_family": 180,
+  "seed": 20260820,
+  "n_scored_targets": 11,
+  "ranking": [
+    "full_tradeoff_modular_evolvability",
+    "full_tradeoff_common_lability",
+    "antagonist_only",
+    "pollinator_only",
+    "environment_only"
+  ],
+  "families": [
+    {
+      "family": "full_tradeoff_modular_evolvability",
+      "best_match_count": 11,
+      "best_pattern_distance": 0.118083,
+      "full_match_rate": 0.005555555555555556,
+      "best_summary": {
+        "within_fraction_mean": 0.751308,
+        "within_fraction_min": 0.696587,
+        "lability_association_rho": -0.00778,
+        "orientation_temperature_r": 0.410523,
+        "colour_precipitation_r": 0.305765,
+        "display_seasonality_r": 0.112594,
+        "display_precipitation_r": -0.029608,
+        "defence_seasonality_r": 0.003,
+        "orientation_colour_vs_shape_env_signal_ratio": 5.037134,
+        "display_pollinator_r": 0.721622,
+        "display_pollinator_R2": 0.520738,
+        "display_antagonist_r": 0.781102,
+        "display_antagonist_R2": 0.610121,
+        "reduced_herbivory_seed_output_RR": 2.875563
+      }
+    },
+    {
+      "family": "full_tradeoff_common_lability",
+      "best_match_count": 10,
+      "best_pattern_distance": 0.234214,
+      "full_match_rate": 0.0,
+      "best_summary": {
+        "within_fraction_mean": 0.783998,
+        "within_fraction_min": 0.701739,
+        "lability_association_rho": 0.08369,
+        "orientation_temperature_r": -0.077897,
+        "colour_precipitation_r": 0.10238,
+        "display_seasonality_r": 0.002736,
+        "display_precipitation_r": -0.082767,
+        "defence_seasonality_r": 0.315517,
+        "orientation_colour_vs_shape_env_signal_ratio": 2.108429,
+        "display_pollinator_r": 0.801286,
+        "display_pollinator_R2": 0.642059,
+        "display_antagonist_r": 0.842961,
+        "display_antagonist_R2": 0.710583,
+        "reduced_herbivory_seed_output_RR": 2.759086
+      }
+    },
+    {
+      "family": "antagonist_only",
+      "best_match_count": 9,
+      "best_pattern_distance": 0.264976,
+      "full_match_rate": 0.0
+    },
+    {
+      "family": "pollinator_only",
+      "best_match_count": 9,
+      "best_pattern_distance": 0.379158,
+      "full_match_rate": 0.0
+    },
+    {
+      "family": "environment_only",
+      "best_match_count": 7,
+      "best_pattern_distance": 0.56312,
+      "full_match_rate": 0.0
+    }
+  ],
+  "current_inference": [
+    "No single-driver family generated the full 11-target observation-plus-interaction bundle in 180 broad prior draws.",
+    "Adding environmental, pollinator and antagonist processes together markedly improved structural sufficiency.",
+    "The modular-evolvability full model was the only family to generate all 11 scored targets in this v1 screen, but the common-lability full model reached 10/11, so v1 supports joint ecological trade-offs more strongly than it demonstrates that modularity itself is necessary.",
+    "The result is prior-predictive structural sufficiency, not a fitted likelihood or posterior model probability."
+  ],
+  "next_discriminator": "Use held-out targets and ancestry-resolved field data to distinguish full_tradeoff_common_lability from full_tradeoff_modular_evolvability rather than adding more single-driver models."
+}
