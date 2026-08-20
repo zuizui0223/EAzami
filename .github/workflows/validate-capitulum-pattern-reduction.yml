@@ -1,0 +1,38 @@
+name: Validate cross-layer capitulum pattern reduction
+on:
+  pull_request:
+    paths:
+      - "analysis/simulate_capitulum_pattern_reduction_v1.py"
+      - "tests/test_simulate_capitulum_pattern_reduction_v1.py"
+      - "data/evidence/capitulum_pattern_reduction_targets_v1.csv"
+      - "data/evidence/capitulum_pattern_reduction_simulation_v1.json"
+      - "docs/CROSS_LAYER_CAPITULUM_PATTERN_REDUCTION_2026-08-20.md"
+      - ".github/workflows/validate-capitulum-pattern-reduction.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Validate target registry and deterministic reduction screen
+        run: |
+          python -m py_compile analysis/simulate_capitulum_pattern_reduction_v1.py
+          python -m unittest tests/test_simulate_capitulum_pattern_reduction_v1.py -v
+          python analysis/simulate_capitulum_pattern_reduction_v1.py \
+            --targets data/evidence/capitulum_pattern_reduction_targets_v1.csv \
+            --output /tmp/pattern_reduction.json \
+            --draws 500
+          python - <<'PY'
+          import json
+          observed=json.load(open('/tmp/pattern_reduction.json'))
+          frozen=json.load(open('data/evidence/capitulum_pattern_reduction_simulation_v1.json'))
+          assert observed==frozen
+          assert observed['models']['FULL_COUPLED']['accepted']==0
+          assert observed['models']['FULL_COUPLED']['best']['violations']==['AZ_LAB_01']
+          assert observed['models']['FULL_MODULAR']['accepted']==2
+          assert observed['models']['FULL_MODULAR']['best']['violations']==[]
+          print('cross_layer_pattern_reduction_valid=true')
+          PY
