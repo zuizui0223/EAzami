@@ -1,0 +1,38 @@
+name: Validate orientation mechanism reduction
+on:
+  pull_request:
+    paths:
+      - "data/evidence/orientation_mechanism_reduction_targets_v1.csv"
+      - "analysis/simulate_orientation_mechanism_reduction.py"
+      - "tests/test_simulate_orientation_mechanism_reduction.py"
+      - "data/evidence/orientation_mechanism_reduction_result_v1.json"
+      - "docs/ORIENTATION_MECHANISM_REDUCTION_RESULT_V1.md"
+      - ".github/workflows/validate-orientation-mechanism-reduction.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Run reduced orientation screen
+        run: |
+          python -m py_compile analysis/simulate_orientation_mechanism_reduction.py
+          python -m unittest tests/test_simulate_orientation_mechanism_reduction.py -v
+          python analysis/simulate_orientation_mechanism_reduction.py \
+            --targets data/evidence/orientation_mechanism_reduction_targets_v1.csv \
+            --draws 1500 --seed 20260820 --output /tmp/orientation.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/orientation.json'))
+          print('ORIENTATION_RESULT=' + json.dumps(d, sort_keys=True, separators=(',',':')))
+          assert d['target_rows']==7
+          assert d['core_targets']==5 and d['heldout_targets']==2
+          assert len(d['families'])==5
+          assert set(d['ranking'])=={
+              'static_pollinator_only','abiotic_protection_only','thermal_timing_only',
+              'combined_static_pollinator_abiotic','combined_time_abiotic'
+          }
+          PY
