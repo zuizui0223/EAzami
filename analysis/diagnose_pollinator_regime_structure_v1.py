@@ -6,6 +6,9 @@ four nested parameterizations. A deterministic random search is retained only as
 convergence/sanity check. Raw residual distance is used as a structural diagnostic, not as
 model selection: the four-parameter structure is saturated for four observations.
 
+The input contract also verifies that all four slopes are directly comparable measurements
+from the same primary study and response definition.
+
 This is not a fit of the full capitulum model and not posterior inference.
 """
 from __future__ import annotations
@@ -22,6 +25,22 @@ TARGET_IDS = [
     "CIR_DISPLAY_PROBE_97LD",
     "CIR_DISPLAY_PROBE_98HD",
     "CIR_DISPLAY_PROBE_98LD",
+]
+EXPECTED_CONTEXT_LABELS = [
+    "1997 high-density stand",
+    "1997 low-density stand",
+    "1998 high-density stand",
+    "1998 low-density stand",
+]
+COMPARABILITY_FIELDS = [
+    "source_id",
+    "taxonomic_scope",
+    "module",
+    "driver",
+    "response",
+    "target_kind",
+    "scale",
+    "provenance",
 ]
 MODES = [
     "COMMON_MEAN_COMMON_RATIO",
@@ -43,7 +62,24 @@ SCORE_SCALE = 0.35
 def load_slopes(path: Path):
     with path.open(encoding="utf-8", newline="") as handle:
         rows = {row["target_id"]: row for row in csv.DictReader(handle)}
-    return [float(rows[target_id]["estimate"]) for target_id in TARGET_IDS]
+    selected = [rows[target_id] for target_id in TARGET_IDS]
+
+    source_design = {}
+    for field in COMPARABILITY_FIELDS:
+        values = {row[field] for row in selected}
+        if len(values) != 1:
+            raise ValueError(f"pollinator slope comparability failed for {field}: {sorted(values)}")
+        source_design[field] = selected[0][field]
+
+    for row, expected_context in zip(selected, EXPECTED_CONTEXT_LABELS):
+        if expected_context not in row["claim_boundary"]:
+            raise ValueError(
+                f"pollinator context mismatch for {row['target_id']}: expected {expected_context!r}"
+            )
+
+    source_design["design"] = "2 years x 2 density stands"
+    source_design["target_ids"] = list(TARGET_IDS)
+    return [float(row["estimate"]) for row in selected], source_design
 
 
 def score(pred, obs):
@@ -153,7 +189,7 @@ def random_search_best(mode, obs, draws):
 
 
 def run(targets: Path, draws=100000):
-    obs = load_slopes(targets)
+    obs, source_design = load_slopes(targets)
     results = {}
     for mode in MODES:
         pred, pars, exact_distance, bounds_ok = exact_fit(mode, obs)
@@ -183,9 +219,10 @@ def run(targets: Path, draws=100000):
     nonsaturated_raw_ranking = sorted(nonsaturated, key=lambda mode: results[mode]["exact_min_distance"])
 
     return {
-        "contract_version": "pollinator_regime_structure_v1_exact_df_audit",
+        "contract_version": "pollinator_regime_structure_v1_exact_df_provenance_audit",
         "status_date": "2026-08-20",
         "observed_slopes": dict(zip(TARGET_IDS, obs)),
+        "source_design": source_design,
         "observation_count": len(obs),
         "random_draws_per_structure": draws,
         "score_scale_log": SCORE_SCALE,
@@ -200,11 +237,12 @@ def run(targets: Path, draws=100000):
             "saturated (residual df = 0) and therefore cannot be preferred from raw fit alone."
         ),
         "interpretation": (
-            "The v2 pollinator-regime residual is genuinely associated with forcing shared response "
-            "structure across 1997 and 1998: year-specific mean response reduces raw distance by about "
-            "62%, and year-specific density ratio by about 38%. The next full-model upgrade should "
-            "represent context heterogeneity with shrinkage or replicated-data validation rather than "
-            "adding an unconstrained parameter for every observed context."
+            "The four slopes are directly comparable primary-study measurements in a 2-year x "
+            "2-density-stand design. The v2 residual is associated with forcing shared response structure "
+            "across those contexts: year-specific mean response reduces raw distance by about 62%, and "
+            "year-specific density ratio by about 38%. The next full-model upgrade should represent "
+            "context heterogeneity with shrinkage or replicated-data validation rather than adding an "
+            "unconstrained parameter for every observed context."
         ),
         "claim_boundary": (
             "This diagnostic uses four published slopes from one C. purpuratum study system. The "
