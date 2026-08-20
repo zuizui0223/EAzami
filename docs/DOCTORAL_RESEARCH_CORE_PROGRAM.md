@@ -1,6 +1,6 @@
 # Doctoral research core program
 
-Status: 2026-08-19
+Status: 2026-08-20
 
 ## One central question
 
@@ -34,40 +34,62 @@ Success criterion: at least two independent focal systems discriminate among lin
 
 **Priority 2 / indispensable for the word “adaptive”.**
 
-Question:
+### Updated question
 
-> Do rapidly divergent capitulum modules alter pollination, abiotic protection, antagonistic interactions and reproductive fitness?
+The existence of an antagonist fitness cost is no longer the main uncertainty.
 
-The 2026-08-19 bounded interaction seed now contains **13 independent studies, 10 taxa and 15 taxon-study rows**.
+A direct random-effects lnRR meta-analysis of harmonizable experimental *Cirsium* seed-output data gives:
 
-Current priors:
+- **4 independent data-generation studies**;
+- **9 within-study contrasts**;
+- pooled seed-output **RR = 2.674** when insect herbivory is experimentally reduced;
+- 95% CI **2.388–2.993**;
+- equivalent ambient-herbivory loss of potential seed output = **62.6%** (95% CI **58.1–66.6%**);
+- **I² = 1.0%**.
 
-- *C. palustre* provides direct natural flower-colour→pollination evidence, but not a replicated ancestry-controlled colour→effective-pollination→fitness chain.
-- *C. palustre* and *C. vulgare* show substantial predation-associated achene losses.
-- Japanese *C. purpuratum* shows that greater seasonal flower production can increase pre-dispersal seed predation and counteract reproductive gains, directly supporting a mutualist-attraction versus antagonist-cost trade-off framing.
-- no direct *Cirsium* head-orientation or phyllary/spine manipulation linked through interaction to reproductive fitness was recovered in the bounded targeted search.
+Canonical result:
 
-Current field order:
+`data/evidence/cirsium_floral_herbivory_lnrr_meta_v2.json`
+
+Therefore the Aim 2 question is now:
+
+> **Which rapidly divergent capitulum modules reduce or redistribute this established antagonist cost, and what pollination or abiotic costs accompany that protection?**
+
+This is a stronger causal target than asking whether insects can reduce seed production.
+
+### Current predictions
+
+- **orientation:** changing presentation can alter pollinator access, wetting/protection and antagonist access; any adaptive interpretation requires final seed output;
+- **colour:** W/coloured states can alter effective pollination and abiotic response; colour-function tests remain ancestry-resolved and share material with Aim 3;
+- **phyllary/spine:** if direct botanical spine/phyllary architecture is defensive, greater exclusion of floral/seed antagonists should preserve seed output, potentially at a cost to pollinator access;
+- **stickiness:** remains lower priority because the recovered direct manipulation was null.
+
+### Field order
 
 1. **orientation manipulation first**;
-2. **W/coloured comparison second**, informed by the *C. palustre* pollination prior and nested with Aim 3;
-3. **phyllary/spine conditional third**, only after direct botanical validation;
+2. **W/coloured comparison second**;
+3. **phyllary/spine conditional third**, only after direct botanical validation of the Azami image proxies and repeatable focal variation;
 4. **stickiness lower priority**.
 
-Required evidence:
+Required evidence chain:
 
-`trait -> interaction/protection -> reproductive fitness`
+`trait -> mutualist/antagonist or abiotic pathway -> reproductive fitness`
 
-Formal pooling remains unauthorized. Six seed-predation studies do not form one harmonized effect because their traits and outcomes differ.
+For defence-related traits, explicitly retain both sides of the trade-off:
 
-Canonical Aim 2 files:
+`trait -> antagonist access/damage -> seed output`
 
-- `docs/AIM2_CIRSIUM_INTERACTION_EVIDENCE_MAP_2026-08-18.md`
-- `data/evidence/cirsium_interaction_evidence_seed_v1.csv`
-- `data/evidence/cirsium_interaction_evidence_summary_v1.json`
-- `docs/AIM2_FIELD_NESTING_PLAN_2026-08-18.md`
+and
 
-Success criterion: replicated trait→interaction/environment→fitness evidence for at least one module in ancestry-resolved populations.
+`trait -> pollinator access/effective contact -> seed output`
+
+### Quantitative evidence boundary
+
+The seed-output lnRR result is a real narrow meta-analysis because all included effects share one explicit estimand. It **does not** authorize pooling heterogeneous pollinator visitation, florivory, seed predation, foliar herbivory or unrelated trait contrasts into a single effect.
+
+It also does not prove that orientation, phyllaries or spines are adaptations. It establishes that the antagonist fitness pressure they might mediate is large enough to merit direct causal tests.
+
+Success criterion: replicated trait→interaction/protection→fitness evidence for at least one capitulum module in ancestry-resolved populations, with pollinator and antagonist outcomes kept separable.
 
 ## Aim 3 — Flower-colour reversibility as a mechanistic case
 
@@ -81,7 +103,7 @@ Required chain:
 
 `population ancestry -> coding/regulatory haplotype -> floral RNA -> pigment -> standardized colour`
 
-The *C. palustre* pollination result strengthens the ecological motivation for colour but does not answer its molecular mechanism or fitness consequence. Existing DFR/ANS evidence remains pathway-retention plausibility only.
+Existing DFR/ANS evidence remains pathway-retention plausibility only. The *C. palustre* colour-pollination prior strengthens the ecological motivation for colour but does not resolve the molecular switch or its fitness consequence.
 
 Success criterion: at least two independent W/C transitions resolve whether regulatory reuse is recurrent.
 
@@ -102,14 +124,14 @@ Aim 2 experiments are nested inside the same ancestry-resolved populations. Do n
 
 # Supporting lanes, not extra Aims
 
-Radiation asymmetry is premise; reticulation/cytonuclear/ploidy/colour compression/Ryukyu history are Aim 1 diagnostics; broad climate and the interaction evidence map support Aim 2 design; anthocyanin evidence supports Aim 3.
+Radiation asymmetry is premise; reticulation/cytonuclear/ploidy/colour compression/Ryukyu history are Aim 1 diagnostics; the quantitative antagonist meta-analysis and bounded interaction map support Aim 2 design; anthocyanin evidence supports Aim 3.
 
 # Stop rules
 
 - Do not create new thesis Aims from supporting analyses.
 - Do not use visitor abundance as effective pollination or fitness.
-- Do not pool distinct antagonist classes or heterogeneous seed-predation contrasts.
-- Do not infer functional absence from a bounded literature search.
+- Do not pool biologically different interaction outcomes merely to increase k.
+- Do not spend new preliminary effort re-establishing that insect herbivory can lower *Cirsium* seed output; test the **capitulum module that changes the cost**.
 - Do not substitute more broad climate models for Aim 2 experiments.
-- Do not call the radiation adaptive until Aim 2 reaches reproductive fitness.
+- Do not call the radiation adaptive until Aim 2 reaches reproductive-fitness evidence tied to a focal trait.
 - Do not claim regulatory reuse until Aim 3 links genotype/expression/pigment/phenotype.
