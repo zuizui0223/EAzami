@@ -1,0 +1,44 @@
+name: Validate orientation mechanism reduction
+on:
+  pull_request:
+    paths:
+      - "data/evidence/orientation_mechanism_reduction_targets_v1.csv"
+      - "analysis/simulate_orientation_mechanism_reduction.py"
+      - "tests/test_simulate_orientation_mechanism_reduction.py"
+      - "data/evidence/orientation_mechanism_reduction_result_v1.json"
+      - "docs/ORIENTATION_MECHANISM_REDUCTION_RESULT_V1.md"
+      - ".github/workflows/validate-orientation-mechanism-reduction.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Run reduced orientation screen
+        run: |
+          python -m py_compile analysis/simulate_orientation_mechanism_reduction.py
+          python -m unittest tests/test_simulate_orientation_mechanism_reduction.py -v
+          python analysis/simulate_orientation_mechanism_reduction.py \
+            --targets data/evidence/orientation_mechanism_reduction_targets_v1.csv \
+            --draws 1500 --seed 20260820 --output /tmp/orientation.json
+          python - <<'PY'
+          import json
+          observed=json.load(open('/tmp/orientation.json'))
+          frozen=json.load(open('data/evidence/orientation_mechanism_reduction_result_v1.json'))
+          assert observed == frozen
+          assert observed['target_rows']==7
+          assert observed['core_targets']==5 and observed['heldout_targets']==2
+          fam={x['family']:x for x in observed['families']}
+          assert observed['ranking'][0]=='combined_time_abiotic'
+          assert fam['combined_time_abiotic']['accepted_core_match_median']==5
+          assert fam['combined_time_abiotic']['full_core_match_rate'] > 0.15
+          assert fam['combined_time_abiotic']['heldout_mean']==1.0
+          assert fam['abiotic_protection_only']['accepted_core_match_median']==4
+          assert fam['thermal_timing_only']['accepted_core_match_median']==4
+          assert fam['static_pollinator_only']['full_core_match_rate']==0
+          print('orientation_mechanism_reduction_frozen=true')
+          print('full_match_rate=', fam['combined_time_abiotic']['full_core_match_rate'])
+          PY

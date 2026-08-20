@@ -1,0 +1,8 @@
+target_id,source_layer,system,pathway,metric,target_value,lower_bound,upper_bound,direction,role,source_ref,notes
+OR_AZ_TEMP,azami_observation,Cirsium_global,environment_to_orientation,orientation_vs_temperature,1,,,positive,core,zuizui0223/azami:manuscript/final_claims.json,"Azami orientation × BIO1 beta +0.017059; only sign is transferred."
+OR_CREM_ACHENE,literature,Cremanthodium_campanulatum,abiotic_protection,nodding_vs_erect_achene_RR,3.58599,2.5,5.0,nodding_positive,core,10.1080/17550874.2012.702793,"Natural nodding 56.3±3.9% vs artificial erect 15.7±3.6%; n=30; F=59.1."
+OR_CREM_POLL_NULL,literature,Cremanthodium_campanulatum,pollinator_preference,nodding_minus_erect_visit_probability,0,-0.08,0.08,null,core,10.1080/17550874.2012.702793,"No significant pollinator preference detected."
+OR_HEL_EARLY,literature,Helianthus_annuus,thermal_timing,east_vs_west_early_visit_RR,1.25,1.10,,east_positive,core,10.1111/nph.17627,"Exact transferable RR not frozen; threshold encodes positive early-morning effect only."
+OR_HEL_ALLDAY,literature,Helianthus_annuus,time_averaging,east_vs_west_all_day_visit_RR,1.0,0.90,1.10,null,core,10.1111/tpj.17070,"All-day pollinator landings can be independent of azimuth; used as scale-dependence target."
+OR_HEL_SIRING,literature,Helianthus_annuus,male_fitness,east_vs_west_siring_RR,1.10,1.02,,east_positive,heldout,10.1111/nph.17627,"East-facing heads had a siring advantage; sign/weak threshold only."
+OR_CREM_EXPOSURE,literature,Cremanthodium_campanulatum,abiotic_protection,protected_vs_exposed_pollen_viability_RR,1.25,1.05,,protected_positive,heldout,10.1080/17550874.2012.702793,"Water and UV-B reduced pollen viability; exact combined RR is not frozen."
