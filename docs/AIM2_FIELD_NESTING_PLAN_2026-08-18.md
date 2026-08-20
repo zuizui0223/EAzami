@@ -1,4 +1,4 @@
-# Aim 2 field nesting plan — 2026-08-19
+# Aim 2 field nesting plan — 2026-08-20
 
 ## Decision
 
@@ -16,16 +16,21 @@ population / individual identity
 
 This preserves the doctoral mainline: explain where variation came from, then test what it does.
 
-## Two biological levels must remain separate
+## Biological levels must remain separate
 
-The 2026-08-19 interaction recheck added a Japanese *C. purpuratum* result showing that greater seasonal flower production can increase pre-dispersal seed predation and counteract reproductive gains. That is a **plant-level seasonal display trade-off**, not the same quantity as a focal capitulum's orientation, colour or phyllary geometry.
+The *C. purpuratum* evidence shows that greater seasonal flower production can increase pre-dispersal seed predation and counteract reproductive gains. That is a **plant-level seasonal display trade-off**, not the same quantity as a focal capitulum's orientation, colour or phyllary geometry.
 
-Therefore Aim 2 uses two linked ledgers:
+The orientation mechanism-reduction result adds a third necessary level: a whole-day visitor total can hide a biologically important early time-window effect.
+
+Therefore Aim 2 uses three linked ledgers:
 
 1. `sampling/aim2_capitulum_field_ledger_v1.csv` — one focal capitulum/treatment outcome;
-2. `sampling/aim2_plant_display_predation_ledger_v1.csv` — one plant × phenology census, with final seasonal flower production and plant-level predation/reproductive output when available.
+2. `sampling/aim2_orientation_time_window_ledger_v1.csv` — one focal capitulum × observation time window, preserving temperature/wetting and visit timing;
+3. `sampling/aim2_plant_display_predation_ledger_v1.csv` — one plant × phenology census, with final seasonal flower production and plant-level predation/reproductive output when available.
 
-Both link through `individual_id` and `population_id`. Do not copy a plant-level display effect into a capitulum-level structural model.
+All link through `individual_id`, `population_id` and, for the first two levels, `capitulum_id`.
+
+Do not copy a plant-level display effect into a capitulum-level structural model and do not collapse early-window orientation effects into a single all-day visit count before testing timing.
 
 ## Baseline measurements attached to focal individuals
 
@@ -55,17 +60,52 @@ Design hierarchy:
 3. record natural angle before treatment and achieved angle after treatment;
 4. retain population and ancestry effects rather than pooling them away.
 
-Required chain:
+### Mechanism-reduction result now governing measurement
 
-`orientation -> rain/wetting or pollinator presentation -> pollen/contact response -> achene/seed set`
+The reduced cross-study simulation compares static pollinator preference, abiotic protection and time-window thermal timing. The only family that robustly reproduced all five core patterns was **time-window pollination + abiotic protection**.
 
-Minimum measurements:
+The comparison bundle was:
 
-- rainfall or standardized wetting exposure;
-- pollen wetting and viability where feasible;
-- visitor guild, visit count and effective stigma/anther contact;
-- florivory and seed-predator damage;
-- total and filled achenes/seeds.
+- Azami orientation–temperature association positive;
+- *Cremanthodium* natural nodding/artificial erect achene-set RR ≈ 3.59;
+- no detected *Cremanthodium* pollinator orientation preference;
+- sunflower early-morning orientation effect positive;
+- sunflower all-day landing effect near null.
+
+This does **not** prove that *Cirsium* uses either comparison-system mechanism. It changes the field design: orientation must be decomposed into at least two candidate pathways rather than represented by one static visitation coefficient.
+
+### Pathway A — time-dependent pollinator presentation
+
+Required measurements by explicit time window:
+
+- local start/end time;
+- natural/achieved orientation;
+- head-surface temperature and ambient temperature;
+- pollen-presentation state where assessable;
+- visitor guild and count;
+- effective stigma/anther contact.
+
+At minimum distinguish an early-day window from the later/all-day aggregate. Do not infer absence of a timing effect from an all-day null.
+
+### Pathway B — rain / UV / wetting protection
+
+Required measurements:
+
+- rainfall or standardized wetting dose;
+- head wetness;
+- pollen wetting;
+- pollen viability using a sample ID tied to the focal head/time;
+- final total and filled achenes.
+
+If possible, pair natural-rain observations with a standardized wetting feasibility treatment so treatment exposure is interpretable.
+
+### Shared outcome
+
+Both pathways must ultimately reconnect to:
+
+`orientation -> timing and/or protection -> pollen/contact response -> achene/seed fitness`
+
+Florivory and seed-predator damage remain recorded so a treatment is not mistakenly interpreted as pollination/protection when it changed antagonist exposure.
 
 A small feasibility pilot may begin with about 10 experimental units per treatment per population. Final replication is determined from pilot variance, treatment loss and whether the experimental unit is capitulum or plant.
 
@@ -108,6 +148,8 @@ When admitted, record both:
 - pollinator landing/access/effective contact;
 - seed outcome.
 
+The large antagonist-cost meta result gives this mechanism biological importance, but it does not establish that any Azami image proxy is a defence trait.
+
 ## Antagonist monitoring common to all experiments
 
 Score focal capitula repeatedly at:
@@ -123,16 +165,17 @@ Keep florivory, pre-dispersal seed predation and vegetative herbivory as separat
 
 ## Data model
 
-- `aim2_capitulum_field_ledger_v1.csv`: focal head/treatment level.
-- `aim2_plant_display_predation_ledger_v1.csv`: individual × census level.
+- `aim2_capitulum_field_ledger_v1.csv`: focal head/treatment level and final fitness.
+- `aim2_orientation_time_window_ledger_v1.csv`: head × time-window temperature/wetting/pollination process.
+- `aim2_plant_display_predation_ledger_v1.csv`: individual × census seasonal display/antagonist context.
 
-Repeated visitor/antagonist event logs can later be keyed by `individual_id + capitulum_id`. Final plant-level seasonal production values are recorded only after the reproductive season is sufficiently complete and the estimation method is explicit.
+Repeated fine-grained insect events may later be stored separately, but every event/table must retain `individual_id + capitulum_id` and time.
 
 ## Priority under limited field capacity
 
 1. preserve Aim 1 population replication;
 2. obtain direct baseline capitulum and plant-display measurements;
-3. run orientation feasibility/manipulation;
+3. run orientation feasibility/manipulation with explicit timing + abiotic pathway measurements;
 4. add W/coloured functional comparisons;
 5. add phyllary/spine manipulation only after validity gates;
 6. measure stickiness opportunistically.
@@ -141,6 +184,7 @@ Repeated visitor/antagonist event logs can later be keyed by `individual_id + ca
 
 - no separate interaction-only sample with no ancestry linkage;
 - no visitation = effective pollination shortcut;
+- no all-day visitation = no orientation effect shortcut;
 - no adaptation claim from damage/visitor counts without reproductive outcome;
 - no pooling of antagonist classes;
 - no mixing plant-level seasonal display with focal-capitulum structural traits;
