@@ -1,6 +1,6 @@
 # Sampling design — doctoral mainline
 
-Status: 2026-08-19
+Status: 2026-08-20
 
 ## Principle
 
@@ -79,51 +79,67 @@ The purpose is to discriminate standing ancestral variation, introgression/gene 
 
 Aim 2 is **not a separate field campaign**. Functional plants remain linked to Aim 1 populations and ancestry.
 
+The merged antagonist meta-analysis already establishes a large reproductive cost of insect herbivory. Tranche 1 therefore does not re-test generic insect exclusion. It measures which capitulum module changes antagonist cost while recording pollinator benefit and abiotic protection on the same focal heads.
+
 ### Experiment order
 
 1. **Head orientation first**
    - natural angle;
    - non-destructive reorientation/sham where feasible;
+   - repeated time-stamped microclimate observation bouts on the same focal head;
    - rain/wetting exposure;
    - pollen wetting/viability;
    - visitor guild and effective contact;
+   - antagonist events/damage;
    - reproductive output.
 
 2. **W/coloured function second**
    - ancestry-resolved W/C comparisons;
    - visible + UV phenotype;
    - effective pollination and relevant abiotic response;
+   - antagonist exposure/damage;
    - achene/seed output;
    - share material with Aim 3.
 
 3. **Phyllary/spine conditional third**
    - only after direct botanical measurement validates the Azami image proxies;
    - only if repeatable focal-population variation exists;
-   - only if manipulation can avoid a dominant wound artifact.
+   - only if manipulation can avoid a dominant wound artifact;
+   - if tested, retain both antagonist protection and pollinator-access outcomes.
 
 4. **Stickiness lower priority**
    - record opportunistically;
    - do not displace orientation or colour.
 
-### Three linked data levels
+### Four linked data levels
 
 Individual/sample identity across Aim 1 and Aim 3:
 
 `sampling/aim13_individual_sample_ledger_v1.csv`
 
-Focal capitulum/treatment:
+Focal capitulum/treatment and final fitness:
 
 `sampling/aim2_capitulum_field_ledger_v1.csv`
+
+Repeated observation bout on the same focal capitulum:
+
+`sampling/aim2_capitulum_observation_bout_ledger_v1.csv`
 
 Plant × phenology / seasonal display and predation:
 
 `sampling/aim2_plant_display_predation_ledger_v1.csv`
 
-Do not collapse these levels. Head orientation is a capitulum-level trait; seasonal display and cumulative seed-predator load are plant-level quantities; DNA/cytotype/RNA/pigment identity belongs to the biological individual.
+Do not collapse these levels. Head orientation is a capitulum-level trait; microclimate and interaction observations vary among bouts; seasonal display and cumulative seed-predator load are plant-level quantities; DNA/cytotype/RNA/pigment identity belongs to the biological individual.
+
+The bout ledger keeps pollinator visits/effective contacts and antagonist events/damage as separate channels. Microclimate fields may be blank when an instrument is unavailable, but missing values must not be replaced with invented head-scale measurements or coarse climate rasters. Detailed protocol:
+
+`docs/AIM2_TRANCHE1_JOINT_OBSERVATION_PROTOCOL_2026-08-20.md`
 
 ### Replication
 
 An orientation feasibility pilot may begin at about 10 experimental units per treatment per population where feasible. Final replication is set after pilot variance, treatment loss and the feasible experimental unit (capitulum or plant) are known.
+
+Repeated bouts are repeated measurements, not additional biological replicates. Analysis must retain population/individual/capitulum dependence.
 
 ## Aim 3 — flowering-stage mechanistic subset
 

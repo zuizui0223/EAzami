@@ -6,6 +6,7 @@ on:
       - "data/evidence/doctoral_next_data_minimum_v1.csv"
       - "docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md"
       - "docs/DOCTORAL_NEXT_DATA_GATE_2026-08-19.md"
+      - "docs/AIM2_TRANCHE1_JOINT_OBSERVATION_PROTOCOL_2026-08-20.md"
       - "data/evidence/preliminary_hypothesis_registry_v1.csv"
       - "docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md"
       - "sampling/SAMPLING_DESIGN.md"
@@ -13,6 +14,9 @@ on:
       - "sampling/SAMPLE_ID_CONVENTION.md"
       - "sampling/doctoral_field_tranche1_population_manifest_v1.csv"
       - "sampling/aim13_individual_sample_ledger_v1.csv"
+      - "sampling/aim2_capitulum_field_ledger_v1.csv"
+      - "sampling/aim2_capitulum_observation_bout_ledger_v1.csv"
+      - "sampling/aim2_plant_display_predation_ledger_v1.csv"
       - "PROJECT_STATUS.md"
       - "README.md"
       - ".github/workflows/validate-preliminary-hypothesis-registry.yml"
@@ -33,6 +37,10 @@ jobs:
           import re
           from collections import Counter
           from pathlib import Path
+
+          def header(path):
+              with Path(path).open(encoding='utf-8', newline='') as handle:
+                  return next(csv.reader(handle))
 
           core=list(csv.DictReader(Path('data/evidence/doctoral_core_program_v1.csv').open(encoding='utf-8',newline='')))
           centers=[r for r in core if r['level']=='central']; aims=[r for r in core if r['level']=='aim']
@@ -55,9 +63,7 @@ jobs:
           assert 'at least 2 independent W/C transitions' in by['AIM3']['minimum_scale']
           assert 'late bud/pigmentation onset' in by['AIM3']['collect_now']
 
-          ledger_path=Path('sampling/aim13_individual_sample_ledger_v1.csv')
-          with ledger_path.open(encoding='utf-8',newline='') as handle:
-              fields=next(csv.reader(handle))
+          fields=header('sampling/aim13_individual_sample_ledger_v1.csv')
           required={
               'individual_id','population_id','taxon','voucher_id',
               'visible_colour_standard','uv_reflectance_file','natural_orientation_deg',
@@ -69,6 +75,39 @@ jobs:
           }
           assert required <= set(fields), required-set(fields)
           assert fields.count('individual_id')==1
+
+          head_fields=header('sampling/aim2_capitulum_field_ledger_v1.csv')
+          head_required={
+              'individual_id','population_id','capitulum_id','natural_orientation_deg',
+              'orientation_treatment','orientation_achieved_deg','visible_colour_standard',
+              'involucre_spread_deg','spine_length_mm','wetting_or_rain_exposure',
+              'pollen_wetting_score','pollen_viability','visitor_count','effective_contact_count',
+              'florivory_damage_fraction','seed_predator_damage_fraction','total_achenes','filled_achenes'
+          }
+          assert head_required <= set(head_fields), head_required-set(head_fields)
+
+          bout_fields=header('sampling/aim2_capitulum_observation_bout_ledger_v1.csv')
+          bout_required={
+              'individual_id','population_id','capitulum_id','observation_bout_id',
+              'observation_date','start_time_local','end_time_local','orientation_achieved_deg',
+              'microclimate_sensor_id','air_temperature_c','relative_humidity_pct',
+              'wind_speed_m_s','incident_radiation_w_m2','head_surface_temperature_c',
+              'rainfall_mm_previous_30min','capitulum_wetness_score',
+              'pollinator_visit_count','effective_contact_count','dominant_pollinator_guild',
+              'antagonist_visit_count','dominant_antagonist_guild','florivory_event_count',
+              'seed_predator_event_count','damage_observed_during_bout','treatment_integrity'
+          }
+          assert bout_required <= set(bout_fields), bout_required-set(bout_fields)
+          assert len(bout_fields)==len(set(bout_fields))
+          assert 'total_achenes' not in bout_fields and 'filled_achenes' not in bout_fields
+
+          plant_fields=header('sampling/aim2_plant_display_predation_ledger_v1.csv')
+          plant_required={
+              'individual_id','population_id','phenology_census_id','total_reproductive_capitula_current',
+              'seasonal_capitula_produced_final','predated_capitula_fraction','filled_achenes_sampled',
+              'estimated_plant_filled_achenes'
+          }
+          assert plant_required <= set(plant_fields), plant_required-set(plant_fields)
 
           manifest=list(csv.DictReader(Path('sampling/doctoral_field_tranche1_population_manifest_v1.csv').open(encoding='utf-8',newline='')))
           assert len(manifest)==14
@@ -115,22 +154,28 @@ jobs:
 
           gate=Path('docs/DOCTORAL_NEXT_DATA_GATE_2026-08-19.md').read_text(encoding='utf-8')
           sampling=Path('sampling/SAMPLING_DESIGN.md').read_text(encoding='utf-8')
+          protocol=Path('docs/AIM2_TRANCHE1_JOINT_OBSERVATION_PROTOCOL_2026-08-20.md').read_text(encoding='utf-8')
           status=Path('PROJECT_STATUS.md').read_text(encoding='utf-8')
           for phrase in ['The only three unresolved doctoral gates','Core = 190','head orientation first','at least **two independent W/C transitions**']:
               assert phrase in gate, phrase
-          for phrase in ['Sampling design — doctoral mainline','**Core = 190 individuals.**','Aim 2 is **not a separate field campaign**','Aim 3 material must be collected during flowering','aim13_individual_sample_ledger_v1.csv','Japan38 × 3 same-library RAD sensitivity']:
+          for phrase in ['Sampling design — doctoral mainline','**Core = 190 individuals.**','Aim 2 is **not a separate field campaign**','Four linked data levels','aim2_capitulum_observation_bout_ledger_v1.csv','Aim 3 material must be collected during flowering','Japan38 × 3 same-library RAD sensitivity']:
               assert phrase in sampling, phrase
+          for phrase in ['same focal head','pollinator visits/effective contacts and antagonist events/damage','repeated measurements, not additional biological replicates']:
+              assert phrase in protocol, phrase
           assert 'three unresolved new-data gates' in status
 
           readme=Path('README.md').read_text(encoding='utf-8')
+          sampling_readme=Path('sampling/README.md').read_text(encoding='utf-8')
           support_map=Path('docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md').read_text(encoding='utf-8')
           assert 'one doctoral-level question' in readme
+          assert 'aim2_capitulum_observation_bout_ledger_v1.csv' in sampling_readme
           assert 'not the doctoral hypothesis hierarchy' in support_map
           assert '190 core individuals' in support_map
           print('doctoral_centers=1')
           print('doctoral_aims=3')
           print('next_data_gates=3')
           print('cross_aim_individual_ledger_valid=true')
+          print('aim2_joint_observation_schema_valid=true')
           print('tranche1_populations=14')
           print('tranche1_minimum_individuals=190')
           PY
