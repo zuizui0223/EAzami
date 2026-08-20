@@ -1,0 +1,41 @@
+{
+  "contract_version": "capitulum_pattern_reduction_v2_replicate_sensitivity",
+  "status_date": "2026-08-20",
+  "parameter_draws_per_model": 600,
+  "simulation_replicates_per_draw": 5,
+  "model_best_mean_distance": {
+    "ENV_ONLY": 1454.94326738,
+    "ENV_POLL": 604.80167743,
+    "ENV_ANT": 887.08235463,
+    "FULL_COUPLED_GLOBAL": 37.22337944,
+    "FULL_MODULAR_GLOBAL": 23.03275436,
+    "FULL_COUPLED_HET": 27.00458154,
+    "FULL_MODULAR_HET": 7.74973539
+  },
+  "model_mean_distance_p01": {
+    "ENV_ONLY": 1454.96664085,
+    "ENV_POLL": 606.69967743,
+    "ENV_ANT": 890.28541283,
+    "FULL_COUPLED_GLOBAL": 44.18840579,
+    "FULL_MODULAR_GLOBAL": 27.70692125,
+    "FULL_COUPLED_HET": 33.74834469,
+    "FULL_MODULAR_HET": 16.97312876
+  },
+  "overall_ranking": [
+    "FULL_MODULAR_HET",
+    "FULL_MODULAR_GLOBAL",
+    "FULL_COUPLED_HET",
+    "FULL_COUPLED_GLOBAL",
+    "ENV_POLL",
+    "ENV_ANT",
+    "ENV_ONLY"
+  ],
+  "full_factorial_ranking": [
+    "FULL_MODULAR_HET",
+    "FULL_MODULAR_GLOBAL",
+    "FULL_COUPLED_HET",
+    "FULL_COUPLED_GLOBAL"
+  ],
+  "headline": "Averaging each parameter draw across five fixed simulation realizations preserves the v2 full-model ranking.",
+  "claim_boundary": "This sensitivity addresses stochastic-realization dependence only; it does not validate the operational uncertainty weights or convert the screen into posterior inference."
+}

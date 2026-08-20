@@ -1,0 +1,23 @@
+name: Validate pattern reduction v2 replicate sensitivity
+on:
+  pull_request:
+    paths:
+      - "analysis/sensitivity_capitulum_pattern_reduction_v2_replicates.py"
+      - "tests/test_pattern_reduction_v2_replicate_sensitivity.py"
+      - "data/evidence/capitulum_pattern_reduction_v2_replicate_sensitivity.json"
+      - "data/evidence/capitulum_pattern_reduction_targets_v2.csv"
+      - "analysis/simulate_capitulum_pattern_reduction_v2.py"
+      - ".github/workflows/validate-capitulum-pattern-reduction-v2-replicate-sensitivity.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Check ranking across fixed simulation replicates
+        run: |
+          python -m py_compile analysis/sensitivity_capitulum_pattern_reduction_v2_replicates.py
+          python -m unittest tests/test_pattern_reduction_v2_replicate_sensitivity.py -v
