@@ -25,6 +25,8 @@ The merged structural screen leaves one practical discriminating question: can e
 
 A single final capitulum row cannot represent time-varying microclimate and repeated interaction measurements. The bout table therefore stores contemporaneous conditions and both interaction channels on the same focal head.
 
+Operational rule: **pollinator visits/effective contacts and antagonist events/damage** are recorded together on the same focal head; **repeated bouts are repeated measurements, not additional biological replicates**.
+
 ## Minimum repeated-bout record
 
 Each observation bout should preserve:
