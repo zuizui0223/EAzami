@@ -1,0 +1,20 @@
+name: Validate frozen Chang 2025 RNA-seq Comp1061 result
+on:
+  pull_request:
+    paths:
+      - "data/evidence/chang2025_rnaseq_comp1061_empirical_pilot_v1.json"
+      - "tests/test_chang2025_rnaseq_comp1061_empirical_pilot.py"
+      - ".github/workflows/validate-chang2025-rnaseq-comp1061-empirical-result.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate frozen empirical result and stop rules
+        run: python -m unittest tests.test_chang2025_rnaseq_comp1061_empirical_pilot
