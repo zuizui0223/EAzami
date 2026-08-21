@@ -1,0 +1,23 @@
+{
+  "version": "v1",
+  "study_count": 6,
+  "taxon_count": 4,
+  "taxa": [
+    "Cirsium altissimum",
+    "Cirsium canescens",
+    "Cirsium occidentale var. occidentale",
+    "Cirsium vulgare"
+  ],
+  "fecundity_cost_supported_studies": 6,
+  "population_transmission": {
+    "consistent": 4,
+    "context_dependent": 1,
+    "blocked": 1
+  },
+  "broad_abiotic_context_tested_studies": 5,
+  "broad_abiotic_general_moderator_support_studies": 0,
+  "demographic_gate_tested_studies": 4,
+  "demographic_gate_supported_studies": 3,
+  "headline": "Reproductive insect herbivory has a repeatable fecundity cost, but whether that cost propagates to recruitment or population growth is gated more consistently by demographic opportunity (safe sites, disturbance and density dependence) than by broad abiotic gradients such as productivity, fertility or elevation.",
+  "pooling_status": "Structured quantitative meta-synthesis only. Population-level response metrics include raw recruitment ratios, intrinsic growth rates and IPM/Bayesian lambda outputs, so a single pooled population-growth effect size is not authorized."
+}
