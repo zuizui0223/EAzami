@@ -5,6 +5,9 @@ on:
       - "analysis/build_focal_occurrence_niche_sample_information_v1.py"
       - "analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py"
       - "data/evidence/focal_occurrence_niche_sampling_config_v1.json"
+      - "data/evidence/focal_occurrence_niche_sampling_decision_v1.csv"
+      - "docs/FULL_OCCURRENCE_NICHE_SAMPLE_INFORMATION_2026-08-21.md"
+      - "sampling/doctoral_field_tranche1_population_manifest_v1.csv"
       - "tests/test_focal_occurrence_niche_sample_information_v1.py"
       - "tests/test_focal_occurrence_source_name_guard_v1.py"
       - ".github/workflows/validate-focal-occurrence-niche-sampling-v1.yml"
@@ -82,11 +85,30 @@ jobs:
           result=json.loads(Path('focal_niche_sampling_live/focal_occurrence_niche_sample_information_v1.json').read_text())
           assert 'ASR_uncertainty_reduction' in result['scoring_components_pending']
           assert 'same_environment_different_trait' in result['scoring_components_pending']
+
+          frozen=list(csv.DictReader(Path('data/evidence/focal_occurrence_niche_sampling_decision_v1.csv').open()))
+          frozen_by={x['taxon']:x for x in frozen}
+          for taxon in ['Cirsium brevicaule','Cirsium irumtiense','Cirsium pendulum']:
+              assert int(frozen_by[taxon]['niche_cluster_gap'])==0
+          assert int(frozen_by['Cirsium sieboldii']['niche_cluster_gap'])>0
+          assert 'Do not auto-add' in frozen_by['Cirsium sieboldii']['current_decision']
+
+          manifest=list(csv.DictReader(Path('sampling/doctoral_field_tranche1_population_manifest_v1.csv').open()))
+          m={x['population_id']:x for x in manifest}
+          assert m['P003']['required_region']=='Southern_Amami_bridge_stratum_Yoron_or_Okinoerabu'
+          assert m['P004']['required_region']=='Tokunoshima_bridge_stratum'
+          for pid in ['P003','P004']:
+              assert m[pid]['exact_locality_status']=='TBD_field_verified'
+              assert m[pid]['exact_locality']=='TBD_field_verified'
+              assert m[pid]['latitude']=='' and m[pid]['longitude']==''
+          assert sum(int(x['minimum_individuals']) for x in manifest)==190
+
           print('expected_taxa=', sorted(expected))
           print('represented_niche_taxa=', sorted(represented))
           print('public_occurrence_niche_gaps=', sorted(expected-represented))
           print('brevicaule_source_excluded=', b['n_source_taxon_excluded'])
           print('p003_p004_candidate_rows=', len(slots))
+          print('core190_unchanged=true')
           PY
       - name: Upload live focal niche sampling audit
         if: always()
