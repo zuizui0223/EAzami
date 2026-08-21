@@ -26,13 +26,14 @@ jobs:
         run: |
           python analysis/diagnose_east_asia_colour_rate_information_v1.py \
             --scaffold data/evidence/east_asia_fixed_colour_dated_scaffold_v1.json \
-            --output east_asia_colour_rate_information_v1.json
-      - name: Validate scientific boundary
+            --output east_asia_colour_rate_information_recomputed.json
+      - name: Validate frozen result and scientific boundary
         run: |
           python - <<'PY'
-          import json
+          import json, math
           from pathlib import Path
-          x=json.loads(Path('east_asia_colour_rate_information_v1.json').read_text())
+          x=json.loads(Path('east_asia_colour_rate_information_recomputed.json').read_text())
+          frozen=json.loads(Path('data/evidence/east_asia_colour_rate_information_v1.json').read_text())
           assert x['n_fixed_tips']==10
           assert x['state_counts']=={'C':7,'W':3}
           assert x['n_nuisance_topology_scenarios']==36
@@ -40,6 +41,14 @@ jobs:
           assert x['diagnostics']['expanded_fixed_tip_context_identifies_transition_rate'] is False
           assert x['diagnostics']['expanded_fixed_tip_context_identifies_arenicola_ancestor_without_rate_constraint'] is False
           assert x['sampling_implication']['immediate_new_core190_populations']==0
+          for key in ['profile_best_q_range_per_myr','profile_LR95_q_lower_range_per_myr','profile_LR95_P_C_arenicola_global_range']:
+              assert len(x[key])==len(frozen[key])
+              for a,b in zip(x[key],frozen[key]):
+                  assert math.isclose(a,b,rel_tol=0,abs_tol=1e-12),(key,a,b)
+          for q, expected in frozen['reference_P_C_arenicola_ranges'].items():
+              got=x['reference_P_C_arenicola_ranges'][q]
+              for a,b in zip(got,expected):
+                  assert math.isclose(a,b,rel_tol=0,abs_tol=1e-12),(q,a,b)
           print('q_best_range=',x['profile_best_q_range_per_myr'])
           print('LR95_q_lower_range=',x['profile_LR95_q_lower_range_per_myr'])
           print('P_C_profile_range=',x['profile_LR95_P_C_arenicola_global_range'])
@@ -48,5 +57,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: east-asia-colour-rate-information-v1
-          path: east_asia_colour_rate_information_v1.json
+          path: east_asia_colour_rate_information_recomputed.json
           retention-days: 90
