@@ -1,0 +1,65 @@
+{
+  "contract_version": "doctoral_sampling_information_gate_v1",
+  "status_date": "2026-08-21",
+  "current_core_individuals": 190,
+  "immediate_new_population_additions": [],
+  "immediate_decision": "keep_core190_no_new_population_count",
+  "existing_slot_repositioning": [
+    {
+      "population_id": "P003",
+      "required_region": "Southern_Amami_bridge_stratum_Yoron_or_Okinoerabu",
+      "reason": "full_occurrence_niche_bridge_coverage"
+    },
+    {
+      "population_id": "P004",
+      "required_region": "Tokunoshima_bridge_stratum",
+      "reason": "full_occurrence_niche_bridge_coverage"
+    }
+  ],
+  "asr_gate": {
+    "pair_only_direction": "unresolved_loss_vs_regain_tie",
+    "current_sister_context": "coloured_Arenicola_MRCA_preferred_by_one_parsimony_step",
+    "root_sensitivity": "forcing_white_deep_root_reverses_Arenicola_MRCA_to_white",
+    "sampling_implication": "do_not_add_focal_population_count_to_solve_deep_ASR_polarity",
+    "higher_value_next_information": [
+      "trusted_branch_length_nuclear_topology_ensemble",
+      "broader_source_backed_colour_states_in_Arenicola_sister_and_adjacent_East_Asian_lineages"
+    ],
+    "role_of_P001_P008": "resolve_population_origin_alternatives_standing_variation_vs_introgression_vs_lineage_specific_change_not_deep_root_state"
+  },
+  "niche_gate": {
+    "Cirsium_brevicaule": "four_planned_populations_cover_major_public_niche_strata_and_P003_P004_are_now_positioned",
+    "Cirsium_irumtiense": "four_planned_populations_match_four_diagnostic_strata_but_coordinate_quality_requires_field_verification",
+    "Cirsium_pendulum": "four_planned_populations_match_four_diagnostic_strata_morph_linkage_is_next_gate",
+    "Cirsium_sieboldii": "two_planned_populations_underrepresent_full_occurrence_niche_structure_but_morph_linkage_is_missing"
+  },
+  "conditional_additions": [
+    {
+      "taxon": "Cirsium sieboldii",
+      "trigger": "verified_W_C_populations_show_P013_P014_do_not_span_an_independent_niche_context_replicate",
+      "action": "add_second_matched_white_coloured_population_pair",
+      "additional_populations_if_triggered": 2,
+      "additional_individuals_if_triggered": 30,
+      "status": "conditional_not_added_now"
+    }
+  ],
+  "conditional_controls": [
+    {
+      "taxon": "Cirsium lineare",
+      "minimum_individuals_if_activated": 16,
+      "status": "unchanged_conditional_control"
+    },
+    {
+      "taxon": "Cirsium dipsacolepis",
+      "minimum_individuals_if_activated": 16,
+      "status": "unchanged_conditional_control"
+    }
+  ],
+  "next_information_order": [
+    "verify_P003_P004_extant_populations_within_the_two_ranked_region_strata",
+    "link_pendulum_and_sieboldii_white_coloured_populations_to_occurrence_niche_space",
+    "recover_trusted_branch_length_tree_and_broaden_colour_atlas_for_full_ASR",
+    "only_then_recompute_composite_sample_value_with_ASR_trait_ancestry_components"
+  ],
+  "claim_boundary": "The gate distinguishes deep ancestral-state polarity from population-origin inference. Niche coverage can position existing field slots but cannot substitute for ancestry or morph linkage. No new population count is added until a declared conditional trigger is observed."
+}
