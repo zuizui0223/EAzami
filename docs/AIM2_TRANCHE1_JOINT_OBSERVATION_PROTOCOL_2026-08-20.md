@@ -1,6 +1,6 @@
 # Aim 2 tranche-1 joint observation protocol
 
-Status: 2026-08-20
+Status: 2026-08-21
 
 ## Purpose
 
@@ -75,6 +75,27 @@ This permits direct reconstruction of `heads probed per visit = heads_probed_tot
 
 Repeated bouts across populations/time windows can later be analyzed with partial pooling. Until those replicated contexts exist, do not fit one unconstrained pollinator-response parameter per year or site.
 
+## Colour-choice update
+
+The *C. palustre* literature colour prior is now quantitative rather than sign-only. Reconstructed significant white-preference bee-type × population cases from Mogford Fig. 24 give
+
+`white selection ratio = white visit share / white morph share`
+
+with a conditional range **1.1516–1.6118** and geometric mean **1.3019** across six significant white-preference cases.
+
+This is deliberately a **soft, significance-conditioned calibration**, not a pooled effect. The six cases are clustered within one study system and were selected because they showed significant white preference. They do not justify hard-coding `white always preferred` into the EAzami generator.
+
+For the W/coloured tranche, preserve the quantities needed to calculate the same object directly:
+
+- `colour_class` once per focal capitulum in `aim2_capitulum_field_ledger_v1.csv`, linked to the existing visible-colour standard, UV reflectance and pigment sample;
+- `colour_choice_context_id` for a comparable local choice set;
+- `local_open_capitula_same_colour_class`;
+- `local_open_capitula_alternative_colour_class`;
+- `pollinator_visit_count` and effective contact separately;
+- the existing time-window, density and microclimate fields.
+
+Do not substitute a subjective statement such as `pollinators preferred white` for availability-normalized counts. The analysis target is a population/time-context-specific selection ratio, with repeated contexts partially pooled. A null or reversed preference in the focal Ryukyu comparisons is a valid result.
+
 ## Channel separation
 
 Never collapse these into one generic insect variable:
@@ -87,12 +108,12 @@ Never collapse these into one generic insect variable:
 - pre-dispersal seed predation;
 - final seed output.
 
-Likewise, temperature/wetting, focal display, local density and visitor responses are separate candidate drivers/mediators; one is not used as a proxy for another.
+Likewise, temperature/wetting, focal display, local density, local colour availability and visitor responses are separate candidate drivers/mediators; one is not used as a proxy for another.
 
 ## Field order
 
 1. **Orientation first** — natural orientation + non-destructive reorientation/sham, with explicit early/later bouts and abiotic measurements.
-2. **W/coloured second** — reuse the joint bout structure so colour effects are not inferred from visitor counts without contemporaneous environment/effective contact.
+2. **W/coloured second** — use `colour_class` plus quantitative local colour availability so selection ratios and effective contacts can be estimated in the same environmental/context frame.
 3. **Phyllary/spine conditional third** — only after direct botanical validation and defensible manipulation.
 
 ## Analysis consequence
@@ -105,6 +126,8 @@ The first orientation field model should compare candidate mediation paths rathe
 
 The pollinator-context layer should test `focal display × local density/context → heads probed per visit / effective contact` with population/time context partially pooled rather than treated as four unrelated parameters.
 
+The colour layer should test `focal colour × local colour availability/context → visit selection ratio → effective contact`, with the Mogford 1.15–1.61 interval used only as an external soft calibration, not as a required effect direction or magnitude.
+
 Population/ancestry and individual/capitulum dependence must remain explicit.
 
 ## Stop rules
@@ -114,6 +137,8 @@ Population/ancestry and individual/capitulum dependence must remain explicit.
 - no visitor-count = fitness shortcut;
 - no subjective density class when quantitative counts/area are feasible;
 - no unpooled year/site pollinator parameter without replicated contexts;
+- no `white always preferred` parameter from the Mogford cases;
+- no colour-preference claim without local morph availability;
 - no environment raster substitution for missing head-scale measurements;
 - no adaptation claim until a focal trait effect reaches reproductive output;
 - no claim that the comparison-system mechanism operates in *Cirsium* until tested directly.
