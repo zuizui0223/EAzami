@@ -1,0 +1,40 @@
+{
+  "contract_version": "arenicola_dated_asr_scaffold_v1",
+  "status_date": "2026-08-21",
+  "state_coding": {"W": "white", "C": "coloured"},
+  "tip_states": {
+    "Cirsium brevicaule": "W",
+    "Cirsium irumtiense": "C",
+    "Cirsium morii": "C",
+    "Cirsium pengii": "C",
+    "Cirsium kawakamii": "W",
+    "Cirsium tatakaense": "C"
+  },
+  "central_node_ages_mya": {
+    "arenicola_nipponocirsium_root": 1.02,
+    "arenicola_mrca": 0.93,
+    "nipponocirsium_crown_morii_split": 0.79,
+    "taiwan_trio_crown": 0.47,
+    "terminal_pair_mrca": 0.35
+  },
+  "topology_variants": [
+    {"id": "published_pengii_basal", "taiwan_trio_basal": "Cirsium pengii", "role": "primary_sensitivity_scaffold"},
+    {"id": "alternative_kawakamii_basal", "taiwan_trio_basal": "Cirsium kawakamii", "role": "topology_sensitivity_only"},
+    {"id": "alternative_tatakaense_basal", "taiwan_trio_basal": "Cirsium tatakaense", "role": "topology_sensitivity_only"}
+  ],
+  "rate_grid_per_myr": {"log10_min": -2.0, "log10_max": 2.0, "points": 801},
+  "reference_rates_per_myr": [0.1, 0.2, 0.5, 1.0, 2.0, 5.0],
+  "root_prior": {"W": 0.5, "C": 0.5},
+  "sources": [
+    {
+      "source_ref": "10.1186/s12870-026-08097-6",
+      "use": "Arenicola-Nipponocirsium split 1.02 Mya; C. brevicaule-C. irumtiense split ~0.93 Mya; C. morii split ~0.79 Mya; East Asian topology and tip colours."
+    },
+    {
+      "source_ref": "10.1186/s40529-025-00454-2",
+      "use": "Within Taiwanese Nipponocirsium sensitivity scaffold: C. pengii basal, ~0.47 Mya; C. kawakamii-C. tatakaense split ~0.35 Mya; alternative basal resolutions retained as sensitivity."
+    }
+  ],
+  "analysis_question": "Does adding published time information make the Arenicola flower-colour ancestor identifiable, or is the coloured-ancestor preference still conditional on a low transition-rate assumption?",
+  "claim_boundary": "This is a hybrid published-node-age sensitivity scaffold, not an extracted BEAST/ASTRAL Newick tree and not the Moreyra final tree. Node ages come from two related East Asian studies with different sampling/analyses. It is used only to diagnose rate/topology identifiability. No final stochastic map, posterior ancestral probability, diversification-rate inference, or published-tree likelihood claim is permitted."
+}
