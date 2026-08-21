@@ -4,6 +4,7 @@ on:
     paths:
       - "analysis/diagnose_arenicola_dated_asr_identifiability_v1.py"
       - "data/evidence/arenicola_dated_asr_scaffold_v1.json"
+      - "data/evidence/arenicola_dated_asr_rate_identifiability_v1.json"
       - "tests/test_arenicola_dated_asr_identifiability_v1.py"
       - ".github/workflows/validate-arenicola-dated-asr-identifiability-v1.yml"
   workflow_dispatch:
@@ -23,13 +24,15 @@ jobs:
         run: |
           python analysis/diagnose_arenicola_dated_asr_identifiability_v1.py \
             --scaffold data/evidence/arenicola_dated_asr_scaffold_v1.json \
-            --output arenicola_dated_asr_rate_identifiability_v1.json
-      - name: Validate decision boundary
+            --output arenicola_dated_asr_rate_identifiability_recomputed.json
+      - name: Validate frozen result and decision boundary
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          x=json.loads(Path('arenicola_dated_asr_rate_identifiability_v1.json').read_text())
+          x=json.loads(Path('arenicola_dated_asr_rate_identifiability_recomputed.json').read_text())
+          frozen=json.loads(Path('data/evidence/arenicola_dated_asr_rate_identifiability_v1.json').read_text())
+          assert x==frozen
           assert x['diagnostics']['all_topology_variants_support_coloured_MRCA_if_q_0_2'] is True
           assert x['diagnostics']['all_topology_variants_profile_support_spans_coloured_to_uninformative'] is True
           assert x['diagnostics']['ancestral_state_is_identified_without_rate_constraint'] is False
@@ -44,5 +47,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: arenicola-dated-asr-rate-identifiability-v1
-          path: arenicola_dated_asr_rate_identifiability_v1.json
+          path: arenicola_dated_asr_rate_identifiability_recomputed.json
           retention-days: 90
