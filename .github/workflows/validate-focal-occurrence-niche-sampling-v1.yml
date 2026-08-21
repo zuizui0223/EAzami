@@ -29,7 +29,7 @@ jobs:
         run: |
           python -m unittest tests/test_focal_occurrence_niche_sample_information_v1.py -v
           python -m unittest tests/test_focal_occurrence_source_name_guard_v1.py -v
-      - name: Run live GBIF plus CHELSA niche audit with source-name guard
+      - name: Run live GBIF plus CHELSA niche audit with taxonomy and support guards
         env:
           GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
           CPL_VSIL_CURL_ALLOWED_EXTENSIONS: .tif,.tiff
@@ -40,7 +40,7 @@ jobs:
           python analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py \
             --config data/evidence/focal_occurrence_niche_sampling_config_v1.json \
             --out-dir focal_niche_sampling_live
-      - name: Validate taxonomy guard, decision boundary and report gaps
+      - name: Validate taxonomy guard, local support and decision boundary
         run: |
           python - <<'PY'
           import csv, json
@@ -53,8 +53,6 @@ jobs:
           assert matched==expected, (expected-matched, matched-expected)
 
           by_match={x['query_name']:x for x in matches}
-          # GBIF currently collapses at least some source-labelled irumtiense records under
-          # the accepted brevicaule concept. The source guard must expose, not hide, this.
           b=by_match['Cirsium brevicaule']
           assert int(b['n_source_taxon_match']) > 0
           assert int(b['n_source_taxon_excluded']) > 0
@@ -75,6 +73,11 @@ jobs:
           slots=list(csv.DictReader(Path('focal_niche_sampling_live/p003_p004_niche_stratum_candidates.csv').open()))
           assert len(slots) <= 2
           assert all(x['decision']=='candidate_stratum_for_field_verification_not_collection_coordinate' for x in slots)
+          for x in slots:
+              assert int(float(x['local_support_neighbors_75km'])) >= 1, x
+              assert float(x['bridge_relevance']) > 0.15, x
+              assert float(x['intermediate_slot_score']) > 0, x
+              assert x['selection_guard']=='source_name_match_and_neighbor_support_and_intermediate_bridge', x
 
           result=json.loads(Path('focal_niche_sampling_live/focal_occurrence_niche_sample_information_v1.json').read_text())
           assert 'ASR_uncertainty_reduction' in result['scoring_components_pending']
