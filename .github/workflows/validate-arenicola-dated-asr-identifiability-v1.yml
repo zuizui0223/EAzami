@@ -1,0 +1,51 @@
+name: Validate Arenicola dated ASR identifiability v1
+on:
+  pull_request:
+    paths:
+      - "analysis/diagnose_arenicola_dated_asr_identifiability_v1.py"
+      - "data/evidence/arenicola_dated_asr_scaffold_v1.json"
+      - "data/evidence/arenicola_dated_asr_rate_identifiability_v1.json"
+      - "tests/test_arenicola_dated_asr_identifiability_v1.py"
+      - ".github/workflows/validate-arenicola-dated-asr-identifiability-v1.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run unit tests
+        run: python -m unittest tests/test_arenicola_dated_asr_identifiability_v1.py -v
+      - name: Recompute dated ASR rate profile
+        run: |
+          python analysis/diagnose_arenicola_dated_asr_identifiability_v1.py \
+            --scaffold data/evidence/arenicola_dated_asr_scaffold_v1.json \
+            --output arenicola_dated_asr_rate_identifiability_recomputed.json
+      - name: Validate frozen result and decision boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('arenicola_dated_asr_rate_identifiability_recomputed.json').read_text())
+          frozen=json.loads(Path('data/evidence/arenicola_dated_asr_rate_identifiability_v1.json').read_text())
+          assert x==frozen
+          assert x['diagnostics']['all_topology_variants_support_coloured_MRCA_if_q_0_2'] is True
+          assert x['diagnostics']['all_topology_variants_profile_support_spans_coloured_to_uninformative'] is True
+          assert x['diagnostics']['ancestral_state_is_identified_without_rate_constraint'] is False
+          assert x['sampling_implication']['immediate_new_focal_populations']==0
+          p=x['primary_topology_key_results']
+          print('P_C_Arenicola_q0.2=',p['P_C_arenicola_at_q_0_2'])
+          print('P_C_Arenicola_q0.5=',p['P_C_arenicola_at_q_0_5'])
+          print('P_C_Arenicola_q1=',p['P_C_arenicola_at_q_1'])
+          for row in x['profiles']:
+              print(row['topology_variant'], 'best_q=',row['profile_best_q_per_myr'], 'LR95_q=',row['profile_LR95_q_lower'],row['profile_LR95_q_upper'], 'P_C_range=',row['profile_LR95_P_C_arenicola_range'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: arenicola-dated-asr-rate-identifiability-v1
+          path: arenicola_dated_asr_rate_identifiability_recomputed.json
+          retention-days: 90
