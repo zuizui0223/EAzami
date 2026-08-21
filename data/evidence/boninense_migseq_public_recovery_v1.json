@@ -1,0 +1,64 @@
+{
+  "contract_version": "boninense_migseq_public_recovery_v1",
+  "status_date": "2026-08-21",
+  "taxon": "Cirsium boninense",
+  "flower_colour_state": "fixed_white",
+  "flower_colour_evidence": {
+    "strength": "strong_direct_official_text",
+    "source": "National Museum of Nature and Science Japan Cirsium database",
+    "url": "https://www.kahaku.go.jp/research/db/botany/azami/detail.html?no=34",
+    "summary": "Official species account states white florets and that flowers are always white."
+  },
+  "genetic_study": {
+    "title_ja": "遺伝子情報を用いた小笠原諸島固有種オガサワラアザミの起源解明",
+    "title_en": "Study on the origin of the Cirsium boninense, endemic to the Ogasawara Islands, using genetic information",
+    "author": "SHINOZAKI Takumi",
+    "institution": "Chiba University",
+    "publication_context": "Global Studies, Vol. 9, 2025; also presented at the 24th Japanese Society for Plant Systematics meeting",
+    "method_status": "MIG-seq_confirmed_from_public_institutional_summary",
+    "method": "MIG-seq (Multiplexed ISSR Genotyping by Sequencing)",
+    "comparison_taxa_as_indexed": [
+      "Cirsium irimtiense",
+      "Cirsium brevicaule",
+      "Cirsium spinosum",
+      "Cirsium maritimum",
+      "Cirsium boninense"
+    ],
+    "source_spelling_note": "The indexed Chiba University summary spells the first comparison taxon Cirsium irimtiense. Preserve that source spelling here; do not use it as an automatic taxonomic normalization rule.",
+    "additional_analysis": "statistical analysis of involucral-bract traits",
+    "public_sources": [
+      {
+        "type": "institutional_publication_summary",
+        "url": "https://opac.ll.chiba-u.jp/da/curator/900123082/S24326291-9-P295.pdf",
+        "recoverable_indexed_information": "study purpose, five comparison taxa, MIG-seq method, bract-trait analysis"
+      },
+      {
+        "type": "conference_bibliographic_record",
+        "url": "https://jglobal.jst.go.jp/detail?JGLOBAL_ID=202502289420525672",
+        "recoverable_indexed_information": "title, authors, meeting, page 69"
+      }
+    ]
+  },
+  "not_recovered": [
+    "number of C. boninense individuals analysed",
+    "sample or voucher identities used for MIG-seq",
+    "number of loci or SNPs retained",
+    "phylogenetic or clustering result values/topology",
+    "raw FASTQ or genotype matrix",
+    "NCBI/DDBJ/ENA/SRA accession",
+    "reusable machine-readable MIG-seq dataset"
+  ],
+  "rate_tree_compatibility": {
+    "compositae1061_compatible_tip_recovered": false,
+    "reason": "MIG-seq is a reduced-representation marker dataset and is not the homologous Compositae1061 common-locus data required by the current branch-length compatibility tree contract.",
+    "can_inform_local_origin_hypothesis_if_results_recovered": true,
+    "can_satisfy_fixed_white_rate_tip_gate_now": false
+  },
+  "current_decision": {
+    "usable_nuclear_tip_recovered": false,
+    "rate_fit_tip_promotion_allowed": false,
+    "new_field_sampling_triggered": false,
+    "next_action": "Recover the full conference abstract/poster or other lawful detailed study record to obtain sample counts, vouchers, results and accession statements. Search for reusable MIG-seq raw/genotype data. If no reusable homologous nuclear data are available, retain the existing plan for at least two verified voucher/flower-colour-linked Compositae1061-compatible individuals."
+  },
+  "claim_boundary": "The public institutional summary establishes that MIG-seq was used and lists the five study taxa. It does not expose enough result/sample/accession information to reconstruct the analysis, promote C. boninense to the common-locus branch-length tree, or infer its exact sister relationship."
+}

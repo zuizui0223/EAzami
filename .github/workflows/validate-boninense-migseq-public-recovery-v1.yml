@@ -1,0 +1,48 @@
+name: Validate boninense MIG-seq public recovery v1
+on:
+  pull_request:
+    paths:
+      - "data/evidence/boninense_migseq_public_recovery_v1.json"
+      - "data/evidence/fixed_white_a1_priority_v2.csv"
+      - "docs/BONINENSE_MIGSEQ_PUBLIC_RECOVERY_2026-08-21.md"
+      - "analysis/validate_boninense_migseq_public_recovery_v1.py"
+      - "tests/test_boninense_migseq_public_recovery_v1.py"
+      - ".github/workflows/validate-boninense-migseq-public-recovery-v1.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run unit tests
+        run: python -m unittest tests/test_boninense_migseq_public_recovery_v1.py -v
+      - name: Validate recovery state
+        run: |
+          python analysis/validate_boninense_migseq_public_recovery_v1.py \
+            --recovery data/evidence/boninense_migseq_public_recovery_v1.json \
+            --priority data/evidence/fixed_white_a1_priority_v2.csv \
+            --output boninense_migseq_public_recovery_validation_v1.json
+      - name: Enforce no premature promotion
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('boninense_migseq_public_recovery_validation_v1.json').read_text())
+          assert x['boninense_method_confirmed']=='MIG-seq'
+          assert x['sample_count_recovered'] is False
+          assert x['raw_or_genotype_data_recovered'] is False
+          assert x['compositae1061_tip_recovered'] is False
+          assert x['rate_fit_tip_promotion_allowed'] is False
+          assert x['new_core190_populations']==0
+          print(x)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: boninense-migseq-public-recovery-v1
+          path: boninense_migseq_public_recovery_validation_v1.json
+          retention-days: 90
