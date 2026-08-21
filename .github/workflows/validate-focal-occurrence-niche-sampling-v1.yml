@@ -1,0 +1,132 @@
+name: Validate focal occurrence niche sampling v1
+on:
+  pull_request:
+    paths:
+      - "analysis/build_focal_occurrence_niche_sample_information_v1.py"
+      - "analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py"
+      - "analysis/build_doctoral_sampling_information_gate_v1.py"
+      - "analysis/arenicola_colour_history_sensitivity_v1.json"
+      - "data/evidence/focal_occurrence_niche_sampling_config_v1.json"
+      - "data/evidence/focal_occurrence_niche_sampling_decision_v1.csv"
+      - "data/evidence/doctoral_sampling_information_gate_v1.json"
+      - "docs/FULL_OCCURRENCE_NICHE_SAMPLE_INFORMATION_2026-08-21.md"
+      - "sampling/doctoral_field_tranche1_population_manifest_v1.csv"
+      - "tests/test_focal_occurrence_niche_sample_information_v1.py"
+      - "tests/test_focal_occurrence_source_name_guard_v1.py"
+      - "tests/test_doctoral_sampling_information_gate_v1.py"
+      - ".github/workflows/validate-focal-occurrence-niche-sampling-v1.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install niche audit dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas requests scikit-learn rasterio
+          python -m pip check
+      - name: Run unit tests
+        run: |
+          python -m unittest tests/test_focal_occurrence_niche_sample_information_v1.py -v
+          python -m unittest tests/test_focal_occurrence_source_name_guard_v1.py -v
+          python -m unittest tests/test_doctoral_sampling_information_gate_v1.py -v
+      - name: Run live GBIF plus CHELSA niche audit with taxonomy and support guards
+        env:
+          GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+          CPL_VSIL_CURL_ALLOWED_EXTENSIONS: .tif,.tiff
+          GDAL_HTTP_TIMEOUT: "120"
+          GDAL_HTTP_MAX_RETRY: "4"
+          GDAL_HTTP_RETRY_DELAY: "3"
+        run: |
+          python analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py \
+            --config data/evidence/focal_occurrence_niche_sampling_config_v1.json \
+            --out-dir focal_niche_sampling_live
+      - name: Validate taxonomy guard, local support and decision boundary
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+
+          cfg=json.loads(Path('data/evidence/focal_occurrence_niche_sampling_config_v1.json').read_text())
+          expected={x['scientific_name'] for x in cfg['taxa']}
+          matches=list(csv.DictReader(Path('focal_niche_sampling_live/gbif_taxon_matches.csv').open()))
+          matched={x['query_name'] for x in matches}
+          assert matched==expected, (expected-matched, matched-expected)
+
+          by_match={x['query_name']:x for x in matches}
+          b=by_match['Cirsium brevicaule']
+          assert int(b['n_source_taxon_match']) > 0
+          assert int(b['n_source_taxon_excluded']) > 0
+
+          summary=list(csv.DictReader(Path('focal_niche_sampling_live/focal_niche_sampling_summary.csv').open()))
+          represented={x['taxon'] for x in summary}
+          central={'Cirsium brevicaule','Cirsium irumtiense'}
+          assert central <= represented, central-represented
+          by_taxon={x['taxon']:x for x in summary}
+          assert int(by_taxon['Cirsium brevicaule']['n_source_taxon_excluded']) > 0
+
+          candidates=list(csv.DictReader(Path('focal_niche_sampling_live/focal_niche_sampling_candidates.csv').open()))
+          for row in candidates:
+              query=row['scientific_name_query'].casefold()
+              source=row['scientificName'].casefold()
+              assert source == query or source.startswith(query+' '), (query, source)
+
+          slots=list(csv.DictReader(Path('focal_niche_sampling_live/p003_p004_niche_stratum_candidates.csv').open()))
+          assert len(slots) <= 2
+          assert all(x['decision']=='candidate_stratum_for_field_verification_not_collection_coordinate' for x in slots)
+          for x in slots:
+              assert int(float(x['local_support_neighbors_75km'])) >= 1, x
+              assert float(x['bridge_relevance']) > 0.15, x
+              assert float(x['intermediate_slot_score']) > 0, x
+              assert x['selection_guard']=='source_name_match_and_neighbor_support_and_intermediate_bridge', x
+
+          result=json.loads(Path('focal_niche_sampling_live/focal_occurrence_niche_sample_information_v1.json').read_text())
+          assert 'ASR_uncertainty_reduction' in result['scoring_components_pending']
+          assert 'same_environment_different_trait' in result['scoring_components_pending']
+
+          frozen=list(csv.DictReader(Path('data/evidence/focal_occurrence_niche_sampling_decision_v1.csv').open()))
+          frozen_by={x['taxon']:x for x in frozen}
+          for taxon in ['Cirsium brevicaule','Cirsium irumtiense','Cirsium pendulum']:
+              assert int(frozen_by[taxon]['niche_cluster_gap'])==0
+          assert int(frozen_by['Cirsium sieboldii']['niche_cluster_gap'])>0
+          assert 'Do not auto-add' in frozen_by['Cirsium sieboldii']['current_decision']
+
+          manifest=list(csv.DictReader(Path('sampling/doctoral_field_tranche1_population_manifest_v1.csv').open()))
+          m={x['population_id']:x for x in manifest}
+          assert m['P003']['required_region']=='Southern_Amami_bridge_stratum_Yoron_or_Okinoerabu'
+          assert m['P004']['required_region']=='Tokunoshima_bridge_stratum'
+          for pid in ['P003','P004']:
+              assert m[pid]['exact_locality_status']=='TBD_field_verified'
+              assert m[pid]['exact_locality']=='TBD_field_verified'
+              assert m[pid]['latitude']=='' and m[pid]['longitude']==''
+          assert sum(int(x['minimum_individuals']) for x in manifest)==190
+
+          gate=json.loads(Path('data/evidence/doctoral_sampling_information_gate_v1.json').read_text())
+          assert gate['immediate_decision']=='keep_core190_no_new_population_count'
+          assert gate['immediate_new_population_additions']==[]
+          assert gate['conditional_additions'][0]['taxon']=='Cirsium sieboldii'
+          assert gate['conditional_additions'][0]['additional_individuals_if_triggered']==30
+
+          print('expected_taxa=', sorted(expected))
+          print('represented_niche_taxa=', sorted(represented))
+          print('public_occurrence_niche_gaps=', sorted(expected-represented))
+          print('brevicaule_source_excluded=', b['n_source_taxon_excluded'])
+          print('p003_p004_candidate_rows=', len(slots))
+          print('core190_unchanged=true')
+          print('conditional_sieboldii_plus30_only_if_triggered=true')
+          PY
+      - name: Upload live focal niche sampling audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eazami-focal-occurrence-niche-sample-info-v1
+          path: focal_niche_sampling_live
+          if-no-files-found: warn
+          retention-days: 90
