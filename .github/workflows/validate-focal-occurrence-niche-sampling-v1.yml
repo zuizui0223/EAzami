@@ -4,12 +4,16 @@ on:
     paths:
       - "analysis/build_focal_occurrence_niche_sample_information_v1.py"
       - "analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py"
+      - "analysis/build_doctoral_sampling_information_gate_v1.py"
+      - "analysis/arenicola_colour_history_sensitivity_v1.json"
       - "data/evidence/focal_occurrence_niche_sampling_config_v1.json"
       - "data/evidence/focal_occurrence_niche_sampling_decision_v1.csv"
+      - "data/evidence/doctoral_sampling_information_gate_v1.json"
       - "docs/FULL_OCCURRENCE_NICHE_SAMPLE_INFORMATION_2026-08-21.md"
       - "sampling/doctoral_field_tranche1_population_manifest_v1.csv"
       - "tests/test_focal_occurrence_niche_sample_information_v1.py"
       - "tests/test_focal_occurrence_source_name_guard_v1.py"
+      - "tests/test_doctoral_sampling_information_gate_v1.py"
       - ".github/workflows/validate-focal-occurrence-niche-sampling-v1.yml"
   workflow_dispatch:
 permissions:
@@ -32,6 +36,7 @@ jobs:
         run: |
           python -m unittest tests/test_focal_occurrence_niche_sample_information_v1.py -v
           python -m unittest tests/test_focal_occurrence_source_name_guard_v1.py -v
+          python -m unittest tests/test_doctoral_sampling_information_gate_v1.py -v
       - name: Run live GBIF plus CHELSA niche audit with taxonomy and support guards
         env:
           GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
@@ -103,12 +108,19 @@ jobs:
               assert m[pid]['latitude']=='' and m[pid]['longitude']==''
           assert sum(int(x['minimum_individuals']) for x in manifest)==190
 
+          gate=json.loads(Path('data/evidence/doctoral_sampling_information_gate_v1.json').read_text())
+          assert gate['immediate_decision']=='keep_core190_no_new_population_count'
+          assert gate['immediate_new_population_additions']==[]
+          assert gate['conditional_additions'][0]['taxon']=='Cirsium sieboldii'
+          assert gate['conditional_additions'][0]['additional_individuals_if_triggered']==30
+
           print('expected_taxa=', sorted(expected))
           print('represented_niche_taxa=', sorted(represented))
           print('public_occurrence_niche_gaps=', sorted(expected-represented))
           print('brevicaule_source_excluded=', b['n_source_taxon_excluded'])
           print('p003_p004_candidate_rows=', len(slots))
           print('core190_unchanged=true')
+          print('conditional_sieboldii_plus30_only_if_triggered=true')
           PY
       - name: Upload live focal niche sampling audit
         if: always()
