@@ -1,0 +1,1 @@
+This registry separates direct reproductive-herbivory fecundity costs from downstream demographic transmission. See docs/AIM2_CIRSIUM_DEMOGRAPHIC_TRANSMISSION_META_V1_2026-08-21.md for interpretation and pooling boundaries.
