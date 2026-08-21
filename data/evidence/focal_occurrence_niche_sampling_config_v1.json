@@ -1,0 +1,89 @@
+{
+  "contract_version": "focal_occurrence_niche_sampling_config_v1",
+  "status_date": "2026-08-21",
+  "purpose": "Use public full-occurrence records and CHELSA climate space to rank information gain for focal population sampling without inventing exact collection localities.",
+  "gbif": {
+    "country": "JP",
+    "has_coordinate": true,
+    "occurrence_status": "PRESENT",
+    "page_size": 300,
+    "max_records_per_taxon": 5000,
+    "max_coordinate_uncertainty_m_primary": 10000,
+    "spatial_thin_degrees": 0.05,
+    "japan_bounds": {"lat_min": 20.0, "lat_max": 46.5, "lon_min": 122.0, "lon_max": 154.5}
+  },
+  "chelsa": {
+    "version": "2.1",
+    "baseline": "1981-2010",
+    "predictors": {
+      "bio01": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio01/1981-2010/CHELSA_bio01_1981-2010_V.2.1.tif",
+      "bio04": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio04/1981-2010/CHELSA_bio04_1981-2010_V.2.1.tif",
+      "bio12": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio12/1981-2010/CHELSA_bio12_1981-2010_V.2.1.tif",
+      "bio15": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio15/1981-2010/CHELSA_bio15_1981-2010_V.2.1.tif"
+    }
+  },
+  "taxa": [
+    {
+      "scientific_name": "Cirsium brevicaule",
+      "planned_populations": 4,
+      "role": "core190_transition_system_A",
+      "slot_assignment": "P003_P004_intermediate_only",
+      "morph_linkage_required": false,
+      "analysis_region_anchors": [
+        {"name": "Amami_Oshima", "latitude": 28.32, "longitude": 129.37, "anchor_type": "analysis_region_centroid_not_collection_site"},
+        {"name": "Okinawa_Honto", "latitude": 26.50, "longitude": 127.95, "anchor_type": "analysis_region_centroid_not_collection_site"}
+      ]
+    },
+    {
+      "scientific_name": "Cirsium irumtiense",
+      "planned_populations": 4,
+      "role": "core190_transition_system_A",
+      "slot_assignment": "fixed_four_check_optional_gap",
+      "morph_linkage_required": false,
+      "analysis_region_anchors": [
+        {"name": "Miyako", "latitude": 24.79, "longitude": 125.30, "anchor_type": "analysis_region_centroid_not_collection_site"},
+        {"name": "Ishigaki", "latitude": 24.41, "longitude": 124.18, "anchor_type": "analysis_region_centroid_not_collection_site"},
+        {"name": "Iriomote", "latitude": 24.33, "longitude": 123.82, "anchor_type": "analysis_region_centroid_not_collection_site"},
+        {"name": "Yonaguni", "latitude": 24.45, "longitude": 122.99, "anchor_type": "analysis_region_centroid_not_collection_site"}
+      ]
+    },
+    {
+      "scientific_name": "Cirsium pendulum",
+      "planned_populations": 4,
+      "role": "core190_transition_system_B",
+      "slot_assignment": "niche_strata_only_until_white_coloured_linkage",
+      "morph_linkage_required": true,
+      "analysis_region_anchors": []
+    },
+    {
+      "scientific_name": "Cirsium sieboldii",
+      "planned_populations": 2,
+      "role": "core190_backup_transition_system_C",
+      "slot_assignment": "niche_strata_only_until_white_coloured_linkage",
+      "morph_linkage_required": true,
+      "analysis_region_anchors": []
+    },
+    {
+      "scientific_name": "Cirsium lineare",
+      "planned_populations": 0,
+      "role": "conditional_secondary_history_control",
+      "slot_assignment": "control_readiness_only",
+      "morph_linkage_required": false,
+      "analysis_region_anchors": []
+    },
+    {
+      "scientific_name": "Cirsium dipsacolepis",
+      "planned_populations": 0,
+      "role": "conditional_secondary_arrival_control",
+      "slot_assignment": "control_readiness_only",
+      "morph_linkage_required": false,
+      "analysis_region_anchors": []
+    }
+  ],
+  "scoring": {
+    "candidate_components": ["niche_edge", "geographic_edge", "cluster_rarity", "coverage_gain_vs_planned_region_anchors", "bridge_relevance"],
+    "not_computed_here": ["ASR_uncertainty_reduction", "same_environment_different_trait", "independent_transition_value", "population_ancestry_bridge"],
+    "rule": "Do not convert the niche-only score into a new sampling count until the pending ASR/phenotype/ancestry components are joined. P003/P004 may be positioned from niche information because those slots already exist in core190."
+  },
+  "claim_boundary": "Region-anchor coordinates are analytic island/region representative points, never proposed collection localities. Exact collection sites remain TBD_field_verified. GBIF/CHELSA niche results prioritize environmental coverage; they do not identify ancestry, adaptation or colour morph by themselves."
+}
