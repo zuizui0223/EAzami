@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - "analysis/audit_white_morph_niche_linkage_v1.py"
+      - "analysis/summarize_white_morph_region_niche_v1.py"
       - "data/evidence/white_morph_locality_evidence_v1.csv"
       - "data/evidence/white_morph_gbif_queries_v1.json"
       - "tests/test_white_morph_niche_linkage_v1.py"
@@ -50,6 +51,9 @@ jobs:
             --parent-config data/evidence/focal_occurrence_niche_sampling_config_v1.json \
             --parent-niche-dir parent_niche_live \
             --out-dir white_morph_niche_live
+          python analysis/summarize_white_morph_region_niche_v1.py \
+            --morph-dir white_morph_niche_live \
+            --out-dir white_morph_niche_live
       - name: Validate sampling boundary
         run: |
           python - <<'PY'
@@ -63,10 +67,15 @@ jobs:
           assert 'untriggered' in by['Cirsium sieboldii']['sampling_decision'] or 'requires_P013_P014_field_placement' in by['Cirsium sieboldii']['sampling_decision']
           result=json.loads(Path('white_morph_niche_live/white_morph_niche_linkage_v1.json').read_text())
           assert result['global_decision']=='do_not_expand_core190_from_public_morph_records_alone'
+          regional=json.loads(Path('white_morph_niche_live/white_morph_region_niche_decision_v1.json').read_text())
+          assert regional['global_decision']=='refine_existing_slots_before_adding_new_populations'
+          assert regional['sieboldii']['new_population_addition']==0
           evidence=list(csv.DictReader(Path('data/evidence/white_morph_locality_evidence_v1.csv').open()))
           assert any(r['source_ref']=='Noda_City_flora' for r in evidence)
           assert any(r['formal_name']=='Cirsium sieboldii f. leucanthum' for r in evidence)
-          print(rows)
+          print('morph_summary=', rows)
+          print('region_cluster_summary=', list(csv.DictReader(Path('white_morph_niche_live/white_morph_region_niche_summary.csv').open())))
+          print('regional_decision=', regional)
           PY
       - name: Upload morph-linked niche audit
         if: always()
