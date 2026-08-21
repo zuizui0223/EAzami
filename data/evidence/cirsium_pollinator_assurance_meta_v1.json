@@ -1,0 +1,17 @@
+{
+  "version": "v1",
+  "independent_study_count": 6,
+  "high_pollinator_dependence_studies": 5,
+  "variable_dependence_studies": 1,
+  "exact_numeric_studies": 1,
+  "dependence_vs_pollen_limitation_designs": 2,
+  "dependence_vs_limitation_with_no_general_open_pollen_deficit": 2,
+  "open_pollen_limitation_categories": {
+    "absent": 1,
+    "context_dependent": 2,
+    "mostly_absent": 1,
+    "not_directly_tested": 2
+  },
+  "headline": "Pollinator contribution to seed production is often large in Cirsium, but pollinator dependence is not equivalent to pollen limitation under current open conditions. Reproductive assurance varies with autonomous selfing, mating system, pollen-donor spacing, flowering synchrony and local density, so visitation alone is an insufficient proxy for fitness benefit.",
+  "pooling_status": "No across-study pooled pollinator effect is authorized yet. Only one independent study currently has a fully recovered Cirsium supplement/open/bagged numeric contrast; other studies use exclusion failure, donor distance, autonomous-selfing indices or qualitative bagged/open results."
+}
