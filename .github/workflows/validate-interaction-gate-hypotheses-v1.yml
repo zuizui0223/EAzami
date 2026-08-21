@@ -1,0 +1,29 @@
+name: Validate interaction gate hypotheses v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/interaction_gate_hypothesis_evidence_v1.csv"
+      - "data/evidence/interaction_gate_hypothesis_registry_v1.csv"
+      - "data/evidence/interaction_gate_hypothesis_summary_v1.json"
+      - "analysis/summarize_interaction_gate_hypotheses_v1.py"
+      - "tests/test_summarize_interaction_gate_hypotheses_v1.py"
+      - "sampling/aim2_assurance_antagonist_factorial_ledger_v1.csv"
+      - "sampling/aim2_seed_recruitment_gate_ledger_v1.csv"
+      - ".github/workflows/validate-interaction-gate-hypotheses-v1.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependency
+        run: python -m pip install pytest
+      - name: Recompute frozen hypothesis summary
+        run: python analysis/summarize_interaction_gate_hypotheses_v1.py
+      - name: Run focused tests
+        run: python -m pytest -q tests/test_summarize_interaction_gate_hypotheses_v1.py
