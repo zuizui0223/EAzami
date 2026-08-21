@@ -3,8 +3,10 @@ on:
   pull_request:
     paths:
       - "analysis/build_focal_occurrence_niche_sample_information_v1.py"
+      - "analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py"
       - "data/evidence/focal_occurrence_niche_sampling_config_v1.json"
       - "tests/test_focal_occurrence_niche_sample_information_v1.py"
+      - "tests/test_focal_occurrence_source_name_guard_v1.py"
       - ".github/workflows/validate-focal-occurrence-niche-sampling-v1.yml"
   workflow_dispatch:
 permissions:
@@ -24,8 +26,10 @@ jobs:
           python -m pip install numpy pandas requests scikit-learn rasterio
           python -m pip check
       - name: Run unit tests
-        run: python -m unittest tests/test_focal_occurrence_niche_sample_information_v1.py -v
-      - name: Run live GBIF plus CHELSA niche audit
+        run: |
+          python -m unittest tests/test_focal_occurrence_niche_sample_information_v1.py -v
+          python -m unittest tests/test_focal_occurrence_source_name_guard_v1.py -v
+      - name: Run live GBIF plus CHELSA niche audit with source-name guard
         env:
           GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
           CPL_VSIL_CURL_ALLOWED_EXTENSIONS: .tif,.tiff
@@ -33,32 +37,52 @@ jobs:
           GDAL_HTTP_MAX_RETRY: "4"
           GDAL_HTTP_RETRY_DELAY: "3"
         run: |
-          python analysis/build_focal_occurrence_niche_sample_information_v1.py \
+          python analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py \
             --config data/evidence/focal_occurrence_niche_sampling_config_v1.json \
             --out-dir focal_niche_sampling_live
-      - name: Validate decision boundary and report gaps
+      - name: Validate taxonomy guard, decision boundary and report gaps
         run: |
           python - <<'PY'
           import csv, json
           from pathlib import Path
+
           cfg=json.loads(Path('data/evidence/focal_occurrence_niche_sampling_config_v1.json').read_text())
           expected={x['scientific_name'] for x in cfg['taxa']}
           matches=list(csv.DictReader(Path('focal_niche_sampling_live/gbif_taxon_matches.csv').open()))
           matched={x['query_name'] for x in matches}
           assert matched==expected, (expected-matched, matched-expected)
+
+          by_match={x['query_name']:x for x in matches}
+          # GBIF currently collapses at least some source-labelled irumtiense records under
+          # the accepted brevicaule concept. The source guard must expose, not hide, this.
+          b=by_match['Cirsium brevicaule']
+          assert int(b['n_source_taxon_match']) > 0
+          assert int(b['n_source_taxon_excluded']) > 0
+
           summary=list(csv.DictReader(Path('focal_niche_sampling_live/focal_niche_sampling_summary.csv').open()))
           represented={x['taxon'] for x in summary}
           central={'Cirsium brevicaule','Cirsium irumtiense'}
           assert central <= represented, central-represented
+          by_taxon={x['taxon']:x for x in summary}
+          assert int(by_taxon['Cirsium brevicaule']['n_source_taxon_excluded']) > 0
+
+          candidates=list(csv.DictReader(Path('focal_niche_sampling_live/focal_niche_sampling_candidates.csv').open()))
+          for row in candidates:
+              query=row['scientific_name_query'].casefold()
+              source=row['scientificName'].casefold()
+              assert source == query or source.startswith(query+' '), (query, source)
+
           slots=list(csv.DictReader(Path('focal_niche_sampling_live/p003_p004_niche_stratum_candidates.csv').open()))
           assert len(slots) <= 2
           assert all(x['decision']=='candidate_stratum_for_field_verification_not_collection_coordinate' for x in slots)
+
           result=json.loads(Path('focal_niche_sampling_live/focal_occurrence_niche_sample_information_v1.json').read_text())
           assert 'ASR_uncertainty_reduction' in result['scoring_components_pending']
           assert 'same_environment_different_trait' in result['scoring_components_pending']
           print('expected_taxa=', sorted(expected))
           print('represented_niche_taxa=', sorted(represented))
           print('public_occurrence_niche_gaps=', sorted(expected-represented))
+          print('brevicaule_source_excluded=', b['n_source_taxon_excluded'])
           print('p003_p004_candidate_rows=', len(slots))
           PY
       - name: Upload live focal niche sampling audit
