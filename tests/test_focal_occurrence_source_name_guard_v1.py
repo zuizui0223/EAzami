@@ -54,6 +54,30 @@ class FocalOccurrenceSourceNameGuardTest(unittest.TestCase):
         self.assertEqual(len(primary), 1)
         self.assertTrue(primary.iloc[0]["scientificName"].startswith("Cirsium brevicaule"))
 
+    def test_intermediate_slot_guard_rejects_isolated_extreme(self):
+        frame = pd.DataFrame([
+            # Locally supported intermediate cluster 0.
+            {"gbif_key": 1, "latitude": 27.05, "longitude": 128.40, "cluster_id": 0,
+             "niche_information_score": 0.7, "bridge_relevance": 0.85, "coverage_gain": 0.70, "niche_edge": 0.35},
+            {"gbif_key": 2, "latitude": 27.10, "longitude": 128.43, "cluster_id": 0,
+             "niche_information_score": 0.6, "bridge_relevance": 0.82, "coverage_gain": 0.65, "niche_edge": 0.30},
+            # Locally supported intermediate cluster 1.
+            {"gbif_key": 3, "latitude": 27.80, "longitude": 128.90, "cluster_id": 1,
+             "niche_information_score": 0.8, "bridge_relevance": 0.84, "coverage_gain": 0.98, "niche_edge": 0.18},
+            {"gbif_key": 4, "latitude": 27.82, "longitude": 128.88, "cluster_id": 1,
+             "niche_information_score": 0.75, "bridge_relevance": 0.83, "coverage_gain": 0.95, "niche_edge": 0.12},
+            # Isolated extreme: high raw score but no nearby corroborating occurrence and not intermediate.
+            {"gbif_key": 99, "latitude": 24.94, "longitude": 125.23, "cluster_id": 2,
+             "niche_information_score": 1.0, "bridge_relevance": 0.0, "coverage_gain": 1.0, "niche_edge": 1.0},
+        ])
+        chosen = mod.guarded_select_distinct_candidates(frame, 2, min_distance_km=50)
+        self.assertEqual(len(chosen), 2)
+        self.assertNotIn(99, set(chosen["gbif_key"]))
+        self.assertEqual(len(set(chosen["cluster_id"])), 2)
+        self.assertTrue((chosen["local_support_neighbors_75km"] >= 1).all())
+        self.assertTrue((chosen["bridge_relevance"] > 0.15).all())
+        self.assertTrue((chosen["intermediate_slot_score"] > 0).all())
+
 
 if __name__ == "__main__":
     unittest.main()
