@@ -1,0 +1,24 @@
+name: Validate Cirsium demographic transmission meta v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/cirsium_demographic_transmission_meta_v1.csv"
+      - "data/evidence/cirsium_demographic_transmission_meta_v1.json"
+      - "analysis/summarize_cirsium_demographic_transmission_meta_v1.py"
+      - "tests/test_summarize_cirsium_demographic_transmission_meta_v1.py"
+      - ".github/workflows/validate-cirsium-demographic-transmission-meta-v1.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Recompute frozen summary
+        run: python analysis/summarize_cirsium_demographic_transmission_meta_v1.py
+      - name: Run focused tests
+        run: python -m pytest -q tests/test_summarize_cirsium_demographic_transmission_meta_v1.py
