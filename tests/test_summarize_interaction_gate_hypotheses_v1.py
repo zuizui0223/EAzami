@@ -44,3 +44,40 @@ def test_every_hypothesis_has_a_decisive_missing_test():
         rows = list(csv.DictReader(handle))
     assert len(rows) == 6
     assert all(r["decisive_missing_test"].strip() for r in rows)
+
+
+def header(path: Path):
+    with path.open(newline="", encoding="utf-8") as handle:
+        return next(csv.reader(handle))
+
+
+def test_factorial_ledger_can_separate_pollination_and_antagonist_marginal_effects():
+    cols = set(header(ROOT / "sampling/aim2_assurance_antagonist_factorial_ledger_v1.csv"))
+    required = {
+        "individual_id",
+        "population_id",
+        "capitulum_id",
+        "pollination_treatment",
+        "pollen_donor_distance_m",
+        "postanthesis_antagonist_protection",
+        "sham_protection_control",
+        "treatment_integrity",
+    }
+    assert required <= cols
+
+
+def test_recruitment_gate_ledger_preserves_seed_input_and_microsite_context():
+    cols = set(header(ROOT / "sampling/aim2_seed_recruitment_gate_ledger_v1.csv"))
+    required = {
+        "population_id",
+        "source_seed_batch_id",
+        "seed_addition_n",
+        "microsite_treatment",
+        "disturbance_treatment",
+        "bare_ground_pct",
+        "litter_cover_pct",
+        "vegetation_cover_pct",
+        "emerged_seedlings_n",
+        "surviving_seedlings_n",
+    }
+    assert required <= cols
