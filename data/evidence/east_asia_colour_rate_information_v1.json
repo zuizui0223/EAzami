@@ -1,0 +1,39 @@
+{
+  "contract_version": "east_asia_colour_rate_information_v1",
+  "status_date": "2026-08-21",
+  "n_fixed_tips": 10,
+  "state_counts": {"C": 7, "W": 3},
+  "n_nuisance_topology_scenarios": 36,
+  "profile_best_q_range_per_myr": [1.5667510701081486, 8.222426499470712],
+  "profile_LR95_q_lower_range_per_myr": [0.1778279410038923, 0.4570881896148752],
+  "all_profile_LR95_hit_upper_grid_boundary": true,
+  "profile_upper_grid_per_myr": 100.0,
+  "profile_LR95_P_C_arenicola_global_range": [0.4999999999999999, 0.9652737916923474],
+  "reference_P_C_arenicola_ranges": {
+    "0.2": [0.9545632535302895, 0.9656775022582398],
+    "0.5": [0.8102296703649855, 0.8417130436187176],
+    "1.0": [0.6135093335163613, 0.6298259402681908]
+  },
+  "diagnostics": {
+    "expanded_fixed_tip_context_identifies_transition_rate": false,
+    "expanded_fixed_tip_context_identifies_arenicola_ancestor_without_rate_constraint": false,
+    "low_rate_coloured_ancestor_signal_persists": true,
+    "high_rate_uninformative_limit_remains_profile_supported": true
+  },
+  "interpretation": "Adding four fixed-state Sinocirsium tips strengthens the conditional coloured-ancestor signal at low q but does not identify the transition rate. In all 36 nuisance/topology scenarios the LR95 rate set reaches 100 transitions/Myr, and the supported Arenicola coloured probability still extends to 0.5.",
+  "sampling_implication": {
+    "immediate_new_core190_populations": 0,
+    "white_tip_gate_interpretation": "W>=5 remains a conservative engineering gate for later ER/ARD fitting, not a guarantee of rate identifiability. Fixed-white additions are scientifically useful only with credible independent nuclear placement and an accepted branch-length tree.",
+    "next_information_priority": [
+      "accepted common-locus branch-length tree",
+      "credible nuclear placement of independent fixed-white lineages",
+      "model-adequacy and rate-identifiability check on the final tree before ARD interpretation"
+    ]
+  },
+  "full_profile_provenance": {
+    "workflow_run": 32445934012,
+    "artifact_id": 9434043054,
+    "artifact_sha256": "620764185abe8750ca0bd3fa32e318887141c83a8de82f165a0bdf8d2bea5a41"
+  },
+  "claim_boundary": "Hybrid published-node-age sensitivity only; not an extracted Chang BEAST/ASTRAL tree, final posterior ASR, or stochastic map."
+}
