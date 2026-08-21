@@ -1,0 +1,196 @@
+name: Validate Chang RNA-seq Comp1061 pilot
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/validate-chang-rnaseq-comp1061-pilot.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Build canonical 20-tip bundle without heavy execution
+        run: |
+          python analysis/build_colour_rate_comp1061_hpc_bundle.py \
+            --bridge-contract data/evidence/colour_rate_comp1061_bridge_artifact_contract_v1.json \
+            --locus-manifest data/evidence/moreyra_public_locus_set_manifest_v1.json \
+            --outdir pilot_bundle
+          awk -F, 'NR==19{print}' pilot_bundle/primary_runs.csv | tee selected_primary_run.csv
+          grep -q 'Cirsium_suffultum' selected_primary_run.csv
+          grep -q 'SRR30617344' selected_primary_run.csv
+      - name: Install pinned recovery toolchain
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-name: chang-rnaseq-comp1061-pilot
+          create-args: >-
+            python=3.11
+            hybpiper=2.3.4
+            sra-tools
+            fastp
+            pigz
+            bwa
+            samtools
+            blast
+            spades
+            exonerate
+            biopython
+          condarc: |
+            channels:
+              - conda-forge
+              - bioconda
+            channel_priority: strict
+          init-shell: none
+          generate-run-shell: true
+          cache-environment: true
+          cache-downloads: true
+          post-cleanup: all
+      - name: Verify selected RNA-seq run and free space
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          hybpiper --version
+          prefetch --version | head -1
+          fastp --version
+          df -h . | tee disk_before.txt
+      - name: Prepare frozen reference and 241-locus set
+        shell: micromamba-shell {0}
+        env:
+          RESULT_ROOT: ${{ github.workspace }}/pilot_results
+          ENV_PREFIX: ${{ env.CONDA_PREFIX }}
+        run: |
+          set -euo pipefail
+          export REPO_ROOT="$GITHUB_WORKSPACE"
+          bash pilot_bundle/00_prepare_inputs_slurm.sh
+          test -s "$RESULT_ROOT/inputs/reference/comp1061_hybpiper_reference.fasta"
+          test $(wc -l < "$RESULT_ROOT/inputs/locus_sets/moreyra_conservative_241_no_warning_loci.txt") -eq 241
+      - name: Download and trim smallest Chang RNA-seq primary run
+        shell: micromamba-shell {0}
+        env:
+          RESULT_ROOT: ${{ github.workspace }}/pilot_results
+          ENV_PREFIX: ${{ env.CONDA_PREFIX }}
+          SLURM_ARRAY_TASK_ID: "17"
+        run: |
+          set -euo pipefail
+          export REPO_ROOT="$GITHUB_WORKSPACE"
+          start=$(date +%s)
+          bash pilot_bundle/01_fetch_trim_slurm.sh
+          stop=$(date +%s)
+          echo $((stop-start)) > fetch_trim_seconds.txt
+          test -s "$RESULT_ROOT/reads/Cirsium_suffultum/trimmed/Cirsium_suffultum.R1.trim.fastq.gz"
+          test -s "$RESULT_ROOT/reads/Cirsium_suffultum/trimmed/Cirsium_suffultum.R2.trim.fastq.gz"
+          du -sh "$RESULT_ROOT/reads/Cirsium_suffultum" | tee reads_disk_usage.txt
+          df -h . | tee disk_after_reads.txt
+      - name: Recover Comp1061 loci with pinned HybPiper BWA
+        shell: micromamba-shell {0}
+        env:
+          RESULT_ROOT: ${{ github.workspace }}/pilot_results
+          ENV_PREFIX: ${{ env.CONDA_PREFIX }}
+          SLURM_ARRAY_TASK_ID: "17"
+        run: |
+          set -euo pipefail
+          export REPO_ROOT="$GITHUB_WORKSPACE"
+          start=$(date +%s)
+          bash pilot_bundle/02_hybpiper_bwa_slurm.sh
+          stop=$(date +%s)
+          echo $((stop-start)) > hybpiper_seconds.txt
+          test -s "$RESULT_ROOT/hybpiper_bwa/Cirsium_suffultum.tar.gz"
+          du -sh "$RESULT_ROOT/hybpiper_bwa/Cirsium_suffultum.tar.gz" | tee hybpiper_archive_size.txt
+      - name: Retrieve one-sample sequences and score frozen 241 loci
+        shell: micromamba-shell {0}
+        env:
+          RESULT_ROOT: ${{ github.workspace }}/pilot_results
+        run: |
+          set -euo pipefail
+          TARGET="$RESULT_ROOT/inputs/reference/comp1061_hybpiper_reference.fasta"
+          HYB="$RESULT_ROOT/hybpiper_bwa"
+          QC="$RESULT_ROOT/pilot_qc"
+          mkdir -p "$QC"
+          printf '%s\n' Cirsium_suffultum > "$QC/sample_names.txt"
+          hybpiper stats -t_dna "$TARGET" gene "$QC/sample_names.txt" --hybpiper_dir "$HYB" --cpu 4 --no_heatmap --seq_lengths_filename seq_lengths --stats_filename hybpiper_stats
+          hybpiper retrieve_sequences dna -t_dna "$TARGET" --sample_names "$QC/sample_names.txt" --hybpiper_dir "$HYB" --fasta_dir "$QC/retrieved_dna" --cpu 4
+          python - <<'PY'
+          import json, os, pathlib, re, time
+          root=pathlib.Path(os.environ['RESULT_ROOT'])
+          qc=root/'pilot_qc'/'retrieved_dna'
+          loci=set()
+          for p in qc.glob('*'):
+              if not p.is_file() or p.stat().st_size==0: continue
+              name=p.name
+              for suffix in ('.FNA','.fasta','.fa','.fas'):
+                  if name.endswith(suffix): name=name[:-len(suffix)]
+              loci.add(name)
+          frozen={x.strip() for x in (root/'inputs/locus_sets/moreyra_conservative_241_no_warning_loci.txt').read_text().splitlines() if x.strip()}
+          strict=sorted(loci & frozen)
+          (root/'pilot_qc'/'recovered_all_loci.txt').write_text('\n'.join(sorted(loci))+'\n')
+          (root/'pilot_qc'/'recovered_frozen241_loci.txt').write_text('\n'.join(strict)+'\n')
+          result={
+            'contract_version':'chang_rnaseq_comp1061_single_sample_pilot_v1',
+            'tip_id':'Cirsium_suffultum',
+            'run':'SRR30617344',
+            'data_type':'leaf_rnaseq',
+            'spots':19710680,
+            'all_retrieved_loci':len(loci),
+            'frozen_241_retrieved_loci':len(strict),
+            'frozen_241_recovery_fraction':len(strict)/241,
+            'engineering_pass_ge_100_loci':len(strict)>=100,
+            'full_panel_occupancy_gate_not_evaluated':True,
+            'claim_boundary':'One RNA-seq sample tests assay compatibility only; it does not establish 20-tip occupancy, current paralog cleanliness, topology, branch lengths, or rate-fit readiness.'
+          }
+          (root/'pilot_qc'/'pilot_result.json').write_text(json.dumps(result,indent=2)+'\n')
+          print(json.dumps(result,indent=2))
+          PY
+          df -h . | tee disk_after_hybpiper.txt
+      - name: Enforce minimal RNA-seq compatibility gate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('pilot_results/pilot_qc/pilot_result.json').read_text())
+          assert x['tip_id']=='Cirsium_suffultum'
+          assert x['run']=='SRR30617344'
+          assert x['frozen_241_retrieved_loci']>=100, x
+          assert x['engineering_pass_ge_100_loci'] is True
+          print(x)
+          PY
+      - name: Build compact performance record
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          def text(p):
+              q=pathlib.Path(p); return q.read_text().strip() if q.exists() else None
+          out={
+            'fetch_trim_seconds':int(text('fetch_trim_seconds.txt')) if text('fetch_trim_seconds.txt') else None,
+            'hybpiper_seconds':int(text('hybpiper_seconds.txt')) if text('hybpiper_seconds.txt') else None,
+            'reads_disk_usage':text('reads_disk_usage.txt'),
+            'hybpiper_archive_size':text('hybpiper_archive_size.txt'),
+            'disk_before':text('disk_before.txt'),
+            'disk_after_reads':text('disk_after_reads.txt'),
+            'disk_after_hybpiper':text('disk_after_hybpiper.txt'),
+          }
+          p=pathlib.Path('pilot_results/pilot_qc'); p.mkdir(parents=True,exist_ok=True)
+          (p/'performance.json').write_text(json.dumps(out,indent=2)+'\n')
+          print(json.dumps(out,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: chang-rnaseq-comp1061-single-sample-pilot-${{ github.run_id }}
+          path: |
+            pilot_results/pilot_qc
+            selected_primary_run.csv
+            fetch_trim_seconds.txt
+            hybpiper_seconds.txt
+            reads_disk_usage.txt
+            hybpiper_archive_size.txt
+            disk_before.txt
+            disk_after_reads.txt
+            disk_after_hybpiper.txt
+          if-no-files-found: warn
+          retention-days: 90
