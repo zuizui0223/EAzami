@@ -1,0 +1,13 @@
+{
+  "contract_version": "cirsium_palustre_colour_preference_fig24_v1",
+  "status_date": "2026-08-21",
+  "n_significant_white_preference_cases": 6,
+  "selection_ratio_definition": "white_visit_share / white_morph_share",
+  "geometric_mean_selection_ratio": 1.3018645918,
+  "median_selection_ratio": 1.28125,
+  "minimum_selection_ratio": 1.1515625,
+  "maximum_selection_ratio": 1.6117647059,
+  "source_statement": "Mogford reports white preferential pollination in all six discriminating cases where white preference was testable; purple was discriminated against in nine of ten discriminating cases containing purple.",
+  "decision": "use_as_soft_significance_conditioned_range_not_pooled_effect",
+  "claim_boundary": "The six rows are bee-type x population observations from one study system and are selected because they showed significant white preference. The 1.15-1.61 range is a conditional mechanistic calibration, not an unbiased pooled effect or genus-wide estimate."
+}
