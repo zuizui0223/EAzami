@@ -1,0 +1,87 @@
+name: Validate white morph niche linkage v1
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_white_morph_niche_linkage_v1.py"
+      - "analysis/summarize_white_morph_region_niche_v1.py"
+      - "data/evidence/white_morph_locality_evidence_v1.csv"
+      - "data/evidence/white_morph_gbif_queries_v1.json"
+      - "tests/test_white_morph_niche_linkage_v1.py"
+      - ".github/workflows/validate-white-morph-niche-linkage-v1.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas requests scikit-learn rasterio
+          python -m pip check
+      - name: Run unit tests
+        run: python -m unittest tests/test_white_morph_niche_linkage_v1.py -v
+      - name: Rebuild guarded parent niche space
+        env:
+          GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+          CPL_VSIL_CURL_ALLOWED_EXTENSIONS: .tif,.tiff
+          GDAL_HTTP_TIMEOUT: "120"
+          GDAL_HTTP_MAX_RETRY: "4"
+          GDAL_HTTP_RETRY_DELAY: "3"
+        run: |
+          python analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py \
+            --config data/evidence/focal_occurrence_niche_sampling_config_v1.json \
+            --out-dir parent_niche_live
+      - name: Project exact white-form records into parent niche space
+        env:
+          GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+          CPL_VSIL_CURL_ALLOWED_EXTENSIONS: .tif,.tiff
+          GDAL_HTTP_TIMEOUT: "120"
+          GDAL_HTTP_MAX_RETRY: "4"
+          GDAL_HTTP_RETRY_DELAY: "3"
+        run: |
+          python analysis/audit_white_morph_niche_linkage_v1.py \
+            --morph-config data/evidence/white_morph_gbif_queries_v1.json \
+            --parent-config data/evidence/focal_occurrence_niche_sampling_config_v1.json \
+            --parent-niche-dir parent_niche_live \
+            --out-dir white_morph_niche_live
+          python analysis/summarize_white_morph_region_niche_v1.py \
+            --morph-dir white_morph_niche_live \
+            --out-dir white_morph_niche_live
+      - name: Validate sampling boundary
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          rows=list(csv.DictReader(Path('white_morph_niche_live/white_morph_niche_linkage_summary.csv').open()))
+          assert {r['parent_taxon'] for r in rows}=={'Cirsium pendulum','Cirsium sieboldii'}
+          assert all(int(r['automatic_new_population_addition'])==0 for r in rows)
+          by={r['parent_taxon']:r for r in rows}
+          assert 'flowering overlap' in by['Cirsium pendulum']['phenology_guard']
+          assert 'untriggered' in by['Cirsium sieboldii']['sampling_decision'] or 'requires_P013_P014_field_placement' in by['Cirsium sieboldii']['sampling_decision']
+          result=json.loads(Path('white_morph_niche_live/white_morph_niche_linkage_v1.json').read_text())
+          assert result['global_decision']=='do_not_expand_core190_from_public_morph_records_alone'
+          regional=json.loads(Path('white_morph_niche_live/white_morph_region_niche_decision_v1.json').read_text())
+          assert regional['global_decision']=='refine_existing_slots_before_adding_new_populations'
+          assert regional['sieboldii']['new_population_addition']==0
+          evidence=list(csv.DictReader(Path('data/evidence/white_morph_locality_evidence_v1.csv').open()))
+          assert any(r['source_ref']=='Noda_City_flora' for r in evidence)
+          assert any(r['formal_name']=='Cirsium sieboldii f. leucanthum' for r in evidence)
+          print('morph_summary=', rows)
+          print('region_cluster_summary=', list(csv.DictReader(Path('white_morph_niche_live/white_morph_region_niche_summary.csv').open())))
+          print('regional_decision=', regional)
+          PY
+      - name: Upload morph-linked niche audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eazami-white-morph-niche-linkage-v1
+          path: white_morph_niche_live
+          if-no-files-found: warn
+          retention-days: 90

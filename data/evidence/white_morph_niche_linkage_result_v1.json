@@ -1,0 +1,32 @@
+{
+  "contract_version": "white_morph_niche_linkage_result_v1",
+  "status_date": "2026-08-21",
+  "live_workflow_run": 32444294570,
+  "pendulum": {
+    "exact_source_name_environment_complete_thinned_form_records": 5,
+    "parent_niche_clusters_represented": [0, 1, 3],
+    "region_cluster_rows": [
+      {"region": "Chiba", "cluster": 1, "n": 1},
+      {"region": "Ibaraki", "cluster": 1, "n": 1},
+      {"region": "Gunma", "cluster": 0, "n": 1},
+      {"region": "Gifu", "cluster": 3, "n": 1},
+      {"region": "Shiga", "cluster": 3, "n": 1}
+    ],
+    "independent_external_region_support": "Noda City documents the white morph in the Kanto Plain, especially Tone/Edo river floodplains, and reports early-summer flowering versus ordinary autumn-flowering C. pendulum.",
+    "range_guard": "NMNS describes ordinary C. pendulum in Japan from Nagano northward and Hokkaido. Therefore isolated Gifu/Shiga exact-form GBIF rows are not promoted to sampling anchors without specimen/taxonomic verification.",
+    "sampling_decision": "Keep two existing white slots P009/P010. Prioritize two distinct verified Kanto white-morph niche contexts where feasible (lowland Tone/Edo floodplain cluster versus an independent inland/northern-Kanto context), then geographically match P011/P012 coloured populations only where flowering periods overlap.",
+    "aim2_guard": "No flowering overlap means the pair is not used as a direct pollinator-choice comparison, although it may remain useful for Aim1/Aim3 ancestry and colour mechanism.",
+    "new_populations_now": 0
+  },
+  "sieboldii": {
+    "exact_source_name_environment_complete_thinned_form_records": 0,
+    "parent_niche_clusters_represented": [],
+    "source_backed_state": "Cirsium sieboldii f. leucanthum / white-flowered plants exist, but no exact-form public locality survived the conservative GBIF audit.",
+    "sampling_decision": "Keep P013/P014 only. The second matched W/C pair (+2 populations, +30 individuals) remains conditional and untriggered until a verified white-morph locality can be placed relative to P013/P014.",
+    "new_populations_now": 0
+  },
+  "global_decision": "refine_existing_core190_slots_before_adding_populations",
+  "core_individuals": 190,
+  "immediate_new_population_additions": 0,
+  "claim_boundary": "Named-form occurrence records are public locality hypotheses, not proof of current population persistence or permission. Exact collection sites remain field-verified. Single records that conflict with authoritative range descriptions are verification targets rather than sampling anchors."
+}

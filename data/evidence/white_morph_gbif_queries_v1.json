@@ -1,0 +1,34 @@
+{
+  "contract_version": "white_morph_gbif_queries_v1",
+  "status_date": "2026-08-21",
+  "country": "JP",
+  "page_size": 300,
+  "max_records_per_query": 3000,
+  "max_coordinate_uncertainty_m": 10000,
+  "spatial_thin_degrees": 0.05,
+  "min_independent_cells_for_projection": 2,
+  "morphs": [
+    {
+      "parent_taxon": "Cirsium pendulum",
+      "morph_class": "white",
+      "queries": [
+        "Cirsium pendulum f. albiflorum",
+        "Cirsium pendulum var. albiflorum",
+        "Cirsium pendulum var. leucanthum"
+      ],
+      "manual_region_prior": "Kanto_Plain_Tone_Edo_floodplains",
+      "phenology_guard": "Require flowering overlap with coloured comparison for Aim2 pollinator choice; otherwise retain for Aim1/Aim3 only."
+    },
+    {
+      "parent_taxon": "Cirsium sieboldii",
+      "morph_class": "white",
+      "queries": [
+        "Cirsium sieboldii f. leucanthum"
+      ],
+      "manual_region_prior": "unknown_beyond_species_range",
+      "phenology_guard": "No morph-specific phenology prior currently frozen."
+    }
+  ],
+  "decision_rule": "Do not add populations from a taxonomic form name alone. A public morph-locality layer becomes decision-capable only when at least two independent spatial cells survive exact source-name filtering and can be projected into the parent species niche space. Even then, exact field localities remain field-verified and P013/P014 must first be placed before activating a second matched W/C pair.",
+  "claim_boundary": "GBIF records can support public morph-locality hypotheses but cannot verify current population persistence, flower colour of an unvouchered occurrence, collecting permission, or reproductive overlap."
+}
