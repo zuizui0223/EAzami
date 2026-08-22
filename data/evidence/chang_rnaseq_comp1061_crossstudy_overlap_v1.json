@@ -1,0 +1,43 @@
+{
+  "contract_version": "chang_rnaseq_comp1061_crossstudy_overlap_v1",
+  "status_date": "2026-08-22",
+  "frozen_locus_universe": "moreyra_conservative_241_no_warning_loci",
+  "frozen_locus_count": 241,
+  "source_pilots": [
+    {
+      "source_pr": 48,
+      "study": "Chang2025",
+      "tip_id": "Cirsium_suffultum",
+      "run": "SRR30617344",
+      "artifact_id": 9435557235,
+      "artifact_digest": "sha256:f60afe73d3d2a18f4b7ce52d0a851637d4234424a5cb0ba6f6fd67c4c57eb992",
+      "recovered_frozen241_loci": 237,
+      "recovered_frozen241_list_sha256": "919ab2d2859a1990c56c4f54edea55ce1710843610116517eb4b886b6b495b23"
+    },
+    {
+      "source_pr": 49,
+      "study": "Chang2026",
+      "tip_id": "Cirsium_japonicum_var_albescens",
+      "run": "SRR35152728",
+      "artifact_id": 9436346282,
+      "artifact_digest": "sha256:ec4436e47131de26f0f15526b5f1539a2fe6584d240c481db9711107d1dfdc7b",
+      "recovered_frozen241_loci": 238,
+      "recovered_frozen241_list_sha256": "3442dfaa9305df7244d4bf2ca98ae666861171b19d3380f404b70100f673c111"
+    }
+  ],
+  "crossstudy_overlap": {
+    "intersection_loci": 236,
+    "intersection_fraction_of_frozen_241": 0.979253112033195,
+    "union_loci": 239,
+    "jaccard": 0.9874476987447699,
+    "chang2025_only_loci": ["At5g03860"],
+    "chang2026_only_loci": ["At1g54650", "At4g31360"],
+    "missing_from_both_count": 2
+  },
+  "engineering_interpretation": "The two independent Chang RNA-seq studies recover nearly the same conservative Comp1061 locus set: 236/241 loci are recovered in both pilots. This strongly supports launching the full mixed-study 20-tip occupancy/paralog QC rather than performing more single-sample assay-compatibility pilots.",
+  "decision": {
+    "additional_single_sample_compatibility_pilots_needed": false,
+    "full_20_tip_recovery_qc_is_next": true
+  },
+  "claim_boundary": "This paired overlap validates cross-study common-locus compatibility for two representative RNA-seq samples only. It does not establish >=16/20 occupancy for any locus across the full panel, current paralog cleanliness, a branch-length topology, flower-colour transition rates, or ancestral-state direction."
+}
