@@ -138,8 +138,10 @@ jobs:
           x=json.load(open('tree_inputs/tree_input_summary.json'))
           assert x['tree_input_ready'] is True
           assert x['eligible_loci'] == 153
+          assert x['tree_reference_tips'] == ['OUTGROUP_saff']
           assert x['required_root_references'] == ['OUTGROUP_saff']
-          assert x['required_reference_tips'] == ['OUTGROUP_saff','OUTGROUP_lett','OUTGROUP_sunf']
+          assert x['distant_references_included_in_tree'] is False
+          assert x['tree_tip_count_if_complete'] == 21
           PY
 
       - name: Align frozen 153 loci with MAFFT
@@ -184,6 +186,8 @@ jobs:
           assert x['alignment_qc_passed'] is True
           assert x['passed_loci'] == 153
           assert x['failed_loci'] == 0
+          assert x['required_reference_tips'] == ['OUTGROUP_saff']
+          assert x['tree_tip_count_if_complete'] == 21
           assert x['posthoc_signal_filtering_applied'] is False
           PY
 
@@ -204,8 +208,8 @@ jobs:
           x=json.load(open('tree/concat/concat_summary.json'))
           assert x['loci'] == 153
           assert x['root_outgroups'] == ['OUTGROUP_saff']
-          assert x['reference_tips'] == ['OUTGROUP_saff','OUTGROUP_lett','OUTGROUP_sunf']
-          assert x['saff_reference_loci'] == 153
+          assert x['reference_tips'] == ['OUTGROUP_saff']
+          assert x['tree_tip_count'] == 21
           PY
 
       - name: Infer saff-rooted concatenated ML tree
@@ -248,11 +252,11 @@ jobs:
               'tree_sha256':tree_sha,
               'analysis_name':'EAzami 20-tip frozen-153 Compositae1061 saff-root concatenated ML tree',
               'branch_length_interpretation':'IQ-TREE maximum-likelihood substitutions per site on the concatenated frozen 153-locus coding-sequence alignment',
-              'rooting_definition':'IQ-TREE rooted using OUTGROUP_saff (Carthamus, Cardueae); OUTGROUP_lett and OUTGROUP_sunf retained as distant Asteraceae references but not used to define the root',
+              'rooting_definition':'IQ-TREE rooted using the sole retained reference OUTGROUP_saff (Carthamus, Cardueae); lettuce and sunflower were audited in the target reference but excluded from tree inference',
               'required_outgroup_tips':['OUTGROUP_saff'],
-              'required_reference_tips':['OUTGROUP_saff','OUTGROUP_lett','OUTGROUP_sunf'],
+              'required_reference_tips':['OUTGROUP_saff'],
               'support_metric_definition':'IQ-TREE ultrafast bootstrap 1000 plus SH-aLRT 1000 on the concatenated matrix',
-              'source_or_pipeline_provenance':f"full20 workflow run {os.environ['SOURCE_FULL20_RUN_ID']} artifact {os.environ['SOURCE_ARTIFACT_DIGEST']}; HybPiper 2.3.4 BWA full reads; frozen current 206-locus QC; pre-topology frozen 153 saff/lett/sunf locus set SHA256 {os.environ['TREE_LOCI_SHA256']}; MAFFT structural QC without post-hoc signal filtering; IQ-TREE MFP",
+              'source_or_pipeline_provenance':f"full20 workflow run {os.environ['SOURCE_FULL20_RUN_ID']} artifact {os.environ['SOURCE_ARTIFACT_DIGEST']}; HybPiper 2.3.4 BWA full reads; frozen current 206-locus QC; pre-topology frozen 153 saff-root locus set SHA256 {os.environ['TREE_LOCI_SHA256']}; MAFFT structural QC without post-hoc signal filtering; IQ-TREE MFP; distant lett/sunf target references excluded from the inferred 21-tip tree",
               'topology_uncertainty_status':'single_tree_with_explicit_limitation'
           }
           Path('tree/tree_provenance.json').write_text(json.dumps(prov,indent=2)+'\n')
@@ -271,6 +275,9 @@ jobs:
           inp=json.load(open('tree_inputs/tree_input_summary.json'))
           concat=json.load(open('tree/concat/concat_summary.json'))
           assert accept['tree_gate_ready'] is True
+          assert accept['tree_tip_count'] == 21
+          assert accept['required_outgroup_tips'] == ['OUTGROUP_saff']
+          assert accept['required_reference_tips'] == ['OUTGROUP_saff']
           summary={
               'contract_version':'full20_comp1061_primary_tree_execution_v1',
               'source_full20_run_id':32555473197,
@@ -283,7 +290,7 @@ jobs:
               'topology_sensitivity_completed':False,
               'rate_fit_execution_allowed':False,
               'next_gate':'gene-tree/topology sensitivity before any flower-colour Mk fitting',
-              'claim_limit':'This artifact establishes one accepted saff-rooted concatenated branch-length tree. Rate fitting remains blocked until topology sensitivity is completed.'
+              'claim_limit':'This artifact establishes one accepted 21-tip Carthamus-rooted concatenated branch-length tree. Rate fitting remains blocked until topology sensitivity is completed.'
           }
           Path('tree/tree_execution_summary.json').write_text(json.dumps(summary,indent=2)+'\n')
           PY
