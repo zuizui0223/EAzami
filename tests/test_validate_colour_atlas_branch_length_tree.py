@@ -69,8 +69,22 @@ class TreeGateTests(unittest.TestCase):
             result=m.validate(*self.write_fixture(td,tree_text=tree,required_outgroups=["OUT1","OUT2"],required_references=["OUT1","OUT2","NEAR"]))
             self.assertTrue(result["focal_monophyly_checked"])
             self.assertTrue(result["focal_monophyly_passed"])
+            self.assertEqual(result["focal_monophyly_definition"],"orientation-invariant edge split")
             self.assertEqual(result["required_outgroup_tips"],["OUT1","OUT2"])
             self.assertEqual(result["required_reference_tips"],["NEAR","OUT1","OUT2"])
+
+    def test_accepts_focal_complement_of_root_adjacent_outgroup_edge(self):
+        with tempfile.TemporaryDirectory() as td:
+            # The root has three children. The focal {t1,t2,t3} set is not a
+            # descendant clade in this Newick orientation, but it is exactly
+            # the complement of the OUT1 pendant-edge split and is monophyletic.
+            tree="((t1:0.1,t2:0.2):0.3,t3:0.4,OUT1:0.5);\n"
+            result=m.validate(*self.write_fixture(td,tree_text=tree,required_outgroups=["OUT1"],required_references=["OUT1"]))
+            self.assertTrue(result["tree_gate_ready"])
+            self.assertTrue(result["focal_monophyly_passed"])
+            parser=m.NewickParser(tree); tips,_,_=parser.parse()
+            self.assertNotIn(frozenset({"t1","t2","t3"}),parser.clades)
+            self.assertIn(frozenset({"t1","t2","t3"}),m.edge_split_sides(parser,set(tips)))
 
     def test_rejects_outgroup_not_declared_as_reference(self):
         with tempfile.TemporaryDirectory() as td:
@@ -81,7 +95,7 @@ class TreeGateTests(unittest.TestCase):
     def test_rejects_reference_intrusion_into_focal_clade(self):
         with tempfile.TemporaryDirectory() as td:
             tree="((t1:0.1,NEAR:0.2):0.3,(t2:0.1,t3:0.1):0.2,OUT1:0.5,OUT2:0.6);\n"
-            with self.assertRaisesRegex(ValueError,"not monophyletic"):
+            with self.assertRaisesRegex(ValueError,"monophyletic edge split"):
                 m.validate(*self.write_fixture(td,tree_text=tree,required_outgroups=["OUT1","OUT2"],required_references=["OUT1","OUT2","NEAR"]))
 
     def test_rejects_undeclared_extra_tree_tip(self):
