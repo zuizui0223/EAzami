@@ -13,11 +13,12 @@
     "close_root_reference": "OUTGROUP_saff",
     "close_root_taxon": "Carthamus",
     "close_root_tribe": "Cardueae",
-    "distant_reference_tips": ["OUTGROUP_lett", "OUTGROUP_sunf"],
-    "required_reference_tips": ["OUTGROUP_saff", "OUTGROUP_lett", "OUTGROUP_sunf"]
+    "tree_reference_tips": ["OUTGROUP_saff"],
+    "audited_but_excluded_distant_reference_tips": ["OUTGROUP_lett", "OUTGROUP_sunf"],
+    "rationale": "Use the close Cardueae outgroup as the sole reference in the inferred tree. Lettuce and sunflower are more distant target references and are excluded rather than retained on the ingroup side of a Carthamus-rooted tree."
   },
   "pre_topology_locus_selection": {
-    "rule": "frozen current 206 loci intersect loci containing saff, lett and sunf reference sequences in the pinned original Compositae1061 target",
+    "rule": "frozen current 206 loci intersect loci containing exactly one saff reference sequence in the pinned original Compositae1061 target",
     "lett_sunf_present_among_source_206": 206,
     "saff_present_among_source_206": 153,
     "excluded_for_missing_saff": 53,
@@ -33,6 +34,7 @@
   },
   "alignment_policy": {
     "method": "MAFFT --auto",
+    "expected_tree_tips_when_complete": 21,
     "structural_qc_required": true,
     "posthoc_signal_filtering_allowed": false,
     "diagnostics_recorded": [
@@ -48,12 +50,12 @@
   "tree_policy": {
     "primary_tree": "concatenated IQ-TREE maximum-likelihood tree",
     "root_outgroup": "OUTGROUP_saff",
-    "retained_distant_references": ["OUTGROUP_lett", "OUTGROUP_sunf"],
+    "tree_reference_tips": ["OUTGROUP_saff"],
     "branch_lengths": "substitutions per site",
     "support": "ultrafast bootstrap 1000 plus SH-aLRT 1000",
     "tree_acceptance_required": true,
     "topology_sensitivity_required_before_rate_fit": true,
     "rate_fit_execution_allowed": false
   },
-  "claim_limit": "The 153-locus set is frozen before alignment inspection and topology inference. Passing this preflight permits alignment/tree execution only; it does not imply tree acceptance or permit flower-colour transition-rate fitting."
+  "claim_limit": "The 153-locus set and sole Carthamus tree reference are frozen before alignment inspection and topology inference. Passing this preflight permits alignment/tree execution only; it does not imply tree acceptance or permit flower-colour transition-rate fitting."
 }
