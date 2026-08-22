@@ -1,0 +1,314 @@
+name: Run saff-rooted Comp1061 tree from frozen full20 artifacts
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/run-comp1061-saff-root-tree.yml"
+      - "analysis/prepare_colour_rate_comp1061_tree_inputs.py"
+      - "analysis/concatenate_colour_rate_comp1061_alignments.py"
+      - "analysis/summarize_colour_rate_alignment_qc.py"
+      - "analysis/augment_colour_rate_comp1061_tree_stages.py"
+      - "analysis/validate_colour_atlas_branch_length_tree.py"
+      - "data/evidence/full20_comp1061_saff_root_153_loci_v1.txt"
+      - "data/evidence/full20_comp1061_saff_root_tree_preflight_v1.json"
+      - "tests/test_prepare_colour_rate_comp1061_tree_inputs.py"
+      - "tests/test_concatenate_colour_rate_comp1061_alignments.py"
+      - "tests/test_summarize_colour_rate_alignment_qc.py"
+      - "tests/test_augment_colour_rate_comp1061_tree_stages.py"
+      - "tests/test_full20_comp1061_saff_root_tree_preflight.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: comp1061-saff-root-tree-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SOURCE_FULL20_RUN_ID: "32555473197"
+  SOURCE_PANEL_ARTIFACT: "comp1061-panel-inputs-32555473197"
+  FROZEN_QC_LOCI: "data/evidence/full20_comp1061_current_conservative_206_loci_v1.txt"
+  FROZEN_TREE_LOCI: "data/evidence/full20_comp1061_saff_root_153_loci_v1.txt"
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run tree-contract unit tests
+        run: |
+          set -euo pipefail
+          for t in \
+            tests/test_prepare_colour_rate_comp1061_tree_inputs.py \
+            tests/test_concatenate_colour_rate_comp1061_alignments.py \
+            tests/test_summarize_colour_rate_alignment_qc.py \
+            tests/test_augment_colour_rate_comp1061_tree_stages.py \
+            tests/test_full20_comp1061_saff_root_tree_preflight.py \
+            tests/test_full20_comp1061_current_qc_evidence.py
+          do
+            python "$t"
+          done
+
+  tree:
+    needs: contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tree toolchain
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-name: comp1061-tree
+          create-args: >-
+            python=3.11
+            mafft
+            iqtree
+          condarc: |
+            channels:
+              - conda-forge
+              - bioconda
+            channel_priority: strict
+          init-shell: none
+          generate-run-shell: true
+          cache-environment: true
+          cache-downloads: true
+          post-cleanup: all
+
+      - name: Download frozen panel inputs from successful full20 run
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.SOURCE_PANEL_ARTIFACT }}
+          path: .
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.SOURCE_FULL20_RUN_ID }}
+
+      - name: Download all compact sample artifacts from successful full20 run
+        uses: actions/download-artifact@v4
+        with:
+          pattern: comp1061-sample-*
+          path: downloaded_samples
+          merge-multiple: false
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.SOURCE_FULL20_RUN_ID }}
+
+      - name: Reconstruct full20 compact recovery matrix and verify frozen QC
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          find downloaded_samples -name sample_metadata.json -print | sort | tee recovered_sample_metadata.txt
+          test "$(wc -l < recovered_sample_metadata.txt)" -eq 20
+          python analysis/aggregate_comp1061_github_matrix.py \
+            --artifact-root downloaded_samples \
+            --runs panel_bundle/primary_runs.csv \
+            --outdir aggregate_inputs
+          python analysis/summarize_colour_rate_comp1061_qc.py \
+            --runs panel_bundle/primary_runs.csv \
+            --retrieved-dir aggregate_inputs/retrieved_dna \
+            --paralog-report aggregate_inputs/paralog_report.tsv \
+            --locus-dir panel_results/inputs/locus_sets \
+            --outdir current_qc_check \
+            --min-occupancy 0.80
+          cmp current_qc_check/current_conservative_241_loci.txt "$FROZEN_QC_LOCI"
+          test "$(grep -cve '^[[:space:]]*$' "$FROZEN_QC_LOCI")" -eq 206
+
+      - name: Prepare and verify frozen saff-root tree inputs
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          python analysis/prepare_colour_rate_comp1061_tree_inputs.py \
+            --primary-runs panel_bundle/primary_runs.csv \
+            --locus-list "$FROZEN_QC_LOCI" \
+            --retrieved-dir aggregate_inputs/retrieved_dna \
+            --target panel_results/inputs/reference/comp1061_hybpiper_reference.fasta \
+            --outdir tree_inputs \
+            --min-fraction 0.80
+          cmp tree_inputs/eligible_loci.txt "$FROZEN_TREE_LOCI"
+          test "$(grep -cve '^[[:space:]]*$' "$FROZEN_TREE_LOCI")" -eq 153
+          python - <<'PY'
+          import json
+          x=json.load(open('tree_inputs/tree_input_summary.json'))
+          assert x['tree_input_ready'] is True
+          assert x['eligible_loci'] == 153
+          assert x['required_root_references'] == ['OUTGROUP_saff']
+          assert x['required_reference_tips'] == ['OUTGROUP_saff','OUTGROUP_lett','OUTGROUP_sunf']
+          PY
+
+      - name: Align frozen 153 loci with MAFFT
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          mkdir -p tree/alignments
+          python - <<'PY'
+          from concurrent.futures import ThreadPoolExecutor
+          from pathlib import Path
+          import subprocess
+
+          loci=[x.strip() for x in Path('tree_inputs/eligible_loci.txt').read_text().splitlines() if x.strip()]
+          assert len(loci)==153
+          def align(locus):
+              inp=Path('tree_inputs/loci_unaligned')/f'{locus}.fasta'
+              out=Path('tree/alignments')/f'{locus}.aln.fasta'
+              with out.open('wb') as h:
+                  subprocess.run(['mafft','--auto','--thread','1',str(inp)],stdout=h,check=True)
+              if out.stat().st_size == 0:
+                  raise RuntimeError(f'empty MAFFT output: {locus}')
+              return locus
+          with ThreadPoolExecutor(max_workers=4) as ex:
+              list(ex.map(align,loci))
+          PY
+          test "$(find tree/alignments -name '*.aln.fasta' -type f | wc -l)" -eq 153
+
+      - name: Apply structural alignment QC
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          mkdir -p tree/alignment_qc
+          python analysis/summarize_colour_rate_alignment_qc.py \
+            --eligible-loci tree_inputs/eligible_loci.txt \
+            --alignment-dir tree/alignments \
+            --primary-runs panel_bundle/primary_runs.csv \
+            --output-csv tree/alignment_qc/alignment_qc.csv \
+            --output-json tree/alignment_qc/alignment_qc_summary.json
+          python - <<'PY'
+          import json
+          x=json.load(open('tree/alignment_qc/alignment_qc_summary.json'))
+          assert x['alignment_qc_passed'] is True
+          assert x['passed_loci'] == 153
+          assert x['failed_loci'] == 0
+          assert x['posthoc_signal_filtering_applied'] is False
+          PY
+
+      - name: Concatenate structurally valid frozen loci
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          mkdir -p tree/concat
+          python analysis/concatenate_colour_rate_comp1061_alignments.py \
+            --eligible-loci tree_inputs/eligible_loci.txt \
+            --alignment-dir tree/alignments \
+            --primary-runs panel_bundle/primary_runs.csv \
+            --output tree/concat/concat.fasta \
+            --partitions tree/concat/partitions.csv \
+            --summary tree/concat/concat_summary.json
+          python - <<'PY'
+          import json
+          x=json.load(open('tree/concat/concat_summary.json'))
+          assert x['loci'] == 153
+          assert x['root_outgroups'] == ['OUTGROUP_saff']
+          assert x['reference_tips'] == ['OUTGROUP_saff','OUTGROUP_lett','OUTGROUP_sunf']
+          assert x['saff_reference_loci'] == 153
+          PY
+
+      - name: Infer saff-rooted concatenated ML tree
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          {
+            echo "mafft=$(mafft --version 2>&1 | head -1)"
+            echo "iqtree2=$(iqtree2 --version 2>&1 | head -1)"
+          } | tee tree/tool_versions.txt
+          iqtree2 \
+            -s tree/concat/concat.fasta \
+            -m MFP \
+            -B 1000 \
+            --alrt 1000 \
+            -T AUTO \
+            -o OUTGROUP_saff \
+            --prefix tree/concat/colour_rate_comp1061_concat
+          test -s tree/concat/colour_rate_comp1061_concat.treefile
+
+      - name: Build provenance and apply branch-length tree acceptance gate
+        shell: micromamba-shell {0}
+        env:
+          SOURCE_ARTIFACT_DIGEST: "sha256:55f5a1fef7b9901e7ba2c88f45939a8cc5e1e1ac8ef47ef27ae60e69c1b4d2ea"
+          TREE_LOCI_SHA256: "1106051eca8bfa699f16e05d92024573cb358d7dbd151b89768e76c3d56cde82"
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import csv, hashlib, json, os
+          from pathlib import Path
+          tree=Path('tree/concat/colour_rate_comp1061_concat.treefile')
+          rows=list(csv.DictReader(open('panel_bundle/primary_runs.csv',encoding='utf-8-sig')))
+          with open('tree/tip_map.csv','w',newline='') as f:
+              w=csv.DictWriter(f,fieldnames=['tree_tip','accepted_taxon','mapping_status'])
+              w.writeheader()
+              w.writerows({'tree_tip':r['tip_id'],'accepted_taxon':r['accepted_taxon'],'mapping_status':'exact'} for r in rows)
+          tree_sha=hashlib.sha256(tree.read_bytes()).hexdigest()
+          prov={
+              'tree_route':'compatibility_reanalysis',
+              'tree_sha256':tree_sha,
+              'analysis_name':'EAzami 20-tip frozen-153 Compositae1061 saff-root concatenated ML tree',
+              'branch_length_interpretation':'IQ-TREE maximum-likelihood substitutions per site on the concatenated frozen 153-locus coding-sequence alignment',
+              'rooting_definition':'IQ-TREE rooted using OUTGROUP_saff (Carthamus, Cardueae); OUTGROUP_lett and OUTGROUP_sunf retained as distant Asteraceae references but not used to define the root',
+              'required_outgroup_tips':['OUTGROUP_saff'],
+              'required_reference_tips':['OUTGROUP_saff','OUTGROUP_lett','OUTGROUP_sunf'],
+              'support_metric_definition':'IQ-TREE ultrafast bootstrap 1000 plus SH-aLRT 1000 on the concatenated matrix',
+              'source_or_pipeline_provenance':f"full20 workflow run {os.environ['SOURCE_FULL20_RUN_ID']} artifact {os.environ['SOURCE_ARTIFACT_DIGEST']}; HybPiper 2.3.4 BWA full reads; frozen current 206-locus QC; pre-topology frozen 153 saff/lett/sunf locus set SHA256 {os.environ['TREE_LOCI_SHA256']}; MAFFT structural QC without post-hoc signal filtering; IQ-TREE MFP",
+              'topology_uncertainty_status':'single_tree_with_explicit_limitation'
+          }
+          Path('tree/tree_provenance.json').write_text(json.dumps(prov,indent=2)+'\n')
+          PY
+          python analysis/validate_colour_atlas_branch_length_tree.py \
+            --tree tree/concat/colour_rate_comp1061_concat.treefile \
+            --atlas data/evidence/cirsium_flower_colour_atlas_v0_3.csv \
+            --tip-map tree/tip_map.csv \
+            --provenance tree/tree_provenance.json \
+            --output tree/tree_acceptance.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          accept=json.load(open('tree/tree_acceptance.json'))
+          aln=json.load(open('tree/alignment_qc/alignment_qc_summary.json'))
+          inp=json.load(open('tree_inputs/tree_input_summary.json'))
+          concat=json.load(open('tree/concat/concat_summary.json'))
+          assert accept['tree_gate_ready'] is True
+          summary={
+              'contract_version':'full20_comp1061_primary_tree_execution_v1',
+              'source_full20_run_id':32555473197,
+              'frozen_tree_loci':153,
+              'tree_input':inp,
+              'alignment_qc':aln,
+              'concatenation':concat,
+              'tree_acceptance':accept,
+              'primary_branch_length_tree_completed':True,
+              'topology_sensitivity_completed':False,
+              'rate_fit_execution_allowed':False,
+              'next_gate':'gene-tree/topology sensitivity before any flower-colour Mk fitting',
+              'claim_limit':'This artifact establishes one accepted saff-rooted concatenated branch-length tree. Rate fitting remains blocked until topology sensitivity is completed.'
+          }
+          Path('tree/tree_execution_summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          PY
+
+      - name: Upload primary tree and QC evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: comp1061-saff-root-primary-tree-${{ github.run_id }}
+          path: |
+            recovered_sample_metadata.txt
+            current_qc_check/current_qc_summary.json
+            tree_inputs/tree_input_summary.json
+            tree_inputs/locus_manifest.csv
+            tree_inputs/eligible_loci.txt
+            tree/alignments
+            tree/alignment_qc
+            tree/concat/concat.fasta
+            tree/concat/partitions.csv
+            tree/concat/concat_summary.json
+            tree/concat/colour_rate_comp1061_concat.*
+            tree/tip_map.csv
+            tree/tree_provenance.json
+            tree/tree_acceptance.json
+            tree/tree_execution_summary.json
+            tree/tool_versions.txt
+          if-no-files-found: error
+          retention-days: 30
