@@ -1,0 +1,157 @@
+{
+  "contract_version": "full20_comp1061_current_qc_evidence_v1",
+  "execution_date": "2026-08-22",
+  "repository": "zuizui0223/EAzami",
+  "execution": {
+    "pull_request": 63,
+    "branch": "agent/full20-github-recovery-qc-20260822",
+    "workflow_run_id": 32555473197,
+    "workflow_head_sha": "e970d0151374a36b13356ae698ba11dfd65d5774",
+    "workflow_conclusion": "success",
+    "aggregate_qc_conclusion": "success",
+    "full20_artifact": {
+      "id": 9475717125,
+      "name": "full20-comp1061-current-qc-32555473197",
+      "digest": "sha256:55f5a1fef7b9901e7ba2c88f45939a8cc5e1e1ac8ef47ef27ae60e69c1b4d2ea",
+      "retention_days": 30
+    },
+    "panel_input_artifact": {
+      "id": 9471289755,
+      "digest": "sha256:bdd423765a02cf9ca4bdfdb682f698df2328eb605cf816897fb2576c31a5ef0f"
+    },
+    "toolchain": {
+      "hybpiper": "2.3.4",
+      "mapping_mode": "bwa",
+      "reads": "full primary SRA runs",
+      "read_subsampling": false
+    }
+  },
+  "panel": {
+    "primary_tips": 20,
+    "leaf_rnaseq_tips": 13,
+    "target_capture_tips": 7,
+    "aggregated_samples": 20,
+    "all_retrieved_loci_min": 962,
+    "all_retrieved_loci_min_tip": "Cirsium_maritimum",
+    "all_retrieved_loci_max": 1005,
+    "all_retrieved_loci_max_tip": "Cirsium_gyojanum"
+  },
+  "gate": {
+    "minimum_occupancy_fraction": 0.8,
+    "minimum_present_tips": 16,
+    "required_paralog_warning_samples_per_locus": 0,
+    "minimum_conservative_241_eligible_loci": 100,
+    "all_20_taxa_must_be_represented": true,
+    "result": "PASS"
+  },
+  "sets": {
+    "public_1061": {
+      "base_count": 1061,
+      "current_eligible_count": 573,
+      "excluded_missingness_only": 90,
+      "excluded_paralog_only": 383,
+      "excluded_both": 15,
+      "eligible_occupancy_counts": {
+        "16": 8,
+        "17": 13,
+        "18": 13,
+        "19": 30,
+        "20": 509
+      },
+      "median_rnaseq_sample_fraction": 0.9912739965095986,
+      "median_target_capture_sample_fraction": 0.9860383944153578,
+      "absolute_library_type_median_gap": 0.005235602094240788,
+      "all_20_taxa_represented": true
+    },
+    "reproducible_531": {
+      "base_count": 531,
+      "current_eligible_count": 416,
+      "excluded_missingness_only": 30,
+      "excluded_paralog_only": 85,
+      "excluded_both": 0,
+      "eligible_occupancy_counts": {
+        "16": 3,
+        "17": 7,
+        "18": 8,
+        "19": 17,
+        "20": 381
+      },
+      "median_rnaseq_sample_fraction": 0.9927884615384616,
+      "median_target_capture_sample_fraction": 0.9927884615384616,
+      "absolute_library_type_median_gap": 0.0,
+      "all_20_taxa_represented": true
+    },
+    "conservative_241": {
+      "base_count": 241,
+      "current_eligible_count": 206,
+      "excluded_missingness_only": 4,
+      "excluded_paralog_only": 31,
+      "excluded_both": 0,
+      "eligible_occupancy_counts": {
+        "16": 1,
+        "17": 3,
+        "18": 1,
+        "19": 4,
+        "20": 197
+      },
+      "median_rnaseq_sample_fraction": 0.9951456310679612,
+      "median_target_capture_sample_fraction": 0.9951456310679612,
+      "absolute_library_type_median_gap": 0.0,
+      "all_20_taxa_represented": true
+    }
+  },
+  "strict_locus_list": {
+    "path": "data/evidence/full20_comp1061_current_conservative_206_loci_v1.txt",
+    "count": 206,
+    "sha256": "b7f69af90ea5820843922c0be31e4eac758365cba104e4c735e166c99f968515"
+  },
+  "artifact_file_sha256": {
+    "current_qc_summary.json": "56f3976cda53043f2b42df3d324ebf84cedbaf9a76c1221241970f6032aa095e",
+    "locus_qc.csv": "6e23b3bfa5834222fa3f5baccb9dda6576f4f14c1ad6875167774477778f0c38",
+    "sample_qc.csv": "af74593ba712a96f4fd19b23415bd87d08e53035768a74eb88afb66ed1fed677",
+    "current_conservative_241_loci.txt": "b7f69af90ea5820843922c0be31e4eac758365cba104e4c735e166c99f968515",
+    "current_reproducible_531_loci.txt": "2bba976e524ff497774166acaa970856f2b0ab75af22b14c52762a900fcdc569",
+    "current_public_1061_loci.txt": "0a0f2dbb5f5ff9050ed508e92f89c80c25ccbfa1e5d3ef88f745afa1163e0bc2",
+    "aggregate_summary.json": "b72323cf3fe4dac94869aaf403e461209fec97ea0ee7d525a52fcc5dfcaa0a37"
+  },
+  "pilot_reproducibility": {
+    "pr48_cirsium_suffultum": {
+      "pilot_workflow_run_id": 32447450428,
+      "pilot_artifact_id": 9435557235,
+      "pilot_artifact_digest": "sha256:f60afe73d3d2a18f4b7ce52d0a851637d4234424a5cb0ba6f6fd67c4c57eb992",
+      "full20_sample_artifact_id": 9474868699,
+      "full20_sample_artifact_digest": "sha256:807b23fca85bdf4c56102b61d04cf994893a384397b48d2ee1a0a1deba0149ad",
+      "all_retrieved_loci": 978,
+      "frozen_241_retrieved_loci": 237,
+      "all_locus_set_canonical_sha256": "70835986919cb8bbb38da1c58b7c472f8f38ce10a1daabf0b955ebc469597020",
+      "frozen_241_set_canonical_sha256": "919ab2d2859a1990c56c4f54edea55ce1710843610116517eb4b886b6b495b23",
+      "exact_recovered_locus_set_match": true
+    },
+    "pr49_cirsium_japonicum_var_albescens": {
+      "pilot_workflow_run_id": 32449218055,
+      "pilot_artifact_id": 9436346282,
+      "pilot_artifact_digest": "sha256:ec4436e47131de26f0f15526b5f1539a2fe6584d240c481db9711107d1dfdc7b",
+      "full20_sample_artifact_id": 9472531433,
+      "full20_sample_artifact_digest": "sha256:ccf9b2b6fc97dd6a8cc88726b8ba2b4b58864f3608f28c25fe3e324090c17b5d",
+      "all_retrieved_loci": 993,
+      "frozen_241_retrieved_loci": 238,
+      "all_locus_set_canonical_sha256": "6cedb2b6aaec804f43ec6397ecd1d1891931c341999a5bc0379ce6aa54fbbbd6",
+      "frozen_241_set_canonical_sha256": "3442dfaa9305df7244d4bf2ca98ae666861171b19d3380f404b70100f673c111",
+      "exact_recovered_locus_set_match": true
+    }
+  },
+  "promotion_boundary": {
+    "current_qc_passed": true,
+    "tree_matrix_auto_promotion_allowed": false,
+    "branch_length_tree_completed": false,
+    "rate_fit_execution_allowed": false,
+    "remaining_before_tree_acceptance": [
+      "alignment QC",
+      "outgroup/rooting",
+      "topology QC",
+      "branch-length QC",
+      "replicate sensitivity"
+    ],
+    "claim_limit": "Current occupancy/no-paralog filtering is necessary but not sufficient for tree promotion."
+  }
+}
