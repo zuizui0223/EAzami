@@ -5,9 +5,13 @@ This is deliberately independent from ER/ARD/Mk fitting. It establishes that a
 machine-readable nuclear tree is real, has branch lengths, has explicit
 provenance/rooting/support semantics, can be joined one-to-one to the frozen
 source-backed colour atlas, and—when reference tips are declared—keeps the focal
-taxa monophyletic relative to those references. Root outgroups and additional
-near references are recorded separately so a close Cardueae anchor such as
-safflower can be retained without redefining the rooting set.
+taxa monophyletic relative to those references.
+
+Monophyly is evaluated as an unrooted edge split rather than as a descendant
+clade in one particular Newick rooting/orientation. This matters when IQ-TREE
+writes a tree rooted on a single outgroup as a top-level multifurcation: the
+focal ingroup may be represented as the complement of the outgroup pendant
+edge rather than as one explicit descendant clade.
 """
 from __future__ import annotations
 
@@ -102,6 +106,28 @@ class NewickParser:
         return self.tips,self.edge_lengths,self.missing_edge_lengths
 
 
+def edge_split_sides(parser: NewickParser, tree_tips: set[str]) -> set[frozenset[str]]:
+    """Return every non-empty side of every tree edge, independent of root orientation.
+
+    ``parser.clades`` records descendant sets under the Newick orientation. Each
+    internal edge also defines the complementary split side. Pendant edges are
+    represented explicitly as singleton/complement pairs because leaf tips are
+    not stored in ``parser.clades``.
+    """
+    all_tips=frozenset(tree_tips)
+    sides: set[frozenset[str]] = set()
+    for tip in all_tips:
+        sides.add(frozenset({tip}))
+        complement=frozenset(all_tips-{tip})
+        if complement: sides.add(complement)
+    for clade in parser.clades:
+        if not clade or clade == all_tips: continue
+        sides.add(clade)
+        complement=frozenset(all_tips-set(clade))
+        if complement: sides.add(complement)
+    return sides
+
+
 def eligible_atlas_taxa(path: Path) -> tuple[set[str], dict[str, str]]:
     rows=read_csv(path); eligible=[r for r in rows if r.get("rate_fit_eligible","").lower()=="yes"]
     taxa={r.get("accepted_taxon","") for r in eligible}
@@ -168,11 +194,12 @@ def validate(tree:Path, atlas:Path, tip_map:Path, provenance:Path) -> dict[str,o
         if overlap: raise ValueError(f"Declared reference tips overlap focal atlas tips: {overlap}")
         unexpected=sorted(tree_tip_set-focal_tips-references)
         if unexpected: raise ValueError(f"Tree contains undeclared extra tips outside focal atlas/references: {unexpected}")
-        if frozenset(focal_tips) not in parser.clades: raise ValueError("Eligible focal taxa are not monophyletic relative to declared reference tips")
+        if frozenset(focal_tips) not in edge_split_sides(parser,tree_tip_set):
+            raise ValueError("Eligible focal taxa do not form one monophyletic edge split relative to declared reference tips")
 
     matched=len(eligible)
     return {
-        "contract_version":"colour_atlas_branch_length_tree_acceptance_v2",
+        "contract_version":"colour_atlas_branch_length_tree_acceptance_v3_edge_split",
         "tree_sha256":tree_sha,"tree_route":prov["tree_route"],"tree_tip_count":len(tips),
         "eligible_atlas_taxa":matched,
         "eligible_state_counts":{"C":sum(v=="C" for v in states.values()),"W":sum(v=="W" for v in states.values())},
@@ -180,12 +207,13 @@ def validate(tree:Path, atlas:Path, tip_map:Path, provenance:Path) -> dict[str,o
         "required_outgroup_tips":sorted(root_outgroups),
         "required_reference_tips":sorted(references),
         "focal_monophyly_checked":focal_monophyly_checked,
+        "focal_monophyly_definition":"orientation-invariant edge split",
         "focal_monophyly_passed":True if focal_monophyly_checked else None,
         "branch_length_edge_count":len(lengths),"branch_length_min":min(lengths),"branch_length_max":max(lengths),
         "branch_length_interpretation":prov["branch_length_interpretation"],"rooting_definition":prov["rooting_definition"],
         "support_metric_definition":prov["support_metric_definition"],"topology_uncertainty_status":prov["topology_uncertainty_status"],
         "tree_gate_ready":True,
-        "claim_limit":"Tree acceptance validates branch-length/provenance/tip-join integrity and focal monophyly relative to every declared reference tip. Root outgroups and additional near references remain distinct. This does not imply the colour-state breadth gate passes or that ARD is supported over ER."
+        "claim_limit":"Tree acceptance validates branch-length/provenance/tip-join integrity and focal monophyly as an orientation-invariant edge split relative to every declared reference tip. This does not imply the colour-state breadth gate passes or that ARD is supported over ER."
     }
 
 
