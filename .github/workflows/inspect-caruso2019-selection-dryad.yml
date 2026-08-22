@@ -17,15 +17,19 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: python -m pip install pandas xlrd openpyxl
-      - name: Download nonduplicated Dryad database
+      - name: Download Dryad dataset through v2 API
         run: |
-          mkdir -p data/external
+          mkdir -p data/external/dryad
           curl -fL --retry 3 --retry-delay 2 \
-            https://datadryad.org/downloads/file_stream/21862 \
-            -o data/external/Exp_stud_NOTdup_Dryad.xls
-          ls -lh data/external/Exp_stud_NOTdup_Dryad.xls
+            -H 'Accept: application/zip,application/octet-stream,*/*' \
+            -A 'EAzami-reproducibility-audit/1.0' \
+            'https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.2v8c5g0/download' \
+            -o data/external/caruso2019_dryad.zip
+          unzip -l data/external/caruso2019_dryad.zip
+          unzip -j data/external/caruso2019_dryad.zip '*Exp_stud_NOTdup_Dryad.xls' -d data/external/dryad
+          ls -lh data/external/dryad/Exp_stud_NOTdup_Dryad.xls
       - name: Inspect schema and coding
-        run: python analysis/inspect_caruso2019_selection_dryad.py data/external/Exp_stud_NOTdup_Dryad.xls
+        run: python analysis/inspect_caruso2019_selection_dryad.py data/external/dryad/Exp_stud_NOTdup_Dryad.xls
       - uses: actions/upload-artifact@v4
         with:
           name: caruso2019-dryad-schema
