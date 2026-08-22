@@ -1,0 +1,32 @@
+name: Inspect Caruso 2019 selection Dryad data
+
+on:
+  pull_request:
+    paths:
+      - "analysis/inspect_caruso2019_selection_dryad.py"
+      - ".github/workflows/inspect-caruso2019-selection-dryad.yml"
+  workflow_dispatch:
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install pandas xlrd openpyxl
+      - name: Download nonduplicated Dryad database
+        run: |
+          mkdir -p data/external
+          curl -fL --retry 3 --retry-delay 2 \
+            https://datadryad.org/downloads/file_stream/21862 \
+            -o data/external/Exp_stud_NOTdup_Dryad.xls
+          ls -lh data/external/Exp_stud_NOTdup_Dryad.xls
+      - name: Inspect schema and coding
+        run: python analysis/inspect_caruso2019_selection_dryad.py data/external/Exp_stud_NOTdup_Dryad.xls
+      - uses: actions/upload-artifact@v4
+        with:
+          name: caruso2019-dryad-schema
+          path: results/caruso2019_dryad_schema.json
