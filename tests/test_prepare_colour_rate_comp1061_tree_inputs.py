@@ -38,13 +38,19 @@ class TreeInputsTests(unittest.TestCase):
             out=r/'out'
             result=m.build(primary,locus_file,retrieved,target,out,0.8)
             self.assertEqual(result['eligible_loci'],100)
-            self.assertEqual(result['eligible_loci_with_saff_reference'],100)
+            self.assertEqual(result['tree_reference_tips'],['OUTGROUP_saff'])
             self.assertEqual(result['required_root_references'],['OUTGROUP_saff'])
-            self.assertEqual(result['required_reference_tips'],['OUTGROUP_saff','OUTGROUP_lett','OUTGROUP_sunf'])
+            self.assertEqual(result['audited_distant_reference_tips'],['OUTGROUP_lett','OUTGROUP_sunf'])
+            self.assertFalse(result['distant_references_included_in_tree'])
+            self.assertEqual(result['tree_tip_count_if_complete'],21)
             self.assertTrue(result['tree_input_ready'])
             self.assertEqual(len((out/'eligible_loci.txt').read_text().splitlines()),100)
+            tree_input=(out/'loci_unaligned/L000.fasta').read_text()
+            self.assertIn('>OUTGROUP_saff',tree_input)
+            self.assertNotIn('>OUTGROUP_lett',tree_input)
+            self.assertNotIn('>OUTGROUP_sunf',tree_input)
 
-    def test_accepts_current_subset_of_100_when_all_references_present(self):
+    def test_accepts_current_subset_of_100_when_saff_present(self):
         with tempfile.TemporaryDirectory() as td:
             r=Path(td);primary=r/'p.csv'
             with primary.open('w',newline='') as f:
@@ -88,6 +94,6 @@ class TreeInputsTests(unittest.TestCase):
             result=m.build(primary,r/'l.txt',r/'retr',r/'target.fa',r/'o',0.8)
             self.assertEqual(result['eligible_loci'],240)
             rows=list(csv.DictReader((r/'o/locus_manifest.csv').open()))
-            self.assertEqual(rows[0]['reason'],'required_close_root_reference_missing')
+            self.assertEqual(rows[0]['reason'],'required_close_root_reference_missing_or_nonunique')
 
 if __name__=='__main__': unittest.main()
