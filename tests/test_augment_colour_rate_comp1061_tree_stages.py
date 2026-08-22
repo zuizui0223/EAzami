@@ -22,7 +22,7 @@ class AugmentTests(unittest.TestCase):
                 sys.argv=['x','--bundle-dir',str(b)];m.main()
             finally:sys.argv=old
             manifest=json.loads((b/'execution_manifest.json').read_text())
-            self.assertEqual(manifest['bundle_version'],'colour_rate_comp1061_hpc_bundle_v0_5_saff_only_root_tree_stage')
+            self.assertEqual(manifest['bundle_version'],'colour_rate_comp1061_hpc_bundle_v0_6_empirically_hardened_saff_root_tree_stage')
             self.assertEqual(manifest['current_stage_end'],'tree_acceptance_scripts_prepared')
             self.assertFalse(manifest['branch_length_tree_completed'])
             self.assertFalse(manifest['rate_fit_execution_allowed'])
@@ -30,6 +30,8 @@ class AugmentTests(unittest.TestCase):
             self.assertEqual(manifest['tree_stage']['root_outgroups'],['OUTGROUP_saff'])
             self.assertEqual(manifest['tree_stage']['required_reference_tips'],['OUTGROUP_saff'])
             self.assertEqual(manifest['tree_stage']['audited_but_excluded_distant_reference_tips'],['OUTGROUP_lett','OUTGROUP_sunf'])
+            self.assertEqual(manifest['tree_stage']['iqtree_executable_resolution'],['iqtree3','iqtree','iqtree2'])
+            self.assertIn('build_cirsium_flower_colour_atlas_v0_3.py',manifest['tree_stage']['colour_atlas_generation'])
             self.assertIn('Carthamus',manifest['tree_stage']['close_root_reference'])
             self.assertIn('no post-hoc',manifest['tree_stage']['alignment_qc'])
             for name in ('04_prepare_tree_inputs_slurm.sh','05_align_loci_slurm.sh','05b_alignment_qc_slurm.sh','06_gene_trees_slurm.sh','07_concat_tree_slurm.sh','08_accept_tree_slurm.sh','submit_tree_chain.sh'):
@@ -45,11 +47,18 @@ class AugmentTests(unittest.TestCase):
             self.assertIn('alignment_qc_summary.json',alnqc)
             gene=(b/'06_gene_trees_slurm.sh').read_text()
             concat=(b/'07_concat_tree_slurm.sh').read_text()
+            for script in (gene,concat):
+                self.assertIn('for candidate in iqtree3 iqtree iqtree2',script)
+                self.assertIn('"$IQTREE_BIN"',script)
+                self.assertNotIn('"${RUN[@]}" iqtree2 ',script)
             self.assertIn('-o OUTGROUP_saff',gene)
             self.assertIn('-o OUTGROUP_saff',concat)
+            self.assertIn('iqtree_tool.txt',concat)
             submit=(b/'submit_tree_chain.sh').read_text()
             self.assertIn('dependency=afterok:$alignqc',submit)
             accept=(b/'08_accept_tree_slurm.sh').read_text()
+            self.assertIn('build_cirsium_flower_colour_atlas_v0_3.py',accept)
+            self.assertIn('cirsium_flower_colour_atlas_v0_3.csv',accept)
             self.assertIn('validate_colour_atlas_branch_length_tree.py',accept)
             self.assertIn('tree_route',accept)
             self.assertIn("root_outgroups=concat['root_outgroups']",accept)
@@ -61,6 +70,7 @@ class AugmentTests(unittest.TestCase):
             self.assertIn('Carthamus, Cardueae',accept)
             self.assertIn('lettuce and sunflower were audited',accept)
             self.assertIn('structural MAFFT alignment QC',accept)
+            self.assertIn('iqtree_tool.txt',accept)
             self.assertIn('export BUNDLE_DIR REPO_ROOT RESULT_ROOT ENV_PREFIX MODE',accept)
 
     def test_rejects_wrong_upstream_stage(self):
