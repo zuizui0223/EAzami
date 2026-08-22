@@ -20,7 +20,18 @@ jobs:
           python-version: "3.12"
       - name: Install test dependency
         run: python -m pip install pytest
+      - name: Preserve frozen summary
+        run: cp data/evidence/multiagent_floral_selection_mosaic_summary_v1.json /tmp/frozen-multiagent-mosaic.json
       - name: Recompute study-program synthesis
         run: python analysis/summarize_multiagent_floral_selection_mosaic_v1.py
+      - name: Require frozen semantic equality
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          frozen = json.loads(Path('/tmp/frozen-multiagent-mosaic.json').read_text())
+          recomputed = json.loads(Path('data/evidence/multiagent_floral_selection_mosaic_summary_v1.json').read_text())
+          assert frozen == recomputed, 'Frozen multi-agent summary differs from recomputation'
+          PY
       - name: Run focused tests
         run: python -m pytest -q tests/test_summarize_multiagent_floral_selection_mosaic_v1.py

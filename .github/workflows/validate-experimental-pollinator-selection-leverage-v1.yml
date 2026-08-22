@@ -21,7 +21,18 @@ jobs:
           python-version: "3.12"
       - name: Install test dependency
         run: python -m pip install pytest
+      - name: Preserve frozen summary
+        run: cp data/evidence/experimental_pollinator_selection_leverage_meta_v1.json /tmp/frozen-selection-leverage.json
       - name: Recompute restricted meta-analysis
         run: python analysis/meta_analyze_experimental_pollinator_selection_leverage_v1.py
+      - name: Require frozen semantic equality
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          frozen = json.loads(Path('/tmp/frozen-selection-leverage.json').read_text())
+          recomputed = json.loads(Path('data/evidence/experimental_pollinator_selection_leverage_meta_v1.json').read_text())
+          assert frozen == recomputed, 'Frozen selection-leverage summary differs from recomputation'
+          PY
       - name: Run focused tests
         run: python -m pytest -q tests/test_meta_analyze_experimental_pollinator_selection_leverage_v1.py

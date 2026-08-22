@@ -22,5 +22,7 @@ jobs:
         run: python -m pip install pytest
       - name: Recompute meta ceiling
         run: python analysis/summarize_doctoral_meta_resolution_gate_v1.py
+      - name: Require frozen summary equality
+        run: git diff --exit-code -- data/evidence/doctoral_meta_resolution_gate_v1.json
       - name: Run focused tests
         run: python -m pytest -q tests/test_summarize_doctoral_meta_resolution_gate_v1.py
