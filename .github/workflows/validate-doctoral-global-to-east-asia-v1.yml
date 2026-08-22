@@ -1,0 +1,39 @@
+name: Validate doctoral global-to-East-Asia synthesis v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/doctoral_global_to_east_asia_hypothesis_map_v1.csv"
+      - "data/evidence/doctoral_global_to_east_asia_summary_v1.json"
+      - "analysis/summarize_doctoral_global_to_east_asia_v1.py"
+      - "tests/test_summarize_doctoral_global_to_east_asia_v1.py"
+      - "docs/GLOBAL_TO_EAST_ASIA_DOCTORAL_SYNTHESIS_2026-08-22.md"
+      - "README.md"
+      - ".github/workflows/validate-doctoral-global-to-east-asia-v1.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependency
+        run: python -m pip install pytest
+      - name: Preserve frozen summary
+        run: cp data/evidence/doctoral_global_to_east_asia_summary_v1.json /tmp/frozen-global-east-asia.json
+      - name: Recompute synthesis
+        run: python analysis/summarize_doctoral_global_to_east_asia_v1.py
+      - name: Require frozen semantic equality
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          frozen = json.loads(Path('/tmp/frozen-global-east-asia.json').read_text())
+          recomputed = json.loads(Path('data/evidence/doctoral_global_to_east_asia_summary_v1.json').read_text())
+          assert frozen == recomputed, 'Frozen global-to-East-Asia synthesis differs from recomputation'
+          PY
+      - name: Run focused tests
+        run: python -m pytest -q tests/test_summarize_doctoral_global_to_east_asia_v1.py
