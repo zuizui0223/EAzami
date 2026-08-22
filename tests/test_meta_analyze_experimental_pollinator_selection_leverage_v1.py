@@ -23,7 +23,9 @@ def test_gradient_registry_internal_arithmetic():
             assert math.isclose(observed, float(r["delta_beta"]), abs_tol=0.011)
         if r["se_delta_source"] == "computed_independent_groups":
             expected = math.sqrt(float(r["se_open"]) ** 2 + float(r["se_hand"]) ** 2)
-            assert math.isclose(expected, float(r["se_delta"]), rel_tol=0, abs_tol=1e-8)
+            # Stored derived SEs are provenance only; analysis recomputes from the
+            # published rounded treatment-specific SEs. Require discrepancies tiny.
+            assert math.isclose(expected, float(r["se_delta"]), rel_tol=0, abs_tol=5e-5)
 
 
 def test_selection_leverage_meta_recomputes_and_keeps_article_clustering():
@@ -38,6 +40,7 @@ def test_selection_leverage_meta_recomputes_and_keeps_article_clustering():
     assert s["primary_gradient_rows"] == 38
     assert s["independent_article_clusters"] == 6
     assert s["taxon_count"] == 6
+    assert s["max_abs_stored_vs_recomputed_delta_se_difference"] < 5e-5
     assert s["functional_class_hierarchy_identified"] is False
     assert s["significant_paired_class_contrasts"] == []
     classes = s["functional_class_summary_all"]
