@@ -13,7 +13,7 @@ spec = importlib.util.spec_from_file_location("aln_qc", MOD); assert spec and sp
 m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
 
 
-def write_alignment(path: Path, focal_n: int = 20, include_saff: bool = True, bad_char: bool = False) -> None:
+def write_alignment(path: Path, focal_n: int = 20, include_saff: bool = True, bad_char: bool = False, include_lett: bool = False) -> None:
     with path.open("w") as f:
         for i in range(focal_n):
             seq = "ACGTACGT" if i else "ACGTTCGT"
@@ -22,7 +22,8 @@ def write_alignment(path: Path, focal_n: int = 20, include_saff: bool = True, ba
             f.write(f">T{i:02d}\n{seq}\n")
         if include_saff:
             f.write(">OUTGROUP_saff\nACGTACGT\n")
-        f.write(">OUTGROUP_lett\nACGTACGT\n>OUTGROUP_sunf\nACGTACGT\n")
+        if include_lett:
+            f.write(">OUTGROUP_lett\nACGTACGT\n")
 
 
 class AlignmentQcTests(unittest.TestCase):
@@ -46,6 +47,8 @@ class AlignmentQcTests(unittest.TestCase):
             self.assertEqual(summary["passed_loci"], 100)
             self.assertEqual(summary["failed_loci"], 0)
             self.assertEqual(summary["root_outgroup"], "OUTGROUP_saff")
+            self.assertEqual(summary["required_reference_tips"], ["OUTGROUP_saff"])
+            self.assertEqual(summary["tree_tip_count_if_complete"], 21)
             self.assertFalse(summary["posthoc_signal_filtering_applied"])
             self.assertGreater(summary["total_variable_sites_acgt"], 0)
             rows = list(csv.DictReader((r / "qc.csv").open()))
@@ -80,6 +83,19 @@ class AlignmentQcTests(unittest.TestCase):
             rows = list(csv.DictReader((r / "qc.csv").open()))
             self.assertEqual(rows[0]["reason"], "invalid_dna_characters")
             self.assertEqual(rows[0]["invalid_characters"], "!")
+
+    def test_distant_reference_is_rejected_if_reintroduced(self):
+        with tempfile.TemporaryDirectory() as td:
+            r = Path(td); primary = self.make_primary(r)
+            loci = [f"L{i:03d}" for i in range(100)]
+            eligible = r / "eligible.txt"; eligible.write_text("\n".join(loci) + "\n")
+            aln = r / "aln"; aln.mkdir()
+            for j, locus in enumerate(loci):
+                write_alignment(aln / f"{locus}.aln.fasta", include_lett=j == 0)
+            with self.assertRaisesRegex(ValueError, "1/100"):
+                m.summarize(eligible, aln, primary, r / "qc.csv", r / "qc.json")
+            rows = list(csv.DictReader((r / "qc.csv").open()))
+            self.assertTrue(rows[0]["reason"].startswith("unexpected_taxa:"))
 
 
 if __name__ == "__main__":
