@@ -4,7 +4,21 @@ on:
   pull_request:
     paths:
       - "analysis/validate_colour_atlas_branch_length_tree.py"
+      - "analysis/prepare_colour_rate_comp1061_tree_inputs.py"
+      - "analysis/concatenate_colour_rate_comp1061_alignments.py"
+      - "analysis/summarize_colour_rate_alignment_qc.py"
+      - "analysis/augment_colour_rate_comp1061_tree_stages.py"
+      - "data/evidence/full20_comp1061_saff_root_153_loci_v1.txt"
+      - "data/evidence/full20_comp1061_saff_root_tree_preflight_v1.json"
+      - "data/evidence/full20_comp1061_primary_tree_v1.nwk"
+      - "data/evidence/full20_comp1061_primary_tree_acceptance_v1.json"
       - "tests/test_validate_colour_atlas_branch_length_tree.py"
+      - "tests/test_prepare_colour_rate_comp1061_tree_inputs.py"
+      - "tests/test_concatenate_colour_rate_comp1061_alignments.py"
+      - "tests/test_summarize_colour_rate_alignment_qc.py"
+      - "tests/test_augment_colour_rate_comp1061_tree_stages.py"
+      - "tests/test_full20_comp1061_saff_root_tree_preflight.py"
+      - "tests/test_full20_comp1061_primary_tree_acceptance.py"
       - ".github/workflows/validate-colour-atlas-branch-length-tree.yml"
   workflow_dispatch:
 
@@ -20,7 +34,21 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Compile and test branch-length tree gate
+      - name: Compile Comp1061 tree-stage scripts
         run: |
-          python -m py_compile analysis/validate_colour_atlas_branch_length_tree.py
-          python -m unittest tests/test_validate_colour_atlas_branch_length_tree.py -v
+          python -m py_compile \
+            analysis/validate_colour_atlas_branch_length_tree.py \
+            analysis/prepare_colour_rate_comp1061_tree_inputs.py \
+            analysis/concatenate_colour_rate_comp1061_alignments.py \
+            analysis/summarize_colour_rate_alignment_qc.py \
+            analysis/augment_colour_rate_comp1061_tree_stages.py
+      - name: Test complete Comp1061 tree contract
+        run: |
+          python -m unittest -v \
+            tests/test_validate_colour_atlas_branch_length_tree.py \
+            tests/test_prepare_colour_rate_comp1061_tree_inputs.py \
+            tests/test_concatenate_colour_rate_comp1061_alignments.py \
+            tests/test_summarize_colour_rate_alignment_qc.py \
+            tests/test_augment_colour_rate_comp1061_tree_stages.py \
+            tests/test_full20_comp1061_saff_root_tree_preflight.py \
+            tests/test_full20_comp1061_primary_tree_acceptance.py
