@@ -1,0 +1,174 @@
+name: Accept frozen saff-root Comp1061 primary tree
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/accept-comp1061-saff-root-primary-tree.yml"
+      - "analysis/validate_colour_atlas_branch_length_tree.py"
+      - "analysis/build_cirsium_flower_colour_atlas_v0_3.py"
+      - "tests/test_validate_colour_atlas_branch_length_tree.py"
+      - "tests/test_cirsium_flower_colour_atlas_v0_3.py"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_2.csv"
+      - "data/evidence/cirsium_flower_colour_atlas_v0_3_expansion_evidence.csv"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: accept-comp1061-saff-root-primary-tree-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SOURCE_TREE_RUN_ID: "32575463230"
+  SOURCE_TREE_ARTIFACT: "comp1061-saff-root-primary-tree-retry-32575463230"
+  SOURCE_TREE_ARTIFACT_DIGEST: "sha256:01a5ec91b4b6244e9b1233e5e2a7f1588f25e31534dda4d72afaec48dbbb2869"
+  FROZEN_TREE_SHA256: "c80b66c1e19c91287d3fa243360ae1f4ab6a28613e2d8f1914c23565788bcac5"
+  FROZEN_TREE_LOCI_SHA256: "1106051eca8bfa699f16e05d92024573cb358d7dbd151b89768e76c3d56cde82"
+
+jobs:
+  accept-tree:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate acceptance and atlas contracts
+        run: |
+          set -euo pipefail
+          python tests/test_validate_colour_atlas_branch_length_tree.py
+          python tests/test_cirsium_flower_colour_atlas_v0_3.py
+
+      - name: Download immutable IQ-TREE-success artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.SOURCE_TREE_ARTIFACT }}
+          path: .
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.SOURCE_TREE_RUN_ID }}
+
+      - name: Verify immutable tree and pre-tree evidence
+        run: |
+          set -euo pipefail
+          test -s tree/concat/colour_rate_comp1061_concat.treefile
+          test -s tree/alignment_qc/alignment_qc_summary.json
+          test -s tree/concat/concat_summary.json
+          test -s tree/tip_map.csv
+          test -s tree/tree_provenance.json
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          tree=Path('tree/concat/colour_rate_comp1061_concat.treefile')
+          observed=hashlib.sha256(tree.read_bytes()).hexdigest()
+          assert observed == os.environ['FROZEN_TREE_SHA256'], (observed, os.environ['FROZEN_TREE_SHA256'])
+          aln=json.load(open('tree/alignment_qc/alignment_qc_summary.json'))
+          concat=json.load(open('tree/concat/concat_summary.json'))
+          assert aln['alignment_qc_passed'] is True
+          assert aln['passed_loci'] == 153 and aln['failed_loci'] == 0
+          assert aln['posthoc_signal_filtering_applied'] is False
+          assert concat['loci'] == 153
+          assert concat['tree_tip_count'] == 21
+          assert concat['root_outgroups'] == ['OUTGROUP_saff']
+          assert concat['reference_tips'] == ['OUTGROUP_saff']
+          PY
+
+      - name: Build the source-backed v0.3 colour atlas
+        run: |
+          set -euo pipefail
+          python analysis/build_cirsium_flower_colour_atlas_v0_3.py
+          test -s data/evidence/cirsium_flower_colour_atlas_v0_3.csv
+          python - <<'PY'
+          import json
+          x=json.load(open('analysis/cirsium_flower_colour_atlas_v0_3_readiness.json'))
+          assert x['rate_fit_eligible_unique_taxa'] == 20
+          assert x['rate_fit_eligible_state_counts'] == {'C':17,'W':3}
+          assert x['transition_rate_fit_ready'] is False
+          assert x['readiness_blockers'] == ['minimum_white_tips']
+          PY
+
+      - name: Apply branch-length tree acceptance gate
+        run: |
+          set -euo pipefail
+          python analysis/validate_colour_atlas_branch_length_tree.py \
+            --tree tree/concat/colour_rate_comp1061_concat.treefile \
+            --atlas data/evidence/cirsium_flower_colour_atlas_v0_3.csv \
+            --tip-map tree/tip_map.csv \
+            --provenance tree/tree_provenance.json \
+            --output tree/tree_acceptance.json
+          python - <<'PY'
+          import json
+          accept=json.load(open('tree/tree_acceptance.json'))
+          assert accept['tree_gate_ready'] is True
+          assert accept['tree_tip_count'] == 21
+          assert accept['eligible_atlas_taxa'] == 20
+          assert accept['eligible_state_counts'] == {'C':17,'W':3}
+          assert accept['required_outgroup_tips'] == ['OUTGROUP_saff']
+          assert accept['required_reference_tips'] == ['OUTGROUP_saff']
+          assert accept['focal_monophyly_checked'] is True
+          assert accept['focal_monophyly_definition'] == 'orientation-invariant edge split'
+          assert accept['focal_monophyly_passed'] is True
+          PY
+
+      - name: Freeze current primary-tree execution boundary in artifact
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          accept=json.load(open('tree/tree_acceptance.json'))
+          atlas=json.load(open('analysis/cirsium_flower_colour_atlas_v0_3_readiness.json'))
+          aln=json.load(open('tree/alignment_qc/alignment_qc_summary.json'))
+          concat=json.load(open('tree/concat/concat_summary.json'))
+          summary={
+              'contract_version':'full20_comp1061_primary_tree_execution_v1',
+              'source_full20_run_id':32555473197,
+              'source_alignment_run_id':32575064385,
+              'source_iqtree_run_id':32575463230,
+              'source_iqtree_artifact_digest':os.environ['SOURCE_TREE_ARTIFACT_DIGEST'],
+              'frozen_tree_sha256':os.environ['FROZEN_TREE_SHA256'],
+              'frozen_tree_loci':153,
+              'frozen_tree_loci_sha256':os.environ['FROZEN_TREE_LOCI_SHA256'],
+              'alignment_qc':aln,
+              'concatenation':concat,
+              'tree_acceptance':accept,
+              'colour_atlas_readiness':{
+                  'eligible_taxa':atlas['rate_fit_eligible_unique_taxa'],
+                  'eligible_state_counts':atlas['rate_fit_eligible_state_counts'],
+                  'transition_rate_fit_ready':atlas['transition_rate_fit_ready'],
+                  'readiness_blockers':atlas['readiness_blockers'],
+              },
+              'primary_branch_length_tree_completed':True,
+              'topology_sensitivity_completed':False,
+              'rate_fit_execution_allowed':False,
+              'remaining_blockers':['topology_sensitivity','minimum_white_tips'],
+              'next_gate':'topology/gene-tree concordance sensitivity',
+              'claim_limit':'This accepts one empirical 21-tip Carthamus-rooted branch-length tree. Flower-colour rate fitting remains blocked by topology sensitivity and the predeclared minimum-white-tip gate.'
+          }
+          Path('tree/tree_execution_summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          PY
+
+      - name: Upload accepted primary-tree evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: comp1061-saff-root-primary-tree-accepted-${{ github.run_id }}
+          path: |
+            data/evidence/cirsium_flower_colour_atlas_v0_3.csv
+            analysis/cirsium_flower_colour_atlas_v0_3_readiness.json
+            tree/alignment_qc/alignment_qc_summary.json
+            tree/concat/concat_summary.json
+            tree/concat/colour_rate_comp1061_concat.treefile
+            tree/concat/colour_rate_comp1061_concat.iqtree
+            tree/concat/colour_rate_comp1061_concat.log
+            tree/iqtree_retry_tool.txt
+            tree/tip_map.csv
+            tree/tree_provenance.json
+            tree/tree_acceptance.json
+            tree/tree_execution_summary.json
+          if-no-files-found: error
+          retention-days: 30

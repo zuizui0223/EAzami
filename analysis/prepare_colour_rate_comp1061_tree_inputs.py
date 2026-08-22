@@ -3,11 +3,14 @@
 
 Input is the HybPiper ``retrieve_sequences dna --fasta_dir`` output from one
 mapping mode. The supplied locus list is already the current no-paralog subset
-of the frozen Moreyra conservative-241 universe; loci are retained for this
-cross-assay tree only when at least 80% of the 20 frozen focal taxa have a
-recovered sequence. Original Compositae1061 reference sequences are appended as
-explicit non-Cirsium references. `lett` and `sunf` are required; `saff` is
-retained and counted wherever available but is not a locus-admission criterion.
+of the frozen Moreyra conservative-241 universe. Loci are retained only when at
+least 80% of the 20 frozen focal taxa have a recovered sequence and the close
+Cardueae reference ``saff`` (Carthamus) is present.
+
+Only ``OUTGROUP_saff`` is appended to the tree alignment. The more distant
+``lett`` and ``sunf`` target references are audited but deliberately excluded
+from the inferred tree so that rooting on the close outgroup does not place
+more distant reference lineages on the ingroup side of the root.
 """
 from __future__ import annotations
 
@@ -17,6 +20,8 @@ import json
 from pathlib import Path
 
 REF_PREFIXES=("lett","saff","sunf")
+TREE_REFERENCE="OUTGROUP_saff"
+DISTANT_REFERENCES=("OUTGROUP_lett","OUTGROUP_sunf")
 
 
 def clean(x: object)->str: return str(x or "").strip()
@@ -90,25 +95,28 @@ def build(primary:Path,locus_list:Path,retrieved:Path,target:Path,outdir:Path,mi
     tips=primary_tips(primary); ids={r["tip_id"] for r in tips}; wanted=loci(locus_list)
     files=retrieve_files(retrieved); refs=target_refs(target)
     min_n=int(len(ids)*min_fraction + 0.999999)
-    manifest=[]; eligible=[]; eligible_saff=0
+    manifest=[]; eligible=[]; eligible_lett=0; eligible_sunf=0
     locus_dir=outdir/"loci_unaligned"
     for locus in wanted:
         focal=normalize_focal_records(read_fasta(files[locus]),ids) if locus in files else []
         anchors=refs.get(locus,[])
+        saff=[x for x in anchors if x[0]==TREE_REFERENCE]
         row={
             "locus":locus,"focal_sequences":len(focal),"focal_fraction":len(focal)/20,
-            "reference_sequences":len(anchors),
+            "reference_sequences_in_target":len(anchors),
             "has_lett":any(x[0]=="OUTGROUP_lett" for x in anchors),
             "has_sunf":any(x[0]=="OUTGROUP_sunf" for x in anchors),
-            "has_saff":any(x[0]=="OUTGROUP_saff" for x in anchors),
+            "has_saff":len(saff)==1,
             "eligible":False,"reason":""
         }
-        if len(focal)<min_n: row["reason"]="focal_occupancy_below_0.80"
-        elif not row["has_lett"] or not row["has_sunf"]: row["reason"]="required_root_reference_missing"
+        if len(focal)<min_n:
+            row["reason"]="focal_occupancy_below_0.80"
+        elif len(saff)!=1:
+            row["reason"]="required_close_root_reference_missing_or_nonunique"
         else:
             row["eligible"]=True; row["reason"]="eligible"; eligible.append(locus)
-            if row["has_saff"]: eligible_saff+=1
-            write_fasta(locus_dir/f"{locus}.fasta",focal+anchors)
+            eligible_lett+=int(row["has_lett"]); eligible_sunf+=int(row["has_sunf"])
+            write_fasta(locus_dir/f"{locus}.fasta",focal+saff)
         manifest.append(row)
     outdir.mkdir(parents=True,exist_ok=True)
     fields=list(manifest[0])
@@ -116,21 +124,25 @@ def build(primary:Path,locus_list:Path,retrieved:Path,target:Path,outdir:Path,mi
         w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(manifest)
     (outdir/"eligible_loci.txt").write_text("\n".join(eligible)+("\n" if eligible else ""),encoding="utf-8")
     summary={
-        "contract_version":"colour_rate_comp1061_tree_inputs_v2",
+        "contract_version":"colour_rate_comp1061_tree_inputs_v4_saff_only_root",
         "supplied_current_locus_count":len(wanted),
         "maximum_frozen_locus_universe":241,
         "focal_taxa":20,
         "minimum_focal_occupancy_fraction":min_fraction,
         "minimum_focal_sequences":min_n,
         "eligible_loci":len(eligible),
-        "eligible_loci_with_saff_reference":eligible_saff,
-        "required_root_references":["OUTGROUP_lett","OUTGROUP_sunf"],
-        "optional_near_reference":"OUTGROUP_saff",
+        "tree_reference_tips":[TREE_REFERENCE],
+        "required_root_references":[TREE_REFERENCE],
+        "audited_distant_reference_tips":list(DISTANT_REFERENCES),
+        "eligible_loci_with_lett_in_target":eligible_lett,
+        "eligible_loci_with_sunf_in_target":eligible_sunf,
+        "distant_references_included_in_tree":False,
+        "tree_tip_count_if_complete":21,
         "tree_input_ready":len(eligible)>=100,
-        "claim_limit":"The >=100 eligible-locus threshold is a conservative engineering gate for launching the tree stage. Safflower-reference coverage is recorded diagnostically and is not used to relax or tighten locus admission post hoc."
+        "claim_limit":"The >=100 eligible-locus threshold is an engineering gate. Locus admission is frozen before topology inference from current occupancy/paralog QC plus presence of the close Carthamus reference. Lettuce and sunflower target references are audited but excluded from the tree; no topology-dependent locus selection is permitted."
     }
     (outdir/"tree_input_summary.json").write_text(json.dumps(summary,indent=2)+"\n",encoding="utf-8")
-    if not summary["tree_input_ready"]: raise ValueError(f"Only {len(eligible)} current-clean loci passed the cross-assay occupancy/root-reference gate")
+    if not summary["tree_input_ready"]: raise ValueError(f"Only {len(eligible)} current-clean loci passed the cross-assay occupancy/Carthamus-root gate")
     return summary
 
 def main()->int:

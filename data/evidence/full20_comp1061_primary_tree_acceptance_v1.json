@@ -1,0 +1,137 @@
+{
+  "contract_version": "full20_comp1061_primary_tree_acceptance_v1",
+  "execution_date": "2026-08-22",
+  "repository": "zuizui0223/EAzami",
+  "source_lineage": {
+    "full20_recovery_qc": {
+      "workflow_run_id": 32555473197,
+      "artifact_id": 9475717125,
+      "artifact_digest": "sha256:55f5a1fef7b9901e7ba2c88f45939a8cc5e1e1ac8ef47ef27ae60e69c1b4d2ea"
+    },
+    "alignment_and_concat": {
+      "workflow_run_id": 32575064385,
+      "artifact_id": 9476351216,
+      "artifact_digest": "sha256:d6dce360848c92fb4cadea83ce20add23dc4d8bddb166ef21bb5ca650b715afa",
+      "note": "This run completed frozen-locus reconstruction, 153 MAFFT alignments, structural alignment QC and concatenation; it stopped only because the initial workflow called a non-existent iqtree2 executable."
+    },
+    "iqtree_primary_tree": {
+      "workflow_run_id": 32575463230,
+      "artifact_id": 9476441345,
+      "artifact_digest": "sha256:01a5ec91b4b6244e9b1233e5e2a7f1588f25e31534dda4d72afaec48dbbb2869",
+      "note": "Pinned IQ-TREE 3.1.3 inference completed; this run stopped afterward because the generated v0.3 atlas CSV was not yet built in the workspace."
+    },
+    "tree_acceptance": {
+      "workflow_run_id": 32575889083,
+      "workflow_head_sha": "4c5790853400eff55c2a77b19c4fc7ceed156002",
+      "artifact_id": 9476540671,
+      "artifact_digest": "sha256:d00a3f309a3519eeaf06d60ba8008d9f4ec5c3ad65256e13c3f7554f06d0627c",
+      "conclusion": "success"
+    }
+  },
+  "frozen_inputs": {
+    "full20_current_qc_contract": "data/evidence/full20_comp1061_current_qc_evidence_v1.json",
+    "current_clean_conservative_loci": 206,
+    "current_clean_conservative_loci_sha256": "b7f69af90ea5820843922c0be31e4eac758365cba104e4c735e166c99f968515",
+    "tree_preflight_contract": "data/evidence/full20_comp1061_saff_root_tree_preflight_v1.json",
+    "tree_loci": 153,
+    "tree_loci_sha256": "1106051eca8bfa699f16e05d92024573cb358d7dbd151b89768e76c3d56cde82",
+    "root_outgroup": "OUTGROUP_saff",
+    "root_taxon": "Carthamus",
+    "root_tribe": "Cardueae",
+    "focal_taxa": 20,
+    "tree_tips": 21
+  },
+  "alignment_qc": {
+    "contract_version": "colour_rate_comp1061_alignment_qc_v2_saff_only_root",
+    "expected_loci": 153,
+    "passed_loci": 153,
+    "failed_loci": 0,
+    "alignment_length_min": 425,
+    "alignment_length_median": 849,
+    "alignment_length_max": 1884,
+    "gap_fraction_median": 0.2746611053180396,
+    "total_variable_sites_acgt": 14081,
+    "total_parsimony_informative_sites_acgt": 2639,
+    "all_gap_columns_total": 0,
+    "posthoc_signal_filtering_applied": false,
+    "alignment_qc_passed": true
+  },
+  "concatenation": {
+    "loci": 153,
+    "alignment_length_bp": 140562,
+    "tree_tip_count": 21,
+    "root_outgroups": ["OUTGROUP_saff"],
+    "reference_tips": ["OUTGROUP_saff"],
+    "missing_filled_with_gaps": true
+  },
+  "iqtree": {
+    "resolved_executable": "iqtree3",
+    "version": "3.1.3",
+    "reported_build": "IQ-TREE version 3.1.3 for Linux x86 64-bit built Jul 26 2026",
+    "model_selection": "MFP",
+    "best_fit_model_bic": "TIM3+F+R3",
+    "log_likelihood": -293432.2110,
+    "log_likelihood_se": 863.1198,
+    "aic": 586962.4221,
+    "aicc": 586962.4569,
+    "bic": 587445.2389,
+    "total_tree_length_substitutions_per_site": 0.3303,
+    "ultrafast_bootstrap_replicates": 1000,
+    "sh_alrt_replicates": 1000
+  },
+  "support_summary": {
+    "internal_edges_with_reported_sh_alrt_and_ufboot": 18,
+    "sh_alrt_min": 22.5,
+    "sh_alrt_median": 99.1,
+    "ufboot_min": 46.0,
+    "ufboot_median": 92.0,
+    "ufboot_ge_95_edges": 7,
+    "ufboot_ge_90_edges": 11,
+    "ufboot_lt_80_edges": 4,
+    "sh_alrt_ge_95_edges": 13,
+    "sh_alrt_lt_80_edges": 3,
+    "interpretation": "Several internal relationships remain weak despite a strongly supported backbone; these nodes motivate the required topology/gene-tree sensitivity gate and must not be silently treated as fixed."
+  },
+  "accepted_tree": {
+    "path": "data/evidence/full20_comp1061_primary_tree_v1.nwk",
+    "sha256": "c80b66c1e19c91287d3fa243360ae1f4ab6a28613e2d8f1914c23565788bcac5",
+    "branch_length_edge_count": 39,
+    "branch_length_min": 0.0001693968,
+    "branch_length_max": 0.2212044068,
+    "branch_length_interpretation": "IQ-TREE maximum-likelihood substitutions per site on the concatenated frozen 153-locus coding-sequence alignment",
+    "rooting_definition": "IQ-TREE rooted using sole retained OUTGROUP_saff (Carthamus, Cardueae); lettuce and sunflower were audited upstream but excluded from tree inference",
+    "focal_monophyly_definition": "orientation-invariant edge split",
+    "focal_monophyly_passed": true,
+    "tree_gate_ready": true
+  },
+  "colour_atlas": {
+    "contract_version": "cirsium_flower_colour_atlas_v0_3",
+    "generated_csv_sha256": "50cbf24a9f9d4e0c0e26dd84cbd583f4ce50b45614692625fe3cff7e1a023025",
+    "eligible_taxa": 20,
+    "eligible_state_counts": {"C": 17, "W": 3},
+    "transition_rate_fit_ready": false,
+    "readiness_blockers": ["minimum_white_tips"]
+  },
+  "artifact_file_sha256": {
+    "treefile": "c80b66c1e19c91287d3fa243360ae1f4ab6a28613e2d8f1914c23565788bcac5",
+    "iqtree_report": "3e3d4cbbd2016dafb5264d061f0d4faa6c3f58e177c39b86d6eac5b894c60172",
+    "iqtree_log": "76cb83f4ee7baee9c22c0f9ed6d12f57db99c0c0aeaaa9f22c268800baa4c864",
+    "alignment_qc_summary": "277157119b7ea8b072fb4988e2638ab4ebd564280a2fcb52d103b94346c09202",
+    "concat_summary": "64bcc0b520ed07507e701118cd0369f923c1ae3d447ab54b84c3e8913b35313f",
+    "tip_map": "ce871b3f4882e9af7da603187f3b70263388a661477f4fdebc03f4a89b561736",
+    "tree_provenance": "0ebec648ca228939faa47aacbf41485270ec9f20c768ddef23e1c45b87bac1bf",
+    "tree_acceptance": "807b019c8ad8081d1f1dfee045d43f834aa42487866d6ecc6c8bba38203dd66a",
+    "tree_execution_summary": "17ba6b73e440585821debc13a899dd8934bfbe215169cd5b70509e29282ef872",
+    "iqtree_tool_record": "4e864935d7536efd0152878e36ec2f820c57c64384c1a193a6b60401519ba6a5",
+    "colour_atlas_readiness": "c5e4dd3808c73320440a8a3e6563fc22d4ebf437e75438801752e8a4aa9d5aa1"
+  },
+  "promotion_boundary": {
+    "primary_branch_length_tree_completed": true,
+    "primary_tree_accepted": true,
+    "topology_sensitivity_completed": false,
+    "rate_fit_execution_allowed": false,
+    "remaining_blockers": ["topology_sensitivity", "minimum_white_tips"],
+    "next_gate": "topology/gene-tree concordance sensitivity",
+    "claim_limit": "This evidence accepts one empirical 21-tip Carthamus-rooted branch-length tree. It does not establish robustness to topology uncertainty and does not permit flower-colour transition-rate fitting while topology sensitivity and the predeclared minimum-white-tip gate remain unresolved."
+  }
+}
