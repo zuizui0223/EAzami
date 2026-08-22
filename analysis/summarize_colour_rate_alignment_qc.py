@@ -3,10 +3,10 @@
 
 This gate deliberately avoids post-hoc filtering on phylogenetic signal. It
 checks that every pre-admitted locus produced a valid alignment with the
-pre-registered taxon/reference structure, while recording gap and variability
-diagnostics for later sensitivity work. Loci are not removed because they are
-conserved, gappy, or weakly informative once they have passed the upstream
-occupancy/paralog/reference gates.
+pre-registered focal taxa plus the sole tree reference ``OUTGROUP_saff``.
+Gap and variability diagnostics are recorded for later sensitivity work but do
+not remove loci once upstream occupancy/paralog/root-reference gates have been
+passed.
 """
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ import statistics
 from pathlib import Path
 
 ROOT_OUTGROUP = "OUTGROUP_saff"
-REQUIRED_REFERENCES = ("OUTGROUP_saff", "OUTGROUP_lett", "OUTGROUP_sunf")
+REQUIRED_REFERENCES = (ROOT_OUTGROUP,)
 DNA_ALLOWED = set("ACGTURYSWKMBDHVN?-X")
 RESOLVED = set("ACGT")
 MISSING = set("-?")
@@ -191,7 +191,7 @@ def summarize(eligible_loci: Path, alignment_dir: Path, primary_runs: Path, outp
     lengths = [int(r["aligned_length"]) for r in passed]
     gaps = [float(r["gap_fraction"]) for r in passed]
     summary: dict[str, object] = {
-        "contract_version": "colour_rate_comp1061_alignment_qc_v1",
+        "contract_version": "colour_rate_comp1061_alignment_qc_v2_saff_only_root",
         "expected_loci": len(loci),
         "passed_loci": len(passed),
         "failed_loci": len(failed),
@@ -200,6 +200,7 @@ def summarize(eligible_loci: Path, alignment_dir: Path, primary_runs: Path, outp
         "minimum_focal_sequences": 16,
         "root_outgroup": ROOT_OUTGROUP,
         "required_reference_tips": list(REQUIRED_REFERENCES),
+        "tree_tip_count_if_complete": 21,
         "alignment_length_min": min(lengths) if lengths else None,
         "alignment_length_median": statistics.median(lengths) if lengths else None,
         "alignment_length_max": max(lengths) if lengths else None,
@@ -209,7 +210,7 @@ def summarize(eligible_loci: Path, alignment_dir: Path, primary_runs: Path, outp
         "all_gap_columns_total": sum(int(r["all_gap_columns"]) for r in rows),
         "posthoc_signal_filtering_applied": False,
         "alignment_qc_passed": len(passed) == len(loci),
-        "claim_limit": "This gate validates alignment structure, taxon/reference membership, occupancy, alphabet, non-empty sequences and absence of all-gap columns. Gap fraction and phylogenetic-site counts are descriptive only and do not remove loci post hoc."
+        "claim_limit": "This gate validates alignment structure, focal/reference membership, occupancy, alphabet, non-empty sequences and absence of all-gap columns. Gap fraction and phylogenetic-site counts are descriptive only and do not remove loci post hoc."
     }
     output_json.parent.mkdir(parents=True, exist_ok=True)
     output_json.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
