@@ -1,0 +1,179 @@
+{
+  "version": "v1",
+  "analysis_question": "Does broad floral functional class robustly predict the strength of experimentally isolated pollinator-mediated directional selection, and does stronger pollen limitation uniformly strengthen selection?",
+  "primary_gradient_rows": 38,
+  "independent_article_clusters": 6,
+  "taxon_count": 6,
+  "articles": [
+    "Anacamptis2016",
+    "Dacty2010",
+    "Gym2019",
+    "Lobelia2023",
+    "Primula2017",
+    "Spiranthes2020"
+  ],
+  "taxa": [
+    "Anacamptis morio",
+    "Dactylorhiza lapponica",
+    "Gymnadenia conopsea",
+    "Lobelia siphilitica",
+    "Primula alpicola",
+    "Spiranthes sinensis"
+  ],
+  "max_abs_stored_vs_recomputed_delta_se_difference": 2.4839401152956797e-05,
+  "functional_class_summary_all": {
+    "phenology": {
+      "n_articles": 4,
+      "article_balanced_mean_abs_delta": 0.099125,
+      "article_balanced_median_abs_delta": 0.08875,
+      "article_balanced_mean_noise_subtracted_strength": 0.06980589128298298
+    },
+    "plant_display": {
+      "n_articles": 5,
+      "article_balanced_mean_abs_delta": 0.09515,
+      "article_balanced_median_abs_delta": 0.058,
+      "article_balanced_mean_noise_subtracted_strength": 0.06752771050059153
+    },
+    "flower_sensory": {
+      "n_articles": 6,
+      "article_balanced_mean_abs_delta": 0.11802777777777777,
+      "article_balanced_median_abs_delta": 0.08408333333333334,
+      "article_balanced_mean_noise_subtracted_strength": 0.08386691796037282
+    },
+    "pollination_efficiency": {
+      "n_articles": 3,
+      "article_balanced_mean_abs_delta": 0.14366666666666666,
+      "article_balanced_median_abs_delta": 0.078,
+      "article_balanced_mean_noise_subtracted_strength": 0.11343136510434419
+    }
+  },
+  "functional_class_summary_post2018_sensitivity": {
+    "phenology": {
+      "n_articles": 2,
+      "article_balanced_mean_abs_delta": 0.05625,
+      "article_balanced_median_abs_delta": 0.05625,
+      "article_balanced_mean_noise_subtracted_strength": 0.039299769327271576
+    },
+    "plant_display": {
+      "n_articles": 3,
+      "article_balanced_mean_abs_delta": 0.052083333333333336,
+      "article_balanced_median_abs_delta": 0.051250000000000004,
+      "article_balanced_mean_noise_subtracted_strength": 0.020702167266270714
+    },
+    "flower_sensory": {
+      "n_articles": 3,
+      "article_balanced_mean_abs_delta": 0.06705555555555555,
+      "article_balanced_median_abs_delta": 0.07816666666666668,
+      "article_balanced_mean_noise_subtracted_strength": 0.03764681963094751
+    },
+    "pollination_efficiency": {
+      "n_articles": 2,
+      "article_balanced_mean_abs_delta": 0.0555,
+      "article_balanced_median_abs_delta": 0.0555,
+      "article_balanced_mean_noise_subtracted_strength": 0.014899664425751339
+    }
+  },
+  "paired_article_contrasts": [
+    {
+      "class_a": "pollination_efficiency",
+      "class_b": "flower_sensory",
+      "n_paired_articles": 3,
+      "article_differences": {
+        "Dacty2010": 0.18,
+        "Gym2019": 0.0,
+        "Lobelia2023": -0.00016666666666667607
+      },
+      "mean_difference_abs_delta": 0.05994444444444444,
+      "two_sided_exact_signflip_p": 1.0,
+      "leave_one_article_out_mean_difference_range": [-8.333333333333803e-05, 0.09]
+    },
+    {
+      "class_a": "pollination_efficiency",
+      "class_b": "plant_display",
+      "n_paired_articles": 3,
+      "article_differences": {
+        "Dacty2010": 0.07500000000000001,
+        "Gym2019": -0.013999999999999999,
+        "Lobelia2023": 0.019999999999999997
+      },
+      "mean_difference_abs_delta": 0.027000000000000007,
+      "two_sided_exact_signflip_p": 0.5,
+      "leave_one_article_out_mean_difference_range": [0.002999999999999999, 0.0475]
+    },
+    {
+      "class_a": "plant_display",
+      "class_b": "flower_sensory",
+      "n_paired_articles": 5,
+      "article_differences": {
+        "Dacty2010": 0.10499999999999998,
+        "Gym2019": 0.013999999999999999,
+        "Lobelia2023": -0.020166666666666673,
+        "Primula2017": 0.05750000000000001,
+        "Spiranthes2020": -0.03874999999999999
+      },
+      "mean_difference_abs_delta": 0.023516666666666665,
+      "two_sided_exact_signflip_p": 0.5,
+      "leave_one_article_out_mean_difference_range": [0.0031458333333333355, 0.03908333333333333]
+    },
+    {
+      "class_a": "phenology",
+      "class_b": "plant_display",
+      "n_paired_articles": 4,
+      "article_differences": {
+        "Dacty2010": -0.16699999999999998,
+        "Gym2019": -0.034,
+        "Primula2017": 0.13149999999999998,
+        "Spiranthes2020": 0.04825
+      },
+      "mean_difference_abs_delta": -0.005312500000000001,
+      "two_sided_exact_signflip_p": 1.0,
+      "leave_one_article_out_mean_difference_range": [-0.050916666666666666, 0.04858333333333333]
+    },
+    {
+      "class_a": "phenology",
+      "class_b": "flower_sensory",
+      "n_paired_articles": 4,
+      "article_differences": {
+        "Dacty2010": -0.06200000000000001,
+        "Gym2019": -0.020000000000000004,
+        "Primula2017": 0.189,
+        "Spiranthes2020": 0.009500000000000008
+      },
+      "mean_difference_abs_delta": 0.029124999999999998,
+      "two_sided_exact_signflip_p": 0.875,
+      "leave_one_article_out_mean_difference_range": [-0.02416666666666667, 0.0595]
+    }
+  ],
+  "functional_class_hierarchy_identified": false,
+  "significant_paired_class_contrasts": [],
+  "lobelia_pollinator_decline_context_test": {
+    "pollen_limitation_log_response_ratio": {
+      "ambient": {"estimate": 0.062, "se": 0.065},
+      "reduced": {"estimate": 0.259, "se": 0.072}
+    },
+    "trait_abs_selection_change_reduced_minus_ambient": {
+      "inflorescence_height": 0.056999999999999995,
+      "daily_display_size": 0.023000000000000003,
+      "petal_brightness": -0.009000000000000001,
+      "petal_chroma": 0.06100000000000001,
+      "corolla_projected_area": 0.0030000000000000027,
+      "corolla_tube_length": -0.015999999999999986
+    },
+    "mean_abs_selection_change": 0.019833333333333338,
+    "traits_stronger_under_reduced": 4,
+    "traits_weaker_under_reduced": 2,
+    "two_sided_exact_signflip_p_exploratory": 0.25,
+    "class_mean_changes": {
+      "flower_sensory": 0.018333333333333337,
+      "plant_display": 0.04,
+      "pollination_efficiency": -0.015999999999999986
+    },
+    "boundary": "Within one experiment; trait-level sign-flip is exploratory because gradients share plants and the supplemental reference group."
+  },
+  "interpretation": {
+    "functional_class": "This restricted article-balanced reanalysis does not identify a universal hierarchy among phenology, plant display, flower sensory/display and pollination-efficiency classes. Broad functional class is therefore an incomplete proxy for the trait-to-interaction leverage operating in a particular population.",
+    "interaction_intensity": "In Lobelia, experimentally increased pollen limitation increased mean absolute pollinator-mediated selection modestly but not uniformly across traits; interaction intensity creates opportunity for selection but does not determine every trait response.",
+    "refined_hypothesis": "Realized biotic selection is generated by interaction intensity x local trait-to-interaction functional leverage x downstream fitness gating, rather than by agent intensity or broad trait class alone."
+  },
+  "claim_boundary": "Restricted experimental-gradient meta-analysis using published standardized directional selection gradients. Article-balanced magnitude summaries are not an inverse-variance random-effects estimate; exact paired sign-flip tests preserve article clustering. Functional classifications are prospective ecological labels and uncertain classifications are excluded from the primary analysis."
+}
