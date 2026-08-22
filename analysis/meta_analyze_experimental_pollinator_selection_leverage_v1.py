@@ -63,7 +63,15 @@ def read_rows():
         r["publication_year"] = int(r["publication_year"])
         r["included_primary"] = int(r["included_primary"])
         r["delta_beta"] = f(r["delta_beta"])
-        r["se_delta"] = f(r["se_delta"])
+        stored_se = f(r["se_delta"])
+        if r["se_delta_source"] == "computed_independent_groups":
+            # Recompute from the published rounded treatment-specific SEs instead of
+            # trusting a hand-entered derived value.
+            r["se_delta"] = math.sqrt(f(r["se_open"]) ** 2 + f(r["se_hand"]) ** 2)
+            r["stored_vs_recomputed_se_abs_diff"] = abs(stored_se - r["se_delta"])
+        else:
+            r["se_delta"] = stored_se
+            r["stored_vs_recomputed_se_abs_diff"] = 0.0
         r["abs_delta"] = abs(r["delta_beta"])
         # Sensitivity only: a truncated noise-subtracted magnitude proxy.
         r["noise_subtracted_strength"] = math.sqrt(max(r["delta_beta"] ** 2 - r["se_delta"] ** 2, 0.0))
@@ -187,6 +195,7 @@ def main():
         "taxon_count": len(taxa),
         "articles": articles,
         "taxa": taxa,
+        "max_abs_stored_vs_recomputed_delta_se_difference": max(r["stored_vs_recomputed_se_abs_diff"] for r in rows),
         "functional_class_summary_all": summarize_classes(ac),
         "functional_class_summary_post2018_sensitivity": summarize_classes(ac, min_year=2019),
         "paired_article_contrasts": contrasts,
