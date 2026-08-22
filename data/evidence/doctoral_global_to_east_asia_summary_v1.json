@@ -1,0 +1,69 @@
+{
+  "version": "v1",
+  "architecture": [
+    "Azami global observational phenotype/environment landscape",
+    "quantitative mechanism meta-analysis and structured synthesis",
+    "East Asian/Japanese rapid-radiation evolutionary-history zoom",
+    "repeated-state and parallel-evolution tests",
+    "focal causal trait-to-interaction/protection-to-fitness validation"
+  ],
+  "hypothesis_count": 19,
+  "scale_counts": {
+    "Arenicola": 1,
+    "Cardueae_defence": 1,
+    "Cirsium": 4,
+    "East_Asia": 6,
+    "general_Asteraceae": 2,
+    "general_flowering_plants": 2,
+    "global": 3
+  },
+  "status_counts": {
+    "live_repeated_state_hypothesis": 1,
+    "mechanistic_candidate": 2,
+    "mechanistic_working_hypothesis": 1,
+    "resolved_general_pressure": 1,
+    "resolved_observational_only": 1,
+    "resolved_premise": 2,
+    "resolved_system_premise": 1,
+    "unresolved_central_hypothesis": 1,
+    "unresolved_direction": 1,
+    "unresolved_high_value": 1,
+    "unresolved_repeated_evolution": 1,
+    "weakened": 1,
+    "working_mechanistic_support": 1,
+    "working_meta_support": 1,
+    "working_support": 2,
+    "working_support_for_local_leverage": 1
+  },
+  "module_to_hypotheses": {
+    "all": ["G0"],
+    "antagonism": ["M3"],
+    "colour": ["C1", "C2"],
+    "colour_molecular": ["C3"],
+    "demography": ["M4"],
+    "display": ["D1"],
+    "involucre_spine": ["G2"],
+    "modularity": ["E1"],
+    "multiagent": ["M1"],
+    "orientation": ["O1", "O2"],
+    "orientation_colour": ["G1"],
+    "parallelism": ["R1"],
+    "pollination": ["M2"],
+    "radiation": ["E0"],
+    "spine_phyllary": ["D2"],
+    "stickiness": ["D3"],
+    "trait_function": ["M5"]
+  },
+  "resolved_or_working_general": ["G0", "G1", "G2", "M1", "M2", "M3", "M4", "M5", "D1", "O1", "E0"],
+  "weakened": ["D3"],
+  "mechanistic_candidates_requiring_focal_validation": ["D2", "C3"],
+  "evolutionary_history_not_yet_identified": ["E1", "C1", "C2", "O2", "R1"],
+  "doctoral_empirical_gates": {
+    "Aim1_history": "same-individual phenotype + nuclear ancestry + plastid + cytotype, plus accepted branch-length East Asian tree for independent transition mapping",
+    "Aim2_function": "orientation first; W/coloured where flowering overlaps; display and validated spine/phyllary effects through effective pollination/antagonism to filled achenes",
+    "Aim3_colour_reversibility": "at least two independent W/C transitions with coding/regulatory haplotype + matched floral RNA + pigment + calibrated colour"
+  },
+  "central_working_thesis": "Rapid East Asian/Japanese Cirsium diversification may have been accelerated by reusable capitulum modules that can be redeployed across local selection mosaics before deep genome-wide lineage sorting; this remains a hypothesis until ancestry-resolved repeated transitions and trait-to-fitness paths are demonstrated.",
+  "adaptive_radiation_boundary": "Use rapid radiation as a premise. Do not call the radiation adaptive until a focal capitulum trait is causally linked through interaction/protection to reproductive fitness.",
+  "generic_meta_stop_rule": "Do not restart broad heterogeneous interaction meta-analysis unless a prespecified reopening condition in the doctoral meta-resolution gate is met. New literature work should target transition history or a missing homologous effect size, not accumulate unrelated studies."
+}

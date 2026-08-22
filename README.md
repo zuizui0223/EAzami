@@ -1,68 +1,116 @@
-# EAzami — rapid Japanese *Cirsium* radiation
+# EAzami — rapid East Asian/Japanese *Cirsium* radiation
 
 EAzami is organized around one doctoral-level question:
 
 > **Why did one young Japanese *Cirsium* radiation generate such large capitulum and ecological diversity so quickly, despite shallow lineage divergence?**
 
+## Azami -> EAzami zoom
+
+`zuizui0223/azami` and EAzami answer different questions.
+
+### Azami = global observational discovery
+
+Azami stops at:
+
+`public images -> continuous capitulum phenotypes -> within-taxon distributions -> within/among-taxon environmental structure`
+
+It establishes that visible capitulum variation is substantial below taxon means and that orientation and visible colour have particularly clear environmental structure. Its involucre/spine measurements are 2-D image proxies. Azami does **not** claim pollinator causation, defence, local adaptation, evolutionary rate, parallel evolution or adaptive radiation.
+
+### EAzami = mechanism + evolutionary-history zoom
+
+EAzami begins with the patterns frozen by Azami and asks:
+
+`global phenotype landscape`
+
+`-> ecological mechanism priors from quantitative literature synthesis`
+
+`-> East Asian/Japanese rapid-radiation history`
+
+`-> repeated-state / parallel-evolution tests`
+
+`-> focal trait -> interaction/protection -> reproductive fitness`
+
+Canonical synthesis:
+- `docs/GLOBAL_TO_EAST_ASIA_DOCTORAL_SYNTHESIS_2026-08-22.md`
+- `data/evidence/doctoral_global_to_east_asia_hypothesis_map_v1.csv`
+- `data/evidence/doctoral_global_to_east_asia_summary_v1.json`
+
 ## Central hypothesis
 
 **Modular evolvability:** standing ancestral variation, gene flow/introgression and cytotype/genome changes allowed pre-existing genetic/developmental modules to be reused and recombined, so capitulum phenotype could diverge faster than genome-wide lineage sorting.
 
-This is the main thesis hypothesis. The older ten-row hypothesis registry is retained only as a supporting evidence register.
+The more explicit ecological version is:
+
+> a young, reticulating radiation may diversify rapidly when reusable capitulum modules can be redeployed across local selection mosaics, with different modules altering pollination, protection, antagonism or demographic gates.
+
+This remains the main thesis **hypothesis**, not a recovered conclusion. Current structural screens do not decisively distinguish modular evolvability from a full common-lability alternative.
+
+## What the meta-analysis now establishes
+
+The generic interaction/meta-analysis phase has reached its current decision ceiling.
+
+- **reproductive antagonist pressure:** 4 independent data-generation studies / 9 contrasts; reduced-herbivory seed-output RR = **2.674** (95% CI **2.388-2.993**), equivalent to **62.6%** ambient loss of potential seed output;
+- **reproductive assurance:** animal-pollinator dependence is often high, but dependence is not equivalent to current open pollen limitation;
+- **demographic gate:** a fecundity effect can transmit, become context-dependent or disappear at the seed-to-recruitment bottleneck;
+- **selection mosaic:** in five strict pollination x antagonism manipulation programmes, agent dominance is antagonist 2 / pollinator 1 / mixed 2, and no universal dominant agent survives as a general model;
+- **local functional leverage:** 38 standardized pollinator-mediated selection gradients / 6 articles do not identify a universal functional-class hierarchy; stronger interaction limitation does not strengthen every trait uniformly;
+- **stickiness:** a direct *C. discolor* neutralization experiment weakens generic `sticky inflorescence = seed-predator defence`;
+- **display:** *C. purpuratum* literature supports simultaneous pollinator benefit and predispersal seed-predator cost, with density/context modifying the pollinator response.
+
+Further heterogeneous generic literature accumulation is stopped unless a prespecified reopening trigger in `data/evidence/doctoral_meta_resolution_gate_v1.json` is met.
+
+## East Asian evolutionary-history question
+
+Published phylogenomics places the principal Japanese radiation after a Pleistocene dispersal from continental Asia. The working system premise is that **36/38 sampled Japanese paper taxon concepts** fall in one dominant young radiation; *C. lineare* is the strongest replicated secondary-history exception and *C. dipsacolepis* remains a secondary-arrival candidate.
+
+The evolutionary-history zoom asks whether the same capitulum states recur independently inside this shallow radiation.
+
+Priority modules:
+
+1. **flower colour** — repeated W/coloured states; loss versus regain and regulatory re-expression;
+2. **orientation** — erect/nodding repeated-state mapping followed by focal functional validation;
+3. **phyllary/spine architecture** — candidate antagonist-defence module after direct botanical validation;
+4. **capitulum size / head number** — density-dependent display benefit versus enemy cost;
+5. **stickiness** — low-priority negative-control lane unless focal evidence reopens it.
 
 ## Three doctoral Aims
 
-1. **Aim 1 — Historical/genomic source of rapid phenotypic divergence**  
-   Determine whether repeated capitulum states come from standing variation, introgression and population ancestry, with matched plastid and cytotype evidence.
-2. **Aim 2 — Adaptive function of capitulum modules**  
-   Test whether orientation, colour and involucre/spine modules alter interactions, protection and reproductive fitness.
-3. **Aim 3 — Flower-colour reversibility as a mechanistic case**  
-   Test whether repeated W↔coloured transitions reuse a retained anthocyanin pathway through regulatory/expression changes.
+### Aim 1 — Historical/genomic source of rapid phenotypic divergence
 
-Full program: `docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md`  
-Machine-readable program: `data/evidence/doctoral_core_program_v1.csv`
+Determine whether repeated capitulum states come from standing ancestral variation, introgression and population ancestry, with matched plastid and cytotype evidence.
 
-## Aim 2 interaction bridge
+Required chain:
 
-The current Aim 2 bridge is a **systematic evidence map**, not a pooled meta-analysis:
+`phenotype -> nuclear ancestry -> plastid -> cytotype -> independent transition history`
 
-- protocol and decision map: `docs/AIM2_CIRSIUM_INTERACTION_EVIDENCE_MAP_2026-08-18.md`;
-- frozen primary-literature seed: `data/evidence/cirsium_interaction_evidence_seed_v1.csv`;
-- machine-readable diagnosis: `data/evidence/cirsium_interaction_evidence_summary_v1.json`.
+### Aim 2 — Adaptive function of capitulum modules
 
-The bounded seed contains 10 independent studies across 9 *Cirsium* taxa. It separates pollinator behaviour, effective pollination, florivory, pre-dispersal seed predation and foliar-herbivory context.
+Test whether orientation, colour, display and validated involucre/spine architecture alter local interaction/protection pathways and reproductive fitness.
 
-Current field order is:
+Current field order:
+1. orientation causal tranche first;
+2. W/coloured function comparison where flowering overlap permits;
+3. display/density effects nested in the same observations;
+4. phyllary/spine only after direct trait validation;
+5. stickiness opportunistically.
 
-1. head-orientation manipulation;
-2. W/coloured function comparison nested with Aim 3;
-3. phyllary/spine only after direct trait validation;
-4. stickiness opportunistically.
+Orientation has an explicit preregistered causal design (`ORI0-ORI5`) in `docs/AIM2_ORIENTATION_CAUSAL_PREREGISTRATION_V1_2026-08-22.md`.
 
-Formal effect-size pooling remains blocked until one harmonized outcome contains at least five independent studies and three taxa.
+### Aim 3 — Flower-colour reversibility as the mechanistic flagship
 
-## What is premise, not a separate thesis Aim
+Test whether repeated W<->coloured transitions reuse retained anthocyanin machinery through regulatory/expression changes rather than repeated pathway destruction/rebuilding.
 
-Existing data are already strong enough to treat the following as system justification:
+The current Arenicola state is deliberately unresolved: low transition-rate scenarios favour a coloured ancestor, but the transition rate is not identified and high-rate scenarios remain compatible with an uninformative ancestor. Therefore `colour re-expression in C. irumtiense` remains a live hypothesis, not a conclusion.
 
-- 36/38 sampled Japanese paper taxon concepts fall in one dominant young radiation;
-- *C. lineare* is the strongest replicated secondary-history exception;
-- *C. dipsacolepis* remains a secondary-arrival candidate;
-- large current capitulum and environmental disparity occurs inside the dominant radiation.
+Required chain for at least two independent W/C transitions:
 
-A full 294/296-tip raw-read rebuild is therefore **not a prerequisite for doctoral sampling**. It remains available if branch-scaled rate inference later becomes publication-critical.
+`ancestry -> coding/regulatory haplotype -> floral RNA -> pigment -> calibrated colour`
 
-## How the old operational questions are used
+## Adaptive-radiation boundary
 
-`data/evidence/preliminary_hypothesis_registry_v1.csv` remains useful for bookkeeping, but its ten rows are not ten equal hypotheses.
+Use **rapid radiation** as a system premise.
 
-- radiation asymmetry = premise;
-- evolvability / standing variation / introgression / cytonuclear / ploidy / colour compression / Ryukyu history = Aim 1 diagnostics;
-- broad climate = weakened simple alternative informing Aim 2;
-- trait→fitness = Aim 2;
-- anthocyanin pathway reuse = Aim 3.
-
-Supporting map: `docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md`
+Do **not** call the radiation adaptive until Aim 2 links at least one focal capitulum trait through an interaction/protection mechanism to reproductive fitness. Repeated states are not called parallel/convergent until independent transitions are reconstructed on a credible population-aware nuclear history.
 
 ## Sampling priority
 
@@ -73,49 +121,35 @@ Supporting map: `docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md`
 - *C. pendulum*: 40
 - *C. sieboldii*: 30
 
-These four are the biological core because they test repeated rapid phenotype change at population scale.
-
-### Comparative controls: +32
-
+Comparative controls:
 - *C. lineare*: 16
 - *C. dipsacolepis*: 16
 
-Full minimum = **222 individuals**. The controls should not reduce replication in the core 190.
+Full minimum = **222 individuals**. Current niche/morph audits do not justify immediate expansion of the core population count.
 
-Each population-genomic individual should link, where possible:
+Each focal biological individual should link, where possible:
 
-`individual_id -> locality/voucher/photo -> colour/orientation/involucre -> nuclear ancestry -> plastid haplotype -> flow-cytometry cytotype`
+`individual_id -> locality/voucher -> colour/orientation/involucre/display -> nuclear ancestry -> plastid haplotype -> cytotype`
 
-Aim 3 focal individuals additionally link floral RNA, pigment and standardized colour. Aim 2 experiments should be nested in the same ancestry-resolved populations.
+Aim 3 additionally links floral RNA and pigment. Aim 2 experiments remain nested in the same ancestry-resolved populations.
 
 ## Preliminary-analysis stop rule
 
 New preliminary work is allowed only when it changes one of three decisions:
-
 1. which population/system to sample;
 2. which competing mechanism can be discriminated;
 3. which claim boundary can be advanced.
 
-More broad CHELSA screens, taxon-level ploidy correlations, untargeted SRA/BLAST fishing and routine heavy tree rebuilding are not current mainline work.
+Do not restart broad climate-only screens, generic heterogeneous interaction pooling, taxon-level ploidy fishing or routine heavy tree rebuilding.
 
 ## Start here
 
-1. `docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md` — central question, central hypothesis and three Aims
-2. `PROJECT_STATUS.md` — current evidence and next action
-3. `docs/AIM2_CIRSIUM_INTERACTION_EVIDENCE_MAP_2026-08-18.md` — pollination/antagonist evidence bridge and experiment priorities
-4. `data/evidence/doctoral_core_program_v1.csv` — machine-readable doctoral hierarchy
-5. `docs/JAPAN_RADSEQ_PHASE_A_SAMPLING_PLAN_2026-08-16.md` — detailed population design
-6. `docs/PRELIMINARY_ANALYSIS_HYPOTHESIS_MAP.md` — supporting evidence lanes
-7. `docs/DEFERRED_HEAVY_ANALYSES.md` — deferred heavy-compute policy
+1. `docs/GLOBAL_TO_EAST_ASIA_DOCTORAL_SYNTHESIS_2026-08-22.md` — global -> East Asia evidence and hypothesis logic
+2. `docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md` — central question and three Aims
+3. `PROJECT_STATUS.md` — current evidence and next action
+4. `data/evidence/doctoral_global_to_east_asia_hypothesis_map_v1.csv` — resolved / live / empirical-gate matrix
+5. `data/evidence/doctoral_meta_resolution_gate_v1.json` — generic meta-analysis ceiling
+6. `docs/AIM2_ORIENTATION_CAUSAL_PREREGISTRATION_V1_2026-08-22.md` — first focal causal experiment
+7. `sampling/SAMPLING_DESIGN.md` — population/sample structure
 
-## Repository layout
-
-- `data/evidence/` — frozen evidence plus doctoral/supporting registries
-- `data/templates/` — prospective extraction templates
-- `docs/` — central program, claim boundaries and sampling logic
-- `analysis/` — deterministic analysis code retained for reproducibility
-- `sampling/` — focal sampling/reference panels
-- `workflow/` — deferred/manual/HPC execution paths
-- `.github/workflows/` — lightweight active CI only
-
-The target end point is not “the biggest tree.” It is a causal explanation linking **where reusable variation came from → how capitulum modules affect fitness → how a focal module can switch repeatedly at molecular scale**.
+The target end point is not the biggest phylogeny or the largest literature table. It is a causal evolutionary explanation linking **where reusable variation came from -> why the same capitulum states recur -> which ecological gate each module changes -> whether that change reaches fitness -> whether a retained molecular module can switch repeatedly**.
