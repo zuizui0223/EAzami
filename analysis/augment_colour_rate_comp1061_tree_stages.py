@@ -2,10 +2,11 @@
 """Add alignment/tree/acceptance stages to a validated colour-rate HPC bundle.
 
 The tree stage starts from the frozen public 241-locus conservative universe,
-but it must also re-apply *current* 20-tip occupancy and paralog QC before any
-alignment is admitted. The distant lett+sunf references define the rooting set;
-when available, the closer safflower Cardueae reference is retained in the
-concatenated matrix and in the focal-monophyly acceptance gate.
+re-applies current 20-tip occupancy and paralog QC, and then admits only loci
+with all three original Compositae1061 references. Safflower (``saff``;
+Carthamus, Cardueae) is the close rooting reference. Lettuce and sunflower are
+retained as distant Asteraceae references for topology diagnostics but do not
+jointly define the root.
 """
 from __future__ import annotations
 import argparse,json
@@ -54,7 +55,8 @@ fi
  --target "$RESULT_ROOT/inputs/reference/comp1061_hybpiper_reference.fasta" \
  --outdir "$TREE/inputs" --min-fraction 0.8
 test -s "$TREE/inputs/eligible_loci.txt"
-echo tree_input_checkpoint=complete mode=$MODE current_clean_loci=$N_CURRENT
+N_TREE=$(grep -cve '^[[:space:]]*$' "$TREE/inputs/eligible_loci.txt")
+echo tree_input_checkpoint=complete mode=$MODE current_clean_loci=$N_CURRENT saff_root_eligible_loci=$N_TREE
 '''
 def align():
     return '#!/usr/bin/env bash\n#SBATCH --job-name=EAzami-cr-align\n#SBATCH --array=0-240\n#SBATCH --cpus-per-task=4\n#SBATCH --mem=8G\n#SBATCH --time=02:00:00\n'+common()+'''TREE="$RESULT_ROOT/tree_$MODE"; IDX="${SLURM_ARRAY_TASK_ID:?}"
@@ -69,7 +71,7 @@ def gene():
 LOCUS=$(sed -n "$((IDX+1))p" "$TREE/inputs/eligible_loci.txt" || true); [[ -n "$LOCUS" ]] || exit 0
 ALN="$TREE/alignments/$LOCUS.aln.fasta"; PREFIX="$TREE/gene_trees/$LOCUS"; mkdir -p "$TREE/gene_trees"
 [[ -s "$PREFIX.treefile" ]] && exit 0
-test -s "$ALN"; "${RUN[@]}" iqtree2 -s "$ALN" -m MFP -B 1000 --alrt 1000 -T 4 -o OUTGROUP_lett,OUTGROUP_sunf --prefix "$PREFIX"; test -s "$PREFIX.treefile"
+test -s "$ALN"; "${RUN[@]}" iqtree2 -s "$ALN" -m MFP -B 1000 --alrt 1000 -T 4 -o OUTGROUP_saff --prefix "$PREFIX"; test -s "$PREFIX.treefile"
 '''
 def concat():
     return '#!/usr/bin/env bash\n#SBATCH --job-name=EAzami-cr-concat\n#SBATCH --cpus-per-task=16\n#SBATCH --mem=32G\n#SBATCH --time=24:00:00\n'+common()+'''TREE="$RESULT_ROOT/tree_$MODE"; mkdir -p "$TREE/concat"
@@ -78,9 +80,9 @@ def concat():
  --primary-runs "$BUNDLE_DIR/primary_runs.csv" --output "$TREE/concat/concat.fasta" \
  --partitions "$TREE/concat/partitions.csv" --summary "$TREE/concat/concat_summary.json"
 "${RUN[@]}" iqtree2 -s "$TREE/concat/concat.fasta" -m MFP -B 1000 --alrt 1000 -T AUTO \
- -o OUTGROUP_lett,OUTGROUP_sunf --prefix "$TREE/concat/colour_rate_comp1061_concat"
+ -o OUTGROUP_saff --prefix "$TREE/concat/colour_rate_comp1061_concat"
 test -s "$TREE/concat/colour_rate_comp1061_concat.treefile"
-echo concat_tree_checkpoint=complete mode=$MODE
+echo concat_tree_checkpoint=complete mode=$MODE root=OUTGROUP_saff
 '''
 def accept():
     return '#!/usr/bin/env bash\n#SBATCH --job-name=EAzami-cr-accept\n#SBATCH --cpus-per-task=2\n#SBATCH --mem=4G\n#SBATCH --time=01:00:00\n'+common()+'''TREE="$RESULT_ROOT/tree_$MODE"; TREEFILE="$TREE/concat/colour_rate_comp1061_concat.treefile"; test -s "$TREEFILE"
@@ -92,12 +94,12 @@ with (tr/'tip_map.csv').open('w',newline='') as f:
  w=csv.DictWriter(f,fieldnames=['tree_tip','accepted_taxon','mapping_status']);w.writeheader();w.writerows({'tree_tip':r['tip_id'],'accepted_taxon':r['accepted_taxon'],'mapping_status':'exact'} for r in rows)
 concat=json.loads((tr/'concat/concat_summary.json').read_text())
 root_outgroups=concat['root_outgroups']; references=concat['reference_tips']
-if root_outgroups != ['OUTGROUP_lett','OUTGROUP_sunf']:
+if root_outgroups != ['OUTGROUP_saff']:
  raise SystemExit(f'unexpected root outgroups: {root_outgroups}')
-if not set(root_outgroups) <= set(references):
- raise SystemExit('root outgroups are not a subset of retained references')
+if set(references) != {'OUTGROUP_saff','OUTGROUP_lett','OUTGROUP_sunf'}:
+ raise SystemExit(f'unexpected retained references: {references}')
 sha=hashlib.sha256(tree.read_bytes()).hexdigest()
-prov={'tree_route':'compatibility_reanalysis','tree_sha256':sha,'analysis_name':f'EAzami 20-tip Compositae1061 {mode} concatenated ML tree','branch_length_interpretation':'IQ-TREE maximum-likelihood substitutions per site on concatenated recovered coding-sequence alignment','rooting_definition':'IQ-TREE rooted using OUTGROUP_lett and OUTGROUP_sunf; optional OUTGROUP_saff retained as a near Cardueae reference but not used to define the root','required_outgroup_tips':root_outgroups,'required_reference_tips':references,'support_metric_definition':'IQ-TREE ultrafast bootstrap 1000 plus SH-aLRT 1000; per-locus ML gene trees retained as topology sensitivity','source_or_pipeline_provenance':'20 frozen colour-atlas taxa; pinned original Compositae1061 reference SHA256 77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c; frozen Moreyra conservative 241-locus universe intersected with current 20-tip occupancy >=0.80 and zero current focal paralog warnings; optional safflower near reference retained wherever present; HybPiper 2.3.4; MAFFT; IQ-TREE','topology_uncertainty_status':'bootstrap_or_gene_tree_sensitivity'}
+prov={'tree_route':'compatibility_reanalysis','tree_sha256':sha,'analysis_name':f'EAzami 20-tip Compositae1061 {mode} concatenated ML tree','branch_length_interpretation':'IQ-TREE maximum-likelihood substitutions per site on concatenated recovered coding-sequence alignment','rooting_definition':'IQ-TREE rooted using OUTGROUP_saff (Carthamus, Cardueae); OUTGROUP_lett and OUTGROUP_sunf retained as distant Asteraceae references but not used to define the root','required_outgroup_tips':root_outgroups,'required_reference_tips':references,'support_metric_definition':'IQ-TREE ultrafast bootstrap 1000 plus SH-aLRT 1000; per-locus ML gene trees retained as topology sensitivity','source_or_pipeline_provenance':'20 frozen colour-atlas taxa; pinned original Compositae1061 reference SHA256 77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c; frozen Moreyra conservative 241-locus universe intersected with current 20-tip occupancy >=0.80 and zero current focal paralog warnings, then restricted before topology inference to loci retaining saff/lett/sunf references; HybPiper 2.3.4; MAFFT; IQ-TREE','topology_uncertainty_status':'bootstrap_or_gene_tree_sensitivity'}
 (tr/'tree_provenance.json').write_text(json.dumps(prov,indent=2)+'\n')
 PY
 "${RUN[@]}" python "$REPO_ROOT/analysis/validate_colour_atlas_branch_length_tree.py" \
@@ -122,6 +124,6 @@ def main():
     if m.get('current_stage_end')!='retrieve_stats_paralog_qc': raise ValueError('Expected v0.2 QC-stage bundle')
     files={'04_prepare_tree_inputs_slurm.sh':prep(),'05_align_loci_slurm.sh':align(),'06_gene_trees_slurm.sh':gene(),'07_concat_tree_slurm.sh':concat(),'08_accept_tree_slurm.sh':accept(),'submit_tree_chain.sh':submit()}
     for n,t in files.items(): q=b/n;q.write_text(t);q.chmod(0o755)
-    m['bundle_version']='colour_rate_comp1061_hpc_bundle_v0_3_tree_stage';m['current_stage_end']='tree_acceptance_scripts_prepared';m['tree_stage']={'frozen_locus_universe':241,'current_occupancy_gate':0.8,'current_paralog_gate':'zero focal HybPiper paralog warnings (>1 recovered copy) per admitted locus','minimum_eligible_loci_to_launch':100,'primary_branch_length_tree':'concatenated IQ-TREE ML substitutions/site','topology_sensitivity':'per-locus IQ-TREE gene trees','root_outgroups':['OUTGROUP_lett','OUTGROUP_sunf'],'optional_near_reference':'OUTGROUP_saff retained when present','acceptance_validator':'analysis/validate_colour_atlas_branch_length_tree.py'};m['branch_length_tree_completed']=False;m['rate_fit_execution_allowed']=False
+    m['bundle_version']='colour_rate_comp1061_hpc_bundle_v0_4_saff_root_tree_stage';m['current_stage_end']='tree_acceptance_scripts_prepared';m['tree_stage']={'frozen_locus_universe':241,'current_occupancy_gate':0.8,'current_paralog_gate':'zero focal HybPiper paralog warnings (>1 recovered copy) per admitted locus','minimum_eligible_loci_to_launch':100,'primary_branch_length_tree':'concatenated IQ-TREE ML substitutions/site','topology_sensitivity':'per-locus IQ-TREE gene trees','root_outgroups':['OUTGROUP_saff'],'required_reference_tips':['OUTGROUP_saff','OUTGROUP_lett','OUTGROUP_sunf'],'close_root_reference':'OUTGROUP_saff (Carthamus; Cardueae)','distant_reference_tips':['OUTGROUP_lett','OUTGROUP_sunf'],'acceptance_validator':'analysis/validate_colour_atlas_branch_length_tree.py'};m['branch_length_tree_completed']=False;m['rate_fit_execution_allowed']=False
     (b/'execution_manifest.json').write_text(json.dumps(m,indent=2)+'\n');print(json.dumps(m,indent=2))
 if __name__=='__main__': main()
