@@ -1,0 +1,49 @@
+{
+  "contract_version": "chang2026_rnaseq_comp1061_empirical_pilot_v1",
+  "source_pr": 49,
+  "workflow_run_id": 32449218055,
+  "workflow_head_sha": "b613d1840f2436c3456dfab454abd8dfd89b8d15",
+  "artifact": {
+    "id": 9436346282,
+    "name": "chang2026-rnaseq-comp1061-single-sample-pilot-32449218055",
+    "digest": "sha256:ec4436e47131de26f0f15526b5f1539a2fe6584d240c481db9711107d1dfdc7b"
+  },
+  "sample": {
+    "tip_id": "Cirsium_japonicum_var_albescens",
+    "run": "SRR35152728",
+    "source_study": "Chang2026",
+    "source_bioproject": "PRJNA1311153",
+    "data_type": "leaf_rnaseq",
+    "binary_colour_code": "W",
+    "spots": 21983186
+  },
+  "analysis_path": {
+    "reference": "original public Compositae1061",
+    "reference_sha256": "77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c",
+    "hybpiper_version": "2.3.4",
+    "mapping_mode": "bwa",
+    "frozen_locus_universe": "moreyra_conservative_241_no_warning_loci",
+    "engineering_gate": "frozen_241_retrieved_loci >= 100"
+  },
+  "observed_result": {
+    "all_retrieved_loci": 993,
+    "frozen_241_retrieved_loci": 238,
+    "frozen_241_recovery_fraction": 0.9875518672199171,
+    "engineering_pass_ge_100_loci": true,
+    "pilot_result_sha256": "1b56000059885dfa5ca8c324d0bfdbd3b434e2c21a67ab63ff03b557620f7f59",
+    "recovered_frozen241_list_sha256": "3442dfaa9305df7244d4bf2ca98ae666861171b19d3380f404b70100f673c111",
+    "recovered_all_loci_list_sha256": "6cedb2b6aaec804f43ec6397ecd1d1891931c341999a5bc0379ce6aa54fbbbd6"
+  },
+  "performance": {
+    "fetch_trim_seconds": 1287,
+    "hybpiper_seconds": 2467,
+    "reads_disk_usage": "8.5G",
+    "hybpiper_archive_size": "2.6G",
+    "runner_root_used_before": "62G/145G",
+    "runner_root_used_after_reads": "71G/145G",
+    "runner_root_used_after_hybpiper": "73G/145G",
+    "performance_json_sha256": "80c26992aed69c6f5ce09cab8521d0ea547ca944f0142ab66d86accba57668ad"
+  },
+  "interpretation": "The smallest Chang 2026 leaf-RNA-seq primary sample is empirically compatible with the canonical Compositae1061/HybPiper BWA recovery path and exceeds the predeclared 100/241 engineering gate by a wide margin.",
+  "claim_boundary": "This single-sample result does not establish 20-tip >=80% locus occupancy, current paralog cleanliness, topology, branch lengths, or empirical flower-colour transition-rate readiness. It closes the second RNA-seq assay-compatibility pilot gate after the independent Chang 2025 pilot."
+}
