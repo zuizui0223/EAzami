@@ -30,7 +30,8 @@ class AugmentTests(unittest.TestCase):
             self.assertEqual(manifest['tree_stage']['root_outgroups'],['OUTGROUP_saff'])
             self.assertEqual(manifest['tree_stage']['required_reference_tips'],['OUTGROUP_saff','OUTGROUP_lett','OUTGROUP_sunf'])
             self.assertIn('Carthamus',manifest['tree_stage']['close_root_reference'])
-            for name in ('04_prepare_tree_inputs_slurm.sh','05_align_loci_slurm.sh','06_gene_trees_slurm.sh','07_concat_tree_slurm.sh','08_accept_tree_slurm.sh','submit_tree_chain.sh'):
+            self.assertIn('no post-hoc',manifest['tree_stage']['alignment_qc'])
+            for name in ('04_prepare_tree_inputs_slurm.sh','05_align_loci_slurm.sh','05b_alignment_qc_slurm.sh','06_gene_trees_slurm.sh','07_concat_tree_slurm.sh','08_accept_tree_slurm.sh','submit_tree_chain.sh'):
                 self.assertTrue((b/name).is_file(),name)
             prep=(b/'04_prepare_tree_inputs_slurm.sh').read_text()
             self.assertIn('summarize_colour_rate_comp1061_qc.py',prep)
@@ -38,10 +39,15 @@ class AugmentTests(unittest.TestCase):
             self.assertIn('paralog_report',prep)
             self.assertIn('N_CURRENT < 100',prep)
             self.assertIn('saff_root_eligible_loci',prep)
+            alnqc=(b/'05b_alignment_qc_slurm.sh').read_text()
+            self.assertIn('summarize_colour_rate_alignment_qc.py',alnqc)
+            self.assertIn('alignment_qc_summary.json',alnqc)
             gene=(b/'06_gene_trees_slurm.sh').read_text()
             concat=(b/'07_concat_tree_slurm.sh').read_text()
             self.assertIn('-o OUTGROUP_saff',gene)
             self.assertIn('-o OUTGROUP_saff',concat)
+            submit=(b/'submit_tree_chain.sh').read_text()
+            self.assertIn('dependency=afterok:$alignqc',submit)
             accept=(b/'08_accept_tree_slurm.sh').read_text()
             self.assertIn('validate_colour_atlas_branch_length_tree.py',accept)
             self.assertIn('tree_route',accept)
@@ -52,6 +58,7 @@ class AugmentTests(unittest.TestCase):
             self.assertIn("'required_reference_tips':references",accept)
             self.assertIn('Carthamus, Cardueae',accept)
             self.assertIn('zero current focal paralog warnings',accept)
+            self.assertIn('structural MAFFT alignment QC',accept)
             self.assertIn('export BUNDLE_DIR REPO_ROOT RESULT_ROOT ENV_PREFIX MODE',accept)
 
     def test_rejects_wrong_upstream_stage(self):
