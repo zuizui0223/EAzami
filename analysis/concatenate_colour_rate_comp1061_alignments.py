@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Concatenate aligned Compositae1061 loci with explicit missing-data padding.
+"""Concatenate aligned Comp1061 loci for the 20-tip Cirsium tree.
 
-Every admitted locus has the close Cardueae reference ``OUTGROUP_saff`` plus the
-two more distant Asteraceae references ``OUTGROUP_lett`` and ``OUTGROUP_sunf``.
-The concatenated tree is rooted on safflower. Lettuce and sunflower are retained
-as declared references for topology/monophyly diagnostics, not as a composite
-rooting set.
+Every admitted locus contains 20 focal Cirsium sequences subject to the frozen
+occupancy rule plus the close Cardueae reference ``OUTGROUP_saff``. More distant
+lettuce/sunflower target references are excluded upstream and therefore cannot
+sit on the ingroup side when the tree is rooted on Carthamus.
 """
 from __future__ import annotations
 
@@ -15,7 +14,7 @@ import json
 from pathlib import Path
 
 ROOT_OUTGROUP="OUTGROUP_saff"
-REFERENCE_TIPS=["OUTGROUP_saff","OUTGROUP_lett","OUTGROUP_sunf"]
+REFERENCE_TIPS=[ROOT_OUTGROUP]
 
 
 def read_fasta(path:Path):
@@ -42,7 +41,7 @@ def main()->int:
     if len(loci)<100: raise ValueError('Refusing concatenation with <100 eligible loci')
     with a.primary_runs.open(encoding='utf-8-sig',newline='') as f: primary=list(csv.DictReader(f))
     focal=[r['tip_id'] for r in primary]
-    if len(focal)!=len(set(focal)): raise ValueError('primary tip IDs are not unique')
+    if len(focal)!=20 or len(focal)!=len(set(focal)): raise ValueError('Expected 20 unique primary tip IDs')
 
     loaded=[]
     allowed=set(focal)|set(REFERENCE_TIPS)
@@ -52,8 +51,7 @@ def main()->int:
         seqs,n=read_fasta(path)
         unknown=sorted(set(seqs)-allowed)
         if unknown: raise ValueError(f'unexpected alignment labels for {locus}: {unknown}')
-        for required in REFERENCE_TIPS:
-            if required not in seqs: raise ValueError(f'{locus} lacks required reference {required}')
+        if ROOT_OUTGROUP not in seqs: raise ValueError(f'{locus} lacks required reference {ROOT_OUTGROUP}')
         loaded.append((locus,seqs,n))
 
     taxa=focal+REFERENCE_TIPS
@@ -70,15 +68,15 @@ def main()->int:
     with a.partitions.open('w',newline='') as f:
         w=csv.writer(f); w.writerow(['locus','start','end']); w.writerows(parts)
     summary={
-        'contract_version':'colour_rate_comp1061_concat_v3_saff_root',
+        'contract_version':'colour_rate_comp1061_concat_v4_saff_only_root',
         'loci':len(loci),
         'focal_taxa':len(primary),
         'root_outgroups':[ROOT_OUTGROUP],
         'reference_tips':REFERENCE_TIPS,
-        'saff_reference_loci':len(loci),
+        'tree_tip_count':len(taxa),
         'alignment_length':start-1,
         'missing_filled_with_gaps':True,
-        'claim_limit':'OUTGROUP_saff is the close Cardueae rooting reference for every admitted locus. OUTGROUP_lett and OUTGROUP_sunf are retained as distant references and are not used together to define the root.'
+        'claim_limit':'OUTGROUP_saff (Carthamus, Cardueae) is the sole tree reference and rooting tip. Distant lettuce/sunflower references were audited upstream but are deliberately absent from the inferred tree.'
     }
     a.summary.write_text(json.dumps(summary,indent=2)+'\n'); print(json.dumps(summary,indent=2)); return 0
 if __name__=='__main__': raise SystemExit(main())
