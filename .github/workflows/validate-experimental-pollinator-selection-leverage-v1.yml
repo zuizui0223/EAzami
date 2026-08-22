@@ -1,0 +1,27 @@
+name: Validate experimental pollinator selection leverage v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/experimental_pollinator_selection_gradients_v1.csv"
+      - "data/evidence/experimental_pollinator_selection_leverage_meta_v1.json"
+      - "data/evidence/experimental_pollinator_selection_article_class_v1.csv"
+      - "analysis/meta_analyze_experimental_pollinator_selection_leverage_v1.py"
+      - "tests/test_meta_analyze_experimental_pollinator_selection_leverage_v1.py"
+      - ".github/workflows/validate-experimental-pollinator-selection-leverage-v1.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependency
+        run: python -m pip install pytest
+      - name: Recompute restricted meta-analysis
+        run: python analysis/meta_analyze_experimental_pollinator_selection_leverage_v1.py
+      - name: Run focused tests
+        run: python -m pytest -q tests/test_meta_analyze_experimental_pollinator_selection_leverage_v1.py
