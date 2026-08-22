@@ -1,0 +1,42 @@
+{
+  "contract_version": "orientation_comp1061_20tip_source_crosswalk_summary_v1",
+  "status_date": "2026-08-22",
+  "source_tree_panel_contract": "data/evidence/colour_rate_comp1061_bridge_artifact_contract_v1.json",
+  "source_trait_crosswalk": "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv",
+  "panel_taxa": 20,
+  "fixed_binary_orientation_taxa": 17,
+  "fixed_binary_fraction": 0.85,
+  "fixed_state_counts": {
+    "upward_or_erect": 9,
+    "downward_or_nodding": 8
+  },
+  "unresolved_taxa": [
+    {
+      "tip_id": "Cirsium_fanjingshanense",
+      "reason": "primary comparative evidence explicitly reports nodding or erect capitula"
+    },
+    {
+      "tip_id": "Cirsium_maritimum",
+      "reason": "the same NMNS authority page contains a downward catchphrase but an erect narrative description"
+    },
+    {
+      "tip_id": "Cirsium_nipponicum_var_incomptum",
+      "reason": "exact-variety evidence describes heads as sideways or slightly downward, which is not a fixed erect-vs-nodding state"
+    }
+  ],
+  "tree_reuse_decision": {
+    "same_comp1061_branch_length_tree_is_informative_for_orientation": true,
+    "reason": "Seventeen of the twenty existing nuclear-tree tips already have conservative source-backed binary orientation states, with both states well represented (9 vs 8).",
+    "additional_orientation_only_nuclear_tree_needed": false,
+    "additional_orientation_literature_screen_needed_before_tree": false
+  },
+  "execution_gates": {
+    "branch_length_tree_completed": false,
+    "orientation_state_balance_gate_ge5_each": true,
+    "orientation_mk_preflight_execution_allowed_now": false,
+    "orientation_mk_preflight_allowed_after_accepted_tree": true,
+    "parallel_or_convergent_evolution_claim_allowed": false
+  },
+  "interpretation": "Unlike the current colour state panel (17 coloured / 3 white), the same 20-tip nuclear panel has a nearly balanced source-backed orientation contrast. Once the full Comp1061 occupancy/paralog gate yields an accepted branch-length tree, orientation can move directly to a preflight transition-count, ER/ARD model-adequacy and ancestral-state sensitivity analysis without waiting for two additional fixed-white nuclear lineages.",
+  "claim_boundary": "The 17 resolved orientation states are taxon-concept annotations, not phenotypes measured on the exact primary sequencing vouchers. Missing/conflicting/nonbinary taxa remain unresolved. The crosswalk supports reuse of the planned branch-length tree and a preflight evolutionary analysis only; it does not establish the number of independent transitions, ancestral head orientation, parallel/convergent evolution, selection, or focal causal fitness effects. Population-aware or same-voucher validation remains required before a final repeated-evolution claim."
+}
