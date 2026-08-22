@@ -1,0 +1,30 @@
+name: Validate Aim 2 orientation causal design v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/aim2_orientation_causal_hypothesis_registry_v1.csv"
+      - "data/evidence/aim2_orientation_causal_design_v1.json"
+      - "sampling/aim2_orientation_treatment_assignment_v1.csv"
+      - "sampling/aim2_capitulum_field_ledger_v1.csv"
+      - "sampling/aim2_capitulum_observation_bout_ledger_v1.csv"
+      - "analysis/validate_aim2_orientation_causal_design_v1.py"
+      - "tests/test_validate_aim2_orientation_causal_design_v1.py"
+      - "docs/AIM2_ORIENTATION_CAUSAL_PREREGISTRATION_V1_2026-08-22.md"
+      - ".github/workflows/validate-aim2-orientation-causal-design-v1.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependency
+        run: python -m pip install pytest
+      - name: Recompute orientation causal readiness
+        run: python analysis/validate_aim2_orientation_causal_design_v1.py
+      - name: Run focused tests
+        run: python -m pytest -q tests/test_validate_aim2_orientation_causal_design_v1.py
