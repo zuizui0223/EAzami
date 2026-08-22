@@ -3,11 +3,14 @@
 
 Input is the HybPiper ``retrieve_sequences dna --fasta_dir`` output from one
 mapping mode. The supplied locus list is already the current no-paralog subset
-of the frozen Moreyra conservative-241 universe; loci are retained for this
-cross-assay tree only when at least 80% of the 20 frozen focal taxa have a
-recovered sequence. Original Compositae1061 reference sequences are appended as
-explicit non-Cirsium references. `lett` and `sunf` are required; `saff` is
-retained and counted wherever available but is not a locus-admission criterion.
+of the frozen Moreyra conservative-241 universe. Loci are retained only when at
+least 80% of the 20 frozen focal taxa have a recovered sequence and all three
+original Compositae1061 reference anchors are present.
+
+``saff`` (Carthamus; Cardueae) is the required close rooting reference for the
+Cirsium tree. ``lett`` and ``sunf`` are retained as more distant Asteraceae
+references, but they do not define the root. Requiring saff at the locus stage
+keeps gene-tree and concatenated-tree rooting semantics identical.
 """
 from __future__ import annotations
 
@@ -90,7 +93,7 @@ def build(primary:Path,locus_list:Path,retrieved:Path,target:Path,outdir:Path,mi
     tips=primary_tips(primary); ids={r["tip_id"] for r in tips}; wanted=loci(locus_list)
     files=retrieve_files(retrieved); refs=target_refs(target)
     min_n=int(len(ids)*min_fraction + 0.999999)
-    manifest=[]; eligible=[]; eligible_saff=0
+    manifest=[]; eligible=[]
     locus_dir=outdir/"loci_unaligned"
     for locus in wanted:
         focal=normalize_focal_records(read_fasta(files[locus]),ids) if locus in files else []
@@ -103,11 +106,14 @@ def build(primary:Path,locus_list:Path,retrieved:Path,target:Path,outdir:Path,mi
             "has_saff":any(x[0]=="OUTGROUP_saff" for x in anchors),
             "eligible":False,"reason":""
         }
-        if len(focal)<min_n: row["reason"]="focal_occupancy_below_0.80"
-        elif not row["has_lett"] or not row["has_sunf"]: row["reason"]="required_root_reference_missing"
+        if len(focal)<min_n:
+            row["reason"]="focal_occupancy_below_0.80"
+        elif not row["has_saff"]:
+            row["reason"]="required_close_root_reference_missing"
+        elif not row["has_lett"] or not row["has_sunf"]:
+            row["reason"]="required_distant_reference_missing"
         else:
             row["eligible"]=True; row["reason"]="eligible"; eligible.append(locus)
-            if row["has_saff"]: eligible_saff+=1
             write_fasta(locus_dir/f"{locus}.fasta",focal+anchors)
         manifest.append(row)
     outdir.mkdir(parents=True,exist_ok=True)
@@ -116,21 +122,22 @@ def build(primary:Path,locus_list:Path,retrieved:Path,target:Path,outdir:Path,mi
         w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(manifest)
     (outdir/"eligible_loci.txt").write_text("\n".join(eligible)+("\n" if eligible else ""),encoding="utf-8")
     summary={
-        "contract_version":"colour_rate_comp1061_tree_inputs_v2",
+        "contract_version":"colour_rate_comp1061_tree_inputs_v3_saff_root",
         "supplied_current_locus_count":len(wanted),
         "maximum_frozen_locus_universe":241,
         "focal_taxa":20,
         "minimum_focal_occupancy_fraction":min_fraction,
         "minimum_focal_sequences":min_n,
         "eligible_loci":len(eligible),
-        "eligible_loci_with_saff_reference":eligible_saff,
-        "required_root_references":["OUTGROUP_lett","OUTGROUP_sunf"],
-        "optional_near_reference":"OUTGROUP_saff",
+        "eligible_loci_with_saff_reference":len(eligible),
+        "required_root_references":["OUTGROUP_saff"],
+        "required_reference_tips":["OUTGROUP_saff","OUTGROUP_lett","OUTGROUP_sunf"],
+        "distant_reference_tips":["OUTGROUP_lett","OUTGROUP_sunf"],
         "tree_input_ready":len(eligible)>=100,
-        "claim_limit":"The >=100 eligible-locus threshold is a conservative engineering gate for launching the tree stage. Safflower-reference coverage is recorded diagnostically and is not used to relax or tighten locus admission post hoc."
+        "claim_limit":"The >=100 eligible-locus threshold is an engineering gate. Locus admission is fixed before topology inference: current occupancy >=0.80, zero focal paralog warnings upstream, and presence of saff/lett/sunf reference sequences. Safflower is the close Cardueae rooting reference; lettuce and sunflower are retained as distant references."
     }
     (outdir/"tree_input_summary.json").write_text(json.dumps(summary,indent=2)+"\n",encoding="utf-8")
-    if not summary["tree_input_ready"]: raise ValueError(f"Only {len(eligible)} current-clean loci passed the cross-assay occupancy/root-reference gate")
+    if not summary["tree_input_ready"]: raise ValueError(f"Only {len(eligible)} current-clean loci passed the cross-assay occupancy/reference gate")
     return summary
 
 def main()->int:
