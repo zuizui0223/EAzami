@@ -1,0 +1,26 @@
+name: Validate doctoral meta resolution gate v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/doctoral_meta_resolution_gate_v1.csv"
+      - "data/evidence/doctoral_meta_resolution_gate_v1.json"
+      - "analysis/summarize_doctoral_meta_resolution_gate_v1.py"
+      - "tests/test_summarize_doctoral_meta_resolution_gate_v1.py"
+      - ".github/workflows/validate-doctoral-meta-resolution-gate-v1.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependency
+        run: python -m pip install pytest
+      - name: Recompute meta ceiling
+        run: python analysis/summarize_doctoral_meta_resolution_gate_v1.py
+      - name: Run focused tests
+        run: python -m pytest -q tests/test_summarize_doctoral_meta_resolution_gate_v1.py
