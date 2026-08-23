@@ -117,6 +117,7 @@ jobs:
           mkdir -p sensitivity
           "$IQTREE_BIN" \
             -S tree/alignments \
+            -st DNA \
             --prefix sensitivity/loci \
             -T AUTO
           test -s sensitivity/loci.treefile
