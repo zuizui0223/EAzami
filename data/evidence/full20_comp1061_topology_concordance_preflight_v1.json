@@ -25,11 +25,11 @@
   },
   "gene_tree_analysis": {
     "method": "IQ-TREE separate-locus maximum-likelihood trees with per-locus ModelFinder",
-    "command_contract": "iqtree3 -S ALN_DIR --prefix loci -T AUTO",
+    "command_contract": "iqtree3 -S ALN_DIR -st DNA --prefix loci -T AUTO",
     "expected_locus_trees": 153,
     "missing_taxa_per_locus_allowed": true,
     "gene_tree_bootstrap_required": false,
-    "reason": "gCF requires locus-tree topologies; branch support on each gene tree is not used to filter loci or select the primary topology."
+    "reason": "gCF requires locus-tree topologies; branch support on each gene tree is not used to filter loci or select the primary topology. DNA sequence type is declared explicitly so sparse loci are not rejected by automatic sequence-type detection."
   },
   "gene_concordance_factor": {
     "method": "IQ-TREE gCF on the frozen accepted primary tree",
