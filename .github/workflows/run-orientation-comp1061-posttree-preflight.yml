@@ -1,0 +1,210 @@
+name: Run post-tree Comp1061 orientation preflight
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/run-orientation-comp1061-posttree-preflight.yml"
+      - "analysis/run_orientation_mk_preflight.py"
+      - "analysis/fit_binary_flower_colour_mk_models.py"
+      - "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv"
+      - "data/evidence/orientation_comp1061_20tip_source_crosswalk_summary_v2.json"
+      - "data/evidence/full20_comp1061_primary_tree_acceptance_v1.json"
+      - "data/evidence/full20_comp1061_alt_topology_au_result_v1.json"
+      - "tests/test_run_orientation_mk_preflight.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: orientation-comp1061-posttree-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  ALT_TOPOLOGY_RUN_ID: "32614839764"
+  ALT_TOPOLOGY_ARTIFACT: "comp1061-alt-topology-au-32614839764"
+  ALT_TOPOLOGY_ARTIFACT_DIGEST: "sha256:d90f30e4fcc3a2a0296a7d0cfa13d0f3ecc008b36d28298ac9782a001e6f63c5"
+  BASE_SEED: "20260823"
+  ADEQUACY_REPS: "2000"
+
+jobs:
+  orientation_preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install numerical and tree dependencies
+        run: python -m pip install --disable-pip-version-check scipy biopython
+
+      - name: Compile and unit-test orientation preflight
+        run: |
+          set -euo pipefail
+          python -m py_compile analysis/run_orientation_mk_preflight.py analysis/fit_binary_flower_colour_mk_models.py
+          python -m unittest tests/test_run_orientation_mk_preflight.py -v
+
+      - name: Validate post-tree orientation contract
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('data/evidence/orientation_comp1061_20tip_source_crosswalk_summary_v2.json').read_text())
+          t=json.loads(Path('data/evidence/full20_comp1061_primary_tree_acceptance_v1.json').read_text())
+          a=json.loads(Path('data/evidence/full20_comp1061_alt_topology_au_result_v1.json').read_text())
+          assert s['fixed_binary_orientation_taxa']==17
+          assert s['fixed_state_counts']=={'upward_or_erect':9,'downward_or_nodding':8}
+          assert s['execution_gates']['branch_length_tree_completed'] is True
+          assert s['execution_gates']['topology_sensitivity_completed'] is True
+          assert s['execution_gates']['orientation_mk_preflight_execution_allowed_now'] is True
+          assert t['accepted_tree']['tree_gate_ready'] is True
+          assert t['accepted_tree']['sha256']=='c80b66c1e19c91287d3fa243360ae1f4ab6a28613e2d8f1914c23565788bcac5'
+          assert a['source']['artifact_digest']=='sha256:d90f30e4fcc3a2a0296a7d0cfa13d0f3ecc008b36d28298ac9782a001e6f63c5'
+          assert a['summary']['au_nonrejected_candidates']==6
+          assert len(a['decision']['au_nonrejected_candidate_ids'])==6
+          PY
+
+      - name: Download immutable AU topology artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.ALT_TOPOLOGY_ARTIFACT }}
+          path: alt_artifact
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.ALT_TOPOLOGY_RUN_ID }}
+
+      - name: Build six rooted optimized branch-length trees
+        run: |
+          set -euo pipefail
+          mkdir -p orientation_trees orientation_results
+          python - <<'PY'
+          import io, json, re
+          from pathlib import Path
+          from Bio import Phylo
+
+          au=Path('alt_artifact/au.trees')
+          assert au.is_file() and au.stat().st_size>0
+          lines=[x.strip() for x in au.read_text().splitlines() if x.strip()]
+          evidence=json.loads(Path('data/evidence/full20_comp1061_alt_topology_au_result_v1.json').read_text())
+          ids=evidence['decision']['au_nonrejected_candidate_ids']
+          assert len(ids)==6 and len(lines)>=9
+          manifest=[]
+          for i,candidate_id in enumerate(ids, start=1):
+              raw=re.sub(r'^\[ tree \d+ lh=[^\]]+ \]', '', lines[i-1]).strip()
+              tree=Phylo.read(io.StringIO(raw), 'newick')
+              names=[t.name for t in tree.get_terminals()]
+              assert len(names)==21 and len(set(names))==21
+              assert 'OUTGROUP_saff' in names
+              tree.root_with_outgroup('OUTGROUP_saff')
+              out=Path('orientation_trees')/f'{candidate_id}.nwk'
+              Phylo.write(tree, str(out), 'newick')
+              reread=Phylo.read(str(out),'newick')
+              assert len(reread.get_terminals())==21
+              manifest.append({'index':i,'candidate_id':candidate_id,'tree_path':str(out)})
+          Path('orientation_trees/manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          PY
+
+      - name: Flatten accepted-tree gate for legacy preflight API
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          t=json.loads(Path('data/evidence/full20_comp1061_primary_tree_acceptance_v1.json').read_text())
+          Path('orientation_tree_acceptance.json').write_text(json.dumps({
+            'tree_gate_ready': t['accepted_tree']['tree_gate_ready'],
+            'primary_tree_sha256': t['accepted_tree']['sha256'],
+            'branch_length_interpretation': t['accepted_tree']['branch_length_interpretation'],
+            'rooting_definition': t['accepted_tree']['rooting_definition'],
+          },indent=2)+'\n')
+          PY
+
+      - name: Run orientation Mk on all six AU-nonrejected trees
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          manifest=json.loads(Path('orientation_trees/manifest.json').read_text())
+          for j,row in enumerate(manifest):
+              out=Path('orientation_results')/f"{row['candidate_id']}.json"
+              seed=int(os.environ['BASE_SEED']) + j*1000
+              subprocess.run([
+                  'python','analysis/run_orientation_mk_preflight.py',
+                  '--tree',row['tree_path'],
+                  '--crosswalk','data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv',
+                  '--summary','data/evidence/orientation_comp1061_20tip_source_crosswalk_summary_v2.json',
+                  '--tree-acceptance','orientation_tree_acceptance.json',
+                  '--reps',os.environ['ADEQUACY_REPS'],
+                  '--seed',str(seed),
+                  '--output',str(out),
+              ],check=True)
+          PY
+
+      - name: Aggregate topology-sensitive orientation result
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, statistics
+          from pathlib import Path
+          manifest=json.loads(Path('orientation_trees/manifest.json').read_text())
+          rows=[]
+          for item in manifest:
+              x=json.loads((Path('orientation_results')/f"{item['candidate_id']}.json").read_text())
+              rows.append((item['candidate_id'],x))
+          assert len(rows)==6
+          steps=[x['minimum_parsimony_transition_steps'] for _,x in rows]
+          root_probs=[]
+          delta_aicc=[]
+          adequacy_flags=[]
+          per_topology=[]
+          for cid,x in rows:
+              local=[]
+              for prior,fit in x['fits_by_root_prior'].items():
+                  er=fit['ER']; ard=fit['ARD']
+                  delta=ard['AICc']-er['AICc']
+                  delta_aicc.append(delta)
+                  for model in ('ER','ARD'):
+                      root_probs.append(fit[model]['root_upward_probability'])
+                      ad=fit[model]['adequacy']
+                      bad=(ad['upward_count_two_sided_tail']<0.05 or ad['parsimony_steps_two_sided_tail']<0.05)
+                      adequacy_flags.append(bad)
+                      local.append({'root_prior':prior,'model':model,'root_upward_probability':fit[model]['root_upward_probability'],'adequacy_flag_p_lt_0_05':bad})
+              per_topology.append({'candidate_id':cid,'minimum_parsimony_transition_steps':x['minimum_parsimony_transition_steps'],'model_prior_cells':local})
+          summary={
+              'contract_version':'orientation_comp1061_posttree_ensemble_preflight_v1',
+              'source_orientation_states':'data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv',
+              'source_topology_evidence':'data/evidence/full20_comp1061_alt_topology_au_result_v1.json',
+              'topologies_evaluated':6,
+              'observed_binary_tips':17,
+              'observed_state_counts':{'U':9,'D':8},
+              'minimum_parsimony_transition_steps_range': [min(steps),max(steps)],
+              'root_upward_probability_range_across_topology_model_prior': [min(root_probs),max(root_probs)],
+              'ard_minus_er_aicc_range': [min(delta_aicc),max(delta_aicc)],
+              'adequacy_cells_flagged_p_lt_0_05':sum(adequacy_flags),
+              'adequacy_cells_total':len(adequacy_flags),
+              'preflight_supports_multiple_state_changes': min(steps)>=2,
+              'parallel_or_convergent_evolution_claim_allowed':False,
+              'adaptive_orientation_claim_allowed':False,
+              'next_ecological_gate':'same-population sham/reorientation experiment resolving time-window pollination versus rain/UV/wetting protection through filled-achene fitness',
+              'claim_boundary':'Taxon-concept orientation coding on six accepted topology alternatives can establish only a topology-sensitive lower bound on state changes and model/root sensitivity. It cannot establish population-level independent transitions, parallel/convergent evolution, adaptation, or causal mechanism without same-voucher/population trait validation and focal fitness experiments.',
+              'per_topology':per_topology,
+          }
+          Path('orientation_results/ensemble_summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps(summary,indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: orientation-comp1061-posttree-${{ github.run_id }}
+          path: |
+            orientation_tree_acceptance.json
+            orientation_trees/manifest.json
+            orientation_trees/*.nwk
+            orientation_results/*.json
+          if-no-files-found: error
+          retention-days: 90
