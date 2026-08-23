@@ -118,6 +118,7 @@ jobs:
           "$IQTREE_BIN" \
             -S tree/alignments \
             -st DNA \
+            -seed 20260822 \
             --prefix sensitivity/loci \
             -T AUTO
           test -s sensitivity/loci.treefile
@@ -178,6 +179,7 @@ jobs:
             'source_alignment_artifact_digest':os.environ['SOURCE_ALIGNMENT_ARTIFACT_DIGEST'],
             'primary_tree_sha256':os.environ['FROZEN_TREE_SHA256'],
             'frozen_loci_sha256':os.environ['FROZEN_LOCI_SHA256'],
+            'gene_tree_seed':20260822,
             'gene_trees_completed':153,
             'gcf_completed':True,
             'likelihood_scf_completed':True,
