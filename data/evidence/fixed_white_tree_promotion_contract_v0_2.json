@@ -1,0 +1,112 @@
+{
+  "contract_version": "fixed_white_tree_promotion_v0_2",
+  "date": "2026-08-23",
+  "purpose": "Predeclare how new fixed-white Compositae1061 samples may be promoted into the flower-colour rate tree without changing loci or choosing samples/topologies to favor a colour history.",
+  "source_state": {
+    "atlas_readiness": "analysis/cirsium_flower_colour_atlas_v0_3_readiness.json",
+    "current_eligible_taxa": 20,
+    "current_state_counts": {"C": 17, "W": 3},
+    "current_rate_blocker": "minimum_white_tips",
+    "rate_tree_contract": "data/evidence/flower_colour_rate_tree_contract_v0_2.json",
+    "current_tree_focal_taxa": 20,
+    "current_tree_tip_count_with_root": 21,
+    "current_tree_taxon_join_ready": true,
+    "current_tree_loci": 153,
+    "current_tree_loci_sha256": "1106051eca8bfa699f16e05d92024573cb358d7dbd151b89768e76c3d56cde82",
+    "current_primary_tree_sha256": "c80b66c1e19c91287d3fa243360ae1f4ab6a28613e2d8f1914c23565788bcac5",
+    "root_outgroup": "OUTGROUP_saff"
+  },
+  "a1_panel": {
+    "sampling_panel": "sampling/FIXED_WHITE_TARGET_CAPTURE_PANEL_V0_1.csv",
+    "public_recovery_priority": "data/evidence/fixed_white_a1_priority_v2.csv",
+    "taxa": [
+      "Cirsium boninense",
+      "Cirsium wulongense"
+    ],
+    "minimum_individuals_per_taxon": 2,
+    "ideal_individuals_per_taxon": 3,
+    "preferred_target_set": "Compositae1061",
+    "voucher_required": true,
+    "flower_colour_link_required": true,
+    "current_public_homologous_tip_count": 0,
+    "current_promotion_allowed": false,
+    "public_status": {
+      "Cirsium boninense": "MIG-seq method and five-taxon comparison are public, but sample/voucher detail, reusable raw/genotype data and a Compositae1061-compatible tip are not recovered",
+      "Cirsium wulongense": "primary white-corolla taxonomy is public, but no exact public homologous nuclear asset is recovered"
+    }
+  },
+  "individual_recovery_gate": {
+    "frozen_locus_universe": "data/evidence/full20_comp1061_saff_root_153_loci_v1.txt",
+    "frozen_locus_count": 153,
+    "frozen_locus_sha256": "1106051eca8bfa699f16e05d92024573cb358d7dbd151b89768e76c3d56cde82",
+    "minimum_clean_recovered_fraction": 0.8,
+    "minimum_clean_recovered_loci": 123,
+    "clean_recovered_definition": "A frozen locus has one usable recovered DNA sequence for that individual and no HybPiper paralog count >1 for that individual at that locus.",
+    "paralog_handling": "Mask only the affected new individual at that locus; do not remove the locus from the frozen 153-locus matrix because of a new-sample paralog warning.",
+    "unrecovered_locus_handling": "Encode the new individual as missing/gaps at that frozen locus; do not backfill with a different locus.",
+    "posthoc_locus_addition_allowed": false,
+    "posthoc_locus_removal_allowed": false,
+    "non_gap_aligned_bp_fraction_role": "descriptive QC and deterministic representative tie-break only; it is not a post hoc locus filter",
+    "mapping_contract": {
+      "target_reference": "original public Compositae1061 HybPiper reference",
+      "hybpiper_version": "2.3.4",
+      "read_mapper": "BWA",
+      "sequence_type": "DNA"
+    }
+  },
+  "replicate_identity_gate": {
+    "minimum_passing_individuals_per_promoted_taxon": 2,
+    "minimum_sample_tips_in_replicate_expanded_tree": 24,
+    "required_linkage": [
+      "accepted taxon concept",
+      "voucher or unambiguous herbarium identifier",
+      "flower-colour record linked to the sequenced individual",
+      "locality",
+      "collection or specimen provenance",
+      "raw sequencing accession after deposition"
+    ],
+    "identity_conflict_policy": "Any unresolved taxonomic, contamination or sample-identity conflict blocks species-level promotion.",
+    "placement_concordance_rule": "Before collapsing replicates to one species tip, all minimum passing individuals must form one species-level clade in the replicate-expanded primary tree and that replicate clade must remain intact across all topology candidates retained by the predeclared topology-sensitivity procedure. Failure is a stop condition, not a reason to choose the individual with the preferred colour history.",
+    "state_counting_rule": "Multiple samples of one species are never counted as multiple white macroevolutionary tips.",
+    "reticulation_policy": "If passing individuals are not placement-concordant, retain them as diagnostic replicates and resolve taxonomy, hybridization/polyploidy or contamination before any species-level rate-tree promotion."
+  },
+  "species_representative_rule": {
+    "applies_only_after_replicate_identity_gate_passes": true,
+    "selection_order": [
+      "highest clean recovered frozen-153 locus count",
+      "highest non-gap aligned base count across the frozen-153 matrix",
+      "lexicographically smallest immutable sample ID"
+    ],
+    "trait_or_topology_preference_allowed": false,
+    "forbidden_criteria": [
+      "flower-colour history favoured by the sample",
+      "Arenicola ancestral-state result",
+      "ER versus ARD result",
+      "preferred topology beyond the predeclared placement-concordance gate"
+    ],
+    "one_rate_tree_tip_per_species": true,
+    "replicates_are_not_independent_macroevolutionary_transitions": true,
+    "replicate_sensitivity": "All non-primary concordant samples remain available for representative-swap sensitivity rather than being discarded."
+  },
+  "expanded_tree_gate": {
+    "trigger": "Both A1 species have passed individual recovery, identity, phenotype and replicate-placement gates and are ready for species-level representatives.",
+    "target_focal_taxa": 22,
+    "target_state_counts": {"C": 17, "W": 5},
+    "target_tree_tip_count_with_root": 23,
+    "root_outgroup": "OUTGROUP_saff",
+    "locus_policy": "Rebuild all per-locus alignments and the concatenated matrix using the same frozen 153 loci. New-sample missing/paralog loci are gaps; the locus universe is not reselected after seeing the two white taxa.",
+    "tree_inference_policy": "Infer a new branch-length tree for the exact 22 eligible focal taxa plus OUTGROUP_saff; do not graft new taxa onto the old 20-tip tree with invented branch lengths.",
+    "topology_policy": "Re-run structural alignment QC, primary tree acceptance and a newly evaluated topology-concordance/sensitivity gate on the expanded tree. The old six AU-nonrejected 20-tip topologies are prior uncertainty evidence, not an automatically valid final 22-tip topology ensemble.",
+    "tip_join_policy": "The final rate-tree contract must contain exactly the same accepted taxon names as the expanded rate-fit atlas before rate fitting can start.",
+    "must_pass_branch_length_acceptance": true,
+    "must_pass_rate_fit_preconditions": true,
+    "rate_fit_unlock_requires_expanded_tree_reacceptance": true
+  },
+  "decision": {
+    "sampling_or_public_data_recovery_may_proceed": true,
+    "current_a1_species_promoted": 0,
+    "current_rate_fit_execution_allowed": false,
+    "next_data_requirement": "Obtain reusable Compositae1061-compatible nuclear data for at least two voucher/flower-colour-linked individuals of each A1 species, or an equivalent public homologous dataset meeting the same individual-level contract.",
+    "claim_limit": "This contract fixes the promotion procedure before new white-tip data are observed. Passing W>=5 is an engineering gate only. Rate inference still requires the rebuilt exact-tip tree, propagation of topology/branch-length uncertainty, sampling-bias assessment, polymorphic-state treatment and model-adequacy checks."
+  }
+}
