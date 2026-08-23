@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Fit binary ER/ARD Mk models only after all empirical preconditions pass.
 
-States are C (anthocyanin-coloured) and W (white).  This script deliberately
-refuses to run on the current v0.3 atlas while the fixed-white breadth gate is
-W<5, and also refuses any tree that has not passed the independent branch-length
-acceptance contract.
+States are C (anthocyanin-coloured) and W (white). Unknown/unmapped tree tips
+(e.g. reference outgroups) are treated as missing character data while their
+topology/rooting is retained.
 
-Unknown/unmapped tree tips (e.g. reference outgroups) are treated as missing
-character data, while their topology/rooting is retained.
+Rate optimisation uses adaptive log-rate bounds. The original fixed upper bound
+(log q=4) can truncate high-rate fits on short substitution-per-site trees, so
+bounds are expanded before point estimates or ancestral-state probabilities are
+reported. The optimiser diagnostics record whether a final boundary remains.
 """
 from __future__ import annotations
 
@@ -108,21 +109,52 @@ def require_gates(preconditions:Path,tree_acceptance:Path):
     if t.get('tree_gate_ready') is not True: raise RuntimeError('branch-length tree acceptance gate is not satisfied')
     return p,t
 
+def _near_bound(x:float,lo:float,hi:float,margin:float=0.05)->bool:
+    return x-lo<margin or hi-x<margin
+
 def fit_models(root:Node,states:dict[str,str],root_prior='equilibrium'):
     try:
         from scipy.optimize import minimize, minimize_scalar
         from scipy.stats import chi2
     except ImportError as exc: raise RuntimeError('scipy is required for empirical Mk fitting') from exc
-    bounds=(-9.0,4.0)
-    er=minimize_scalar(lambda x:-log_likelihood(root,states,math.exp(x),math.exp(x),root_prior),bounds=bounds,method='bounded',options={'xatol':1e-10})
-    ard=minimize(lambda x:-log_likelihood(root,states,math.exp(x[0]),math.exp(x[1]),root_prior),x0=[er.x,er.x],method='L-BFGS-B',bounds=[bounds,bounds])
-    if not er.success or not ard.success: raise RuntimeError(f'optimizer failure ER={er.success} ARD={ard.success}')
+
+    initial=(-9.0,4.0); lo,hi=initial; min_lo=-20.0; max_hi=14.0
+    expansion_rounds=0
+    while True:
+        bounds=(lo,hi)
+        er=minimize_scalar(lambda x:-log_likelihood(root,states,math.exp(x),math.exp(x),root_prior),bounds=bounds,method='bounded',options={'xatol':1e-10})
+        ard=minimize(lambda x:-log_likelihood(root,states,math.exp(x[0]),math.exp(x[1]),root_prior),x0=[er.x,er.x],method='L-BFGS-B',bounds=[bounds,bounds])
+        if not er.success or not ard.success: raise RuntimeError(f'optimizer failure ER={er.success} ARD={ard.success}')
+        xs=[float(er.x),float(ard.x[0]),float(ard.x[1])]
+        hit_low=any(x-lo<0.05 for x in xs)
+        hit_high=any(hi-x<0.05 for x in xs)
+        new_lo=max(min_lo,lo-2.0) if hit_low else lo
+        new_hi=min(max_hi,hi+2.0) if hit_high else hi
+        if (new_lo,new_hi)==(lo,hi): break
+        lo,hi=new_lo,new_hi; expansion_rounds+=1
+        if expansion_rounds>12: raise RuntimeError('adaptive Mk bound expansion did not converge')
+
+    final_boundary=any(_near_bound(x,lo,hi) for x in xs)
     ll_er=-float(er.fun);ll_ard=-float(ard.fun);q_er=math.exp(float(er.x));q_cw,q_wc=map(lambda z:math.exp(float(z)),ard.x)
     n=sum(v in STATE_INDEX for v in states.values())
     def metrics(ll,k):
         aic=2*k-2*ll;aicc=aic+(2*k*(k+1)/(n-k-1) if n>k+1 else float('inf'));return aic,aicc
     aic_er,aicc_er=metrics(ll_er,1);aic_ard,aicc_ard=metrics(ll_ard,2);lr=max(0.0,2*(ll_ard-ll_er))
-    return {'contract_version':'binary_flower_colour_mk_fit_v1','root_prior':root_prior,'n_observed_tips':n,'ER':{'q_C_to_W':q_er,'q_W_to_C':q_er,'logLik':ll_er,'k':1,'AIC':aic_er,'AICc':aicc_er},'ARD':{'q_C_to_W':q_cw,'q_W_to_C':q_wc,'loss_to_regain_ratio':q_cw/q_wc,'logLik':ll_ard,'k':2,'AIC':aic_ard,'AICc':aicc_ard},'comparison':{'delta_AIC_ARD_minus_ER':aic_ard-aic_er,'delta_AICc_ARD_minus_ER':aicc_ard-aicc_er,'LR_statistic':lr,'LR_df':1,'LR_pvalue':float(chi2.sf(lr,1))},'claim_limit':'Model fit alone does not establish causal molecular reactivation, adaptation, or introgression. Interpret rate asymmetry only with topology/branch-length sensitivity and model adequacy.'}
+    optimizer={
+        'initial_log_rate_bounds':list(initial),
+        'final_log_rate_bounds':[lo,hi],
+        'bound_expansion_rounds':expansion_rounds,
+        'final_boundary_hit':final_boundary,
+        'legacy_upper_rate':math.exp(initial[1]),
+    }
+    return {
+        'contract_version':'binary_flower_colour_mk_fit_v2_adaptive_bounds','root_prior':root_prior,'n_observed_tips':n,
+        'optimizer':optimizer,
+        'ER':{'q_C_to_W':q_er,'q_W_to_C':q_er,'logLik':ll_er,'k':1,'AIC':aic_er,'AICc':aicc_er},
+        'ARD':{'q_C_to_W':q_cw,'q_W_to_C':q_wc,'loss_to_regain_ratio':q_cw/q_wc,'logLik':ll_ard,'k':2,'AIC':aic_ard,'AICc':aicc_ard},
+        'comparison':{'delta_AIC_ARD_minus_ER':aic_ard-aic_er,'delta_AICc_ARD_minus_ER':aicc_ard-aicc_er,'LR_statistic':lr,'LR_df':1,'LR_pvalue':float(chi2.sf(lr,1))},
+        'claim_limit':'Model fit alone does not establish causal molecular reactivation, adaptation, or introgression. Interpret rate asymmetry only with topology/branch-length sensitivity, optimizer-bound diagnostics and model adequacy.'
+    }
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--tree',type=Path,required=True);p.add_argument('--atlas',type=Path,required=True);p.add_argument('--tip-map',type=Path,required=True);p.add_argument('--preconditions',type=Path,required=True);p.add_argument('--tree-acceptance',type=Path,required=True);p.add_argument('--root-prior',choices=['equilibrium','flat'],default='equilibrium');p.add_argument('--output',type=Path,required=True);a=p.parse_args()
