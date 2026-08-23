@@ -1,0 +1,65 @@
+{
+  "contract_version": "full20_comp1061_topology_concordance_preflight_v1",
+  "execution_date": "2026-08-22",
+  "source_primary_tree_contract": "data/evidence/full20_comp1061_primary_tree_acceptance_v1.json",
+  "source_primary_tree": {
+    "path": "data/evidence/full20_comp1061_primary_tree_v1.nwk",
+    "sha256": "c80b66c1e19c91287d3fa243360ae1f4ab6a28613e2d8f1914c23565788bcac5",
+    "tips": 21,
+    "focal_taxa": 20,
+    "root_outgroup": "OUTGROUP_saff"
+  },
+  "source_alignments": {
+    "workflow_run_id": 32575064385,
+    "artifact_id": 9476351216,
+    "artifact_name": "comp1061-saff-root-primary-tree-32575064385",
+    "artifact_digest": "sha256:d6dce360848c92fb4cadea83ce20add23dc4d8bddb166ef21bb5ca650b715afa",
+    "frozen_loci": 153,
+    "frozen_locus_list_sha256": "1106051eca8bfa699f16e05d92024573cb358d7dbd151b89768e76c3d56cde82",
+    "structural_alignment_qc_required": true,
+    "posthoc_locus_filtering_allowed": false
+  },
+  "toolchain": {
+    "iqtree_version": "3.1.3",
+    "executable_resolution": ["iqtree3", "iqtree", "iqtree2"]
+  },
+  "gene_tree_analysis": {
+    "method": "IQ-TREE separate-locus maximum-likelihood trees with per-locus ModelFinder",
+    "command_contract": "iqtree3 -S ALN_DIR -st DNA --prefix loci -T AUTO",
+    "expected_locus_trees": 153,
+    "missing_taxa_per_locus_allowed": true,
+    "gene_tree_bootstrap_required": false,
+    "reason": "gCF requires locus-tree topologies; branch support on each gene tree is not used to filter loci or select the primary topology. DNA sequence type is declared explicitly so sparse loci are not rejected by automatic sequence-type detection."
+  },
+  "gene_concordance_factor": {
+    "method": "IQ-TREE gCF on the frozen accepted primary tree",
+    "command_contract": "iqtree3 -t PRIMARY_TREE --gcf loci.treefile --prefix gcf",
+    "interpretation": "fraction of decisive locus trees concordant with each primary-tree internal branch"
+  },
+  "site_concordance_factor": {
+    "method": "IQ-TREE likelihood-based sCF",
+    "command_contract": "iqtree3 -te PRIMARY_TREE -s CONCAT_ALIGNMENT --scfl 100 -seed 20260822 -m TIM3+F+R3 --prefix scf -T AUTO",
+    "quartets_per_internal_branch": 100,
+    "seed": 20260822,
+    "primary_model_family": "TIM3+F+R3",
+    "interpretation": "likelihood-based fraction of decisive sites supporting each primary-tree internal branch"
+  },
+  "completion_gate": {
+    "expected_gene_trees": 153,
+    "gcf_stat_required": true,
+    "scf_stat_required": true,
+    "minimum_gcf_for_acceptance": null,
+    "minimum_scf_for_acceptance": null,
+    "data_driven_branch_removal_allowed": false,
+    "data_driven_locus_removal_allowed": false,
+    "policy": "Concordance factors diagnose topology conflict; they do not retroactively change the frozen locus set or manufacture a pass threshold. Low-concordance branches are flagged for downstream alternative-topology sensitivity."
+  },
+  "promotion_boundary": {
+    "primary_branch_length_tree_completed": true,
+    "topology_concordance_execution_allowed": true,
+    "topology_sensitivity_completed": false,
+    "rate_fit_execution_allowed": false,
+    "independent_rate_fit_blocker": "minimum_white_tips",
+    "claim_limit": "Completing gCF/sCF quantifies conflict on the accepted primary topology. It does not by itself permit flower-colour transition-rate fitting, and low-concordance branches must remain explicit uncertainty rather than being silently fixed."
+  }
+}
