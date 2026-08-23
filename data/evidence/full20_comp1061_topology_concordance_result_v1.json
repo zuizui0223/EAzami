@@ -1,0 +1,159 @@
+{
+  "contract_version": "full20_comp1061_topology_concordance_result_v1",
+  "execution_date": "2026-08-23",
+  "source": {
+    "workflow_run_id": 32614242600,
+    "workflow_head_sha": "5c24565d39d296968dfff4ed1252a195cb7061c0",
+    "artifact_id": 9486472031,
+    "artifact_name": "comp1061-topology-concordance-32614242600",
+    "artifact_digest": "sha256:eef4bac60ad742445f39abf80e6738ba3556471888abf34b9db94363bc9c9189",
+    "primary_tree_sha256": "c80b66c1e19c91287d3fa243360ae1f4ab6a28613e2d8f1914c23565788bcac5",
+    "frozen_loci": 153,
+    "frozen_loci_sha256": "1106051eca8bfa699f16e05d92024573cb358d7dbd151b89768e76c3d56cde82",
+    "alignment_run_id": 32575064385,
+    "alignment_artifact_digest": "sha256:d6dce360848c92fb4cadea83ce20add23dc4d8bddb166ef21bb5ca650b715afa"
+  },
+  "execution": {
+    "iqtree_version": "3.1.3",
+    "sequence_type": "DNA",
+    "gene_tree_seed": 20260822,
+    "gene_trees_completed": 153,
+    "internal_branches": 18,
+    "gcf_completed": true,
+    "scf_completed": true,
+    "scf_quartets_per_branch": 100,
+    "scf_seed": 20260822,
+    "scf_model_family": "TIM3+F+R3",
+    "data_driven_locus_filtering_applied": false,
+    "data_driven_branch_filtering_applied": false
+  },
+  "raw_output_sha256": {
+    "locus_trees": "8339a6520a63fef28ecde8f471522ce89d748bffc86952f0c08704112faf4ea8",
+    "gcf_stat": "ad8968f7d32245eafc000ec1e4f98f883ab904b013aeb371db945ca6d4fb6010",
+    "gcf_tree": "fd8826a9964b32a215d91b8651109d4474718f31a443376bb0758e0dbea94383",
+    "scf_stat": "3e2dd3631229da93f2d0917a555d35b261b9f6bd4bb787ba0262d7500e845dd3",
+    "scf_tree": "2fcebd52f8e4ba1446de22c2c3005b3629beb7eb99b83c1560fa67fb23e9a30b"
+  },
+  "summary": {
+    "gCF_min": 0.65,
+    "gCF_median": 7.545,
+    "gCF_mean": 11.103889,
+    "gCF_max": 40.79,
+    "gDFP_median": 88.565,
+    "sCF_min": 33.34,
+    "sCF_median": 46.92,
+    "sCF_mean": 49.503333,
+    "sCF_max": 89.51,
+    "primary_site_plurality_branches": 16,
+    "site_challenged_branches": 2
+  },
+  "uncertainty_flag": {
+    "definition": "Descriptive non-threshold flag: primary sCF is not the largest of sCF, sDF1 and sDF2. It does not delete loci or branches.",
+    "flagged_splits": [
+      {
+        "split": [
+          "Cirsium_kujuense",
+          "Cirsium_nipponicum_var_incomptum"
+        ],
+        "gCF": 8.55,
+        "sCF": 34.01,
+        "sDF1": 26.87,
+        "sDF2": 39.12,
+        "primary_support": "75.1/75"
+      },
+      {
+        "split": [
+          "Cirsium_maritimum",
+          "Cirsium_nippoense"
+        ],
+        "gCF": 5.88,
+        "sCF": 33.34,
+        "sDF1": 24.81,
+        "sDF2": 41.85,
+        "primary_support": "85.8/90"
+      }
+    ]
+  },
+  "decision": {
+    "topology_concordance_execution_completed": true,
+    "primary_tree_retained": true,
+    "alternative_topology_sensitivity_required": true,
+    "rate_fit_execution_allowed": false,
+    "independent_rate_fit_blocker": "minimum_white_tips",
+    "claim_limit": "Concordance is quantified on the frozen 153-locus primary tree. Gene-tree discordance is widespread, while 16/18 internal branches retain site-quartet plurality; two site-challenged splits must remain explicit topology uncertainty. No post hoc locus or branch deletion is allowed."
+  },
+  "branches": [
+    {
+      "split": ["Cirsium_alpicola", "Cirsium_fanjingshanense", "Cirsium_gyojanum", "Cirsium_kamtschaticum", "Cirsium_maritimum", "Cirsium_nippoense", "Cirsium_yezoense"],
+      "gCF": 10.46, "gN": 153, "gDFP": 88.24, "sCF": 65.39, "sDF1": 7.07, "sDF2": 27.55, "primary_site_plurality": true, "primary_support": "100/100"
+    },
+    {
+      "split": ["Cirsium_alpicola", "Cirsium_gyojanum", "Cirsium_maritimum", "Cirsium_nippoense", "Cirsium_yezoense"],
+      "gCF": 1.31, "gN": 153, "gDFP": 97.39, "sCF": 36.5, "sDF1": 33.94, "sDF2": 29.56, "primary_site_plurality": true, "primary_support": "100/94"
+    },
+    {
+      "split": ["Cirsium_alpicola", "Cirsium_gyojanum", "Cirsium_yezoense"],
+      "gCF": 3.92, "gN": 153, "gDFP": 92.81, "sCF": 49.34, "sDF1": 31.4, "sDF2": 19.26, "primary_site_plurality": true, "primary_support": "100/96"
+    },
+    {
+      "split": ["Cirsium_brevicaule", "Cirsium_irumtiense"],
+      "gCF": 40.79, "gN": 152, "gDFP": 59.21, "sCF": 89.51, "sDF1": 3.98, "sDF2": 6.5, "primary_site_plurality": true, "primary_support": "100/100"
+    },
+    {
+      "split": ["Cirsium_brevicaule", "Cirsium_irumtiense", "Cirsium_kawakamii", "Cirsium_kujuense", "Cirsium_morii", "Cirsium_nipponicum_var_incomptum", "Cirsium_pengii", "Cirsium_suffultum", "Cirsium_tatakaense"],
+      "gCF": 6.54, "gN": 153, "gDFP": 93.46, "sCF": 48.27, "sDF1": 24.07, "sDF2": 27.67, "primary_site_plurality": true, "primary_support": "98.8/74"
+    },
+    {
+      "split": ["Cirsium_brevicaule", "Cirsium_irumtiense", "Cirsium_kawakamii", "Cirsium_morii", "Cirsium_pengii", "Cirsium_tatakaense"],
+      "gCF": 0.65, "gN": 153, "gDFP": 96.73, "sCF": 51.41, "sDF1": 20.46, "sDF2": 28.14, "primary_site_plurality": true, "primary_support": "100/80"
+    },
+    {
+      "split": ["Cirsium_fanjingshanense", "Cirsium_kamtschaticum"],
+      "gCF": 3.97, "gN": 151, "gDFP": 91.39, "sCF": 45.64, "sDF1": 30.74, "sDF2": 23.62, "primary_site_plurality": true, "primary_support": "94.5/92"
+    },
+    {
+      "split": ["Cirsium_gyojanum", "Cirsium_yezoense"],
+      "gCF": 9.15, "gN": 153, "gDFP": 84.31, "sCF": 43.71, "sDF1": 39.5, "sDF2": 16.79, "primary_site_plurality": true, "primary_support": "99.4/96"
+    },
+    {
+      "split": ["Cirsium_japonicum_var_albescens", "Cirsium_japonicum_var_australe", "Cirsium_japonicum_var_fukienense"],
+      "gCF": 25.66, "gN": 152, "gDFP": 56.58, "sCF": 43.13, "sDF1": 20.15, "sDF2": 36.72, "primary_site_plurality": true, "primary_support": "97.3/77"
+    },
+    {
+      "split": ["Cirsium_japonicum_var_albescens", "Cirsium_japonicum_var_australe", "Cirsium_japonicum_var_fukienense", "Cirsium_japonicum_var_japonicum"],
+      "gCF": 26.97, "gN": 152, "gDFP": 69.74, "sCF": 59.52, "sDF1": 20.51, "sDF2": 19.97, "primary_site_plurality": true, "primary_support": "100/100"
+    },
+    {
+      "split": ["Cirsium_japonicum_var_albescens", "Cirsium_japonicum_var_australe", "Cirsium_japonicum_var_fukienense", "Cirsium_japonicum_var_japonicum", "OUTGROUP_saff"],
+      "gCF": 4.58, "gN": 153, "gDFP": 88.89, "sCF": 54.93, "sDF1": 31.66, "sDF2": 13.4, "primary_site_plurality": true, "primary_support": "99.7/99"
+    },
+    {
+      "split": ["Cirsium_japonicum_var_australe", "Cirsium_japonicum_var_fukienense"],
+      "gCF": 22.37, "gN": 152, "gDFP": 36.84, "sCF": 42.39, "sDF1": 30.85, "sDF2": 26.76, "primary_site_plurality": true, "primary_support": "22.5/46"
+    },
+    {
+      "split": ["Cirsium_kawakamii", "Cirsium_morii", "Cirsium_pengii", "Cirsium_tatakaense"],
+      "gCF": 2.61, "gN": 153, "gDFP": 91.5, "sCF": 41.73, "sDF1": 23.47, "sDF2": 34.8, "primary_site_plurality": true, "primary_support": "97.4/88"
+    },
+    {
+      "split": ["Cirsium_kawakamii", "Cirsium_pengii", "Cirsium_tatakaense"],
+      "gCF": 14.47, "gN": 152, "gDFP": 75.66, "sCF": 60.31, "sDF1": 17.61, "sDF2": 22.07, "primary_site_plurality": true, "primary_support": "100/100"
+    },
+    {
+      "split": ["Cirsium_kawakamii", "Cirsium_tatakaense"],
+      "gCF": 10.67, "gN": 150, "gDFP": 66.67, "sCF": 43.73, "sDF1": 35.61, "sDF2": 20.66, "primary_site_plurality": true, "primary_support": "77.6/85"
+    },
+    {
+      "split": ["Cirsium_kujuense", "Cirsium_nipponicum_var_incomptum"],
+      "gCF": 8.55, "gN": 152, "gDFP": 79.61, "sCF": 34.01, "sDF1": 26.87, "sDF2": 39.12, "primary_site_plurality": false, "primary_support": "75.1/75"
+    },
+    {
+      "split": ["Cirsium_kujuense", "Cirsium_nipponicum_var_incomptum", "Cirsium_suffultum"],
+      "gCF": 1.32, "gN": 152, "gDFP": 98.68, "sCF": 48.2, "sDF1": 28.04, "sDF2": 23.76, "primary_site_plurality": true, "primary_support": "96.3/92"
+    },
+    {
+      "split": ["Cirsium_maritimum", "Cirsium_nippoense"],
+      "gCF": 5.88, "gN": 153, "gDFP": 93.46, "sCF": 33.34, "sDF1": 24.81, "sDF2": 41.85, "primary_site_plurality": false, "primary_support": "85.8/90"
+    }
+  ]
+}
