@@ -1,0 +1,107 @@
+{
+  "contract_version": "full20_comp1061_alt_topology_preflight_v1",
+  "execution_date": "2026-08-23",
+  "source_primary_tree": {
+    "path": "data/evidence/full20_comp1061_primary_tree_v1.nwk",
+    "sha256": "c80b66c1e19c91287d3fa243360ae1f4ab6a28613e2d8f1914c23565788bcac5",
+    "tips": 21,
+    "focal_taxa": 20,
+    "root_outgroup": "OUTGROUP_saff"
+  },
+  "source_concordance_result": {
+    "path": "data/evidence/full20_comp1061_topology_concordance_result_v1.json",
+    "workflow_run_id": 32614242600,
+    "artifact_id": 9486472031,
+    "artifact_digest": "sha256:eef4bac60ad742445f39abf80e6738ba3556471888abf34b9db94363bc9c9189",
+    "site_challenged_branches": 2,
+    "alternative_topology_sensitivity_required": true
+  },
+  "source_alignment": {
+    "workflow_run_id": 32575064385,
+    "artifact_id": 9476351216,
+    "artifact_name": "comp1061-saff-root-primary-tree-32575064385",
+    "artifact_digest": "sha256:d6dce360848c92fb4cadea83ce20add23dc4d8bddb166ef21bb5ca650b715afa",
+    "frozen_loci": 153,
+    "frozen_loci_sha256": "1106051eca8bfa699f16e05d92024573cb358d7dbd151b89768e76c3d56cde82",
+    "concat_alignment_bp": 140562,
+    "primary_model_family": "TIM3+F+R3"
+  },
+  "challenged_edges": [
+    {
+      "id": "kujuense_incomptum",
+      "split": [
+        "Cirsium_kujuense",
+        "Cirsium_nipponicum_var_incomptum"
+      ],
+      "source_gCF": 8.55,
+      "source_sCF": 34.01,
+      "source_sDF1": 26.87,
+      "source_sDF2": 39.12,
+      "states": {
+        "primary": "retain the frozen primary split",
+        "swap_first": "swap Cirsium_kujuense with the challenged clade's parent-side sibling; the local alternative contains Cirsium_nipponicum_var_incomptum + Cirsium_suffultum",
+        "swap_second": "swap Cirsium_nipponicum_var_incomptum with the challenged clade's parent-side sibling; the local alternative contains Cirsium_kujuense + Cirsium_suffultum"
+      }
+    },
+    {
+      "id": "maritimum_nippoense",
+      "split": [
+        "Cirsium_maritimum",
+        "Cirsium_nippoense"
+      ],
+      "source_gCF": 5.88,
+      "source_sCF": 33.34,
+      "source_sDF1": 24.81,
+      "source_sDF2": 41.85,
+      "states": {
+        "primary": "retain the frozen primary split",
+        "swap_first": "swap Cirsium_maritimum with the challenged clade's parent-side sibling; the local alternative adds the split Cirsium_alpicola + Cirsium_gyojanum + Cirsium_nippoense + Cirsium_yezoense",
+        "swap_second": "swap Cirsium_nippoense with the challenged clade's parent-side sibling; the local alternative adds the split Cirsium_alpicola + Cirsium_gyojanum + Cirsium_maritimum + Cirsium_yezoense"
+      }
+    }
+  ],
+  "candidate_contract": {
+    "design": "full factorial of primary plus both NNI alternatives at each of two preregistered challenged edges",
+    "states_per_edge": 3,
+    "candidate_count": 9,
+    "tip_count": 21,
+    "nontrivial_splits_per_tree": 18,
+    "root_outgroup": "OUTGROUP_saff",
+    "candidate_internal_supports_retained": false,
+    "candidate_branch_lengths_retained": false,
+    "data_driven_candidate_filtering_allowed": false,
+    "expected_primary_split_fingerprint_sha256": "0501004e737172a88e9fe2741eefa7d2cb9b369b1df3cbaad4af64ae8f5990d3",
+    "expected_candidate_set_sha256": "359e87c0a2b057d7c3aa6bd6e1600487431234dbc78c7c42b246769633caac18"
+  },
+  "toolchain": {
+    "python": "3.11",
+    "biopython": "1.85",
+    "iqtree": "3.1.3"
+  },
+  "au_test": {
+    "method": "IQ-TREE candidate-tree topology test with 10000 RELL replicates and approximately unbiased test",
+    "command_contract": "iqtree3 -s CONCAT -te PRIMARY_TREE -m TIM3+F+R3 -st DNA -z CANDIDATE_TREES -zb 10000 -au -seed 20260822 --prefix au -T AUTO",
+    "rell_replicates": 10000,
+    "seed": 20260822,
+    "sequence_type": "DNA",
+    "model_family": "TIM3+F+R3",
+    "au_rejection_alpha": 0.05,
+    "interpretation": "p-AU < 0.05 rejects a candidate topology under the fixed comparison. Non-rejection is not evidence that a topology is uniquely true."
+  },
+  "decision_policy": {
+    "primary_only_nonrejected": "the two local NNI alternatives are not retained as supported alternatives under this concatenated-alignment topology test",
+    "one_or_more_alternatives_nonrejected": "retain the corresponding topology alternatives explicitly in downstream topology sensitivity",
+    "primary_rejected": "the frozen primary tree remains an audit reference but cannot be treated as the uniquely adequate topology",
+    "posthoc_candidate_addition_allowed": false,
+    "posthoc_candidate_removal_allowed": false,
+    "posthoc_locus_removal_allowed": false
+  },
+  "promotion_boundary": {
+    "topology_concordance_completed": true,
+    "alternative_topology_sensitivity_execution_allowed": true,
+    "alternative_topology_sensitivity_completed": false,
+    "rate_fit_execution_allowed": false,
+    "independent_rate_fit_blocker": "minimum_white_tips",
+    "claim_limit": "This gate tests only the preregistered nine local topologies around the two site-challenged branches on the immutable 153-locus concatenated alignment. It does not search arbitrary topologies, delete loci, or permit colour-rate fitting."
+  }
+}
