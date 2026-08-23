@@ -1,0 +1,58 @@
+{
+  "contract_version": "orientation_comp1061_20tip_source_crosswalk_summary_v2",
+  "status_date": "2026-08-23",
+  "source_trait_crosswalk": "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv",
+  "accepted_tree_evidence": "data/evidence/full20_comp1061_primary_tree_acceptance_v1.json",
+  "topology_uncertainty_evidence": "data/evidence/full20_comp1061_alt_topology_au_result_v1.json",
+  "panel_taxa": 20,
+  "fixed_binary_orientation_taxa": 17,
+  "fixed_binary_fraction": 0.85,
+  "fixed_state_counts": {
+    "upward_or_erect": 9,
+    "downward_or_nodding": 8
+  },
+  "unresolved_taxa": [
+    {
+      "tip_id": "Cirsium_fanjingshanense",
+      "reason": "primary comparative evidence explicitly reports nodding or erect capitula"
+    },
+    {
+      "tip_id": "Cirsium_maritimum",
+      "reason": "the same NMNS authority page contains a downward catchphrase but an erect narrative description"
+    },
+    {
+      "tip_id": "Cirsium_nipponicum_var_incomptum",
+      "reason": "exact-variety evidence describes heads as sideways or slightly downward, which is not a fixed erect-vs-nodding state"
+    }
+  ],
+  "tree_reuse_decision": {
+    "same_comp1061_branch_length_tree_is_informative_for_orientation": true,
+    "accepted_primary_tree_available": true,
+    "accepted_tree_loci": 153,
+    "accepted_tree_root": "OUTGROUP_saff",
+    "au_nonrejected_topology_count": 6,
+    "primary_topology_uniquely_supported": false,
+    "additional_orientation_only_nuclear_tree_needed": false,
+    "additional_orientation_literature_screen_needed_before_preflight": false
+  },
+  "preflight_contract": {
+    "topology_scope": "all six AU-nonrejected optimized branch-length topologies from run 32614839764",
+    "binary_mk_models": ["ER", "ARD"],
+    "root_priors": ["equilibrium", "flat"],
+    "adequacy_simulations_per_model_prior_topology": 2000,
+    "base_seed": 20260823,
+    "unresolved_tips_are_missing": true,
+    "posthoc_state_forcing_allowed": false,
+    "topology_selection_from_orientation_result_allowed": false
+  },
+  "execution_gates": {
+    "branch_length_tree_completed": true,
+    "topology_sensitivity_completed": true,
+    "orientation_state_balance_gate_ge5_each": true,
+    "orientation_mk_preflight_execution_allowed_now": true,
+    "orientation_mk_preflight_allowed_after_accepted_tree": true,
+    "parallel_or_convergent_evolution_claim_allowed": false
+  },
+  "interpretation": "The orientation panel is now executable on the accepted Comp1061 branch-length framework without waiting for additional fixed-white colour tips. Preflight inference must propagate the six AU-nonrejected tree topologies rather than silently treating the maximum-likelihood topology as unique.",
+  "claim_boundary": "The 17 resolved orientation states remain taxon-concept annotations rather than same-voucher phenotypes. The post-tree Mk analysis may quantify a lower bound on changes, model sensitivity and root-state sensitivity, but population-aware or same-voucher validation is still required before calling repeated changes parallel/convergent or adaptive."
+}
