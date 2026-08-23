@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import csv
 import json
-from collections import Counter, defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -44,86 +43,74 @@ def main() -> None:
 
     by_id = {r["order_id"]: r for r in rows}
 
-    # Repository boundary: Azami must remain observational, not causal/evolutionary.
-    if "no genetic variance" not in by_id["L0"]["claim_boundary"].lower():
-        raise RuntimeError("L0 lost the Azami observational boundary")
-    if "azami is observational phenomics" not in by_id["L0"]["claim_boundary"].lower():
-        raise RuntimeError("L0 must explicitly remain an Azami-only observational claim")
+    # Azami boundary must remain observational.
+    l0 = by_id["L0"]
+    if "Azami is observational phenomics" not in l0["claim_boundary"]:
+        raise RuntimeError("Azami observational boundary lost")
+    if "no genetic variance" not in l0["claim_boundary"]:
+        raise RuntimeError("Azami causal overclaim guard lost")
 
-    # Meta-analysis decisions that must not drift.
+    # Meta-analysis decisions.
     if by_id["L2"]["meta_status"] != "resolved_general_pressure":
-        raise RuntimeError("Antagonist seed-output pressure must remain the narrow resolved meta result")
+        raise RuntimeError("Antagonist pressure status drifted")
     if "RR=2.674" not in by_id["L2"]["meta_or_literature_result"]:
-        raise RuntimeError("Antagonist pooled RR drifted")
+        raise RuntimeError("Antagonist RR drifted")
+    if "selection mosaic" not in by_id["L1"]["current_conclusion"].lower():
+        raise RuntimeError("Selection-mosaic conclusion lost")
     if by_id["L6"]["meta_status"] != "weakened_general_hypothesis":
         raise RuntimeError("Generic stickiness defence must remain weakened")
-    if "selection mosaic" not in by_id["L1"]["current_conclusion"].lower():
-        raise RuntimeError("Selection-mosaic conclusion was lost")
 
-    # Current EAzami evolutionary results.
-    orient = by_id["L3"]
-    if "minimum of 5 orientation changes" not in orient["eazami_self_analysis"]:
+    # Current self-analysis conclusions.
+    if "minimum of 5 orientation changes" not in by_id["L3"]["eazami_self_analysis"]:
         raise RuntimeError("Orientation repeated-state result drifted")
-    if "parallel/convergent adaptation is not yet established" not in orient["claim_boundary"]:
-        raise RuntimeError("Orientation overclaim guard was lost")
-
-    colour = by_id["L4"]
-    if "C=17/W=3" not in colour["eazami_self_analysis"]:
-        raise RuntimeError("Current colour state gate drifted")
-    if "regain" not in colour["claim_boundary"].lower():
-        raise RuntimeError("Colour regain claim boundary was lost")
-
-    radiation = by_id["L8"]
-    if "adaptive radiation" not in radiation["claim_boundary"].lower():
-        raise RuntimeError("Adaptive-radiation boundary was lost")
-    if "common-lability" not in radiation["new_hypothesis_or_prediction"]:
-        raise RuntimeError("Competing common-lability hypothesis was lost")
-
-    scopes = Counter(r["scope"] for r in rows)
-    meta_status = Counter(r["meta_status"] for r in rows)
-    gate_to_ids: dict[str, list[str]] = defaultdict(list)
-    for row in rows:
-        gate_to_ids[row["doctoral_issue_gate"]].append(row["order_id"])
+    if "parallel/convergent adaptation is not yet established" not in by_id["L3"]["claim_boundary"]:
+        raise RuntimeError("Orientation overclaim guard lost")
+    if "C=17/W=3" not in by_id["L4"]["eazami_self_analysis"]:
+        raise RuntimeError("Colour state gate drifted")
+    if "regain" not in by_id["L4"]["claim_boundary"].lower():
+        raise RuntimeError("Colour regain boundary lost")
+    if "common-lability" not in by_id["L8"]["new_hypothesis_or_prediction"]:
+        raise RuntimeError("Competing common-lability model lost")
+    if "adaptive radiation" not in by_id["L8"]["claim_boundary"].lower():
+        raise RuntimeError("Adaptive-radiation boundary lost")
 
     summary = {
         "version": "v2_evidence_ladder",
         "status_date": "2026-08-23",
+        "evidence_ladder_rows": 10,
         "architecture": [
-            "Azami global observational phenomics: continuous within/among-taxon phenotype-environment structure",
-            "EAzami quantitative literature/meta-analysis: test general ecological mechanism hypotheses",
-            "EAzami East-Asian/Japanese rapid-radiation zoom: accepted nuclear history plus repeated-state tests",
-            "Doctoral empirical programme: ancestry-resolved trait -> interaction/protection -> reproductive fitness",
-            "Mechanistic flagship: repeated flower-colour transitions and regulatory/molecular reuse",
+            "Azami global observational phenomics",
+            "EAzami quantitative ecological literature synthesis",
+            "EAzami East-Asian rapid-radiation evolutionary-history zoom",
+            "Doctoral ancestry-resolved ecological function tests",
+            "Flower-colour molecular reuse test",
         ],
-        "evidence_ladder_rows": len(rows),
-        "scope_counts": dict(sorted(scopes.items())),
-        "meta_status_counts": dict(sorted(meta_status.items())),
         "meta_conclusions": {
-            "direct_climate_or_pollinator_single_axis": "insufficient/weakened as a universal explanation",
-            "selection_mosaic": "working general support; focal agent dominance remains unknown",
-            "reproductive_antagonist_pressure": "resolved narrow meta result: RR=2.674 (95% CI 2.388-2.993)",
-            "reproductive_assurance_and_demographic_gating": "working support; focal population state remains unknown",
+            "single_universal_driver": "not_supported_as_general_model",
+            "selection_mosaic": "working_general_support",
+            "reproductive_antagonist_pressure": "resolved_general_pressure_RR_2.674_CI_2.388_2.993",
+            "reproductive_assurance_and_demographic_gating": "working_support",
             "stickiness_general_defence": "weakened",
-            "display_tradeoff": "working mechanistic support",
-            "orientation_timing_protection": "mechanistic candidate",
-            "phyllary_spine_defence": "mechanistic candidate requiring direct trait validation",
+            "display_tradeoff": "working_mechanistic_support",
+            "orientation_timing_protection": "mechanistic_candidate",
+            "phyllary_spine_defence": "mechanistic_candidate_requires_direct_validation",
         },
         "self_analysis_resolutions": {
-            "global": "Azami establishes large below-taxon visible variance and trait-specific environmental structure, strongest for orientation and visible colour, without causal interpretation.",
-            "east_asia_tree": "Accepted 153-locus branch-length framework with explicit six-topology uncertainty set.",
-            "orientation": "All six AU-nonrejected topologies require at least five orientation-state changes; direction, root state and adaptation remain unresolved.",
-            "colour": "Current exact colour panel is C=17/W=3; tree gate is ready but the fixed-white breadth/rate-identifiability gate blocks loss-versus-regain inference.",
+            "azami": "large_below_taxon_visible_variance_and_trait_specific_environmental_structure_without_causal_claim",
+            "east_asia_tree": "accepted_153_locus_branch_length_framework_with_six_topology_uncertainty_set",
+            "orientation": "minimum_five_state_changes_on_all_six_topologies_direction_and_ancestor_unresolved",
+            "colour": "C17_W3_tree_ready_fixed_white_breadth_and_rate_identifiability_still_block_loss_vs_regain",
         },
-        "new_central_hypothesis": "A young reticulating East-Asian Cirsium radiation diversified rapidly because semi-independent capitulum modules were repeatedly redeployed across local selection mosaics; the competing explanation is a single shared common-lability axis.",
-        "multiscale_prediction": "Population-level selection mosaics and ancestry-linked within-species variation should connect to repeated among-lineage states; within- and among-species patterns must be modelled jointly rather than treating species as fixed endpoints.",
-        "doctoral_empirical_frontier": {
-            "Aim1_history": "same-individual phenotype + nuclear ancestry + plastid + cytotype; validate repeated states at voucher/population level and identify independent transitions",
-            "Aim2_function": "orientation first, then W/coloured function and display; phyllary/spine only after direct validation; close trait -> interaction/protection -> filled-achene paths",
-            "Aim3_colour_reexpression": "after >=2 independent W/C transitions, link ancestry -> coding/regulatory haplotype -> floral RNA -> pigment -> calibrated colour",
-            "adaptive_radiation_gate": "do not use adaptive radiation until at least one repeated focal trait is causally linked through ecological mechanism to reproductive fitness",
+        "central_hypothesis": "semi_independent_capitulum_modules_redeployed_across_local_selection_mosaics_during_young_East_Asian_radiation",
+        "competing_hypothesis": "shared_common_lability_axis",
+        "multiscale_prediction": "within_population_selection_mosaics_and_ancestry_linked_variation_connect_to_repeated_among_lineage_states",
+        "doctoral_frontier": {
+            "Aim1": "population_and_voucher_validated_transition_history_with_nuclear_ancestry_plastid_and_cytotype",
+            "Aim2": "trait_to_pollination_protection_antagonism_to_filled_achene_causal_tests",
+            "Aim3": "at_least_two_independent_colour_transitions_with_haplotype_floral_RNA_pigment_and_colour",
+            "adaptive_radiation_gate": "requires_causal_trait_mechanism_reproductive_fitness_link",
         },
-        "issue_gate_to_rows": dict(sorted(gate_to_ids.items())),
-        "generic_meta_stop_rule": "Generic heterogeneous literature accumulation is complete at the present decision ceiling. Reopen only for a prespecified homologous estimand or a study capable of changing a focal mechanism/sampling decision.",
+        "generic_meta_stop_rule": "reopen_only_for_prespecified_homologous_estimand_or_study_that_changes_a_focal_mechanism_or_sampling_decision",
     }
     OUTPUT.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps(summary, indent=2, ensure_ascii=False))
