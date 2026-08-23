@@ -53,8 +53,8 @@ class FlowerColourRateFitPreconditionsTests(unittest.TestCase):
             "77d510ef101d08a7a23a4df391d077d3b7f75482c66f7f4bea6d32cf290ced2c",
         )
 
-    def test_tree_contract_matches_frozen_empirical_evidence(self):
-        tree = json.loads(TREE.read_text(encoding="utf-8"))
+    def test_tree_contract_matches_frozen_empirical_evidence_and_current_atlas_scope(self):
+        atlas, tree = self.current_inputs()
         primary = json.loads(PRIMARY_ACCEPTANCE.read_text(encoding="utf-8"))
         concordance = json.loads(CONCORDANCE.read_text(encoding="utf-8"))
         alt = json.loads(ALT_TOPOLOGY.read_text(encoding="utf-8"))
@@ -72,6 +72,14 @@ class FlowerColourRateFitPreconditionsTests(unittest.TestCase):
         self.assertEqual(compatibility["alignment_length_bp"], 140562)
         self.assertEqual(compatibility["parsimony_informative_sites_acgt"], 2639)
         self.assertEqual(compatibility["root_outgroup"], "OUTGROUP_saff")
+        self.assertEqual(compatibility["focal_taxa"], 20)
+        self.assertEqual(
+            set(compatibility["focal_taxa_accepted_names"]),
+            set(atlas["rate_fit_eligible_taxa"]),
+        )
+        self.assertTrue(
+            tree["downstream_topology_policy"]["atlas_taxon_expansion_requires_tree_rebuild_and_reacceptance"]
+        )
         self.assertEqual(
             primary["accepted_tree"]["branch_length_interpretation"],
             compatibility["branch_length_interpretation"],
@@ -108,29 +116,43 @@ class FlowerColourRateFitPreconditionsTests(unittest.TestCase):
         self.assertEqual(result["eligible_state_counts"], {"C": 17, "W": 3})
         self.assertEqual(result["blockers"], ["atlas_minimum_white_tips"])
         self.assertTrue(result["empirical_branch_length_tree_ready"])
+        self.assertTrue(result["tree_taxon_join_ready"])
+        self.assertEqual(result["tree_focal_taxa"], 20)
+        self.assertEqual(set(result["tree_focal_taxa_names"]), set(result["eligible_taxa_names"]))
         self.assertEqual(result["tree_loci"], 153)
         self.assertEqual(result["root_outgroup"], "OUTGROUP_saff")
         self.assertEqual(result["au_nonrejected_topology_count"], 6)
         self.assertFalse(result["primary_topology_uniquely_supported"])
-        self.assertTrue(result["comp1061_original_reference_available"])
-        self.assertFalse(result["moreyra_augmented_reference_available"])
-        self.assertEqual(
-            result["target_reference_status"],
-            "original_compatible_reference_recovered_augmented_not_recovered",
-        )
 
-    def test_two_additional_fixed_white_tips_would_unlock_current_combined_gate(self):
+    def test_two_additional_fixed_white_tips_do_not_unlock_old_20_tip_tree(self):
         atlas, tree = self.current_inputs()
         atlas = json.loads(json.dumps(atlas))
         atlas["readiness_conditions"]["minimum_white_tips"] = True
         atlas["transition_rate_fit_ready"] = True
         atlas["rate_fit_eligible_unique_taxa"] = 22
         atlas["rate_fit_eligible_state_counts"] = {"C": 17, "W": 5}
+        atlas["rate_fit_eligible_taxa"] = atlas["rate_fit_eligible_taxa"] + [
+            "Cirsium boninense",
+            "Cirsium wulongense",
+        ]
         result = gate.evaluate(atlas, tree)
-        self.assertTrue(result["execution_allowed"])
-        self.assertEqual(result["blockers"], [])
-        self.assertTrue(result["empirical_branch_length_tree_ready"])
-        self.assertEqual(result["au_nonrejected_topology_count"], 6)
+        self.assertFalse(result["execution_allowed"])
+        self.assertEqual(result["blockers"], ["tree_taxon_join_mismatch"])
+        self.assertFalse(result["tree_taxon_join_ready"])
+        self.assertEqual(result["eligible_taxa"], 22)
+        self.assertEqual(result["tree_focal_taxa"], 20)
+
+    def test_same_count_but_different_taxon_set_is_blocked(self):
+        atlas, tree = self.current_inputs()
+        atlas = json.loads(json.dumps(atlas))
+        atlas["rate_fit_eligible_taxa"][-1] = "Cirsium boninense"
+        result = gate.evaluate(atlas, tree)
+        self.assertFalse(result["execution_allowed"])
+        self.assertEqual(
+            result["blockers"],
+            ["atlas_minimum_white_tips", "tree_taxon_join_mismatch"],
+        )
+        self.assertFalse(result["tree_taxon_join_ready"])
 
     def test_tree_gate_remains_independent_if_tree_readiness_is_removed(self):
         atlas, tree = self.current_inputs()
