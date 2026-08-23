@@ -2,9 +2,9 @@
 """Validate fixed-white promotion from the current 20-tip tree to the final W>=5 tree.
 
 This is an execution-design validator, not evidence that new sequencing exists.
-The active v0.2 contract freezes sample-level recovery, replicate placement,
-representative selection and expanded-tree reacceptance before the two A1
-fixed-white taxa are observed in the homologous Comp1061 matrix.
+The active v0.2 contract freezes external sample intake, sample-level recovery,
+replicate placement, representative selection and expanded-tree reacceptance
+before the two A1 fixed-white taxa are observed in the homologous Comp1061 matrix.
 """
 from __future__ import annotations
 
@@ -19,6 +19,18 @@ DEFAULT_ATLAS = ROOT / "analysis" / "cirsium_flower_colour_atlas_v0_3_readiness.
 DEFAULT_TREE = ROOT / "data" / "evidence" / "flower_colour_rate_tree_contract_v0_2.json"
 DEFAULT_PANEL = ROOT / "sampling" / "FIXED_WHITE_TARGET_CAPTURE_PANEL_V0_1.csv"
 DEFAULT_PRIORITY = ROOT / "data" / "evidence" / "fixed_white_a1_priority_v2.csv"
+EXPECTED_INTAKE = "sampling/FIXED_WHITE_A1_SAMPLE_INTAKE_V0_1.csv"
+EXPECTED_INTAKE_VALIDATOR = "analysis/validate_fixed_white_a1_sample_intake.py"
+EXPECTED_RECOVERY_EVALUATOR = "analysis/evaluate_fixed_white_a1_recovery_qc.py"
+EXPECTED_RECOVERY_COLUMNS = [
+    "immutable_sample_id",
+    "taxon",
+    "frozen_loci",
+    "recovered_frozen_loci",
+    "paralog_warning_frozen_loci",
+    "clean_recovered_frozen_loci",
+    "non_gap_aligned_bp",
+]
 
 EXPECTED_A1 = {"Cirsium boninense", "Cirsium wulongense"}
 EXPECTED_LOCI = 153
@@ -122,6 +134,15 @@ def validate(
         raise ValueError("promotion contract target set drifted")
     if a1.get("voucher_required") is not True or a1.get("flower_colour_link_required") is not True:
         raise ValueError("promotion contract must require voucher and flower-colour linkage")
+    if a1.get("sample_intake_manifest") != EXPECTED_INTAKE:
+        raise ValueError("promotion contract lost canonical A1 intake manifest")
+    if a1.get("sample_intake_validator") != EXPECTED_INTAKE_VALIDATOR:
+        raise ValueError("promotion contract lost canonical A1 intake validator")
+    if a1.get("current_available_external_samples") != {
+        "Cirsium boninense": 0,
+        "Cirsium wulongense": 0,
+    }:
+        raise ValueError("contract must not claim external A1 samples before they are acquired")
     if a1.get("current_public_homologous_tip_count") != 0 or a1.get("current_promotion_allowed") is not False:
         raise ValueError("A1 taxa must not be represented as already promoted")
 
@@ -130,6 +151,10 @@ def validate(
         raise ValueError("individual gate must use all 153 frozen loci")
     if recovery.get("frozen_locus_sha256") != EXPECTED_LOCI_SHA256:
         raise ValueError("individual gate frozen locus SHA256 drifted")
+    if recovery.get("recovery_qc_evaluator") != EXPECTED_RECOVERY_EVALUATOR:
+        raise ValueError("individual gate lost canonical recovery evaluator")
+    if recovery.get("recovery_qc_required_columns") != EXPECTED_RECOVERY_COLUMNS:
+        raise ValueError("individual recovery QC schema drifted")
     fraction = recovery.get("minimum_clean_recovered_fraction")
     if fraction != 0.8:
         raise ValueError("individual clean-recovery fraction must remain 0.8")
@@ -219,6 +244,8 @@ def validate(
         raise ValueError("no A1 species is currently promoted")
     if decision.get("current_rate_fit_execution_allowed") is not False:
         raise ValueError("rate fitting must remain blocked")
+    if "mandatory intake slots" not in decision.get("next_data_requirement", ""):
+        raise ValueError("next data requirement must route through canonical intake slots")
 
     return {
         "contract_version": c["contract_version"],
@@ -226,15 +253,18 @@ def validate(
         "current_taxa": 20,
         "current_state_counts": {"C": 17, "W": 3},
         "current_tree_focal_taxa": 20,
+        "external_samples_available": 0,
+        "sample_intake_manifest": EXPECTED_INTAKE,
         "placement_min_sample_tips": replicate["minimum_sample_tips_in_replicate_expanded_tree"],
         "frozen_loci": EXPECTED_LOCI,
         "minimum_clean_recovered_loci_per_individual": expected_min,
         "minimum_passing_individuals_per_taxon": 2,
+        "recovery_qc_evaluator": EXPECTED_RECOVERY_EVALUATOR,
         "final_taxa": 22,
         "final_states": {"C": 17, "W": 5},
         "target_tree_tips_with_root": 23,
         "current_rate_fit_execution_allowed": False,
-        "next_gate": "recover_or_generate_homologous_A1_nuclear_data",
+        "next_gate": "populate_mandatory_A1_intake_slots",
         "valid": True,
     }
 

@@ -26,15 +26,18 @@ class FixedWhiteTreePromotionContractTest(unittest.TestCase):
         self.assertEqual(x["contract_version"], "fixed_white_tree_promotion_v0_2")
         self.assertEqual(x["a1_taxa"], ["Cirsium boninense", "Cirsium wulongense"])
         self.assertEqual(x["current_state_counts"], {"C": 17, "W": 3})
+        self.assertEqual(x["external_samples_available"], 0)
+        self.assertEqual(x["sample_intake_manifest"], "sampling/FIXED_WHITE_A1_SAMPLE_INTAKE_V0_1.csv")
         self.assertEqual(x["placement_min_sample_tips"], 24)
         self.assertEqual(x["frozen_loci"], 153)
         self.assertEqual(x["minimum_clean_recovered_loci_per_individual"], 123)
         self.assertEqual(x["minimum_passing_individuals_per_taxon"], 2)
+        self.assertEqual(x["recovery_qc_evaluator"], "analysis/evaluate_fixed_white_a1_recovery_qc.py")
         self.assertEqual(x["final_states"], {"C": 17, "W": 5})
         self.assertEqual(x["final_taxa"], 22)
         self.assertEqual(x["target_tree_tips_with_root"], 23)
         self.assertFalse(x["current_rate_fit_execution_allowed"])
-        self.assertEqual(x["next_gate"], "recover_or_generate_homologous_A1_nuclear_data")
+        self.assertEqual(x["next_gate"], "populate_mandatory_A1_intake_slots")
         self.assertTrue(x["valid"])
 
     def test_clean_locus_threshold_cannot_be_relaxed_posthoc(self):
@@ -53,6 +56,15 @@ class FixedWhiteTreePromotionContractTest(unittest.TestCase):
             p = pathlib.Path(td) / "contract.json"
             p.write_text(json.dumps(c))
             with self.assertRaisesRegex(ValueError, "post hoc locus reselection"):
+                self.validate(p)
+
+    def test_intake_manifest_cannot_be_swapped_after_data_arrive(self):
+        c = json.loads(CONTRACT.read_text())
+        c["a1_panel"]["sample_intake_manifest"] = "sampling/OTHER.csv"
+        with tempfile.TemporaryDirectory() as td:
+            p = pathlib.Path(td) / "contract.json"
+            p.write_text(json.dumps(c))
+            with self.assertRaisesRegex(ValueError, "canonical A1 intake manifest"):
                 self.validate(p)
 
     def test_expanded_tree_cannot_skip_reacceptance(self):

@@ -4,8 +4,11 @@ on:
   pull_request:
     paths:
       - "sampling/FIXED_WHITE_TARGET_CAPTURE_PANEL_V0_1.csv"
+      - "sampling/FIXED_WHITE_A1_SAMPLE_INTAKE_V0_1.csv"
       - "analysis/validate_fixed_white_target_capture_panel.py"
       - "analysis/validate_fixed_white_tree_promotion_contract.py"
+      - "analysis/validate_fixed_white_a1_sample_intake.py"
+      - "analysis/evaluate_fixed_white_a1_recovery_qc.py"
       - "analysis/validate_fixed_white_public_nuclear_recovery_audit.py"
       - "analysis/validate_boninense_migseq_public_recovery_v1.py"
       - "analysis/cirsium_flower_colour_atlas_v0_3_readiness.json"
@@ -16,6 +19,7 @@ on:
       - "data/evidence/fixed_white_public_nuclear_recovery_audit_2026-08-12.csv"
       - "tests/test_fixed_white_target_capture_panel.py"
       - "tests/test_fixed_white_tree_promotion_contract.py"
+      - "tests/test_fixed_white_a1_sample_intake.py"
       - "tests/test_boninense_migseq_public_recovery_v1.py"
       - "tests/test_validate_fixed_white_public_nuclear_recovery_audit.py"
       - "docs/FIXED_WHITE_TIP_GATE_TARGET_CAPTURE_2026-08-12.md"
@@ -39,19 +43,38 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Compile and test active fixed-white promotion and recovery contracts
+      - name: Compile and test active fixed-white intake, promotion and recovery contracts
         run: |
           python -m py_compile \
             analysis/validate_fixed_white_target_capture_panel.py \
             analysis/validate_fixed_white_tree_promotion_contract.py \
+            analysis/validate_fixed_white_a1_sample_intake.py \
+            analysis/evaluate_fixed_white_a1_recovery_qc.py \
             analysis/validate_fixed_white_public_nuclear_recovery_audit.py \
             analysis/validate_boninense_migseq_public_recovery_v1.py
           python -m unittest \
             tests/test_fixed_white_target_capture_panel.py \
             tests/test_fixed_white_tree_promotion_contract.py \
+            tests/test_fixed_white_a1_sample_intake.py \
             tests/test_boninense_migseq_public_recovery_v1.py \
             tests/test_validate_fixed_white_public_nuclear_recovery_audit.py \
             -v
+      - name: Validate current external-data intake remains empty and fail-closed
+        run: |
+          set -euo pipefail
+          python analysis/validate_fixed_white_a1_sample_intake.py \
+            sampling/FIXED_WHITE_A1_SAMPLE_INTAKE_V0_1.csv \
+            --output /tmp/fixed_white_a1_intake.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/fixed_white_a1_intake.json'))
+          assert x['available_samples_by_taxon']=={'Cirsium boninense':0,'Cirsium wulongense':0}
+          assert x['minimum_external_reads_available'] is False
+          assert x['recovery_qc_allowed'] is False
+          assert x['rate_fit_tip_promotion_allowed'] is False
+          print('a1_external_samples_available=0')
+          print('recovery_qc_allowed=false')
+          PY
       - name: Validate active target-capture and tree-promotion gates
         run: |
           set -euo pipefail
@@ -69,9 +92,12 @@ jobs:
           x=json.load(open('/tmp/fixed_white_promotion_v02.json'))
           assert x['contract_version']=='fixed_white_tree_promotion_v0_2'
           assert x['a1_taxa']==['Cirsium boninense','Cirsium wulongense']
+          assert x['external_samples_available']==0
+          assert x['sample_intake_manifest']=='sampling/FIXED_WHITE_A1_SAMPLE_INTAKE_V0_1.csv'
           assert x['frozen_loci']==153
           assert x['minimum_clean_recovered_loci_per_individual']==123
           assert x['minimum_passing_individuals_per_taxon']==2
+          assert x['recovery_qc_evaluator']=='analysis/evaluate_fixed_white_a1_recovery_qc.py'
           assert x['final_taxa']==22
           assert x['final_states']=={'C':17,'W':5}
           assert x['target_tree_tips_with_root']==23

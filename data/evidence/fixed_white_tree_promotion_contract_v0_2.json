@@ -18,6 +18,8 @@
   },
   "a1_panel": {
     "sampling_panel": "sampling/FIXED_WHITE_TARGET_CAPTURE_PANEL_V0_1.csv",
+    "sample_intake_manifest": "sampling/FIXED_WHITE_A1_SAMPLE_INTAKE_V0_1.csv",
+    "sample_intake_validator": "analysis/validate_fixed_white_a1_sample_intake.py",
     "public_recovery_priority": "data/evidence/fixed_white_a1_priority_v2.csv",
     "taxa": [
       "Cirsium boninense",
@@ -29,6 +31,10 @@
     "voucher_required": true,
     "flower_colour_link_required": true,
     "current_public_homologous_tip_count": 0,
+    "current_available_external_samples": {
+      "Cirsium boninense": 0,
+      "Cirsium wulongense": 0
+    },
     "current_promotion_allowed": false,
     "public_status": {
       "Cirsium boninense": "MIG-seq method and five-taxon comparison are public, but sample/voucher detail, reusable raw/genotype data and a Compositae1061-compatible tip are not recovered",
@@ -39,6 +45,16 @@
     "frozen_locus_universe": "data/evidence/full20_comp1061_saff_root_153_loci_v1.txt",
     "frozen_locus_count": 153,
     "frozen_locus_sha256": "1106051eca8bfa699f16e05d92024573cb358d7dbd151b89768e76c3d56cde82",
+    "recovery_qc_evaluator": "analysis/evaluate_fixed_white_a1_recovery_qc.py",
+    "recovery_qc_required_columns": [
+      "immutable_sample_id",
+      "taxon",
+      "frozen_loci",
+      "recovered_frozen_loci",
+      "paralog_warning_frozen_loci",
+      "clean_recovered_frozen_loci",
+      "non_gap_aligned_bp"
+    ],
     "minimum_clean_recovered_fraction": 0.8,
     "minimum_clean_recovered_loci": 123,
     "clean_recovered_definition": "A frozen locus has one usable recovered DNA sequence for that individual and no HybPiper paralog count >1 for that individual at that locus.",
@@ -106,7 +122,7 @@
     "sampling_or_public_data_recovery_may_proceed": true,
     "current_a1_species_promoted": 0,
     "current_rate_fit_execution_allowed": false,
-    "next_data_requirement": "Obtain reusable Compositae1061-compatible nuclear data for at least two voucher/flower-colour-linked individuals of each A1 species, or an equivalent public homologous dataset meeting the same individual-level contract.",
+    "next_data_requirement": "Populate at least two mandatory intake slots per A1 species with voucher/flower-colour-linked paired reads, then run the frozen-153 individual recovery evaluator; equivalent public homologous data may be used if they satisfy the same intake contract.",
     "claim_limit": "This contract fixes the promotion procedure before new white-tip data are observed. Passing W>=5 is an engineering gate only. Rate inference still requires the rebuilt exact-tip tree, propagation of topology/branch-length uncertainty, sampling-bias assessment, polymorphic-state treatment and model-adequacy checks."
   }
 }
