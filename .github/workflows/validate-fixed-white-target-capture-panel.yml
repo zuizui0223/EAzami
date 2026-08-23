@@ -7,10 +7,16 @@ on:
       - "analysis/validate_fixed_white_target_capture_panel.py"
       - "analysis/validate_fixed_white_tree_promotion_contract.py"
       - "analysis/validate_fixed_white_public_nuclear_recovery_audit.py"
-      - "data/evidence/fixed_white_tree_promotion_contract_v0_1.json"
+      - "analysis/validate_boninense_migseq_public_recovery_v1.py"
+      - "analysis/cirsium_flower_colour_atlas_v0_3_readiness.json"
+      - "data/evidence/flower_colour_rate_tree_contract_v0_2.json"
+      - "data/evidence/fixed_white_tree_promotion_contract_v0_2.json"
+      - "data/evidence/fixed_white_a1_priority_v2.csv"
+      - "data/evidence/boninense_migseq_public_recovery_v1.json"
       - "data/evidence/fixed_white_public_nuclear_recovery_audit_2026-08-12.csv"
-      - "data/evidence/fixed_white_tip_recovery_priority_v1.csv"
       - "tests/test_fixed_white_target_capture_panel.py"
+      - "tests/test_fixed_white_tree_promotion_contract.py"
+      - "tests/test_boninense_migseq_public_recovery_v1.py"
       - "tests/test_validate_fixed_white_public_nuclear_recovery_audit.py"
       - "docs/FIXED_WHITE_TIP_GATE_TARGET_CAPTURE_2026-08-12.md"
       - "docs/FIXED_WHITE_PUBLIC_DATA_RECOVERY_2026-08-12.md"
@@ -33,29 +39,71 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Compile and test panel, public-data and tree-promotion contracts
+      - name: Compile and test active fixed-white promotion and recovery contracts
         run: |
           python -m py_compile \
             analysis/validate_fixed_white_target_capture_panel.py \
             analysis/validate_fixed_white_tree_promotion_contract.py \
-            analysis/validate_fixed_white_public_nuclear_recovery_audit.py
+            analysis/validate_fixed_white_public_nuclear_recovery_audit.py \
+            analysis/validate_boninense_migseq_public_recovery_v1.py
           python -m unittest \
             tests/test_fixed_white_target_capture_panel.py \
+            tests/test_fixed_white_tree_promotion_contract.py \
+            tests/test_boninense_migseq_public_recovery_v1.py \
             tests/test_validate_fixed_white_public_nuclear_recovery_audit.py \
             -v
+      - name: Validate active target-capture and tree-promotion gates
+        run: |
+          set -euo pipefail
           python analysis/validate_fixed_white_target_capture_panel.py \
             sampling/FIXED_WHITE_TARGET_CAPTURE_PANEL_V0_1.csv
           python analysis/validate_fixed_white_tree_promotion_contract.py \
-            data/evidence/fixed_white_tree_promotion_contract_v0_1.json
+            data/evidence/fixed_white_tree_promotion_contract_v0_2.json \
+            --atlas analysis/cirsium_flower_colour_atlas_v0_3_readiness.json \
+            --tree-contract data/evidence/flower_colour_rate_tree_contract_v0_2.json \
+            --panel sampling/FIXED_WHITE_TARGET_CAPTURE_PANEL_V0_1.csv \
+            --priority data/evidence/fixed_white_a1_priority_v2.csv \
+            > /tmp/fixed_white_promotion_v02.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/fixed_white_promotion_v02.json'))
+          assert x['contract_version']=='fixed_white_tree_promotion_v0_2'
+          assert x['a1_taxa']==['Cirsium boninense','Cirsium wulongense']
+          assert x['frozen_loci']==153
+          assert x['minimum_clean_recovered_loci_per_individual']==123
+          assert x['minimum_passing_individuals_per_taxon']==2
+          assert x['final_taxa']==22
+          assert x['final_states']=={'C':17,'W':5}
+          assert x['target_tree_tips_with_root']==23
+          assert x['current_rate_fit_execution_allowed'] is False
+          print('promotion_contract=fixed_white_tree_promotion_v0_2')
+          print('frozen_loci=153')
+          print('minimum_clean_recovered_loci_per_individual=123')
+          print('target_final_tree=22_focal_plus_1_root')
+          PY
+      - name: Assert public-data recovery still does not create an A1 rate tip
+        run: |
+          set -euo pipefail
           python analysis/validate_fixed_white_public_nuclear_recovery_audit.py \
             data/evidence/fixed_white_public_nuclear_recovery_audit_2026-08-12.csv \
             --output /tmp/fixed_white_public_recovery_status.json
+          python analysis/validate_boninense_migseq_public_recovery_v1.py \
+            data/evidence/boninense_migseq_public_recovery_v1.json \
+            data/evidence/fixed_white_a1_priority_v2.csv \
+            > /tmp/boninense_migseq_recovery_status.json
           python - <<'PY'
           import json
-          x=json.load(open('/tmp/fixed_white_public_recovery_status.json'))
-          assert x['usable_nuclear_tip_recovered'] is False
-          assert x['rate_fit_tip_promotion_allowed'] is False
-          assert set(x['candidates'].values())=={'Cirsium boninense','Cirsium wulongense'}
+          old=json.load(open('/tmp/fixed_white_public_recovery_status.json'))
+          bon=json.load(open('/tmp/boninense_migseq_recovery_status.json'))
+          assert old['usable_nuclear_tip_recovered'] is False
+          assert old['rate_fit_tip_promotion_allowed'] is False
+          assert set(old['candidates'].values())=={'Cirsium boninense','Cirsium wulongense'}
+          assert bon['boninense_method_confirmed']=='MIG-seq'
+          assert bon['raw_or_genotype_data_recovered'] is False
+          assert bon['compositae1061_tip_recovered'] is False
+          assert bon['rate_fit_tip_promotion_allowed'] is False
           print('public_data_discovery_only=true')
+          print('boninense_method=MIG-seq')
+          print('a1_homologous_tip_recovered=false')
           print('rate_fit_tip_promotion_allowed=false')
           PY
