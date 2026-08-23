@@ -1,0 +1,7 @@
+sample_slot,taxon,slot_role,required_for_minimum,acquisition_status,preferred_material_anchor,immutable_sample_id,locality,voucher_or_herbarium_id,flower_colour_link_status,read_source_type,read_source_1,read_source_2,raw_archive_accession,notes
+BON-01,Cirsium boninense,replicate_1,yes,not_acquired,"legally accessible Ogasawara fresh material or identity-secure herbarium material",,,,,,,,,"Mandatory replicate; do not substitute Colletotrichum boninense search hits."
+BON-02,Cirsium boninense,replicate_2,yes,not_acquired,"independent legally accessible Ogasawara individual; retain locality and voucher provenance",,,,,,,,,"Mandatory independent replicate."
+BON-03,Cirsium boninense,replicate_3,no,not_acquired,"third independent individual when feasible",,,,,,,,,"Ideal replicate; optional for the minimum promotion gate."
+WUL-01,Cirsium wulongense,replicate_1,yes,not_acquired,"verified Xiannü Shan/Wulong taxonomic concept; XLS21-095 is an identity anchor, not presumed destructively available",,,,,,,,,"Mandatory replicate; exact taxon concept required."
+WUL-02,Cirsium wulongense,replicate_2,yes,not_acquired,"independent verified Wulong/Xiannü Shan material; XLS21-093 is an identity anchor, not presumed destructively available",,,,,,,,,"Mandatory independent replicate."
+WUL-03,Cirsium wulongense,replicate_3,no,not_acquired,"third verified individual or independent population when feasible",,,,,,,,,"Ideal replicate; optional for the minimum promotion gate."
