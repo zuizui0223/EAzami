@@ -88,9 +88,9 @@ jobs:
             data/evidence/fixed_white_public_nuclear_recovery_audit_2026-08-12.csv \
             --output /tmp/fixed_white_public_recovery_status.json
           python analysis/validate_boninense_migseq_public_recovery_v1.py \
-            data/evidence/boninense_migseq_public_recovery_v1.json \
-            data/evidence/fixed_white_a1_priority_v2.csv \
-            > /tmp/boninense_migseq_recovery_status.json
+            --recovery data/evidence/boninense_migseq_public_recovery_v1.json \
+            --priority data/evidence/fixed_white_a1_priority_v2.csv \
+            --output /tmp/boninense_migseq_recovery_status.json
           python - <<'PY'
           import json
           old=json.load(open('/tmp/fixed_white_public_recovery_status.json'))
