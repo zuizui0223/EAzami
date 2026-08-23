@@ -1,0 +1,242 @@
+{
+  "contract_version": "full20_comp1061_alt_topology_au_result_v1",
+  "execution_date": "2026-08-23",
+  "source": {
+    "workflow_run_id": 32614839764,
+    "workflow_head_sha": "719d982ed2bf4016c0324f1e12dd280d44e9ed8f",
+    "artifact_id": 9486643703,
+    "artifact_name": "comp1061-alt-topology-au-32614839764",
+    "artifact_digest": "sha256:d90f30e4fcc3a2a0296a7d0cfa13d0f3ecc008b36d28298ac9782a001e6f63c5",
+    "primary_tree_sha256": "c80b66c1e19c91287d3fa243360ae1f4ab6a28613e2d8f1914c23565788bcac5",
+    "frozen_loci": 153,
+    "frozen_loci_sha256": "1106051eca8bfa699f16e05d92024573cb358d7dbd151b89768e76c3d56cde82",
+    "candidate_set_sha256": "359e87c0a2b057d7c3aa6bd6e1600487431234dbc78c7c42b246769633caac18",
+    "candidate_manifest_sha256": "a519f63ec1bc3dfed84ac7b8420f6c25700ae5fd390ab01bb3d99bf54aa7f6a9",
+    "au_iqtree_sha256": "848da3cab33b74d02c7b9326b55502ac07827cfa295f5c404af42aeebfc28c2c",
+    "au_optimized_trees_sha256": "ba18f5509766d72845557dd6a654321e1cf52dd0d45c69add650aa01ddaa0d33"
+  },
+  "test_contract": {
+    "candidate_count": 9,
+    "challenged_edges": 2,
+    "states_per_edge": 3,
+    "rell_replicates": 10000,
+    "au_seed": 20260822,
+    "sequence_type": "DNA",
+    "model_family": "TIM3+F+R3",
+    "au_rejection_alpha": 0.05,
+    "interpretation_rule": "candidate is rejected only when p_AU < 0.05; non-rejection is not proof that a candidate topology is true"
+  },
+  "summary": {
+    "maximum_likelihood_candidate": "T01__kujuense_incomptum-primary__maritimum_nippoense-primary",
+    "primary_log_likelihood": -293445.9222,
+    "primary_p_AU": 1.0,
+    "best_alternative_candidate": "T03__kujuense_incomptum-primary__maritimum_nippoense-swap_second",
+    "best_alternative_delta_log_likelihood": 3.9244,
+    "best_alternative_p_AU": 0.145,
+    "au_nonrejected_candidates": 6,
+    "au_rejected_candidates": 3,
+    "primary_is_maximum_likelihood_within_preregistered_set": true,
+    "primary_is_unique_au_adequate_topology": false
+  },
+  "edge_state_summary": {
+    "kujuense_incomptum": {
+      "primary_split": [
+        "Cirsium_kujuense",
+        "Cirsium_nipponicum_var_incomptum"
+      ],
+      "au_nonrejected_states": [
+        "primary",
+        "swap_first"
+      ],
+      "au_rejected_states": [
+        "swap_second"
+      ],
+      "swap_first_added_split": [
+        "Cirsium_nipponicum_var_incomptum",
+        "Cirsium_suffultum"
+      ],
+      "swap_second_added_split": [
+        "Cirsium_kujuense",
+        "Cirsium_suffultum"
+      ],
+      "interpretation": "The frozen primary split and the incomptum+suffultum NNI alternative remain in the AU confidence set. The kujuense+suffultum NNI state is rejected in all three maritimum/nippoense contexts, although its least-extreme p_AU=0.0478 is close to the preregistered 0.05 boundary."
+    },
+    "maritimum_nippoense": {
+      "primary_split": [
+        "Cirsium_maritimum",
+        "Cirsium_nippoense"
+      ],
+      "au_nonrejected_states": [
+        "primary",
+        "swap_first",
+        "swap_second"
+      ],
+      "au_rejected_states": [],
+      "swap_first_added_split": [
+        "Cirsium_alpicola",
+        "Cirsium_gyojanum",
+        "Cirsium_nippoense",
+        "Cirsium_yezoense"
+      ],
+      "swap_second_added_split": [
+        "Cirsium_alpicola",
+        "Cirsium_gyojanum",
+        "Cirsium_maritimum",
+        "Cirsium_yezoense"
+      ],
+      "interpretation": "All three local states occur in at least one AU-nonrejected candidate, and all three remain nonrejected when kujuense/incomptum is in either of its two AU-nonrejected states. This edge remains explicitly three-way uncertain."
+    }
+  },
+  "candidates": [
+    {
+      "index": 1,
+      "candidate_id": "T01__kujuense_incomptum-primary__maritimum_nippoense-primary",
+      "kujuense_incomptum": "primary",
+      "maritimum_nippoense": "primary",
+      "logL": -293445.9222,
+      "deltaL": 0.0,
+      "bp_RELL": 0.649,
+      "p_KH": 0.859,
+      "p_SH": 1.0,
+      "c_ELW": 0.6,
+      "p_AU": 1.0,
+      "au_rejected": false
+    },
+    {
+      "index": 2,
+      "candidate_id": "T02__kujuense_incomptum-primary__maritimum_nippoense-swap_first",
+      "kujuense_incomptum": "primary",
+      "maritimum_nippoense": "swap_first",
+      "logL": -293449.904,
+      "deltaL": 3.9818,
+      "bp_RELL": 0.0559,
+      "p_KH": 0.137,
+      "p_SH": 0.599,
+      "c_ELW": 0.0812,
+      "p_AU": 0.158,
+      "au_rejected": false
+    },
+    {
+      "index": 3,
+      "candidate_id": "T03__kujuense_incomptum-primary__maritimum_nippoense-swap_second",
+      "kujuense_incomptum": "primary",
+      "maritimum_nippoense": "swap_second",
+      "logL": -293449.8466,
+      "deltaL": 3.9244,
+      "bp_RELL": 0.0652,
+      "p_KH": 0.141,
+      "p_SH": 0.602,
+      "c_ELW": 0.0859,
+      "p_AU": 0.145,
+      "au_rejected": false
+    },
+    {
+      "index": 4,
+      "candidate_id": "T04__kujuense_incomptum-swap_first__maritimum_nippoense-primary",
+      "kujuense_incomptum": "swap_first",
+      "maritimum_nippoense": "primary",
+      "logL": -293457.9695,
+      "deltaL": 12.047,
+      "bp_RELL": 0.177,
+      "p_KH": 0.214,
+      "p_SH": 0.332,
+      "c_ELW": 0.168,
+      "p_AU": 0.339,
+      "au_rejected": false
+    },
+    {
+      "index": 5,
+      "candidate_id": "T05__kujuense_incomptum-swap_first__maritimum_nippoense-swap_first",
+      "kujuense_incomptum": "swap_first",
+      "maritimum_nippoense": "swap_first",
+      "logL": -293461.9493,
+      "deltaL": 16.027,
+      "bp_RELL": 0.0165,
+      "p_KH": 0.152,
+      "p_SH": 0.229,
+      "c_ELW": 0.0222,
+      "p_AU": 0.101,
+      "au_rejected": false
+    },
+    {
+      "index": 6,
+      "candidate_id": "T06__kujuense_incomptum-swap_first__maritimum_nippoense-swap_second",
+      "kujuense_incomptum": "swap_first",
+      "maritimum_nippoense": "swap_second",
+      "logL": -293461.9,
+      "deltaL": 15.978,
+      "bp_RELL": 0.0169,
+      "p_KH": 0.153,
+      "p_SH": 0.23,
+      "c_ELW": 0.0233,
+      "p_AU": 0.0935,
+      "au_rejected": false
+    },
+    {
+      "index": 7,
+      "candidate_id": "T07__kujuense_incomptum-swap_second__maritimum_nippoense-primary",
+      "kujuense_incomptum": "swap_second",
+      "maritimum_nippoense": "primary",
+      "logL": -293468.9631,
+      "deltaL": 23.041,
+      "bp_RELL": 0.0163,
+      "p_KH": 0.0527,
+      "p_SH": 0.0936,
+      "c_ELW": 0.0153,
+      "p_AU": 0.0478,
+      "au_rejected": true
+    },
+    {
+      "index": 8,
+      "candidate_id": "T08__kujuense_incomptum-swap_second__maritimum_nippoense-swap_first",
+      "kujuense_incomptum": "swap_second",
+      "maritimum_nippoense": "swap_first",
+      "logL": -293472.947,
+      "deltaL": 27.025,
+      "bp_RELL": 0.0012,
+      "p_KH": 0.0336,
+      "p_SH": 0.052,
+      "c_ELW": 0.0019,
+      "p_AU": 0.0317,
+      "au_rejected": true
+    },
+    {
+      "index": 9,
+      "candidate_id": "T09__kujuense_incomptum-swap_second__maritimum_nippoense-swap_second",
+      "kujuense_incomptum": "swap_second",
+      "maritimum_nippoense": "swap_second",
+      "logL": -293472.8865,
+      "deltaL": 26.964,
+      "bp_RELL": 0.0014,
+      "p_KH": 0.0338,
+      "p_SH": 0.0523,
+      "c_ELW": 0.00202,
+      "p_AU": 0.0274,
+      "au_rejected": true
+    }
+  ],
+  "decision": {
+    "alternative_topology_sensitivity_completed": true,
+    "primary_tree_retained_as_maximum_likelihood_reference": true,
+    "primary_topology_uniquely_supported": false,
+    "au_nonrejected_candidate_ids": [
+      "T01__kujuense_incomptum-primary__maritimum_nippoense-primary",
+      "T02__kujuense_incomptum-primary__maritimum_nippoense-swap_first",
+      "T03__kujuense_incomptum-primary__maritimum_nippoense-swap_second",
+      "T04__kujuense_incomptum-swap_first__maritimum_nippoense-primary",
+      "T05__kujuense_incomptum-swap_first__maritimum_nippoense-swap_first",
+      "T06__kujuense_incomptum-swap_first__maritimum_nippoense-swap_second"
+    ],
+    "au_rejected_candidate_ids": [
+      "T07__kujuense_incomptum-swap_second__maritimum_nippoense-primary",
+      "T08__kujuense_incomptum-swap_second__maritimum_nippoense-swap_first",
+      "T09__kujuense_incomptum-swap_second__maritimum_nippoense-swap_second"
+    ],
+    "topology_uncertainty_must_propagate_downstream": true,
+    "data_driven_candidate_filtering_applied": false,
+    "data_driven_locus_filtering_applied": false,
+    "rate_fit_execution_allowed": false,
+    "independent_rate_fit_blocker": "minimum_white_tips",
+    "claim_limit": "Within the preregistered 3x3 local NNI set, the frozen primary topology has the highest likelihood but is not uniquely supported by AU testing. Downstream topology-sensitive analyses must carry the six AU-nonrejected candidates or an explicitly justified equivalent uncertainty representation. The kujuense+suffultum NNI is rejected at the preregistered alpha in all three contexts but includes a boundary-near p_AU=0.0478 result; do not describe that exclusion as strong. No colour-rate fitting is permitted yet."
+  }
+}
