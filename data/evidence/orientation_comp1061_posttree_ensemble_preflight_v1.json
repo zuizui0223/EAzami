@@ -1,0 +1,75 @@
+{
+  "contract_version": "orientation_comp1061_posttree_ensemble_preflight_v1",
+  "execution_date": "2026-08-23",
+  "source": {
+    "workflow_run_id": 32636509465,
+    "workflow_head_sha": "c007bf478e956fa12e6c56777ffea6c8168be278",
+    "artifact_id": 9492453273,
+    "artifact_name": "orientation-comp1061-posttree-32636509465",
+    "artifact_digest": "sha256:04bad63dafae6bf3f91e0b44be8cd5977eb30f14ca2294cd783a3b0f660c9b74",
+    "ensemble_summary_sha256": "8c4dbe0a989472a82aa89c01aa2ee5d93ad903affad5c0a955dc95be408bbec9",
+    "orientation_crosswalk": "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv",
+    "orientation_contract": "data/evidence/orientation_comp1061_20tip_source_crosswalk_summary_v2.json",
+    "primary_tree_sha256": "c80b66c1e19c91287d3fa243360ae1f4ab6a28613e2d8f1914c23565788bcac5",
+    "topology_uncertainty_source": "data/evidence/full20_comp1061_alt_topology_au_result_v1.json",
+    "topologies_evaluated": 6
+  },
+  "trait_data": {
+    "panel_taxa": 20,
+    "resolved_binary_taxa": 17,
+    "upward_or_erect": 9,
+    "downward_or_nodding": 8,
+    "unresolved_taxa": [
+      "Cirsium_fanjingshanense",
+      "Cirsium_maritimum",
+      "Cirsium_nipponicum_var_incomptum"
+    ],
+    "same_primary_voucher_state_verified": false,
+    "state_scope": "source-backed taxon-concept annotations"
+  },
+  "robust_repeated_state_result": {
+    "minimum_parsimony_transition_steps_range_across_au_nonrejected_topologies": [5, 5],
+    "all_six_topologies_require_at_least_five_state_changes": true,
+    "multiple_state_changes_required": true,
+    "interpretation": "Under the conservative 17-tip binary taxon-concept coding, every AU-nonrejected topology requires at least five erect/upward <-> nodding/downward changes. This is a topology-robust repeated-state lower bound, not yet a population-level count of independent adaptive transitions."
+  },
+  "mk_model_sensitivity": {
+    "models": ["ER", "ARD"],
+    "root_priors": ["equilibrium", "flat"],
+    "rate_scale": "changes per unit molecular branch length; accepted tree branch lengths are substitutions/site, not absolute time",
+    "adaptive_log_rate_bounds_used": true,
+    "legacy_fixed_upper_rate": 54.598150033144236,
+    "legacy_boundary_problem_detected_and_corrected": true,
+    "er_rate_range": [200.84553677800002, 202.19878696975834],
+    "ard_upward_to_downward_rate_range": [154.61822969987148, 156.00622323756275],
+    "ard_downward_to_upward_rate_range": [210.07109479901115, 211.08133510584665],
+    "ard_upward_to_downward_over_downward_to_upward_ratio_range": [0.7360281044272413, 0.7390858658613568],
+    "ard_minus_er_aicc_range": [2.305612936529812, 2.312400265844712],
+    "lr_pvalue_range": [0.5935312406133576, 0.5979651057997665],
+    "model_decision": "ER is preferred by AICc across all evaluated topology/root-prior cells; ARD provides no supported directional-rate asymmetry.",
+    "directional_rate_asymmetry_supported": false
+  },
+  "ancestral_state_sensitivity": {
+    "root_upward_probability_range_across_topology_model_prior": [0.5, 0.576027540942331],
+    "ancestral_orientation_resolved": false,
+    "interpretation": "The root remains essentially equivocal. The analysis does not support calling the ancestral state upward/erect or downward/nodding."
+  },
+  "adequacy": {
+    "simulations_per_model_prior_topology": 2000,
+    "model_prior_topology_cells": 24,
+    "cells_flagged_at_p_lt_0_05": 0,
+    "upward_count_tail_p_range": [0.8555722138930535, 1.0],
+    "minimum_transition_steps_tail_p_range": [1.0, 1.0],
+    "interpretation": "The fitted ER/ARD models do not fail the preregistered fixed-parameter checks for state balance or minimum-transition count, but passing these checks does not identify a causal ecological mechanism."
+  },
+  "decision": {
+    "orientation_posttree_preflight_completed": true,
+    "topology_robust_repeated_state_signal": true,
+    "parallel_or_convergent_evolution_claim_allowed": false,
+    "adaptive_orientation_claim_allowed": false,
+    "ancestral_orientation_claim_allowed": false,
+    "directional_rate_asymmetry_claim_allowed": false,
+    "next_ecological_gate": "same-population sham/reorientation experiment resolving time-window effective pollination versus rain/UV/wetting protection, with antagonist exposure retained as a separate path and filled achenes as the reproductive-fitness endpoint",
+    "claim_limit": "The robust result is repeated orientation-state change: at least five changes under all six AU-nonrejected topologies. Taxon-concept annotations are not same-voucher or population phenotypes, so repeated-state change must not yet be labelled parallel/convergent adaptation. Direction, ancestral state and ecological cause remain unresolved."
+  }
+}
