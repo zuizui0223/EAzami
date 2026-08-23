@@ -35,6 +35,29 @@
     "root_outgroup": "OUTGROUP_saff",
     "root_taxon": "Carthamus",
     "focal_taxa": 20,
+    "focal_taxa_accepted_names": [
+      "Cirsium alpicola",
+      "Cirsium brevicaule",
+      "Cirsium fanjingshanense",
+      "Cirsium gyojanum",
+      "Cirsium irumtiense",
+      "Cirsium japonicum var. albescens",
+      "Cirsium japonicum var. australe",
+      "Cirsium japonicum var. fukienense",
+      "Cirsium japonicum var. japonicum",
+      "Cirsium kamtschaticum",
+      "Cirsium kawakamii",
+      "Cirsium kujuense",
+      "Cirsium maritimum",
+      "Cirsium morii",
+      "Cirsium nippoense",
+      "Cirsium nipponicum var. incomptum",
+      "Cirsium pengii",
+      "Cirsium suffultum",
+      "Cirsium tatakaense",
+      "Cirsium yezoense"
+    ],
+    "tip_join_scope": "exactly_the_current_20_rate_fit_eligible_taxa_in_cirsium_flower_colour_atlas_v0_3",
     "tree_tips": 21,
     "alignment_length_bp": 140562,
     "parsimony_informative_sites_acgt": 2639,
@@ -67,7 +90,7 @@
       "T06__kujuense_incomptum-swap_first__maritimum_nippoense-swap_second"
     ],
     "cos763_role": "mapping_reference_or_frame_correction_input_only",
-    "claim_limit": "This is a clearly labelled compatibility reanalysis, not an exact reproduction of Moreyra et al. 2025. The accepted primary branch-length tree is the maximum-likelihood reference, but six preregistered local NNI candidates are AU-nonrejected and must remain explicit topology uncertainty in topology-sensitive downstream analyses."
+    "claim_limit": "This is a clearly labelled compatibility reanalysis, not an exact reproduction of Moreyra et al. 2025. The accepted primary branch-length tree is the maximum-likelihood reference, but six preregistered local NNI candidates are AU-nonrejected and must remain explicit topology uncertainty in topology-sensitive downstream analyses. Its tip-join validity is limited to the frozen current 20 eligible atlas taxa; adding new rate-fit taxa requires a rebuilt and reaccepted tree containing those taxa."
   },
   "tree_acceptance_rule": {
     "any_one_route_can_satisfy_tree_gate": true,
@@ -90,7 +113,8 @@
     "topology_ensemble_required_for_topology_sensitive_inference": true,
     "au_nonrejected_topology_count": 6,
     "data_driven_locus_removal_allowed": false,
-    "data_driven_topology_removal_allowed": false
+    "data_driven_topology_removal_allowed": false,
+    "atlas_taxon_expansion_requires_tree_rebuild_and_reacceptance": true
   },
-  "claim_limit": "At the tree-only precondition layer, an empirical branch-length compatibility route is now available and its local topology uncertainty has been explicitly quantified. This does not itself permit flower-colour transition-rate fitting unless the independent atlas state gate also passes, and it does not establish rate asymmetry, ancestral colour state, regain, or molecular anthocyanin reactivation."
+  "claim_limit": "At the tree-only precondition layer, an empirical branch-length compatibility route is now available for the current 20 eligible atlas taxa and its local topology uncertainty has been explicitly quantified. This does not itself permit flower-colour transition-rate fitting unless the independent atlas state gate also passes. If the eligible atlas taxon set changes, this tree must be rebuilt/reaccepted with the new taxa before the combined gate can pass."
 }

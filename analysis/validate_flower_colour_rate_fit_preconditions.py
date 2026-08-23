@@ -5,14 +5,15 @@ The gate combines two independent requirements:
 
 1. the source-backed colour atlas must pass its predeclared taxon/state breadth
    gate; and
-2. at least one empirical machine-readable branch-length nuclear tree route
-   must satisfy provenance/tip-join/rooting/topology-uncertainty requirements.
+2. an empirical machine-readable branch-length nuclear tree route must satisfy
+   provenance, rooting, topology-uncertainty and exact atlas-tip join requirements.
 
-The compatibility tree route is now complete: a frozen 153-locus Carthamus-rooted
-primary tree has accepted branch lengths, and deterministic gCF/sCF plus a
-preregistered 3x3 AU test retain six local topology candidates.  The tree gate
-therefore passes while topology uncertainty remains explicit.  The independent
-atlas minimum-white-tip gate remains load-bearing.
+The current 153-locus Carthamus-rooted compatibility tree passes the tree route
+for the current 20 eligible atlas taxa.  Its deterministic gCF/sCF and
+preregistered AU sensitivity retain six local topology candidates.  If the
+eligible atlas taxon set changes (for example by adding two fixed-white taxa),
+the old 20-tip tree cannot silently unlock rates: the expanded tree must be
+rebuilt and reaccepted with an exact taxon join.
 """
 
 from __future__ import annotations
@@ -48,7 +49,6 @@ def evaluate(atlas: dict[str, object], tree: dict[str, object]) -> dict[str, obj
     conditions = atlas.get("readiness_conditions")
     if not isinstance(conditions, dict):
         raise ValueError("Atlas summary lacks readiness_conditions")
-
     required_atlas_conditions = (
         "minimum_taxon_tips",
         "minimum_white_tips",
@@ -60,6 +60,13 @@ def evaluate(atlas: dict[str, object], tree: dict[str, object]) -> dict[str, obj
     missing = [name for name in required_atlas_conditions if name not in conditions]
     if missing:
         raise ValueError(f"Atlas summary lacks required conditions: {missing}")
+
+    atlas_count = atlas.get("rate_fit_eligible_unique_taxa")
+    atlas_taxa = atlas.get("rate_fit_eligible_taxa")
+    if not isinstance(atlas_count, int) or not isinstance(atlas_taxa, list):
+        raise ValueError("Atlas summary must retain eligible taxon count and names")
+    if len(atlas_taxa) != atlas_count or len(set(atlas_taxa)) != atlas_count:
+        raise ValueError("Atlas eligible taxon names/count are inconsistent")
 
     blockers: list[str] = []
     for name in required_atlas_conditions:
@@ -96,6 +103,13 @@ def evaluate(atlas: dict[str, object], tree: dict[str, object]) -> dict[str, obj
     if compatibility.get("target_reference_issue") != 16:
         raise ValueError("Compositae1061 target/reference provenance must point to Issue #16")
 
+    tree_scope_count = compatibility.get("focal_taxa")
+    tree_scope_names = compatibility.get("focal_taxa_accepted_names")
+    if not isinstance(tree_scope_count, int) or not isinstance(tree_scope_names, list):
+        raise ValueError("Tree contract must freeze its focal taxon count and accepted names")
+    if len(tree_scope_names) != tree_scope_count or len(set(tree_scope_names)) != tree_scope_count:
+        raise ValueError("Tree focal taxon names/count are internally inconsistent")
+
     if tree_ready:
         if compatibility.get("compatibility_branch_length_tree_available") is not True:
             raise ValueError("Tree-ready contract lost the compatibility branch-length tree")
@@ -127,18 +141,35 @@ def evaluate(atlas: dict[str, object], tree: dict[str, object]) -> dict[str, obj
         if tree.get("remaining_tree_blockers") != []:
             raise ValueError("Tree-ready contract cannot retain a hidden tree blocker")
 
+    tree_taxon_join_ready = (
+        tree_ready
+        and tree_scope_count == atlas_count
+        and set(tree_scope_names) == set(atlas_taxa)
+    )
+    if tree_ready and not tree_taxon_join_ready:
+        blockers.append("tree_taxon_join_mismatch")
+
     execution_allowed = not blockers
     if execution_allowed and atlas.get("transition_rate_fit_ready") is not True:
         raise ValueError("Atlas gate disagrees with combined execution decision")
 
+    tree_unlock = (
+        "current tree and atlas taxon sets match exactly; if eligible atlas taxa are added or removed, rebuild and reaccept the tree before fitting rates"
+        if tree_taxon_join_ready
+        else "rebuild and reaccept a branch-length tree whose focal taxon set exactly matches the eligible atlas taxon set"
+    )
     return {
         "contract_version": "flower_colour_rate_fit_preconditions_v0_2",
         "atlas_contract_version": atlas.get("contract_version"),
         "tree_contract_version": tree.get("contract_version"),
-        "eligible_taxa": atlas.get("rate_fit_eligible_unique_taxa"),
+        "eligible_taxa": atlas_count,
+        "eligible_taxa_names": atlas_taxa,
         "eligible_state_counts": atlas.get("rate_fit_eligible_state_counts"),
         "atlas_transition_rate_fit_ready": atlas.get("transition_rate_fit_ready"),
         "empirical_branch_length_tree_ready": tree_ready,
+        "tree_focal_taxa": tree_scope_count,
+        "tree_focal_taxa_names": tree_scope_names,
+        "tree_taxon_join_ready": tree_taxon_join_ready,
         "accepted_tree_route": tree.get("accepted_tree_route"),
         "primary_tree_sha256": compatibility.get("primary_tree_sha256"),
         "tree_loci": compatibility.get("tree_loci"),
@@ -155,13 +186,14 @@ def evaluate(atlas: dict[str, object], tree: dict[str, object]) -> dict[str, obj
         "target_reference_status": compatibility.get("target_reference_status"),
         "next_unlocks": {
             "atlas": "add two independently supported fixed-white nuclear species tips without collapsing polymorphic taxa",
-            "tree": "tree gate satisfied; retain the primary branch-length tree plus all six AU-nonrejected local topology candidates in topology-sensitive downstream inference",
+            "tree": tree_unlock,
         },
         "claim_limit": (
             "execution_allowed=true is only a prerequisite for empirical transition-rate modelling. "
             "It does not establish ARD over ER, rate asymmetry, ancestral state, coloured regain, "
             "or molecular anthocyanin reactivation. The primary branch-length tree is not a uniquely "
-            "supported topology; topology-sensitive inference must preserve the frozen uncertainty set."
+            "supported topology; topology-sensitive inference must preserve the frozen uncertainty set, "
+            "and any atlas taxon-set change requires a matched rebuilt tree."
         ),
     }
 
