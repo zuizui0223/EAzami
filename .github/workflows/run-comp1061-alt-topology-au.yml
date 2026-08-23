@@ -1,0 +1,226 @@
+name: Run Comp1061 challenged-edge AU sensitivity
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/run-comp1061-alt-topology-au.yml"
+      - "analysis/build_comp1061_challenged_nni_candidates.py"
+      - "data/evidence/full20_comp1061_alt_topology_preflight_v1.json"
+      - "tests/test_full20_comp1061_alt_topology_preflight.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: comp1061-alt-topology-au-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SOURCE_ALIGNMENT_RUN_ID: "32575064385"
+  SOURCE_ALIGNMENT_ARTIFACT: "comp1061-saff-root-primary-tree-32575064385"
+  SOURCE_ALIGNMENT_ARTIFACT_DIGEST: "sha256:d6dce360848c92fb4cadea83ce20add23dc4d8bddb166ef21bb5ca650b715afa"
+  FROZEN_TREE: "data/evidence/full20_comp1061_primary_tree_v1.nwk"
+  FROZEN_TREE_SHA256: "c80b66c1e19c91287d3fa243360ae1f4ab6a28613e2d8f1914c23565788bcac5"
+  FROZEN_LOCI: "data/evidence/full20_comp1061_saff_root_153_loci_v1.txt"
+  FROZEN_LOCI_SHA256: "1106051eca8bfa699f16e05d92024573cb358d7dbd151b89768e76c3d56cde82"
+  CONCORDANCE_RESULT: "data/evidence/full20_comp1061_topology_concordance_result_v1.json"
+  PREFLIGHT: "data/evidence/full20_comp1061_alt_topology_preflight_v1.json"
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned candidate-builder dependency
+        run: python -m pip install --disable-pip-version-check biopython==1.85
+      - name: Validate preregistered nine-topology contract
+        run: |
+          set -euo pipefail
+          python tests/test_full20_comp1061_alt_topology_preflight.py
+
+  au:
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pinned IQ-TREE and candidate-builder toolchain
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-name: comp1061-alt-topology
+          create-args: >-
+            python=3.11
+            biopython=1.85
+            iqtree=3.1.3
+          condarc: |
+            channels:
+              - conda-forge
+              - bioconda
+            channel_priority: strict
+          init-shell: none
+          generate-run-shell: true
+          cache-environment: true
+          cache-downloads: true
+          post-cleanup: all
+
+      - name: Download immutable 153-locus primary-tree artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.SOURCE_ALIGNMENT_ARTIFACT }}
+          path: .
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.SOURCE_ALIGNMENT_RUN_ID }}
+
+      - name: Verify immutable inputs and topology-sensitivity gate
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          from Bio import SeqIO
+
+          tree = Path(os.environ['FROZEN_TREE'])
+          loci = Path(os.environ['FROZEN_LOCI'])
+          result = json.load(open(os.environ['CONCORDANCE_RESULT']))
+          preflight = json.load(open(os.environ['PREFLIGHT']))
+
+          assert hashlib.sha256(tree.read_bytes()).hexdigest() == os.environ['FROZEN_TREE_SHA256']
+          assert hashlib.sha256(loci.read_bytes()).hexdigest() == os.environ['FROZEN_LOCI_SHA256']
+          assert Path('tree_inputs/eligible_loci.txt').read_bytes() == loci.read_bytes()
+
+          assert result['source']['workflow_run_id'] == 32614242600
+          assert result['source']['artifact_id'] == 9486472031
+          assert result['source']['artifact_digest'] == 'sha256:eef4bac60ad742445f39abf80e6738ba3556471888abf34b9db94363bc9c9189'
+          assert result['summary']['site_challenged_branches'] == 2
+          assert result['decision']['alternative_topology_sensitivity_required'] is True
+          assert result['decision']['rate_fit_execution_allowed'] is False
+
+          assert preflight['source_alignment']['workflow_run_id'] == int(os.environ['SOURCE_ALIGNMENT_RUN_ID'])
+          assert preflight['source_alignment']['artifact_digest'] == os.environ['SOURCE_ALIGNMENT_ARTIFACT_DIGEST']
+          assert preflight['candidate_contract']['candidate_count'] == 9
+          assert preflight['au_test']['rell_replicates'] == 10000
+          assert preflight['au_test']['seed'] == 20260822
+          assert preflight['promotion_boundary']['rate_fit_execution_allowed'] is False
+
+          records = list(SeqIO.parse('tree/concat/concat.fasta', 'fasta'))
+          assert len(records) == 21, len(records)
+          lengths = {len(r.seq) for r in records}
+          assert lengths == {140562}, lengths
+          PY
+
+      - name: Build frozen 3x3 NNI candidate set
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          mkdir -p sensitivity/au_candidates
+          python analysis/build_comp1061_challenged_nni_candidates.py \
+            --tree "$FROZEN_TREE" \
+            --concordance-result "$CONCORDANCE_RESULT" \
+            --preflight "$PREFLIGHT" \
+            --outdir sensitivity/au_candidates
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.load(open('data/evidence/full20_comp1061_alt_topology_preflight_v1.json'))
+          m=json.load(open('sensitivity/au_candidates/candidate_manifest.json'))
+          trees=[x for x in Path('sensitivity/au_candidates/candidate_trees.nwk').read_text().splitlines() if x.strip()]
+          assert m['candidate_count'] == 9 and len(trees) == 9
+          assert len({x['split_fingerprint_sha256'] for x in m['candidates']}) == 9
+          assert m['primary_split_fingerprint_sha256'] == p['candidate_contract']['expected_primary_split_fingerprint_sha256']
+          assert m['candidate_set_sha256'] == p['candidate_contract']['expected_candidate_set_sha256']
+          assert m['data_driven_candidate_filtering_applied'] is False
+          PY
+
+      - name: Resolve pinned IQ-TREE 3 executable
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          IQTREE_BIN=""
+          for candidate in iqtree3 iqtree iqtree2; do
+            if command -v "$candidate" >/dev/null 2>&1; then IQTREE_BIN="$(command -v "$candidate")"; break; fi
+          done
+          test -n "$IQTREE_BIN"
+          VERSION="$($IQTREE_BIN --version 2>&1 | head -1)"
+          printf 'IQTREE_BIN=%s\n' "$IQTREE_BIN" >> "$GITHUB_ENV"
+          printf 'resolved_iqtree=%s\nversion=%s\n' "$IQTREE_BIN" "$VERSION" | tee sensitivity/au_iqtree_tool.txt
+          printf '%s\n' "$VERSION" | grep -Eq 'IQ-TREE.*3\.1\.3|version 3\.1\.3|Version 3\.1\.3'
+
+      - name: Run preregistered nine-topology AU test
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          "$IQTREE_BIN" \
+            -s tree/concat/concat.fasta \
+            -te "$FROZEN_TREE" \
+            -m TIM3+F+R3 \
+            -st DNA \
+            -z sensitivity/au_candidates/candidate_trees.nwk \
+            -zb 10000 \
+            -au \
+            -seed 20260822 \
+            --prefix sensitivity/au \
+            -T AUTO
+          test -s sensitivity/au.iqtree
+          grep -q 'USER TREES' sensitivity/au.iqtree
+          grep -q 'p-AU' sensitivity/au.iqtree
+
+      - name: Write raw AU execution manifest
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+
+          files={}
+          for path in sorted(Path('sensitivity').glob('au*')):
+              if path.is_file():
+                  files[str(path)] = hashlib.sha256(path.read_bytes()).hexdigest()
+          for path in sorted(Path('sensitivity/au_candidates').glob('*')):
+              if path.is_file():
+                  files[str(path)] = hashlib.sha256(path.read_bytes()).hexdigest()
+
+          candidates=json.load(open('sensitivity/au_candidates/candidate_manifest.json'))
+          manifest={
+            'contract_version':'full20_comp1061_alt_topology_au_raw_execution_v1',
+            'source_alignment_run_id':32575064385,
+            'source_alignment_artifact_digest':os.environ['SOURCE_ALIGNMENT_ARTIFACT_DIGEST'],
+            'primary_tree_sha256':os.environ['FROZEN_TREE_SHA256'],
+            'frozen_loci_sha256':os.environ['FROZEN_LOCI_SHA256'],
+            'source_concordance_run_id':32614242600,
+            'candidate_count':candidates['candidate_count'],
+            'candidate_set_sha256':candidates['candidate_set_sha256'],
+            'rell_replicates':10000,
+            'au_seed':20260822,
+            'sequence_type':'DNA',
+            'model_family':'TIM3+F+R3',
+            'au_completed':True,
+            'interpretation_pending':True,
+            'data_driven_candidate_filtering_applied':False,
+            'data_driven_locus_filtering_applied':False,
+            'rate_fit_execution_allowed':False,
+            'output_sha256':files,
+            'claim_limit':'Raw AU completion tests only the preregistered 3x3 local NNI candidate set. Interpretation must preserve all non-rejected candidates and cannot enable colour-rate fitting.'
+          }
+          Path('sensitivity/au_raw_execution_manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          PY
+
+      - name: Upload raw alternative-topology evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: comp1061-alt-topology-au-${{ github.run_id }}
+          path: |
+            sensitivity/au_candidates/**
+            sensitivity/au*
+          if-no-files-found: error
+          retention-days: 30
