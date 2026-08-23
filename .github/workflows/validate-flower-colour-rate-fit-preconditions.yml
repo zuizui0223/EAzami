@@ -9,7 +9,11 @@ on:
       - "analysis/fit_binary_flower_colour_mk_models.py"
       - "data/evidence/cirsium_flower_colour_atlas_v0_2.csv"
       - "data/evidence/cirsium_flower_colour_atlas_v0_3_expansion_evidence.csv"
-      - "data/evidence/flower_colour_rate_tree_contract_v0_1.json"
+      - "data/evidence/flower_colour_rate_tree_contract_v0_2.json"
+      - "data/evidence/full20_comp1061_primary_tree_v1.nwk"
+      - "data/evidence/full20_comp1061_primary_tree_acceptance_v1.json"
+      - "data/evidence/full20_comp1061_topology_concordance_result_v1.json"
+      - "data/evidence/full20_comp1061_alt_topology_au_result_v1.json"
       - "tests/test_flower_colour_rate_fit_preconditions.py"
       - "tests/test_fit_binary_flower_colour_mk_models.py"
       - ".github/workflows/validate-flower-colour-rate-fit-preconditions.yml"
@@ -43,7 +47,7 @@ jobs:
             tests/test_flower_colour_rate_fit_preconditions.py \
             tests/test_fit_binary_flower_colour_mk_models.py \
             -v
-      - name: Rebuild current atlas gate and assert empirical rate fitting stays blocked
+      - name: Rebuild current atlas gate and assert only white-tip blocker remains
         run: |
           mkdir -p /tmp/eazami_rate_gate
           python analysis/build_cirsium_flower_colour_atlas_v0_3.py \
@@ -53,7 +57,7 @@ jobs:
             --summary /tmp/eazami_rate_gate/atlas_v0_3_readiness.json
           python analysis/validate_flower_colour_rate_fit_preconditions.py \
             --atlas-summary /tmp/eazami_rate_gate/atlas_v0_3_readiness.json \
-            --tree-contract data/evidence/flower_colour_rate_tree_contract_v0_1.json \
+            --tree-contract data/evidence/flower_colour_rate_tree_contract_v0_2.json \
             --output /tmp/eazami_rate_gate/rate_fit_preconditions.json
           python - <<'PY'
           import json
@@ -61,10 +65,18 @@ jobs:
           x=json.loads(Path('/tmp/eazami_rate_gate/rate_fit_preconditions.json').read_text())
           if x['execution_allowed'] is not False:
               raise SystemExit('Current project must remain blocked from empirical transition-rate fitting')
-          if x['blockers'] != ['atlas_minimum_white_tips','branch_length_tree_unavailable']:
+          if x['blockers'] != ['atlas_minimum_white_tips']:
               raise SystemExit(f"Unexpected blockers: {x['blockers']}")
+          if x['empirical_branch_length_tree_ready'] is not True:
+              raise SystemExit('Accepted empirical branch-length tree must now satisfy the tree gate')
+          if x['au_nonrejected_topology_count'] != 6:
+              raise SystemExit('All six AU-nonrejected topology candidates must be retained')
+          if x['primary_topology_uniquely_supported'] is not False:
+              raise SystemExit('Primary topology must not be overclaimed as unique')
           print('execution_allowed=false')
           print('blockers='+'|'.join(x['blockers']))
+          print('tree_ready=true')
+          print('au_nonrejected_topologies=6')
           PY
       - name: Assert the empirical fitter itself refuses the current blocked gate
         run: |
@@ -95,6 +107,10 @@ jobs:
             exit 1
           fi
           grep -q 'atlas_minimum_white_tips' /tmp/eazami_rate_gate/fitter_block.stderr
+          if grep -q 'branch_length_tree_unavailable' /tmp/eazami_rate_gate/fitter_block.stderr; then
+            echo "Fitter still reports obsolete tree blocker" >&2
+            exit 1
+          fi
           test ! -e /tmp/eazami_rate_gate/SHOULD_NOT_EXIST.json
       - uses: actions/upload-artifact@v4
         with:
