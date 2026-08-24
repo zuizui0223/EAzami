@@ -6,6 +6,7 @@ on:
       - "data/evidence/fdt4_existing_material_join_audit_v1.csv"
       - "data/evidence/fdt4_existing_material_join_audit_v1.json"
       - "data/evidence/fdt4_japan_orientation_niche_config_v1.json"
+      - "data/evidence/fdt4_eastasia_orientation_niche_phase2_queue_v1.csv"
       - ".github/workflows/run-fdt4-japan-orientation-niche-v1.yml"
   workflow_dispatch:
 
@@ -47,7 +48,13 @@ jobs:
           }
           assert taxa==expected
           assert cfg['gbif']['country']=='JP'
-          print('FDT4 contract PASS; Japan phase taxa=', len(taxa))
+
+          phase2=list(csv.DictReader(Path('data/evidence/fdt4_eastasia_orientation_niche_phase2_queue_v1.csv').open()))
+          assert len(phase2)==7
+          assert all(r['phase']=='EastAsia_phase2' for r in phase2)
+          assert {r['orientation_state'] for r in phase2}=={'U','D'}
+          assert all('verified' in r['current_action'] for r in phase2)
+          print('FDT4 contract PASS; Japan phase taxa=', len(taxa), 'EastAsia phase2=', len(phase2))
           PY
 
   live_niche:
