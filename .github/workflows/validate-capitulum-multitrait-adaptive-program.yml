@@ -1,0 +1,22 @@
+name: Validate capitulum multi-trait adaptive programme
+
+on:
+  pull_request:
+    paths:
+      - "README.md"
+      - "docs/CAPITULUM_MULTI_TRAIT_ADAPTIVE_EVOLUTION_PROGRAM_2026-08-24.md"
+      - "data/evidence/capitulum_adaptive_module_registry_v1.csv"
+      - "tests/test_capitulum_adaptive_module_registry.py"
+      - ".github/workflows/validate-capitulum-multitrait-adaptive-program.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check pytest
+      - run: python -m pytest -q tests/test_capitulum_adaptive_module_registry.py
