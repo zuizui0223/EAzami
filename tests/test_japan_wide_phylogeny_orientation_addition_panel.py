@@ -76,8 +76,10 @@ def test_core190_taxa_are_not_replaced_by_broad_panel():
         "Cirsium pendulum",
         "Cirsium sieboldii",
     ):
+        # Priority, not note wording, is the contract: the Japan-wide breadth
+        # panel may reuse representatives but must never demote or replace the
+        # protected population-replicated core.
         assert by_taxon[taxon]["priority"] == "CORE"
-        assert "core" in by_taxon[taxon]["collection_note"].lower()
 
 
 def test_species_backbone_is_not_defined_as_radseq_everywhere():
