@@ -1,0 +1,67 @@
+{
+  "contract_version": "fdt4_eastasia_pgls_recovered_diagnostic_v1",
+  "status_date": "2026-08-24",
+  "provenance": {
+    "taiwan_failed_run_id": 32725842871,
+    "taiwan_artifact_id": 9520157997,
+    "taiwan_artifact_note": "The live extraction produced and uploaded six files successfully; the job failed only afterward while building the manifest because scoring.candidate_components was absent from the Taiwan config.",
+    "japan_run_id": 32716015605,
+    "japan_artifact_id": 9516784077,
+    "au_run_id": 32614839764,
+    "au_artifact_id": 9486643703,
+    "pgls_consumer": "analysis/run_fdt4_orientation_niche_pgls_v1.py",
+    "topologies": "first six AU-nonrejected optimized trees"
+  },
+  "taiwan_extraction": {
+    "expected_taxa": 7,
+    "resolved_rows_present": 4,
+    "n_environment_complete": {
+      "Cirsium japonicum var. australe": 23,
+      "Cirsium kawakamii": 14,
+      "Cirsium morii": 9,
+      "Cirsium tatakaense": 9
+    },
+    "missing_after_source_guard": [
+      "Cirsium japonicum var. albescens",
+      "Cirsium japonicum var. fukienense",
+      "Cirsium pengii"
+    ],
+    "source_guard_note": "albescens and pengii matched GBIF only at a higher rank; fukienense did not contribute a final usable occurrence set."
+  },
+  "primary_min_n_10": {
+    "n_taxa": 9,
+    "n_U": 5,
+    "n_D": 4,
+    "taiwan_taxa_added": [
+      "Cirsium japonicum var. australe",
+      "Cirsium kawakamii"
+    ],
+    "axis_ranges_across_six_topologies": {
+      "chelsa_bio01": {"beta_D_minus_U_sd_min": -0.975456, "beta_D_minus_U_sd_max": -0.967046, "p_min": 0.096037, "p_max": 0.097934},
+      "chelsa_bio04": {"beta_D_minus_U_sd_min": 0.253370, "beta_D_minus_U_sd_max": 0.275853, "p_min": 0.641736, "p_max": 0.669418},
+      "chelsa_bio12": {"beta_D_minus_U_sd_min": 0.847558, "beta_D_minus_U_sd_max": 0.861335, "p_min": 0.261606, "p_max": 0.265489},
+      "chelsa_bio15": {"beta_D_minus_U_sd_min": 1.319998, "beta_D_minus_U_sd_max": 1.330203, "p_min": 0.050537, "p_max": 0.052393}
+    },
+    "interpretation": "BIO15 is a topology-stable borderline present-day association; BIO1 is a weaker negative candidate. No axis is declared significant under the frozen min_n=10 primary screen."
+  },
+  "sensitivity_min_n_9": {
+    "status": "threshold sensitivity only; does not replace the primary gate",
+    "n_taxa": 11,
+    "n_U": 6,
+    "n_D": 5,
+    "additional_taiwan_taxa": ["Cirsium morii", "Cirsium tatakaense"],
+    "axis_ranges_across_six_topologies": {
+      "chelsa_bio01": {"beta_D_minus_U_sd_min": -1.021342, "beta_D_minus_U_sd_max": -1.013412, "p_min": 0.045530, "p_max": 0.046455},
+      "chelsa_bio04": {"beta_D_minus_U_sd_min": 0.231947, "beta_D_minus_U_sd_max": 0.250691, "p_min": 0.605018, "p_max": 0.632879},
+      "chelsa_bio12": {"beta_D_minus_U_sd_min": 0.569628, "beta_D_minus_U_sd_max": 0.580010, "p_min": 0.309943, "p_max": 0.313819},
+      "chelsa_bio15": {"beta_D_minus_U_sd_min": 1.147610, "beta_D_minus_U_sd_max": 1.154854, "p_min": 0.034769, "p_max": 0.036559}
+    },
+    "interpretation": "Adding the two n=9 Taiwan taxa strengthens rather than erases the lower-BIO1 / higher-BIO15 D-state pattern, showing that the primary BIO15 candidate is not caused by excluding those sparse taxa. This remains a present-day threshold sensitivity, not historical or adaptive evidence."
+  },
+  "next_data_priority": {
+    "taxa": ["Cirsium morii", "Cirsium tatakaense"],
+    "reason": "Each is only one independent thinned environment-complete occurrence below the frozen n>=10 primary inclusion gate.",
+    "do_not_do": "Do not lower the frozen primary threshold merely to obtain significance."
+  },
+  "claim_boundary": "All results are present-day taxon niche-centroid associations under Brownian phylogenetic covariance. They do not establish ancestral niche states, parallel adaptation, ecological-event causation, or trait fitness effects."
+}

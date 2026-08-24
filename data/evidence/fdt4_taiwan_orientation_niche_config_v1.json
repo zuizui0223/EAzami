@@ -1,0 +1,40 @@
+{
+  "contract_version": "fdt4_taiwan_orientation_niche_config_v1",
+  "status_date": "2026-08-24",
+  "purpose": "Extend the existing source-name-guarded GBIF plus CHELSA niche pipeline to the seven resolved Taiwan members of the 20-tip orientation panel, without mixing mainland-China occurrence ranges into nuclear tips represented by Taiwan taxon concepts.",
+  "gbif": {
+    "country": "TW",
+    "has_coordinate": true,
+    "occurrence_status": "PRESENT",
+    "page_size": 300,
+    "max_records_per_taxon": 5000,
+    "max_coordinate_uncertainty_m_primary": 10000,
+    "spatial_thin_degrees": 0.05,
+    "japan_bounds": {"lat_min": 21.5, "lat_max": 25.6, "lon_min": 119.0, "lon_max": 122.5}
+  },
+  "chelsa": {
+    "version": "2.1",
+    "baseline": "1981-2010",
+    "predictors": {
+      "bio01": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio01/1981-2010/CHELSA_bio01_1981-2010_V.2.1.tif",
+      "bio04": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio04/1981-2010/CHELSA_bio04_1981-2010_V.2.1.tif",
+      "bio12": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio12/1981-2010/CHELSA_bio12_1981-2010_V.2.1.tif",
+      "bio15": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio15/1981-2010/CHELSA_bio15_1981-2010_V.2.1.tif"
+    }
+  },
+  "taxa": [
+    {"scientific_name":"Cirsium japonicum var. albescens","planned_populations":0,"role":"FDT4_Taiwan_orientation_tip","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium japonicum var. australe","planned_populations":0,"role":"FDT4_Taiwan_orientation_tip","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium japonicum var. fukienense","planned_populations":0,"role":"FDT4_Taiwan_orientation_tip","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium kawakamii","planned_populations":0,"role":"FDT4_Taiwan_orientation_tip","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium morii","planned_populations":0,"role":"FDT4_Taiwan_orientation_tip","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium pengii","planned_populations":0,"role":"FDT4_Taiwan_orientation_tip","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium tatakaense","planned_populations":0,"role":"FDT4_Taiwan_orientation_tip","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]}
+  ],
+  "scoring": {
+    "candidate_components": ["niche_edge", "geographic_edge", "cluster_rarity"],
+    "not_computed_here": ["branchwise_ancestral_niche", "trait_transition_posterior", "transition_niche_concordance"],
+    "rule": "This run creates present-day Taiwan tip-level niche inputs only. It must not be interpreted as historical range reconstruction or adaptive causation."
+  },
+  "claim_boundary": "Country-scoped Taiwan occurrences are used to align present-day niche summaries with the taxon concepts represented by the seven Taiwan nuclear tips. Mainland-China ranges are deliberately excluded at this stage."
+}
