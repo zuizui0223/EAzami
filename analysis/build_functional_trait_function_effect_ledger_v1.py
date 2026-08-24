@@ -109,7 +109,6 @@ def add_herbivory_rows(out: list[dict[str, str]]) -> None:
 
 def add_orientation_rows(out: list[dict[str, str]]) -> None:
     for row in read_csv(ORIENTATION):
-        metric = row["metric"]
         exactness = "threshold_or_sign_anchor"
         poolability = "nonpoolable_structured_anchor"
         causal_stage = "trait_or_exposure_to_function"
@@ -134,7 +133,7 @@ def add_orientation_rows(out: list[dict[str, str]]) -> None:
             "agent": "abiotic_or_pollinator",
             "causal_stage": causal_stage,
             "evidence_design": exactness,
-            "metric_family": metric,
+            "metric_family": row["metric"],
             "estimate": row["target_value"],
             "se": "",
             "lower": row["lower_bound"],
@@ -214,9 +213,9 @@ def add_structured_context_rows(out: list[dict[str, str]]) -> None:
         out.append({
             "effect_id": f"DEMO_{row['study_id']}", "source_family": "cirsium_demographic_transmission_meta_v1", "source_row_id": row["study_id"],
             "taxon": row["taxon"], "module": "demographic_gate", "function_axis": "seed_to_recruitment_transmission", "agent": "demographic_context",
-            "causal_stage": "seed_fitness_to_population_transmission", "evidence_design": row["design"], "metric_family": "heterogeneous_demographic_transmission", "estimate": "", "se": "", "lower": "", "upper": "",
+            "causal_stage": "seed_fitness_to_population_transmission", "evidence_design": row["study_context"], "metric_family": "heterogeneous_demographic_transmission", "estimate": "", "se": "", "lower": "", "upper": "",
             "direction": row["population_transmission"], "fitness_endpoint": "recruitment_or_population_growth", "independence_cluster": row["study_id"], "poolable_group": "", "poolability": "structured_nonpoolable_context_prior",
-            "source": row["source"], "notes": row["quantitative_anchor"], "claim_boundary": row["claim_boundary"]
+            "source": row["source"], "notes": f"gate={row['demographic_gate']}; {row['quantitative_anchor']}", "claim_boundary": row["claim_boundary"]
         })
 
 
@@ -237,14 +236,15 @@ def summarize(rows: list[dict[str, str]]) -> dict:
     poolability = Counter(r["poolability"] for r in rows)
     modules = Counter(r["module"] for r in rows)
     pool_groups: dict[str, set[str]] = defaultdict(set)
-    for r in rows:
-        if r["poolable_group"]:
-            pool_groups[r["poolable_group"]].add(r["independence_cluster"])
+    for row in rows:
+        if row["poolable_group"]:
+            pool_groups[row["poolable_group"]].add(row["independence_cluster"])
     group_summary = {g: len(clusters) for g, clusters in sorted(pool_groups.items())}
     meta_ready = {g: k for g, k in group_summary.items() if k >= 3}
     return {
         "contract_version": "functional_trait_function_effect_ledger_v1",
         "row_count": len(rows),
+        "row_count_is_not_independent_study_count": True,
         "module_row_counts": dict(sorted(modules.items())),
         "poolability_counts": dict(sorted(poolability.items())),
         "independent_cluster_counts_by_poolable_group": group_summary,
@@ -257,7 +257,7 @@ def summarize(rows: list[dict[str, str]]) -> dict:
             "display: direct antagonist and joint pollinator-antagonist effect sizes on comparable fitness scales"
         ],
         "decision": "Existing data support several within-metric meta seeds, but no single cross-module scalar effect is scientifically authorized. The next literature search should be targeted to missing causal chains and under-replicated module-metric families.",
-        "claim_boundary": "Poolability is defined by metric family, causal stage, module and independent study/article clustering; it is not evidence that pooled effects are exchangeable without further design and variance checks."
+        "claim_boundary": "Poolability is defined by metric family, causal stage, module and independent study/article clustering; it is not evidence that pooled effects are exchangeable without further design and variance checks. Some structured/target ledgers intentionally overlap source studies, so total row count must never be interpreted as independent evidence count."
     }
 
 
