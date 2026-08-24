@@ -1,0 +1,89 @@
+{
+  "contract_version": "fdt7_legacy_simulation_bridge_v1",
+  "status_date": "2026-08-24",
+  "purpose": "Freeze the reusable evidence boundary between the existing capitulum pattern-reduction simulation v2 and the developing FDT7 time-axis simulation, without inventing time-history mechanisms that are not yet represented.",
+  "legacy_simulation": {
+    "implementation": "analysis/simulate_capitulum_pattern_reduction_v2.py",
+    "target_registry": "data/evidence/capitulum_pattern_reduction_targets_v2.csv",
+    "target_rows": 36,
+    "replicate_sensitivity": "data/evidence/capitulum_pattern_reduction_v2_replicate_sensitivity.json",
+    "screen_type": "prior-predictive uncertainty-weighted structural sufficiency screen",
+    "not": [
+      "posterior inference",
+      "posterior model probability",
+      "Bayes factor",
+      "causal proof"
+    ],
+    "model_families": [
+      "ENV_ONLY",
+      "ENV_POLL",
+      "ENV_ANT",
+      "FULL_COUPLED_GLOBAL",
+      "FULL_MODULAR_GLOBAL",
+      "FULL_COUPLED_HET",
+      "FULL_MODULAR_HET"
+    ],
+    "replicate_best_mean_distance": {
+      "ENV_ONLY": 1454.94326738,
+      "ENV_POLL": 604.80167743,
+      "ENV_ANT": 887.08235463,
+      "FULL_COUPLED_GLOBAL": 37.22337944,
+      "FULL_MODULAR_GLOBAL": 23.03275436,
+      "FULL_COUPLED_HET": 27.00458154,
+      "FULL_MODULAR_HET": 7.74973539
+    },
+    "replicate_ranking": [
+      "FULL_MODULAR_HET",
+      "FULL_MODULAR_GLOBAL",
+      "FULL_COUPLED_HET",
+      "FULL_COUPLED_GLOBAL",
+      "ENV_POLL",
+      "ENV_ANT",
+      "ENV_ONLY"
+    ],
+    "supported_structural_result": "Among the tested toy-generator families, combining module-specific within-taxon variation with heterogeneous pollinator/antagonist regimes is the closest structural match to the frozen target bundle, and this ranking survives five fixed simulation realizations per parameter draw.",
+    "claim_boundary": "This establishes a reusable structural starting point only. It does not show that modular heterogeneity evolved through time, that repeated trait transitions are adaptive, or that ecological events caused transitions."
+  },
+  "time_axis_seed": {
+    "registry": "data/evidence/fdt7_time_axis_simulation_seed_v1.csv",
+    "target_rows": 9,
+    "roles": [
+      "repeated_transition_lower_bound",
+      "modularity_target",
+      "biotic_cost_target",
+      "interaction_heterogeneity_target",
+      "external_function_target",
+      "negative_control"
+    ],
+    "orientation_minimum_changes": 5,
+    "orientation_minimum_changes_boundary": "Topology-robust lower bound; not an adaptive-convergence count."
+  },
+  "reuse_decision": {
+    "reuse_now": [
+      "environment-only and partial biotic baselines",
+      "coupled versus modular within-taxon variation contrast",
+      "global versus heterogeneous interaction-regime contrast",
+      "36-target uncertainty-weighted distance machinery",
+      "five-replicate realization sensitivity"
+    ],
+    "requires_new_time_axis_layer": [
+      "branch-indexed trait state",
+      "branch-indexed niche state",
+      "transition timing",
+      "ancestral niche reconstruction",
+      "branchwise niche-transition concordance"
+    ],
+    "blocked_until_dated_tree": [
+      "ecological-opportunity pulse model",
+      "Pleistocene event alignment",
+      "island-emergence or isolation event alignment"
+    ]
+  },
+  "model_aliases": {
+    "M0": null,
+    "M3": null,
+    "M4": null,
+    "M5": null,
+    "reason": "The repository does not yet contain a frozen definition of the M0/M3/M4/M5 labels. Do not assign aliases by inference. M5 is nevertheless operationally blocked because ecological-opportunity pulse tests require a dated tree."
+  }
+}
