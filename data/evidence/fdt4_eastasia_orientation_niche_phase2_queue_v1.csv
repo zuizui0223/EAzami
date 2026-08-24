@@ -1,0 +1,8 @@
+tip_id,accepted_taxon,orientation_state,phase,reason,current_action
+Cirsium_japonicum_var_albescens,Cirsium japonicum var. albescens,U,EastAsia_phase2,"resolved orientation but not safe under Japan-only GBIF filter",jurisdiction_and_taxonomy_scope_must_be_verified_before_live_niche_run
+Cirsium_japonicum_var_australe,Cirsium japonicum var. australe,U,EastAsia_phase2,"resolved orientation but not safe under Japan-only GBIF filter",jurisdiction_and_taxonomy_scope_must_be_verified_before_live_niche_run
+Cirsium_japonicum_var_fukienense,Cirsium japonicum var. fukienense,D,EastAsia_phase2,"resolved orientation but not safe under Japan-only GBIF filter",jurisdiction_and_taxonomy_scope_must_be_verified_before_live_niche_run
+Cirsium_kawakamii,Cirsium kawakamii,D,EastAsia_phase2,"resolved orientation but not safe under Japan-only GBIF filter",jurisdiction_and_taxonomy_scope_must_be_verified_before_live_niche_run
+Cirsium_morii,Cirsium morii,U,EastAsia_phase2,"resolved orientation but not safe under Japan-only GBIF filter",jurisdiction_and_taxonomy_scope_must_be_verified_before_live_niche_run
+Cirsium_pengii,Cirsium pengii,D,EastAsia_phase2,"resolved orientation but not safe under Japan-only GBIF filter",jurisdiction_and_taxonomy_scope_must_be_verified_before_live_niche_run
+Cirsium_tatakaense,Cirsium tatakaense,D,EastAsia_phase2,"resolved orientation but not safe under Japan-only GBIF filter",jurisdiction_and_taxonomy_scope_must_be_verified_before_live_niche_run
