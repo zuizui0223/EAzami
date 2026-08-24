@@ -1,0 +1,24 @@
+name: Validate functional-diversity time meta programme
+
+on:
+  pull_request:
+    paths:
+      - "docs/FUNCTIONAL_DIVERSITY_TIME_META_ANALYSIS_PROGRAM_2026-08-24.md"
+      - "data/evidence/functional_diversity_time_meta_registry_v1.csv"
+      - "README.md"
+      - "tests/test_functional_diversity_time_meta_program.py"
+      - ".github/workflows/validate-functional-diversity-time-meta-program.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pytest
+        run: python -m pip install --disable-pip-version-check pytest
+      - name: Validate functional-diversity time programme
+        run: python -m pytest -q tests/test_functional_diversity_time_meta_program.py
