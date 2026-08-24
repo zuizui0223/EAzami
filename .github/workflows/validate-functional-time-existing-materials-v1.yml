@@ -12,6 +12,7 @@ on:
       - "data/evidence/functional_diversity_time_meta_registry_v1.csv"
       - "data/evidence/functional_effect_existing_seed_registry_v1.csv"
       - "data/evidence/phyllary_posture_harmonization_contract_v1.json"
+      - "data/evidence/cirsium_ecological_event_windows_v1.csv"
       - "data/evidence/experimental_pollinator_selection_gradients_v1.csv"
       - ".github/workflows/validate-functional-time-existing-materials-v1.yml"
   workflow_dispatch:
