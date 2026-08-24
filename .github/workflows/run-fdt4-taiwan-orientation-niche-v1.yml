@@ -7,6 +7,8 @@ on:
       - ".github/workflows/run-fdt4-taiwan-orientation-niche-v1.yml"
       - "analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py"
       - "analysis/summarize_fdt4_orientation_niche_screen_v1.py"
+      - "analysis/run_fdt4_orientation_niche_pgls_v1.py"
+      - "tests/test_fdt4_orientation_niche_pgls_v1.py"
   workflow_dispatch:
 
 permissions:
@@ -39,6 +41,10 @@ jobs:
           assert 118 <= b['lon_min'] < b['lon_max'] <= 123
           print('Taiwan FDT4 contract PASS; taxa=', len(taxa))
           PY
+      - name: Validate PGLS consumer
+        run: |
+          python -m pip install --disable-pip-version-check numpy pandas scipy biopython pytest
+          python -m pytest -q tests/test_fdt4_orientation_niche_pgls_v1.py
 
   live_niche:
     needs: validate_contract
