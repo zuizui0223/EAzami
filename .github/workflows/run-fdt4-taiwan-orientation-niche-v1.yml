@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   validate_contract:
@@ -58,7 +59,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install numpy pandas requests scikit-learn rasterio
+          python -m pip install numpy pandas requests scikit-learn rasterio scipy biopython
           python -m pip check
       - name: Run source-name-guarded Taiwan tip niche extraction
         env:
@@ -106,6 +107,59 @@ jobs:
             --occurrences fdt4_taiwan_orientation_niche_live/focal_occurrences_environment_complete.csv \
             --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
             --out-dir fdt4_taiwan_orientation_niche_live
+      - name: Download pinned Japan FDT4 extraction artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: fdt4-japan-orientation-niche-v1
+          path: pinned_japan_fdt4
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32716015605
+      - name: Download pinned AU topology artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: comp1061-alt-topology-au-32614839764
+          path: pinned_au
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614839764
+      - name: Run Japan plus Taiwan six-topology PGLS screen
+        run: |
+          mkdir -p fdt4_taiwan_orientation_niche_live/eastasia_pgls
+          python analysis/run_fdt4_orientation_niche_pgls_v1.py \
+            --occurrences \
+              pinned_japan_fdt4/focal_occurrences_environment_complete.csv \
+              fdt4_taiwan_orientation_niche_live/focal_occurrences_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --au-trees pinned_au/au.trees \
+            --nonrejected-count 6 \
+            --min-n 10 \
+            --out-dir fdt4_taiwan_orientation_niche_live/eastasia_pgls
+      - name: Freeze pinned-input provenance
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          out=Path('fdt4_taiwan_orientation_niche_live/eastasia_pgls')
+          payload={
+            'contract_version':'fdt4_eastasia_pgls_pinned_inputs_v1',
+            'japan_artifact':{
+              'workflow_run_id':32716015605,
+              'artifact_id':9516784077,
+              'artifact_digest':'sha256:cb5717c90cbc769398f9ffce38787704a02e34253c1ff16cf8f368ba55aeda96',
+              'note':'GBIF/CHELSA extraction completed; parent job failed later on an empty optional-slot CSV before that postprocessing bug was fixed.'
+            },
+            'au_artifact':{
+              'workflow_run_id':32614839764,
+              'artifact_id':9486643703,
+              'artifact_digest':'sha256:d90f30e4fcc3a2a0296a7d0cfa13d0f3ecc008b36d28298ac9782a001e6f63c5',
+              'nonrejected_tree_indices':[1,2,3,4,5,6],
+              'rejected_tree_indices':[7,8,9]
+            },
+            'claim_boundary':'PGLS is a phylogeny-corrected association of present-day taxon niche centroids with orientation, not a branch-wise historical niche reconstruction or adaptive-convergence test.'
+          }
+          (out/'fdt4_eastasia_pgls_pinned_inputs_v1.json').write_text(json.dumps(payload,indent=2)+'\n')
+          PY
       - name: Upload Taiwan FDT4 artifact
         if: always()
         uses: actions/upload-artifact@v4
