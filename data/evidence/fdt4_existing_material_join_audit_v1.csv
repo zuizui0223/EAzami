@@ -1,0 +1,21 @@
+tip_id,accepted_taxon,orientation_state,orientation_resolved,current_niche_asset,current_niche_scope,fdt4_now_status,next_action
+Cirsium_alpicola,Cirsium alpicola,U,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_brevicaule,Cirsium brevicaule,U,true,yes,focal_occurrence_CHELSA_sampling_audit,partial_join,retain_existing_niche_and_promote_to_branchwise_format
+Cirsium_fanjingshanense,Cirsium fanjingshanense,?,false,no,none,orientation_unresolved,resolve_trait_before_primary_binary_FDT4
+Cirsium_gyojanum,Cirsium gyojanum,U,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_irumtiense,Cirsium irumtiense,U,true,yes,focal_occurrence_CHELSA_sampling_audit,partial_join,retain_existing_niche_and_promote_to_branchwise_format
+Cirsium_japonicum_var_albescens,Cirsium japonicum var. albescens,U,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_japonicum_var_australe,Cirsium japonicum var. australe,U,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_japonicum_var_fukienense,Cirsium japonicum var. fukienense,D,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_japonicum_var_japonicum,Cirsium japonicum var. japonicum,U,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_kamtschaticum,Cirsium kamtschaticum,D,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_kawakamii,Cirsium kawakamii,D,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_kujuense,Cirsium kujuense,D,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_maritimum,Cirsium maritimum,?,false,no,none,orientation_unresolved,adjudicate_source_conflict_before_primary_binary_FDT4
+Cirsium_morii,Cirsium morii,U,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_nippoense,Cirsium nippoense,U,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_nipponicum_var_incomptum,Cirsium nipponicum var. incomptum,?,false,no,none,orientation_unresolved,retain_nonbinary_or_collect_voucher_angle
+Cirsium_pengii,Cirsium pengii,D,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_suffultum,Cirsium suffultum,D,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_tatakaense,Cirsium tatakaense,D,true,no,none,trait_only,extend_vetted_occurrence_niche
+Cirsium_yezoense,Cirsium yezoense,D,true,no,none,trait_only,extend_vetted_occurrence_niche
