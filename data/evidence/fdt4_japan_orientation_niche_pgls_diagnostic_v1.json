@@ -1,0 +1,57 @@
+{
+  "contract_version": "fdt4_japan_orientation_niche_pgls_diagnostic_v1",
+  "status_date": "2026-08-24",
+  "purpose": "Freeze the Japan-only seven-taxon phylogenetic diagnostic before Taiwan phase-2 expansion. This is a screening diagnostic, not a final FDT4 result.",
+  "inputs": {
+    "japan_workflow_run_id": 32716015605,
+    "japan_artifact_id": 9516784077,
+    "japan_artifact_digest": "sha256:cb5717c90cbc769398f9ffce38787704a02e34253c1ff16cf8f368ba55aeda96",
+    "au_workflow_run_id": 32614839764,
+    "au_artifact_id": 9486643703,
+    "au_artifact_digest": "sha256:d90f30e4fcc3a2a0296a7d0cfa13d0f3ecc008b36d28298ac9782a001e6f63c5",
+    "au_nonrejected_topology_indices": [1, 2, 3, 4, 5, 6],
+    "min_environment_complete_occurrences_per_taxon": 10
+  },
+  "panel": {
+    "n_taxa": 7,
+    "n_upward_or_erect": 4,
+    "n_downward_or_nodding": 3,
+    "taxa": [
+      "Cirsium alpicola",
+      "Cirsium brevicaule",
+      "Cirsium irumtiense",
+      "Cirsium japonicum var. japonicum",
+      "Cirsium kamtschaticum",
+      "Cirsium suffultum",
+      "Cirsium yezoense"
+    ]
+  },
+  "method": "For each of the six AU-nonrejected optimized branch-length topologies, root with OUTGROUP_saff, construct Brownian shared-path covariance for the seven included focal tips, standardize each taxon-level CHELSA centroid, and fit GLS with orientation coded U=0, D=1.",
+  "results": {
+    "chelsa_bio01": {
+      "beta_D_minus_U_sd_range": [-0.474975, -0.473500],
+      "p_range": [0.392332, 0.397284]
+    },
+    "chelsa_bio04": {
+      "beta_D_minus_U_sd_range": [0.605030, 0.612713],
+      "p_range": [0.300013, 0.308548]
+    },
+    "chelsa_bio12": {
+      "beta_D_minus_U_sd_range": [0.608121, 0.641926],
+      "p_range": [0.420186, 0.445856]
+    },
+    "chelsa_bio15": {
+      "beta_D_minus_U_sd_range": [1.056949, 1.102830],
+      "p_range": [0.191262, 0.206212]
+    }
+  },
+  "decision": {
+    "any_axis_supported_at_p_lt_0_05": false,
+    "lowest_p_axis": "chelsa_bio15",
+    "lowest_p_approx": 0.191262,
+    "taiwan_phase2_required_before_main_trait_niche_interpretation": true,
+    "branchwise_historical_niche_coupling_allowed_from_this_diagnostic": false
+  },
+  "interpretation": "The Japan-only candidate direction is not robust enough to support a climatic-adaptation claim. Topology propagation is stable but phylogenetic correction changes some descriptive effect ordering, including annual precipitation. Taiwan expansion is therefore required before selecting a climate axis for historical branch-wise analysis.",
+  "claim_boundary": "Present-day taxon niche centroids plus Brownian PGLS do not reconstruct historical niches, establish parallel adaptation, or identify causal selective agents."
+}

@@ -1,0 +1,37 @@
+{
+  "contract_version": "fdt4_existing_material_join_audit_v1",
+  "status_date": "2026-08-24",
+  "panel": {
+    "comp1061_focal_tips": 20,
+    "orientation_resolved_binary_tips": 17,
+    "orientation_unresolved_tips": 3,
+    "resolved_orientation_tips_with_existing_focal_occurrence_niche_asset": 2,
+    "resolved_orientation_tips_missing_equivalent_niche_asset": 15
+  },
+  "existing_joinable_taxa": [
+    "Cirsium brevicaule",
+    "Cirsium irumtiense"
+  ],
+  "orientation_unresolved_taxa": [
+    "Cirsium fanjingshanense",
+    "Cirsium maritimum",
+    "Cirsium nipponicum var. incomptum"
+  ],
+  "source_contracts": {
+    "orientation": "data/evidence/orientation_comp1061_posttree_ensemble_preflight_v1.json",
+    "orientation_crosswalk": "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv",
+    "niche": "docs/FULL_OCCURRENCE_NICHE_SAMPLE_INFORMATION_2026-08-21.md"
+  },
+  "decision": {
+    "orientation_repeated_state_result_reusable_now": true,
+    "full_branchwise_orientation_niche_history_runnable_now": false,
+    "reason": "Existing CHELSA occurrence-niche assets were built for focal sampling systems rather than the full 17-tip resolved orientation panel. Only C. brevicaule and C. irumtiense currently overlap the resolved 20-tip orientation panel with equivalent vetted focal niche assets.",
+    "next_required_computation": "Extend the source-name-guarded occurrence plus CHELSA niche pipeline to the other 15 resolved orientation tips before estimating branch-wise niche shifts or transition-niche concordance.",
+    "do_not_do": [
+      "do not impute niche values from taxon names or broad regions",
+      "do not reuse latitude as a causal niche variable",
+      "do not call the existing two-tip overlap a branch-wise evolutionary test",
+      "do not relabel repeated orientation state change as adaptive convergence"
+    ]
+  }
+}
