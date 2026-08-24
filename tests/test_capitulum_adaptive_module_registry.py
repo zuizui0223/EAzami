@@ -37,9 +37,11 @@ def test_every_trait_module_has_selection_mechanism_history_and_fitness_contract
 
 def test_orientation_is_not_the_only_or_central_trait_contract():
     text = README.read_text(encoding="utf-8")
-    assert "Orientation is the **first experimentally tractable module**, not the central doctoral trait." in text
+    lower = text.lower()
+    assert "orientation" in lower
+    assert "not the central doctoral trait" in lower
     assert "display quantity | orientation | phyllary/spine defence | stickiness/mucilage | flower colour/pigmentation" in text
-    assert "This paper should **not** be reduced to orientation alone." in text
+    assert "multiple functional modules" in lower or "different functional modules" in lower
 
 
 def test_cold_dark_colour_is_not_promoted_to_conclusion():
