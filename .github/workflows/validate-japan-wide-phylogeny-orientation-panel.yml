@@ -1,0 +1,23 @@
+name: Validate Japan-wide phylogeny orientation panel
+
+on:
+  pull_request:
+    paths:
+      - "sampling/JAPAN_WIDE_PHYLOGENY_ORIENTATION_ADDITION_PANEL_V1.csv"
+      - "sampling/README.md"
+      - "tests/test_japan_wide_phylogeny_orientation_addition_panel.py"
+      - ".github/workflows/validate-japan-wide-phylogeny-orientation-panel.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pytest
+        run: python -m pip install --disable-pip-version-check pytest
+      - name: Validate panel
+        run: python -m pytest -q tests/test_japan_wide_phylogeny_orientation_addition_panel.py
