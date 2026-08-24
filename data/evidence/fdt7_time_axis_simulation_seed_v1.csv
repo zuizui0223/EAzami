@@ -1,0 +1,10 @@
+target_id,observed_value,lower,upper,role,source,claim_boundary
+orientation_minimum_changes,5,5,5,repeated_transition_lower_bound,orientation_comp1061_posttree_ensemble_preflight_v1,"topology-robust lower bound; not adaptive convergence count"
+cross_module_environment_coupling,-0.05687,-0.26524,0.15484,modularity_target,capitulum_pattern_reduction_targets_v2,"observational within-taxon target; does not prove genetic modularity"
+antagonist_seed_output_rr,2.67364,2.38833,2.99302,biotic_cost_target,cirsium_floral_herbivory_lnrr_meta_v2,"antagonist fitness cost, not a specific defence-trait effect"
+display_enemy_coefficient_ratio,8.4,,,interaction_heterogeneity_target,Cirsium_purpuratum_seed_damage_models,"approximate Nikko/Kawamata attack-coefficient ratio; population-context target"
+display_pollinator_slope_min,0.078,,,interaction_heterogeneity_target,Cirsium_purpuratum_pollinator_models,"heads-probed-per-visit slope; context-dependent soft target"
+display_pollinator_slope_max,0.25,,,interaction_heterogeneity_target,Cirsium_purpuratum_pollinator_models,"heads-probed-per-visit slope; context-dependent soft target"
+size_predation_r,0.676,,,external_function_target,AST_ALPINE_SIZE_ALLPRED_01,"29-species Asteraceae calibration; not Cirsium-specific"
+orientation_protection_rr,3.585987,,,external_function_target,AST_NOD_ACHENE_01,"Cremanthodium manipulation; external Asteraceae calibration"
+stickiness_effect,0,,,negative_control,CIR_STICK_01,"Cirsium discolor neutralization null; does not prove no context-specific function"
