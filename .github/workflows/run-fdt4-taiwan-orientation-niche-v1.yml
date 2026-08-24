@@ -1,0 +1,110 @@
+name: Run FDT4 Taiwan orientation niche v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/fdt4_taiwan_orientation_niche_config_v1.json"
+      - ".github/workflows/run-fdt4-taiwan-orientation-niche-v1.yml"
+      - "analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py"
+      - "analysis/summarize_fdt4_orientation_niche_screen_v1.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate_contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate Taiwan FDT4 contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          cfg=json.loads(Path('data/evidence/fdt4_taiwan_orientation_niche_config_v1.json').read_text())
+          assert cfg['gbif']['country']=='TW'
+          taxa={x['scientific_name'] for x in cfg['taxa']}
+          expected={
+            'Cirsium japonicum var. albescens','Cirsium japonicum var. australe',
+            'Cirsium japonicum var. fukienense','Cirsium kawakamii','Cirsium morii',
+            'Cirsium pengii','Cirsium tatakaense'
+          }
+          assert taxa==expected
+          b=cfg['gbif']['japan_bounds']
+          assert 21 <= b['lat_min'] < b['lat_max'] <= 26
+          assert 118 <= b['lon_min'] < b['lon_max'] <= 123
+          print('Taiwan FDT4 contract PASS; taxa=', len(taxa))
+          PY
+
+  live_niche:
+    needs: validate_contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas requests scikit-learn rasterio
+          python -m pip check
+      - name: Run source-name-guarded Taiwan tip niche extraction
+        env:
+          GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+          CPL_VSIL_CURL_ALLOWED_EXTENSIONS: .tif,.tiff
+          GDAL_HTTP_TIMEOUT: "120"
+          GDAL_HTTP_MAX_RETRY: "4"
+          GDAL_HTTP_RETRY_DELAY: "3"
+        run: |
+          python analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py \
+            --config data/evidence/fdt4_taiwan_orientation_niche_config_v1.json \
+            --out-dir fdt4_taiwan_orientation_niche_live
+      - name: Summarize Taiwan tip coverage
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          out=Path('fdt4_taiwan_orientation_niche_live')
+          rows=list(csv.DictReader((out/'focal_niche_sampling_summary.csv').open()))
+          cfg=json.loads(Path('data/evidence/fdt4_taiwan_orientation_niche_config_v1.json').read_text())
+          expected={x['scientific_name'] for x in cfg['taxa']}
+          by={r['taxon']:r for r in rows}
+          usable=[]; sparse=[]; missing=[]
+          for taxon in sorted(expected):
+              if taxon not in by:
+                  missing.append(taxon); continue
+              n=int(float(by[taxon].get('primary_thinned_environment_complete',0) or 0))
+              row={'taxon':taxon,'n_environment_complete':n}
+              (usable if n>=10 else sparse).append(row)
+          result={
+            'contract_version':'fdt4_taiwan_orientation_niche_live_summary_v1',
+            'expected_taxa':len(expected),
+            'usable_n_ge_10':len(usable),
+            'usable_taxa':usable,
+            'sparse_taxa':sparse,
+            'missing_taxa':missing,
+            'decision':'present-day tip-level niche inputs only; combine with Japan phase before any phylogenetic trait-niche coupling'
+          }
+          (out/'fdt4_taiwan_orientation_niche_live_summary_v1.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n')
+          print(json.dumps(result,indent=2,ensure_ascii=False))
+          PY
+      - name: Descriptive orientation × niche screen
+        run: |
+          python analysis/summarize_fdt4_orientation_niche_screen_v1.py \
+            --occurrences fdt4_taiwan_orientation_niche_live/focal_occurrences_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --out-dir fdt4_taiwan_orientation_niche_live
+      - name: Upload Taiwan FDT4 artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fdt4-taiwan-orientation-niche-v1
+          path: fdt4_taiwan_orientation_niche_live
+          if-no-files-found: warn
+          retention-days: 90
