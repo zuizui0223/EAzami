@@ -3,6 +3,7 @@ name: Run FDT4 Japan orientation niche v1
 on:
   pull_request:
     paths:
+      - "analysis/summarize_fdt4_orientation_niche_screen_v1.py"
       - "data/evidence/fdt4_existing_material_join_audit_v1.csv"
       - "data/evidence/fdt4_existing_material_join_audit_v1.json"
       - "data/evidence/fdt4_japan_orientation_niche_config_v1.json"
@@ -26,29 +27,21 @@ jobs:
           python - <<'PY'
           import csv, json
           from pathlib import Path
-
           audit=json.loads(Path('data/evidence/fdt4_existing_material_join_audit_v1.json').read_text())
           assert audit['panel']['comp1061_focal_tips']==20
           assert audit['panel']['orientation_resolved_binary_tips']==17
           assert audit['panel']['resolved_orientation_tips_with_existing_focal_occurrence_niche_asset']==2
           assert audit['panel']['resolved_orientation_tips_missing_equivalent_niche_asset']==15
           assert audit['decision']['full_branchwise_orientation_niche_history_runnable_now'] is False
-
           rows=list(csv.DictReader(Path('data/evidence/fdt4_existing_material_join_audit_v1.csv').open()))
           assert len(rows)==20
           assert sum(r['orientation_resolved']=='true' for r in rows)==17
           assert sum(r['current_niche_asset']=='yes' and r['orientation_resolved']=='true' for r in rows)==2
-
           cfg=json.loads(Path('data/evidence/fdt4_japan_orientation_niche_config_v1.json').read_text())
           taxa={x['scientific_name'] for x in cfg['taxa']}
-          expected={
-            'Cirsium alpicola','Cirsium brevicaule','Cirsium gyojanum','Cirsium irumtiense',
-            'Cirsium japonicum var. japonicum','Cirsium kamtschaticum','Cirsium kujuense',
-            'Cirsium nippoense','Cirsium suffultum','Cirsium yezoense'
-          }
+          expected={'Cirsium alpicola','Cirsium brevicaule','Cirsium gyojanum','Cirsium irumtiense','Cirsium japonicum var. japonicum','Cirsium kamtschaticum','Cirsium kujuense','Cirsium nippoense','Cirsium suffultum','Cirsium yezoense'}
           assert taxa==expected
           assert cfg['gbif']['country']=='JP'
-
           phase2=list(csv.DictReader(Path('data/evidence/fdt4_eastasia_orientation_niche_phase2_queue_v1.csv').open()))
           assert len(phase2)==7
           assert all(r['phase']=='EastAsia_phase2' for r in phase2)
@@ -87,25 +80,19 @@ jobs:
           python - <<'PY'
           import csv, json
           from pathlib import Path
-
           out=Path('fdt4_japan_orientation_niche_live')
           rows=list(csv.DictReader((out/'focal_niche_sampling_summary.csv').open()))
           cfg=json.loads(Path('data/evidence/fdt4_japan_orientation_niche_config_v1.json').read_text())
           expected={x['scientific_name'] for x in cfg['taxa']}
           by={r['taxon']:r for r in rows}
           represented=set(by)
-          usable=[]
-          sparse=[]
-          missing=[]
+          usable=[]; sparse=[]; missing=[]
           for taxon in sorted(expected):
               if taxon not in by:
-                  missing.append(taxon)
-                  continue
-              n=int(float(by[taxon].get('n_environment_complete',0) or 0))
-              if n>=10:
-                  usable.append({'taxon':taxon,'n_environment_complete':n})
-              else:
-                  sparse.append({'taxon':taxon,'n_environment_complete':n})
+                  missing.append(taxon); continue
+              n=int(float(by[taxon].get('primary_thinned_environment_complete',0) or 0))
+              row={'taxon':taxon,'n_environment_complete':n}
+              (usable if n>=10 else sparse).append(row)
           result={
             'contract_version':'fdt4_japan_orientation_niche_live_summary_v1',
             'expected_taxa':len(expected),
@@ -119,6 +106,12 @@ jobs:
           (out/'fdt4_japan_orientation_niche_live_summary_v1.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n')
           print(json.dumps(result,indent=2,ensure_ascii=False))
           PY
+      - name: Descriptive orientation × niche candidate-axis screen
+        run: |
+          python analysis/summarize_fdt4_orientation_niche_screen_v1.py \
+            --occurrences fdt4_japan_orientation_niche_live/focal_occurrences_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --out-dir fdt4_japan_orientation_niche_live
       - name: Upload FDT4 Japan niche artifact
         if: always()
         uses: actions/upload-artifact@v4
