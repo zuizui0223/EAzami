@@ -32,6 +32,7 @@
     {"scientific_name":"Cirsium tatakaense","planned_populations":0,"role":"FDT4_Taiwan_orientation_tip","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]}
   ],
   "scoring": {
+    "candidate_components": ["niche_edge", "geographic_edge", "cluster_rarity"],
     "not_computed_here": ["branchwise_ancestral_niche", "trait_transition_posterior", "transition_niche_concordance"],
     "rule": "This run creates present-day Taiwan tip-level niche inputs only. It must not be interpreted as historical range reconstruction or adaptive causation."
   },
