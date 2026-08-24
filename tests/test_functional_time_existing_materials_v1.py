@@ -65,6 +65,16 @@ def test_japan_wide_machine_tree_is_a_real_gate_not_inferred_from_sample_count()
     assert "do_not_infer_Japan38_transition_counts" in gate["decision"]
 
 
+def test_existing_event_windows_are_frozen_without_promoting_point_estimates():
+    summary = mod.build_summary()
+    ev = summary["ecological_event_windows"]
+    assert ev["event_rows"] == 7
+    assert ev["eligible_biogeographic_opportunity_windows"] == 3
+    assert ev["eligible_event_ids"] == ["EV01", "EV02", "EV03"]
+    assert ev["lineage_split_anchors"] == 4
+    assert "dated_trait_tree" in ev["decision"]
+
+
 def test_time_program_does_not_overclaim_current_readiness():
     summary = mod.build_summary()
     statuses = {r["analysis_id"]: r["status"] for r in summary["fdt_layer_readiness"]}
@@ -73,6 +83,7 @@ def test_time_program_does_not_overclaim_current_readiness():
     assert statuses["FDT3"] == "partial_ready_tree_gated"
     assert statuses["FDT4"] == "partial_ready"
     assert statuses["FDT5"] == "blocked"
+    assert statuses["FDT6"] == "event_windows_frozen_dated_transition_tree_missing"
     assert statuses["FDT7"] == "design_ready_not_parameterized"
 
 
@@ -84,6 +95,7 @@ def test_known_reusable_assets_are_present_and_missing_gates_remain_missing():
     assert "pollinator_gradient_registry" in assets
     assert "fdt1_existing_seed_registry" in assets
     assert "phyllary_harmonization_contract" in assets
+    assert "event_window_registry" in assets
     assert "focal_niche_builder" in assets
     assert "focal_branch_length_tree" in assets
     assert "orientation_posttree" in assets
@@ -94,8 +106,8 @@ def test_known_reusable_assets_are_present_and_missing_gates_remain_missing():
     assert "georeferenced_cross_module_effect_ledger" in missing
     assert "japan_wide_machine_readable_tree" in missing
     assert "exact_tip_dated_tree" in missing
-    assert "event_window_registry" in missing
     assert "simulation_engine" in missing
+    assert "event_window_registry" not in missing
 
 
 def test_existing_effect_seed_registry_is_complete_before_new_search():
