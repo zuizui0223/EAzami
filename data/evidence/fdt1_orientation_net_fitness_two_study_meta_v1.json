@@ -1,0 +1,46 @@
+{
+  "contract_version": "fdt1_orientation_net_fitness_two_study_meta_v1",
+  "k": 2,
+  "effects": [
+    {
+      "study_id": "ORI_FIT_CREM_01",
+      "taxon": "Cremanthodium campanulatum",
+      "family": "Asteraceae",
+      "endpoint": "achene_set",
+      "lnRR": 1.2770338228,
+      "se_lnRR": 0.2395344953,
+      "RR": 3.5859872611,
+      "ci95_RR": [2.2423988591, 5.7346196841]
+    },
+    {
+      "study_id": "ORI_FIT_POLY_01",
+      "taxon": "Polygonatum cyrtonema",
+      "family": "Asparagaceae",
+      "endpoint": "seed_set",
+      "lnRR": 0.2548922496,
+      "se_lnRR": 0.0989309401,
+      "RR": 1.2903225806,
+      "ci95_RR": [1.0628857418, 1.5664264714]
+    }
+  ],
+  "fixed_effect": {
+    "lnRR": 0.4038414206,
+    "se": 0.0914390244,
+    "RR": 1.4977611652,
+    "ci95_RR": [1.2524407007, 1.7911431264]
+  },
+  "random_effect_DL": {
+    "tau2": 0.4888046451,
+    "lnRR": 0.7426837544,
+    "se": 0.5105403255,
+    "RR": 2.1015680454,
+    "ci95_RR_normal": [0.7726143282, 5.7164203257]
+  },
+  "heterogeneity": {
+    "Q": 15.5555320896,
+    "df": 1,
+    "I2_percent": 93.5714188738
+  },
+  "interpretation": "Both independent manipulations favour the natural downward/nodding orientation for seed/achene success, but effect magnitude is highly heterogeneous. With k=2, the pooled mean is a feasibility diagnostic rather than a publishable general effect; moderator/context expansion is the priority.",
+  "claim_boundary": "Approximate delta-method lnRR from reported means and SEs. Achene set and seed set are homologous proportional reproductive-success endpoints but from different families. Do not treat the k=2 pooled effect as evidence that downward orientation is universally adaptive or as a Cirsium effect."
+}
