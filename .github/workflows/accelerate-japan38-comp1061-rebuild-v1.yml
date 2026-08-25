@@ -104,7 +104,7 @@ jobs:
             exit 127
           fi
           micromamba list iqtree | tee tree_result/iqtree_package_version.txt
-          "$IQTREE_BIN" -s tree_result/japan38_concat.fasta -m MFP -B 1000 --alrt 1000 -T AUTO -seed 20260825 -o OUTGROUP_saff --prefix tree_result/japan38_comp1061
+          "$IQTREE_BIN" -s tree_result/japan38_concat.fasta -m MFP -B 1000 --alrt 1000 -wbt -T AUTO -seed 20260825 -o OUTGROUP_saff --prefix tree_result/japan38_comp1061
           test -s tree_result/japan38_comp1061.treefile
           test -s tree_result/japan38_comp1061.ufboot
       - name: Map multiple capitulum traits on reconstructed Japan38 tree
