@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "analysis/run_japan38_module_transition_overlap_v1.py"
+      - "analysis/run_japan38_module_overlap_topology_sensitivity_v1.py"
       - "tests/test_japan38_module_transition_overlap_v1.py"
       - ".github/workflows/validate-japan38-module-overlap-v1.yml"
   workflow_dispatch:
@@ -33,7 +34,9 @@ jobs:
         run: pip install biopython
       - name: Compile and test
         run: |
-          python -m py_compile analysis/run_japan38_module_transition_overlap_v1.py
+          python -m py_compile \
+            analysis/run_japan38_module_transition_overlap_v1.py \
+            analysis/run_japan38_module_overlap_topology_sensitivity_v1.py
           python -m unittest tests/test_japan38_module_transition_overlap_v1.py -v
       - name: Download frozen completed Japan38 tree result
         uses: actions/download-artifact@v4
@@ -53,7 +56,6 @@ jobs:
             --permutations 999 \
             --seed 20260825 \
             --output real_tree/japan38_module_transition_overlap_v1.json
-          cat real_tree/japan38_module_transition_overlap_v1.json
           python - <<'PY'
           import json
           from pathlib import Path
@@ -67,9 +69,34 @@ jobs:
           }
           print(json.dumps(x['pairwise_overlap'],indent=2))
           PY
+      - name: Run topology-only sensitivity across all raw UFBoot trees
+        run: |
+          set -euo pipefail
+          python analysis/run_japan38_module_overlap_topology_sensitivity_v1.py \
+            --bootstrap-trees frozen_japan38/tree_result/japan38_comp1061.ufboot \
+            --ml-tree frozen_japan38/tree_result/japan38_comp1061.treefile \
+            --concept-map frozen_japan38/work/japan38_subset/concept_map.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --output real_tree/japan38_module_overlap_topology_sensitivity_v1.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('real_tree/japan38_module_overlap_topology_sensitivity_v1.json').read_text())
+          b=x['bootstrap_topology_sensitivity']
+          assert b['bootstrap_trees_total']==1000
+          assert b['jpn20_monophyletic_trees']==0
+          os=x['ml_topology_equal_branch']['pairwise_overlap']['orientation__stickiness']['spearman_transition_posterior']
+          assert os < 0
+          d=b['pairwise_spearman_distributions']['orientation__stickiness']
+          assert d['median'] < 0
+          assert d['fraction_positive'] < 0.05
+          print(json.dumps(x,indent=2))
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: japan38-module-overlap-real-tree-${{ github.run_id }}
-          path: real_tree/japan38_module_transition_overlap_v1.json
+          path: |
+            real_tree/japan38_module_transition_overlap_v1.json
+            real_tree/japan38_module_overlap_topology_sensitivity_v1.json
           if-no-files-found: error
           retention-days: 90
