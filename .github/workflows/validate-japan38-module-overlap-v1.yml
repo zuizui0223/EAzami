@@ -10,15 +10,20 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: validate-japan38-module-overlap-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  FROZEN_JAPAN38_RUN_ID: "32845725038"
+  FROZEN_JAPAN38_ARTIFACT: "japan38-comp1061-frozen-tree-retry-32845725038"
+
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -30,3 +35,41 @@ jobs:
         run: |
           python -m py_compile analysis/run_japan38_module_transition_overlap_v1.py
           python -m unittest tests/test_japan38_module_transition_overlap_v1.py -v
+      - name: Download frozen completed Japan38 tree result
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.FROZEN_JAPAN38_ARTIFACT }}
+          path: frozen_japan38
+          run-id: ${{ env.FROZEN_JAPAN38_RUN_ID }}
+          github-token: ${{ github.token }}
+      - name: Run corrected overlap diagnostic on the real Japan38 ML tree
+        run: |
+          set -euo pipefail
+          mkdir -p real_tree
+          python analysis/run_japan38_module_transition_overlap_v1.py \
+            --tree frozen_japan38/tree_result/japan38_comp1061.treefile \
+            --concept-map frozen_japan38/work/japan38_subset/concept_map.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --permutations 999 \
+            --seed 20260825 \
+            --output real_tree/japan38_module_transition_overlap_v1.json
+          cat real_tree/japan38_module_transition_overlap_v1.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('real_tree/japan38_module_transition_overlap_v1.json').read_text())
+          assert x['tree_diagnostic']['replicate_monophyly'] is False
+          assert x['tree_diagnostic']['replicate_mode']=='pruned_fully_unresolved_replicated_concept'
+          assert x['tree_diagnostic']['concept_tips']==36
+          assert x['branch_identity']=='unique descendant-tip signature on the rooted analysis tree'
+          assert set(x['pairwise_overlap'])=={
+              'orientation__phyllary','orientation__stickiness','phyllary__stickiness'
+          }
+          print(json.dumps(x['pairwise_overlap'],indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-module-overlap-real-tree-${{ github.run_id }}
+          path: real_tree/japan38_module_transition_overlap_v1.json
+          if-no-files-found: error
+          retention-days: 90
