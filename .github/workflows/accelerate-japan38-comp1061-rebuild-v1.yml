@@ -180,7 +180,7 @@ jobs:
           create-args: >-
             python=3.11
             mafft
-            iqtree
+            iqtree=2.4.0
             biopython
           condarc: |
             channels:
@@ -241,7 +241,14 @@ jobs:
             --output tree_result/japan38_concat.fasta \
             --partitions tree_result/partitions.csv \
             --summary tree_result/concat_summary.json
-          iqtree2 -s tree_result/japan38_concat.fasta -m MFP -B 1000 --alrt 1000 -T AUTO -o OUTGROUP_saff --prefix tree_result/japan38_comp1061
+          IQTREE_BIN="$(command -v iqtree2 || true)"
+          if [[ -z "$IQTREE_BIN" ]]; then
+            echo "Pinned IQ-TREE 2 executable iqtree2 is unavailable" >&2
+            micromamba list iqtree || true
+            exit 127
+          fi
+          "$IQTREE_BIN" 2>&1 | head -n 1 | tee tree_result/iqtree_version.txt || true
+          "$IQTREE_BIN" -s tree_result/japan38_concat.fasta -m MFP -B 1000 --alrt 1000 -T AUTO -o OUTGROUP_saff --prefix tree_result/japan38_comp1061
           test -s tree_result/japan38_comp1061.treefile
           test -s tree_result/japan38_comp1061.ufboot
       - name: Map multiple capitulum traits
