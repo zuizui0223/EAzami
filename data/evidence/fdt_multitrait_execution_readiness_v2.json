@@ -1,0 +1,43 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v2",
+  "status_date": "2026-08-25",
+  "modules": {
+    "orientation": {
+      "trait_coverage": "17/20 resolved focal tips; Japan38 authority seed also broad",
+      "evolutionary_history": "minimum >=5 changes on all six AU-nonrejected topologies",
+      "ecology": "present-day BIO15/BIO1 candidate and branchwise direction implemented",
+      "functional_prior": "external manipulation supports abiotic-protection / reproductive-fitness pathway",
+      "status": "benchmark module; not sole programme focus"
+    },
+    "display": {
+      "trait_coverage": "15 source-backed direct size rows now compiled across Japan/Ryukyu/Taiwan; directly comparable measured subset includes seven focal taxa",
+      "head_number": "qualitative architecture available for some taxa but standardized plant-level simultaneous/seasonal head count remains missing",
+      "functional_prior": "pollinator-benefit and reproductive-enemy-cost evidence both available",
+      "pilot_result": "direct measured capitulum width has no detectable U/D coupling in the seven-taxon PGLS diagnostic",
+      "status": "size component ready for phylogenetic expansion; head-number component still needs direct table"
+    },
+    "phyllary_spine": {
+      "trait_coverage": "Japan38 NMNS phyllary posture resolved for 10 concepts; direct phyllary length/protrusion measurements compiled for seven focal taxa",
+      "functional_prior": "defence plausible but focal trait-to-enemy-to-fitness effect not resolved",
+      "pilot_result": "phyllary protrusion is smaller in D taxa in the seven-taxon PGLS diagnostic (borderline p~0.055), but lineage confounding prevents ecological interpretation",
+      "status": "evolutionary mapping ready once Japan38 tree exists; functional loading remains blocked"
+    },
+    "stickiness": {
+      "trait_coverage": "Japan38 NMNS sticky/nonsticky state resolved for 12 concepts",
+      "functional_prior": "direct Cirsium neutralization result weakens generic defence hypothesis",
+      "status": "ready as macroevolutionary negative-control module once Japan38 tree exists"
+    },
+    "colour": {
+      "trait_coverage": "focal 20-tip tree currently C17/W3",
+      "functional_prior": "pollinator preference and abiotic-pigment hypotheses remain context dependent",
+      "status": "ecological/history module valuable but fixed-white breadth remains the immediate transition-history blocker"
+    }
+  },
+  "cross_module": {
+    "direct_7taxon_functional_space_pc1_fraction": 0.51929318,
+    "display_width_vs_phyllary_protrusion_pgls_p": "0.7709-0.7711",
+    "interpretation": "Current direct measurements do not support collapsing all capitulum variation onto one obligatory display-defence-orientation axis. This retains modularity and common-lability as competing hypotheses rather than choosing between them."
+  },
+  "tree_dependency": "Japan38 compatibility rebuild PR #88 is executing 39 biological samples / 40 SRRs in the frozen conservative Comp1061 space. Multi-trait ASR must wait for that tree rather than inventing the unavailable Moreyra final-350 tree.",
+  "claim_boundary": "Readiness and diagnostic synthesis only; no adaptive-radiation or functional causation claim."
+}
