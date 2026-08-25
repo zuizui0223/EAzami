@@ -1,0 +1,39 @@
+{
+  "contract_version": "fdt1_broad_functional_calibration_v1",
+  "rows": 14,
+  "modules": {
+    "display": {
+      "rows": 3,
+      "quantitative_ready_rows": 0,
+      "effect_extraction_needed_rows": 3,
+      "taxa": ["Ipomopsis aggregata"],
+      "source_ids": ["10.1007/s004420050136"]
+    },
+    "orientation": {
+      "rows": 6,
+      "quantitative_ready_rows": 4,
+      "effect_extraction_needed_rows": 0,
+      "taxa": ["Platycodon grandiflorus", "Polygonatum cyrtonema"],
+      "source_ids": ["10.1002/ece3.73221", "10.1111/plb.13414"]
+    },
+    "stickiness": {
+      "rows": 5,
+      "quantitative_ready_rows": 2,
+      "effect_extraction_needed_rows": 1,
+      "taxa": ["Aquilegia vulgaris + A. pyrenaica", "Bejaria resinosa", "Datura wrightii"],
+      "source_ids": ["10.1007/s00442-012-2553-z", "10.1038/s41598-022-23261-2", "10.1890/04-0972"]
+    }
+  },
+  "current_inference": {
+    "orientation": "Direct manipulation evidence outside Asteraceae supports multiple mechanisms (effective pollination plus abiotic protection) reaching seed/fruit fitness; effect transport to Cirsium remains a hypothesis.",
+    "stickiness": "A universal sticky-is-defence rule is not retained. Direct floral evidence includes strong benefit in Bejaria while Cirsium has a null direct neutralization result elsewhere in the repository; whole-plant Datura also shows substantial demographic costs. Context-dependent defence is the working hypothesis.",
+    "display": "Direct manipulation supports simultaneous pollinator-attraction benefit and seed-predator cost, but broad-angiosperm numerical common-effect extraction is incomplete."
+  },
+  "next_meta_actions": [
+    "extract raw/group summaries for Ipomopsis display manipulation",
+    "extract comparable quantitative endpoints for Aquilegia glandular-trichome manipulation",
+    "add additional independent orientation manipulations with seed/fruit endpoints",
+    "do not pool different response metrics until an explicit common estimand or multivariate model is preregistered"
+  ],
+  "claim_boundary": "Candidate calibration/effect-extraction registry only; no pooled across-angiosperm effect and no Cirsium adaptation claim."
+}
