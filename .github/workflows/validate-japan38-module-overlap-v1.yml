@@ -5,6 +5,7 @@ on:
     paths:
       - "analysis/run_japan38_module_transition_overlap_v1.py"
       - "analysis/run_japan38_module_overlap_topology_sensitivity_v1.py"
+      - "analysis/summarize_japan38_transition_identifiability_v1.py"
       - "tests/test_japan38_module_transition_overlap_v1.py"
       - ".github/workflows/validate-japan38-module-overlap-v1.yml"
   workflow_dispatch:
@@ -36,7 +37,8 @@ jobs:
         run: |
           python -m py_compile \
             analysis/run_japan38_module_transition_overlap_v1.py \
-            analysis/run_japan38_module_overlap_topology_sensitivity_v1.py
+            analysis/run_japan38_module_overlap_topology_sensitivity_v1.py \
+            analysis/summarize_japan38_transition_identifiability_v1.py
           python -m unittest tests/test_japan38_module_transition_overlap_v1.py -v
       - name: Download frozen completed Japan38 tree result
         uses: actions/download-artifact@v4
@@ -92,11 +94,47 @@ jobs:
           assert d['fraction_positive'] < 0.05
           print(json.dumps(x,indent=2))
           PY
+      - name: Resolve transition identifiability and trait-completion priorities
+        run: |
+          set -euo pipefail
+          python analysis/summarize_japan38_transition_identifiability_v1.py \
+            --tree frozen_japan38/tree_result/japan38_comp1061.treefile \
+            --bootstrap-trees frozen_japan38/tree_result/japan38_comp1061.ufboot \
+            --concept-map frozen_japan38/work/japan38_subset/concept_map.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --output real_tree/japan38_transition_identifiability_v1.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('real_tree/japan38_transition_identifiability_v1.json').read_text())
+          ml=x['ml_minimum_reconstructions']
+          assert ml['orientation']['minimum_steps']==6
+          assert ml['orientation']['minimum_root_state_set']==['U']
+          assert len(ml['orientation']['forced_change_edges'])==0
+          assert ml['phyllary']['minimum_steps']==3
+          assert any(e['edge_id']=='JPN_36' for e in ml['phyllary']['forced_change_edges'])
+          assert ml['stickiness']['minimum_steps']==5
+          assert any(e['edge_id']=='JPN_06' for e in ml['stickiness']['forced_change_edges'])
+          b=x['bootstrap_identifiability']
+          assert b['orientation']['minimum_root_state_set_frequencies']=={'U':1000}
+          assert b['phyllary']['minimum_step_distribution']['min']==3
+          assert b['phyllary']['minimum_step_distribution']['max']==3
+          op=x['trait_completion_priorities']['orientation']['candidates']
+          assert op[0]['paper_japan_member_id']=='JPN_33'
+          sp=x['trait_completion_priorities']['stickiness']['candidates']
+          assert sp[0]['paper_japan_member_id'] in {'JPN_10','JPN_24'}
+          print(json.dumps({
+            'orientation_top_completion':op[:6],
+            'stickiness_top_completion':sp[:6],
+            'bootstrap_identifiability':b,
+          },indent=2))
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: japan38-module-overlap-real-tree-${{ github.run_id }}
           path: |
             real_tree/japan38_module_transition_overlap_v1.json
             real_tree/japan38_module_overlap_topology_sensitivity_v1.json
+            real_tree/japan38_transition_identifiability_v1.json
           if-no-files-found: error
           retention-days: 90

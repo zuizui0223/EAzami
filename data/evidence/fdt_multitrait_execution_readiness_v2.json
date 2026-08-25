@@ -3,14 +3,15 @@
   "status_date": "2026-08-25",
   "modules": {
     "orientation": {
-      "trait_coverage": "17/20 resolved focal tips; Japan38 authority seed also broad",
-      "evolutionary_history": "minimum >=5 changes on all six AU-nonrejected topologies",
-      "ecology": "present-day BIO15/BIO1 candidate and branchwise direction implemented",
+      "trait_coverage": "19/38 source concepts resolved in the Japan38 authority seed; JPN_20 and JPN_31 are excluded from the current trait tree for independent reasons",
+      "evolutionary_history": "Japan38 compatibility ML tree requires 6 unordered steps; across UFBoot1000 the lower bound is 4-6 with median 5, and the minimum-change root state is U in all 1000 topologies",
+      "transition_identifiability": "The repeated-state lower bound is robust but branch localization is not: the ML minimum reconstruction has zero individually forced orientation-change edges",
+      "ecology": "present-day BIO15/BIO1 candidate and branchwise direction implemented, but ecological event alignment must wait for better transition localization",
       "functional_prior": "external manipulation supports abiotic-protection / reproductive-fitness pathway",
-      "status": "benchmark module; not sole programme focus"
+      "status": "benchmark module with robust recurrence but unresolved transition placement; not sole programme focus"
     },
     "display": {
-      "trait_coverage": "15 source-backed direct size rows now compiled across Japan/Ryukyu/Taiwan; directly comparable measured subset includes seven focal taxa",
+      "trait_coverage": "15 source-backed direct size rows compiled across Japan/Ryukyu/Taiwan; directly comparable measured subset includes seven focal taxa",
       "head_number": "qualitative architecture available for some taxa but standardized plant-level simultaneous/seasonal head count remains missing",
       "functional_prior": "pollinator-benefit and reproductive-enemy-cost evidence both available",
       "pilot_result": "direct measured capitulum width has no detectable U/D coupling in the seven-taxon PGLS diagnostic",
@@ -18,14 +19,19 @@
     },
     "phyllary_spine": {
       "trait_coverage": "Japan38 NMNS phyllary posture resolved for 10 concepts; direct phyllary length/protrusion measurements compiled for seven focal taxa",
+      "evolutionary_history": "minimum 3 unordered steps on the Japan38 ML tree and exactly 3 on all UFBoot1000 topologies; minimum-change root remains ambiguous among ascending/spreading/recurved",
+      "transition_identifiability": "JPN_36 is a forced ascending->appressed change on the ML minimum reconstruction and is a frequent forced edge across bootstrap topologies, but most transition placement remains uncertain",
       "functional_prior": "defence plausible but focal trait-to-enemy-to-fitness effect not resolved",
       "pilot_result": "phyllary protrusion is smaller in D taxa in the seven-taxon PGLS diagnostic (borderline p~0.055), but lineage confounding prevents ecological interpretation",
-      "status": "evolutionary mapping ready once Japan38 tree exists; functional loading remains blocked"
+      "status": "repeated history is supported; functional loading and denser trait coverage remain blocked"
     },
     "stickiness": {
       "trait_coverage": "Japan38 NMNS sticky/nonsticky state resolved for 12 concepts",
+      "evolutionary_history": "minimum 5 unordered steps on the ML tree; UFBoot1000 gives 4-5 with median 5",
+      "transition_identifiability": "ML minimum reconstruction forces changes on JPN_06, JPN_36 and one larger clade, but bootstrap localization is only partial",
+      "mk_warning": "branch-length-aware equal-rates Mk is saturation-prone for stickiness (k*q*median branch about 4.48; prior change probability about 0.494)",
       "functional_prior": "direct Cirsium neutralization result weakens generic defence hypothesis",
-      "status": "ready as macroevolutionary negative-control module once Japan38 tree exists"
+      "status": "useful macroevolutionary negative-control module; do not promote current Mk overlap to shared developmental mechanism"
     },
     "colour": {
       "trait_coverage": "focal 20-tip tree currently C17/W3",
@@ -36,8 +42,35 @@
   "cross_module": {
     "direct_7taxon_functional_space_pc1_fraction": 0.51929318,
     "display_width_vs_phyllary_protrusion_pgls_p": "0.7709-0.7711",
-    "interpretation": "Current direct measurements do not support collapsing all capitulum variation onto one obligatory display-defence-orientation axis. This retains modularity and common-lability as competing hypotheses rather than choosing between them."
+    "branch_length_aware_ml": {
+      "orientation_phyllary_excess_rho": 0.36831550802139035,
+      "orientation_phyllary_excess_p": 0.08,
+      "orientation_stickiness_excess_rho": 0.2438997702155597,
+      "orientation_stickiness_excess_p": 0.003,
+      "phyllary_stickiness_excess_rho": 0.04112903225806452,
+      "phyllary_stickiness_excess_p": 0.299,
+      "stickiness_saturation_warning": true
+    },
+    "topology_only_equal_branch_sensitivity": {
+      "orientation_phyllary_ml_rho": -0.05614593884204658,
+      "orientation_phyllary_bootstrap_median": -0.05614593884204658,
+      "orientation_phyllary_bootstrap_fraction_positive": 0.21685508735868447,
+      "orientation_stickiness_ml_rho": -0.38710737479257257,
+      "orientation_stickiness_bootstrap_median": -0.3870861744653411,
+      "orientation_stickiness_bootstrap_fraction_positive": 0.011,
+      "phyllary_stickiness_ml_rho": 0.20435086975252437,
+      "phyllary_stickiness_bootstrap_median": 0.19470195916272703,
+      "phyllary_stickiness_bootstrap_fraction_positive": 0.8633093525179856
+    },
+    "current_h2_h3_resolution": "No module pair is consistently positive across the branch-length-aware and branch-length-free topology layers. The simple H3 alternative of one shared whole-capitulum lability axis is therefore not supported by the current three-module data. This makes module-specific histories necessary, but does not by itself establish developmental/genetic modular evolvability (H2).",
+    "interpretation": "Repeated evolution is supported within each observed module, while cross-module coupling is assumption-sensitive and heterogeneous. Retain separate module histories rather than collapsing capitulum variation onto one latent lability axis."
   },
-  "tree_dependency": "Japan38 compatibility rebuild PR #88 is executing 39 biological samples / 40 SRRs in the frozen conservative Comp1061 space. Multi-trait ASR must wait for that tree rather than inventing the unavailable Moreyra final-350 tree.",
-  "claim_boundary": "Readiness and diagnostic synthesis only; no adaptive-radiation or functional causation claim."
+  "trait_completion_design": {
+    "criterion": "topology-conditioned reduction in ambiguous optimal transition-placement edges under exhaustive hypothetical state assignment; a design heuristic, not a biological-value probability",
+    "orientation_first": ["JPN_33", "JPN_34", "JPN_01"],
+    "stickiness_first": ["JPN_10", "JPN_24", "JPN_05", "JPN_25"],
+    "phyllary_note": "No single currently missing concept gives a uniformly positive one-at-a-time reduction under all four hypothetical states; use a small batch rather than claiming one dominant target."
+  },
+  "tree_dependency": "Resolved for the current compatibility analysis: frozen 241 locus universe -> 236 current QC loci -> 176 safflower-rootable loci -> 40-tip, 161654-bp IQ-TREE2.4.0 ML analysis. JPN_20 biological samples are non-monophyletic in the ML tree and 0/1000 UFBoot trees; because JPN_20 is fully unresolved for the three analysed traits it is pruned rather than forcibly collapsed. JPN_31 remains excluded from primary trait analysis because of the Japan/Ukraine identity conflict.",
+  "claim_boundary": "Independent Japan38 compatibility reconstruction and source-backed trait lower bounds only; not the unpublished Moreyra final-350 phylogeny, not adaptive-convergence counts, and not proof of developmental modularity or adaptive radiation."
 }
