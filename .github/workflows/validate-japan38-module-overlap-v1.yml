@@ -1,0 +1,32 @@
+name: Validate Japan38 module transition overlap v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_japan38_module_transition_overlap_v1.py"
+      - "tests/test_japan38_module_transition_overlap_v1.py"
+      - ".github/workflows/validate-japan38-module-overlap-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-japan38-module-overlap-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install runtime dependency
+        run: pip install biopython
+      - name: Compile and test
+        run: |
+          python -m py_compile analysis/run_japan38_module_transition_overlap_v1.py
+          python -m unittest tests/test_japan38_module_transition_overlap_v1.py -v
