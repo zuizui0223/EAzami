@@ -31,27 +31,34 @@
       "source_ids": ["10.1002/ece3.73221", "10.1111/jse.12002", "10.1111/plb.13414", "10.1371/journal.pone.0095381"]
     },
     "stickiness": {
-      "rows": 5,
+      "rows": 2,
       "quantitative_ready_rows": 2,
+      "effect_extraction_needed_rows": 0,
+      "taxa": ["Bejaria resinosa"],
+      "source_ids": ["10.1038/s41598-022-23261-2"]
+    },
+    "stickiness_glandular_trichomes": {
+      "rows": 3,
+      "quantitative_ready_rows": 0,
       "effect_extraction_needed_rows": 1,
-      "taxa": ["Aquilegia vulgaris + A. pyrenaica", "Bejaria resinosa", "Datura wrightii"],
-      "source_ids": ["10.1007/s00442-012-2553-z", "10.1038/s41598-022-23261-2", "10.1890/04-0972"]
+      "taxa": ["Aquilegia vulgaris + A. pyrenaica", "Datura wrightii"],
+      "source_ids": ["10.1007/s00442-012-2553-z", "10.1890/04-0972"]
     }
   },
   "current_inference": {
-    "orientation": "Direct reorientation studies now span natural downward, horizontal and down-slope optima. The general working hypothesis is therefore not that downward orientation is universally superior, but that locally integrated natural orientation can increase fitness through different combinations of pollinator presentation/filtering and abiotic protection. The two-study homologous seed/achene-set lnRR diagnostic has high heterogeneity, reinforcing context dependence.",
+    "orientation": "Direct manipulation evidence outside Asteraceae supports multiple mechanisms (effective pollination plus abiotic protection) reaching seed/fruit fitness; effect transport to Cirsium remains a hypothesis.",
     "stickiness": "A universal sticky-is-defence rule is not retained. Direct floral evidence includes strong benefit in Bejaria and a Cirsium null elsewhere in the repository, while whole-plant Datura shows substantial costs; context-dependent defence is the working hypothesis.",
-    "display": "Direct manipulation supports simultaneous pollinator-attraction benefit and seed-predator cost, but broad-angiosperm numerical common-effect extraction is incomplete.",
-    "bract_defence": "Pedicularis rex directly separates pathways: draining water-holding bracts left pollinator visitation unchanged but increased seed predation and reduced final seed set. This supports a defence/protection mechanism rather than generic pollinator attraction.",
-    "colour_pigmentation": "UV experiments support both an environmental selection-pressure axis and a plausible anthocyanin UV-screening mechanism. However, intact-flower pigment-causal reproductive fitness evidence remains insufficient; colder/darker or UV/darker adaptive claims remain hypotheses."
+    "display": "Direct manipulation supports simultaneous pollinator-attraction benefit and seed-predator cost, but numerical common-effect extraction is not yet complete for the broad-angiosperm lane.",
+    "bract_defence": "Pedicularis rex directly separates functions: draining water-holding bracts left pollinator visitation unchanged but increased seed predation and reduced final seed set. This supports a defence/protection pathway rather than a generic pollinator-attraction function.",
+    "colour_pigmentation": "Silene UV exclusion shows that UV exposure induces anthocyanin while simultaneously depressing pollen and whole-plant seed production. This supports UV as a plausible selection pressure and pigment-induction context, but does not demonstrate that darker pigmentation itself raises fitness."
   },
   "next_meta_actions": [
-    "extract raw/group summaries or covariance-aware model effects for Corydalis and Lilium orientation so they can enter a hierarchical natural-optimum meta model",
     "extract raw/group summaries for Ipomopsis display manipulation",
     "extract comparable quantitative endpoints for Aquilegia glandular-trichome manipulation",
+    "add additional independent orientation manipulations with seed/fruit endpoints",
     "expand bract/phyllary manipulations beyond water-holding bracts to physical exclusion or access mechanisms",
-    "find factorial or near-isogenic flower-pigment manipulations with reproductive output under abiotic stress",
+    "separate colour-driver experiments from direct pigment-function manipulations before pooling",
     "do not pool different response metrics until an explicit common estimand or multivariate model is preregistered"
   ],
-  "claim_boundary": "Candidate calibration/effect-extraction registry only; no universal pooled floral-trait effect and no Cirsium adaptation claim."
+  "claim_boundary": "Candidate calibration/effect-extraction registry only. It does not estimate a pooled across-angiosperm effect or prove adaptation in Cirsium."
 }
