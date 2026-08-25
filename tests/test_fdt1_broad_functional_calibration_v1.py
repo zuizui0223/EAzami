@@ -15,6 +15,7 @@ def test_seed_unique_and_summary_counts_match():
     rows=read_csv(SEED); s=json.loads(SUMMARY.read_text())
     assert len(rows)==s['rows']==26
     assert len({r['study_id'] for r in rows})==len(rows)
+    assert set(s['modules'])=={'bract_defence','colour_pigmentation','display','orientation','stickiness','stickiness_glandular_trichomes'}
     for module,info in s['modules'].items():
         mr=[r for r in rows if r['module']==module]
         assert len(mr)==info['rows']
@@ -22,6 +23,11 @@ def test_seed_unique_and_summary_counts_match():
         assert sorted({r['source_id'] for r in mr})==sorted(info['source_ids'])
         assert sum(r['effect_readiness'].startswith('quantitative') for r in mr)==info['quantitative_ready_rows']
         assert sum(r['effect_readiness']=='effect_extraction_needed' for r in mr)==info['effect_extraction_needed_rows']
+
+def test_floral_stickiness_is_not_pooled_with_whole_plant_glandular_systems():
+    s=json.loads(SUMMARY.read_text())
+    assert s['modules']['stickiness']['taxa']==['Bejaria resinosa']
+    assert set(s['modules']['stickiness_glandular_trichomes']['taxa'])=={'Aquilegia vulgaris + A. pyrenaica','Datura wrightii'}
 
 def test_claim_boundaries_keep_context_separate():
     rows={r['study_id']:r for r in read_csv(SEED)}
