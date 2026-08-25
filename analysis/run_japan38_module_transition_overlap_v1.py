@@ -8,8 +8,14 @@ posterior transition probability for each informative branch. Cross-module
 overlap is summarized with rank correlation and a branch-length-stratified
 permutation null.
 
-Missing/ambiguous tip states remain ambiguous. JPN_20 is collapsed only when
-its two biological samples are monophyletic; JPN_31 remains unforced.
+Missing/ambiguous tip states remain ambiguous. A replicated concept is
+collapsed only when monophyletic if it has an observed analysed trait. A
+replicated concept that is fully unresolved for every analysed trait may be
+pruned without blocking the analysis, while its monophyly remains a separate
+tree diagnostic. Concepts disallowed by the frozen trait-ASR reconciliation
+(e.g. JPN_31) are pruned. Branches are matched across modules by their unique
+descendant-tip signature, never by potentially duplicated internal support
+labels.
 """
 from __future__ import annotations
 
@@ -23,16 +29,32 @@ STATE_UNIVERSE = {
     "stickiness": ("sticky", "nonsticky"),
 }
 
+
 def read_csv(path: Path):
     with path.open(encoding="utf-8-sig", newline="") as h:
         return list(csv.DictReader(h))
 
-def concept_map(path: Path):
+
+def concept_info(path: Path):
     rows = read_csv(path)
-    out = {r["paper_japan_member_id"]: [x for x in r["tip_ids"].split("|") if x] for r in rows}
-    if len(out) != 38:
-        raise ValueError(f"expected 38 concepts, found {len(out)}")
-    return out
+    cmap = {
+        r["paper_japan_member_id"]: [x for x in r["tip_ids"].split("|") if x]
+        for r in rows
+    }
+    allowed = {
+        r["paper_japan_member_id"]: (
+            (r.get("trait_asr_primary_allowed") or "true").strip().lower() != "false"
+        )
+        for r in rows
+    }
+    if len(cmap) != 38:
+        raise ValueError(f"expected 38 concepts, found {len(cmap)}")
+    return cmap, allowed
+
+
+def concept_map(path: Path):
+    return concept_info(path)[0]
+
 
 def trait_state(row, trait):
     if trait == "orientation":
@@ -61,6 +83,7 @@ def trait_state(row, trait):
             return {"nonsticky"}
     return set(STATE_UNIVERSE[trait])
 
+
 def trait_states(path: Path):
     rows = read_csv(path)
     by = {r["paper_japan_member_id"]: r for r in rows}
@@ -69,16 +92,32 @@ def trait_states(path: Path):
         for trait in STATE_UNIVERSE
     }
 
-def load_concept_tree(tree_path: Path, cmap):
-    tree = Phylo.read(str(tree_path), "newick")
+
+def resolved_for_any_trait(states, mid):
+    return any(
+        states[trait].get(mid, set(universe)) != set(universe)
+        for trait, universe in STATE_UNIVERSE.items()
+    )
+
+
+def _validate_raw_tree(tree, cmap):
     names = {t.name for t in tree.get_terminals()}
     expected = {x for xs in cmap.values() for x in xs} | {"OUTGROUP_saff"}
     if names != expected:
-        raise ValueError(f"tree tip mismatch missing={sorted(expected-names)} extra={sorted(names-expected)}")
+        raise ValueError(
+            f"tree tip mismatch missing={sorted(expected-names)} extra={sorted(names-expected)}"
+        )
+    tree.root_with_outgroup("OUTGROUP_saff")
     reps = [(m, xs) for m, xs in cmap.items() if len(xs) > 1]
     if len(reps) != 1 or reps[0][0] != "JPN_20" or len(reps[0][1]) != 2:
         raise ValueError(f"unexpected replicated concepts: {reps}")
-    two = reps[0][1]
+    return reps[0]
+
+
+def load_concept_tree(tree_path: Path, cmap):
+    """Strict legacy loader used by tests/diagnostics when JPN20 is observed."""
+    tree = Phylo.read(str(tree_path), "newick")
+    _, two = _validate_raw_tree(tree, cmap)
     mrca = tree.common_ancestor({"name": two[0]}, {"name": two[1]})
     if {x.name for x in mrca.get_terminals()} != set(two):
         raise ValueError("JPN_20 biological replicates are not monophyletic")
@@ -93,31 +132,106 @@ def load_concept_tree(tree_path: Path, cmap):
         raise ValueError("concept-tree tip set mismatch")
     return tree
 
+
+def load_analysis_tree(tree_path: Path, cmap, allowed, states):
+    """Prepare the primary trait tree without forcing unobserved/conflicted concepts."""
+    tree = Phylo.read(str(tree_path), "newick")
+    mid, two = _validate_raw_tree(tree, cmap)
+    mrca = tree.common_ancestor({"name": two[0]}, {"name": two[1]})
+    descendants = {x.name for x in mrca.get_terminals()}
+    monophyletic = descendants == set(two)
+    replicate_resolved = resolved_for_any_trait(states, mid)
+    excluded = []
+
+    if replicate_resolved:
+        if not monophyletic:
+            raise ValueError(
+                "JPN_20 biological replicates are not monophyletic but JPN_20 has an observed analysed trait"
+            )
+        mrca.clades = []
+        mrca.name = mid
+        replicate_mode = "collapsed_monophyletic_replicated_concept"
+    else:
+        for tip in two:
+            tree.prune(target=tip)
+        excluded.append(mid)
+        replicate_mode = "pruned_fully_unresolved_replicated_concept"
+
+    for concept, xs in cmap.items():
+        if allowed.get(concept, True) or len(xs) != 1:
+            continue
+        if xs[0] in {t.name for t in tree.get_terminals()}:
+            tree.prune(target=xs[0])
+        excluded.append(concept)
+
+    reverse = {
+        xs[0]: concept
+        for concept, xs in cmap.items()
+        if len(xs) == 1 and allowed.get(concept, True)
+    }
+    for tip in tree.get_terminals():
+        if tip.name in reverse:
+            tip.name = reverse[tip.name]
+
+    tree.prune(target="OUTGROUP_saff")
+    expected = {
+        concept
+        for concept in cmap
+        if allowed.get(concept, True) and concept not in set(excluded)
+    }
+    final = {t.name for t in tree.get_terminals()}
+    if final != expected:
+        raise ValueError(
+            f"analysis-tree tip mismatch missing={sorted(expected-final)} extra={sorted(final-expected)}"
+        )
+    return tree, {
+        "replicate_monophyly": monophyletic,
+        "replicate_resolved_for_any_trait": replicate_resolved,
+        "replicate_mode": replicate_mode,
+        "replicate_mrca_descendants": sorted(descendants),
+        "excluded_concepts": sorted(set(excluded)),
+        "concept_tips": len(final),
+    }
+
+
 def transition_matrix(k, q, t):
     e = math.exp(-k * q * max(float(t or 0.0), 0.0))
     same = 1.0 / k + (1.0 - 1.0 / k) * e
     diff = 1.0 / k - (1.0 / k) * e
     return [[same if i == j else diff for j in range(k)] for i in range(k)]
 
+
 def postorder(clade):
     for c in clade.clades:
         yield from postorder(c)
     yield clade
+
 
 def preorder(clade):
     yield clade
     for c in clade.clades:
         yield from preorder(c)
 
+
 def resolved_tip_names(states, universe):
     u = set(universe)
     return {mid for mid, s in states.items() if set(s) != u}
+
+
+def edge_id(child):
+    """Unique rooted-tree branch identifier independent of duplicated node labels."""
+    return "|".join(sorted(t.name for t in child.get_terminals()))
+
 
 def fit_trait(tree, states, universe):
     state_list = list(universe)
     k = len(state_list)
     nodes = list(preorder(tree.root))
-    positive = [float(c.branch_length) for c in nodes if c is not tree.root and (c.branch_length or 0) > 0]
+    positive = [
+        float(c.branch_length)
+        for c in nodes
+        if c is not tree.root and (c.branch_length or 0) > 0
+    ]
     median_t = statistics.median(positive) if positive else 1.0
     u = set(universe)
     allowed = {}
@@ -140,7 +254,10 @@ def fit_trait(tree, states, universe):
                 scale = 0.0
                 for child in node.clades:
                     P = transition_matrix(k, q, child.branch_length or 0.0)
-                    msg = [sum(P[i][j] * up[child][j] for j in range(k)) for i in range(k)]
+                    msg = [
+                        sum(P[i][j] * up[child][j] for j in range(k))
+                        for i in range(k)
+                    ]
                     child_msg[(node, child)] = msg
                     for i in range(k):
                         raw[i] *= msg[i]
@@ -172,39 +289,81 @@ def fit_trait(tree, states, universe):
         if parent.is_terminal():
             continue
         for child in parent.clades:
-            sibs = [s for s in parent.clades if s is not child]
+            siblings = [s for s in parent.clades if s is not child]
             outside_parent = down[parent][:]
-            for sib in sibs:
+            for sib in siblings:
                 msg = child_msg[(parent, sib)]
-                outside_parent = [outside_parent[i] * msg[i] for i in range(k)]
+                outside_parent = [
+                    outside_parent[i] * msg[i] for i in range(k)
+                ]
             z = sum(outside_parent)
             if z > 0:
                 outside_parent = [x / z for x in outside_parent]
             P = transition_matrix(k, q_best, child.branch_length or 0.0)
-            dchild = [sum(outside_parent[i] * P[i][j] for i in range(k)) for j in range(k)]
+            dchild = [
+                sum(outside_parent[i] * P[i][j] for i in range(k))
+                for j in range(k)
+            ]
             z = sum(dchild)
-            down[child] = [x / z for x in dchild] if z > 0 else [1.0 / k] * k
-            joint = [[outside_parent[i] * P[i][j] * up[child][j] for j in range(k)] for i in range(k)]
+            down[child] = (
+                [x / z for x in dchild] if z > 0 else [1.0 / k] * k
+            )
+            joint = [
+                [
+                    outside_parent[i] * P[i][j] * up[child][j]
+                    for j in range(k)
+                ]
+                for i in range(k)
+            ]
             z = sum(sum(r) for r in joint)
-            pchg = None if z <= 0 else 1.0 - sum(joint[i][i] for i in range(k)) / z
+            pchg = (
+                None
+                if z <= 0
+                else 1.0 - sum(joint[i][i] for i in range(k)) / z
+            )
+            prior_pchg = (
+                (k - 1.0) / k
+                * (1.0 - math.exp(-k * q_best * float(child.branch_length or 0.0)))
+            )
             inside = descendant_resolved(child)
-            edge_rows.append({
-                "parent": parent.name or f"internal_{id(parent)}",
-                "child": child.name or f"internal_{id(child)}",
-                "branch_length": float(child.branch_length or 0.0),
-                "resolved_inside": inside,
-                "resolved_outside": total_resolved - inside,
-                "informative": inside > 0 and inside < total_resolved,
-                "transition_posterior": pchg,
-            })
+            edge_rows.append(
+                {
+                    "edge_id": edge_id(child),
+                    "parent_label": parent.name,
+                    "child_label": child.name,
+                    "branch_length": float(child.branch_length or 0.0),
+                    "resolved_inside": inside,
+                    "resolved_outside": total_resolved - inside,
+                    "informative": inside > 0 and inside < total_resolved,
+                    "transition_posterior": pchg,
+                    "branch_length_prior_transition": prior_pchg,
+                    "transition_excess_over_branch_prior": (
+                        None if pchg is None else pchg - prior_pchg
+                    ),
+                }
+            )
+
+    # No two rooted branches may share a descendant-tip signature.
+    ids = [r["edge_id"] for r in edge_rows]
+    if len(ids) != len(set(ids)):
+        raise ValueError("non-unique descendant-tip edge identifiers")
+
+    k_q_median = k * q_best * median_t
+    prior_change_median = (
+        (k - 1.0) / k * (1.0 - math.exp(-k_q_median))
+    )
     return {
         "states": state_list,
         "resolved_tips": total_resolved,
         "q_equal_rates": q_best,
         "log_likelihood": ll_best,
         "median_positive_branch_length": median_t,
+        "k_q_times_median_branch": k_q_median,
+        "prior_transition_probability_at_median_branch": prior_change_median,
+        "saturation_warning": k_q_median >= 3.0,
         "edges": edge_rows,
     }
+
 
 def rankdata(vals):
     order = sorted(range(len(vals)), key=lambda i: vals[i])
@@ -220,6 +379,7 @@ def rankdata(vals):
         i = j
     return ranks
 
+
 def pearson(x, y):
     if len(x) < 3:
         return None
@@ -228,8 +388,10 @@ def pearson(x, y):
     den = math.sqrt(sum(v * v for v in dx) * sum(v * v for v in dy))
     return sum(a * b for a, b in zip(dx, dy)) / den if den > 0 else None
 
+
 def spearman(x, y):
     return pearson(rankdata(x), rankdata(y))
+
 
 def branch_bins(lengths, bins=4):
     order = sorted(range(len(lengths)), key=lambda i: lengths[i])
@@ -237,6 +399,7 @@ def branch_bins(lengths, bins=4):
     for rank, idx in enumerate(order):
         labels[idx] = min(bins - 1, int(rank * bins / len(order)))
     return labels
+
 
 def stratified_perm_p(x, y, lengths, observed, rng, nperm):
     if observed is None or len(x) < 4:
@@ -261,6 +424,7 @@ def stratified_perm_p(x, y, lengths, observed, rng, nperm):
             ge += 1
     return (ge + 1) / (valid + 1) if valid else None
 
+
 def compare_traits(fits, seed=20260825, nperm=999):
     rng = random.Random(seed)
     out = {}
@@ -268,20 +432,38 @@ def compare_traits(fits, seed=20260825, nperm=999):
     for ai in range(len(traits)):
         for bi in range(ai + 1, len(traits)):
             a, b = traits[ai], traits[bi]
-            ea = {(r["parent"], r["child"]): r for r in fits[a]["edges"] if r["informative"] and r["transition_posterior"] is not None}
-            eb = {(r["parent"], r["child"]): r for r in fits[b]["edges"] if r["informative"] and r["transition_posterior"] is not None}
+            ea = {
+                r["edge_id"]: r
+                for r in fits[a]["edges"]
+                if r["informative"] and r["transition_posterior"] is not None
+            }
+            eb = {
+                r["edge_id"]: r
+                for r in fits[b]["edges"]
+                if r["informative"] and r["transition_posterior"] is not None
+            }
             keys = sorted(set(ea) & set(eb))
             x = [ea[k]["transition_posterior"] for k in keys]
             y = [eb[k]["transition_posterior"] for k in keys]
+            xe = [ea[k]["transition_excess_over_branch_prior"] for k in keys]
+            ye = [eb[k]["transition_excess_over_branch_prior"] for k in keys]
             lengths = [ea[k]["branch_length"] for k in keys]
             rho = spearman(x, y)
+            rho_excess = spearman(xe, ye)
             out[f"{a}__{b}"] = {
                 "shared_informative_edges": len(keys),
                 "spearman_transition_posterior": rho,
-                "branch_length_stratified_one_sided_p_for_positive_overlap": stratified_perm_p(x, y, lengths, rho, rng, nperm),
+                "branch_length_stratified_one_sided_p_for_positive_overlap": stratified_perm_p(
+                    x, y, lengths, rho, rng, nperm
+                ),
+                "spearman_transition_excess_over_branch_prior": rho_excess,
+                "branch_length_stratified_one_sided_p_for_positive_excess_overlap": stratified_perm_p(
+                    xe, ye, lengths, rho_excess, rng, nperm
+                ),
                 "sum_product_transition_posterior": sum(i * j for i, j in zip(x, y)),
             }
     return out
+
 
 def main():
     p = argparse.ArgumentParser()
@@ -292,22 +474,41 @@ def main():
     p.add_argument("--seed", type=int, default=20260825)
     p.add_argument("--output", type=Path, required=True)
     a = p.parse_args()
-    cmap = concept_map(a.concept_map)
-    tree = load_concept_tree(a.tree, cmap)
+
+    cmap, allowed = concept_info(a.concept_map)
     states = trait_states(a.trait_seed)
-    fits = {t: fit_trait(tree, states[t], STATE_UNIVERSE[t]) for t in STATE_UNIVERSE}
+    tree, tree_diag = load_analysis_tree(a.tree, cmap, allowed, states)
+    fits = {
+        t: fit_trait(tree, states[t], STATE_UNIVERSE[t])
+        for t in STATE_UNIVERSE
+    }
     result = {
         "contract_version": "japan38_module_transition_overlap_v1",
         "model": "separate symmetric equal-rates Mk per module",
-        "traits": {t: {k: v for k, v in fit.items() if k != "edges"} for t, fit in fits.items()},
+        "tree_diagnostic": tree_diag,
+        "traits": {
+            t: {k: v for k, v in fit.items() if k != "edges"}
+            for t, fit in fits.items()
+        },
         "pairwise_overlap": compare_traits(fits, a.seed, a.permutations),
         "permutations": a.permutations,
         "seed": a.seed,
-        "claim_boundary": "Branch-wise transition-posterior overlap diagnostic only. Positive overlap can motivate common-lability; weak/heterogeneous overlap can motivate modularity. It does not identify shared developmental genetics, ecological adaptation, or causal selection. Missing/ambiguous states remain uncertain and JPN_31 is unforced.",
+        "branch_identity": "unique descendant-tip signature on the rooted analysis tree",
+        "claim_boundary": (
+            "Branch-wise transition-posterior overlap diagnostic only. Positive overlap can motivate common-lability; "
+            "weak/heterogeneous overlap can motivate modularity. It does not identify shared developmental genetics, "
+            "ecological adaptation, or causal selection. Missing/ambiguous states remain uncertain. Fully unresolved "
+            "replicated concepts and concepts disallowed by the frozen trait-ASR reconciliation are pruned. High Mk "
+            "saturation diagnostics require caution because transition posteriors can become weakly discriminating."
+        ),
     }
     a.output.parent.mkdir(parents=True, exist_ok=True)
-    a.output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    a.output.write_text(
+        json.dumps(result, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     print(json.dumps(result, indent=2, ensure_ascii=False))
+
 
 if __name__ == "__main__":
     main()
