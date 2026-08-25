@@ -30,7 +30,12 @@ jobs:
           python analysis/summarize_fdt1_broad_functional_calibration_v1.py \
             --input data/evidence/fdt1_broad_functional_calibration_seed_v1.csv \
             --output /tmp/fdt1_summary.json
-          diff -u data/evidence/fdt1_broad_functional_calibration_summary_v1.json /tmp/fdt1_summary.json
+          python - <<'PY'
+          import json
+          frozen=json.load(open('data/evidence/fdt1_broad_functional_calibration_summary_v1.json'))
+          recomputed=json.load(open('/tmp/fdt1_summary.json'))
+          assert frozen == recomputed, (frozen, recomputed)
+          PY
           python analysis/run_fdt1_orientation_net_fitness_meta_v1.py \
             --input data/evidence/fdt1_orientation_net_fitness_extract_v1.csv \
             --output /tmp/orientation_meta.json
