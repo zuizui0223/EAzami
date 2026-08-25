@@ -1,0 +1,45 @@
+name: Validate FDT1 broad functional calibration v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/fdt1_broad_functional_calibration_seed_v1.csv"
+      - "data/evidence/fdt1_broad_functional_calibration_summary_v1.json"
+      - "data/evidence/fdt1_meta_estimand_registry_v1.csv"
+      - "data/evidence/fdt1_orientation_net_fitness_extract_v1.csv"
+      - "data/evidence/fdt1_orientation_net_fitness_two_study_meta_v1.json"
+      - "analysis/summarize_fdt1_broad_functional_calibration_v1.py"
+      - "analysis/run_fdt1_orientation_net_fitness_meta_v1.py"
+      - "tests/test_fdt1_broad_functional_calibration_v1.py"
+      - ".github/workflows/validate-fdt1-broad-functional-calibration-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Recompute frozen summaries
+        run: |
+          python analysis/summarize_fdt1_broad_functional_calibration_v1.py \
+            --input data/evidence/fdt1_broad_functional_calibration_seed_v1.csv \
+            --output /tmp/fdt1_summary.json
+          diff -u data/evidence/fdt1_broad_functional_calibration_summary_v1.json /tmp/fdt1_summary.json
+          python analysis/run_fdt1_orientation_net_fitness_meta_v1.py \
+            --input data/evidence/fdt1_orientation_net_fitness_extract_v1.csv \
+            --output /tmp/orientation_meta.json
+          python - <<'PY'
+          import json
+          a=json.load(open('data/evidence/fdt1_orientation_net_fitness_two_study_meta_v1.json'))
+          b=json.load(open('/tmp/orientation_meta.json'))
+          for key in ['k','effects','fixed_effect','random_effect_DL','heterogeneity','interpretation','claim_boundary']:
+              assert a[key]==b[key], (key,a[key],b[key])
+          PY
+      - name: Run unit tests
+        run: python -m pytest -q tests/test_fdt1_broad_functional_calibration_v1.py
