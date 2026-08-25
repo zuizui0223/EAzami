@@ -12,174 +12,33 @@ permissions:
 
 concurrency:
   group: japan38-comp1061-accelerator-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 env:
-  SOURCE_RUN_ID: "32806058893"
+  FROZEN_TREE_RUN_ID: "32823196992"
+  FROZEN_TREE_ARTIFACT: "japan38-comp1061-accelerated-tree-32823196992"
+  FROZEN_CONCAT_SHA256: "60693300e56fc3f05e937db5b62bd600e217fb3a8598fcb4c713838b400da26f"
+  FROZEN_PARTITIONS_SHA256: "30e6e5703a76b4065c3903c04b43179fb538d280539df66c7bf64706962a128e"
+  FROZEN_SUMMARY_SHA256: "8170b2fb33384cecfa7d42997fc637c682eb8c61bd8302140be125fa4ad238f5"
 
 jobs:
-  recover_remaining:
-    runs-on: ubuntu-latest
-    timeout-minutes: 180
-    strategy:
-      fail-fast: false
-      max-parallel: 12
-      matrix:
-        index: [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: japan38-comp1061-inputs-${{ env.SOURCE_RUN_ID }}
-          path: .
-          run-id: ${{ env.SOURCE_RUN_ID }}
-          github-token: ${{ github.token }}
-      - uses: mamba-org/setup-micromamba@v3
-        with:
-          environment-name: japan38-comp1061
-          create-args: >-
-            python=3.11
-            hybpiper=2.3.4
-            sra-tools
-            fastp
-            pigz
-            bwa
-            samtools
-            blast
-            spades
-            exonerate
-            biopython
-          condarc: |
-            channels:
-              - conda-forge
-              - bioconda
-            channel_priority: strict
-          init-shell: none
-          generate-run-shell: true
-          cache-environment: true
-          cache-downloads: true
-          post-cleanup: all
-      - name: Resolve biological sample
-        id: sample
-        env:
-          IDX: ${{ matrix.index }}
-        run: |
-          python - <<'PY'
-          import csv,os
-          rows=list(csv.DictReader(open('japan38_bundle/sample_manifest.csv',encoding='utf-8-sig')))
-          r=rows[int(os.environ['IDX'])]
-          with open(os.environ['GITHUB_OUTPUT'],'a') as h:
-              h.write(f"tip={r['tip_id']}\nmember={r['paper_japan_member_id']}\nbiosample={r['biosample']}\nruns={r['run_accessions']}\n")
-          print(r)
-          PY
-      - name: Fetch, combine and trim SRA reads
-        shell: micromamba-shell {0}
-        env:
-          RESULT_ROOT: ${{ github.workspace }}/panel_results
-          ENV_PREFIX: ${{ env.CONDA_PREFIX }}
-          SLURM_ARRAY_TASK_ID: ${{ matrix.index }}
-        run: |
-          set -euo pipefail
-          export REPO_ROOT="$GITHUB_WORKSPACE"
-          bash japan38_bundle/01_fetch_trim_slurm.sh
-          TIP="${{ steps.sample.outputs.tip }}"
-          test -s "$RESULT_ROOT/reads/$TIP/trimmed/$TIP.R1.trim.fastq.gz"
-          test -s "$RESULT_ROOT/reads/$TIP/trimmed/$TIP.R2.trim.fastq.gz"
-      - name: Recover Comp1061 with pinned HybPiper BWA
-        shell: micromamba-shell {0}
-        env:
-          RESULT_ROOT: ${{ github.workspace }}/panel_results
-          TIP: ${{ steps.sample.outputs.tip }}
-        run: |
-          set -euo pipefail
-          TARGET="$RESULT_ROOT/inputs/reference/comp1061_hybpiper_reference.fasta"
-          R1="$RESULT_ROOT/reads/$TIP/trimmed/$TIP.R1.trim.fastq.gz"
-          R2="$RESULT_ROOT/reads/$TIP/trimmed/$TIP.R2.trim.fastq.gz"
-          HYB="$RESULT_ROOT/hybpiper_bwa"
-          mkdir -p "$HYB"; cd "$HYB"
-          hybpiper assemble -t_dna "$TARGET" -r "$R1" "$R2" --prefix "$TIP" --cpu 4 --bwa --no_intronerate --compress_sample_folder
-          cd - >/dev/null
-          test -s "$HYB/$TIP.tar.gz"
-      - name: Export compact sequence and paralog evidence
-        shell: micromamba-shell {0}
-        env:
-          RESULT_ROOT: ${{ github.workspace }}/panel_results
-          TIP: ${{ steps.sample.outputs.tip }}
-          MEMBER: ${{ steps.sample.outputs.member }}
-          BIOSAMPLE: ${{ steps.sample.outputs.biosample }}
-          RUNS: ${{ steps.sample.outputs.runs }}
-        run: |
-          set -euo pipefail
-          TARGET="$RESULT_ROOT/inputs/reference/comp1061_hybpiper_reference.fasta"
-          HYB="$RESULT_ROOT/hybpiper_bwa"
-          QC="$GITHUB_WORKSPACE/sample_compact/$TIP"
-          mkdir -p "$QC"; printf '%s\n' "$TIP" > "$QC/sample_names.txt"
-          hybpiper retrieve_sequences dna -t_dna "$TARGET" --sample_names "$QC/sample_names.txt" --hybpiper_dir "$HYB" --fasta_dir "$QC/retrieved_dna" --cpu 4
-          hybpiper paralog_retriever "$QC/sample_names.txt" -t_dna "$TARGET" --hybpiper_dir "$HYB" --fasta_dir_all "$QC/paralogs_all" --paralog_report_filename "$QC/paralog_report" --paralogs_above_threshold_report_filename "$QC/paralog_loci_any" --paralogs_list_threshold_percentage 0 --no_heatmap --cpu 4
-          PAR=$(find "$QC" -maxdepth 1 -type f -name 'paralog_report*' -print | head -1)
-          test -n "$PAR"; test -s "$PAR"; [[ "$PAR" == "$QC/paralog_report.tsv" ]] || cp "$PAR" "$QC/paralog_report.tsv"
-          TIP="$TIP" MEMBER="$MEMBER" BIOSAMPLE="$BIOSAMPLE" RUNS="$RUNS" QC="$QC" RESULT_ROOT="$RESULT_ROOT" python - <<'PY'
-          import json,os,pathlib
-          qc=pathlib.Path(os.environ['QC'])
-          loci={p.stem for p in (qc/'retrieved_dna').glob('*.FNA') if p.stat().st_size>0}
-          frozen={x.strip() for x in (pathlib.Path(os.environ['RESULT_ROOT'])/'inputs/locus_sets/moreyra_conservative_241_no_warning_loci.txt').read_text().splitlines() if x.strip()}
-          out={'tip_id':os.environ['TIP'],'paper_japan_member_id':os.environ['MEMBER'],'biosample':os.environ['BIOSAMPLE'],'run_accessions':os.environ['RUNS'],'mapping_mode':'bwa','all_retrieved_loci':len(loci),'frozen_241_retrieved_loci':len(loci & frozen)}
-          (qc/'sample_metadata.json').write_text(json.dumps(out,indent=2)+'\n')
-          print(json.dumps(out,indent=2))
-          PY
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: japan38-accelerated-sample-${{ matrix.index }}
-          path: sample_compact
-          if-no-files-found: warn
-          compression-level: 6
-          retention-days: 14
-
-  aggregate_tree:
-    needs: recover_remaining
+  retry_tree_only:
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: japan38-comp1061-inputs-${{ env.SOURCE_RUN_ID }}
-          path: .
-          run-id: ${{ env.SOURCE_RUN_ID }}
-          github-token: ${{ github.token }}
-      - name: Download frozen successful source-run samples 0-9
+      - name: Download frozen successful matrix from failed tree-stage run
         uses: actions/download-artifact@v4
         with:
-          pattern: japan38-comp1061-sample-?
-          path: downloaded_samples
-          run-id: ${{ env.SOURCE_RUN_ID }}
+          name: ${{ env.FROZEN_TREE_ARTIFACT }}
+          path: frozen_artifact
+          run-id: ${{ env.FROZEN_TREE_RUN_ID }}
           github-token: ${{ github.token }}
-      - name: Download frozen successful source-run samples 10-19
-        uses: actions/download-artifact@v4
-        with:
-          pattern: japan38-comp1061-sample-1?
-          path: downloaded_samples
-          run-id: ${{ env.SOURCE_RUN_ID }}
-          github-token: ${{ github.token }}
-      - name: Download frozen successful source-run sample 20
-        uses: actions/download-artifact@v4
-        with:
-          name: japan38-comp1061-sample-20
-          path: downloaded_samples/source20
-          run-id: ${{ env.SOURCE_RUN_ID }}
-          github-token: ${{ github.token }}
-      - name: Download accelerated samples 21-38
-        uses: actions/download-artifact@v4
-        with:
-          pattern: japan38-accelerated-sample-*
-          path: downloaded_samples
       - uses: mamba-org/setup-micromamba@v3
         with:
-          environment-name: japan38-comp1061
+          environment-name: japan38-tree-retry
           create-args: >-
             python=3.11
-            mafft
             iqtree=2.4.0
             biopython
           condarc: |
@@ -192,71 +51,69 @@ jobs:
           cache-environment: true
           cache-downloads: true
           post-cleanup: all
-      - name: Aggregate exactly 39 compact sample artifacts
+      - name: Verify frozen tree matrix contract
         shell: micromamba-shell {0}
         run: |
           set -euo pipefail
-          find downloaded_samples -name sample_metadata.json -print | tee recovered_sample_metadata.txt
-          test $(wc -l < recovered_sample_metadata.txt) -eq 39
-          python analysis/aggregate_comp1061_github_matrix.py \
-            --artifact-root downloaded_samples \
-            --runs japan38_bundle/sample_manifest.csv \
-            --outdir aggregate_inputs
-      - name: Apply frozen 241 occupancy/paralog gate
+          test -s frozen_artifact/tree_result/japan38_concat.fasta
+          test -s frozen_artifact/tree_result/partitions.csv
+          test -s frozen_artifact/tree_result/concat_summary.json
+          echo "$FROZEN_CONCAT_SHA256  frozen_artifact/tree_result/japan38_concat.fasta" | sha256sum -c -
+          echo "$FROZEN_PARTITIONS_SHA256  frozen_artifact/tree_result/partitions.csv" | sha256sum -c -
+          echo "$FROZEN_SUMMARY_SHA256  frozen_artifact/tree_result/concat_summary.json" | sha256sum -c -
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('frozen_artifact/tree_result/concat_summary.json').read_text())
+          assert x['contract_version']=='japan38_comp1061_concat_v1'
+          assert x['loci']==176
+          assert x['focal_tips']==39
+          assert x['tree_tip_count']==40
+          assert x['root_tip']=='OUTGROUP_saff'
+          assert x['alignment_length']==161654
+          print(json.dumps(x,indent=2))
+          PY
+      - name: Rebuild frozen 38-concept map without sequence recovery
         shell: micromamba-shell {0}
         run: |
-          python analysis/summarize_japan38_comp1061_qc_v1.py \
-            --manifest japan38_bundle/sample_manifest.csv \
-            --retrieved-dir aggregate_inputs/retrieved_dna \
-            --paralog-report aggregate_inputs/paralog_report.tsv \
-            --locus-dir panel_results/inputs/locus_sets \
-            --outdir japan38_qc --min-occupancy 0.80
-          cat japan38_qc/current_qc_summary.json
-      - name: Prepare safflower-rooted tree inputs
+          set -euo pipefail
+          mkdir -p work/moreyra work/global_panel work/japan38_subset
+          python analysis/materialize_frozen_moreyra_reconciliation.py \
+            --output work/moreyra/moreyra2025_all_sample_reconciliation.csv
+          echo "cf3af71a1a77eee5bd177cef9cf8106b749b949eaacc0ad82bbb331978084505  work/moreyra/moreyra2025_all_sample_reconciliation.csv" | sha256sum -c -
+          python analysis/build_japan_origin_global_public_panel_v2.py \
+            --moreyra-reconciliation work/moreyra/moreyra2025_all_sample_reconciliation.csv \
+            --outdir work/global_panel
+          python analysis/build_japan38_comp1061_subset_panel_v1.py \
+            --global-panel work/global_panel/japan_origin_global_public_panel_v2.csv \
+            --japan38-audit data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv \
+            --outdir work/japan38_subset
+          test -s work/japan38_subset/concept_map.csv
+      - name: Infer pinned IQ-TREE 2 primary tree from frozen matrix
         shell: micromamba-shell {0}
         run: |
-          python analysis/prepare_japan38_comp1061_tree_inputs_v1.py \
-            --manifest japan38_bundle/sample_manifest.csv \
-            --locus-list japan38_qc/current_conservative_241_loci.txt \
-            --retrieved-dir aggregate_inputs/retrieved_dna \
-            --target panel_results/inputs/reference/comp1061_hybpiper_reference.fasta \
-            --outdir tree_inputs
-      - name: Align all admitted loci
-        shell: micromamba-shell {0}
-        run: |
-          set -euo pipefail; mkdir -p alignments
-          while IFS= read -r LOCUS; do
-            test -n "$LOCUS" || continue
-            mafft --auto --thread 2 "tree_inputs/loci_unaligned/$LOCUS.fasta" > "alignments/$LOCUS.aln.fasta"
-          done < tree_inputs/eligible_loci.txt
-          test $(find alignments -name '*.aln.fasta' | wc -l) -eq $(wc -l < tree_inputs/eligible_loci.txt)
-      - name: Concatenate and infer primary ML tree
-        shell: micromamba-shell {0}
-        run: |
-          set -euo pipefail; mkdir -p tree_result
-          python analysis/concatenate_japan38_comp1061_alignments_v1.py \
-            --eligible-loci tree_inputs/eligible_loci.txt \
-            --alignment-dir alignments \
-            --manifest japan38_bundle/sample_manifest.csv \
-            --output tree_result/japan38_concat.fasta \
-            --partitions tree_result/partitions.csv \
-            --summary tree_result/concat_summary.json
+          set -euo pipefail
+          mkdir -p tree_result
+          cp frozen_artifact/tree_result/japan38_concat.fasta tree_result/
+          cp frozen_artifact/tree_result/partitions.csv tree_result/
+          cp frozen_artifact/tree_result/concat_summary.json tree_result/
           IQTREE_BIN="$(command -v iqtree2 || true)"
           if [[ -z "$IQTREE_BIN" ]]; then
             echo "Pinned IQ-TREE 2 executable iqtree2 is unavailable" >&2
             micromamba list iqtree || true
             exit 127
           fi
-          "$IQTREE_BIN" 2>&1 | head -n 1 | tee tree_result/iqtree_version.txt || true
+          micromamba list iqtree | tee tree_result/iqtree_package_version.txt
           "$IQTREE_BIN" -s tree_result/japan38_concat.fasta -m MFP -B 1000 --alrt 1000 -T AUTO -o OUTGROUP_saff --prefix tree_result/japan38_comp1061
           test -s tree_result/japan38_comp1061.treefile
           test -s tree_result/japan38_comp1061.ufboot
-      - name: Map multiple capitulum traits
+      - name: Map multiple capitulum traits on reconstructed Japan38 tree
         shell: micromamba-shell {0}
         run: |
+          set -euo pipefail
           python analysis/summarize_japan38_multitrait_parsimony_v1.py \
             --tree tree_result/japan38_comp1061.treefile \
-            --concept-map japan38_bundle/concept_map.csv \
+            --concept-map work/japan38_subset/concept_map.csv \
             --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
             --bootstrap-trees tree_result/japan38_comp1061.ufboot \
             --output tree_result/japan38_multitrait_parsimony_v1.json
@@ -264,13 +121,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: japan38-comp1061-accelerated-tree-${{ github.run_id }}
+          name: japan38-comp1061-frozen-tree-retry-${{ github.run_id }}
           path: |
-            recovered_sample_metadata.txt
-            aggregate_inputs/aggregate_summary.json
-            japan38_qc
-            tree_inputs/tree_input_summary.json
-            tree_inputs/locus_manifest.csv
+            work/japan38_subset/summary.json
+            work/japan38_subset/concept_map.csv
             tree_result
           if-no-files-found: warn
-          retention-days: 30
+          retention-days: 90
