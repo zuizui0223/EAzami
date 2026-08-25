@@ -1,0 +1,27 @@
+{
+  "contract_version": "fdt4_multitrait_readiness_v1",
+  "status_date": "2026-08-25",
+  "source": "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv",
+  "rows_in_nmns_seed": 22,
+  "coverage": {
+    "orientation_resolved": 19,
+    "phyllary_resolved": 10,
+    "stickiness_resolved": 12,
+    "phyllary_and_stickiness_resolved": 8
+  },
+  "module_decision": {
+    "orientation": "benchmark module; repeated-state and niche screens already implemented, but not the sole doctoral trait",
+    "phyllary_spine": "next macroevolution module after a machine-readable Japan38/expanded nuclear tree is recovered",
+    "stickiness": "parallel negative-control macroevolution module after the Japan38/expanded tree is recovered",
+    "display": "functional meta prior is comparatively strong, but a Japan-wide direct taxon-level size/head-number trait table is still missing",
+    "colour": "high-value evolutionary module, but fixed-white lineage coverage remains the immediate historical-state bottleneck"
+  },
+  "current_blocker": "The repository does not yet contain a machine-readable Moreyra Japan38/expanded nuclear topology with sample-to-taxon provenance. Trait coverage alone must not be converted into ASR or transition counts.",
+  "next_actions": [
+    "recover/store the Moreyra Japan38 or broader nuclear topology in machine-readable form with sample provenance",
+    "map phyllary and stickiness separately and estimate repeated transitions/topology sensitivity",
+    "build a direct display trait table from authority/voucher sources before display evolutionary mapping",
+    "compare module-specific transition histories against the common-lability alternative only after at least two additional modules are validly mapped"
+  ],
+  "claim_boundary": "Coverage/readiness audit only; no phylogenetic signal, correlated evolution, ecological function or adaptation claim."
+}
