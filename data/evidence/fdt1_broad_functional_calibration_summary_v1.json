@@ -1,7 +1,21 @@
 {
   "contract_version": "fdt1_broad_functional_calibration_v1",
-  "rows": 14,
+  "rows": 20,
   "modules": {
+    "bract_defence": {
+      "rows": 3,
+      "quantitative_ready_rows": 3,
+      "effect_extraction_needed_rows": 0,
+      "taxa": ["Pedicularis rex"],
+      "source_ids": ["10.1093/aobpla/plv019"]
+    },
+    "colour_pigmentation": {
+      "rows": 3,
+      "quantitative_ready_rows": 0,
+      "effect_extraction_needed_rows": 0,
+      "taxa": ["Silene littorea"],
+      "source_ids": ["10.1371/journal.pone.0231611"]
+    },
     "display": {
       "rows": 3,
       "quantitative_ready_rows": 0,
@@ -26,13 +40,17 @@
   },
   "current_inference": {
     "orientation": "Direct manipulation evidence outside Asteraceae supports multiple mechanisms (effective pollination plus abiotic protection) reaching seed/fruit fitness; effect transport to Cirsium remains a hypothesis.",
-    "stickiness": "A universal sticky-is-defence rule is not retained. Direct floral evidence includes strong benefit in Bejaria while Cirsium has a null direct neutralization result elsewhere in the repository; whole-plant Datura also shows substantial demographic costs. Context-dependent defence is the working hypothesis.",
-    "display": "Direct manipulation supports simultaneous pollinator-attraction benefit and seed-predator cost, but broad-angiosperm numerical common-effect extraction is incomplete."
+    "stickiness": "A universal sticky-is-defence rule is not retained. Direct floral evidence includes strong benefit in Bejaria and a Cirsium null elsewhere in the repository, while whole-plant Datura shows substantial costs; context-dependent defence is the working hypothesis.",
+    "display": "Direct manipulation supports simultaneous pollinator-attraction benefit and seed-predator cost, but broad-angiosperm numerical common-effect extraction is incomplete.",
+    "bract_defence": "Pedicularis rex directly separates pathways: draining water-holding bracts left pollinator visitation unchanged but increased seed predation and reduced final seed set. This supports a defence/protection mechanism rather than generic pollinator attraction.",
+    "colour_pigmentation": "Silene UV exclusion shows that UV exposure induces anthocyanin while depressing pollen and whole-plant seed production. UV is therefore a plausible selection-pressure axis, but this does not demonstrate that darker pigmentation itself increases fitness."
   },
   "next_meta_actions": [
     "extract raw/group summaries for Ipomopsis display manipulation",
     "extract comparable quantitative endpoints for Aquilegia glandular-trichome manipulation",
     "add additional independent orientation manipulations with seed/fruit endpoints",
+    "expand bract/phyllary manipulations beyond water-holding bracts to physical exclusion or access mechanisms",
+    "separate colour-driver experiments from direct pigment-function manipulations before pooling",
     "do not pool different response metrics until an explicit common estimand or multivariate model is preregistered"
   ],
   "claim_boundary": "Candidate calibration/effect-extraction registry only; no pooled across-angiosperm effect and no Cirsium adaptation claim."
