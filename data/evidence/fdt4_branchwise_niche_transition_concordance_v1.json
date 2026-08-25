@@ -1,0 +1,44 @@
+{
+  "contract_version": "fdt4_branchwise_niche_transition_concordance_v1",
+  "status_date": "2026-08-25",
+  "purpose": "Test whether inferred U<->D orientation transitions repeatedly align with present-day niche shifts on branches, without requiring an absolute dated tree.",
+  "input_contract": {
+    "taxon_gate": "same frozen FDT4 primary gate: >=10 independent thinned environment-complete occurrences per resolved U/D taxon",
+    "n_taxa": 9,
+    "n_U": 5,
+    "n_D": 4,
+    "topologies": 6,
+    "tree_source": "first six AU-nonrejected Comp1061 optimized topologies",
+    "axes_tested": ["chelsa_bio01", "chelsa_bio15"]
+  },
+  "method": {
+    "discrete_trait": "symmetric two-state CTMC estimated separately on each topology; edge U->D and D->U probabilities are retained rather than forcing one ancestral state",
+    "continuous_niche": "Brownian squared-change ancestral reconstruction on relative branch lengths using standardized taxon niche centroids",
+    "directional_statistic": "transition-probability-weighted branch niche shift, signed so positive values mean the D direction is associated with higher niche values",
+    "null": "499 tip-state permutations preserving the observed 5 U / 4 D counts, refitting the CTMC for each permutation",
+    "claim_boundary": "Exploratory branchwise concordance screen. Relative branch lengths are sufficient for this directionality test, but absolute event timing, historical range, adaptation and ecological causation are not tested."
+  },
+  "results_across_six_topologies": {
+    "expected_orientation_transitions": {"min": 5.174338, "max": 5.204366},
+    "chelsa_bio15": {
+      "directional_shift_sd_min": 0.267907,
+      "directional_shift_sd_max": 0.269417,
+      "permutation_p_min": 0.094,
+      "permutation_p_max": 0.124,
+      "direction": "U_to_D aligned with higher precipitation seasonality"
+    },
+    "chelsa_bio01": {
+      "directional_shift_sd_min": -0.199306,
+      "directional_shift_sd_max": -0.199151,
+      "permutation_p_min": 0.108,
+      "permutation_p_max": 0.136,
+      "direction": "U_to_D aligned with lower annual mean temperature"
+    }
+  },
+  "interpretation": {
+    "supported": "The branchwise direction matches the earlier present-day PGLS on all six accepted topologies: D-direction changes align with higher BIO15 and lower BIO1. The signal therefore is not only a terminal-state mean difference.",
+    "not_supported_yet": "Neither branchwise concordance reaches the frozen exploratory permutation threshold. The evidence is directional and topology-stable, but not yet sufficient to claim repeated niche-associated convergence.",
+    "main_bottleneck": "taxon coverage rather than topology: two Taiwan taxa (Cirsium morii and Cirsium tatakaense) each have n=9 and remain one independent thinned occurrence below the primary gate."
+  },
+  "next_decision": "Keep BIO15 as the primary niche axis and BIO1 as the secondary axis for the next branchwise test. First increase morii and tatakaense to the frozen n>=10 gate; then rerun the same six-topology branchwise concordance before adding any dated-event model."
+}
