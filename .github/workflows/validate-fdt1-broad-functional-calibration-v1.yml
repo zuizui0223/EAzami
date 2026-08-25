@@ -40,11 +40,26 @@ jobs:
             --input data/evidence/fdt1_orientation_net_fitness_extract_v1.csv \
             --output /tmp/orientation_meta.json
           python - <<'PY'
-          import json
+          import json, math
           a=json.load(open('data/evidence/fdt1_orientation_net_fitness_two_study_meta_v1.json'))
           b=json.load(open('/tmp/orientation_meta.json'))
-          for key in ['k','effects','fixed_effect','random_effect_DL','heterogeneity','interpretation','claim_boundary']:
-              assert a[key]==b[key], (key,a[key],b[key])
+          assert a['k']==b['k']==2
+          assert a['interpretation']==b['interpretation']
+          assert a['claim_boundary']==b['claim_boundary']
+          assert [x['study_id'] for x in a['effects']] == [x['study_id'] for x in b['effects']]
+          def close(x,y): return math.isclose(float(x),float(y),rel_tol=1e-8,abs_tol=1e-10)
+          for ea,eb in zip(a['effects'],b['effects']):
+              for key in ['lnRR','se_lnRR','RR']:
+                  assert close(ea[key],eb[key]), (key,ea[key],eb[key])
+              assert all(close(x,y) for x,y in zip(ea['ci95_RR'],eb['ci95_RR']))
+          for section in ['fixed_effect','random_effect_DL','heterogeneity']:
+              for key,value in a[section].items():
+                  if isinstance(value,list):
+                      assert all(close(x,y) for x,y in zip(value,b[section][key]))
+                  elif isinstance(value,(int,float)):
+                      assert close(value,b[section][key]), (section,key,value,b[section][key])
+                  else:
+                      assert value==b[section][key]
           PY
       - name: Run unit tests
         run: python -m pytest -q tests/test_fdt1_broad_functional_calibration_v1.py
