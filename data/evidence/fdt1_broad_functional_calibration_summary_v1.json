@@ -1,6 +1,6 @@
 {
   "contract_version": "fdt1_broad_functional_calibration_v1",
-  "rows": 20,
+  "rows": 26,
   "modules": {
     "bract_defence": {
       "rows": 3,
@@ -10,11 +10,11 @@
       "source_ids": ["10.1093/aobpla/plv019"]
     },
     "colour_pigmentation": {
-      "rows": 3,
+      "rows": 4,
       "quantitative_ready_rows": 0,
       "effect_extraction_needed_rows": 0,
-      "taxa": ["Silene littorea"],
-      "source_ids": ["10.1371/journal.pone.0231611"]
+      "taxa": ["Ipomoea tricolor", "Silene littorea"],
+      "source_ids": ["10.1016/j.bmc.2005.01.011", "10.1371/journal.pone.0231611"]
     },
     "display": {
       "rows": 3,
@@ -24,11 +24,11 @@
       "source_ids": ["10.1007/s004420050136"]
     },
     "orientation": {
-      "rows": 6,
-      "quantitative_ready_rows": 4,
-      "effect_extraction_needed_rows": 0,
-      "taxa": ["Platycodon grandiflorus", "Polygonatum cyrtonema"],
-      "source_ids": ["10.1002/ece3.73221", "10.1111/plb.13414"]
+      "rows": 11,
+      "quantitative_ready_rows": 8,
+      "effect_extraction_needed_rows": 1,
+      "taxa": ["Corydalis sheareri", "Lilium duchartrei", "Platycodon grandiflorus", "Polygonatum cyrtonema"],
+      "source_ids": ["10.1002/ece3.73221", "10.1111/jse.12002", "10.1111/plb.13414", "10.1371/journal.pone.0095381"]
     },
     "stickiness": {
       "rows": 5,
@@ -39,19 +39,19 @@
     }
   },
   "current_inference": {
-    "orientation": "Direct manipulation evidence outside Asteraceae supports multiple mechanisms (effective pollination plus abiotic protection) reaching seed/fruit fitness; effect transport to Cirsium remains a hypothesis.",
+    "orientation": "Direct reorientation studies now span natural downward, horizontal and down-slope optima. The general working hypothesis is therefore not that downward orientation is universally superior, but that locally integrated natural orientation can increase fitness through different combinations of pollinator presentation/filtering and abiotic protection. The two-study homologous seed/achene-set lnRR diagnostic has high heterogeneity, reinforcing context dependence.",
     "stickiness": "A universal sticky-is-defence rule is not retained. Direct floral evidence includes strong benefit in Bejaria and a Cirsium null elsewhere in the repository, while whole-plant Datura shows substantial costs; context-dependent defence is the working hypothesis.",
     "display": "Direct manipulation supports simultaneous pollinator-attraction benefit and seed-predator cost, but broad-angiosperm numerical common-effect extraction is incomplete.",
     "bract_defence": "Pedicularis rex directly separates pathways: draining water-holding bracts left pollinator visitation unchanged but increased seed predation and reduced final seed set. This supports a defence/protection mechanism rather than generic pollinator attraction.",
-    "colour_pigmentation": "Silene UV exclusion shows that UV exposure induces anthocyanin while depressing pollen and whole-plant seed production. UV is therefore a plausible selection-pressure axis, but this does not demonstrate that darker pigmentation itself increases fitness."
+    "colour_pigmentation": "UV experiments support both an environmental selection-pressure axis and a plausible anthocyanin UV-screening mechanism. However, intact-flower pigment-causal reproductive fitness evidence remains insufficient; colder/darker or UV/darker adaptive claims remain hypotheses."
   },
   "next_meta_actions": [
+    "extract raw/group summaries or covariance-aware model effects for Corydalis and Lilium orientation so they can enter a hierarchical natural-optimum meta model",
     "extract raw/group summaries for Ipomopsis display manipulation",
     "extract comparable quantitative endpoints for Aquilegia glandular-trichome manipulation",
-    "add additional independent orientation manipulations with seed/fruit endpoints",
     "expand bract/phyllary manipulations beyond water-holding bracts to physical exclusion or access mechanisms",
-    "separate colour-driver experiments from direct pigment-function manipulations before pooling",
+    "find factorial or near-isogenic flower-pigment manipulations with reproductive output under abiotic stress",
     "do not pool different response metrics until an explicit common estimand or multivariate model is preregistered"
   ],
-  "claim_boundary": "Candidate calibration/effect-extraction registry only; no pooled across-angiosperm effect and no Cirsium adaptation claim."
+  "claim_boundary": "Candidate calibration/effect-extraction registry only; no universal pooled floral-trait effect and no Cirsium adaptation claim."
 }
