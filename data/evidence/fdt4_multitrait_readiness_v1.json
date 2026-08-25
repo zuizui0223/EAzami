@@ -13,8 +13,14 @@
     "orientation": "benchmark module; repeated-state and niche screens already implemented, but not the sole doctoral trait",
     "phyllary_spine": "next macroevolution module after a machine-readable Japan38/expanded nuclear tree is recovered",
     "stickiness": "parallel negative-control macroevolution module after the Japan38/expanded tree is recovered",
-    "display": "functional meta prior is comparatively strong, but a Japan-wide direct taxon-level size/head-number trait table is still missing",
+    "display": "functional meta prior is comparatively strong, but a Japan-wide direct taxon-level size/head-number trait table is still missing; Azami continuous phenomics cannot substitute because its frozen continuous aggregation covers colour, gross shape and orientation, not plant-level display quantity or direct capitulum size",
     "colour": "high-value evolutionary module, but fixed-white lineage coverage remains the immediate historical-state bottleneck"
+  },
+  "cross_repo_audit": {
+    "azami_continuous_aggregation": "ch1_global/v2/53_aggregate_primary_trait_continuous.py",
+    "azami_metrics_available": ["colour", "gross_shape", "orientation"],
+    "azami_not_valid_as_display_quantity": ["plant_head_number", "simultaneously_open_head_number", "direct_capitulum_diameter"],
+    "decision": "Do not repurpose photo framing/detected-head count as a biological display trait. Build display from authority/voucher/direct botanical data."
   },
   "current_blocker": "The repository does not yet contain a machine-readable Moreyra Japan38/expanded nuclear topology with sample-to-taxon provenance. Trait coverage alone must not be converted into ASR or transition counts.",
   "next_actions": [
