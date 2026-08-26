@@ -5,8 +5,8 @@ on:
     paths:
       - "analysis/audit_jpn38_commons_independent_localities_v1.py"
       - "tests/test_jpn38_commons_independent_localities_v1.py"
-      - "data/evidence/jpn38_commons_independent_locality_audit_v1.csv"
       - "data/evidence/jpn38_commons_independent_locality_audit_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v6.json"
       - ".github/workflows/validate-jpn38-commons-independent-localities-v1.yml"
   workflow_dispatch:
 
@@ -56,16 +56,23 @@ jobs:
           }
           assert x['dalgial_2008_09_15_files']==5
 
-          frozen=Path('data/evidence/jpn38_commons_independent_locality_audit_v1.json')
-          if frozen.exists():
-              f=json.loads(frozen.read_text())
-              for key in [
-                'files_total','open_license_files','explicit_japan_locality_files',
-                'known_fukushima_aizu_files','other_explicit_japan_files',
-                'explicit_korea_files','location_unresolved_files',
-                'independent_japan_locality_candidates'
-              ]:
-                  assert f[key]==x[key], (key,f[key],x[key])
+          f=json.loads(Path('data/evidence/jpn38_commons_independent_locality_audit_v1.json').read_text())
+          for key in [
+            'files_total','open_license_files','explicit_japan_locality_files',
+            'known_fukushima_aizu_files','other_explicit_japan_files',
+            'explicit_korea_files','location_unresolved_files',
+            'independent_japan_locality_candidates'
+          ]:
+              assert f[key]==x[key], (key,f[key],x[key])
+
+          r=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v6.json').read_text())
+          c=r['colour']['jpn38_commons_exhaustion']
+          assert c['commons_files_total']==x['files_total']
+          assert c['open_license_files']==x['open_license_files']
+          assert c['known_fukushima_aizu_files']==x['known_fukushima_aizu_files']
+          assert c['other_explicit_japan_files']==x['other_explicit_japan_files']
+          assert c['independent_japan_locality_candidates']==0
+          assert c['status']=='commons_source_exhausted_for_independent_japan_locality'
           print(json.dumps(x,indent=2,ensure_ascii=False))
           PY
       - uses: actions/upload-artifact@v4
