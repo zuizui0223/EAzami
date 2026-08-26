@@ -1,0 +1,78 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v8",
+  "status_date": "2026-08-26",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v7.json",
+  "inheritance": "All discrete-module histories, H2/H3 resolution, display gate, global continuous-colour result, current abiotic gates, geographic provenance gate, JPN38 one-locality Commons calibration/exhaustion, non-Commons live-source licensing gate, and JPN29 voucher-geography gate are inherited from v7 unless overridden below.",
+  "colour": {
+    "japan_local_history_ready": false,
+    "existing_clean_japan_window_concepts": ["JPN_17", "JPN_23", "JPN_36", "JPN_37"],
+    "jpn38_noncommons_live_source_audit": {
+      "canonical_audit": "data/evidence/jpn38_inat_gbif_japan_source_audit_v1.json",
+      "permission_registry": "data/evidence/jpn38_permission_candidates_v1.csv",
+      "inaturalist_photo_observations_in_japan": 4,
+      "gbif_stillimage_records_in_japan": 34,
+      "open_reusable_gbif_records": 22,
+      "open_reusable_gbif_live_records": 0,
+      "open_reusable_gbif_specimen_records": 22,
+      "independent_open_reusable_live_records": 0,
+      "independent_cc_by_nc_live_records": 3,
+      "independent_cc_by_nc_localities": ["Niigata", "Tochigi", "Tochigi-shi Fujioka-machi Yachunoko"],
+      "validation": {
+        "workflow_run": 32951676817,
+        "artifact_id": 9600367595,
+        "artifact_digest": "sha256:9724076ead245834e11fc982cb9ea39e7c5d7cc0a827ff76085777b470b014eb"
+      },
+      "status": "reusable_live_source_blocked_by_license; preserved specimens excluded from colour measurement",
+      "interpretation": "The non-Commons source class contains three geographically independent live-photo records, but all are CC BY-NC under the current conservative reuse policy. The apparently abundant open GBIF media are preserved specimens, not usable corolla-colour proxies."
+    },
+    "jpn29_identity_gate": {
+      "paper_japan_member_id": "JPN_29",
+      "voucher": "K. Yonekura 6788 (PE01523822)",
+      "voucher_geography_resolved": true,
+      "voucher_taxon_identity_resolved": false,
+      "clean_japan_local_trait_join_allowed": false,
+      "next_resolution_route": "Direct PE herbarium specimen/image, label/annotation history, or curator-level inspection."
+    },
+    "jpn29_public_aggregator_audit": {
+      "canonical_audit": "data/evidence/jpn29_specimen_determination_public_api_audit_v1.json",
+      "canonical_idigbio_direct_intersection": "data/evidence/jpn29_idigbio_combined_route_v1.json",
+      "all_query_routes_ok": {
+        "GBIF": true,
+        "iDigBio": true
+      },
+      "exact_catalog_hit_count": 0,
+      "collector_number_hit_count": 0,
+      "idigbio_direct_collector_recordnumber_query": {
+        "collector": "yonekura",
+        "recordnumber": "6788"
+      },
+      "idigbio_direct_collector_recordnumber_count": 0,
+      "determination_history_resolved": false,
+      "validation": {
+        "workflow_run": 32953447137,
+        "artifact_id": 9601043715,
+        "artifact_name": "jpn29-specimen-determination-audit-32953447137",
+        "artifact_digest": "sha256:60cc6c8e2cf39d4721f8c7c4553911a77710b64ab82399d8aecddbd9b3acb58f"
+      },
+      "status": "public_aggregator_route_exhausted_without_specimen_determination_resolution",
+      "interpretation": "Exact PE01523822 searches and the server-side iDigBio collector=Yonekura AND recordnumber=6788 intersection returned zero target hits after all GBIF/iDigBio routes succeeded. The broad iDigBio routes returned 1120 record-number hits and 1887 collector hits, but their first-300 retrieval limit is not used as negative evidence because the direct intersection route closes that pagination gap."
+    },
+    "status": "Japan-local colour history remains blocked. JPN38 is blocked by reuse permission for three geographically independent CC BY-NC live-photo records; JPN29 is blocked by specimen-level identity resolution after the public GBIF/iDigBio route was exhausted without recovering PE01523822 or Yonekura 6788 determination metadata."
+  },
+  "priority_reordering": {
+    "first": "Resolve reuse for the three independent JPN_38 CC BY-NC live-photo records (iNaturalist 190462681, 268410147, 339557766) or acquire equivalent open/direct images from independent Japanese populations. Do not substitute preserved-specimen scans for live corolla colour.",
+    "second": "Inspect PE01523822 / K. Yonekura 6788 directly through the PE herbarium specimen image, label/annotation history, or curator communication. Public GBIF/iDigBio searching is no longer the next action.",
+    "third": "Once a fifth Japan-local identity-resolved concept is obtained, rerun continuous-lightness history with population-matched proxies.",
+    "fourth": "Only after the Japan-local trait gate passes, resume radiation/rsds, VPD/aridity, wind/sfcWind and improved-soil mechanism screens.",
+    "do_not_repeat": "Do not keep mining Commons, GBIF preserved-specimen images, or the same GBIF/iDigBio JPN29 metadata routes unless source metadata, licensing, or specimen indexing materially changes."
+  },
+  "canonical_results": {
+    "jpn38_commons_audit": "data/evidence/jpn38_commons_independent_locality_audit_v1.json",
+    "jpn38_inat_gbif_audit": "data/evidence/jpn38_inat_gbif_japan_source_audit_v1.json",
+    "jpn38_permission_candidates": "data/evidence/jpn38_permission_candidates_v1.csv",
+    "jpn29_identity_gate": "data/evidence/japan38_jpn29_identity_geography_gate_v1.json",
+    "jpn29_public_aggregator_audit": "data/evidence/jpn29_specimen_determination_public_api_audit_v1.json",
+    "jpn29_idigbio_direct_intersection": "data/evidence/jpn29_idigbio_combined_route_v1.json"
+  },
+  "claim_boundary": "Current JPN38 non-Commons live-photo evidence is blocked by the conservative reuse policy, not by lack of geographic replication. Open preserved specimens are deliberately excluded from colour measurement. For JPN29, failure to recover PE01523822 or Yonekura 6788 in GBIF/iDigBio does not reidentify the voucher and does not prove the Moreyra label is wrong; it only closes the current public-aggregator route. The raw nuclear tip remains retained, and a clean Japan-local phenotype join remains blocked until specimen-level determination is resolved."
+}

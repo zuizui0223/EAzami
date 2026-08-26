@@ -1,0 +1,18 @@
+{
+  "contract_version": "jpn29_idigbio_combined_route_v1",
+  "status_date": "2026-08-26",
+  "query": {
+    "collector": "yonekura",
+    "recordnumber": "6788"
+  },
+  "item_count": 0,
+  "returned_rows": 0,
+  "rows": [],
+  "validation": {
+    "workflow_run": 32953447137,
+    "artifact_id": 9601043715,
+    "artifact_name": "jpn29-specimen-determination-audit-32953447137",
+    "artifact_digest": "sha256:60cc6c8e2cf39d4721f8c7c4553911a77710b64ab82399d8aecddbd9b3acb58f"
+  },
+  "decision_boundary": "The server-side collector+recordnumber intersection is zero. This closes the pagination gap in broad iDigBio queries but does not reidentify the specimen."
+}
