@@ -21,10 +21,12 @@ class TestCommonsAudit(unittest.TestCase):
         self.assertTrue(mod.open_license("GFDL 1.2"))
         self.assertFalse(mod.open_license("All rights reserved"))
 
-    def test_japan_text(self):
-        self.assertTrue(mod.japan_text("福島県会津地方 日本"))
-        self.assertTrue(mod.japan_text("photographed in Japan"))
-        self.assertFalse(mod.japan_text("Korea"))
+    def test_locality_text_classification(self):
+        self.assertTrue(mod.japan_word("photographed in Japan"))
+        self.assertTrue(mod.fukushima_aizu_text("タカアザミ 福島県会津地方"))
+        self.assertTrue(mod.korea_text("Cirsium pendulum in Kimpo, Korea"))
+        self.assertFalse(mod.korea_text("Cirsium pendulum"))
+        self.assertFalse(mod.japan_word("Cirsium pendulum"))
 
 
 if __name__ == "__main__":
