@@ -1,0 +1,63 @@
+{
+  "contract_version": "japan38_colour_geographic_provenance_gate_v1",
+  "status_date": "2026-08-26",
+  "geographic_contract": {
+    "summary": "data/evidence/japan38_colour_geographic_provenance_summary_v1.csv",
+    "operational_window": "three frozen coordinate boxes in the provenance contract; sensitivity heuristic, not an authoritative country polygon",
+    "global_exact_concepts": 6,
+    "japan_window_n_ge_5_concepts": 4,
+    "japan_window_n_ge_10_concepts": 4
+  },
+  "coverage": {
+    "JPN_17": {"taxon_name": "Cirsium maritimum", "global_colour_usable_n": 14, "japan_window_colour_usable_n": 14, "global_lightness_median": 68.23529434204102, "japan_window_lightness_median": 68.23529434204102, "lightness_shift_japan_minus_global": 0.0},
+    "JPN_23": {"taxon_name": "Cirsium oligophyllum", "global_colour_usable_n": 20, "japan_window_colour_usable_n": 20, "global_lightness_median": 63.235294342041016, "japan_window_lightness_median": 63.235294342041016, "lightness_shift_japan_minus_global": 0.0},
+    "JPN_29": {"taxon_name": "Cirsium verutum", "global_colour_usable_n": 9, "japan_window_colour_usable_n": 0, "global_lightness_median": 62.35293960571289, "japan_window_lightness_median": null, "lightness_shift_japan_minus_global": null},
+    "JPN_36": {"taxon_name": "Cirsium sieboldii", "global_colour_usable_n": 10, "japan_window_colour_usable_n": 10, "global_lightness_median": 59.607842445373535, "japan_window_lightness_median": 59.607842445373535, "lightness_shift_japan_minus_global": 0.0},
+    "JPN_37": {"taxon_name": "Cirsium kamtschaticum", "global_colour_usable_n": 92, "japan_window_colour_usable_n": 11, "global_lightness_median": 65.0, "japan_window_lightness_median": 73.43136978149414, "lightness_shift_japan_minus_global": 8.43136978149414},
+    "JPN_38": {"taxon_name": "Cirsium pendulum", "global_colour_usable_n": 42, "japan_window_colour_usable_n": 0, "global_lightness_median": 61.86274528503418, "japan_window_lightness_median": null, "lightness_shift_japan_minus_global": null}
+  },
+  "global_proxy_signal": {
+    "rho": -0.7071428571428571,
+    "exact_permutations": 720,
+    "negative_tail_p": 0.001388888888888889,
+    "positive_tail_p": 1.0,
+    "two_sided_abs_p": 0.044444444444444446,
+    "paper_japan_member_ids": ["JPN_17", "JPN_23", "JPN_29", "JPN_36", "JPN_37", "JPN_38"],
+    "lightness_values": {"JPN_17": 68.23529434204102, "JPN_23": 63.235294342041016, "JPN_29": 62.35293960571289, "JPN_36": 59.607842445373535, "JPN_37": 65.0, "JPN_38": 61.86274528503418}
+  },
+  "japan_where_available_substitution_sensitivity": {
+    "rho": -0.4035714285714285,
+    "exact_permutations": 720,
+    "negative_tail_p": 0.13055555555555556,
+    "positive_tail_p": 0.8736111111111111,
+    "two_sided_abs_p": 0.32083333333333336,
+    "paper_japan_member_ids": ["JPN_17", "JPN_23", "JPN_29", "JPN_36", "JPN_37", "JPN_38"],
+    "lightness_values": {"JPN_17": 68.23529434204102, "JPN_23": 63.235294342041016, "JPN_29": 62.35293960571289, "JPN_36": 59.607842445373535, "JPN_37": 73.43136978149414, "JPN_38": 61.86274528503418}
+  },
+  "japan_window_signal_n_ge_5": {
+    "rho": -0.3142857142857143,
+    "exact_permutations": 24,
+    "negative_tail_p": 0.3333333333333333,
+    "positive_tail_p": 0.7083333333333334,
+    "two_sided_abs_p": 0.625,
+    "paper_japan_member_ids": ["JPN_17", "JPN_23", "JPN_36", "JPN_37"],
+    "lightness_values": {"JPN_17": 68.23529434204102, "JPN_23": 63.235294342041016, "JPN_36": 59.607842445373535, "JPN_37": 73.43136978149414}
+  },
+  "japan_window_signal_n_ge_10": {
+    "rho": -0.3142857142857143,
+    "exact_permutations": 24,
+    "negative_tail_p": 0.3333333333333333,
+    "positive_tail_p": 0.7083333333333334,
+    "two_sided_abs_p": 0.625,
+    "paper_japan_member_ids": ["JPN_17", "JPN_23", "JPN_36", "JPN_37"],
+    "lightness_values": {"JPN_17": 68.23529434204102, "JPN_23": 63.235294342041016, "JPN_36": 59.607842445373535, "JPN_37": 73.43136978149414}
+  },
+  "missing_japan_window_colour": ["JPN_29", "JPN_38"],
+  "decision": {
+    "japan_local_radiation_colour_history_ready": false,
+    "global_anti_phylogenetic_signal_reproduced_in_japan_window": false,
+    "interpretation": "The current high-depth lightness signal is a global exact-concept species proxy, not a validated Japan-local radiation trait history. Japan-window coverage retains only four concepts and the anti-phylogenetic signal is not reproduced."
+  },
+  "next_action": "Recover Japan-local colour evidence for JPN_29 C. verutum and JPN_38 C. pendulum, and increase local population coverage before using colour as a Japan38 historical module. Do not treat global species medians as phenotypes of the Japanese nuclear-tip populations.",
+  "claim_boundary": "Geographic-provenance sensitivity only. The operational Japan window is a coordinate heuristic. This result does not invalidate the global species-level colour signal, but it blocks promotion of that signal to a Japan-local radiation-history claim."
+}
