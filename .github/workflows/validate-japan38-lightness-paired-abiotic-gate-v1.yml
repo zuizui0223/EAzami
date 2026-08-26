@@ -7,6 +7,8 @@ on:
       - "tests/test_japan38_lightness_paired_abiotic_gate_v1.py"
       - "data/evidence/japan38_lightness_paired_environment_summary_v1.csv"
       - "data/evidence/japan38_lightness_paired_environment_summary_provenance_v1.json"
+      - "data/evidence/japan38_lightness_paired_abiotic_summary_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v3.json"
       - "data/evidence/japan38_comp1061_primary_tree_v1.nwk"
       - "data/evidence/japan38_comp1061_concept_map_v1.csv"
       - ".github/workflows/validate-japan38-lightness-paired-abiotic-gate-v1.yml"
@@ -77,6 +79,20 @@ jobs:
           so=clean['soil_distance_vs_absolute_lightness_difference']
           assert abs(so['rho']-0.3939393939393939)<1e-12
           assert abs(so['positive_tail_p']-0.19166666666666668)<1e-12
+
+          frozen=json.loads(Path('data/evidence/japan38_lightness_paired_abiotic_summary_v1.json').read_text())
+          assert frozen['decision']['paired_current_climate_or_topography_explains_lightness_overdispersion'] is False
+          assert frozen['decision']['soil_promoted_to_supported_mechanism'] is False
+          assert abs(frozen['n_colour_usable_ge_5']['paired_climate']['rho'] - s5['modules']['paired_climate']['abiotic_distance_vs_absolute_lightness_difference']['rho']) < 1e-12
+          assert abs(frozen['n_colour_usable_ge_10']['paired_climate_plus_topography']['rho'] - s10['modules']['paired_climate_plus_topography']['abiotic_distance_vs_absolute_lightness_difference']['rho']) < 1e-12
+          assert abs(frozen['soil']['soil_distance_vs_absolute_lightness_difference_rho'] - so['rho']) < 1e-12
+
+          readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v3.json').read_text())
+          assert readiness['supersedes'].endswith('fdt_multitrait_execution_readiness_v2.json')
+          pg=readiness['colour']['paired_same_cohort_gate']
+          assert pg['decision'].startswith('Current same-cohort climate, topography')
+          assert readiness['colour']['soil']['replicated_gate_ready'] is False
+          assert readiness['colour']['source_axes_absent']==['solar radiation / rsds','VPD / aridity','wind / sfcWind']
           print(json.dumps(x['overall_decision'],indent=2))
           PY
       - uses: actions/upload-artifact@v4
