@@ -1,0 +1,51 @@
+{
+  "contract_version": "japan38_colour_climate_coupling_summary_v1",
+  "status_date": "2026-08-26",
+  "workflow_run": 32926486171,
+  "artifact_id": 9591692409,
+  "artifact_digest": "sha256:c7c59b4aa12ee5b4b57912c033215ddac512c5c5ffd55d9f3e34ca9ec08b61c5",
+  "analysis_status": "exploratory_followup_after_frozen_lightness_overdispersion_result",
+  "primary_question": "Do taxa occupying more different present-day BIO1/BIO4/BIO12/BIO15 climates also differ more in exact-concept corolla LAB lightness?",
+  "n_colour_usable_ge_5": {
+    "concepts": ["JPN_17", "JPN_23", "JPN_29", "JPN_36", "JPN_37", "JPN_38"],
+    "n": 6,
+    "patristic_vs_absolute_lightness_difference_rho": -0.7071428571428571,
+    "patristic_vs_multivariate_climate_distance_rho": 0.075,
+    "multivariate_climate_distance_vs_lightness_difference_rho": -0.3285714285714285,
+    "exact_permutations": 720,
+    "exact_positive_tail_p": 0.8222222222222222,
+    "exact_two_sided_p": 0.4083333333333333,
+    "partial_controlling_patristic_rho": -0.39078686452995803,
+    "partial_two_sided_p": 0.3875,
+    "leave_one_taxon_out_rho_range": [-0.43030303030303024, -0.06666666666666665],
+    "leave_one_taxon_out_all_negative": true
+  },
+  "n_colour_usable_ge_10": {
+    "concepts": ["JPN_17", "JPN_23", "JPN_36", "JPN_37", "JPN_38"],
+    "n": 5,
+    "patristic_vs_absolute_lightness_difference_rho": -0.8545454545454544,
+    "patristic_vs_multivariate_climate_distance_rho": -0.04242424242424241,
+    "multivariate_climate_distance_vs_lightness_difference_rho": -0.29696969696969694,
+    "exact_permutations": 120,
+    "exact_positive_tail_p": 0.6916666666666667,
+    "exact_two_sided_p": 0.6333333333333333,
+    "partial_controlling_patristic_rho": -0.6421610210711568,
+    "partial_negative_tail_p": 0.008333333333333333,
+    "partial_two_sided_p": 0.10833333333333334
+  },
+  "secondary_directional_screen": {
+    "replicated_axes_two_sided_p_le_0_05": [],
+    "BIO15_rho_n_ge_5": -0.7142857142857143,
+    "BIO15_two_sided_p_n_ge_5": 0.1361111111111111,
+    "BIO15_rho_n_ge_10": -0.7999999999999999,
+    "BIO15_two_sided_p_n_ge_10": 0.13333333333333333,
+    "interpretation": "BIO15 has a consistent negative descriptive direction but does not pass the exact two-sided 0.05 screen in either subset."
+  },
+  "decision": {
+    "current_four_axis_climate_tracking_supported": false,
+    "reason": "The preregistered-in-branch primary association is negative rather than positive in both evidence-depth subsets; exact positive-tail p-values are 0.822 and 0.692, and every n>=5 leave-one-out primary association is negative.",
+    "scientific_interpretation": "The simplest explanation that phylogenetically distant taxa reoccupy similar lightness because they track similarity in current BIO1/BIO4/BIO12/BIO15 climate is not supported by the present six-/five-taxon data. The lightness overdispersion remains unexplained by these four current-climate axes."
+  },
+  "next_inference_boundary": "Do not turn this null gate into evidence against climate adaptation generally. Candidate explanations still include unmeasured abiotic axes, historical rather than current climate, biotic interactions, population-level colour variation and other forms of modular trait evolution.",
+  "claim_boundary": "Exploratory species-level follow-up only. Colour and environment are separate evidence layers and not paired individuals; the tree is in substitutions/site, not time. No adaptation, convergence, causal-climate, ancestral-colour or evolutionary-rate claim is made."
+}
