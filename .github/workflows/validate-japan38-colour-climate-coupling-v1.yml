@@ -11,6 +11,7 @@ on:
       - "data/evidence/japan_radiation_pre_tree_trait_environment_snapshot_v1.csv"
       - "data/evidence/japan38_colour_climate_coupling_summary_v1.json"
       - "data/evidence/japan38_colour_climate_gate_contract_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v2.json"
       - ".github/workflows/validate-japan38-colour-climate-coupling-v1.yml"
   workflow_dispatch:
 
@@ -83,6 +84,18 @@ jobs:
           assert abs(frozen['n_colour_usable_ge_10']['multivariate_climate_distance_vs_lightness_difference_rho'] - p10['observed']) < 1e-12
           assert abs(frozen['n_colour_usable_ge_10']['exact_positive_tail_p'] - p10['positive_tail_p']) < 1e-12
           assert frozen['secondary_directional_screen']['replicated_axes_two_sided_p_le_0_05']==[]
+
+          readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v2.json').read_text())
+          colour=readiness['modules']['colour']
+          assert 'rho=-0.7071' in colour['continuous_history_result']
+          assert 'rho=-0.8545' in colour['continuous_history_result']
+          assert 'rho=-0.3286' in colour['current_climate_gate']
+          assert 'positive-tail p=0.8222' in colour['current_climate_gate']
+          assert 'rho=-0.2970' in colour['current_climate_gate']
+          assert 'positive-tail p=0.6917' in colour['current_climate_gate']
+          assert 'current four-axis BIO1/BIO4/BIO12/BIO15 climate gate is negative' in colour['status']
+          assert 'broader existing abiotic axes' in colour['next_action']
+          assert 'current BIO1/BIO4/BIO12/BIO15 climate gate does not explain' in readiness['next_module_expansion_gate']['colour']
           print(json.dumps(x['decision_gate'], indent=2))
           PY
       - uses: actions/upload-artifact@v4
