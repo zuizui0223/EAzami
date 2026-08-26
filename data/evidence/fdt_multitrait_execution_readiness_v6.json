@@ -1,0 +1,49 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v6",
+  "status_date": "2026-08-26",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v5.json",
+  "inheritance": "All discrete-module histories, H2/H3 resolution, display gate, global continuous-colour result, current-climate/topography/soil gates, geographic-provenance gate, JPN38 one-locality colour calibration and JPN29 voucher/taxon-concept gate are inherited from v5 unless overridden below.",
+  "colour": {
+    "japan_local_history_ready": false,
+    "existing_clean_japan_window_concepts": ["JPN_17", "JPN_23", "JPN_36", "JPN_37"],
+    "jpn38_commons_exhaustion": {
+      "paper_japan_member_id": "JPN_38",
+      "taxon": "Cirsium pendulum",
+      "canonical_audit": "data/evidence/jpn38_commons_independent_locality_audit_v1.json",
+      "commons_files_total": 8,
+      "open_license_files": 8,
+      "known_fukushima_aizu_files": 3,
+      "other_explicit_japan_files": 0,
+      "independent_japan_locality_candidates": 0,
+      "explicit_korea_files": 1,
+      "location_unresolved_files": 4,
+      "status": "commons_source_exhausted_for_independent_japan_locality",
+      "interpretation": "Wikimedia Commons does not add an independent Japanese locality beyond the already-screened Fukushima/Aizu series. The four unlabeled Dalgial files remain geographically unresolved and are not imputed to Korea or Japan."
+    },
+    "jpn29_identity_gate": {
+      "paper_japan_member_id": "JPN_29",
+      "taxon_label": "Cirsium verutum (D.Don) Spreng.",
+      "voucher": "K. Yonekura 6788 (PE01523822)",
+      "voucher_label_geography": "Japan",
+      "voucher_geography_resolved": true,
+      "voucher_taxon_identity_resolved": false,
+      "clean_japan_local_trait_join_allowed": false,
+      "status": "specimen_determination_history_required"
+    },
+    "status": "Japan-local colour history remains blocked. Commons has been exhausted as a source of an independent Japanese C. pendulum locality; next recovery must use another source class or direct sampling."
+  },
+  "priority_reordering": {
+    "first": "Search non-Commons sources with explicit reusable licensing and Japanese locality for C. pendulum, prioritizing iNaturalist/GBIF-derived observations or institutional image records. Treat license, locality and independence as separate gates before automated measurement.",
+    "second": "Resolve PE01523822 / K. Yonekura 6788 determination and annotation history before any Japan-local phenotype is attached to JPN_29.",
+    "third": "When at least five Japan-local identity-resolved concepts are available, rerun the continuous-lightness phylogenetic diagnostic with population-matched proxies.",
+    "fourth": "Only after the Japan-local trait gate passes, resume radiation/rsds, VPD/aridity, wind/sfcWind and improved-soil mechanism screens.",
+    "do_not_repeat": "Do not continue searching the same eight Commons C. pendulum files for an independent Japan locality unless their metadata are externally updated."
+  },
+  "canonical_results": {
+    "geographic_provenance_gate": "data/evidence/japan38_colour_geographic_provenance_gate_v1.json",
+    "jpn38_public_screen": "data/evidence/japan38_jpn38_public_colour_recovery_summary_v1.json",
+    "jpn38_commons_independent_locality_audit": "data/evidence/jpn38_commons_independent_locality_audit_v1.json",
+    "jpn29_identity_gate": "data/evidence/japan38_jpn29_identity_geography_gate_v1.json"
+  },
+  "claim_boundary": "The absence of an independent Japanese locality in the Commons metadata set is a source-coverage result, not evidence that C. pendulum lacks other Japanese populations or photographs elsewhere. Unresolved Commons metadata are not geographically imputed."
+}
