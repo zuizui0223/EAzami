@@ -64,7 +64,7 @@ class TestJapan38SamplingValue(unittest.TestCase):
         )
         self.assertEqual(transition[0]["paper_japan_member_id"], "JPN_A")
 
-    def test_shortlist_falls_back_to_root_then_steps(self):
+    def test_shortlist_falls_back_to_root_and_keeps_root_ranked_alternates(self):
         rows = [
             {
                 "paper_japan_member_id": "JPN_ROOT",
@@ -77,9 +77,19 @@ class TestJapan38SamplingValue(unittest.TestCase):
                 "maximum_absolute_step_delta": 1,
             },
             {
+                "paper_japan_member_id": "JPN_ROOT_ALT",
+                "identity_gate": "pass",
+                "robust_transition_localization_gain": -3,
+                "best_case_transition_localization_gain": 4,
+                "states_reducing_root_state_count": 2,
+                "minimum_root_state_count_across_scenarios": 1,
+                "states_changing_minimum_steps": 1,
+                "maximum_absolute_step_delta": 1,
+            },
+            {
                 "paper_japan_member_id": "JPN_STEP",
                 "identity_gate": "pass",
-                "robust_transition_localization_gain": -1,
+                "robust_transition_localization_gain": 0,
                 "best_case_transition_localization_gain": 0,
                 "states_reducing_root_state_count": 0,
                 "minimum_root_state_count_across_scenarios": 3,
@@ -89,8 +99,16 @@ class TestJapan38SamplingValue(unittest.TestCase):
         ]
         transition, root, steps = sv.rank_missing(rows)
         shortlist = sv.trait_shortlist(transition, root, steps)
-        self.assertEqual(shortlist["primary_objective"], "ancestral_state_discrimination")
-        self.assertEqual(shortlist["primary"]["paper_japan_member_id"], "JPN_ROOT")
+        self.assertEqual(
+            shortlist["primary_objective"], "ancestral_state_discrimination"
+        )
+        self.assertEqual(
+            shortlist["primary"]["paper_japan_member_id"], "JPN_ROOT"
+        )
+        self.assertEqual(
+            shortlist["identity_pass_alternates"][0]["paper_japan_member_id"],
+            "JPN_ROOT_ALT",
+        )
 
     def test_validation_targets_keep_terminal_forced_edges_only(self):
         ident = {
@@ -139,7 +157,10 @@ class TestJapan38SamplingValue(unittest.TestCase):
             },
         ]
         by_trait, cross = sv.validation_targets(ident, identity, seed, 0.10)
-        self.assertEqual([x["paper_japan_member_id"] for x in by_trait["orientation"]], ["JPN_36"])
+        self.assertEqual(
+            [x["paper_japan_member_id"] for x in by_trait["orientation"]],
+            ["JPN_36"],
+        )
         self.assertEqual(cross[0]["paper_japan_member_id"], "JPN_36")
         self.assertEqual(set(cross[0]["traits"]), {"orientation", "phyllary"})
 
