@@ -29,10 +29,8 @@ class TestJPN38PublicColourRecovery(unittest.TestCase):
         self.assertEqual({r["paper_japan_member_id"] for r in rows}, {"JPN_38"})
         self.assertTrue(all(mod.truthy(r["automated_use"]) for r in rows))
         self.assertTrue(all("Japan" in r["location"] for r in rows))
-        self.assertEqual(
-            {r["rights_status"] for r in rows},
-            {"verified_open_license", "verify_in_ci"},
-        )
+        self.assertEqual({r["rights_status"] for r in rows}, {"verified_open_license"})
+        self.assertEqual({r["license"] for r in rows}, {"CC-BY-SA-4.0"})
         self.assertTrue(all("commons.wikimedia.org" in r["source_page_url"] for r in rows))
 
 
