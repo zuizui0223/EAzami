@@ -42,7 +42,7 @@ class TestJapan38ColourClimateCoupling(unittest.TestCase):
     def test_partial_spearman_matches_formula_and_is_finite(self):
         x = np.asarray([1, 2, 3, 4, 5, 6], dtype=float)
         y = np.asarray([2, 1, 4, 3, 6, 5], dtype=float)
-        z = np.asarray([6, 5, 4, 3, 2, 1], dtype=float)
+        z = np.asarray([6, 5, 3, 4, 2, 1], dtype=float)
         value = cc.partial_spearman(x, y, z)
         self.assertTrue(math.isfinite(value))
         self.assertGreaterEqual(value, -1.0)
