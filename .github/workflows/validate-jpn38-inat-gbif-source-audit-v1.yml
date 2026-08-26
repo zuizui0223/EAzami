@@ -41,17 +41,28 @@ jobs:
           x=json.loads(Path('result/jpn38_inat_gbif_japan_source_audit_v1.json').read_text())
           assert x['contract_version']=='jpn38_inat_gbif_japan_source_audit_v1'
           assert set(x['sources'])=={'iNaturalist','GBIF'}
-          assert x['combined_media_rows'] >= 0
-          assert x['cross_source_unique_open_reusable_records'] >= 0
-          assert x['conservative_independent_open_reusable_records'] >= 0
-          assert isinstance(x['candidate_records'], list)
-          if x['conservative_independent_open_reusable_records'] > 0:
-              assert x['candidate_records']
-              for row in x['candidate_records']:
+          for key in [
+            'combined_media_rows','cross_source_unique_open_reusable_records',
+            'cross_source_open_reusable_specimen_records','cross_source_open_reusable_live_records',
+            'conservative_independent_open_reusable_live_records',
+            'conservative_independent_open_reusable_live_locality_cells_0_05deg',
+            'license_blocked_noncommercial_independent_live_records',
+            'license_blocked_noncommercial_independent_live_locality_cells_0_05deg',
+          ]:
+              assert x[key] >= 0, (key,x[key])
+          assert isinstance(x['automated_measurement_candidates'], list)
+          assert isinstance(x['permission_or_license_change_candidates'], list)
+          if x['conservative_independent_open_reusable_live_records'] > 0:
+              assert x['automated_measurement_candidates']
+              for row in x['automated_measurement_candidates']:
                   assert row['media_url']
                   assert row['media_license']
-                  assert row['latitude'] is not None
-                  assert row['longitude'] is not None
+                  assert row['basis_of_record'] in {'HUMAN_OBSERVATION','OBSERVATION','MACHINE_OBSERVATION'}
+          if x['license_blocked_noncommercial_independent_live_records'] > 0:
+              assert x['permission_or_license_change_candidates']
+              for row in x['permission_or_license_change_candidates']:
+                  assert row['media_license_class']=='noncommercial_only'
+                  assert row['basis_of_record'] in {'HUMAN_OBSERVATION','OBSERVATION','MACHINE_OBSERVATION'}
           print(json.dumps(x,indent=2,ensure_ascii=False))
           PY
       - uses: actions/upload-artifact@v4
