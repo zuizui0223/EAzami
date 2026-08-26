@@ -1,0 +1,47 @@
+{
+  "contract_version": "japan38_jpn29_identity_geography_gate_v1",
+  "status_date": "2026-08-26",
+  "paper_japan_member_id": "JPN_29",
+  "paper_taxon_concept": "Cirsium verutum (D.Don) Spreng.",
+  "tree_code": "Cirsium verutum",
+  "biosample": "SAMN44017947",
+  "run": "SRR30887232",
+  "internal_evidence": {
+    "membership_audit": {
+      "source": "data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv",
+      "sample_origin_class": "direct_Japan_sample_or_public_locality",
+      "sample_origin_detail": "Japan in supplement voucher and/or NCBI BioSample locality",
+      "paper_japan_membership_confidence": "high",
+      "current_name_status": "pending_authority_backed_reconciliation",
+      "note": "NCBI treats this sample as Lophiolepis veruta"
+    },
+    "name_conflict_registry": {
+      "source": "data/evidence/moreyra2025_name_conflicts_priority_2026-08-10.csv",
+      "conflict_type": "generic_reassignment",
+      "priority": "medium",
+      "required_resolution": "Represent broad Cirsium and segregate Lophiolepis treatments in topology sensitivity"
+    }
+  },
+  "external_taxonomic_geography": {
+    "source": "Plants of the World Online, Kew Science",
+    "source_url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:196173-1",
+    "accepted_name": "Cirsium verutum (D.Don) Spreng.",
+    "homotypic_synonym": "Lophiolepis veruta (D.Don) Bures, Del Guacchio, Iamonico & P.Caputo",
+    "native_range_summary": "Northern Pakistan to Tibet and northern Indo-China",
+    "native_regions": ["Assam", "East Himalaya", "Myanmar", "Nepal", "Pakistan", "Tibet", "Vietnam", "West Himalaya"],
+    "japan_in_native_range": false,
+    "retrieved_date": "2026-08-26"
+  },
+  "conflict": "The paper/Japan38 membership audit places the sequenced sample in the Japanese panel, while the currently accepted species concept has no native Japanese range. Exact taxon-name matching therefore cannot be treated as evidence that the JPN_29 nuclear tip represents a natural Japanese C. verutum population.",
+  "decision": {
+    "keep_raw_nuclear_tip": true,
+    "clean_japan_local_trait_join_allowed": false,
+    "japan_local_colour_recovery_priority": "blocked_pending_identity_resolution",
+    "required_next_evidence": [
+      "Resolve the exact Moreyra voucher/locality for SAMN44017947 / SRR30887232.",
+      "Determine whether the sampled material was cultivated in Japan, misidentified, or uses a different taxonomic concept.",
+      "Only after voucher-level reconciliation decide whether a Japan-local colour phenotype is biologically meaningful for this tip."
+    ]
+  },
+  "claim_boundary": "This is an identity/geography gate, not a reidentification of the sequence. POWO distribution absence does not by itself prove that the sequenced sample is wrong; it makes the current Japan-local phenotype join unsafe until voucher-level evidence resolves the contradiction."
+}
