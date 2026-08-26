@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Audit Japan-local Cirsium pendulum photo sources from iNaturalist and GBIF.
 
-Metadata only. No external images are downloaded. The goal is to find records that
-simultaneously satisfy taxon, Japanese locality, explicit media licensing and
-geographic independence before any image enters the Azami colour pipeline.
+Metadata only. No external images are downloaded. The goal is to separate live
+photo observations from preserved-specimen media before any image enters the Azami
+colour pipeline, while enforcing explicit media licensing and locality independence.
 """
 from __future__ import annotations
 
@@ -26,20 +26,18 @@ INAT_JAPAN_PLACE_ID = 6737
 GBIF_TAXON_KEY = 3113714
 USER_AGENT = "EAzami-scientific-reproducibility/1.0 (https://github.com/zuizui0223/EAzami; public biodiversity metadata audit)"
 
-# Conservative whole-Fukushima envelope. Anything outside this box is certainly
-# independent of the previously used Fukushima/Aizu image series. Records inside
-# may still be independent, but are not promoted automatically.
 FUKUSHIMA_BBOX = {
     "lat_min": 36.75,
     "lat_max": 37.98,
     "lon_min": 139.16,
     "lon_max": 141.05,
 }
+LIVE_BASIS = {"HUMAN_OBSERVATION", "OBSERVATION", "MACHINE_OBSERVATION"}
+SPECIMEN_BASIS = {"PRESERVED_SPECIMEN", "FOSSIL_SPECIMEN", "MATERIAL_SAMPLE"}
 
 
 def request_json(base: str, params: dict[str, object], attempts: int = 5):
-    query = urllib.parse.urlencode(params, doseq=True)
-    url = base + "?" + query
+    url = base + "?" + urllib.parse.urlencode(params, doseq=True)
     delays = (0, 3, 7, 15, 30)
     last = None
     for i in range(attempts):
@@ -99,6 +97,15 @@ def outside_fukushima_bbox(lat, lon) -> bool | None:
     return not (b["lat_min"] <= lat <= b["lat_max"] and b["lon_min"] <= lon <= b["lon_max"])
 
 
+def explicit_prefecture_independence(state_province: str | None):
+    s = (state_province or "").strip()
+    if not s:
+        return None
+    if re.search(r"fukushima|福島", s, flags=re.I):
+        return False
+    return True
+
+
 def locality_cell(lat, lon, step=0.05):
     lat = finite_float(lat)
     lon = finite_float(lon)
@@ -112,6 +119,14 @@ def normalize_inat_record_key(url: str | None):
         return None
     m = re.search(r"inaturalist\.org/observations/(\d+)", str(url))
     return f"inat:{m.group(1)}" if m else None
+
+
+def is_live_basis(value: str | None) -> bool:
+    return (value or "").upper() in LIVE_BASIS
+
+
+def is_specimen_basis(value: str | None) -> bool:
+    return (value or "").upper() in SPECIMEN_BASIS
 
 
 def fetch_inaturalist():
@@ -147,6 +162,10 @@ def fetch_inaturalist():
                     "dedup_record_key": f"inat:{obs_id}" if obs_id else record_url,
                     "record_url": record_url,
                     "taxon_name": ((obs.get("taxon") or {}).get("name") or ""),
+                    "basis_of_record": "HUMAN_OBSERVATION",
+                    "state_province": "",
+                    "institution_code": "",
+                    "collection_code": "",
                     "quality_grade": obs.get("quality_grade") or "",
                     "observed_on": obs.get("observed_on") or obs.get("time_observed_at") or "",
                     "place_text": obs.get("place_guess") or "",
@@ -189,6 +208,8 @@ def fetch_gbif():
             dedup_key = inat_key or (f"gbif:{key}" if key else occurrence_id or record_url)
             lat = finite_float(occ.get("decimalLatitude"))
             lon = finite_float(occ.get("decimalLongitude"))
+            basis = (occ.get("basisOfRecord") or "").upper()
+            state_province = occ.get("stateProvince") or ""
             for media in occ.get("media") or []:
                 license_value = media.get("license") or ""
                 rows.append({
@@ -197,9 +218,13 @@ def fetch_gbif():
                     "dedup_record_key": dedup_key,
                     "record_url": record_url,
                     "taxon_name": occ.get("scientificName") or "",
+                    "basis_of_record": basis,
+                    "state_province": state_province,
+                    "institution_code": occ.get("institutionCode") or "",
+                    "collection_code": occ.get("collectionCode") or "",
                     "quality_grade": occ.get("identificationVerificationStatus") or "",
                     "observed_on": occ.get("eventDate") or occ.get("dateIdentified") or "",
-                    "place_text": " | ".join(x for x in [occ.get("stateProvince"), occ.get("locality")] if x),
+                    "place_text": " | ".join(x for x in [state_province, occ.get("locality")] if x),
                     "latitude": lat,
                     "longitude": lon,
                     "coordinate_accuracy_m": occ.get("coordinateUncertaintyInMeters"),
@@ -208,7 +233,7 @@ def fetch_gbif():
                     "media_license": license_value,
                     "media_license_class": classify_license(license_value),
                     "attribution": media.get("creator") or media.get("rightsHolder") or "",
-                    "dataset": occ.get("datasetTitle") or "",
+                    "dataset": occ.get("datasetTitle") or occ.get("datasetName") or "",
                 })
         offset += len(results)
         if not results or offset >= (total or 0):
@@ -216,13 +241,27 @@ def fetch_gbif():
     return rows, int(total or 0)
 
 
-def add_geographic_fields(rows):
+def add_gate_fields(rows):
     for row in rows:
         row["locality_cell_0_05deg"] = locality_cell(row.get("latitude"), row.get("longitude"))
         outside = outside_fukushima_bbox(row.get("latitude"), row.get("longitude"))
+        pref_independent = explicit_prefecture_independence(row.get("state_province"))
         row["conservative_independent_from_fukushima"] = "" if outside is None else str(bool(outside)).lower()
+        row["explicit_prefecture_independent_from_fukushima"] = "" if pref_independent is None else str(bool(pref_independent)).lower()
+        row["media_is_live_observation"] = str(is_live_basis(row.get("basis_of_record"))).lower()
+        row["media_is_specimen"] = str(is_specimen_basis(row.get("basis_of_record"))).lower()
+        geographic_independent = outside is True or (outside is None and pref_independent is True)
         row["automated_measurement_candidate"] = str(
-            row.get("media_license_class") == "open_reusable" and outside is True and bool(row.get("media_url"))
+            row.get("media_license_class") == "open_reusable"
+            and is_live_basis(row.get("basis_of_record"))
+            and geographic_independent
+            and bool(row.get("media_url"))
+        ).lower()
+        row["license_blocked_live_independent_candidate"] = str(
+            row.get("media_license_class") == "noncommercial_only"
+            and is_live_basis(row.get("basis_of_record"))
+            and geographic_independent
+            and bool(row.get("media_url"))
         ).lower()
     return rows
 
@@ -233,9 +272,20 @@ def summarize(rows, inat_total, gbif_total):
         by_source[r["source"]].append(r)
     open_rows = [r for r in rows if r["media_license_class"] == "open_reusable"]
     open_records = {r["dedup_record_key"] for r in open_rows if r["dedup_record_key"]}
+    open_specimen_records = {
+        r["dedup_record_key"] for r in open_rows
+        if r["dedup_record_key"] and is_specimen_basis(r.get("basis_of_record"))
+    }
+    open_live_records = {
+        r["dedup_record_key"] for r in open_rows
+        if r["dedup_record_key"] and is_live_basis(r.get("basis_of_record"))
+    }
     candidate_rows = [r for r in rows if r["automated_measurement_candidate"] == "true"]
     candidate_records = {r["dedup_record_key"] for r in candidate_rows if r["dedup_record_key"]}
-    cells = {r["locality_cell_0_05deg"] for r in candidate_rows if r["locality_cell_0_05deg"]}
+    candidate_cells = {r["locality_cell_0_05deg"] for r in candidate_rows if r["locality_cell_0_05deg"]}
+    license_blocked_rows = [r for r in rows if r["license_blocked_live_independent_candidate"] == "true"]
+    license_blocked_records = {r["dedup_record_key"] for r in license_blocked_rows if r["dedup_record_key"]}
+    license_blocked_cells = {r["locality_cell_0_05deg"] for r in license_blocked_rows if r["locality_cell_0_05deg"]}
 
     def source_summary(name, total_records):
         srows = by_source.get(name, [])
@@ -244,22 +294,27 @@ def summarize(rows, inat_total, gbif_total):
             "media_rows": len(srows),
             "open_reusable_media_rows": sum(r["media_license_class"] == "open_reusable" for r in srows),
             "open_reusable_record_keys": len({r["dedup_record_key"] for r in srows if r["media_license_class"] == "open_reusable" and r["dedup_record_key"]}),
+            "open_reusable_specimen_record_keys": len({r["dedup_record_key"] for r in srows if r["media_license_class"] == "open_reusable" and is_specimen_basis(r.get("basis_of_record")) and r["dedup_record_key"]}),
+            "open_reusable_live_record_keys": len({r["dedup_record_key"] for r in srows if r["media_license_class"] == "open_reusable" and is_live_basis(r.get("basis_of_record")) and r["dedup_record_key"]}),
             "noncommercial_only_media_rows": sum(r["media_license_class"] == "noncommercial_only" for r in srows),
             "unspecified_or_restricted_media_rows": sum(r["media_license_class"] in {"unspecified", "restricted", "other_or_unknown", "no_derivatives"} for r in srows),
         }
 
-    candidates = []
-    seen = set()
-    for r in sorted(candidate_rows, key=lambda x: (x["dedup_record_key"], x["source"], x["media_url"])):
-        key = (r["dedup_record_key"], r["source"], r["media_url"])
-        if key in seen:
-            continue
-        seen.add(key)
-        candidates.append({k: r.get(k) for k in [
-            "source", "source_record_id", "dedup_record_key", "record_url", "observed_on",
-            "place_text", "latitude", "longitude", "locality_cell_0_05deg",
-            "media_url", "media_license", "attribution", "dataset"
-        ]})
+    def compact(rows_to_emit):
+        out = []
+        seen = set()
+        for r in sorted(rows_to_emit, key=lambda x: (x["dedup_record_key"], x["source"], x["media_url"])):
+            key = (r["dedup_record_key"], r["source"], r["media_url"])
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append({k: r.get(k) for k in [
+                "source", "source_record_id", "dedup_record_key", "record_url", "basis_of_record",
+                "observed_on", "state_province", "place_text", "latitude", "longitude",
+                "locality_cell_0_05deg", "media_url", "media_license", "media_license_class",
+                "attribution", "institution_code", "collection_code", "dataset"
+            ]})
+        return out
 
     return {
         "contract_version": "jpn38_inat_gbif_japan_source_audit_v1",
@@ -274,16 +329,22 @@ def summarize(rows, inat_total, gbif_total):
         },
         "combined_media_rows": len(rows),
         "cross_source_unique_open_reusable_records": len(open_records),
-        "conservative_independent_open_reusable_records": len(candidate_records),
-        "conservative_independent_locality_cells_0_05deg": len(cells),
-        "candidate_records": candidates,
+        "cross_source_open_reusable_specimen_records": len(open_specimen_records),
+        "cross_source_open_reusable_live_records": len(open_live_records),
+        "conservative_independent_open_reusable_live_records": len(candidate_records),
+        "conservative_independent_open_reusable_live_locality_cells_0_05deg": len(candidate_cells),
+        "license_blocked_noncommercial_independent_live_records": len(license_blocked_records),
+        "license_blocked_noncommercial_independent_live_locality_cells_0_05deg": len(license_blocked_cells),
+        "automated_measurement_candidates": compact(candidate_rows),
+        "permission_or_license_change_candidates": compact(license_blocked_rows),
         "decision": (
-            "At least one conservatively independent Japanese open-license photo source is available for JPN_38 recovery."
+            "At least one conservatively independent Japanese open-license live-photo source is available for JPN_38 recovery."
             if candidate_records else
-            "No conservatively independent Japanese open-license photo source was recovered from the live iNaturalist/GBIF metadata audit."
+            "No conservatively independent Japanese open-license live-photo source was recovered. Open GBIF media are separated from preserved-specimen scans, and noncommercial live-photo records are retained only as permission/license candidates."
         ),
-        "license_boundary": "Only CC0, CC BY and CC BY-SA media are automated-measurement candidates. CC BY-NC and records with unspecified/restrictive image licenses are retained for metadata context but not promoted automatically.",
-        "geographic_boundary": "Outside-Fukushima status uses a conservative whole-prefecture bounding box. A record inside the box may still be independent of Aizu, but is not promoted automatically by this audit.",
+        "specimen_boundary": "Preserved-specimen images are never promoted to corolla-colour measurement because drying and preservation can alter colour. They may support locality/taxonomic context only.",
+        "license_boundary": "Only CC0, CC BY and CC BY-SA media are automated-measurement candidates. CC BY-NC media are not auto-used here even when locality is suitable; they are retained as possible permission/license-change targets.",
+        "geographic_boundary": "Coordinates outside a conservative whole-Fukushima bounding box are independent of the previous Fukushima/Aizu series. If coordinates are absent, an explicitly non-Fukushima stateProvince can establish coarse independence for source triage but not a precise population locality.",
     }
 
 
@@ -295,16 +356,18 @@ def main():
 
     inat_rows, inat_total = fetch_inaturalist()
     gbif_rows, gbif_total = fetch_gbif()
-    rows = add_geographic_fields(inat_rows + gbif_rows)
+    rows = add_gate_fields(inat_rows + gbif_rows)
     rows.sort(key=lambda r: (r["source"], r["dedup_record_key"], r["media_url"]))
 
     args.csv_output.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = [
         "source", "source_record_id", "dedup_record_key", "record_url", "taxon_name",
+        "basis_of_record", "state_province", "institution_code", "collection_code",
         "quality_grade", "observed_on", "place_text", "latitude", "longitude",
         "coordinate_accuracy_m", "locality_cell_0_05deg", "conservative_independent_from_fukushima",
+        "explicit_prefecture_independent_from_fukushima", "media_is_live_observation", "media_is_specimen",
         "media_id", "media_url", "media_license", "media_license_class", "attribution", "dataset",
-        "automated_measurement_candidate",
+        "automated_measurement_candidate", "license_blocked_live_independent_candidate",
     ]
     with args.csv_output.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
