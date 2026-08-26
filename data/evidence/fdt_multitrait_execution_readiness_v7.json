@@ -1,0 +1,47 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v7",
+  "status_date": "2026-08-26",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v6.json",
+  "inheritance": "All discrete-module histories, H2/H3 resolution, display gate, global continuous-colour result, current abiotic gates, geographic provenance gate, JPN38 one-locality Commons calibration/exhaustion, and JPN29 specimen-determination gate are inherited from v6 unless overridden below.",
+  "colour": {
+    "japan_local_history_ready": false,
+    "existing_clean_japan_window_concepts": ["JPN_17", "JPN_23", "JPN_36", "JPN_37"],
+    "jpn38_noncommons_live_source_audit": {
+      "canonical_audit": "data/evidence/jpn38_inat_gbif_japan_source_audit_v1.json",
+      "permission_registry": "data/evidence/jpn38_permission_candidates_v1.csv",
+      "inaturalist_photo_observations_in_japan": 4,
+      "gbif_stillimage_records_in_japan": 34,
+      "open_reusable_gbif_records": 22,
+      "open_reusable_gbif_live_records": 0,
+      "open_reusable_gbif_specimen_records": 22,
+      "independent_open_reusable_live_records": 0,
+      "independent_cc_by_nc_live_records": 3,
+      "independent_cc_by_nc_localities": ["Niigata", "Tochigi", "Tochigi-shi Fujioka-machi Yachunoko"],
+      "status": "reusable_live_source_blocked_by_license; preserved specimens excluded from colour measurement",
+      "interpretation": "The non-Commons source class contains three geographically independent live-photo records, but all are CC BY-NC under the current conservative reuse policy. The apparently abundant open GBIF media are preserved specimens, not usable corolla-colour proxies."
+    },
+    "jpn29_identity_gate": {
+      "paper_japan_member_id": "JPN_29",
+      "voucher": "K. Yonekura 6788 (PE01523822)",
+      "voucher_geography_resolved": true,
+      "voucher_taxon_identity_resolved": false,
+      "external_public_search_result": "No independent public determination/annotation-history record was recovered by exact specimen-number and collector-number web searches; the Moreyra thesis remains the public source confirming the Japan voucher label.",
+      "clean_japan_local_trait_join_allowed": false
+    },
+    "status": "Japan-local colour history remains blocked. For JPN_38, the next actionable route is permission/relicensing for three independent live-photo observations or new/directly collected population images; for JPN_29, specimen determination history remains unresolved."
+  },
+  "priority_reordering": {
+    "first": "Resolve reuse for the three independent JPN_38 CC BY-NC live-photo records (iNaturalist 190462681, 268410147, 339557766) or acquire equivalent open/direct images from independent Japanese populations. Do not substitute preserved-specimen scans for live corolla colour.",
+    "second": "Resolve PE01523822 / K. Yonekura 6788 determination and annotation history before joining JPN_29 to a Japanese phenotype.",
+    "third": "Once a fifth Japan-local identity-resolved concept is obtained, rerun continuous-lightness history with population-matched proxies.",
+    "fourth": "Only after the Japan-local trait gate passes, resume radiation/rsds, VPD/aridity, wind/sfcWind and improved-soil mechanism screens.",
+    "do_not_repeat": "Do not keep mining Commons or GBIF preserved-specimen images for JPN_38 corolla colour unless source metadata or licensing materially change."
+  },
+  "canonical_results": {
+    "jpn38_commons_audit": "data/evidence/jpn38_commons_independent_locality_audit_v1.json",
+    "jpn38_inat_gbif_audit": "data/evidence/jpn38_inat_gbif_japan_source_audit_v1.json",
+    "jpn38_permission_candidates": "data/evidence/jpn38_permission_candidates_v1.csv",
+    "jpn29_identity_gate": "data/evidence/japan38_jpn29_identity_geography_gate_v1.json"
+  },
+  "claim_boundary": "Current JPN_38 non-Commons live-photo evidence is blocked by the conservative reuse policy, not by lack of geographic replication. Open preserved specimens are deliberately excluded from colour measurement. JPN_29 remains a specimen/taxon-concept problem, not a missing-photo problem."
+}
