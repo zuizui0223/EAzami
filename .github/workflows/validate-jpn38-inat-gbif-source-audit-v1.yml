@@ -1,0 +1,64 @@
+name: Validate JPN38 iNaturalist GBIF source audit v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_jpn38_inat_gbif_japan_sources_v1.py"
+      - "tests/test_jpn38_inat_gbif_japan_sources_v1.py"
+      - ".github/workflows/validate-jpn38-inat-gbif-source-audit-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-jpn38-inat-gbif-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile and unit test
+        run: |
+          python -m py_compile analysis/audit_jpn38_inat_gbif_japan_sources_v1.py
+          python -m unittest tests/test_jpn38_inat_gbif_japan_sources_v1.py -v
+      - name: Audit live iNaturalist and GBIF metadata
+        run: |
+          set -euo pipefail
+          mkdir -p result
+          python analysis/audit_jpn38_inat_gbif_japan_sources_v1.py \
+            --csv-output result/jpn38_inat_gbif_japan_source_audit_v1.csv \
+            --json-output result/jpn38_inat_gbif_japan_source_audit_v1.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('result/jpn38_inat_gbif_japan_source_audit_v1.json').read_text())
+          assert x['contract_version']=='jpn38_inat_gbif_japan_source_audit_v1'
+          assert set(x['sources'])=={'iNaturalist','GBIF'}
+          assert x['combined_media_rows'] >= 0
+          assert x['cross_source_unique_open_reusable_records'] >= 0
+          assert x['conservative_independent_open_reusable_records'] >= 0
+          assert isinstance(x['candidate_records'], list)
+          if x['conservative_independent_open_reusable_records'] > 0:
+              assert x['candidate_records']
+              for row in x['candidate_records']:
+                  assert row['media_url']
+                  assert row['media_license']
+                  assert row['latitude'] is not None
+                  assert row['longitude'] is not None
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jpn38-inat-gbif-source-audit-${{ github.run_id }}
+          path: |
+            result/jpn38_inat_gbif_japan_source_audit_v1.csv
+            result/jpn38_inat_gbif_japan_source_audit_v1.json
+          if-no-files-found: error
+          retention-days: 90
