@@ -1,0 +1,25 @@
+{
+  "contract_version": "fdt1_ipomopsis_display_source_recovery_v1",
+  "status_date": "2026-08-26",
+  "study": {
+    "taxon": "Ipomopsis aggregata",
+    "doi": "10.1007/s004420050136",
+    "citation": "Brody and Mitchell 1997, Oecologia 110:86-93"
+  },
+  "routes_checked": 6,
+  "primary_abstract_verified": true,
+  "verified_numeric_fulltext_recovered": false,
+  "group_means_dispersions_sample_sizes_recovered": false,
+  "content_mismatch_artifact_rejected": true,
+  "display_effect_size_ready": false,
+  "cross_study_display_meta_analysis_ready": false,
+  "retained_direction_only_findings": {
+    "pollinator_long_distance_attraction": "larger displays favoured",
+    "predispersal_seed_predation": "higher on many-flowered plants",
+    "maternal_fitness": "potential gain reported, but no common effect size identified"
+  },
+  "stop_reason": "Primary and author abstracts verify directions, but the bounded public recovery did not yield the article's numerical treatment summaries. The similarly named author PDF is a different article and is rejected.",
+  "reopen_condition": "Obtain a verified full-text copy or author-supplied tables containing treatment definitions, sample sizes, group summaries and uncertainty through a lawful institutional or author route.",
+  "do_not_repeat": "Do not ingest the rejected Lesquerella PDF, infer means from P-value signs, or repeat the same legacy-link and archive-index checks unless their records change.",
+  "claim_limit": "The experiment supports a joint display benefit/enemy-cost direction. It does not yet identify a transportable magnitude, a pooled display effect, or a net adaptation estimate for Cirsium."
+}

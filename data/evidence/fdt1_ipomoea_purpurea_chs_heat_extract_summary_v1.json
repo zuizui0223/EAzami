@@ -1,0 +1,58 @@
+{
+  "contract_version": "fdt1_ipomoea_purpurea_chs_heat_extract_v1",
+  "source_id": "10.1046/j.1365-294X.2003.01786.x",
+  "source_location": "Table_1",
+  "rows": 64,
+  "total_plant_day_pollination_pairs": 1342,
+  "factor_levels": {
+    "maternal_genotype": [
+      "AA",
+      "aa"
+    ],
+    "paternal_genotype": [
+      "AA",
+      "aa"
+    ],
+    "maternal_light": [
+      "high",
+      "low"
+    ],
+    "paternal_light": [
+      "high",
+      "low"
+    ],
+    "maternal_temperature": [
+      "high",
+      "low"
+    ],
+    "paternal_temperature": [
+      "high",
+      "low"
+    ]
+  },
+  "complete_two_level_factorial": true,
+  "observation_unit": "one_or_two_flowers_pooled_on_one_maternal_plant_on_one_day",
+  "reported_interactions": {
+    "maternal_genotype_x_maternal_temperature": {
+      "F": 7.32,
+      "p": 0.0069
+    },
+    "paternal_genotype_x_maternal_temperature": {
+      "F": 4.85,
+      "p": 0.0278
+    }
+  },
+  "author_reported_relative_differences": {
+    "mutant_recipient_deficit_at_high_maternal_temperature_percent": 26,
+    "mutant_pollen_deficit_on_high_temperature_recipients_percent": 24
+  },
+  "readiness": "bounded_effect_extraction_ready_not_pool_ready",
+  "blocking_design_features": [
+    "one_chamber_per_temperature",
+    "one_light_subchamber_per_light_level_within_temperature",
+    "two_constructed_lines_pooled_in_the_published_cell_table",
+    "maternal_plants_generally_used_once_and_rarely_twice_per_treatment_combination",
+    "published_cell_SEs_do_not_supply_cross_cell_or_repeated_plant_covariance"
+  ],
+  "claim_boundary": "This is a CHS-D whole-flavonoid-pathway genotype-by-environment calibration, not an anthocyanin-only visible-petal effect. Temperature is chamber-confounded; do not treat the 64 cells as independent study effects or inverse-variance pool them."
+}

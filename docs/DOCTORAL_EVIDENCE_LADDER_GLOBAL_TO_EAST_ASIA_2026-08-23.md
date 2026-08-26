@@ -1,6 +1,20 @@
 # Doctoral evidence ladder: global capitulum diversity -> ecological mechanism -> East-Asian rapid radiation
 
-Status: 2026-08-23
+Status: 2026-08-26
+
+Dissertation placement: **Azami series Chapter 2 canonical interface**.
+
+```text
+Chapter 1 / Azami = global spatial observational discovery
+Chapter 2 / EAzami = functional diversification through evolutionary time
+downstream validation = ancestry-resolved causal ecology and molecular reuse
+```
+
+Chapter 2 is not a second version of Chapter 1. It takes Chapter 1's frozen
+spatial patterns as hypotheses, then asks whether experimentally supported
+functions changed repeatedly during the East-Asian radiation and whether those
+changes track niche history better than neutral, single-driver or shared
+common-lability alternatives.
 
 ## Decision
 
@@ -59,6 +73,77 @@ EAzami begins exactly where Azami must stop:
 5. for flower colour, test whether repeated states reuse retained molecular machinery.
 
 This boundary allows the same biological observation to be used at two scales without overclaiming it: Azami describes global within/among-taxon pattern; EAzami asks how population-level ecology and ancestry can generate repeated among-lineage states.
+
+### Chapter 2 execution unit
+
+The eight FDT layers belong to one Chapter 2 inferential chain:
+
+`FDT1 trait -> function effects -> FDT2 geographic moderators -> FDT3 repeated-function synthesis -> FDT4 focal trait/niche history -> FDT5 disparity through time -> FDT6 ecological-event correspondence -> FDT7 M0-M5 model discrimination -> FDT8 reverse-engineered validation`.
+
+FDT8 selects the later ancestry-resolved causal experiments. Those experiments
+must not be treated as already observed Chapter 2 evidence.
+
+Current gate state on 2026-08-26:
+
+- **FDT1:** one coordinated eight-population *Aquilegia* trichome-removal
+  cluster is quantitatively extractable (damage RR 1.656; intact-versus-removal
+  healthy-fruit RR 1.077, 95% normal CI 0.991-1.171), with supported
+  species-by-treatment heterogeneity. It calibrates a context-dependent pathway,
+  not a transferable *Cirsium* effect. Independent *Erica* and *Passiflora*
+  manipulations now replicate enemy damage/access effects, but missing model
+  scale or paired-cluster covariance and nonhomologous trait packages prevent a
+  pooled effect; neither adds a final fruit/seed fitness effect. *Ipomopsis*
+  display and *Lilium* orientation remain direction-only source gates because
+  recoverable public evidence lacks the numerical information needed for
+  homologous effects. *Pedicularis* water-holding-bract tables supply exact
+  coefficients and SEs, but the seed-model link is unnamed. A bounded audit now
+  adds independent *Centaurea* spine, *Taraxacum* phyllary, *Monotropsis* bract
+  and *Chrysothemis* liquid-calyx manipulations. Antagonist access/damage and
+  final seed/fruit directions are therefore externally replicated, with
+  *Rheum* retained as an opposite-direction counterexample. The heterogeneous
+  envelope packages remain nonhomologous and not pool-ready, and none validates
+  the Azami image proxy or establishes a focal *Cirsium* adaptation.
+  For colour, the extracted *Ipomoea purpurea* CHS-null 64-cell table makes
+  whole-flavonoid genotype x heat reproductive response bounded-extraction
+  ready. Tomato F3H complementation and antioxidant rescue close a pollen-
+  flavonol/ROS mechanism, not a visible-petal anthocyanin mechanism; one
+  chamber/greenhouse per environment and a direct *Mimulus* counterexample keep
+  the general colour-protection pool closed.
+- **FDT2:** 49 FDT1 response rows have been collapsed to 23 independent
+  primary-source study clusters. Reported geography and imposed exposure are
+  now registered without geocoding named sites, using author affiliation, or
+  treating source-population locality as the environment of greenhouse/chamber
+  outcomes. No homologous georeferenced effect family with recoverable variance
+  is present, and temperature/UV/rain/light contexts differ in tissue, duration,
+  endpoint and environmental replication. FDT2 is therefore
+  `READINESS_REGISTRY_ONLY / STOP_BEFORE_MODERATOR_MODEL`; ten directional
+  exposure calibrations may inform mechanism uncertainty but cannot be pooled
+  as an environmental response surface.
+- **FDT3:** existing materials have been role-audited before event extraction.
+  FDT1/FDT2 functional studies, 54 focal *Cirsium* phylogeny citations, the
+  focal orientation repeated-state result, module hypotheses and method/theory
+  anchors are not exchangeable transition events. The external event ledger is
+  deliberately row-empty. A seven-source orientation pilot admitted zero event
+  rows but identified the 41-species *Lonicera* study as the priority source
+  family. Its node probabilities and branch list were not accessible in the
+  bounded lawful record, so FDT3 is
+  `NOT_READY_ZERO_PRIMARY_EVENT_LEDGER_ROWS_SOURCE_FAMILY_IDENTIFIED`.
+  Reopening requires Supporting Figure S1/Table S3 plus a probability and
+  branch-independence rule frozen before ecological matching; non-events and
+  separate ecology/fitness validation remain in the denominator.
+- **FDT4:** the published-voucher occurrence gate now gives 11 taxa. Present-day
+  PGLS directions for higher BIO15 and lower BIO1 in nodding taxa are stable
+  across all six retained topologies. The stricter branchwise transition test
+  does not pass all-topology robustness (BIO15 permutation p=0.078-0.094;
+  BIO1 p=0.044-0.066), so repeated niche-associated convergence and adaptation
+  remain blocked.
+- **FDT5-FDT7:** absolute-time disparity, event correspondence and time-calibrated
+  simulations remain closed because the accepted focal trees have
+  substitutions/site branch lengths and no machine-readable dated tree or age
+  posterior has been recovered. Molecular branch lengths must not be relabelled
+  as time. M0-M5 model names are now semantically frozen, but the older
+  FULL_COUPLED/FULL_MODULAR structural screens are not silently relabelled as
+  fitted time-axis models.
 
 ---
 
@@ -140,6 +225,21 @@ Broader Cardueae/Asteraceae evidence makes antagonist exclusion biologically pla
 
 A direct *Cirsium discolor* neutralization experiment did not increase seed predators or reduce seed production. Generic `sticky inflorescence = reproductive defence` is therefore **weakened** and should remain a low-priority or negative-control lane unless new focal evidence reopens it.
 
+The quantitative *Aquilegia* glandular-trichome extraction retains a real enemy
+damage and healthy-fruit pathway, but the supported species interaction and
+mixed *A. pyrenaica* directions make context dependence explicit. Its eight
+populations are one coordinated study cluster, not eight independent studies,
+and glandular trichomes are not interchangeable with adhesive capitula.
+
+Two further primary manipulations independently support an enemy damage/access
+mechanism. Added corolla stickiness sharply reduced nectar-robbing damage in
+*Erica plukenetii*, with a sticky-stem location control remaining null. Removing
+the sticky glandular bract package of *Passiflora foetida* increased bud damage
+from 17.65% to 55.82%, but not developing-fruit damage. The first study has an
+unrecovered link scale/sample size; the second lacks plant-cluster covariance
+and removes enclosure together with adhesion. They close replication of the
+mechanism direction, not a pooled magnitude or fruit/seed fitness effect.
+
 ### Meta-analysis stop rule
 
 The generic heterogeneous literature phase has reached its current decision ceiling. More papers of different taxa, traits and response scales are not expected to identify which agent or mechanism operates in the focal East-Asian populations.
@@ -163,7 +263,7 @@ The doctoral prediction is therefore multiscale:
 
 This remains a prediction; within-species variation is not automatically heritable ancestral polymorphism or adaptation.
 
-## 3.2 East-Asian tree: the historical scaffold is now usable
+## 3.2 East-Asian tree: the topology/branch scaffold is usable, absolute time is not
 
 EAzami has now completed an empirical compatibility tree route:
 
@@ -174,7 +274,7 @@ EAzami has now completed an empirical compatibility tree route:
 - explicit gene/site concordance sensitivity;
 - six AU-nonrejected local topology alternatives retained rather than hiding uncertainty.
 
-This is not an exact reproduction of the augmented Moreyra et al. matrix, but it is sufficient as a source-frozen compatibility framework for current repeated-state preflight analyses.
+This is not an exact reproduction of the augmented Moreyra et al. matrix, but it is sufficient as a source-frozen compatibility framework for current repeated-state preflight analyses. Its branch lengths are substitutions/site. Without a machine-readable dated tree or node-age posterior it does **not** license FDT5-FDT7 absolute-time analyses.
 
 ## 3.3 Orientation: repeated state change is now a result, not merely a hypothesis
 
@@ -198,6 +298,13 @@ Thus the current defensible evolutionary conclusion is:
 > **erect/upward and nodding/downward states changed repeatedly in the sampled East-Asian panel.**
 
 The words `parallel`, `convergent` and `adaptive` remain blocked because the states are taxon-concept annotations rather than same-voucher/population phenotypes and because ecological causation has not been demonstrated.
+
+Published-voucher augmentation closes the predeclared `n>=10` occurrence gate
+for 11 taxa without lowering the threshold. Present-day PGLS directions (higher
+BIO15 and lower BIO1 in nodding taxa) are stable across all six retained
+topologies, but the branchwise transition-niche test fails the all-topology gate.
+Therefore the directions are retained as Chapter 2 hypotheses; they are not
+evidence of repeated niche-associated convergence or adaptation.
 
 ## 3.4 Flower colour: tree solved, transition-direction gate not solved
 
@@ -486,6 +593,12 @@ This remains a programme hypothesis until the ancestry-resolved ecological fitne
 - `data/evidence/doctoral_global_to_east_asia_evidence_ladder_v2.csv`
 - `data/evidence/doctoral_global_to_east_asia_summary_v2.json`
 - `data/evidence/doctoral_meta_resolution_gate_v1.json`
+- `data/evidence/fdt1_broad_functional_calibration_summary_v1.json`
+- `data/evidence/fdt1_meta_estimand_registry_v1.csv`
+- `docs/FDT1_STICKINESS_PRIMARY_MANIPULATION_EVIDENCE_AUDIT_2026-08-26.md`
+- `docs/FDT1_BRACT_PHYLLARY_DEFENCE_PRIMARY_MANIPULATION_AUDIT_2026-08-26.md`
+- `docs/FDT1_COLOUR_PIGMENT_FUNCTION_PRIMARY_AUDIT_2026-08-26.md`
+- `data/evidence/fdt1_ipomoea_purpurea_chs_heat_extract_summary_v1.json`
 - `data/evidence/cirsium_floral_herbivory_lnrr_meta_v2.json`
 - `data/evidence/doctoral_ecological_hypothesis_registry_v2.csv`
 - `data/evidence/orientation_comp1061_posttree_ensemble_preflight_v1.json`

@@ -31,7 +31,10 @@ Decision-relevant priors include:
 - *C. palustre*: natural flower-colour-dependent pollination exists, but ancestry-controlled colour→effective-pollination→fitness remains unresolved;
 - *C. purpuratum*: greater seasonal flower production can increase pre-dispersal seed predation, supporting a mutualist-attraction versus antagonist-cost trade-off;
 - no direct *Cirsium* head-orientation manipulation linked through interaction/protection to reproductive fitness was recovered;
-- no direct phyllary/spine manipulation linked to both antagonist access and pollinator access was recovered;
+- external direct phyllary/spine manipulations now calibrate antagonist access,
+  pollinator handling and seed direction in *Centaurea*, and physical access in
+  *Taraxacum*; no focal *Cirsium* manipulation or validated Azami proxy was
+  recovered;
 - the recovered direct stickiness manipulation was null for its tested defence/seed-output effect.
 
 ## Direct quantitative antagonist baseline — v2
@@ -96,6 +99,15 @@ Published colour-dependent pollination exists, but ancestry-controlled effective
 ### 3. Involucre/phyllary/spine — biologically strengthened, methodologically gated
 
 The large quantified antagonist cost makes a defence hypothesis more consequential. However, the Azami involucre/spine variables are image-geometry proxies, not botanical truth.
+
+Independent external experiments now provide direct functional calibration:
+paired removal of involucral-bract spines in *Centaurea solstitialis* increased
+illegitimate visits and reduced filled-seed percentage by a reported 22%, while
+cutting recurved outer phyllaries in a *Taraxacum* hybrid approximately halved
+slug barrier time. Bract-package and liquid-calyx experiments in *Monotropsis*
+and *Chrysothemis* replicate antagonist exclusion by nonhomologous envelopes.
+These studies change the mechanism from an evidence blank to an external
+calibration, but do not validate the focal morphology or a common effect size.
 
 Proceed only after:
 

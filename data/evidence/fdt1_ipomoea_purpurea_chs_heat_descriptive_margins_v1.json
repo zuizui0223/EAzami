@@ -1,0 +1,152 @@
+{
+  "contract_version": "fdt1_ipomoea_purpurea_chs_heat_descriptive_margins_v1",
+  "source_id": "10.1046/j.1365-294X.2003.01786.x",
+  "input_rows": 64,
+  "unweighted_equal_cell_margins": {
+    "maternal_genotype_x_maternal_temperature": {
+      "by_maternal_temperature": {
+        "high": {
+          "AA": {
+            "cells": 16,
+            "denominator": 16,
+            "mean": 0.278375
+          },
+          "aa": {
+            "cells": 16,
+            "denominator": 16,
+            "mean": 0.1965
+          },
+          "aa_minus_AA": -0.08187499999999998,
+          "aa_over_AA": 0.7058823529411765
+        },
+        "low": {
+          "AA": {
+            "cells": 16,
+            "denominator": 16,
+            "mean": 0.4825625
+          },
+          "aa": {
+            "cells": 16,
+            "denominator": 16,
+            "mean": 0.5237499999999999
+          },
+          "aa_minus_AA": 0.04118749999999993,
+          "aa_over_AA": 1.0853516383888095
+        }
+      },
+      "ratio_of_ratios_high_over_low": 0.6503720342552297,
+      "difference_in_differences_high_minus_low": -0.12306249999999991
+    },
+    "paternal_genotype_x_maternal_temperature": {
+      "by_maternal_temperature": {
+        "high": {
+          "AA": {
+            "cells": 16,
+            "denominator": 16,
+            "mean": 0.2733125
+          },
+          "aa": {
+            "cells": 16,
+            "denominator": 16,
+            "mean": 0.2015625
+          },
+          "aa_minus_AA": -0.07175000000000001,
+          "aa_over_AA": 0.7374799908529613
+        },
+        "low": {
+          "AA": {
+            "cells": 16,
+            "denominator": 16,
+            "mean": 0.4910625
+          },
+          "aa": {
+            "cells": 16,
+            "denominator": 16,
+            "mean": 0.51525
+          },
+          "aa_minus_AA": 0.024187499999999973,
+          "aa_over_AA": 1.0492554410080184
+        }
+      },
+      "ratio_of_ratios_high_over_low": 0.7028602969592087,
+      "difference_in_differences_high_minus_low": -0.09593749999999998
+    }
+  },
+  "n_weighted_descriptive_margins": {
+    "maternal_genotype_x_maternal_temperature": {
+      "by_maternal_temperature": {
+        "high": {
+          "AA": {
+            "cells": 16,
+            "denominator": 271,
+            "mean": 0.2768044280442804
+          },
+          "aa": {
+            "cells": 16,
+            "denominator": 321,
+            "mean": 0.1977102803738318
+          },
+          "aa_minus_AA": -0.07909414767044862,
+          "aa_over_AA": 0.7142598179181009
+        },
+        "low": {
+          "AA": {
+            "cells": 16,
+            "denominator": 377,
+            "mean": 0.48937400530503977
+          },
+          "aa": {
+            "cells": 16,
+            "denominator": 373,
+            "mean": 0.5201501340482574
+          },
+          "aa_minus_AA": 0.030776128743217612,
+          "aa_over_AA": 1.0628887689366215
+        }
+      },
+      "ratio_of_ratios_high_over_low": 0.6719986500870545,
+      "difference_in_differences_high_minus_low": -0.10987027641366623
+    },
+    "paternal_genotype_x_maternal_temperature": {
+      "by_maternal_temperature": {
+        "high": {
+          "AA": {
+            "cells": 16,
+            "denominator": 295,
+            "mean": 0.26947457627118643
+          },
+          "aa": {
+            "cells": 16,
+            "denominator": 297,
+            "mean": 0.1985993265993266
+          },
+          "aa_minus_AA": -0.07087524967185982,
+          "aa_over_AA": 0.7369872488433404
+        },
+        "low": {
+          "AA": {
+            "cells": 16,
+            "denominator": 373,
+            "mean": 0.49463002680965146
+          },
+          "aa": {
+            "cells": 16,
+            "denominator": 377,
+            "mean": 0.5146233421750663
+          },
+          "aa_minus_AA": 0.019993315365414877,
+          "aa_over_AA": 1.0404207473904712
+        }
+      },
+      "ratio_of_ratios_high_over_low": 0.7083550099244111,
+      "difference_in_differences_high_minus_low": -0.0908685650372747
+    }
+  },
+  "direction_check": {
+    "mutant_deficit_at_high_maternal_temperature_both_weightings": true,
+    "mutant_deficit_at_low_maternal_temperature_both_weightings": false,
+    "matches_author_reported_genotype_by_maternal_temperature_direction": true
+  },
+  "inference_status": "descriptive_reconstruction_only",
+  "claim_boundary": "These are arithmetic margins of published cell means, not a refit of the authors' individual observations. No confidence interval or sampling variance is assigned because plant reuse, cross-cell covariance, pooled experimental lines and one chamber per temperature are unresolved."
+}

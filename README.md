@@ -1,8 +1,13 @@
-# EAzami — rapid East Asian/Japanese *Cirsium* radiation
+# EAzami — Azami series Chapter 2: rapid East Asian/Japanese *Cirsium* radiation
 
 EAzami is organized around one doctoral-level question:
 
 > **How did one young East-Asian/Japanese *Cirsium* radiation generate such large capitulum functional diversity so quickly, and which ecological selection pressures repeatedly favour different functional solutions through time?**
+
+Dissertation placement is fixed: **Chapter 1 / Azami** is the global spatial
+observational discovery layer; **Chapter 2 / EAzami** is the literature-informed
+functional and evolutionary-time layer. Ancestry-resolved causal fitness and
+molecular-reuse experiments are downstream validations selected by Chapter 2.
 
 ## Azami -> EAzami: space versus time
 
@@ -40,12 +45,22 @@ Orientation is the first module with a robust repeated-state result and the clea
 
 ### Canonical current synthesis
 
-- `docs/FUNCTIONAL_DIVERSITY_TIME_META_ANALYSIS_PROGRAM_2026-08-24.md` — current **time-axis** first-paper programme;
+- `docs/FUNCTIONAL_DIVERSITY_TIME_META_ANALYSIS_PROGRAM_2026-08-24.md` — current **time-axis Chapter 2** programme;
 - `data/evidence/functional_diversity_time_meta_registry_v1.csv` — eight analysis layers from meta-analysis to experiment reverse-engineering;
 - `docs/CAPITULUM_MULTI_TRAIT_ADAPTIVE_EVOLUTION_PROGRAM_2026-08-24.md` — multi-trait adaptive-evolution framework;
 - `data/evidence/capitulum_adaptive_module_registry_v1.csv` — module -> selection pressure -> mechanism -> history -> fitness registry;
 - `docs/DOCTORAL_EVIDENCE_LADDER_GLOBAL_TO_EAST_ASIA_2026-08-23.md` — evidence-order interface;
 - `data/evidence/doctoral_global_to_east_asia_summary_v2.json` — machine-readable programme state.
+- `docs/FDT1_STICKINESS_PRIMARY_MANIPULATION_EVIDENCE_AUDIT_2026-08-26.md` — bounded primary-source audit for independent stickiness/enemy-damage calibrations and their pooling STOPs.
+- `docs/FDT1_BRACT_PHYLLARY_DEFENCE_PRIMARY_MANIPULATION_AUDIT_2026-08-26.md` — bounded primary-source audit for direct reproductive-envelope access, damage and seed/fruit calibrations, counterexamples and pooling STOPs.
+- `docs/FDT1_COLOUR_PIGMENT_FUNCTION_PRIMARY_AUDIT_2026-08-26.md` — separates whole-flavonoid reproductive thermoprotection, pollen-flavonol ROS mechanism and the still-open visible-petal anthocyanin target.
+- `data/evidence/fdt1_ipomoea_purpurea_chs_heat_extract_summary_v1.json` — validated 64-cell, 1,342-observation CHS genotype × environment extraction contract and chamber-confounding boundary.
+- `data/evidence/fdt1_ipomoea_purpurea_chs_heat_descriptive_margins_v1.json` — equal-cell and reported-n margin sensitivity; direction check only, with no invented covariance or interval.
+- `data/evidence/fdt1_trait_function_loading_contract_v1.csv` — 15-row Chapter 2 interface from raw modules to evidence-state functional axes; no fixed Cirsium tip weights.
+- `docs/FDT2_PRIMARY_STUDY_CONTEXT_AUDIT_2026-08-26.md` — 23-source geography/exposure/unit audit; fixes FDT2 at readiness-registry only and forbids inferred localities.
+- `data/evidence/fdt2_source_context_registry_v1.csv` and `data/evidence/fdt2_context_readiness_summary_v1.json` — machine-readable FDT2 STOP before geographic or pooled-exposure moderator modelling.
+- `data/evidence/fdt3_existing_material_preflight_v1.json` and `data/evidence/fdt3_repeated_evolution_event_ledger_v1.csv` — role audit plus deliberately empty external event ledger; no paper/tip/functional contrast is miscounted as an independent transition.
+- `docs/FDT3_ORIENTATION_REPEATED_EVOLUTION_PRIMARY_PILOT_2026-08-26.md` and `data/evidence/fdt3_orientation_primary_pilot_v1.csv` — seven-source primary pilot; zero events admitted, with *Lonicera* fixed as the branchwise-extraction priority.
 
 ## Central hypotheses
 
@@ -69,7 +84,7 @@ Neither adaptive model is a recovered conclusion yet.
 
 ## What the prior meta-analysis already establishes
 
-The current generic literature synthesis provides priors rather than the final first-paper analysis.
+The current generic literature synthesis provides priors rather than the final Chapter 2 analysis.
 
 - **single universal driver:** direct climate-only or pollinator-only explanations are insufficient as general models;
 - **selection mosaic:** strict pollination x antagonism manipulations include antagonist-, pollinator- and mixed-dominance outcomes;
@@ -78,7 +93,7 @@ The current generic literature synthesis provides priors rather than the final f
 - **display:** simultaneous pollinator benefit and predispersal seed-predator cost are supported, with density dependence;
 - **orientation:** timing and rain/UV/wetting protection are candidate mechanisms;
 - **phyllary/spine:** defence remains a candidate until direct focal botanical traits are validated;
-- **stickiness:** generic reproductive-defence evidence is weakened, making it a useful low-priority/negative-control module;
+- **stickiness:** enemy damage/access effects are replicated across heterogeneous external manipulations, but a *Cirsium* null, nonhomologous interventions and missing new fruit/seed fitness effects block a universal or pooled defence claim;
 - **colour/pigmentation:** pollinator and abiotic roles are both plausible; `colder -> darker` remains a hypothesis, not a rule.
 
 The next literature phase is therefore not more undirected paper accumulation. It is the preregistered **functional effect-size meta-analysis** described in `FUNCTIONAL_DIVERSITY_TIME_META_ANALYSIS_PROGRAM_2026-08-24.md`.
@@ -133,7 +148,7 @@ Use current SDMs/ENMs, niche overlap/equivalency, ancestral niche axes, selected
 
 ## Functional disparity through time
 
-The first paper will quantify:
+Chapter 2 will quantify, once the required dated-tree gate is open:
 
 - phylomorphospace / phylo-functional space;
 - functional disparity through time;
@@ -161,7 +176,7 @@ Simulation is for model discrimination, not proof of adaptation.
 
 ## Reverse engineering the empirical doctorate
 
-The first paper ends by ranking unresolved transition systems by expected information value:
+Chapter 2 ends by ranking unresolved transition systems by expected information value:
 
 - transition independence/confidence;
 - strength of meta-derived functional prediction;
@@ -174,13 +189,13 @@ The first paper ends by ranking unresolved transition systems by expected inform
 
 The highest-information systems become Aim 2/Aim 3 experiments. Thus the experimental programme is **derived from the meta/comparative result**, not fixed in advance.
 
-## Paper architecture
+## Dissertation-series architecture
 
-### Paper A — Azami global phenomics: **space**
+### Chapter 1 — Azami global phenomics: **space**
 
 Present-day global continuous capitulum phenotype and environmental structure. No adaptive claim.
 
-### Paper B — EAzami functional diversification through **time**
+### Chapter 2 — EAzami functional diversification through **time**
 
 Systematic review/meta-analysis + geographic effect modifiers + dated Cirsium functional history + niche/distribution linkage + repeated evolution + functional disparity through time + simulation model discrimination.
 
@@ -188,11 +203,11 @@ Main question:
 
 > Did changing ecological opportunity repeatedly reorganize different capitulum functions during a young radiation, and is the observed history better predicted by a modular selection mosaic than by neutral, single-driver or common-lability alternatives?
 
-This is the planned **trend/hypothesis-generating paper before new causal field experiments**.
+This is the planned **trend/hypothesis-generating chapter/manuscript before new causal field experiments**.
 
-### Papers C/D — empirical causal tests
+### Downstream chapters/papers — empirical causal tests
 
-Use the systems selected by Paper B. Orientation can be first because it is experimentally tractable; colour/re-expression is a likely mechanistic flagship; display and defence become standalone causal papers only if their trait -> function -> fitness paths are strong enough.
+Use the systems selected by Chapter 2. Orientation can be first because it is experimentally tractable; colour/re-expression is a likely mechanistic flagship; display and defence become standalone causal papers only if their trait -> function -> fitness paths are strong enough.
 
 ### Thesis synthesis
 
@@ -202,7 +217,7 @@ Compare module-specific versus common-lability models and ask whether multiple i
 
 Use **rapid radiation** as the current system premise.
 
-Paper B may support `ecological-opportunity-consistent functional diversification` or `repeated functional evolution`. It must not claim that a particular Japanese trait state is adaptive without trait-specific fitness evidence. Adaptive-radiation inference remains downstream of causal validation.
+Chapter 2 may support `ecological-opportunity-consistent functional diversification` or `repeated functional evolution`. It must not claim that a particular Japanese trait state is adaptive without trait-specific fitness evidence. Adaptive-radiation inference remains downstream of causal validation.
 
 ## Start here
 

@@ -1,0 +1,53 @@
+{
+  "contract_version": "fdt2_context_readiness_v1",
+  "unit_of_accounting": "one published source/study cluster, not one FDT1 response row",
+  "source_clusters": 23,
+  "module_source_counts": {
+    "bract_defence": 6,
+    "colour_pigmentation": 7,
+    "display": 1,
+    "orientation": 4,
+    "stickiness": 2,
+    "stickiness_glandular_trichomes": 3
+  },
+  "geography_readiness_counts": {
+    "laboratory_or_greenhouse_without_field_origin": 7,
+    "reported_exact_coordinates": 3,
+    "reported_multi_site_coordinates": 2,
+    "reported_named_multi_site_only": 1,
+    "reported_named_site_only": 4,
+    "reported_nonstandard_coordinates_unusable": 2,
+    "reported_region_only": 2,
+    "unresolved": 2
+  },
+  "exposure_readiness_counts": {
+    "manipulated_environment_confounded": 5,
+    "qualitative_mechanism_only": 4,
+    "within_study_context_only": 14
+  },
+  "fdt2_use_counts": {
+    "descriptor_only": 6,
+    "directional_exposure_calibration_only": 10,
+    "mechanism_context_only": 6,
+    "not_usable": 1
+  },
+  "geographic_meta_regression_ready_sources": [],
+  "directional_exposure_calibration_sources": [
+    "10.1002/ece3.73221",
+    "10.1007/s00442-012-2518-2",
+    "10.1016/j.bmc.2005.01.011",
+    "10.1046/j.1365-294X.2003.01786.x",
+    "10.1073/pnas.1811492115",
+    "10.1086/694853",
+    "10.1111/plb.13414",
+    "10.1371/journal.pone.0093615",
+    "10.1371/journal.pone.0231611",
+    "10.3389/fpls.2021.672368"
+  ],
+  "gate_decision": {
+    "geographic_meta_regression": "NOT_READY_NO_HOMOLOGOUS_GEOREFERENCED_EFFECT_FAMILY",
+    "experimental_exposure_synthesis": "DIRECTIONAL_CALIBRATION_ONLY",
+    "next_valid_action": "Build an outcome-and-variance ledger only within a preregistered homologous module x mediator x fitness-stage family; do not fit a latitude slope or pool current cross-module responses."
+  },
+  "claim_boundary": "FDT2 v1 audits recoverable study geography and imposed exposure. It does not estimate a geographic response surface, transport an external effect to a Cirsium tip, or treat missing context as zero exposure."
+}

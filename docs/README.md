@@ -7,10 +7,17 @@ This index mirrors the project knowledge-graph backbone and separates current de
 Read these first, in order:
 
 1. [Current resolution goal](../PROJECT_STATUS.md) — the active decision gate and acceptance criteria.
-2. [Research plan](RESEARCH_PLAN.md) — durable scientific aims and claim limits.
-3. [East Asia phylogenomics implementation plan](EAST_ASIA_CIRSIUM_PHYLOGENOMICS_IMPLEMENTATION_PLAN.md) — the two-layer data design.
-4. [Japan-origin topology decision contract](JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md) — permitted inferences from the accepted tree.
-5. [Sequencing panel v0.3](SEQUENCING_PANEL_V0_3_EXACT_COVERAGE.md) — current exact-coverage sampling decisions.
+2. [Chapter 2 canonical evidence ladder](DOCTORAL_EVIDENCE_LADDER_GLOBAL_TO_EAST_ASIA_2026-08-23.md) — Chapter 1/2 boundary, current FDT gates and claim ceilings.
+3. [Chapter 2 time-axis programme](FUNCTIONAL_DIVERSITY_TIME_META_ANALYSIS_PROGRAM_2026-08-24.md) — FDT1-FDT8 execution order.
+4. [FDT1 bract/phyllary primary audit](FDT1_BRACT_PHYLLARY_DEFENCE_PRIMARY_MANIPULATION_AUDIT_2026-08-26.md) — direct envelope manipulations, counterexample and quantitative STOPs.
+5. [FDT1 colour/pigment-function primary audit](FDT1_COLOUR_PIGMENT_FUNCTION_PRIMARY_AUDIT_2026-08-26.md) — whole-flavonoid heat effects, pollen-flavonol mechanism, visible-petal gap and STOPs.
+6. [FDT2 primary-study context audit](FDT2_PRIMARY_STUDY_CONTEXT_AUDIT_2026-08-26.md) — 23-source geography/exposure/unit registry and STOP before moderator modelling.
+7. [FDT3 existing-material preflight](../data/evidence/fdt3_existing_material_preflight_v1.json) — role audit and zero-event gate before any convergence synthesis.
+8. [FDT3 orientation primary pilot](FDT3_ORIENTATION_REPEATED_EVOLUTION_PRIMARY_PILOT_2026-08-26.md) — seven primary comparative studies, zero admitted events and the *Lonicera* branchwise-extraction gate.
+9. [Research plan](RESEARCH_PLAN.md) — durable scientific aims and claim limits.
+10. [East Asia phylogenomics implementation plan](EAST_ASIA_CIRSIUM_PHYLOGENOMICS_IMPLEMENTATION_PLAN.md) — the two-layer data design.
+11. [Japan-origin topology decision contract](JAPAN_ORIGIN_TOPOLOGY_DECISION_CONTRACT_2026-08-13.md) — permitted inferences from the accepted tree.
+9. [Sequencing panel v0.3](SEQUENCING_PANEL_V0_3_EXACT_COVERAGE.md) — current exact-coverage sampling decisions.
 
 ## Graph-aligned workstreams
 

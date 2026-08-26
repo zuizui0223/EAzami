@@ -1,0 +1,318 @@
+{
+  "contract_version": "fdt1_aquilegia_trichome_population_synthesis_v1",
+  "status_date": "2026-08-26",
+  "coverage": {
+    "population_effects": 8,
+    "independent_study_clusters": 1,
+    "taxa": [
+      "Aquilegia pyrenaica subsp. cazorlensis",
+      "Aquilegia pyrenaica subsp. pyrenaica",
+      "Aquilegia vulgaris subsp. nevadensis",
+      "Aquilegia vulgaris subsp. vulgaris"
+    ],
+    "design_total_n": 300
+  },
+  "estimands": {
+    "healthy_fruit_set": "ln(mean healthy fruit set, intact control / trichome removal)",
+    "herbivory_damage": "ln(mean herbivory damage, trichome removal / intact control)"
+  },
+  "healthy_fruit_set_effects": [
+    {
+      "effect_id": "AQUI_JABALISES",
+      "taxon": "Aquilegia vulgaris subsp. vulgaris",
+      "population": "Jabalises",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": 0.1451820098444979,
+      "se_lnRR": 0.12856230711992458,
+      "RR": 1.15625,
+      "ci95_RR": [
+        0.8987052953422606,
+        1.4876000724918985
+      ]
+    },
+    {
+      "effect_id": "AQUI_CABRILLA",
+      "taxon": "Aquilegia vulgaris subsp. vulgaris",
+      "population": "Cabrilla",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": 0.08701137698962969,
+      "se_lnRR": 0.12677295856033574,
+      "RR": 1.0909090909090908,
+      "ci95_RR": [
+        0.8508974850309183,
+        1.3986204749269602
+      ]
+    },
+    {
+      "effect_id": "AQUI_DURCAL",
+      "taxon": "Aquilegia vulgaris subsp. nevadensis",
+      "population": "Dúrcal",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": 0.19415601444095756,
+      "se_lnRR": 0.10395742584330833,
+      "RR": 1.2142857142857144,
+      "ci95_RR": [
+        0.9904453978466548,
+        1.4887138646149323
+      ]
+    },
+    {
+      "effect_id": "AQUI_PRADOLLANO",
+      "taxon": "Aquilegia vulgaris subsp. nevadensis",
+      "population": "Pradollano",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": 0.2670627852490453,
+      "se_lnRR": 0.20621592047398912,
+      "RR": 1.306122448979592,
+      "ci95_RR": [
+        0.871865230775947,
+        1.956673797176396
+      ]
+    },
+    {
+      "effect_id": "AQUI_LA_CANAL",
+      "taxon": "Aquilegia pyrenaica subsp. cazorlensis",
+      "population": "La Canal",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": 0.07571182173569638,
+      "se_lnRR": 0.09433324560467118,
+      "RR": 1.0786516853932584,
+      "ci95_RR": [
+        0.896567819461848,
+        1.297714944866173
+      ]
+    },
+    {
+      "effect_id": "AQUI_CABANAS",
+      "taxon": "Aquilegia pyrenaica subsp. cazorlensis",
+      "population": "Cabañas",
+      "n_control": 10,
+      "n_removal": 10,
+      "lnRR": 0.0,
+      "se_lnRR": 0.16304347826086957,
+      "RR": 1.0,
+      "ci95_RR": [
+        0.7264648226904042,
+        1.3765291432785145
+      ]
+    },
+    {
+      "effect_id": "AQUI_CANDANCHU",
+      "taxon": "Aquilegia pyrenaica subsp. pyrenaica",
+      "population": "Candanchú",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": -0.0430173850836907,
+      "se_lnRR": 0.09191475367862079,
+      "RR": 0.9578947368421054,
+      "ci95_RR": [
+        0.7999785995025813,
+        1.146983591111484
+      ]
+    },
+    {
+      "effect_id": "AQUI_LARRA",
+      "taxon": "Aquilegia pyrenaica subsp. pyrenaica",
+      "population": "Larra",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": -0.013605652055778598,
+      "se_lnRR": 0.14679001219616775,
+      "RR": 0.9864864864864865,
+      "ci95_RR": [
+        0.7398453686077467,
+        1.3153499762413237
+      ]
+    }
+  ],
+  "herbivory_damage_effects": [
+    {
+      "effect_id": "AQUI_JABALISES",
+      "taxon": "Aquilegia vulgaris subsp. vulgaris",
+      "population": "Jabalises",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": 0.48183808689273855,
+      "se_lnRR": 0.22387945325140715,
+      "RR": 1.6190476190476193,
+      "ci95_RR": [
+        1.0439737636278268,
+        2.5109014077467324
+      ]
+    },
+    {
+      "effect_id": "AQUI_CABRILLA",
+      "taxon": "Aquilegia vulgaris subsp. vulgaris",
+      "population": "Cabrilla",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": 0.6359887667199968,
+      "se_lnRR": 0.25144292891073655,
+      "RR": 1.888888888888889,
+      "ci95_RR": [
+        1.1539151356168662,
+        3.091996217434616
+      ]
+    },
+    {
+      "effect_id": "AQUI_DURCAL",
+      "taxon": "Aquilegia vulgaris subsp. nevadensis",
+      "population": "Dúrcal",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": 0.5596157879354225,
+      "se_lnRR": 0.23035022137995856,
+      "RR": 1.7499999999999998,
+      "ci95_RR": [
+        1.1141918612735142,
+        2.748628944838621
+      ]
+    },
+    {
+      "effect_id": "AQUI_PRADOLLANO",
+      "taxon": "Aquilegia vulgaris subsp. nevadensis",
+      "population": "Pradollano",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": 0.7375989431307791,
+      "se_lnRR": 0.44753137880531735,
+      "RR": 2.090909090909091,
+      "ci95_RR": [
+        0.8697386112396842,
+        5.026683614994143
+      ]
+    },
+    {
+      "effect_id": "AQUI_LA_CANAL",
+      "taxon": "Aquilegia pyrenaica subsp. cazorlensis",
+      "population": "La Canal",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": 0.5947071077466927,
+      "se_lnRR": 0.23276859812587256,
+      "RR": 1.8124999999999998,
+      "ci95_RR": [
+        1.148527463573859,
+        2.860320152708946
+      ]
+    },
+    {
+      "effect_id": "AQUI_CABANAS",
+      "taxon": "Aquilegia pyrenaica subsp. cazorlensis",
+      "population": "Cabañas",
+      "n_control": 10,
+      "n_removal": 10,
+      "lnRR": 0.6931471805599453,
+      "se_lnRR": 1.7365554986812255,
+      "RR": 2.0,
+      "ci95_RR": [
+        0.06650344043092095,
+        60.14726417282
+      ]
+    },
+    {
+      "effect_id": "AQUI_CANDANCHU",
+      "taxon": "Aquilegia pyrenaica subsp. pyrenaica",
+      "population": "Candanchú",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": -0.3364722366212129,
+      "se_lnRR": 0.9831228876620144,
+      "RR": 0.7142857142857143,
+      "ci95_RR": [
+        0.10399701351668936,
+        4.905949357389728
+      ]
+    },
+    {
+      "effect_id": "AQUI_LARRA",
+      "taxon": "Aquilegia pyrenaica subsp. pyrenaica",
+      "population": "Larra",
+      "n_control": 20,
+      "n_removal": 20,
+      "lnRR": -0.30538164955118174,
+      "se_lnRR": 0.414574902819807,
+      "RR": 0.736842105263158,
+      "ci95_RR": [
+        0.32694985807000554,
+        1.6606102577735053
+      ]
+    }
+  ],
+  "population_level_random_effects_descriptive": {
+    "healthy_fruit_set": {
+      "k_populations": 8,
+      "pooled_lnRR": 0.074481298294931,
+      "se_lnRR": 0.042503542655050165,
+      "pooled_RR": 1.0773251955157845,
+      "ci95_RR_normal": [
+        0.9912131863763959,
+        1.1709182170346901
+      ],
+      "tau2_lnRR": 0.0,
+      "Q": 4.712693404104824,
+      "Q_df": 7,
+      "I2_percent": 0.0
+    },
+    "herbivory_damage": {
+      "k_populations": 8,
+      "pooled_lnRR": 0.5042118481178304,
+      "se_lnRR": 0.1083071215915204,
+      "pooled_RR": 1.6556800787149328,
+      "ci95_RR_normal": [
+        1.339009136147895,
+        2.0472425833774963
+      ],
+      "tau2_lnRR": 0.0,
+      "Q": 5.322207334782994,
+      "Q_df": 7,
+      "I2_percent": 0.0
+    }
+  },
+  "direction_by_species": {
+    "Aquilegia pyrenaica": {
+      "population_count": 4,
+      "fruit_lnRR_positive": 1,
+      "fruit_lnRR_zero": 1,
+      "fruit_lnRR_negative": 2,
+      "damage_lnRR_positive": 2,
+      "damage_lnRR_zero": 0,
+      "damage_lnRR_negative": 2
+    },
+    "Aquilegia vulgaris": {
+      "population_count": 4,
+      "fruit_lnRR_positive": 4,
+      "fruit_lnRR_zero": 0,
+      "fruit_lnRR_negative": 0,
+      "damage_lnRR_positive": 4,
+      "damage_lnRR_zero": 0,
+      "damage_lnRR_negative": 0
+    }
+  },
+  "published_hierarchical_model_tests": {
+    "healthy_fruit_set": {
+      "treatment_F": 40.71,
+      "treatment_p": 0.001,
+      "species_by_treatment_F": 8.86,
+      "species_by_treatment_p": 0.016
+    },
+    "herbivory_damage": {
+      "treatment_F": 22.5,
+      "treatment_p": 0.007,
+      "species_by_treatment_F": 8.12,
+      "species_by_treatment_p": 0.041
+    },
+    "source_locator": "Table 10; PDF page 127; printed page 115"
+  },
+  "interpretation": "Removing glandular-trichome protection increased herbivory damage and reduced healthy fruit set overall, but population directions and the published species-by-treatment interactions show strong context dependence. Aquilegia can now calibrate a direct trichome-to-enemy-to-fitness pathway, not a universal sticky-defence effect.",
+  "claim_boundary": "The eight population effects come from one article and one coordinated experiment, so they are not eight independent studies. The DL summaries describe among-population effects only and are not an across-study meta-analysis. Delta-method lnRR uses the published raw population means and SEs; the published F tests come from the authors' hierarchical models, with variables log-transformed when necessary. Do not transport the magnitude to Cirsium or equate Aquilegia glandular trichomes with capitulum stickiness without focal tests.",
+  "inputs": {
+    "extract": "data/evidence/fdt1_aquilegia_trichome_population_extract_v1.csv",
+    "extract_sha256": "ad394ad3028db990b891b57472b1751d186edce976ce9e94808e0386f900619a"
+  }
+}

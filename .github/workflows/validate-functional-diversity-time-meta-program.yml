@@ -5,8 +5,21 @@ on:
     paths:
       - "docs/FUNCTIONAL_DIVERSITY_TIME_META_ANALYSIS_PROGRAM_2026-08-24.md"
       - "data/evidence/functional_diversity_time_meta_registry_v1.csv"
+      - "data/evidence/fdt7_legacy_simulation_bridge_v1.json"
+      - "data/evidence/fdt2_source_context_registry_v1.csv"
+      - "data/evidence/fdt2_context_readiness_summary_v1.json"
+      - "analysis/summarize_fdt2_context_readiness_v1.py"
+      - "docs/FDT2_PRIMARY_STUDY_CONTEXT_AUDIT_2026-08-26.md"
       - "README.md"
       - "tests/test_functional_diversity_time_meta_program.py"
+      - "tests/test_fdt2_context_readiness_v1.py"
+      - "data/evidence/fdt3_existing_material_preflight_v1.csv"
+      - "data/evidence/fdt3_repeated_evolution_event_ledger_v1.csv"
+      - "data/evidence/fdt3_orientation_primary_pilot_v1.csv"
+      - "data/evidence/fdt3_existing_material_preflight_v1.json"
+      - "analysis/summarize_fdt3_existing_material_preflight_v1.py"
+      - "docs/FDT3_ORIENTATION_REPEATED_EVOLUTION_PRIMARY_PILOT_2026-08-26.md"
+      - "tests/test_fdt3_existing_material_preflight_v1.py"
       - ".github/workflows/validate-functional-diversity-time-meta-program.yml"
   workflow_dispatch:
 
@@ -21,4 +34,8 @@ jobs:
       - name: Install pytest
         run: python -m pip install --disable-pip-version-check pytest
       - name: Validate functional-diversity time programme
-        run: python -m pytest -q tests/test_functional_diversity_time_meta_program.py
+        run: >-
+          python -m pytest -q
+          tests/test_functional_diversity_time_meta_program.py
+          tests/test_fdt2_context_readiness_v1.py
+          tests/test_fdt3_existing_material_preflight_v1.py

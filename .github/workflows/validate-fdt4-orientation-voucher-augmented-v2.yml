@@ -1,0 +1,36 @@
+name: Validate FDT4 orientation voucher-augmented v2
+
+on:
+  pull_request:
+    paths:
+      - "analysis/augment_fdt4_occurrences_with_published_vouchers_v1.py"
+      - "analysis/run_fdt4_branchwise_niche_transition_concordance_v2.py"
+      - "data/evidence/fdt4_taiwan_published_voucher_occurrence_seed_v1.csv"
+      - "data/evidence/fdt4_orientation_voucher_augmented_diagnostic_v2.json"
+      - "data/evidence/fdt4_orientation_voucher_augmented_branchwise_by_topology_v2.csv"
+      - "tests/test_augment_fdt4_occurrences_with_published_vouchers_v1.py"
+      - "tests/test_fdt4_branchwise_niche_transition_concordance_v2.py"
+      - "tests/test_fdt4_orientation_voucher_augmented_diagnostic_v2.py"
+      - ".github/workflows/validate-fdt4-orientation-voucher-augmented-v2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install --disable-pip-version-check numpy pandas scipy scikit-learn rasterio biopython pytest
+      - name: Run focused validation
+        run: |
+          python -m pytest -q \
+            tests/test_augment_fdt4_occurrences_with_published_vouchers_v1.py \
+            tests/test_fdt4_branchwise_niche_transition_concordance_v2.py \
+            tests/test_fdt4_orientation_voucher_augmented_diagnostic_v2.py \
+            tests/test_fdt4_orientation_niche_pgls_v1.py
