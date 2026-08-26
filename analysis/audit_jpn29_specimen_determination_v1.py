@@ -20,6 +20,7 @@ GBIF_API = "https://api.gbif.org/v1/occurrence/search"
 IDIGBIO_API = "https://search.idigbio.org/v2/search/records/"
 USER_AGENT = "EAzami-scientific-reproducibility/1.0 (https://github.com/zuizui0223/EAzami; specimen metadata audit)"
 TARGET_CATALOG = "PE01523822"
+TARGET_CATALOG_NUMERIC = "01523822"
 TARGET_COLLECTOR = "Yonekura"
 TARGET_NUMBER = "6788"
 TARGET_TAXON = "Cirsium verutum"
@@ -57,8 +58,15 @@ def collector_number_match(recorded_by, record_number) -> bool:
 
 
 def catalog_match(*values) -> bool:
-    target = norm(TARGET_CATALOG)
-    return any(target and target == norm(v) for v in values if v is not None)
+    accepted = {norm(TARGET_CATALOG), norm(TARGET_CATALOG_NUMERIC)}
+    return any(norm(v) in accepted for v in values if v is not None and norm(v))
+
+
+def first_value(*values):
+    for value in values:
+        if value not in {None, "", []}:
+            return value
+    return None
 
 
 def compact_gbif(row: dict) -> dict:
@@ -92,59 +100,76 @@ def compact_idigbio(item: dict) -> dict:
     index = item.get("indexTerms") or {}
     return {
         "uuid": item.get("uuid") or data.get("uuid"),
-        "scientificname": index.get("scientificname") or data.get("scientificname"),
-        "catalognumber": index.get("catalognumber") or data.get("catalognumber"),
-        "occurrenceid": index.get("occurrenceid") or data.get("occurrenceid"),
-        "recordedby": index.get("recordedby") or data.get("recordedby"),
-        "recordnumber": index.get("recordnumber") or data.get("recordnumber"),
-        "institutioncode": index.get("institutioncode") or data.get("institutioncode"),
-        "collectioncode": index.get("collectioncode") or data.get("collectioncode"),
-        "country": index.get("country") or data.get("country"),
-        "stateprovince": index.get("stateprovince") or data.get("stateprovince"),
-        "locality": index.get("locality") or data.get("locality"),
-        "identifiedby": index.get("identifiedby") or data.get("identifiedby"),
-        "dateidentified": index.get("dateidentified") or data.get("dateidentified"),
-        "identificationremarks": data.get("identificationremarks"),
-        "taxonremarks": data.get("taxonremarks"),
-        "mediarecords": data.get("mediarecords") or [],
+        "scientificname": first_value(index.get("scientificname"), data.get("scientificname"), data.get("dwc:scientificName")),
+        "catalognumber": first_value(index.get("catalognumber"), data.get("catalognumber"), data.get("dwc:catalogNumber")),
+        "occurrenceid": first_value(index.get("occurrenceid"), data.get("occurrenceid"), data.get("dwc:occurrenceID")),
+        "recordedby": first_value(index.get("collector"), index.get("recordedby"), data.get("recordedby"), data.get("dwc:recordedBy")),
+        "recordnumber": first_value(index.get("recordnumber"), data.get("recordnumber"), data.get("dwc:recordNumber")),
+        "institutioncode": first_value(index.get("institutioncode"), data.get("institutioncode"), data.get("dwc:institutionCode")),
+        "collectioncode": first_value(index.get("collectioncode"), data.get("collectioncode"), data.get("dwc:collectionCode")),
+        "country": first_value(index.get("country"), data.get("country"), data.get("dwc:country")),
+        "stateprovince": first_value(index.get("stateprovince"), data.get("stateprovince"), data.get("dwc:stateProvince")),
+        "locality": first_value(index.get("locality"), data.get("locality"), data.get("dwc:locality")),
+        "identifiedby": first_value(index.get("identifiedby"), data.get("identifiedby"), data.get("dwc:identifiedBy")),
+        "dateidentified": first_value(index.get("dateidentified"), data.get("dateidentified"), data.get("dwc:dateIdentified")),
+        "identificationremarks": first_value(data.get("identificationremarks"), data.get("dwc:identificationRemarks")),
+        "taxonremarks": first_value(data.get("taxonremarks"), data.get("dwc:taxonRemarks")),
+        "references": first_value(data.get("references"), data.get("dcterms:references")),
+        "mediarecords": first_value(index.get("mediarecords"), data.get("mediarecords"), []),
     }
 
 
-def gbif_queries():
-    queries = {
-        "catalog_number": {"catalog_number": TARGET_CATALOG, "limit": 300},
-        "collector_taxon_japan": {
-            "recorded_by": TARGET_COLLECTOR,
-            "scientific_name": TARGET_TAXON,
-            "country": "JP",
-            "limit": 300,
-        },
-    }
+def run_query_set(api: str, queries: dict[str, dict[str, object]], *, idigbio=False):
     out = {}
-    for name, params in queries.items():
+    for name, query in queries.items():
         try:
-            data = request_json(GBIF_API, params)
-            rows = [compact_gbif(r) for r in data.get("results", [])]
-            out[name] = {"ok": True, "count": int(data.get("count", len(rows))), "rows": rows}
+            if idigbio:
+                data = request_json(api, {"rq": json.dumps(query, separators=(",", ":")), "limit": 300})
+                items = data.get("items", [])
+                rows = [compact_idigbio(item) for item in items]
+                count = int(data.get("itemCount", len(rows)))
+            else:
+                data = request_json(api, query)
+                rows = [compact_gbif(r) for r in data.get("results", [])]
+                count = int(data.get("count", len(rows)))
+            out[name] = {"ok": True, "count": count, "rows": rows}
         except Exception as exc:
             out[name] = {"ok": False, "error": f"{type(exc).__name__}: {exc}", "count": 0, "rows": []}
     return out
 
 
+def gbif_queries():
+    return run_query_set(GBIF_API, {
+        "catalog_full": {"catalog_number": TARGET_CATALOG, "limit": 300},
+        "catalog_numeric_pe": {"catalog_number": TARGET_CATALOG_NUMERIC, "institution_code": "PE", "limit": 300},
+        "record_number_japan": {"record_number": TARGET_NUMBER, "country": "JP", "limit": 300},
+        "collector_taxon_japan": {"recorded_by": TARGET_COLLECTOR, "scientific_name": TARGET_TAXON, "country": "JP", "limit": 300},
+    })
+
+
 def idigbio_queries():
-    queries = {
-        "catalog_number": {"catalognumber": TARGET_CATALOG},
-        "collector_number": {"recordedby": TARGET_COLLECTOR, "recordnumber": TARGET_NUMBER},
-    }
-    out = {}
-    for name, rq in queries.items():
-        try:
-            data = request_json(IDIGBIO_API, {"rq": json.dumps(rq, separators=(",", ":")), "limit": 100})
-            items = data.get("items", [])
-            rows = [compact_idigbio(item) for item in items]
-            out[name] = {"ok": True, "count": int(data.get("itemCount", len(rows))), "rows": rows}
-        except Exception as exc:
-            out[name] = {"ok": False, "error": f"{type(exc).__name__}: {exc}", "count": 0, "rows": []}
+    # iDigBio's indexed collector field is `collector`; `recordedby` is a raw DWC field.
+    # Use recordnumber alone for the collector-number route, then require Yonekura in
+    # the returned collector field locally to avoid exact-string assumptions.
+    return run_query_set(IDIGBIO_API, {
+        "catalog_full": {"catalognumber": TARGET_CATALOG},
+        "catalog_numeric_pe": {"catalognumber": TARGET_CATALOG_NUMERIC, "institutioncode": "pe"},
+        "record_number": {"recordnumber": TARGET_NUMBER},
+        "collector": {"collector": TARGET_COLLECTOR.lower()},
+    }, idigbio=True)
+
+
+def deduplicate(rows: list[dict], keys: tuple[str, ...]) -> list[dict]:
+    seen = set()
+    out = []
+    for row in rows:
+        signature = tuple(norm(row.get(k)) for k in keys)
+        if not any(signature):
+            signature = (json.dumps(row, sort_keys=True, ensure_ascii=False),)
+        if signature in seen:
+            continue
+        seen.add(signature)
+        out.append(row)
     return out
 
 
@@ -152,10 +177,22 @@ def summarize(gbif: dict, idigbio: dict):
     gbif_rows = [r for q in gbif.values() for r in q.get("rows", [])]
     idigbio_rows = [r for q in idigbio.values() for r in q.get("rows", [])]
 
-    exact_gbif = [r for r in gbif_rows if catalog_match(r.get("catalogNumber"), r.get("occurrenceID"))]
-    exact_idigbio = [r for r in idigbio_rows if catalog_match(r.get("catalognumber"), r.get("occurrenceid"))]
-    collector_gbif = [r for r in gbif_rows if collector_number_match(r.get("recordedBy"), r.get("recordNumber"))]
-    collector_idigbio = [r for r in idigbio_rows if collector_number_match(r.get("recordedby"), r.get("recordnumber"))]
+    exact_gbif = deduplicate(
+        [r for r in gbif_rows if catalog_match(r.get("catalogNumber"), r.get("occurrenceID"))],
+        ("key", "catalogNumber", "occurrenceID"),
+    )
+    exact_idigbio = deduplicate(
+        [r for r in idigbio_rows if catalog_match(r.get("catalognumber"), r.get("occurrenceid"))],
+        ("uuid", "catalognumber", "occurrenceid"),
+    )
+    collector_gbif = deduplicate(
+        [r for r in gbif_rows if collector_number_match(r.get("recordedBy"), r.get("recordNumber"))],
+        ("key", "catalogNumber", "occurrenceID"),
+    )
+    collector_idigbio = deduplicate(
+        [r for r in idigbio_rows if collector_number_match(r.get("recordedby"), r.get("recordnumber"))],
+        ("uuid", "catalognumber", "occurrenceid"),
+    )
 
     exact = [{"source": "GBIF", **r} for r in exact_gbif] + [{"source": "iDigBio", **r} for r in exact_idigbio]
     collector = [{"source": "GBIF", **r} for r in collector_gbif] + [{"source": "iDigBio", **r} for r in collector_idigbio]
@@ -177,6 +214,10 @@ def summarize(gbif: dict, idigbio: dict):
         any(v not in {None, "", []} for k, v in row.items() if k not in {"source", "scientific_name", "accepted_name"})
         for row in determination_fields
     )
+    routes_ok = {
+        "GBIF": all(q.get("ok") for q in gbif.values()),
+        "iDigBio": all(q.get("ok") for q in idigbio.values()),
+    }
 
     return {
         "contract_version": "jpn29_specimen_determination_public_api_audit_v1",
@@ -184,11 +225,13 @@ def summarize(gbif: dict, idigbio: dict):
             "paper_japan_member_id": "JPN_29",
             "paper_taxon_concept": TARGET_TAXON,
             "catalog_number": TARGET_CATALOG,
+            "catalog_number_numeric_variant": TARGET_CATALOG_NUMERIC,
             "collector": "K. Yonekura",
             "collector_number": TARGET_NUMBER,
             "voucher_label": "Japan: 16.05.2001, K. Yonekura 6788 (PE01523822)",
         },
         "sources": {"GBIF": gbif, "iDigBio": idigbio},
+        "all_query_routes_ok": routes_ok,
         "exact_catalog_hits": exact,
         "collector_number_hits": collector,
         "exact_catalog_hit_count": len(exact),
@@ -198,7 +241,11 @@ def summarize(gbif: dict, idigbio: dict):
         "decision": (
             "Public aggregator metadata contain determination/annotation fields that require specimen-level review."
             if determination_informative
-            else "GBIF/iDigBio public metadata did not resolve a determination or annotation history for PE01523822 / Yonekura 6788. Direct herbarium-curator/specimen-image inspection remains required."
+            else (
+                "GBIF/iDigBio public metadata did not resolve a determination or annotation history for PE01523822 / Yonekura 6788. Direct herbarium-curator/specimen-image inspection remains required."
+                if all(routes_ok.values())
+                else "At least one public-aggregator query route failed; do not treat the aggregator search as exhausted until all routes return successfully."
+            )
         ),
         "claim_boundary": "Aggregator absence or sparse metadata do not reidentify the specimen. The raw nuclear tip remains retained, while a clean Japan-local phenotype join remains blocked until specimen determination is resolved.",
     }
