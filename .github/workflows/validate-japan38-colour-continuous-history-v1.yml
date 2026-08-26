@@ -78,13 +78,28 @@ jobs:
             'corolla_hue_sin_species_median',
             'corolla_hue_cos_species_median',
           }
-          for subset in x['subsets'].values():
+          expected_perm={
+            'n_colour_usable_ge_1':('monte_carlo_label_permutations',999),
+            'n_colour_usable_ge_5':('exact_all_label_permutations',720),
+            'n_colour_usable_ge_10':('exact_all_label_permutations',120),
+          }
+          for name,subset in x['subsets'].items():
             assert set(subset['metrics'])==expected
+            mode,nperm=expected_perm[name]
             for m in subset['metrics'].values():
               lam=m['pagel_lambda']['lambda_mle']
               assert 0.0 <= lam <= 1.0
-              assert m['pairwise_signal']['permutations_usable']==999
-            assert subset['circular_hue_pairwise_signal']['permutations_usable']==999
+              p=m['pairwise_signal']
+              assert p['permutation_mode']==mode
+              assert p['permutations_usable']==nperm
+              assert 0.0 <= p['one_sided_label_permutation_p_positive_structure'] <= 1.0
+              assert 0.0 <= p['one_sided_label_permutation_p_negative_structure'] <= 1.0
+              assert 0.0 <= p['two_sided_label_permutation_p'] <= 1.0
+              assert len(p['leave_one_taxon_out']['rho_by_omitted_taxon'])==subset['n_concepts']
+            h=subset['circular_hue_pairwise_signal']
+            assert h['permutation_mode']==mode
+            assert h['permutations_usable']==nperm
+            assert len(h['leave_one_taxon_out']['rho_by_omitted_taxon'])==subset['n_concepts']
           print(json.dumps(x,indent=2))
           PY
       - uses: actions/upload-artifact@v4
