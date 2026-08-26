@@ -1,0 +1,81 @@
+{
+  "contract_version": "japan38_multitrait_history_summary_v1",
+  "status_date": "2026-08-26",
+  "tree": "data/evidence/japan38_comp1061_primary_tree_v1.nwk",
+  "tree_acceptance": "data/evidence/japan38_comp1061_primary_tree_acceptance_v1.json",
+  "source_tree_recovery_run_id": 32923076873,
+  "source_tree_recovery_artifact_id": 9590650447,
+  "trait_history_concepts": 36,
+  "excluded_or_unresolved_concepts": {
+    "JPN_20": "two biological samples are non-monophyletic in ML and 0/1000 UFBoot trees; current three discrete traits are unresolved, so the concept is pruned from trait history rather than forcibly collapsed",
+    "JPN_31": "Japan/Ukraine identity conflict; retained in sample tree but excluded from primary trait history"
+  },
+  "minimum_change_history": {
+    "orientation": {
+      "resolved_concepts": 19,
+      "ml_minimum_unordered_steps": 6,
+      "ufboot1000_steps_min": 4,
+      "ufboot1000_steps_median": 5,
+      "ufboot1000_steps_max": 6,
+      "ml_minimum_root_state_set": ["U"],
+      "ufboot_root_U_fraction": 1.0
+    },
+    "phyllary_posture": {
+      "resolved_concepts": 10,
+      "ml_minimum_unordered_steps": 3,
+      "ufboot1000_steps_min": 3,
+      "ufboot1000_steps_median": 3,
+      "ufboot1000_steps_max": 3,
+      "ml_minimum_root_state_set": ["ascending", "recurved", "spreading"]
+    },
+    "stickiness": {
+      "resolved_concepts": 12,
+      "ml_minimum_unordered_steps": 5,
+      "ufboot1000_steps_min": 4,
+      "ufboot1000_steps_median": 5,
+      "ufboot1000_steps_max": 5,
+      "ml_minimum_root_state_set": ["sticky"],
+      "ufboot_root_sticky_fraction": 0.67,
+      "ufboot_root_ambiguous_sticky_nonsticky_fraction": 0.33
+    }
+  },
+  "transition_identifiability": {
+    "orientation": {
+      "ml_individually_forced_change_edges": 0,
+      "interpretation": "recurrence is robust but exact minimum-change placement is weakly identifiable",
+      "highest_terminal_forced_edge": "JPN_36",
+      "highest_terminal_forced_edge_ufboot_fraction": 0.201
+    },
+    "phyllary_posture": {
+      "ml_forced_terminal_edge": "JPN_36",
+      "JPN_36_ufboot_forced_fraction": 0.754,
+      "main_uncertainty": "ancestral/root posture"
+    },
+    "stickiness": {
+      "JPN_06_ufboot_forced_fraction": 0.67,
+      "JPN_36_ufboot_forced_fraction": 0.40,
+      "interpretation": "minimum recurrence is stable but exact placements are partial; equal-rates Mk is saturation-prone"
+    }
+  },
+  "common_lability_diagnostic": {
+    "branch_length_aware_ml_excess_transition_overlap": {
+      "orientation_x_phyllary": {"rho": 0.3683155, "one_sided_stratified_p": 0.080},
+      "orientation_x_stickiness": {"rho": 0.2438998, "one_sided_stratified_p": 0.003, "warning": "stickiness saturation-prone; k*q*median_branch approximately 4.477"},
+      "phyllary_x_stickiness": {"rho": 0.0411290, "one_sided_stratified_p": 0.299}
+    },
+    "topology_only_equal_branch_ufboot1000": {
+      "orientation_x_phyllary": {"median_rho": -0.05615, "positive_fraction": 0.217, "q05": -0.2863, "q95": 0.1780},
+      "orientation_x_stickiness": {"median_rho": -0.38709, "positive_fraction": 0.011, "q05": -0.3920, "q95": -0.3656},
+      "phyllary_x_stickiness": {"median_rho": 0.19470, "positive_fraction": 0.863, "q05": -0.0801, "q95": 0.2659}
+    },
+    "decision": "No module pair is consistently positive across branch-length-aware and branch-length-free layers. The simple H3 one-shared-whole-capitulum-lability alternative is not supported by the current three-module data.",
+    "boundary": "This requires module-specific historical structure but does not itself prove developmental or genetic modular evolvability."
+  },
+  "sampling_priorities": {
+    "observed_state_validation": ["JPN_36", "JPN_06"],
+    "missing_orientation_primary": "JPN_34",
+    "missing_phyllary_primary": "JPN_15",
+    "missing_stickiness_primary": "JPN_24"
+  },
+  "claim_boundary": "Source-backed, topology-conditioned repeated-state lower bounds and module-overlap diagnostics only. Repeated steps are not adaptive-convergence counts; exact transition placement is not equally identifiable across modules."
+}
