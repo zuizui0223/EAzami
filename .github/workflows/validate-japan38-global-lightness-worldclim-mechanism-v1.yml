@@ -13,6 +13,7 @@ on:
       - "data/evidence/japan38_global_lightness_worldclim_summary_v1.csv"
       - "data/evidence/japan38_global_lightness_worldclim_sampling_v1.json"
       - "data/evidence/japan38_global_lightness_worldclim_mechanism_gate_v1.json"
+      - "data/evidence/japan38_global_lightness_worldclim_zip_sha256_v1.txt"
       - "data/evidence/fdt_multitrait_execution_readiness_v9.json"
       - ".github/workflows/validate-japan38-global-lightness-worldclim-mechanism-v1.yml"
   workflow_dispatch:
@@ -52,6 +53,10 @@ jobs:
           done
           sha256sum /tmp/wc2.1_10m_*.zip | sort > result/worldclim_zip_sha256.txt
           ls -lh worldclim | head -100
+      - name: Cross-check frozen WorldClim archive hashes
+        run: |
+          sed 's#  /tmp/#  #' result/worldclim_zip_sha256.txt > result/worldclim_zip_sha256_normalized.txt
+          diff -u data/evidence/japan38_global_lightness_worldclim_zip_sha256_v1.txt result/worldclim_zip_sha256_normalized.txt
       - name: Sample WorldClim at the same colour observations
         run: |
           python analysis/sample_worldclim_public_exposure_v1.py \
@@ -123,5 +128,6 @@ jobs:
             result/japan38_global_lightness_worldclim_sampling_v1.json
             result/japan38_global_lightness_worldclim_mechanism_gate_v1.json
             result/worldclim_zip_sha256.txt
+            result/worldclim_zip_sha256_normalized.txt
           if-no-files-found: error
           retention-days: 90
