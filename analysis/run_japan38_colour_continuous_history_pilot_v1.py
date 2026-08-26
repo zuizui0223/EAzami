@@ -10,7 +10,9 @@ For each evidence-depth subset, the script:
      L*, chroma, hue-sin and hue-cos separately;
   3. calculates label-permutation diagnostics relating patristic distance to
      pairwise trait difference, reporting positive, negative, and two-sided tails;
-  4. treats circular hue separately with normalized sin/cos chord distance.
+  4. uses all label permutations when n<=8 and Monte Carlo permutations otherwise;
+  5. reports leave-one-taxon-out pairwise-rho sensitivity;
+  6. treats circular hue separately with normalized sin/cos chord distance.
 
 The tree is a compatibility phylogram, not a dated tree. Therefore lambda and
 pairwise-distance diagnostics are evidence about phylogenetic structure only,
@@ -21,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import itertools
 import json
 import math
 import random
@@ -38,6 +41,7 @@ METRICS = (
     "corolla_hue_cos_species_median",
 )
 SUBSET_THRESHOLDS = (1, 5, 10)
+EXACT_PERMUTATION_MAX_N = 8
 
 
 def read_csv(path: Path):
@@ -93,8 +97,6 @@ def load_colour_concept_tree(tree_path: Path, cmap, allowed, colour_ids):
     tree = Phylo.read(str(tree_path), "newick")
     _validate_raw_tree(tree, cmap)
 
-    # Replicated JPN_20 has no exact colour row. Its two non-monophyletic biological
-    # tips are therefore pruned rather than collapsed.
     replicated = [(mid, tips) for mid, tips in cmap.items() if len(tips) > 1]
     if replicated != [("JPN_20", cmap["JPN_20"])]:
         raise ValueError(f"unexpected replicated concepts: {replicated}")
@@ -134,7 +136,6 @@ def load_colour_concept_tree(tree_path: Path, cmap, allowed, colour_ids):
 
 
 def prune_to_ids(tree, ids):
-    # Round-trip through Newick to avoid mutating the original analysis tree.
     from io import StringIO
     buf = StringIO()
     Phylo.write(tree, buf, "newick")
@@ -176,7 +177,6 @@ def gls_lambda_loglik(y, C, lam):
     V = np.array(C, dtype=float, copy=True)
     off = ~np.eye(n, dtype=bool)
     V[off] *= float(lam)
-    # Tiny numerical nugget only; this is not a biological residual model.
     V[np.diag_indices(n)] += 1e-10
     sign, logdet = np.linalg.slogdet(V)
     if sign <= 0 or not math.isfinite(float(logdet)):
@@ -211,7 +211,6 @@ def fit_pagel_lambda(y, C):
     candidates = [0.0, 1.0]
     if opt.success:
         candidates.append(float(opt.x))
-    # Grid safety net for boundary/flat likelihoods.
     candidates.extend(float(x) for x in np.linspace(0.0, 1.0, 101))
     scored = []
     for lam in candidates:
@@ -254,42 +253,86 @@ def _rho(x, y):
     return float(spearmanr(x, y).statistic)
 
 
-def permutation_tails(observed, null):
+def permutation_tails(observed, null, exact):
     if not null or not math.isfinite(observed):
         return None, None, None
-    denom = len(null) + 1
-    p_pos = (1 + sum(r >= observed for r in null)) / denom
-    p_neg = (1 + sum(r <= observed for r in null)) / denom
-    p_two = (1 + sum(abs(r) >= abs(observed) for r in null)) / denom
+    if exact:
+        denom = len(null)
+        p_pos = sum(r >= observed for r in null) / denom
+        p_neg = sum(r <= observed for r in null) / denom
+        p_two = sum(abs(r) >= abs(observed) for r in null) / denom
+    else:
+        denom = len(null) + 1
+        p_pos = (1 + sum(r >= observed for r in null)) / denom
+        p_neg = (1 + sum(r <= observed for r in null)) / denom
+        p_two = (1 + sum(abs(r) >= abs(observed) for r in null)) / denom
     return p_pos, p_neg, p_two
+
+
+def build_permutation_null(items, statistic, requested, seed):
+    items = list(items)
+    n = len(items)
+    null = []
+    if n <= EXACT_PERMUTATION_MAX_N:
+        for perm in itertools.permutations(items):
+            rr = statistic(perm)
+            if math.isfinite(rr):
+                null.append(rr)
+        return null, "exact_all_label_permutations", True, math.factorial(n)
+
+    rng = random.Random(seed)
+    for _ in range(requested):
+        z = list(items)
+        rng.shuffle(z)
+        rr = statistic(z)
+        if math.isfinite(rr):
+            null.append(rr)
+    return null, "monte_carlo_label_permutations", False, requested
+
+
+def scalar_rho_for_assignment(tree, ids, assigned):
+    ids = list(ids)
+    pairs, pdist = patristic_vector(tree, ids)
+    v = np.asarray(assigned, dtype=float)
+    tdist = np.asarray([abs(float(v[i] - v[j])) for j, i in pairs], dtype=float)
+    return _rho(pdist, tdist)
+
+
+def scalar_leave_one_out(tree, ids, values):
+    ids = list(ids)
+    out = {}
+    for omitted in ids:
+        keep = [mid for mid in ids if mid != omitted]
+        if len(keep) < 4:
+            continue
+        sub = prune_to_ids(tree, keep)
+        out[omitted] = scalar_rho_for_assignment(sub, keep, [values[mid] for mid in keep])
+    vals = [v for v in out.values() if math.isfinite(v)]
+    return {
+        "rho_by_omitted_taxon": out,
+        "min_rho": min(vals) if vals else None,
+        "max_rho": max(vals) if vals else None,
+        "all_negative": bool(vals) and all(v < 0 for v in vals),
+        "all_positive": bool(vals) and all(v > 0 for v in vals),
+    }
 
 
 def pairwise_signal(tree, ids, values, permutations, seed):
     ids = list(ids)
-    y = np.asarray([values[mid] for mid in ids], dtype=float)
-    pairs, pdist = patristic_vector(tree, ids)
-
-    def trait_dist(v):
-        return np.asarray([abs(float(v[i] - v[j])) for j, i in pairs], dtype=float)
-
-    observed = _rho(pdist, trait_dist(y))
-    rng = random.Random(seed)
-    null = []
-    if math.isfinite(observed):
-        for _ in range(permutations):
-            z = list(y)
-            rng.shuffle(z)
-            rr = _rho(pdist, trait_dist(np.asarray(z, dtype=float)))
-            if math.isfinite(rr):
-                null.append(rr)
-    p_pos, p_neg, p_two = permutation_tails(observed, null)
+    y = [values[mid] for mid in ids]
+    observed = scalar_rho_for_assignment(tree, ids, y)
+    statistic = lambda assigned: scalar_rho_for_assignment(tree, ids, assigned)
+    null, mode, exact, requested_or_total = build_permutation_null(y, statistic, permutations, seed)
+    p_pos, p_neg, p_two = permutation_tails(observed, null, exact)
     return {
         "spearman_patristic_vs_absolute_trait_difference": observed,
         "one_sided_label_permutation_p_positive_structure": p_pos,
         "one_sided_label_permutation_p_negative_structure": p_neg,
         "two_sided_label_permutation_p": p_two,
-        "permutations_requested": permutations,
+        "permutation_mode": mode,
+        "permutations_requested_or_exact_total": requested_or_total,
         "permutations_usable": len(null),
+        "leave_one_taxon_out": scalar_leave_one_out(tree, ids, values),
         "direction": (
             "positive rho means more-distant taxa tend to differ more; negative rho means more-distant taxa tend to be more similar in this pairwise-distance diagnostic"
         ),
@@ -308,32 +351,51 @@ def normalized_hue_vector(row):
     return np.array([s / norm, c / norm], dtype=float)
 
 
+def circular_rho_for_assignment(tree, ids, assigned_vecs):
+    ids = list(ids)
+    pairs, pdist = patristic_vector(tree, ids)
+    tdist = np.asarray(
+        [float(np.linalg.norm(assigned_vecs[i] - assigned_vecs[j])) for j, i in pairs]
+    )
+    return _rho(pdist, tdist)
+
+
+def circular_leave_one_out(tree, ids, bridge):
+    ids = list(ids)
+    out = {}
+    for omitted in ids:
+        keep = [mid for mid in ids if mid != omitted]
+        if len(keep) < 4:
+            continue
+        sub = prune_to_ids(tree, keep)
+        vecs = [normalized_hue_vector(bridge[mid]) for mid in keep]
+        out[omitted] = circular_rho_for_assignment(sub, keep, vecs)
+    vals = [v for v in out.values() if math.isfinite(v)]
+    return {
+        "rho_by_omitted_taxon": out,
+        "min_rho": min(vals) if vals else None,
+        "max_rho": max(vals) if vals else None,
+        "all_negative": bool(vals) and all(v < 0 for v in vals),
+        "all_positive": bool(vals) and all(v > 0 for v in vals),
+    }
+
+
 def circular_hue_pairwise_signal(tree, ids, bridge, permutations, seed):
     ids = list(ids)
     vecs = [normalized_hue_vector(bridge[mid]) for mid in ids]
-    pairs, pdist = patristic_vector(tree, ids)
-
-    def chord(vs):
-        return np.asarray([float(np.linalg.norm(vs[i] - vs[j])) for j, i in pairs])
-
-    observed = _rho(pdist, chord(vecs))
-    rng = random.Random(seed)
-    null = []
-    if math.isfinite(observed):
-        for _ in range(permutations):
-            z = list(vecs)
-            rng.shuffle(z)
-            rr = _rho(pdist, chord(z))
-            if math.isfinite(rr):
-                null.append(rr)
-    p_pos, p_neg, p_two = permutation_tails(observed, null)
+    observed = circular_rho_for_assignment(tree, ids, vecs)
+    statistic = lambda assigned: circular_rho_for_assignment(tree, ids, assigned)
+    null, mode, exact, requested_or_total = build_permutation_null(vecs, statistic, permutations, seed)
+    p_pos, p_neg, p_two = permutation_tails(observed, null, exact)
     return {
         "spearman_patristic_vs_hue_chord_distance": observed,
         "one_sided_label_permutation_p_positive_structure": p_pos,
         "one_sided_label_permutation_p_negative_structure": p_neg,
         "two_sided_label_permutation_p": p_two,
-        "permutations_requested": permutations,
+        "permutation_mode": mode,
+        "permutations_requested_or_exact_total": requested_or_total,
         "permutations_usable": len(null),
+        "leave_one_taxon_out": circular_leave_one_out(tree, ids, bridge),
         "hue_distance": "Euclidean chord distance after normalizing species median sin/cos to the unit circle",
         "negative_tail_claim_boundary": (
             "A significant negative tail is an anti-phylogenetic/overdispersion diagnostic only; it does not by itself identify convergence, selection, or evolutionary rate."
@@ -415,7 +477,8 @@ def main():
             "metrics": list(METRICS),
             "hue_rule": "fit sin/cos separately and use normalized sin/cos chord distance for circular pairwise sensitivity; do not model raw degrees linearly",
             "evidence_depth_rule": "repeat diagnostics at >=1, >=5 and >=10 colour-usable observations; do not precision-weight sparse image medians as if they were population means",
-            "pairwise_null_rule": "taxon labels are permuted on the fixed pruned tree; positive, negative and absolute/two-sided tails are reported separately",
+            "pairwise_null_rule": "taxon labels are permuted on the fixed pruned tree; all label permutations are enumerated for n<=8 and Monte Carlo permutations are used otherwise; positive, negative and absolute/two-sided tails are reported separately",
+            "leave_one_out_rule": "recalculate observed pairwise rho after dropping each taxon to expose single-taxon leverage; this is sensitivity analysis, not an independent significance test",
         },
         "subsets": subsets,
         "claim_boundary": (
