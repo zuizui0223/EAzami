@@ -1,0 +1,54 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v3",
+  "status_date": "2026-08-26",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v2.json",
+  "inheritance": "Orientation, display, phyllary/spine, stickiness, trait-completion priorities and the three-discrete-module H2/H3 result are inherited unchanged from v2 unless overridden below.",
+  "colour": {
+    "exact_continuous_coverage": "14/38 Japan38 concepts; six concepts have >=5 colour-usable observations and five have >=10",
+    "continuous_history": "LAB lightness is stably anti-phylogenetic at higher evidence depth: n>=5 patristic distance vs absolute lightness difference rho=-0.7071 with exact two-sided p=0.04444; n>=10 rho=-0.8545 with exact two-sided p=0.00833. Chroma and circular hue do not show the same stable pattern.",
+    "separate_species_level_climate_gate": "Negative: BIO1/BIO4/BIO12/BIO15 distance does not explain lightness overdispersion.",
+    "paired_same_cohort_gate": {
+      "evidence": "Environment is reconstructed from the same strict-spatial colour-usable observations that produce the exact species lightness medians.",
+      "n_ge_5": {
+        "paired_climate": {"rho": -0.23571428571428568, "exact_positive_tail_p": 0.7430555555555556},
+        "paired_topography": {"rho": -0.35, "exact_positive_tail_p": 0.8722222222222222, "leave_one_out_all_negative": true},
+        "paired_climate_plus_topography": {"rho": -0.32499999999999996, "exact_positive_tail_p": 0.775, "leave_one_out_all_negative": true}
+      },
+      "n_ge_10": {
+        "paired_climate": {"rho": -0.19999999999999998, "exact_positive_tail_p": 0.6583333333333333},
+        "paired_topography": {"rho": -0.22424242424242422, "exact_positive_tail_p": 0.65},
+        "paired_climate_plus_topography": {"rho": -0.4666666666666666, "exact_positive_tail_p": 0.9}
+      },
+      "decision": "Current same-cohort climate, topography, and their combined distance do not explain the anti-phylogenetic lightness placement."
+    },
+    "soil": {
+      "replicated_gate_ready": false,
+      "blocker": "JPN_17 C. maritimum has only four soil-linked colour observations, so the six-concept n>=5 set cannot be preserved.",
+      "clean_five_concept_screen": {"rho": 0.3939393939393939, "exact_positive_tail_p": 0.19166666666666668, "partial_controlling_patristic_rho": 0.047406122236815756},
+      "status": "coverage-limited exploratory lead only; not a supported mechanism"
+    },
+    "source_axes_absent": ["solar radiation / rsds", "VPD / aridity", "wind / sfcWind"],
+    "status": "continuous history executed; high-depth lightness is anti-phylogenetic; both separate-layer and same-cohort current climate gates are negative; topography is negative; soil is unresolved by coverage; discrete colour transition history remains gated"
+  },
+  "cross_module": {
+    "simple_common_lability_H3": "not supported by the current three discrete historical modules",
+    "H2_modular_evolvability": "not established",
+    "colour_implication": "Continuous lightness adds a non-conservative trait dimension but is not forced into the discrete Sankoff/Mk overlap because no justified discrete colour-state ontology is frozen."
+  },
+  "next_actions": {
+    "colour_mechanism": [
+      "Recover or derive radiation/rsds, VPD/aridity and wind/sfcWind on the exact high-depth concepts before claiming abiotic mechanism.",
+      "Increase soil-linked colour coverage, especially JPN_17, before repeating a depth-replicated soil gate.",
+      "After current abiotic axes are exhausted, test historical climate, biotic interactions and population-level colour variation."
+    ],
+    "discrete_colour_history": "Do not invent a C/W threshold; fixed-white lineage recovery and a biologically justified state ontology remain required for loss/regain questions.",
+    "display": "Still blocked by only 5/38 exact concepts sharing one comparable direct size metric; prioritize JPN_36, JPN_06, JPN_34, JPN_15 and JPN_24."
+  },
+  "canonical_results": {
+    "continuous_colour": "data/evidence/japan38_colour_continuous_history_summary_v1.json",
+    "separate_layer_climate": "data/evidence/japan38_colour_climate_coupling_summary_v1.json",
+    "paired_same_cohort_abiotic": "data/evidence/japan38_lightness_paired_abiotic_summary_v1.json",
+    "three_discrete_modules": "data/evidence/japan38_multitrait_history_summary_v1.json"
+  },
+  "claim_boundary": "Independent Japan38 compatibility reconstruction plus source-backed trait and same-cohort observational diagnostics. The paired gate reduces evidence-layer mismatch but does not establish adaptation or convergence. The tree is substitutions/site rather than dated time; soil coverage is uneven; radiation, VPD/aridity and wind are absent from the paired source artifact."
+}
