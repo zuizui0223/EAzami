@@ -20,10 +20,11 @@
   "population_replicate_note": "All three licensed sources are from the same Fukushima/Aizu locality, date (2008-10-01) and photographer (Qwert1234); they are image replicates, not independent population replicates.",
   "per_image_result": "data/evidence/japan38_jpn38_public_colour_recovery_per_image_v1.csv",
   "validation": {
-    "workflow_run": 32930840302,
-    "artifact_id": 9593143034,
-    "artifact_name": "jpn38-public-colour-recovery-32930840302",
-    "artifact_digest": "sha256:3eaff1d8b07ee077e8684fbe41f1e10948895893ab362576cadad0091cd7c9de",
+    "workflow_run": 32930979065,
+    "artifact_id": 9593190257,
+    "artifact_name": "jpn38-public-colour-recovery-32930979065",
+    "artifact_digest": "sha256:feea58634fade502d2ed7390c0177261d0524880d9f3e82035185c563967eec4",
+    "validated_head_sha": "b96a19e6a080ffb8007436ac4e8f9ae3420f007d",
     "commons_metadata_check": "Three files independently verified in CI as Fukushima/Aizu and CC BY-SA 4.0 before original-image download."
   },
   "promotion_gate": {
