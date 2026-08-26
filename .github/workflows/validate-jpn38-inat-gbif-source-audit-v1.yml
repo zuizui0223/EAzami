@@ -1,0 +1,85 @@
+name: Validate JPN38 iNaturalist GBIF source audit v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_jpn38_inat_gbif_japan_sources_v1.py"
+      - "tests/test_jpn38_inat_gbif_japan_sources_v1.py"
+      - "data/evidence/jpn38_inat_gbif_japan_source_audit_v1.json"
+      - "data/evidence/jpn38_permission_candidates_v1.csv"
+      - "data/evidence/fdt_multitrait_execution_readiness_v7.json"
+      - ".github/workflows/validate-jpn38-inat-gbif-source-audit-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-jpn38-inat-gbif-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile and unit test
+        run: |
+          python -m py_compile analysis/audit_jpn38_inat_gbif_japan_sources_v1.py
+          python -m unittest tests/test_jpn38_inat_gbif_japan_sources_v1.py -v
+      - name: Audit live iNaturalist and GBIF metadata
+        run: |
+          set -euo pipefail
+          mkdir -p result
+          python analysis/audit_jpn38_inat_gbif_japan_sources_v1.py \
+            --csv-output result/jpn38_inat_gbif_japan_source_audit_v1.csv \
+            --json-output result/jpn38_inat_gbif_japan_source_audit_v1.json
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          x=json.loads(Path('result/jpn38_inat_gbif_japan_source_audit_v1.json').read_text())
+          assert x['contract_version']=='jpn38_inat_gbif_japan_source_audit_v1'
+          assert set(x['sources'])=={'iNaturalist','GBIF'}
+          assert x['sources']['iNaturalist']['api_records_reported']==4
+          assert x['sources']['iNaturalist']['open_reusable_live_record_keys']==0
+          assert x['sources']['GBIF']['api_records_reported']==34
+          assert x['sources']['GBIF']['open_reusable_record_keys']==22
+          assert x['sources']['GBIF']['open_reusable_specimen_record_keys']==22
+          assert x['sources']['GBIF']['open_reusable_live_record_keys']==0
+          assert x['cross_source_open_reusable_specimen_records']==22
+          assert x['cross_source_open_reusable_live_records']==0
+          assert x['conservative_independent_open_reusable_live_records']==0
+          assert x['license_blocked_noncommercial_independent_live_records']==3
+          assert x['license_blocked_noncommercial_independent_live_locality_cells_0_05deg']==3
+          assert x['automated_measurement_candidates']==[]
+
+          frozen=json.loads(Path('data/evidence/jpn38_inat_gbif_japan_source_audit_v1.json').read_text())
+          assert frozen['cross_source']['open_reusable_specimen_records']==x['cross_source_open_reusable_specimen_records']
+          assert frozen['cross_source']['open_reusable_live_records']==x['cross_source_open_reusable_live_records']
+          assert frozen['cross_source']['license_blocked_noncommercial_independent_live_records']==x['license_blocked_noncommercial_independent_live_records']
+
+          permission_rows=list(csv.DictReader(Path('data/evidence/jpn38_permission_candidates_v1.csv').open(encoding='utf-8')))
+          assert len(permission_rows)==3
+          assert {int(r['inat_observation_id']) for r in permission_rows}=={190462681,268410147,339557766}
+          assert all(r['media_license']=='CC BY-NC 4.0' for r in permission_rows)
+
+          readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v7.json').read_text())
+          audit=readiness['colour']['jpn38_noncommons_live_source_audit']
+          assert audit['open_reusable_gbif_specimen_records']==22
+          assert audit['open_reusable_gbif_live_records']==0
+          assert audit['independent_cc_by_nc_live_records']==3
+          assert readiness['colour']['japan_local_history_ready'] is False
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jpn38-inat-gbif-source-audit-${{ github.run_id }}
+          path: |
+            result/jpn38_inat_gbif_japan_source_audit_v1.csv
+            result/jpn38_inat_gbif_japan_source_audit_v1.json
+          if-no-files-found: error
+          retention-days: 90

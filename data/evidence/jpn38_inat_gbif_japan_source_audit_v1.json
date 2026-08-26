@@ -1,0 +1,71 @@
+{
+  "contract_version": "jpn38_inat_gbif_japan_source_audit_v1",
+  "status_date": "2026-08-26",
+  "taxon": "Cirsium pendulum",
+  "inat_taxon_id": 559940,
+  "inat_japan_place_id": 6737,
+  "gbif_taxon_key": 3113714,
+  "sources": {
+    "iNaturalist": {
+      "api_records_reported": 4,
+      "media_rows": 4,
+      "open_reusable_live_record_keys": 0,
+      "noncommercial_only_media_rows": 4
+    },
+    "GBIF": {
+      "api_records_reported": 34,
+      "media_rows": 35,
+      "open_reusable_record_keys": 22,
+      "open_reusable_specimen_record_keys": 22,
+      "open_reusable_live_record_keys": 0,
+      "noncommercial_only_media_rows": 7,
+      "unspecified_or_restricted_media_rows": 5
+    }
+  },
+  "cross_source": {
+    "combined_media_rows": 39,
+    "unique_open_reusable_records": 22,
+    "open_reusable_specimen_records": 22,
+    "open_reusable_live_records": 0,
+    "conservative_independent_open_reusable_live_records": 0,
+    "license_blocked_noncommercial_independent_live_records": 3,
+    "license_blocked_noncommercial_independent_live_locality_cells_0_05deg": 3
+  },
+  "permission_candidates": [
+    {
+      "inat_observation_id": 190462681,
+      "place": "Niigata",
+      "latitude": 38.1920081179,
+      "longitude": 139.5327852785,
+      "photo_id": 333903657,
+      "license": "CC BY-NC 4.0",
+      "observer": "hakkahamushi"
+    },
+    {
+      "inat_observation_id": 268410147,
+      "place": "Tochigi",
+      "latitude": 36.2368627844,
+      "longitude": 139.7921587936,
+      "photo_id": 482456857,
+      "license": "CC BY-NC 4.0",
+      "observer": "hakkahamushi"
+    },
+    {
+      "inat_observation_id": 339557766,
+      "place": "Tochigi, Tochigi-shi, Fujioka-machi, Yachunoko",
+      "latitude": 36.2271852778,
+      "longitude": 139.6714133333,
+      "photo_id": 617732711,
+      "license": "CC BY-NC 4.0",
+      "observer": "よも"
+    }
+  ],
+  "decision": "No conservatively independent Japanese open-license live-photo source was recovered. The 22 open-license GBIF records are preserved-specimen images and are excluded from corolla-colour measurement. Three independent live-photo localities exist but are CC BY-NC and therefore remain permission/license-change candidates under the frozen conservative reuse policy.",
+  "validation": {
+    "workflow_run": 32951676817,
+    "artifact_id": 9600367595,
+    "artifact_name": "jpn38-inat-gbif-source-audit-32951676817",
+    "artifact_digest": "sha256:9724076ead245834e11fc982cb9ea39e7c5d7cc0a827ff76085777b470b014eb"
+  },
+  "claim_boundary": "Preserved-specimen scans are not used for corolla colour because drying and preservation alter colour. CC BY-NC live photographs are not automatically processed under this conservative pipeline; they remain permission candidates, not measured phenotypes."
+}
