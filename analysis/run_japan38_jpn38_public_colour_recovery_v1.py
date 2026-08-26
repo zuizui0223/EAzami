@@ -143,7 +143,7 @@ def main():
         "usable_lightness_mad": median_abs_deviation(usable_lightness),
         "usable_chroma_median": statistics.median(usable_chroma) if usable_chroma else None,
         "independent_population_replicates": 1,
-        "population_replicate_note": "The v1 licensed sources are two images from the same Fukushima/Aizu locality, date and photographer; do not count them as two population replicates.",
+        "population_replicate_note": "The v1 licensed sources are three images from the same Fukushima/Aizu locality, date and photographer; do not count them as independent population replicates.",
         "promotion_gate": {
             "japan_local_colour_bridge_ready_from_this_recovery": False,
             "reason": "Screening images are not detector-cropped observations from the original Azami cohort and currently represent only one independent Japanese locality."
