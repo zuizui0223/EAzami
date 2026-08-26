@@ -1,0 +1,29 @@
+{
+  "contract_version": "japan38_colour_geographic_provenance_summary_provenance_v1",
+  "status_date": "2026-08-26",
+  "source": {
+    "repo": "zuizui0223/azami",
+    "workflow_run": 29306454759,
+    "artifact_id": 8314947270,
+    "artifact_name": "ch1-exhaustive-enriched-environment-20260713",
+    "artifact_digest": "sha256:b1252258fff85b397de8a58f322e24e90731d55f07f53ff7de16a169c5a4dfe3",
+    "source_file": "strict_spatial_thinned_with_climate_topography_soil.csv",
+    "source_observations": 46276
+  },
+  "target_contract": {
+    "concepts": ["JPN_17", "JPN_23", "JPN_29", "JPN_36", "JPN_37", "JPN_38"],
+    "selection": "Exact high-depth Japan38 concepts used in the n>=5 continuous-lightness history diagnostic; retain observations with nonmissing corolla_lab_lightness_median.",
+    "rows_after_selection": 187
+  },
+  "operational_japan_archipelago_window_v1": {
+    "reason": "The source observation table has coordinates but no country field. The window is a transparent coordinate heuristic for sensitivity analysis, not an authoritative national-boundary classification.",
+    "boxes": [
+      {"name": "Ryukyu", "lat_min": 24.0, "lat_max_exclusive": 30.8, "lon_min": 122.0, "lon_max": 131.5},
+      {"name": "Kyushu_Shikoku_Honshu", "lat_min": 30.8, "lat_max_exclusive": 41.5, "lon_min": 129.0, "lon_max": 142.5},
+      {"name": "Hokkaido", "lat_min": 41.5, "lat_max_inclusive": 45.7, "lon_min": 139.0, "lon_max": 145.9}
+    ],
+    "total_rows_inside_window": 55,
+    "known_target_behavior": "For the six focal taxa the heuristic excludes all C. verutum observations in the Himalaya and all C. pendulum observations in Korea/continental northeast Asia, while retaining the Hokkaido subset of C. kamtschaticum."
+  },
+  "claim_boundary": "This is a geographic-provenance sensitivity layer. Exact taxon-name matching does not imply that a global species-level image median represents the phenotype of the Japanese population attached to the nuclear tip."
+}
