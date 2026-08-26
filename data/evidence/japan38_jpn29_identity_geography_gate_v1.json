@@ -6,11 +6,20 @@
   "tree_code": "Cirsium verutum",
   "biosample": "SAMN44017947",
   "run": "SRR30887232",
+  "experiment": "SRX26291365",
   "internal_evidence": {
+    "voucher_reconciliation": {
+      "source": "data/evidence/moreyra2025_cirsium_reconciliation_v1/part_008.csv",
+      "voucher_and_herbarium": "Japan: 16.05.2001, K. Yonekura 6788 (PE01523822)",
+      "region_class": "Japan",
+      "geographic_location": "Japan",
+      "scope_class": "core_east_asia",
+      "tree_code_vs_sra_name": "different_submitted_or_published_name",
+      "name_reconciliation_priority": "high"
+    },
     "membership_audit": {
       "source": "data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv",
       "sample_origin_class": "direct_Japan_sample_or_public_locality",
-      "sample_origin_detail": "Japan in supplement voucher and/or NCBI BioSample locality",
       "paper_japan_membership_confidence": "high",
       "current_name_status": "pending_authority_backed_reconciliation",
       "note": "NCBI treats this sample as Lophiolepis veruta"
@@ -22,6 +31,11 @@
       "required_resolution": "Represent broad Cirsium and segregate Lophiolepis treatments in topology sensitivity"
     }
   },
+  "published_source_crosscheck": {
+    "source": "Moreyra doctoral thesis supplementary taxon table",
+    "voucher_line_reproduced": "Cirsium verutum — Japan: 16.05.2001, K. Yonekura 6788 (PE01523822)",
+    "crosscheck_status": "matches the repository voucher reconciliation"
+  },
   "external_taxonomic_geography": {
     "source": "Plants of the World Online, Kew Science",
     "source_url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:196173-1",
@@ -32,16 +46,18 @@
     "japan_in_native_range": false,
     "retrieved_date": "2026-08-26"
   },
-  "conflict": "The paper/Japan38 membership audit places the sequenced sample in the Japanese panel, while the currently accepted species concept has no native Japanese range. Exact taxon-name matching therefore cannot be treated as evidence that the JPN_29 nuclear tip represents a natural Japanese C. verutum population.",
+  "conflict": "The exact sequenced voucher is explicitly labelled Japan (K. Yonekura 6788, PE01523822), but the currently accepted C. verutum species concept has no native Japanese range. This is therefore a voucher/taxon-concept contradiction, not merely a missing-photo problem.",
   "decision": {
     "keep_raw_nuclear_tip": true,
     "clean_japan_local_trait_join_allowed": false,
-    "japan_local_colour_recovery_priority": "blocked_pending_identity_resolution",
+    "japan_local_colour_recovery_priority": "blocked_pending_voucher_taxon_resolution",
+    "voucher_geography_resolved": true,
+    "voucher_taxon_identity_resolved": false,
     "required_next_evidence": [
-      "Resolve the exact Moreyra voucher/locality for SAMN44017947 / SRR30887232.",
-      "Determine whether the sampled material was cultivated in Japan, misidentified, or uses a different taxonomic concept.",
-      "Only after voucher-level reconciliation decide whether a Japan-local colour phenotype is biologically meaningful for this tip."
+      "Inspect PE01523822 / K. Yonekura 6788 directly, including determination history and any updated annotation.",
+      "Determine whether the Japanese material was cultivated, misdetermined as C. verutum, or represents a taxonomic concept not equivalent to the currently accepted Himalayan-to-Indochinese species.",
+      "Only after specimen-level taxonomic reconciliation decide whether a Japan-local colour phenotype can be joined to JPN_29."
     ]
   },
-  "claim_boundary": "This is an identity/geography gate, not a reidentification of the sequence. POWO distribution absence does not by itself prove that the sequenced sample is wrong; it makes the current Japan-local phenotype join unsafe until voucher-level evidence resolves the contradiction."
+  "claim_boundary": "This gate establishes a real contradiction between an explicitly Japanese voucher label and the accepted native range. It does not reidentify the sequence or prove the voucher label is wrong. Until specimen-level determination history is resolved, JPN_29 may remain in the raw nuclear reconstruction but must not be used as a clean Japan-local colour-history tip."
 }
