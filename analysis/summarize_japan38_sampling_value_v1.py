@@ -206,17 +206,18 @@ def trait_shortlist(transition, root, steps):
         primary = first_pass(transition, lambda x: True)
         objective = "coverage_only"
 
-    pass_candidates = []
-    seen = set()
-    for row in transition + root + steps:
-        if (
-            row["identity_gate"] != "pass"
-            or row["paper_japan_member_id"] in seen
-        ):
-            continue
-        seen.add(row["paper_japan_member_id"])
-        pass_candidates.append(row)
-    caution = [r for r in transition if r["identity_gate"] == "caution"]
+    objective_rows = {
+        "transition_localization": transition,
+        "ancestral_state_discrimination": root,
+        "minimum_step_falsification": steps,
+        "coverage_only": transition,
+    }[objective]
+    pass_candidates = [
+        r for r in objective_rows if r["identity_gate"] == "pass"
+    ]
+    caution = [
+        r for r in objective_rows if r["identity_gate"] == "caution"
+    ]
     return {
         "primary_objective": objective,
         "primary": primary,
