@@ -1,0 +1,44 @@
+{
+  "contract_version": "japan38_colour_continuous_history_summary_v1",
+  "status_date": "2026-08-26",
+  "tree": "data/evidence/japan38_comp1061_primary_tree_v1.nwk",
+  "continuous_bridge": "data/evidence/japan38_colour_continuous_bridge_v1.csv",
+  "exact_concepts_with_continuous_colour": 14,
+  "excluded_from_exact_colour_contract": ["JPN_20", "JPN_21", "JPN_31"],
+  "metrics": ["LAB_lightness", "LAB_chroma", "hue_sin", "hue_cos"],
+  "pagel_lambda_mle": {
+    "minimum_observations_1": {"LAB_lightness": 0.0, "LAB_chroma": 0.0, "hue_sin": 0.0, "hue_cos": 0.0},
+    "minimum_observations_5": {"LAB_lightness": 0.0, "LAB_chroma": 0.0, "hue_sin": 0.0, "hue_cos": 0.0},
+    "minimum_observations_10": {"LAB_lightness": 0.0, "LAB_chroma": 0.0, "hue_sin": 0.0, "hue_cos": 0.0}
+  },
+  "lightness_phylogenetic_overdispersion": {
+    "minimum_observations_1": {
+      "taxa": 14,
+      "patristic_distance_vs_absolute_lightness_difference_rho": -0.273,
+      "negative_tail_p": 0.021,
+      "two_sided_p": 0.095,
+      "leave_one_taxon_out_sign": "all negative"
+    },
+    "minimum_observations_5": {
+      "taxa": 6,
+      "rho": -0.707,
+      "exact_negative_tail_p": 0.0013889,
+      "exact_two_sided_p": 0.04444,
+      "leave_one_taxon_out_sign": "all negative"
+    },
+    "minimum_observations_10": {
+      "taxa": 5,
+      "concepts": ["JPN_17", "JPN_23", "JPN_36", "JPN_37", "JPN_38"],
+      "rho": -0.8545,
+      "exact_negative_tail_p": 0.00833,
+      "exact_two_sided_p": 0.00833,
+      "leave_one_taxon_out_rho_range": [-0.943, -0.771]
+    }
+  },
+  "other_metric_high_depth_diagnostics": {
+    "chroma_minimum_observations_10": {"rho": 0.3697, "two_sided_p": 0.175},
+    "hue_chord_distance_minimum_observations_10": {"rho": -0.0424, "two_sided_p": 0.95}
+  },
+  "interpretation": "Lightness shows a stable anti-phylogenetic/overdispersion signal as evidence depth increases, whereas chroma and circular hue do not show the same stable pattern.",
+  "claim_boundary": "A continuous phylogenetic-structure pilot on a substitutions/site tree. The result may be consistent with distant lineages reoccupying similar brightness states, but it is not proof of convergence or adaptation and does not estimate evolutionary rate, ancestral colour, C/W transition count, loss/regain direction, or absolute time."
+}
