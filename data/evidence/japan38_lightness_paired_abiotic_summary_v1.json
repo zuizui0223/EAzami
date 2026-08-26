@@ -1,0 +1,47 @@
+{
+  "contract_version": "japan38_lightness_paired_abiotic_summary_v1",
+  "status_date": "2026-08-26",
+  "source": {
+    "azami_workflow_run": 29306454759,
+    "azami_artifact_id": 8314947270,
+    "azami_artifact_name": "ch1-exhaustive-enriched-environment-20260713",
+    "azami_artifact_digest": "sha256:b1252258fff85b397de8a58f322e24e90731d55f07f53ff7de16a169c5a4dfe3",
+    "validation_run": 32927382858,
+    "validation_artifact_id": 9591998547,
+    "validation_artifact_digest": "sha256:56031a4d2b93125324bdc29b4a7f6e31da4f0259a7d1bac182ceac23e3dcde7e"
+  },
+  "paired_evidence": "Lightness and environmental medians are reconstructed from the same strict-spatial colour-usable observations within each exact Japan38 concept.",
+  "n_colour_usable_ge_5": {
+    "concepts": ["JPN_17", "JPN_23", "JPN_29", "JPN_36", "JPN_37", "JPN_38"],
+    "patristic_vs_absolute_lightness_difference_rho": -0.7071428571428571,
+    "paired_climate": {"rho": -0.23571428571428568, "exact_positive_tail_p": 0.7430555555555556, "exact_two_sided_p": 0.5208333333333334},
+    "paired_topography": {"rho": -0.35, "exact_positive_tail_p": 0.8722222222222222, "exact_two_sided_p": 0.3416666666666667, "leave_one_out_all_negative": true},
+    "paired_climate_plus_topography": {"rho": -0.32499999999999996, "exact_positive_tail_p": 0.775, "exact_two_sided_p": 0.45416666666666666, "leave_one_out_all_negative": true}
+  },
+  "n_colour_usable_ge_10": {
+    "concepts": ["JPN_17", "JPN_23", "JPN_36", "JPN_37", "JPN_38"],
+    "patristic_vs_absolute_lightness_difference_rho": -0.8545454545454544,
+    "paired_climate": {"rho": -0.19999999999999998, "exact_positive_tail_p": 0.6583333333333333, "exact_two_sided_p": 0.6916666666666667},
+    "paired_topography": {"rho": -0.22424242424242422, "exact_positive_tail_p": 0.65, "exact_two_sided_p": 0.7333333333333333},
+    "paired_climate_plus_topography": {"rho": -0.4666666666666666, "exact_positive_tail_p": 0.9, "exact_two_sided_p": 0.20833333333333334}
+  },
+  "soil": {
+    "six_taxon_replicated_gate_ready": false,
+    "blocking_concept": "JPN_17",
+    "blocking_concept_minimum_soil_linked_colour_observations": 4,
+    "clean_five_concepts": ["JPN_23", "JPN_29", "JPN_36", "JPN_37", "JPN_38"],
+    "soil_distance_vs_absolute_lightness_difference_rho": 0.3939393939393939,
+    "exact_positive_tail_p": 0.19166666666666668,
+    "exact_two_sided_p": 0.36666666666666664,
+    "partial_controlling_patristic_rho": 0.047406122236815756,
+    "interpretation": "Positive direction is exploratory only: it is not significant and cannot preserve the six-concept depth-replicated gate."
+  },
+  "absent_from_source_artifact": ["solar radiation / rsds", "VPD / aridity", "wind / sfcWind"],
+  "decision": {
+    "paired_current_climate_or_topography_explains_lightness_overdispersion": false,
+    "soil_promoted_to_supported_mechanism": false,
+    "interpretation": "Removing the evidence-layer mismatch does not rescue current climate or topography as an explanation for the anti-phylogenetic lightness placement. Soil remains a coverage-limited lead rather than a supported mechanism."
+  },
+  "next_gate": "Recover same-concept radiation/rsds, VPD/aridity and wind/sfcWind evidence if available; improve soil-linked colour coverage, especially JPN_17; then move to historical climate, biotic interactions and population-level colour variation rather than repeatedly retesting BIO1/BIO4/BIO12/BIO15.",
+  "claim_boundary": "Small observational species-level same-cohort diagnostic on a substitutions/site tree. Pairing reduces evidence-layer mismatch but does not establish causal selection, adaptation, convergence, historical exposure, ancestral colour or evolutionary rate."
+}

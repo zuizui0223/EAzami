@@ -1,0 +1,30 @@
+{
+  "contract_version": "japan38_lightness_paired_environment_summary_provenance_v1",
+  "status_date": "2026-08-26",
+  "source_repo": "zuizui0223/azami",
+  "source_workflow_run": 29306454759,
+  "source_artifact_id": 8314947270,
+  "source_artifact_name": "ch1-exhaustive-enriched-environment-20260713",
+  "source_artifact_digest": "sha256:b1252258fff85b397de8a58f322e24e90731d55f07f53ff7de16a169c5a4dfe3",
+  "source_file": "strict_spatial_thinned_with_climate_topography_soil.csv",
+  "source_observations": 46276,
+  "selection_rule": "Keep exact high-depth Japan38 taxa used by the continuous-lightness gate and retain only strict-spatial observations with corolla_lab_lightness_n_usable_heads > 0; aggregate each environmental variable by species median over those same colour-usable observations.",
+  "exact_concepts": ["JPN_17", "JPN_23", "JPN_29", "JPN_36", "JPN_37", "JPN_38"],
+  "colour_usable_observation_counts": {
+    "JPN_17": 14,
+    "JPN_23": 20,
+    "JPN_29": 9,
+    "JPN_36": 10,
+    "JPN_37": 92,
+    "JPN_38": 42
+  },
+  "lightness_validation": "Species-median LAB lightness reconstructed from the selected source observations matches japan38_colour_continuous_bridge_v1.csv for all six concepts to stored numeric precision.",
+  "environment_modules": {
+    "climate": ["chelsa_bio01", "chelsa_bio04", "chelsa_bio12", "chelsa_bio15"],
+    "topography": ["topo_elevation", "topo_slope", "topo_roughness"],
+    "soil_0_30cm": ["bdod", "cec", "cfvo", "clay", "sand", "silt", "nitrogen", "phh2o", "soc", "ocd"]
+  },
+  "soil_coverage_warning": "JPN_17 Cirsium maritimum has only 4 soil-linked colour-usable observations out of 14. Therefore soil cannot satisfy the same six-taxon >=5-environment-observation gate and is retained as a coverage blocker rather than a primary replicated mechanism test.",
+  "absent_from_source_artifact": ["solar radiation / rsds", "VPD / aridity index", "wind / sfcWind"],
+  "claim_boundary": "Derived same-cohort species summaries only. Environment and lightness originate from the same strict-spatial observations, but this remains observational species-level evidence and does not establish causal environmental selection or historical exposure."
+}

@@ -1,0 +1,103 @@
+name: Validate Japan38 lightness paired abiotic gate v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_japan38_lightness_paired_abiotic_gate_v1.py"
+      - "tests/test_japan38_lightness_paired_abiotic_gate_v1.py"
+      - "data/evidence/japan38_lightness_paired_environment_summary_v1.csv"
+      - "data/evidence/japan38_lightness_paired_environment_summary_provenance_v1.json"
+      - "data/evidence/japan38_lightness_paired_abiotic_summary_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v3.json"
+      - "data/evidence/japan38_comp1061_primary_tree_v1.nwk"
+      - "data/evidence/japan38_comp1061_concept_map_v1.csv"
+      - ".github/workflows/validate-japan38-lightness-paired-abiotic-gate-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-japan38-paired-abiotic-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install runtime dependencies
+        run: pip install biopython numpy scipy
+      - name: Compile and unit test
+        run: |
+          python -m py_compile analysis/run_japan38_lightness_paired_abiotic_gate_v1.py
+          python -m unittest tests/test_japan38_lightness_paired_abiotic_gate_v1.py -v
+      - name: Run paired same-cohort abiotic gate
+        run: |
+          set -euo pipefail
+          mkdir -p result
+          python analysis/run_japan38_lightness_paired_abiotic_gate_v1.py \
+            --paired-summary data/evidence/japan38_lightness_paired_environment_summary_v1.csv \
+            --tree data/evidence/japan38_comp1061_primary_tree_v1.nwk \
+            --concept-map data/evidence/japan38_comp1061_concept_map_v1.csv \
+            --minimum-soil-observations 5 \
+            --output result/japan38_lightness_paired_abiotic_gate_v1.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('result/japan38_lightness_paired_abiotic_gate_v1.json').read_text())
+          s5=x['subsets']['n_colour_usable_ge_5']
+          s10=x['subsets']['n_colour_usable_ge_10']
+          assert s5['n_concepts']==6
+          assert s10['n_concepts']==5
+          expected={
+            'paired_climate': (-0.23571428571428568, 0.7430555555555556, -0.2, 0.6583333333333333),
+            'paired_topography': (-0.35, 0.8722222222222222, -0.22424242424242422, 0.65),
+            'paired_climate_plus_topography': (-0.32499999999999996, 0.775, -0.4666666666666666, 0.9),
+          }
+          for name,(rho5,p5,rho10,p10) in expected.items():
+            a=s5['modules'][name]['abiotic_distance_vs_absolute_lightness_difference']
+            b=s10['modules'][name]['abiotic_distance_vs_absolute_lightness_difference']
+            assert abs(a['rho']-rho5)<1e-12
+            assert abs(a['positive_tail_p']-p5)<1e-12
+            assert abs(b['rho']-rho10)<1e-12
+            assert abs(b['positive_tail_p']-p10)<1e-12
+            assert x['primary_module_decisions'][name]['tracking_supported'] is False
+          assert x['primary_module_decisions']['paired_topography']['leave_one_taxon_out_all_negative'] is True
+          assert x['primary_module_decisions']['paired_climate_plus_topography']['leave_one_taxon_out_all_negative'] is True
+          assert x['overall_decision']['paired_current_climate_or_topography_explains_lightness_overdispersion'] is False
+          soil=x['soil']
+          assert soil['six_taxon_replicated_gate_ready'] is False
+          assert soil['coverage_by_concept']['JPN_17']['minimum_nonmissing_across_soil_axes']==4
+          clean=soil['exploratory_clean_subset']
+          assert clean['n_concepts']==5
+          assert set(clean['paper_japan_member_ids'])=={'JPN_23','JPN_29','JPN_36','JPN_37','JPN_38'}
+          so=clean['soil_distance_vs_absolute_lightness_difference']
+          assert abs(so['rho']-0.3939393939393939)<1e-12
+          assert abs(so['positive_tail_p']-0.19166666666666668)<1e-12
+
+          frozen=json.loads(Path('data/evidence/japan38_lightness_paired_abiotic_summary_v1.json').read_text())
+          assert frozen['decision']['paired_current_climate_or_topography_explains_lightness_overdispersion'] is False
+          assert frozen['decision']['soil_promoted_to_supported_mechanism'] is False
+          assert abs(frozen['n_colour_usable_ge_5']['paired_climate']['rho'] - s5['modules']['paired_climate']['abiotic_distance_vs_absolute_lightness_difference']['rho']) < 1e-12
+          assert abs(frozen['n_colour_usable_ge_10']['paired_climate_plus_topography']['rho'] - s10['modules']['paired_climate_plus_topography']['abiotic_distance_vs_absolute_lightness_difference']['rho']) < 1e-12
+          assert abs(frozen['soil']['soil_distance_vs_absolute_lightness_difference_rho'] - so['rho']) < 1e-12
+
+          readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v3.json').read_text())
+          assert readiness['supersedes'].endswith('fdt_multitrait_execution_readiness_v2.json')
+          pg=readiness['colour']['paired_same_cohort_gate']
+          assert pg['decision'].startswith('Current same-cohort climate, topography')
+          assert readiness['colour']['soil']['replicated_gate_ready'] is False
+          assert readiness['colour']['source_axes_absent']==['solar radiation / rsds','VPD / aridity','wind / sfcWind']
+          print(json.dumps(x['overall_decision'],indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-lightness-paired-abiotic-${{ github.run_id }}
+          path: result/japan38_lightness_paired_abiotic_gate_v1.json
+          if-no-files-found: error
+          retention-days: 90
