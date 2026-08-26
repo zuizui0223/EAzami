@@ -24,6 +24,7 @@
       "global_six_signal": {"rho": -0.7071428571428571, "exact_negative_tail_p": 0.001388888888888889, "exact_two_sided_p": 0.044444444444444446},
       "japan_where_available_on_global_six_sensitivity": {"rho": -0.4035714285714285, "exact_negative_tail_p": 0.13055555555555556, "exact_two_sided_p": 0.32083333333333336},
       "japan_window_four_signal": {"rho": -0.3142857142857143, "exact_negative_tail_p": 0.3333333333333333, "exact_two_sided_p": 0.625},
+      "executed_validation": {"workflow_run": 32929020824, "artifact_id": 9592538804, "artifact_digest": "sha256:bd23b03bbd63215dec2a2ee2bf1cf3f296b827c9aeb5e2b9bed863b6e2ef2eb7"},
       "decision": "The anti-phylogenetic lightness pattern is not reproduced as a Japan-local radiation signal. Current evidence supports a global exact-concept species proxy only."
     },
     "paired_current_abiotic_gate": "Same-cohort current climate/topography remains negative and soil remains coverage-limited, but mechanism expansion is now secondary to resolving Japan-local colour provenance.",
@@ -45,7 +46,7 @@
     "continuous_colour_global_proxy": "data/evidence/japan38_colour_continuous_history_summary_v1.json",
     "separate_layer_climate": "data/evidence/japan38_colour_climate_coupling_summary_v1.json",
     "paired_same_cohort_abiotic": "data/evidence/japan38_lightness_paired_abiotic_summary_v1.json",
-    "colour_geographic_provenance": "data/evidence/japan38_colour_geographic_provenance_summary_v1.csv"
+    "colour_geographic_provenance": "data/evidence/japan38_colour_geographic_provenance_gate_v1.json"
   },
   "claim_boundary": "The current continuous colour result is an exact-taxonomy global species-level proxy, not a population-matched Japan38 trait history. Exact name identity does not establish geographic/population identity. The operational Japan window is a coordinate heuristic; the negative local sensitivity blocks promotion to a Japan-local radiation claim but does not invalidate the global species-level signal."
 }
