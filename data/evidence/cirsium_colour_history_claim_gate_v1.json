@@ -1,0 +1,64 @@
+{
+  "contract_version": "cirsium_colour_history_claim_gate_v1",
+  "status_date": "2026-08-27",
+  "scope": "East Asian Cirsium visible-colour history and molecular claim licensing",
+  "handoff_provenance": {
+    "source_repository": "zuizui0223/chun",
+    "source_parent_commit": "2f56b9fa77ea4988660e574925235224b954ef44",
+    "source_scope_cleanup_commit": "b1c1bd1d80c892ff8983bb15de87981cf71c26b6",
+    "source_cleanup_interpretation": "Cirsium material was intentionally removed from chun when that repository was narrowed to Camellia; EAzami owns the surviving Cirsium question.",
+    "source_documents": [
+      "docs/CIRSIUM_VISIBLE_COLOUR_HISTORY_GATE.md",
+      "docs/FLOWER_COLOR_REACTIVATION_HYPOTHESES.md",
+      "docs/EVIDENCE_AUDIT_2026-08-14.md"
+    ]
+  },
+  "terminology": {
+    "retention": "A coloured floral state is ancestrally continuous across the focal branch interval.",
+    "recruitment_or_gain": "A coloured floral state appears after a reconstructed white ancestral state, but prior floral activity of the pathway has not been demonstrated.",
+    "reactivation_or_reexpression": "Licensed only when history supports earlier floral activity followed by an intervening suppressed or absent floral state and later activity, and molecular evidence supports retention of the underlying pigment machinery through the suppressed interval.",
+    "ancestral_polymorphism_sorting": "An ancestral polymorphic state is differentially sorted or fixed among descendants; this is a separate historical alternative and is not collapsed into gain or loss."
+  },
+  "ryukyu_competing_histories": [
+    "coloured ancestor -> white suppression/loss in Cirsium brevicaule",
+    "white ancestor -> coloured recruitment/gain in Cirsium irumtiense",
+    "ancestral colour polymorphism -> differential sorting/fixation",
+    "earlier coloured state -> intervening white suppression -> later coloured reactivation, only if broader history and pathway-retention evidence support the suppressed interval"
+  ],
+  "analysis_requirements": {
+    "tree": "Use a branch-length-aware nuclear history or explicitly justified branch-length sensitivity; do not invent branch lengths.",
+    "trait_provenance": "Use sample/population-level visible-colour provenance for historical inference; global species-proxy colour is not interchangeable with Japan-local radiation colour.",
+    "polymorphism": "Treat within-lineage polymorphism as an analysis unit rather than forcing one taxon consensus state.",
+    "state_models": "Compare binary and biologically justified multistate/polymorphism-aware histories where coverage permits; a binary W/C model is a broad phenotype history, not a pigment-mechanism model.",
+    "reticulation_sensitivity": "Repeat historical inference across plausible nuclear/topological alternatives where reticulation, ILS or introgression can alter transition placement.",
+    "reactivation_evidence_chain": [
+      "ancestry and transition history",
+      "coding/regulatory pathway-retention evidence",
+      "floral RNA/expression evidence",
+      "pigment chemistry",
+      "calibrated visible colour"
+    ]
+  },
+  "current_resolution": {
+    "japan_local_colour_history_ready": false,
+    "ryukyu_white_coloured_direction": "unresolved",
+    "c_irumtiense_reactivation_claim": "not licensed",
+    "within_lineage_polymorphism": "must remain explicit, with var. takaoense as a key informative case rather than noise",
+    "global_continuous_lightness_result": "real exploratory pattern but not admissible as Japan-local transition history under the current provenance gate",
+    "molecular_pathway_context": "Upstream/core flavonoid machinery and DFR are strongly anchored in published Cirsium resources; the terminal anthocyanin, MBW regulatory, transport/sequestration and cis-regulatory layers remain the most diagnostic unresolved layers for reversible W/C switching.",
+    "worldclim_species_proxy_gate": "failed; solar radiation, wind, VPD and the joint three-axis exposure distance are not promoted as robust mechanisms under the frozen global gate"
+  },
+  "next_execution_gate": [
+    "Resolve at least a fifth identity-resolved Japan-local colour concept by closing the JPN38 live-image reuse gap or the JPN29 voucher-identity gap, or by obtaining an equivalent independent population-matched source.",
+    "Rerun population-matched continuous-colour history before interpreting colour as a Japanese-radiation trait history; do not manufacture W/C states by thresholding L* unless an independent biological state definition exists.",
+    "Build a sample-level W/C/polymorphism evidence matrix for the East Asian transition question and map transitions across the accepted nuclear history plus plausible topology/reticulation alternatives.",
+    "Only after at least two independent W/C transitions are resolved should pathway-locus genealogy, coding/regulatory integrity, floral expression and pigment chemistry be used to test molecular reuse or reactivation."
+  ],
+  "prohibited_shortcuts": [
+    "coloured descendant alone -> reactivation",
+    "DFR or ANS presence alone -> reactivation",
+    "global species median colour -> Japan-local ancestral state",
+    "within-taxon polymorphism -> majority-vote consensus without sensitivity",
+    "present-day environmental correlation -> transition direction or causal selection"
+  ]
+}
