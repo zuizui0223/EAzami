@@ -1,0 +1,52 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v4",
+  "status_date": "2026-08-26",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v3.json",
+  "inheritance": "Orientation, display, phyllary/spine, stickiness, trait-completion priorities, three-discrete-module H2/H3 resolution, and the paired current-abiotic gate are inherited from v3 unless overridden below.",
+  "colour": {
+    "global_exact_concept_bridge": "14/38 exact Japan38 taxon concepts have continuous image-derived colour metrics. The high-depth phylogenetic signal uses six exact concepts at n>=5 and five at n>=10.",
+    "global_species_proxy_result": "LAB lightness is anti-phylogenetic at high evidence depth in the global exact-concept proxy: n>=5 rho=-0.7071, exact two-sided p=0.04444; n>=10 rho=-0.8545, exact two-sided p=0.00833.",
+    "geographic_provenance_gate": {
+      "source_rows": 187,
+      "operational_japan_window": "Transparent three-box coordinate sensitivity, not an authoritative country polygon.",
+      "high_depth_global_concepts": 6,
+      "japan_window_n_ge_5_concepts": 4,
+      "japan_window_n_ge_10_concepts": 4,
+      "missing_japan_window_colour": ["JPN_29", "JPN_38"],
+      "JPN_37": {
+        "taxon": "Cirsium kamtschaticum",
+        "global_n": 92,
+        "japan_window_n": 11,
+        "global_lightness_median": 65.0,
+        "japan_window_lightness_median": 73.43136978149414,
+        "japan_minus_global": 8.43136978149414
+      },
+      "global_six_signal": {"rho": -0.7071428571428571, "exact_negative_tail_p": 0.001388888888888889, "exact_two_sided_p": 0.044444444444444446},
+      "japan_where_available_on_global_six_sensitivity": {"rho": -0.4035714285714285, "exact_negative_tail_p": 0.13055555555555556, "exact_two_sided_p": 0.32083333333333336},
+      "japan_window_four_signal": {"rho": -0.3142857142857143, "exact_negative_tail_p": 0.3333333333333333, "exact_two_sided_p": 0.625},
+      "executed_validation": {"workflow_run": 32929020824, "artifact_id": 9592538804, "artifact_digest": "sha256:bd23b03bbd63215dec2a2ee2bf1cf3f296b827c9aeb5e2b9bed863b6e2ef2eb7"},
+      "decision": "The anti-phylogenetic lightness pattern is not reproduced as a Japan-local radiation signal. Current evidence supports a global exact-concept species proxy only."
+    },
+    "paired_current_abiotic_gate": "Same-cohort current climate/topography remains negative and soil remains coverage-limited, but mechanism expansion is now secondary to resolving Japan-local colour provenance.",
+    "status": "GLOBAL species-level lightness signal present; JAPAN-LOCAL radiation colour history not ready. Do not use global species medians as phenotypes of the Japanese nuclear-tip populations."
+  },
+  "priority_reordering": {
+    "first": "Recover Japan-local colour evidence for JPN_29 C. verutum and JPN_38 C. pendulum, and improve population-matched Japan-local colour coverage for JPN_37 C. kamtschaticum.",
+    "second": "Re-run continuous lightness history on Japan-local population proxies with at least five identity-resolved concepts; propagate topology uncertainty only after this geographic gate passes.",
+    "third": "Only then expand same-population mechanism screens to radiation/rsds, VPD/aridity, wind/sfcWind and better soil coverage; historical climate and biotic interactions follow.",
+    "discrete_colour": "Do not invent a C/W threshold. Fixed-white lineage recovery and a biologically justified state ontology remain required for directional loss/regain questions."
+  },
+  "cross_module": {
+    "simple_common_lability_H3": "not supported by the current three discrete historical modules",
+    "H2_modular_evolvability": "not established",
+    "colour_role": "Colour currently constrains evidence quality and mechanism design as a continuous global species proxy; it is not yet a valid Japan-local historical module."
+  },
+  "canonical_results": {
+    "three_discrete_modules": "data/evidence/japan38_multitrait_history_summary_v1.json",
+    "continuous_colour_global_proxy": "data/evidence/japan38_colour_continuous_history_summary_v1.json",
+    "separate_layer_climate": "data/evidence/japan38_colour_climate_coupling_summary_v1.json",
+    "paired_same_cohort_abiotic": "data/evidence/japan38_lightness_paired_abiotic_summary_v1.json",
+    "colour_geographic_provenance": "data/evidence/japan38_colour_geographic_provenance_gate_v1.json"
+  },
+  "claim_boundary": "The current continuous colour result is an exact-taxonomy global species-level proxy, not a population-matched Japan38 trait history. Exact name identity does not establish geographic/population identity. The operational Japan window is a coordinate heuristic; the negative local sensitivity blocks promotion to a Japan-local radiation claim but does not invalidate the global species-level signal."
+}

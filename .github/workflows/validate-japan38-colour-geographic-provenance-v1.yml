@@ -1,0 +1,108 @@
+name: Validate Japan38 colour geographic provenance v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_japan38_colour_geographic_provenance_v1.py"
+      - "tests/test_japan38_colour_geographic_provenance_v1.py"
+      - "data/evidence/japan38_colour_geographic_provenance_summary_v1.csv"
+      - "data/evidence/japan38_colour_geographic_provenance_summary_provenance_v1.json"
+      - "data/evidence/japan38_colour_geographic_provenance_gate_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v4.json"
+      - "data/evidence/japan38_comp1061_primary_tree_v1.nwk"
+      - "data/evidence/japan38_comp1061_concept_map_v1.csv"
+      - ".github/workflows/validate-japan38-colour-geographic-provenance-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-japan38-colour-geography-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install runtime dependencies
+        run: pip install biopython numpy scipy
+      - name: Compile and unit test
+        run: |
+          python -m py_compile analysis/audit_japan38_colour_geographic_provenance_v1.py
+          python -m unittest tests/test_japan38_colour_geographic_provenance_v1.py -v
+      - name: Run geographic provenance gate
+        run: |
+          set -euo pipefail
+          mkdir -p result
+          python analysis/audit_japan38_colour_geographic_provenance_v1.py \
+            --summary data/evidence/japan38_colour_geographic_provenance_summary_v1.csv \
+            --tree data/evidence/japan38_comp1061_primary_tree_v1.nwk \
+            --concept-map data/evidence/japan38_comp1061_concept_map_v1.csv \
+            --output result/japan38_colour_geographic_provenance_gate_v1.json
+          python - <<'PY'
+          import json, math
+          from pathlib import Path
+          x=json.loads(Path('result/japan38_colour_geographic_provenance_gate_v1.json').read_text())
+          assert x['geographic_contract']['global_exact_concepts']==6
+          assert x['geographic_contract']['japan_window_n_ge_5_concepts']==4
+          assert x['geographic_contract']['japan_window_n_ge_10_concepts']==4
+          assert x['missing_japan_window_colour']==['JPN_29','JPN_38']
+          assert x['coverage']['JPN_29']['japan_window_colour_usable_n']==0
+          assert x['coverage']['JPN_38']['japan_window_colour_usable_n']==0
+          assert x['coverage']['JPN_37']['global_colour_usable_n']==92
+          assert x['coverage']['JPN_37']['japan_window_colour_usable_n']==11
+          assert abs(x['coverage']['JPN_37']['lightness_shift_japan_minus_global'] - 8.43136978149414) < 1e-12
+          g=x['global_proxy_signal']
+          assert g['paper_japan_member_ids']==['JPN_17','JPN_23','JPN_29','JPN_36','JPN_37','JPN_38']
+          assert abs(g['rho'] - (-0.7071428571428571)) < 1e-12
+          assert abs(g['negative_tail_p'] - (1/720)) < 1e-12
+          assert abs(g['two_sided_abs_p'] - (32/720)) < 1e-12
+          s=x['japan_where_available_substitution_sensitivity']
+          assert abs(s['rho'] - (-0.4035714285714285)) < 1e-12
+          assert abs(s['negative_tail_p'] - (94/720)) < 1e-12
+          assert abs(s['two_sided_abs_p'] - (231/720)) < 1e-12
+          j=x['japan_window_signal_n_ge_5']
+          assert j['paper_japan_member_ids']==['JPN_17','JPN_23','JPN_36','JPN_37']
+          assert abs(j['rho'] - (-0.3142857142857143)) < 1e-12
+          assert j['exact_permutations']==24
+          assert abs(j['negative_tail_p'] - (8/24)) < 1e-12
+          assert abs(j['two_sided_abs_p'] - (15/24)) < 1e-12
+          assert x['decision']['japan_local_radiation_colour_history_ready'] is False
+          assert x['decision']['global_anti_phylogenetic_signal_reproduced_in_japan_window'] is False
+
+          frozen=json.loads(Path('data/evidence/japan38_colour_geographic_provenance_gate_v1.json').read_text())
+          def compare(a,b,path='root'):
+              if isinstance(a,dict) and isinstance(b,dict):
+                  assert set(a)==set(b), (path,set(a)^set(b))
+                  for key in a: compare(a[key],b[key],f'{path}.{key}')
+              elif isinstance(a,list) and isinstance(b,list):
+                  assert len(a)==len(b), (path,len(a),len(b))
+                  for i,(aa,bb) in enumerate(zip(a,b)): compare(aa,bb,f'{path}[{i}]')
+              elif isinstance(a,(int,float)) and isinstance(b,(int,float)) and not isinstance(a,bool) and not isinstance(b,bool):
+                  assert math.isclose(float(a),float(b),rel_tol=1e-12,abs_tol=1e-12), (path,a,b)
+              else:
+                  assert a==b, (path,a,b)
+          compare(x,frozen)
+
+          ready=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v4.json').read_text())
+          geo=ready['colour']['geographic_provenance_gate']
+          assert geo['missing_japan_window_colour']==['JPN_29','JPN_38']
+          assert geo['japan_window_n_ge_5_concepts']==4
+          assert abs(geo['JPN_37']['japan_minus_global']-8.43136978149414)<1e-12
+          assert abs(geo['japan_window_four_signal']['rho']-j['rho'])<1e-12
+          assert ready['canonical_results']['colour_geographic_provenance'].endswith('japan38_colour_geographic_provenance_gate_v1.json')
+          assert ready['colour']['status'].startswith('GLOBAL species-level lightness signal present; JAPAN-LOCAL')
+          print(json.dumps(x['decision'], indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-colour-geographic-provenance-${{ github.run_id }}
+          path: result/japan38_colour_geographic_provenance_gate_v1.json
+          if-no-files-found: error
+          retention-days: 90
