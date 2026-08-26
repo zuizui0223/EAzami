@@ -44,16 +44,23 @@ jobs:
           assert x['target']['catalog_number']=='PE01523822'
           assert x['target']['collector_number']=='6788'
           assert set(x['sources'])=={'GBIF','iDigBio'}
+          assert x['all_query_routes_ok']['GBIF'] is True
+          assert x['all_query_routes_ok']['iDigBio'] is True
+          assert all(q['ok'] for q in x['sources']['GBIF'].values())
+          assert all(q['ok'] for q in x['sources']['iDigBio'].values())
           assert isinstance(x['exact_catalog_hits'],list)
           assert isinstance(x['collector_number_hits'],list)
           assert isinstance(x['determination_history_resolved'],bool)
           frozen=Path('data/evidence/jpn29_specimen_determination_public_api_audit_v1.json')
           if frozen.exists():
               f=json.loads(frozen.read_text())
+              assert f['all_query_routes_ok']==x['all_query_routes_ok']
               for key in ['exact_catalog_hit_count','collector_number_hit_count','determination_history_resolved']:
                   assert f[key]==x[key], (key,f[key],x[key])
               readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v8.json').read_text())
-              assert readiness['colour']['jpn29_public_aggregator_audit']['determination_history_resolved']==x['determination_history_resolved']
+              audit=readiness['colour']['jpn29_public_aggregator_audit']
+              assert audit['all_query_routes_ok']==x['all_query_routes_ok']
+              assert audit['determination_history_resolved']==x['determination_history_resolved']
           print(json.dumps(x,indent=2,ensure_ascii=False))
           PY
       - uses: actions/upload-artifact@v4
