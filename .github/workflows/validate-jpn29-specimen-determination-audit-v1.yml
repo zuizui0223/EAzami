@@ -4,8 +4,10 @@ on:
   pull_request:
     paths:
       - "analysis/audit_jpn29_specimen_determination_v1.py"
+      - "analysis/check_jpn29_idigbio_combined_route_v1.py"
       - "tests/test_jpn29_specimen_determination_v1.py"
       - "data/evidence/jpn29_specimen_determination_public_api_audit_v1.json"
+      - "data/evidence/jpn29_idigbio_combined_route_v1.json"
       - "data/evidence/fdt_multitrait_execution_readiness_v8.json"
       - ".github/workflows/validate-jpn29-specimen-determination-audit-v1.yml"
   workflow_dispatch:
@@ -29,6 +31,7 @@ jobs:
       - name: Compile and unit test
         run: |
           python -m py_compile analysis/audit_jpn29_specimen_determination_v1.py
+          python -m py_compile analysis/check_jpn29_idigbio_combined_route_v1.py
           python -m unittest tests/test_jpn29_specimen_determination_v1.py -v
       - name: Audit public specimen aggregators
         run: |
@@ -36,10 +39,13 @@ jobs:
           mkdir -p result
           python analysis/audit_jpn29_specimen_determination_v1.py \
             --output result/jpn29_specimen_determination_public_api_audit_v1.json
+          python analysis/check_jpn29_idigbio_combined_route_v1.py \
+            --output result/jpn29_idigbio_combined_route_v1.json
           python - <<'PY'
           import json
           from pathlib import Path
           x=json.loads(Path('result/jpn29_specimen_determination_public_api_audit_v1.json').read_text())
+          c=json.loads(Path('result/jpn29_idigbio_combined_route_v1.json').read_text())
           assert x['contract_version']=='jpn29_specimen_determination_public_api_audit_v1'
           assert x['target']['catalog_number']=='PE01523822'
           assert x['target']['collector_number']=='6788'
@@ -48,24 +54,34 @@ jobs:
           assert x['all_query_routes_ok']['iDigBio'] is True
           assert all(q['ok'] for q in x['sources']['GBIF'].values())
           assert all(q['ok'] for q in x['sources']['iDigBio'].values())
+          assert c['contract_version']=='jpn29_idigbio_combined_route_v1'
+          assert c['query']=={'collector':'yonekura','recordnumber':'6788'}
+          assert isinstance(c['item_count'],int)
+          assert c['returned_rows'] <= c['item_count']
           assert isinstance(x['exact_catalog_hits'],list)
           assert isinstance(x['collector_number_hits'],list)
           assert isinstance(x['determination_history_resolved'],bool)
           frozen=Path('data/evidence/jpn29_specimen_determination_public_api_audit_v1.json')
+          combined_frozen=Path('data/evidence/jpn29_idigbio_combined_route_v1.json')
           if frozen.exists():
               f=json.loads(frozen.read_text())
+              cf=json.loads(combined_frozen.read_text())
               assert f['all_query_routes_ok']==x['all_query_routes_ok']
               for key in ['exact_catalog_hit_count','collector_number_hit_count','determination_history_resolved']:
                   assert f[key]==x[key], (key,f[key],x[key])
+              assert cf['item_count']==c['item_count']
               readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v8.json').read_text())
               audit=readiness['colour']['jpn29_public_aggregator_audit']
               assert audit['all_query_routes_ok']==x['all_query_routes_ok']
+              assert audit['idigbio_direct_collector_recordnumber_count']==c['item_count']
               assert audit['determination_history_resolved']==x['determination_history_resolved']
-          print(json.dumps(x,indent=2,ensure_ascii=False))
+          print(json.dumps({'main':x,'combined_idigbio':c},indent=2,ensure_ascii=False))
           PY
       - uses: actions/upload-artifact@v4
         with:
           name: jpn29-specimen-determination-audit-${{ github.run_id }}
-          path: result/jpn29_specimen_determination_public_api_audit_v1.json
+          path: |
+            result/jpn29_specimen_determination_public_api_audit_v1.json
+            result/jpn29_idigbio_combined_route_v1.json
           if-no-files-found: error
           retention-days: 90
