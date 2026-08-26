@@ -1,0 +1,110 @@
+name: Validate Japan38 continuous colour history v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_japan38_colour_continuous_history_pilot_v1.py"
+      - "tests/test_japan38_colour_continuous_history_pilot_v1.py"
+      - "data/evidence/japan38_colour_continuous_bridge_v1.csv"
+      - "data/evidence/japan38_colour_continuous_bridge_v1.json"
+      - ".github/workflows/validate-japan38-colour-continuous-history-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: validate-japan38-colour-continuous-history-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  FROZEN_JAPAN38_RUN_ID: "32845725038"
+  FROZEN_JAPAN38_ARTIFACT: "japan38-comp1061-frozen-tree-retry-32845725038"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install runtime dependencies
+        run: pip install biopython numpy scipy
+      - name: Compile and unit test
+        run: |
+          python -m py_compile analysis/run_japan38_colour_continuous_history_pilot_v1.py
+          python -m unittest tests/test_japan38_colour_continuous_history_pilot_v1.py -v
+      - name: Download frozen completed Japan38 tree result
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.FROZEN_JAPAN38_ARTIFACT }}
+          path: frozen_japan38
+          run-id: ${{ env.FROZEN_JAPAN38_RUN_ID }}
+          github-token: ${{ github.token }}
+      - name: Run continuous colour history pilot on real Japan38 ML tree
+        run: |
+          set -euo pipefail
+          mkdir -p colour_history
+          python analysis/run_japan38_colour_continuous_history_pilot_v1.py \
+            --tree frozen_japan38/tree_result/japan38_comp1061.treefile \
+            --concept-map frozen_japan38/work/japan38_subset/concept_map.csv \
+            --colour-bridge data/evidence/japan38_colour_continuous_bridge_v1.csv \
+            --permutations 999 \
+            --seed 20260826 \
+            --output colour_history/japan38_colour_continuous_history_pilot_v1.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('colour_history/japan38_colour_continuous_history_pilot_v1.json').read_text())
+          assert x['tree_contract']['exact_colour_concepts']==14
+          assert x['tree_contract']['branch_length_semantics']=='substitution-length phylogram; not dated time'
+          assert x['trait_contract']['continuous_only'] is True
+          assert x['trait_contract']['discrete_colour_state_frozen'] is False
+          assert set(x['subsets'])=={
+            'n_colour_usable_ge_1','n_colour_usable_ge_5','n_colour_usable_ge_10'
+          }
+          assert x['subsets']['n_colour_usable_ge_1']['n_concepts']==14
+          assert x['subsets']['n_colour_usable_ge_5']['n_concepts']==6
+          assert x['subsets']['n_colour_usable_ge_10']['n_concepts']==5
+          assert set(x['subsets']['n_colour_usable_ge_10']['paper_japan_member_ids'])=={
+            'JPN_17','JPN_23','JPN_36','JPN_37','JPN_38'
+          }
+          expected={
+            'corolla_lab_lightness_species_median',
+            'corolla_lab_chroma_species_median',
+            'corolla_hue_sin_species_median',
+            'corolla_hue_cos_species_median',
+          }
+          expected_perm={
+            'n_colour_usable_ge_1':('monte_carlo_label_permutations',999),
+            'n_colour_usable_ge_5':('exact_all_label_permutations',720),
+            'n_colour_usable_ge_10':('exact_all_label_permutations',120),
+          }
+          for name,subset in x['subsets'].items():
+            assert set(subset['metrics'])==expected
+            mode,nperm=expected_perm[name]
+            for m in subset['metrics'].values():
+              lam=m['pagel_lambda']['lambda_mle']
+              assert 0.0 <= lam <= 1.0
+              p=m['pairwise_signal']
+              assert p['permutation_mode']==mode
+              assert p['permutations_usable']==nperm
+              assert 0.0 <= p['one_sided_label_permutation_p_positive_structure'] <= 1.0
+              assert 0.0 <= p['one_sided_label_permutation_p_negative_structure'] <= 1.0
+              assert 0.0 <= p['two_sided_label_permutation_p'] <= 1.0
+              assert len(p['leave_one_taxon_out']['rho_by_omitted_taxon'])==subset['n_concepts']
+            h=subset['circular_hue_pairwise_signal']
+            assert h['permutation_mode']==mode
+            assert h['permutations_usable']==nperm
+            assert len(h['leave_one_taxon_out']['rho_by_omitted_taxon'])==subset['n_concepts']
+          print(json.dumps(x,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-colour-continuous-history-${{ github.run_id }}
+          path: colour_history/japan38_colour_continuous_history_pilot_v1.json
+          if-no-files-found: error
+          retention-days: 90

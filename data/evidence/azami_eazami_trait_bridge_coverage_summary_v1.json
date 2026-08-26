@@ -1,6 +1,9 @@
 {
   "contract_version": "azami_eazami_trait_bridge_coverage_summary_v1",
   "date": "2026-08-16",
+  "status": "historical_balanced_atlas_snapshot_superseded_for_japan38_coverage",
+  "current_japan38_coverage_pointer": "data/evidence/japan38_azami_exhaustive_trait_coverage_summary_v1.json",
+  "current_colour_bridge_pointer": "data/evidence/japan38_colour_continuous_bridge_v1.json",
   "azami_source": {
     "repo": "zuizui0223/azami",
     "branch": "agent/macro-to-micro-handoff-20260816",
@@ -15,44 +18,18 @@
     "n_taxa_with_orientation": 214,
     "n_taxa_with_auxiliary_involucre_spine": 210
   },
-  "exact_nuclear_name_overlap": {
-    "moreyra2025_exact_azami_taxa": 111,
-    "chang2025_2026_additional_exact_azami_taxa": 5,
-    "union_exact_nuclear_matched_azami_taxa": 116,
-    "union_exact_fraction_of_azami_taxa": 0.5370370370370371,
-    "chang_additional_taxa": [
-      "Cirsium brevicaule",
-      "Cirsium irumtiense",
-      "Cirsium kawakamii",
-      "Cirsium morii",
-      "Cirsium tatakaense"
-    ]
-  },
-  "japan38_trait_coverage": {
+  "balanced_216_atlas_japan38_trait_coverage": {
     "paper_taxon_concepts": 38,
     "concepts_with_any_azami_binomial_trait_coverage": 11,
     "concepts_with_exact_azami_taxon_concept_coverage": 10,
     "concepts_without_azami_binomial_trait_coverage": 27,
-    "covered_binomial_taxa": [
-      "Cirsium aomorense",
-      "Cirsium japonicum",
-      "Cirsium kamtschaticum",
-      "Cirsium lineare",
-      "Cirsium maritimum",
-      "Cirsium oligophyllum",
-      "Cirsium pendulum",
-      "Cirsium sieboldii",
-      "Cirsium suzukaense",
-      "Cirsium verutum",
-      "Cirsium yezoense"
-    ],
-    "important_boundary": "Cirsium japonicum var. horridum has only broad Cirsium japonicum image-trait coverage, so it is retained as binomial-level sensitivity and not an exact infraspecific trait assignment."
+    "important_boundary": "These 10/38 and 11/38 counts describe only the balanced 216-taxon handoff atlas. They are not the current Japan38 coverage ceiling. The later exhaustive strict-spatial cohort recovers 14 exact concepts and 17 paper concepts at binomial level."
   },
-  "new_bottleneck": {
-    "finding": "The global Azami trait atlas can be linked directly to more than half of its taxa in current nuclear resources, but the Japanese 38-concept radiation is much more sparsely covered by image traits.",
-    "consequence": "A radiation-wide Japanese trait-rate analysis cannot rely on the current Azami Chapter 1 trait atlas alone. Missing Japanese trait data are a trait-coverage gap, not a reason to resequence already represented species for phylogenetic placement.",
-    "next_public_data_action": "Before new field sampling, search public images/herbarium/flora evidence specifically for the 27 Japan-38 concepts lacking Azami binomial coverage and assess whether orientation/colour/outline/involucre proxies can be recovered under the existing measurement ontology.",
-    "tree_dependency": "Formal trait-rate and ancestral-state tests still wait for the accepted EAzami nuclear topology ensemble and branch lengths."
+  "superseding_exhaustive_result": {
+    "exact_japan38_concepts": 14,
+    "paper_concepts_represented_at_binomial_level": 17,
+    "row_level_continuous_colour_bridge": "recovered for 14 exact concepts",
+    "exact_concepts_with_at_least_10_colour_usable_observations": 5
   },
-  "claim_boundary": "Exact normalized taxon-name overlap is a coverage audit only. It does not establish voucher equivalence, population phenotype identity, direct ancestry, evolutionary rate, adaptation or an ancestral state."
+  "claim_boundary": "Historical balanced-atlas coverage snapshot only. Do not use the 10/38 count as current Japan38 colour coverage; use the exhaustive coverage summary and continuous colour bridge for current execution status."
 }

@@ -1,0 +1,85 @@
+{
+  "contract_version": "fdt7_legacy_simulation_bridge_v2",
+  "status_date": "2026-08-25",
+  "purpose": "Connect the validated legacy capitulum pattern-reduction structure to the preregistered FDT7 evolutionary model family while preserving the boundary between present structural adequacy and time-axis evidence.",
+  "legacy_simulation": {
+    "implementation": "analysis/simulate_capitulum_pattern_reduction_v2.py",
+    "target_registry": "data/evidence/capitulum_pattern_reduction_targets_v2.csv",
+    "target_rows": 36,
+    "replicate_sensitivity": "data/evidence/capitulum_pattern_reduction_v2_replicate_sensitivity.json",
+    "replicate_ranking": [
+      "FULL_MODULAR_HET",
+      "FULL_MODULAR_GLOBAL",
+      "FULL_COUPLED_HET",
+      "FULL_COUPLED_GLOBAL",
+      "ENV_POLL",
+      "ENV_ANT",
+      "ENV_ONLY"
+    ],
+    "best_family": "FULL_MODULAR_HET",
+    "best_mean_distance": 7.74973539,
+    "claim_boundary": "Prior-predictive structural sufficiency only; not posterior model probability, Bayes factor or causal proof."
+  },
+  "fdt7_definition_source": "data/evidence/functional_diversity_time_meta_registry_v1.csv",
+  "time_axis_seed": {
+    "registry": "data/evidence/fdt7_time_axis_simulation_seed_v2.csv",
+    "changes_from_v1": [
+      "retain orientation repeated-transition lower bound",
+      "replace single Cremanthodium orientation functional target with study-specific Cremanthodium and Polygonatum reproductive-fitness calibrations",
+      "add orientation between-study tau2 and I2 as context-heterogeneity diagnostics"
+    ],
+    "orientation_function_boundary": "Both direct manipulations favour the natural downward/nodding state for reproductive success, but effect magnitude is highly heterogeneous; no universal or Cirsium-specific fixed RR is assumed."
+  },
+  "model_aliases": {
+    "M0": {
+      "name": "neutral_or_unconstrained",
+      "legacy_starting_point": "ENV_ONLY plus neutral BM/Mk time-axis process",
+      "status": "time-axis implementation required"
+    },
+    "M1": {
+      "name": "single_abiotic_driver",
+      "legacy_starting_point": "environment-dominated baseline",
+      "status": "time-axis implementation required"
+    },
+    "M2": {
+      "name": "single_biotic_driver",
+      "legacy_starting_point": "ENV_POLL or ENV_ANT depending preregistered agent",
+      "status": "time-axis implementation required"
+    },
+    "M3": {
+      "name": "common_lability",
+      "legacy_starting_point": "FULL_COUPLED_HET is the closest existing structural analogue because modules share a common lability component while ecological interaction regimes may vary",
+      "status": "branch-indexed implementation required"
+    },
+    "M4": {
+      "name": "modular_selection_mosaic",
+      "legacy_starting_point": "FULL_MODULAR_HET",
+      "status": "preferred structural starting family, not yet time-axis winner"
+    },
+    "M5": {
+      "name": "modular_mosaic_plus_ecological_opportunity_pulse",
+      "legacy_starting_point": "FULL_MODULAR_HET plus dated event-window pulse layer",
+      "status": "blocked_until_dated_tree_and_event_inputs"
+    }
+  },
+  "new_observed_time_axis_inputs": {
+    "available_now": [
+      "orientation minimum repeated-change lower bound",
+      "orientation branchwise niche-concordance candidates",
+      "direct multi-trait pilot showing weak obligatory display-orientation-defence coupling",
+      "orientation reproductive-fitness effect heterogeneity",
+      "antagonist cost and display interaction heterogeneity"
+    ],
+    "pending_japan38_rebuild": [
+      "orientation/phyllary/stickiness minimum transition distributions",
+      "JPN20 monophyly sensitivity",
+      "branchwise cross-module transition overlap"
+    ],
+    "blocked_until_dated_tree": [
+      "functional disparity through absolute time",
+      "transition concentration around Pleistocene/fragmentation events",
+      "M5 ecological-opportunity pulse"
+    ]
+  },
+  "decision_rule_after_japan38": "Use Japan38 module-transition counts and branch-overlap diagnostics as new posterior-predictive targets. Strong positive cross-module branch overlap favours the common-lability target family; weak or module-specific overlap combined with distinct ecological associations favours modular-mosaic targets. Neither outcome alone demonstrates adaptive or genetic modularity."
+}

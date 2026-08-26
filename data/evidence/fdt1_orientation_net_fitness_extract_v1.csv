@@ -1,0 +1,3 @@
+study_id,taxon,family,treatment_natural_or_protective_mean,treatment_natural_or_protective_se,treatment_natural_or_protective_n,forced_or_alternative_mean,forced_or_alternative_se,forced_or_alternative_n,endpoint,scale,source_id,claim_boundary
+ORI_FIT_CREM_01,Cremanthodium campanulatum,Asteraceae,56.3,3.9,30,15.7,3.6,30,achene_set,percent,10.1080/17550874.2012.702793,"Natural nodding vs experimentally held erect; reported mean +/- SE. External Asteraceae calibration."
+ORI_FIT_POLY_01,Polygonatum cyrtonema,Asparagaceae,0.40,0.03,30,0.31,0.02,30,seed_set,proportion,10.1002/ece3.73221,"Natural downward vs manipulated upward; 2024/2025 reproductive experiment; reported mean +/- SE."

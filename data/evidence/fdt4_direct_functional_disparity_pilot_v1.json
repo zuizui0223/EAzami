@@ -1,0 +1,23 @@
+{
+  "contract_version": "fdt4_direct_functional_disparity_pilot_v1",
+  "status_date": "2026-08-25",
+  "taxa": [
+    "Cirsium japonicum var. albescens",
+    "Cirsium japonicum var. australe",
+    "Cirsium brevicaule",
+    "Cirsium irumtiense",
+    "Cirsium kawakamii",
+    "Cirsium pengii",
+    "Cirsium tatakaense"
+  ],
+  "axes": [
+    "direct capitulum width",
+    "direct phyllary protrusion",
+    "binary orientation",
+    "binary white-versus-coloured corolla"
+  ],
+  "standardized_pca_variance_fraction": [0.51929318, 0.26112282, 0.19804735, 0.02153665],
+  "interpretation": "The first standardized axis explains about 52% rather than collapsing the four observed modules to one dominant axis. Display width is nearly uncorrelated with phyllary protrusion, orientation and colour in this restricted panel, while phyllary protrusion is strongly correlated with orientation because the sampled taxa are lineage-clustered.",
+  "hypothesis_consequence": "Retain module-specific functional disparity and common-lability as competing models. The present pilot is sufficient to motivate the comparison but not to choose between them.",
+  "claim_boundary": "Seven lineage-clustered taxa, mixed binary and continuous traits, and no dated-tree correction. This is a functional-space pilot only, not evidence of adaptive radiation, convergence or modular genetic architecture."
+}

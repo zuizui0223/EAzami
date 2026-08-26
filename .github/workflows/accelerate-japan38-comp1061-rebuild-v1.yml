@@ -1,0 +1,130 @@
+name: Accelerate Japan38 Comp1061 rebuild v1
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/accelerate-japan38-comp1061-rebuild-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: japan38-comp1061-accelerator-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  FROZEN_TREE_RUN_ID: "32823196992"
+  FROZEN_TREE_ARTIFACT: "japan38-comp1061-accelerated-tree-32823196992"
+  FROZEN_CONCAT_SHA256: "60693300e56fc3f05e937db5b62bd600e217fb3a8598fcb4c713838b400da26f"
+  FROZEN_PARTITIONS_SHA256: "30e6e5703a76b4065c3903c04b43179fb538d280539df66c7bf64706962a128e"
+  FROZEN_SUMMARY_SHA256: "8170b2fb33384cecfa7d42997fc637c682eb8c61bd8302140be125fa4ad238f5"
+
+jobs:
+  retry_tree_only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download frozen successful matrix from failed tree-stage run
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.FROZEN_TREE_ARTIFACT }}
+          path: frozen_artifact
+          run-id: ${{ env.FROZEN_TREE_RUN_ID }}
+          github-token: ${{ github.token }}
+      - uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-name: japan38-tree-retry
+          create-args: >-
+            python=3.11
+            iqtree=2.4.0
+            biopython
+          condarc: |
+            channels:
+              - conda-forge
+              - bioconda
+            channel_priority: strict
+          init-shell: none
+          generate-run-shell: true
+          cache-environment: true
+          cache-downloads: true
+          post-cleanup: all
+      - name: Verify frozen tree matrix contract
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          test -s frozen_artifact/tree_result/japan38_concat.fasta
+          test -s frozen_artifact/tree_result/partitions.csv
+          test -s frozen_artifact/tree_result/concat_summary.json
+          echo "$FROZEN_CONCAT_SHA256  frozen_artifact/tree_result/japan38_concat.fasta" | sha256sum -c -
+          echo "$FROZEN_PARTITIONS_SHA256  frozen_artifact/tree_result/partitions.csv" | sha256sum -c -
+          echo "$FROZEN_SUMMARY_SHA256  frozen_artifact/tree_result/concat_summary.json" | sha256sum -c -
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('frozen_artifact/tree_result/concat_summary.json').read_text())
+          assert x['contract_version']=='japan38_comp1061_concat_v1'
+          assert x['loci']==176
+          assert x['focal_tips']==39
+          assert x['tree_tip_count']==40
+          assert x['root_tip']=='OUTGROUP_saff'
+          assert x['alignment_length']==161654
+          print(json.dumps(x,indent=2))
+          PY
+      - name: Rebuild frozen 38-concept map without sequence recovery
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          mkdir -p work/moreyra work/global_panel work/japan38_subset
+          python analysis/materialize_frozen_moreyra_reconciliation.py \
+            --output work/moreyra/moreyra2025_all_sample_reconciliation.csv
+          echo "cf3af71a1a77eee5bd177cef9cf8106b749b949eaacc0ad82bbb331978084505  work/moreyra/moreyra2025_all_sample_reconciliation.csv" | sha256sum -c -
+          python analysis/build_japan_origin_global_public_panel_v2.py \
+            --moreyra-reconciliation work/moreyra/moreyra2025_all_sample_reconciliation.csv \
+            --outdir work/global_panel
+          python analysis/build_japan38_comp1061_subset_panel_v1.py \
+            --global-panel work/global_panel/japan_origin_global_public_panel_v2.csv \
+            --japan38-audit data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv \
+            --outdir work/japan38_subset
+          test -s work/japan38_subset/concept_map.csv
+      - name: Infer pinned IQ-TREE 2 primary tree from frozen matrix
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          mkdir -p tree_result
+          cp frozen_artifact/tree_result/japan38_concat.fasta tree_result/
+          cp frozen_artifact/tree_result/partitions.csv tree_result/
+          cp frozen_artifact/tree_result/concat_summary.json tree_result/
+          IQTREE_BIN="$(command -v iqtree2 || true)"
+          if [[ -z "$IQTREE_BIN" ]]; then
+            echo "Pinned IQ-TREE 2 executable iqtree2 is unavailable" >&2
+            micromamba list iqtree || true
+            exit 127
+          fi
+          micromamba list iqtree | tee tree_result/iqtree_package_version.txt
+          "$IQTREE_BIN" -s tree_result/japan38_concat.fasta -m MFP -B 1000 --alrt 1000 -wbt -T AUTO -seed 20260825 -o OUTGROUP_saff --prefix tree_result/japan38_comp1061
+          test -s tree_result/japan38_comp1061.treefile
+          test -s tree_result/japan38_comp1061.ufboot
+      - name: Map multiple capitulum traits on reconstructed Japan38 tree
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          python analysis/summarize_japan38_multitrait_parsimony_v1.py \
+            --tree tree_result/japan38_comp1061.treefile \
+            --concept-map work/japan38_subset/concept_map.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --bootstrap-trees tree_result/japan38_comp1061.ufboot \
+            --output tree_result/japan38_multitrait_parsimony_v1.json
+          cat tree_result/japan38_multitrait_parsimony_v1.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: japan38-comp1061-frozen-tree-retry-${{ github.run_id }}
+          path: |
+            work/japan38_subset/summary.json
+            work/japan38_subset/concept_map.csv
+            tree_result
+          if-no-files-found: warn
+          retention-days: 90

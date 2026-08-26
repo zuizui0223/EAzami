@@ -1,0 +1,67 @@
+{
+  "contract_version": "japan38_colour_continuous_bridge_v1",
+  "status_date": "2026-08-26",
+  "source": {
+    "repo": "zuizui0223/azami",
+    "workflow_run": 29306454759,
+    "artifact_id": 8301295025,
+    "artifact_name": "ch1-strict-spatial-cohort-only-20260713",
+    "artifact_digest": "sha256:f453e36b1867bbb0a239253c2cdfa4a4a6b8f6117a9e814db7224e8b060a440a",
+    "cohort": "strict_spatial_thinned_observations",
+    "n_source_observations": 46276
+  },
+  "coverage": {
+    "japan38_paper_concepts": 38,
+    "exact_japan38_concepts": 14,
+    "exact_fraction": 0.3684210526315789,
+    "binomial_level_sensitivity_only_concepts": [
+      "JPN_12",
+      "JPN_20",
+      "JPN_21"
+    ],
+    "paper_concepts_represented_at_binomial_level": 17,
+    "exact_concepts_with_n_colour_usable_ge_10": 5,
+    "exact_concepts_with_n_colour_usable_ge_10_ids": [
+      "JPN_17",
+      "JPN_23",
+      "JPN_36",
+      "JPN_37",
+      "JPN_38"
+    ],
+    "exact_concepts_with_any_colour": [
+      "JPN_05",
+      "JPN_15",
+      "JPN_17",
+      "JPN_22",
+      "JPN_23",
+      "JPN_26",
+      "JPN_27",
+      "JPN_29",
+      "JPN_30",
+      "JPN_32",
+      "JPN_35",
+      "JPN_36",
+      "JPN_37",
+      "JPN_38"
+    ]
+  },
+  "state_definition": {
+    "type": "continuous_image_derived",
+    "metrics": [
+      "corolla_lab_lightness_species_median",
+      "corolla_lab_chroma_species_median",
+      "corolla_hue_sin_species_median",
+      "corolla_hue_cos_species_median",
+      "corolla_hue_degrees_species_circular"
+    ],
+    "aggregation": "median across strict-spatial observation-level automated head measurements; MAD retained",
+    "discrete_colour_state_frozen": false
+  },
+  "history_readiness": {
+    "row_level_exact_bridge": "recovered",
+    "discrete_transition_history": "not_ready_no_frozen_state_ontology_and_sparse_exact_coverage",
+    "continuous_history_pilot": "possible_with_uncertainty_caution",
+    "recommended_next_step": "Run a continuous-trait phylogenetic pilot with observation-count/dispersion sensitivity, but do not convert hue/chroma/lightness to C/W states merely to enter the three-module Sankoff/Mk overlap analysis."
+  },
+  "claim_boundary": "Exact Japan38 concept-level continuous image-trait bridge only. JPN_12 var. horridum and JPN_20/JPN_21 nipponicum varieties remain binomial-level sensitivities and are not assigned the broad species phenotype. Image-derived medians do not establish fixed population colour, ancestral colour, transition direction, or adaptation."
+}

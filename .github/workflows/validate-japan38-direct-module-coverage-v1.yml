@@ -1,0 +1,91 @@
+name: Validate Japan38 direct module coverage v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_japan38_direct_module_coverage_v1.py"
+      - "analysis/build_japan38_colour_continuous_bridge_v1.py"
+      - "tests/test_japan38_direct_module_coverage_v1.py"
+      - "tests/test_japan38_colour_continuous_bridge_v1.py"
+      - "data/evidence/comp1061_display_size_direct_seed_v1.csv"
+      - "data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv"
+      - "data/evidence/japan38_azami_exhaustive_trait_coverage_summary_v1.json"
+      - "data/evidence/japan38_colour_continuous_bridge_v1.csv"
+      - "data/evidence/japan38_colour_continuous_bridge_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v2.json"
+      - ".github/workflows/validate-japan38-direct-module-coverage-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-japan38-direct-module-coverage-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile and test strict concept matching
+        run: |
+          python -m py_compile analysis/audit_japan38_direct_module_coverage_v1.py
+          python -m py_compile analysis/build_japan38_colour_continuous_bridge_v1.py
+          python -m unittest tests/test_japan38_direct_module_coverage_v1.py -v
+          python -m unittest tests/test_japan38_colour_continuous_bridge_v1.py -v
+      - name: Audit direct display and exhaustive Azami colour bridge coverage
+        run: |
+          set -euo pipefail
+          mkdir -p audit_result
+          python analysis/audit_japan38_direct_module_coverage_v1.py \
+            --membership-audit data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv \
+            --display-seed data/evidence/comp1061_display_size_direct_seed_v1.csv \
+            --azami-exhaustive-summary data/evidence/japan38_azami_exhaustive_trait_coverage_summary_v1.json \
+            --colour-continuous-summary data/evidence/japan38_colour_continuous_bridge_v1.json \
+            --readiness data/evidence/fdt_multitrait_execution_readiness_v2.json \
+            --output audit_result/japan38_direct_module_coverage_audit_v1.json
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          x=json.loads(Path('audit_result/japan38_direct_module_coverage_audit_v1.json').read_text())
+          d=x['display_size_direct']
+          assert d['source_rows']==15
+          assert d['exact_japan38_concepts']==5
+          assert d['largest_comparable_metric_group']=='involucre_live_diameter'
+          assert d['largest_comparable_metric_group_n']==5
+          ids={r['paper_japan_member_id'] for r in d['exact_matches']}
+          assert ids=={'JPN_03','JPN_09','JPN_19','JPN_30','JPN_37'}
+          assert not any(r['paper_japan_member_id']=='JPN_24' for r in d['exact_matches'])
+          assert any(r['normalized_concept']=='Cirsium suffultum' for r in d['unmatched_source_rows'])
+          b=x['azami_image_trait_bridge']
+          assert b['paper_concepts_with_exact_taxon_concept_trait_match']==14
+          assert b['paper_concepts_represented_at_binomial_level']==17
+          assert b['row_level_colour_continuous_exact_concepts']==14
+          assert b['row_level_colour_join_available_in_this_audit'] is True
+          assert b['exact_colour_concepts_with_n_usable_ge_10']==5
+          assert set(b['exact_colour_concepts_with_n_usable_ge_10_ids'])=={'JPN_17','JPN_23','JPN_36','JPN_37','JPN_38'}
+          assert b['discrete_colour_state_frozen'] is False
+          rows=list(csv.DictReader(Path('data/evidence/japan38_colour_continuous_bridge_v1.csv').open()))
+          assert len(rows)==14
+          assert {r['paper_japan_member_id'] for r in rows}=={
+            'JPN_05','JPN_15','JPN_17','JPN_22','JPN_23','JPN_26','JPN_27',
+            'JPN_29','JPN_30','JPN_32','JPN_35','JPN_36','JPN_37','JPN_38'
+          }
+          missing={r['paper_japan_member_id'] for r in x['high_leverage_targets_missing_direct_display']}
+          assert missing=={'JPN_06','JPN_15','JPN_24','JPN_34','JPN_36'}
+          assert x['display_history_readiness']=='not_promoted_sparse_exact_coverage'
+          assert x['colour_history_readiness']=='continuous_pilot_only_discrete_state_not_frozen'
+          print(json.dumps(x,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-direct-module-coverage-${{ github.run_id }}
+          path: audit_result/japan38_direct_module_coverage_audit_v1.json
+          if-no-files-found: error
+          retention-days: 90

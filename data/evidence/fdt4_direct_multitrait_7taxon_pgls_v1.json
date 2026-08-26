@@ -1,0 +1,49 @@
+{
+  "contract_version": "fdt4_direct_multitrait_7taxon_pgls_v1",
+  "status_date": "2026-08-25",
+  "scope": "exploratory direct-measurement screen on seven taxa with harmonized comparative capitulum-width and phyllary-protrusion measurements",
+  "taxa": [
+    "Cirsium brevicaule",
+    "Cirsium irumtiense",
+    "Cirsium japonicum var. albescens",
+    "Cirsium japonicum var. australe",
+    "Cirsium kawakamii",
+    "Cirsium pengii",
+    "Cirsium tatakaense"
+  ],
+  "tree_provenance": {
+    "au_run": 32614839764,
+    "au_artifact": 9486643703,
+    "topologies": "six AU-nonrejected optimized Comp1061 topologies"
+  },
+  "inputs": {
+    "display_seed": "data/evidence/comp1061_display_size_direct_seed_v1.csv",
+    "phyllary_seed": "data/evidence/comp1061_phyllary_direct_seed_v1.csv",
+    "orientation_seed": "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv"
+  },
+  "results": {
+    "capitulum_width_by_orientation": {
+      "beta_D_minus_U_sd_min": -0.204571,
+      "beta_D_minus_U_sd_max": -0.203532,
+      "p_min": 0.893301,
+      "p_max": 0.893488,
+      "interpretation": "No evidence that the directly measured capitulum-width component is obligatorily coupled to erect versus nodding state in this seven-taxon panel."
+    },
+    "phyllary_protrusion_by_orientation": {
+      "beta_D_minus_U_sd_min": -1.584538,
+      "beta_D_minus_U_sd_max": -1.583004,
+      "p_min": 0.055268,
+      "p_max": 0.056195,
+      "interpretation": "Nodding taxa have smaller phyllary protrusion in this restricted panel, but the association is borderline and strongly vulnerable to clade/sample composition."
+    },
+    "phyllary_protrusion_by_capitulum_width": {
+      "beta_sd_min": 0.089454,
+      "beta_sd_max": 0.089567,
+      "p_min": 0.770892,
+      "p_max": 0.771065,
+      "interpretation": "Direct display width and phyllary protrusion are not detectably coupled after Brownian phylogenetic correction in this restricted panel."
+    }
+  },
+  "hypothesis_consequence": "The direct measurements do not support a single obligatory display-orientation-defence axis. They justify testing module-specific transition histories against the common-lability alternative once Japan38/expanded topology and broader direct trait coverage are available.",
+  "claim_boundary": "Seven taxa are insufficient for a general adaptive or convergence claim. Taxa are clustered by lineage and source study, so these values are a diagnostic only. Do not interpret the phyllary-orientation result as defensive adaptation."
+}
