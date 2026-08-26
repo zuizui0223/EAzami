@@ -22,10 +22,10 @@
   "decision": "The Commons category provides no explicit Japan locality independent of the already-used Fukushima/Aizu series. One Dalgial file is explicitly Kimpo, Korea; four same-author/same-date Dalgial files lack locality metadata and are not assigned to Korea or Japan by inference.",
   "decision_boundary": "A different filename or photograph is not an independent population replicate. Promote only files whose metadata explicitly establish a Japan locality distinct from Fukushima/Aizu, or whose coordinates can independently establish such a locality.",
   "validation": {
-    "workflow_run": 32931446056,
-    "artifact_id": 9593336269,
-    "artifact_name": "jpn38-commons-independent-locality-audit-32931446056",
-    "artifact_digest": "sha256:4ef6445e44379b545890a3e1a55c7036096169ea05282eb7cb1fd5bcd61e6076"
+    "workflow_run": 32931725935,
+    "artifact_id": 9593426462,
+    "artifact_name": "jpn38-commons-independent-locality-audit-32931725935",
+    "artifact_digest": "sha256:c2bdeb9383961a5beb5e2ddffe4e275053da7df7f246030c78e1d86ea433613f"
   },
   "claim_boundary": "Commons metadata audit only. Absence of explicit locality metadata is missing provenance, not evidence that the photograph was taken outside Japan. Same author/date association with an explicitly Korean file is not used to impute geography for unlabeled files."
 }
