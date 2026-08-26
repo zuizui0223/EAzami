@@ -53,6 +53,10 @@ def norm(value) -> str:
     return re.sub(r"[^a-z0-9]", "", str(value or "").lower())
 
 
+def present(value) -> bool:
+    return value is not None and value != "" and value != []
+
+
 def collector_number_match(recorded_by, record_number) -> bool:
     return "yonekura" in norm(recorded_by) and TARGET_NUMBER in norm(record_number)
 
@@ -64,7 +68,7 @@ def catalog_match(*values) -> bool:
 
 def first_value(*values):
     for value in values:
-        if value not in {None, "", []}:
+        if present(value):
             return value
     return None
 
@@ -211,7 +215,7 @@ def summarize(gbif: dict, idigbio: dict):
         determination_fields.append(vals)
 
     determination_informative = any(
-        any(v not in {None, "", []} for k, v in row.items() if k not in {"source", "scientific_name", "accepted_name"})
+        any(present(v) for k, v in row.items() if k not in {"source", "scientific_name", "accepted_name"})
         for row in determination_fields
     )
     routes_ok = {
