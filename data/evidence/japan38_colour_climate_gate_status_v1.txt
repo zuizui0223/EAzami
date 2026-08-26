@@ -1,0 +1,2 @@
+Implementation branch: agent/japan38-colour-climate-gate-v1-20260826
+Primary decision contract: data/evidence/japan38_colour_climate_gate_contract_v1.json
