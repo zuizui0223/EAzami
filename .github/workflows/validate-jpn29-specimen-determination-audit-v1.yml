@@ -1,0 +1,64 @@
+name: Validate JPN29 specimen determination audit v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_jpn29_specimen_determination_v1.py"
+      - "tests/test_jpn29_specimen_determination_v1.py"
+      - "data/evidence/jpn29_specimen_determination_public_api_audit_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v8.json"
+      - ".github/workflows/validate-jpn29-specimen-determination-audit-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-jpn29-specimen-determination-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile and unit test
+        run: |
+          python -m py_compile analysis/audit_jpn29_specimen_determination_v1.py
+          python -m unittest tests/test_jpn29_specimen_determination_v1.py -v
+      - name: Audit public specimen aggregators
+        run: |
+          set -euo pipefail
+          mkdir -p result
+          python analysis/audit_jpn29_specimen_determination_v1.py \
+            --output result/jpn29_specimen_determination_public_api_audit_v1.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('result/jpn29_specimen_determination_public_api_audit_v1.json').read_text())
+          assert x['contract_version']=='jpn29_specimen_determination_public_api_audit_v1'
+          assert x['target']['catalog_number']=='PE01523822'
+          assert x['target']['collector_number']=='6788'
+          assert set(x['sources'])=={'GBIF','iDigBio'}
+          assert isinstance(x['exact_catalog_hits'],list)
+          assert isinstance(x['collector_number_hits'],list)
+          assert isinstance(x['determination_history_resolved'],bool)
+          frozen=Path('data/evidence/jpn29_specimen_determination_public_api_audit_v1.json')
+          if frozen.exists():
+              f=json.loads(frozen.read_text())
+              for key in ['exact_catalog_hit_count','collector_number_hit_count','determination_history_resolved']:
+                  assert f[key]==x[key], (key,f[key],x[key])
+              readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v8.json').read_text())
+              assert readiness['colour']['jpn29_public_aggregator_audit']['determination_history_resolved']==x['determination_history_resolved']
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jpn29-specimen-determination-audit-${{ github.run_id }}
+          path: result/jpn29_specimen_determination_public_api_audit_v1.json
+          if-no-files-found: error
+          retention-days: 90
