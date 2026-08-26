@@ -143,11 +143,12 @@ def run_query_set(api: str, queries: dict[str, dict[str, object]], *, idigbio=Fa
 
 
 def gbif_queries():
+    # GBIF occurrence-search parameters use Darwin Core-style camelCase names.
     return run_query_set(GBIF_API, {
-        "catalog_full": {"catalog_number": TARGET_CATALOG, "limit": 300},
-        "catalog_numeric_pe": {"catalog_number": TARGET_CATALOG_NUMERIC, "institution_code": "PE", "limit": 300},
-        "record_number_japan": {"record_number": TARGET_NUMBER, "country": "JP", "limit": 300},
-        "collector_taxon_japan": {"recorded_by": TARGET_COLLECTOR, "scientific_name": TARGET_TAXON, "country": "JP", "limit": 300},
+        "catalog_full": {"catalogNumber": TARGET_CATALOG, "limit": 300},
+        "catalog_numeric_pe": {"catalogNumber": TARGET_CATALOG_NUMERIC, "institutionCode": "PE", "limit": 300},
+        "record_number_japan": {"recordNumber": TARGET_NUMBER, "country": "JP", "limit": 300},
+        "collector_taxon_japan": {"recordedBy": TARGET_COLLECTOR, "scientificName": TARGET_TAXON, "country": "JP", "limit": 300},
     })
 
 
