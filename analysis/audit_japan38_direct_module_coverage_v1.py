@@ -22,12 +22,7 @@ def read_csv(path: Path):
 
 
 def concept_key(text: str) -> str:
-    """Return genus + species + optional infraspecific rank/epithet.
-
-    Authority strings may occur between the species epithet and ``var.`` in the
-    Moreyra audit, so rank tokens are searched globally rather than assumed to be
-    adjacent to the species epithet.
-    """
+    """Return genus + species + optional infraspecific rank/epithet."""
     clean = " ".join((text or "").replace("×", "x").split())
     m = re.match(r"^([A-Z][A-Za-z-]+)\s+([a-z][A-Za-z-]+)", clean)
     if not m:
@@ -140,7 +135,8 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--membership-audit", type=Path, required=True)
     p.add_argument("--display-seed", type=Path, required=True)
-    p.add_argument("--azami-bridge-summary", type=Path, required=True)
+    p.add_argument("--azami-exhaustive-summary", type=Path, required=True)
+    p.add_argument("--colour-continuous-summary", type=Path, required=True)
     p.add_argument("--readiness", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     a = p.parse_args()
@@ -150,30 +146,50 @@ def main():
     if len(audit) != 38:
         raise ValueError(f"expected 38 Japan concepts, found {len(audit)}")
     d = display_audit(audit, display)
-    bridge = json.loads(a.azami_bridge_summary.read_text(encoding="utf-8"))
+    exhaustive = json.loads(a.azami_exhaustive_summary.read_text(encoding="utf-8"))
+    colour = json.loads(a.colour_continuous_summary.read_text(encoding="utf-8"))
     readiness = json.loads(a.readiness.read_text(encoding="utf-8"))
     exact_ids = {r["paper_japan_member_id"] for r in d["exact_matches"]}
     leverage = high_leverage_targets(readiness, exact_ids)
+
+    ex_cov = exhaustive["japan38_coverage"]
+    col_cov = colour["coverage"]
+    if ex_cov["paper_concepts_with_exact_taxon_concept_trait_match"] != col_cov["exact_japan38_concepts"]:
+        raise ValueError("exhaustive coverage summary and continuous colour bridge disagree on exact concept count")
+    if ex_cov["paper_concepts_represented_at_binomial_level"] != col_cov["paper_concepts_represented_at_binomial_level"]:
+        raise ValueError("exhaustive coverage summary and continuous colour bridge disagree on binomial coverage")
 
     result = {
         "contract_version": "japan38_direct_module_coverage_audit_v1",
         "japan38_concepts": len(audit),
         "display_size_direct": d,
         "azami_image_trait_bridge": {
-            "concepts_with_exact_azami_taxon_concept_coverage": bridge[
-                "japan38_trait_coverage"
-            ]["concepts_with_exact_azami_taxon_concept_coverage"],
-            "concepts_with_any_azami_binomial_trait_coverage": bridge[
-                "japan38_trait_coverage"
-            ]["concepts_with_any_azami_binomial_trait_coverage"],
-            "covered_binomial_taxa": bridge["japan38_trait_coverage"][
-                "covered_binomial_taxa"
+            "paper_concepts_with_exact_taxon_concept_trait_match": ex_cov[
+                "paper_concepts_with_exact_taxon_concept_trait_match"
             ],
-            "row_level_colour_join_available_in_this_audit": False,
+            "paper_concepts_represented_at_binomial_level": ex_cov[
+                "paper_concepts_represented_at_binomial_level"
+            ],
+            "distinct_trait_taxa_with_at_least_10_observations": ex_cov[
+                "distinct_trait_taxa_with_at_least_10_observations"
+            ],
+            "row_level_colour_continuous_exact_concepts": col_cov[
+                "exact_japan38_concepts"
+            ],
+            "row_level_colour_join_available_in_this_audit": True,
+            "exact_colour_concepts_with_n_usable_ge_10": col_cov[
+                "exact_concepts_with_n_colour_usable_ge_10"
+            ],
+            "exact_colour_concepts_with_n_usable_ge_10_ids": col_cov[
+                "exact_concepts_with_n_colour_usable_ge_10_ids"
+            ],
+            "discrete_colour_state_frozen": colour["state_definition"][
+                "discrete_colour_state_frozen"
+            ],
             "interpretation": (
-                "The retained EAzami bridge summary proves only the coverage ceiling. "
-                "It does not identify which exact Japan38 concepts have usable colour "
-                "states, so a colour history is not constructed from this summary alone."
+                "The exhaustive strict-spatial cohort now supports an exact-concept continuous colour bridge for 14/38 Japan38 concepts. "
+                "Five exact concepts have at least ten usable colour observations. The bridge remains continuous; no C/W state ontology is frozen, "
+                "so it is not converted into discrete transition counts merely to enter the current Sankoff/Mk overlap analysis."
             ),
         },
         "high_leverage_targets_missing_direct_display": [
@@ -181,24 +197,22 @@ def main():
         ],
         "display_history_readiness": (
             "not_promoted_sparse_exact_coverage"
-            if d["exact_japan38_concepts"] < len(audit)
+            if d["largest_comparable_metric_group_n"] < len(audit)
             else "complete_exact_coverage"
         ),
+        "colour_history_readiness": "continuous_pilot_only_discrete_state_not_frozen",
         "display_interpretation": (
             f"Direct display size currently reaches {d['exact_japan38_concepts']}/38 Japan38 concepts. "
             f"The largest internally comparable metric class contains {d['largest_comparable_metric_group_n']} concepts. "
-            "This is useful calibration evidence but is too sparse for a radiation-wide display history without "
-            "aggressive imputation or arbitrary discretization."
+            "This is useful calibration evidence but is too sparse for a radiation-wide display history without aggressive imputation or arbitrary discretization."
         ),
         "next_measurement_contract": (
-            "Add standardized direct involucre/capitulum size on identity-resolved Japan38 material, prioritizing "
-            "the current cross-module validation and trait-completion targets, and keep plant-level head number "
-            "as a separate measurement rather than substituting qualitative arrangement categories."
+            "Add standardized direct involucre/capitulum size on identity-resolved Japan38 material, prioritizing the current cross-module validation "
+            "and trait-completion targets, and keep plant-level head number as a separate measurement rather than substituting qualitative arrangement categories."
         ),
         "claim_boundary": (
-            "Exact normalized concept overlap and metric comparability audit only. Authority strings are ignored, "
-            "but infraspecific rank is preserved; near-name species and broad-species substitutions are forbidden. "
-            "No missing trait is imputed and no continuous display metric is discretized."
+            "Exact normalized concept overlap and metric comparability audit only. Authority strings are ignored, but infraspecific rank is preserved; "
+            "near-name species and broad-species substitutions are forbidden. No missing trait is imputed and no continuous display/colour metric is discretized."
         ),
     }
     a.output.parent.mkdir(parents=True, exist_ok=True)
