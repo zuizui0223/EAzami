@@ -8,8 +8,8 @@ For each evidence-depth subset, the script:
   1. prunes the frozen Japan38 ML tree to exact concept-level colour tips;
   2. fits Pagel's lambda under a Brownian covariance on ML branch lengths for
      L*, chroma, hue-sin and hue-cos separately;
-  3. calculates a label-permutation diagnostic relating patristic distance to
-     pairwise trait difference;
+  3. calculates label-permutation diagnostics relating patristic distance to
+     pairwise trait difference, reporting positive, negative, and two-sided tails;
   4. treats circular hue separately with normalized sin/cos chord distance.
 
 The tree is a compatibility phylogram, not a dated tree. Therefore lambda and
@@ -254,6 +254,16 @@ def _rho(x, y):
     return float(spearmanr(x, y).statistic)
 
 
+def permutation_tails(observed, null):
+    if not null or not math.isfinite(observed):
+        return None, None, None
+    denom = len(null) + 1
+    p_pos = (1 + sum(r >= observed for r in null)) / denom
+    p_neg = (1 + sum(r <= observed for r in null)) / denom
+    p_two = (1 + sum(abs(r) >= abs(observed) for r in null)) / denom
+    return p_pos, p_neg, p_two
+
+
 def pairwise_signal(tree, ids, values, permutations, seed):
     ids = list(ids)
     y = np.asarray([values[mid] for mid in ids], dtype=float)
@@ -272,15 +282,20 @@ def pairwise_signal(tree, ids, values, permutations, seed):
             rr = _rho(pdist, trait_dist(np.asarray(z, dtype=float)))
             if math.isfinite(rr):
                 null.append(rr)
-    p = None
-    if null:
-        p = (1 + sum(r >= observed for r in null)) / (len(null) + 1)
+    p_pos, p_neg, p_two = permutation_tails(observed, null)
     return {
         "spearman_patristic_vs_absolute_trait_difference": observed,
-        "one_sided_label_permutation_p_positive_structure": p,
+        "one_sided_label_permutation_p_positive_structure": p_pos,
+        "one_sided_label_permutation_p_negative_structure": p_neg,
+        "two_sided_label_permutation_p": p_two,
         "permutations_requested": permutations,
         "permutations_usable": len(null),
-        "direction": "positive rho means more-distant taxa tend to differ more in the continuous trait",
+        "direction": (
+            "positive rho means more-distant taxa tend to differ more; negative rho means more-distant taxa tend to be more similar in this pairwise-distance diagnostic"
+        ),
+        "negative_tail_claim_boundary": (
+            "A significant negative tail is an anti-phylogenetic/overdispersion diagnostic only; it does not by itself identify convergence, selection, or evolutionary rate."
+        ),
     }
 
 
@@ -311,15 +326,18 @@ def circular_hue_pairwise_signal(tree, ids, bridge, permutations, seed):
             rr = _rho(pdist, chord(z))
             if math.isfinite(rr):
                 null.append(rr)
-    p = None
-    if null:
-        p = (1 + sum(r >= observed for r in null)) / (len(null) + 1)
+    p_pos, p_neg, p_two = permutation_tails(observed, null)
     return {
         "spearman_patristic_vs_hue_chord_distance": observed,
-        "one_sided_label_permutation_p_positive_structure": p,
+        "one_sided_label_permutation_p_positive_structure": p_pos,
+        "one_sided_label_permutation_p_negative_structure": p_neg,
+        "two_sided_label_permutation_p": p_two,
         "permutations_requested": permutations,
         "permutations_usable": len(null),
         "hue_distance": "Euclidean chord distance after normalizing species median sin/cos to the unit circle",
+        "negative_tail_claim_boundary": (
+            "A significant negative tail is an anti-phylogenetic/overdispersion diagnostic only; it does not by itself identify convergence, selection, or evolutionary rate."
+        ),
     }
 
 
@@ -397,12 +415,13 @@ def main():
             "metrics": list(METRICS),
             "hue_rule": "fit sin/cos separately and use normalized sin/cos chord distance for circular pairwise sensitivity; do not model raw degrees linearly",
             "evidence_depth_rule": "repeat diagnostics at >=1, >=5 and >=10 colour-usable observations; do not precision-weight sparse image medians as if they were population means",
+            "pairwise_null_rule": "taxon labels are permuted on the fixed pruned tree; positive, negative and absolute/two-sided tails are reported separately",
         },
         "subsets": subsets,
         "claim_boundary": (
             "Pilot evidence about continuous phylogenetic structure only. The compatibility tree is not dated; "
             "lambda is not an evolutionary rate. Image-derived species medians do not establish fixed population colour. "
-            "No C/W discretization, ancestral-colour claim, transition count, loss/regain direction, adaptive convergence, or H2/H3 module-overlap claim is made here."
+            "A negative pairwise tail is not by itself convergence. No C/W discretization, ancestral-colour claim, transition count, loss/regain direction, adaptive convergence, or H2/H3 module-overlap claim is made here."
         ),
     }
     a.output.parent.mkdir(parents=True, exist_ok=True)
