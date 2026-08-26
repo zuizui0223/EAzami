@@ -6,7 +6,9 @@ on:
       - "analysis/run_japan38_module_transition_overlap_v1.py"
       - "analysis/run_japan38_module_overlap_topology_sensitivity_v1.py"
       - "analysis/summarize_japan38_transition_identifiability_v1.py"
+      - "analysis/summarize_japan38_sampling_value_v1.py"
       - "tests/test_japan38_module_transition_overlap_v1.py"
+      - "tests/test_japan38_sampling_value_v1.py"
       - ".github/workflows/validate-japan38-module-overlap-v1.yml"
   workflow_dispatch:
 
@@ -38,8 +40,11 @@ jobs:
           python -m py_compile \
             analysis/run_japan38_module_transition_overlap_v1.py \
             analysis/run_japan38_module_overlap_topology_sensitivity_v1.py \
-            analysis/summarize_japan38_transition_identifiability_v1.py
-          python -m unittest tests/test_japan38_module_transition_overlap_v1.py -v
+            analysis/summarize_japan38_transition_identifiability_v1.py \
+            analysis/summarize_japan38_sampling_value_v1.py
+          python -m unittest \
+            tests/test_japan38_module_transition_overlap_v1.py \
+            tests/test_japan38_sampling_value_v1.py -v
       - name: Download frozen completed Japan38 tree result
         uses: actions/download-artifact@v4
         with:
@@ -119,14 +124,37 @@ jobs:
           assert b['orientation']['minimum_root_state_set_frequencies']=={'U':1000}
           assert b['phyllary']['minimum_step_distribution']['min']==3
           assert b['phyllary']['minimum_step_distribution']['max']==3
-          op=x['trait_completion_priorities']['orientation']['candidates']
-          assert op[0]['paper_japan_member_id']=='JPN_33'
-          sp=x['trait_completion_priorities']['stickiness']['candidates']
-          assert sp[0]['paper_japan_member_id'] in {'JPN_10','JPN_24'}
           print(json.dumps({
-            'orientation_top_completion':op[:6],
-            'stickiness_top_completion':sp[:6],
             'bootstrap_identifiability':b,
+            'raw_trait_completion':x['trait_completion_priorities'],
+          },indent=2))
+          PY
+      - name: Convert inferential gaps into identity-gated sampling priorities
+        run: |
+          set -euo pipefail
+          python analysis/summarize_japan38_sampling_value_v1.py \
+            --identifiability real_tree/japan38_transition_identifiability_v1.json \
+            --membership-audit data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv \
+            --name-conflicts data/evidence/moreyra2025_name_conflicts_priority_2026-08-10.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --output real_tree/japan38_sampling_value_v1.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('real_tree/japan38_sampling_value_v1.json').read_text())
+          s=x['operational_shortlist']
+          assert s['orientation']['primary']['paper_japan_member_id']=='JPN_34'
+          assert s['orientation']['primary_objective']=='transition_localization'
+          assert any(r['paper_japan_member_id']=='JPN_33' for r in s['orientation']['analytically_high_but_identity_caution'])
+          assert s['phyllary']['primary_objective']=='ancestral_state_discrimination'
+          assert s['phyllary']['primary']['paper_japan_member_id'] in {'JPN_15','JPN_18'}
+          assert s['stickiness']['primary']['paper_japan_member_id']=='JPN_24'
+          cross=x['cross_module_validation_targets']
+          assert cross[0]['paper_japan_member_id']=='JPN_36'
+          assert set(cross[0]['traits'])=={'orientation','phyllary','stickiness'}
+          print(json.dumps({
+            'operational_shortlist':s,
+            'cross_module_validation_targets':cross,
           },indent=2))
           PY
       - uses: actions/upload-artifact@v4
@@ -136,5 +164,6 @@ jobs:
             real_tree/japan38_module_transition_overlap_v1.json
             real_tree/japan38_module_overlap_topology_sensitivity_v1.json
             real_tree/japan38_transition_identifiability_v1.json
+            real_tree/japan38_sampling_value_v1.json
           if-no-files-found: error
           retention-days: 90
