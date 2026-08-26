@@ -25,5 +25,13 @@
     "total_rows_inside_window": 55,
     "known_target_behavior": "For the six focal taxa the heuristic excludes all C. verutum observations in the Himalaya and all C. pendulum observations in Korea/continental northeast Asia, while retaining the Hokkaido subset of C. kamtschaticum."
   },
+  "validation": {
+    "workflow_run": 32929020824,
+    "artifact_id": 9592538804,
+    "artifact_name": "japan38-colour-geographic-provenance-32929020824",
+    "artifact_digest": "sha256:bd23b03bbd63215dec2a2ee2bf1cf3f296b827c9aeb5e2b9bed863b6e2ef2eb7",
+    "result_file": "data/evidence/japan38_colour_geographic_provenance_gate_v1.json",
+    "conclusion": "success"
+  },
   "claim_boundary": "This is a geographic-provenance sensitivity layer. Exact taxon-name matching does not imply that a global species-level image median represents the phenotype of the Japanese population attached to the nuclear tip."
 }
