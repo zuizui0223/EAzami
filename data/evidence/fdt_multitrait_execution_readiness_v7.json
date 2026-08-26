@@ -17,6 +17,11 @@
       "independent_open_reusable_live_records": 0,
       "independent_cc_by_nc_live_records": 3,
       "independent_cc_by_nc_localities": ["Niigata", "Tochigi", "Tochigi-shi Fujioka-machi Yachunoko"],
+      "validation": {
+        "workflow_run": 32951676817,
+        "artifact_id": 9600367595,
+        "artifact_digest": "sha256:9724076ead245834e11fc982cb9ea39e7c5d7cc0a827ff76085777b470b014eb"
+      },
       "status": "reusable_live_source_blocked_by_license; preserved specimens excluded from colour measurement",
       "interpretation": "The non-Commons source class contains three geographically independent live-photo records, but all are CC BY-NC under the current conservative reuse policy. The apparently abundant open GBIF media are preserved specimens, not usable corolla-colour proxies."
     },
