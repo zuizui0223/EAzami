@@ -1,0 +1,118 @@
+name: Validate JPN38 licensed Japan-local colour recovery v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_japan38_jpn38_public_colour_recovery_v1.py"
+      - "tests/test_japan38_jpn38_public_colour_recovery_v1.py"
+      - "data/evidence/japan38_jpn38_public_colour_recovery_sources_v1.csv"
+      - "data/evidence/japan38_jpn29_identity_geography_gate_v1.json"
+      - ".github/workflows/validate-japan38-jpn38-public-colour-recovery-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-jpn38-public-colour-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  AZAMI_COMMIT: "4e6f66675004207d331fd620d6bcd894287f316a"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout EAzami
+        uses: actions/checkout@v4
+
+      - name: Checkout pinned Azami measurement implementation
+        uses: actions/checkout@v4
+        with:
+          repository: zuizui0223/azami
+          ref: ${{ env.AZAMI_COMMIT }}
+          path: _azami
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install runtime dependencies
+        run: pip install numpy pandas opencv-python-headless
+
+      - name: Compile and unit test
+        run: |
+          python -m py_compile analysis/run_japan38_jpn38_public_colour_recovery_v1.py
+          python -m unittest tests/test_japan38_jpn38_public_colour_recovery_v1.py -v
+
+      - name: Download licensed external images without committing raw media
+        run: |
+          set -euo pipefail
+          mkdir -p external_images
+          python - <<'PY'
+          import csv, pathlib, subprocess
+          registry=pathlib.Path('data/evidence/japan38_jpn38_public_colour_recovery_sources_v1.csv')
+          out=pathlib.Path('external_images')
+          rows=list(csv.DictReader(registry.open(encoding='utf-8-sig', newline='')))
+          used=0
+          for row in rows:
+              if row['automated_use'].strip().lower() != 'true':
+                  continue
+              if row['rights_status'] != 'verified_open_license':
+                  raise SystemExit(f"Refusing unverified rights row: {row['source_id']}")
+              target=out / f"{row['source_id']}.jpg"
+              subprocess.run([
+                  'curl','--fail','--location','--retry','3','--retry-delay','2',
+                  '--user-agent','EAzami-scientific-reproducibility/1.0',
+                  row['download_url'],'--output',str(target)
+              ], check=True)
+              if target.stat().st_size < 10000:
+                  raise SystemExit(f"Downloaded file too small: {target}")
+              used += 1
+          if used != 2:
+              raise SystemExit(f"Expected exactly two automated-use sources, got {used}")
+          PY
+
+      - name: Run pinned Azami colour measurement screen
+        run: |
+          set -euo pipefail
+          mkdir -p result
+          python analysis/run_japan38_jpn38_public_colour_recovery_v1.py \
+            --registry data/evidence/japan38_jpn38_public_colour_recovery_sources_v1.csv \
+            --image-dir external_images \
+            --azami-measure-script _azami/ch1_global/v2/52_measure_primary_traits_continuous.py \
+            --colour-confidence-floor 0.55 \
+            --per-image-output result/japan38_jpn38_public_colour_recovery_per_image_v1.csv \
+            --summary-output result/japan38_jpn38_public_colour_recovery_summary_v1.json
+
+      - name: Assert recovery boundaries and JPN29 identity gate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('result/japan38_jpn38_public_colour_recovery_summary_v1.json').read_text())
+          assert x['paper_japan_member_id']=='JPN_38'
+          assert x['registered_automated_sources']==2
+          assert x['downloaded_images_measured']==2
+          assert x['independent_population_replicates']==1
+          assert x['promotion_gate']['japan_local_colour_bridge_ready_from_this_recovery'] is False
+          gate=json.loads(Path('data/evidence/japan38_jpn29_identity_geography_gate_v1.json').read_text())
+          assert gate['paper_japan_member_id']=='JPN_29'
+          assert gate['external_taxonomic_geography']['japan_in_native_range'] is False
+          assert gate['decision']['clean_japan_local_trait_join_allowed'] is False
+          assert gate['decision']['keep_raw_nuclear_tip'] is True
+          print(json.dumps({'jpn38':x,'jpn29_decision':gate['decision']},indent=2,ensure_ascii=False))
+          PY
+
+      - name: Upload derived measurements only
+        uses: actions/upload-artifact@v4
+        with:
+          name: jpn38-public-colour-recovery-${{ github.run_id }}
+          path: |
+            result/japan38_jpn38_public_colour_recovery_per_image_v1.csv
+            result/japan38_jpn38_public_colour_recovery_summary_v1.json
+          if-no-files-found: error
+          retention-days: 90
