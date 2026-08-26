@@ -1,0 +1,47 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v10",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v9.json",
+  "inheritance": "All discrete-module histories, global continuous-colour results, negative CHELSA/topography/WorldClim species-proxy mechanism gates, JPN38 licensing blockers, JPN29 specimen-identity blocker, and claim boundaries from v9 remain in force unless explicitly updated below.",
+  "colour": {
+    "japan_local_history_ready": false,
+    "minimum_clean_identity_resolved_concepts_current": 4,
+    "minimum_required_for_next_population_matched_history": 5,
+    "jpn38_external_live_image_candidate_audit": {
+      "registry": "data/evidence/jpn38_external_live_image_candidates_v1.csv",
+      "independent_candidate_localities": 3,
+      "candidate_localities": [
+        "Hokkaido University, Hokkaido (2018-07-14)",
+        "Shimukappu Town, Hokkaido (2006-08-15)",
+        "Sugadaira, Nagano Prefecture (source date displayed ambiguously as 204.9.7)"
+      ],
+      "reusable_now": 0,
+      "status": "new_independent_live_sources_found_but_permission_or_item_specific_license_required",
+      "interpretation": "The bottleneck is no longer absence of independent public-facing live images. It is reuse permission/licensing under the conservative colour-measurement gate."
+    },
+    "jpn29_primary_source_trace": {
+      "canonical_trace": "data/evidence/jpn29_pe01523822_primary_source_trace_v1.json",
+      "primary_study_treated_voucher_as_cirsium_verutum_from_japan": true,
+      "independent_redetermination_found": false,
+      "pe_annotation_history_resolved": false,
+      "voucher_taxon_identity_resolved": false,
+      "clean_japan_local_trait_join_allowed": false,
+      "status": "primary_study_provenance_strengthened_but_taxonomic_contradiction_remains"
+    },
+    "status": "Japan-local colour history remains blocked. Three new independent JPN38 live-image sources are now concrete permission targets; JPN29 is confirmed as a deliberate primary-study C. verutum/PE01523822 designation rather than a repository transcription error, but its specimen-level identity remains unresolved."
+  },
+  "priority_reordering": {
+    "first": "Close one JPN38 independent live-image reuse route: Hokkaido University 2018, HUSCAP Shimukappu 2006, or NMNS Sugadaira. Open access or public display alone is not sufficient; use item-specific license evidence or explicit permission.",
+    "second": "In parallel, inspect PE01523822 determination labels/annotation history or obtain curator-level confirmation. The Moreyra thesis/article trace should not be counted twice because it is the same primary-study lineage.",
+    "third": "The first route that yields a fifth identity-resolved population-matched Japan-local colour concept unlocks the next continuous-colour history run. Do not wait for both JPN38 and JPN29 if one clean route is sufficient.",
+    "fourth": "After the fifth concept is secured, rerun population-matched continuous-colour history and only then construct W/C/polymorphism transition models and reticulation/topology sensitivity.",
+    "do_not_repeat": "Do not repeat Commons exhaustion, GBIF/iDigBio JPN29 searches, or broad global present-day climate screens without changed source metadata, indexing, sampling frame, or predictor definition."
+  },
+  "canonical_results": {
+    "chun_claim_gate": "data/evidence/cirsium_colour_history_claim_gate_v1.json",
+    "jpn38_external_live_image_candidates": "data/evidence/jpn38_external_live_image_candidates_v1.csv",
+    "jpn29_primary_source_trace": "data/evidence/jpn29_pe01523822_primary_source_trace_v1.json",
+    "worldclim_gate": "data/evidence/japan38_global_lightness_worldclim_mechanism_gate_v1.json"
+  },
+  "claim_boundary": "Finding public-facing images does not license automated colour extraction. The Moreyra primary-study voucher designation does not resolve the accepted-range contradiction. No new source found here licenses ancestral colour, W/C transition direction, reactivation, adaptive convergence, or modular evolvability."
+}
