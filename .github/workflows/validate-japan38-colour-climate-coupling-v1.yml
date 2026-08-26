@@ -1,0 +1,106 @@
+name: Validate Japan38 colour climate coupling v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_japan38_colour_climate_coupling_v1.py"
+      - "tests/test_japan38_colour_climate_coupling_v1.py"
+      - "data/evidence/japan38_comp1061_primary_tree_v1.nwk"
+      - "data/evidence/japan38_comp1061_concept_map_v1.csv"
+      - "data/evidence/japan38_colour_continuous_bridge_v1.csv"
+      - "data/evidence/japan_radiation_pre_tree_trait_environment_snapshot_v1.csv"
+      - "data/evidence/japan38_colour_climate_coupling_summary_v1.json"
+      - "data/evidence/japan38_colour_climate_gate_contract_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v2.json"
+      - ".github/workflows/validate-japan38-colour-climate-coupling-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-japan38-colour-climate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install runtime dependencies
+        run: pip install biopython numpy scipy
+      - name: Compile and unit test
+        run: |
+          python -m py_compile analysis/run_japan38_colour_climate_coupling_v1.py
+          python -m unittest tests/test_japan38_colour_climate_coupling_v1.py -v
+      - name: Run exact colour-climate gate on canonical Japan38 tree
+        run: |
+          set -euo pipefail
+          mkdir -p result
+          python analysis/run_japan38_colour_climate_coupling_v1.py \
+            --tree data/evidence/japan38_comp1061_primary_tree_v1.nwk \
+            --concept-map data/evidence/japan38_comp1061_concept_map_v1.csv \
+            --colour-bridge data/evidence/japan38_colour_continuous_bridge_v1.csv \
+            --environment-snapshot data/evidence/japan_radiation_pre_tree_trait_environment_snapshot_v1.csv \
+            --minimum-environment-observations 10 \
+            --output result/japan38_colour_climate_coupling_v1.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('result/japan38_colour_climate_coupling_v1.json').read_text())
+          s5=x['subsets']['n_colour_usable_ge_5']
+          s10=x['subsets']['n_colour_usable_ge_10']
+          assert s5['n_concepts']==6
+          assert set(s5['paper_japan_member_ids'])=={'JPN_17','JPN_23','JPN_29','JPN_36','JPN_37','JPN_38'}
+          assert s10['n_concepts']==5
+          assert set(s10['paper_japan_member_ids'])=={'JPN_17','JPN_23','JPN_36','JPN_37','JPN_38'}
+          p5=s5['primary_multivariate_climate_distance']
+          p10=s10['primary_multivariate_climate_distance']
+          assert p5['exact_permutations']==720
+          assert p10['exact_permutations']==120
+          assert abs(p5['observed'] - (-0.3285714285714285)) < 1e-12
+          assert abs(p5['positive_tail_p'] - 0.8222222222222222) < 1e-12
+          assert abs(p5['two_sided_abs_p'] - 0.4083333333333333) < 1e-12
+          assert abs(p10['observed'] - (-0.29696969696969694)) < 1e-12
+          assert abs(p10['positive_tail_p'] - 0.6916666666666667) < 1e-12
+          assert abs(p10['two_sided_abs_p'] - 0.6333333333333333) < 1e-12
+          assert s5['phylogenetic_context']['patristic_vs_absolute_lightness_difference_rho'] < -0.70
+          assert s10['phylogenetic_context']['patristic_vs_absolute_lightness_difference_rho'] < -0.85
+          assert all(
+            row['multivariate_climate_vs_lightness_difference']['observed'] < 0
+            for row in s5['leave_one_taxon_out_primary'].values()
+          )
+          assert x['decision_gate']['current_four_axis_climate_tracking_supported'] is False
+          assert x['decision_gate']['replicated_directional_axes_at_two_sided_0_05']==[]
+
+          frozen=json.loads(Path('data/evidence/japan38_colour_climate_coupling_summary_v1.json').read_text())
+          assert frozen['decision']['current_four_axis_climate_tracking_supported'] is False
+          assert abs(frozen['n_colour_usable_ge_5']['multivariate_climate_distance_vs_lightness_difference_rho'] - p5['observed']) < 1e-12
+          assert abs(frozen['n_colour_usable_ge_5']['exact_positive_tail_p'] - p5['positive_tail_p']) < 1e-12
+          assert abs(frozen['n_colour_usable_ge_10']['multivariate_climate_distance_vs_lightness_difference_rho'] - p10['observed']) < 1e-12
+          assert abs(frozen['n_colour_usable_ge_10']['exact_positive_tail_p'] - p10['positive_tail_p']) < 1e-12
+          assert frozen['secondary_directional_screen']['replicated_axes_two_sided_p_le_0_05']==[]
+
+          readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v2.json').read_text())
+          colour=readiness['modules']['colour']
+          assert 'rho=-0.7071' in colour['continuous_history_result']
+          assert 'rho=-0.8545' in colour['continuous_history_result']
+          assert 'rho=-0.3286' in colour['current_climate_gate']
+          assert 'positive-tail p=0.8222' in colour['current_climate_gate']
+          assert 'rho=-0.2970' in colour['current_climate_gate']
+          assert 'positive-tail p=0.6917' in colour['current_climate_gate']
+          assert 'current four-axis BIO1/BIO4/BIO12/BIO15 climate gate is negative' in colour['status']
+          assert 'broader existing abiotic axes' in colour['next_action']
+          assert 'current BIO1/BIO4/BIO12/BIO15 climate gate does not explain' in readiness['next_module_expansion_gate']['colour']
+          print(json.dumps(x['decision_gate'], indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-colour-climate-coupling-${{ github.run_id }}
+          path: result/japan38_colour_climate_coupling_v1.json
+          if-no-files-found: error
+          retention-days: 90

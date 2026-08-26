@@ -1,0 +1,23 @@
+{
+  "contract_version": "japan38_colour_climate_gate_contract_v1",
+  "status_date": "2026-08-26",
+  "analysis_status": "exploratory_followup_after_frozen_lightness_overdispersion_result",
+  "primary_response": "absolute pairwise difference in exact-concept corolla LAB lightness",
+  "primary_predictor": "Euclidean distance after within-subset z-standardization of CHELSA BIO1/BIO4/BIO12/BIO15 species medians",
+  "colour_thresholds": [5, 10],
+  "minimum_environment_observations": 10,
+  "inference": "exhaustive lightness-label permutation",
+  "support_rule": {
+    "n_ge_5_direction": "positive",
+    "n_ge_5_exact_positive_tail_p_max": 0.05,
+    "n_ge_10_direction": "positive",
+    "n_ge_5_leave_one_out_direction": "all_positive"
+  },
+  "secondary_diagnostics": [
+    "partial Spearman controlling patristic distance",
+    "axis-specific absolute-distance tests",
+    "directional single-axis Spearman tests",
+    "leave-one-taxon-out primary recomputation"
+  ],
+  "claim_boundary": "Exploratory present-day species-level climate diagnostic only; not a causal adaptation test, not historical climate reconstruction, not a convergence or evolutionary-rate test."
+}

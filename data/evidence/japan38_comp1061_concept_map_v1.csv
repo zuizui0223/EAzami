@@ -1,0 +1,39 @@
+paper_japan_member_id,paper_taxon_concept,tip_ids,n_biological_samples,trait_asr_primary_allowed,replicate_monophyly_required
+JPN_01,Cirsium abukumense Kadota,J38S001,1,true,false
+JPN_02,Cirsium aidzuense i,J38S002,1,true,false
+JPN_03,Cirsium alpicola Nakai,J38S003,1,true,false
+JPN_04,Cirsium amplexifolium (Nakai) Kitam.,J38S004,1,true,false
+JPN_05,Cirsium aomorense Nakai,J38S005,1,true,false
+JPN_06,Cirsium dipsacolepis Matsum.,J38S006,1,true,false
+JPN_07,Cirsium domonii Kadota,J38S007,1,true,false
+JPN_08,Cirsium funagataense Kadota,J38S008,1,true,false
+JPN_09,Cirsium gyojanum Kitam.,J38S009,1,true,false
+JPN_10,"Cirsium ishidatense (Horiuchi) Kadota et Horiuchi, comb. ined.",J38S010,1,true,false
+JPN_11,Cirsium ishizuchiense (Kitam.) Kadota,J38S011,1,true,false
+JPN_12,Cirsium japonicum Fisch. ex DC. var. horridum Nakai,J38S012,1,true,false
+JPN_13,Cirsium kasaianum Kadota,J38S013,1,true,false
+JPN_14,Cirsium kiotoense (Kitam.) Kadota,J38S014,1,true,false
+JPN_15,Cirsium lineare (Thunb.) Sch.Bip.,J38S015,1,true,false
+JPN_16,Cirsium magofukui Kitam.,J38S016,1,true,false
+JPN_17,Cirsium maritimum Makino,J38S017,1,true,false
+JPN_18,Cirsium matsumurae Nakai var. dubium Kitam.,J38S018,1,true,false
+JPN_19,Cirsium nippoense Kadota,J38S019,1,true,false
+JPN_20,Cirsium nipponicum var. incomptum (Maxim.) Kadota,J38S020|J38S021,2,true,true
+JPN_21,Cirsium nipponicum var. yoshinoi (Nakai) Kitam.,J38S022,1,true,false
+JPN_22,Cirsium norikurense Nakai,J38S023,1,true,false
+JPN_23,Cirsium oligophyllum Matsum.,J38S024,1,true,false
+JPN_24,Cirsium pseudosuffultum Kadota,J38S025,1,true,false
+JPN_25,Cirsium shidokimontanum Kadota,J38S026,1,true,false
+JPN_26,Cirsium spicatum Matsum.,J38S027,1,true,false
+JPN_27,Cirsium suzukaense Kitam.,J38S028,1,true,false
+JPN_28,Cirsium uzenense Kadota,J38S029,1,true,false
+JPN_29,Cirsium verutum (D.Don) Spreng.,J38S030,1,true,false
+JPN_30,Cirsium yezoense (Maxim.) Makino,J38S031,1,true,false
+JPN_31,Cirsium yuki-uenoanum Kadota,J38S032,1,false,false
+JPN_32,Cirsium buergeri Miq.,J38S033,1,true,false
+JPN_33,Cirsium effusum Matsm.,J38S034,1,true,false
+JPN_34,Cirsium microspicatum Nakai,J38S035,1,true,false
+JPN_35,Cirsium nipponicum Makino,J38S036,1,true,false
+JPN_36,Cirsium sieboldii Miq.,J38S037,1,true,false
+JPN_37,Cirsium kamtschaticum Ledeb. ex DC.,J38S038,1,true,false
+JPN_38,Cirsium pendulum Fisch. ex. DC.,J38S039,1,true,false

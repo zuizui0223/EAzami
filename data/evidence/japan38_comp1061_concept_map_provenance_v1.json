@@ -1,0 +1,15 @@
+{
+  "contract_version": "japan38_comp1061_concept_map_provenance_v1",
+  "status_date": "2026-08-26",
+  "source_workflow_run": 32845725038,
+  "source_artifact_id": 9562506734,
+  "source_artifact_name": "japan38-comp1061-frozen-tree-retry-32845725038",
+  "source_artifact_digest": "sha256:ec7f82ead606a64e41f1da15ba1d97c65942e258f278b632528c2c85a15115b8",
+  "source_path_within_artifact": "work/japan38_subset/concept_map.csv",
+  "frozen_copy": "data/evidence/japan38_comp1061_concept_map_v1.csv",
+  "rows": 38,
+  "replicated_concept": "JPN_20",
+  "replicated_tips": ["J38S020", "J38S021"],
+  "primary_trait_disallowed_concept": "JPN_31",
+  "claim_boundary": "Identifier/provenance bridge only. The map does not resolve JPN_20 nuclear non-monophyly or JPN_31 identity conflict and does not imply that image-derived phenotypes belong to the sequenced biological individual."
+}
