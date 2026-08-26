@@ -1,5 +1,4 @@
 import importlib.util
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -26,11 +25,15 @@ class TestJPN38PublicColourRecovery(unittest.TestCase):
 
     def test_registry_is_utf8_csv(self):
         rows = mod.read_csv(ROOT / "data/evidence/japan38_jpn38_public_colour_recovery_sources_v1.csv")
-        self.assertEqual(len(rows), 2)
+        self.assertEqual(len(rows), 3)
         self.assertEqual({r["paper_japan_member_id"] for r in rows}, {"JPN_38"})
         self.assertTrue(all(mod.truthy(r["automated_use"]) for r in rows))
         self.assertTrue(all("Japan" in r["location"] for r in rows))
-        self.assertTrue(all(r["rights_status"] == "verified_open_license" for r in rows))
+        self.assertEqual(
+            {r["rights_status"] for r in rows},
+            {"verified_open_license", "verify_in_ci"},
+        )
+        self.assertTrue(all("commons.wikimedia.org" in r["source_page_url"] for r in rows))
 
 
 if __name__ == "__main__":
