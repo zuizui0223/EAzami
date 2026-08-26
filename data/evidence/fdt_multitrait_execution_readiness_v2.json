@@ -1,11 +1,11 @@
 {
   "contract_version": "fdt_multitrait_execution_readiness_v2",
-  "status_date": "2026-08-25",
+  "status_date": "2026-08-26",
   "modules": {
     "orientation": {
       "trait_coverage": "19/38 source concepts resolved in the Japan38 authority seed; JPN_20 and JPN_31 are excluded from the current trait tree for independent reasons",
       "evolutionary_history": "Japan38 compatibility ML tree requires 6 unordered steps; across UFBoot1000 the lower bound is 4-6 with median 5, and the minimum-change root state is U in all 1000 topologies",
-      "transition_identifiability": "The repeated-state lower bound is robust but branch localization is not: the ML minimum reconstruction has zero individually forced orientation-change edges",
+      "transition_identifiability": "The repeated-state lower bound is robust but branch localization is weak: the ML minimum reconstruction has zero individually forced orientation-change edges; the most frequent terminal forced edge is JPN_36 in only 20.1% of bootstrap topologies",
       "ecology": "present-day BIO15/BIO1 candidate and branchwise direction implemented, but ecological event alignment must wait for better transition localization",
       "functional_prior": "external manipulation supports abiotic-protection / reproductive-fitness pathway",
       "status": "benchmark module with robust recurrence but unresolved transition placement; not sole programme focus"
@@ -20,15 +20,15 @@
     "phyllary_spine": {
       "trait_coverage": "Japan38 NMNS phyllary posture resolved for 10 concepts; direct phyllary length/protrusion measurements compiled for seven focal taxa",
       "evolutionary_history": "minimum 3 unordered steps on the Japan38 ML tree and exactly 3 on all UFBoot1000 topologies; minimum-change root remains ambiguous among ascending/spreading/recurved",
-      "transition_identifiability": "JPN_36 is a forced ascending->appressed change on the ML minimum reconstruction and is a frequent forced edge across bootstrap topologies, but most transition placement remains uncertain",
+      "transition_identifiability": "JPN_36 is the only forced terminal change on the ML minimum reconstruction and is forced in 75.4% of bootstrap topologies; the dominant remaining uncertainty is ancestral-state identity rather than the minimum step count",
       "functional_prior": "defence plausible but focal trait-to-enemy-to-fitness effect not resolved",
       "pilot_result": "phyllary protrusion is smaller in D taxa in the seven-taxon PGLS diagnostic (borderline p~0.055), but lineage confounding prevents ecological interpretation",
       "status": "repeated history is supported; functional loading and denser trait coverage remain blocked"
     },
     "stickiness": {
       "trait_coverage": "Japan38 NMNS sticky/nonsticky state resolved for 12 concepts",
-      "evolutionary_history": "minimum 5 unordered steps on the ML tree; UFBoot1000 gives 4-5 with median 5",
-      "transition_identifiability": "ML minimum reconstruction forces changes on JPN_06, JPN_36 and one larger clade, but bootstrap localization is only partial",
+      "evolutionary_history": "minimum 5 unordered steps on the ML tree; UFBoot1000 gives 4-5 with median 5; minimum root is sticky in 670/1000 topologies and ambiguous sticky/nonsticky in 330/1000",
+      "transition_identifiability": "ML minimum reconstruction forces changes on JPN_06, JPN_36 and one larger clade; across bootstrap topologies JPN_06 is forced in 67.0% and JPN_36 in 40.0%",
       "mk_warning": "branch-length-aware equal-rates Mk is saturation-prone for stickiness (k*q*median branch about 4.48; prior change probability about 0.494)",
       "functional_prior": "direct Cirsium neutralization result weakens generic defence hypothesis",
       "status": "useful macroevolutionary negative-control module; do not promote current Mk overlap to shared developmental mechanism"
@@ -66,11 +66,35 @@
     "interpretation": "Repeated evolution is supported within each observed module, while cross-module coupling is assumption-sensitive and heterogeneous. Retain separate module histories rather than collapsing capitulum variation onto one latent lability axis."
   },
   "trait_completion_design": {
-    "criterion": "topology-conditioned reduction in ambiguous optimal transition-placement edges under exhaustive hypothetical state assignment; a design heuristic, not a biological-value probability",
-    "orientation_first": ["JPN_33", "JPN_34", "JPN_01"],
-    "stickiness_first": ["JPN_10", "JPN_24", "JPN_05", "JPN_25"],
-    "phyllary_note": "No single currently missing concept gives a uniformly positive one-at-a-time reduction under all four hypothetical states; use a small batch rather than claiming one dominant target."
+    "criterion": "multi-objective, topology-conditioned and identity-gated design: prefer a missing state that robustly reduces optional transition-placement edges; if none exists, target ancestral-state discrimination, then minimum-step falsification. Enumerated hypothetical states are scenarios, not probabilities.",
+    "orientation": {
+      "primary_objective": "transition_localization",
+      "primary": "JPN_34",
+      "identity_pass_alternates": ["JPN_01", "JPN_25", "JPN_28", "JPN_16"],
+      "identity_caution_high_value": ["JPN_33", "JPN_10", "JPN_21"],
+      "note": "JPN_33 has the largest raw localization gain but is not operationally first because its cultivated paper concept has a name/voucher identity conflict."
+    },
+    "phyllary": {
+      "primary_objective": "ancestral_state_discrimination",
+      "primary": "JPN_15",
+      "identity_pass_alternates": ["JPN_18", "JPN_01", "JPN_04", "JPN_05"],
+      "identity_caution_high_value": ["JPN_29", "JPN_10", "JPN_14"],
+      "note": "No missing concept guarantees a positive reduction in optional transition edges across all four posture states, so the operational target switches to resolving the currently ambiguous root-state set."
+    },
+    "stickiness": {
+      "primary_objective": "transition_localization",
+      "primary": "JPN_24",
+      "identity_pass_alternates": ["JPN_05", "JPN_25", "JPN_08", "JPN_04"],
+      "identity_caution_high_value": ["JPN_10", "JPN_14", "JPN_21"],
+      "note": "JPN_10 has the same robust localization gain as JPN_24 but carries an NCBI/tree-code naming caution, so JPN_24 is the clean operational first target."
+    },
+    "observed_state_validation": {
+      "cross_module_first": "JPN_36",
+      "cross_module_reason": "JPN_36 is a terminal forced-change target in orientation (20.1%), phyllary (75.4%) and stickiness (40.0%) across bootstrap topologies; validate the source-backed states on Japanese voucher/population material before treating those placements as biological history.",
+      "stickiness_second": "JPN_06",
+      "stickiness_second_reason": "JPN_06 is a forced stickiness-change terminal in 67.0% of bootstrap topologies."
+    }
   },
   "tree_dependency": "Resolved for the current compatibility analysis: frozen 241 locus universe -> 236 current QC loci -> 176 safflower-rootable loci -> 40-tip, 161654-bp IQ-TREE2.4.0 ML analysis. JPN_20 biological samples are non-monophyletic in the ML tree and 0/1000 UFBoot trees; because JPN_20 is fully unresolved for the three analysed traits it is pruned rather than forcibly collapsed. JPN_31 remains excluded from primary trait analysis because of the Japan/Ukraine identity conflict.",
-  "claim_boundary": "Independent Japan38 compatibility reconstruction and source-backed trait lower bounds only; not the unpublished Moreyra final-350 phylogeny, not adaptive-convergence counts, and not proof of developmental modularity or adaptive radiation."
+  "claim_boundary": "Independent Japan38 compatibility reconstruction and source-backed trait lower bounds only; sampling priorities are inferential design heuristics, not probabilities of biological importance; not the unpublished Moreyra final-350 phylogeny, not adaptive-convergence counts, and not proof of developmental modularity or adaptive radiation."
 }
