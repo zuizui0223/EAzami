@@ -1,0 +1,59 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v9",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v8.json",
+  "inheritance": "All Japan38 discrete-module histories, display gate, global continuous-colour history, paired CHELSA/topography/soil screens, Japan-local colour provenance blockers, JPN38 licensing gate, and JPN29 specimen-identity gate in v8 remain unchanged unless overridden below.",
+  "colour": {
+    "japan_local_history_ready": false,
+    "public_worldclim_mechanism_gate": {
+      "scope": "global exact-concept species-proxy exploratory sensitivity; explicitly not Japan-local colour history",
+      "baseline": "WorldClim 2.1 1970-2000, 10 arc-minutes",
+      "coordinate_source": "Azami run 29306454759 artifact 8314947270, strict_spatial_thinned_with_climate_topography_soil.csv",
+      "coordinate_rows": 187,
+      "complete_rows": 187,
+      "species_rows": 6,
+      "coordinate_table_sha256": "1eadba060f7fa57a87f06c53caaadd04dc5fb8604c4a4a7d3a990d9de49cb27b",
+      "primary_predictor": "standardized 3-D distance across annual-mean solar radiation, wind speed, and mean-temperature VPD proxy",
+      "primary_gate_pass": false,
+      "secondary_axis_robust_leads": {
+        "solar_radiation": false,
+        "wind_speed": false,
+        "vpd_tavg_proxy": false
+      },
+      "descriptive_vpd_signal": {
+        "n_ge_5_rho": 0.4928571428571427,
+        "n_ge_5_p_positive_exact": 0.10972222222222222,
+        "n_ge_5_p_positive_holm_three_axes": 0.32916666666666666,
+        "n_ge_5_leave_one_out_all_positive": true,
+        "n_ge_10_rho": 0.41818181818181815,
+        "n_ge_10_p_positive_exact": 0.125,
+        "n_ge_10_leave_one_out_all_positive": false,
+        "interpretation": "VPD is the only descriptively positive axis at both depth gates, but it fails the prespecified exact and leave-one-out support rules and is not promoted to a mechanism lead."
+      },
+      "validation": {
+        "workflow_run": 32957135194,
+        "artifact_id": 9602409268,
+        "artifact_name": "japan38-global-lightness-worldclim-mechanism-32957135194",
+        "artifact_digest": "sha256:496164534cb9f5a8f1b8855c68a48b8c2f033370e6af18b77684aa4e5e39ee32",
+        "head_sha": "ccb6c4e04f9686abdf3feecb94dbff7b51f3782b"
+      },
+      "status": "prespecified_global_worldclim_exposure_gate_failed",
+      "interpretation": "Solar radiation, wind, VPD and their standardized three-axis exposure distance do not explain the global exact-concept species-proxy L* placement under the frozen support rule. This negative gate does not reject abiotic adaptation generally and does not resolve Japan-local colour history."
+    },
+    "status": "Japan-local colour history remains blocked exactly as in v8. The additional global WorldClim exposure screen is now a frozen negative sensitivity result and cannot be promoted to a Japan-radiation mechanism."
+  },
+  "priority_reordering": {
+    "first": "Resolve reusable or direct Japan-local live colour evidence for JPN_38, or obtain an equivalent fifth identity-resolved Japan-local concept. Preserved-specimen scans remain excluded from live corolla-colour measurement.",
+    "second": "Resolve PE01523822 / K. Yonekura 6788 specimen identity directly through PE herbarium annotation history or curator-level inspection; do not repeat the exhausted GBIF/iDigBio route without changed indexing.",
+    "third": "Once at least five Japan-local identity-resolved concepts exist, rerun continuous-lightness history with population-matched proxies before interpreting colour as a Japanese-radiation history.",
+    "fourth": "For mechanism work, prioritize population-matched local microclimate and biotic measurements after the Japan-local history gate. Do not repeat the same global WorldClim 2.1 solar/wind/VPD species-proxy screen unless the sampling frame or predictor definition materially changes.",
+    "do_not_repeat": "Do not reopen the same global CHELSA/topography or WorldClim solar/wind/VPD screens merely to search for significance; current present-day species-proxy abiotic screens are negative under their frozen gates."
+  },
+  "canonical_results": {
+    "global_worldclim_summary": "data/evidence/japan38_global_lightness_worldclim_summary_v1.csv",
+    "global_worldclim_sampling": "data/evidence/japan38_global_lightness_worldclim_sampling_v1.json",
+    "global_worldclim_mechanism_gate": "data/evidence/japan38_global_lightness_worldclim_mechanism_gate_v1.json",
+    "global_worldclim_source_hashes": "data/evidence/japan38_global_lightness_worldclim_zip_sha256_v1.txt"
+  },
+  "claim_boundary": "The new WorldClim result is a negative global exact-concept species-proxy sensitivity analysis. It does not validate a Japan-local radiation history, does not prove VPD is irrelevant, does not reject climatic adaptation generally, and does not establish adaptive convergence, ancestral colour, colour loss/regain, or anthocyanin reactivation."
+}

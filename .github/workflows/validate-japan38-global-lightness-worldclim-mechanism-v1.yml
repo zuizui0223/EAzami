@@ -1,0 +1,133 @@
+name: Validate Japan38 global lightness WorldClim mechanism v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/japan38_global_colour_observation_coordinates_v1.csv"
+      - "data/evidence/japan38_global_colour_observation_coordinates_provenance_v1.json"
+      - "data/evidence/japan38_lightness_paired_environment_summary_v1.csv"
+      - "analysis/validate_japan38_global_colour_observation_coordinates_v1.py"
+      - "analysis/sample_worldclim_public_exposure_v1.py"
+      - "analysis/run_japan38_global_lightness_worldclim_mechanism_gate_v1.py"
+      - "tests/test_japan38_global_lightness_worldclim_mechanism_v1.py"
+      - "data/evidence/japan38_global_lightness_worldclim_summary_v1.csv"
+      - "data/evidence/japan38_global_lightness_worldclim_sampling_v1.json"
+      - "data/evidence/japan38_global_lightness_worldclim_mechanism_gate_v1.json"
+      - "data/evidence/japan38_global_lightness_worldclim_zip_sha256_v1.txt"
+      - "data/evidence/fdt_multitrait_execution_readiness_v9.json"
+      - ".github/workflows/validate-japan38-global-lightness-worldclim-mechanism-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-japan38-global-lightness-worldclim-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install analysis dependencies
+        run: python -m pip install --disable-pip-version-check numpy pandas scipy rasterio
+      - name: Validate frozen colour-coordinate sampling frame
+        run: |
+          python analysis/validate_japan38_global_colour_observation_coordinates_v1.py \
+            --csv data/evidence/japan38_global_colour_observation_coordinates_v1.csv \
+            --provenance data/evidence/japan38_global_colour_observation_coordinates_provenance_v1.json
+      - name: Download WorldClim 2.1 public exposure normals
+        run: |
+          set -euo pipefail
+          mkdir -p worldclim result
+          for var in srad wind vapr tavg; do
+            url="https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_${var}.zip"
+            echo "Downloading ${url}"
+            curl -fL --retry 5 --retry-all-errors --connect-timeout 30 "${url}" -o "/tmp/wc2.1_10m_${var}.zip"
+            unzip -q "/tmp/wc2.1_10m_${var}.zip" -d worldclim
+          done
+          sha256sum /tmp/wc2.1_10m_*.zip | sort > result/worldclim_zip_sha256.txt
+          ls -lh worldclim | head -100
+      - name: Cross-check frozen WorldClim archive hashes
+        run: |
+          sed 's#  /tmp/#  #' result/worldclim_zip_sha256.txt > result/worldclim_zip_sha256_normalized.txt
+          diff -u data/evidence/japan38_global_lightness_worldclim_zip_sha256_v1.txt result/worldclim_zip_sha256_normalized.txt
+      - name: Sample WorldClim at the same colour observations
+        run: |
+          python analysis/sample_worldclim_public_exposure_v1.py \
+            --coordinates data/evidence/japan38_global_colour_observation_coordinates_v1.csv \
+            --worldclim-dir worldclim \
+            --observation-output result/japan38_global_colour_worldclim_observation_samples_v1.csv \
+            --summary-output result/japan38_global_lightness_worldclim_summary_v1.csv \
+            --metadata-output result/japan38_global_lightness_worldclim_sampling_v1.json
+      - name: Cross-check coverage and canonical lightness
+        run: |
+          python - <<'PY'
+          import json
+          import pandas as pd
+          from pathlib import Path
+          meta=json.loads(Path('result/japan38_global_lightness_worldclim_sampling_v1.json').read_text())
+          assert meta['coordinate_rows']==187, meta
+          assert meta['complete_rows']==187, meta
+          assert meta['species_rows']==6, meta
+          new=pd.read_csv('result/japan38_global_lightness_worldclim_summary_v1.csv').set_index('paper_japan_member_id')
+          old=pd.read_csv('data/evidence/japan38_lightness_paired_environment_summary_v1.csv').set_index('paper_japan_member_id')
+          assert set(new.index)==set(old.index)
+          for jpn in new.index:
+              assert int(new.loc[jpn,'n_worldclim_complete_observations'])==int(new.loc[jpn,'n_colour_observations'])
+              a=float(new.loc[jpn,'corolla_lab_lightness_median_species_median'])
+              b=float(old.loc[jpn,'corolla_lab_lightness_species_median'])
+              assert abs(a-b)<1e-6,(jpn,a,b)
+          PY
+      - name: Run exact WorldClim mechanism gate
+        run: |
+          python analysis/run_japan38_global_lightness_worldclim_mechanism_gate_v1.py \
+            --summary result/japan38_global_lightness_worldclim_summary_v1.csv \
+            --output result/japan38_global_lightness_worldclim_mechanism_gate_v1.json
+      - name: Unit tests
+        run: python -m unittest tests/test_japan38_global_lightness_worldclim_mechanism_v1.py -v
+      - name: Cross-check frozen outputs when present
+        run: |
+          python - <<'PY'
+          import json
+          import pandas as pd
+          from pathlib import Path
+          live_gate=json.loads(Path('result/japan38_global_lightness_worldclim_mechanism_gate_v1.json').read_text())
+          frozen_gate=Path('data/evidence/japan38_global_lightness_worldclim_mechanism_gate_v1.json')
+          frozen_summary=Path('data/evidence/japan38_global_lightness_worldclim_summary_v1.csv')
+          frozen_sampling=Path('data/evidence/japan38_global_lightness_worldclim_sampling_v1.json')
+          if frozen_gate.exists():
+              f=json.loads(frozen_gate.read_text())
+              assert f['primary_gate_pass']==live_gate['primary_gate_pass']
+              assert f['secondary_axis_robust_leads']==live_gate['secondary_axis_robust_leads']
+              for subset in ['n_ge_5','n_ge_10']:
+                  for metric in ['solar_radiation','wind_speed','vpd_tavg_proxy','exposure_3d']:
+                      for key in ['rho','p_positive_exact','p_two_sided_exact']:
+                          assert abs(float(f['subsets'][subset]['results'][metric][key])-float(live_gate['subsets'][subset]['results'][metric][key]))<1e-12
+              pd.testing.assert_frame_equal(pd.read_csv(frozen_summary),pd.read_csv('result/japan38_global_lightness_worldclim_summary_v1.csv'),check_exact=False,rtol=1e-10,atol=1e-10)
+              fs=json.loads(frozen_sampling.read_text())
+              ls=json.loads(Path('result/japan38_global_lightness_worldclim_sampling_v1.json').read_text())
+              for key in ['coordinate_rows','complete_rows','species_rows']:
+                  assert fs[key]==ls[key]
+              readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v9.json').read_text())
+              wc=readiness['colour']['public_worldclim_mechanism_gate']
+              assert wc['primary_gate_pass']==live_gate['primary_gate_pass']
+              assert wc['secondary_axis_robust_leads']==live_gate['secondary_axis_robust_leads']
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-global-lightness-worldclim-mechanism-${{ github.run_id }}
+          path: |
+            result/japan38_global_colour_worldclim_observation_samples_v1.csv
+            result/japan38_global_lightness_worldclim_summary_v1.csv
+            result/japan38_global_lightness_worldclim_sampling_v1.json
+            result/japan38_global_lightness_worldclim_mechanism_gate_v1.json
+            result/worldclim_zip_sha256.txt
+            result/worldclim_zip_sha256_normalized.txt
+          if-no-files-found: error
+          retention-days: 90

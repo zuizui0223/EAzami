@@ -1,0 +1,17 @@
+{
+  "contract_version": "japan38_global_colour_worldclim_sampling_v1",
+  "worldclim_version": "2.1",
+  "baseline": "1970-2000",
+  "resolution": "10 arc-minutes",
+  "variables": {
+    "srad": "monthly solar radiation, kJ m^-2 day^-1",
+    "wind": "monthly wind speed, m s^-1",
+    "vapr": "monthly water vapor pressure, kPa",
+    "tavg": "monthly average temperature, degrees C",
+    "vpd_tavg_proxy": "max(es(tavg)-vapr, 0), kPa; monthly values averaged across 12 months"
+  },
+  "coordinate_rows": 187,
+  "complete_rows": 187,
+  "species_rows": 6,
+  "claim_boundary": "Independent WorldClim public-data sensitivity baseline for global exact-concept species proxies; not a Japan-local colour-history analysis and not interchangeable with the CHELSA gate."
+}

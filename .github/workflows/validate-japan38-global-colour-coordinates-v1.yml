@@ -1,0 +1,35 @@
+name: Validate Japan38 global colour coordinate contract v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/japan38_global_colour_observation_coordinates_v1.csv"
+      - "data/evidence/japan38_global_colour_observation_coordinates_provenance_v1.json"
+      - "analysis/validate_japan38_global_colour_observation_coordinates_v1.py"
+      - "tests/test_japan38_global_colour_observation_coordinates_v1.py"
+      - ".github/workflows/validate-japan38-global-colour-coordinates-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-japan38-global-colour-coordinates-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate frozen coordinate table
+        run: |
+          python analysis/validate_japan38_global_colour_observation_coordinates_v1.py \
+            --csv data/evidence/japan38_global_colour_observation_coordinates_v1.csv \
+            --provenance data/evidence/japan38_global_colour_observation_coordinates_provenance_v1.json
+      - name: Unit tests
+        run: python -m unittest tests/test_japan38_global_colour_observation_coordinates_v1.py -v

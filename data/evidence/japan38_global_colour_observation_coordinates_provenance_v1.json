@@ -1,0 +1,39 @@
+{
+  "contract_version": "japan38_global_colour_observation_coordinates_provenance_v1",
+  "status_date": "2026-08-26",
+  "scope": "Public-image exact-concept species-proxy observations used only as the sampling frame for global colour mechanism sensitivity analyses. This is not a Japan-local phenotype table.",
+  "source": {
+    "repository": "zuizui0223/azami",
+    "workflow_run": 29306454759,
+    "artifact_id": 8314947270,
+    "artifact_name": "ch1-exhaustive-enriched-environment-20260713",
+    "artifact_digest": "sha256:gf6865411d01d169493063306c500362cff5f64bc419598344b7af6772c1be1f",
+    "source_file": "strict_spatial_thinned_with_climate_topography_soil.csv"
+  },
+  "filter": {
+    "paper_japan_member_ids": ["JPN_17", "JPN_23", "JPN_29", "JPN_36", "JPN_37", "JPN_38"],
+    "condition": "corolla_lab_lightness_n_usable_heads > 0",
+    "columns": [
+      "paper_japan_member_id",
+      "taxon_name",
+      "obs_id",
+      "latitude",
+      "longitude",
+      "corolla_lab_lightness_median",
+      "corolla_lab_lightness_n_usable_heads"
+    ]
+  },
+  "row_count": 187,
+  "taxon_counts": {
+    "JPN_17": 14,
+    "JPN_23": 20,
+    "JPN_29": 9,
+    "JPN_36": 10,
+    "JPN_37": 92,
+    "JPN_38": 42
+  },
+  "coordinate_csv": "data/evidence/japan38_global_colour_observation_coordinates_v1.csv",
+  "coordinate_csv_sha256": "1eadba060f7fa57a87f06c53caaadd04dc5fb8604c4a4a7d3a990d9de49cb27b",
+  "integrity_note": "An invalid initial draft of the coordinate CSV was detected on the analysis branch before any WorldClim analysis was executed. It was fully replaced with this table regenerated from the frozen Azami artifact. Downstream workflows hard-fail unless the byte-level SHA256 and exact per-concept counts match this contract.",
+  "claim_boundary": "The six concepts are the high-evidence global colour bridge. JPN_29 and JPN_38 observations include non-Japan localities, and JPN_29 remains specimen-identity-blocked for Japan-local phenotype joining. These coordinates may support a global exact-concept species-proxy sensitivity analysis only."
+}
