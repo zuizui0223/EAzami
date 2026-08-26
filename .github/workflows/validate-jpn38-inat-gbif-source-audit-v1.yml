@@ -5,6 +5,9 @@ on:
     paths:
       - "analysis/audit_jpn38_inat_gbif_japan_sources_v1.py"
       - "tests/test_jpn38_inat_gbif_japan_sources_v1.py"
+      - "data/evidence/jpn38_inat_gbif_japan_source_audit_v1.json"
+      - "data/evidence/jpn38_permission_candidates_v1.csv"
+      - "data/evidence/fdt_multitrait_execution_readiness_v7.json"
       - ".github/workflows/validate-jpn38-inat-gbif-source-audit-v1.yml"
   workflow_dispatch:
 
@@ -36,33 +39,40 @@ jobs:
             --csv-output result/jpn38_inat_gbif_japan_source_audit_v1.csv \
             --json-output result/jpn38_inat_gbif_japan_source_audit_v1.json
           python - <<'PY'
-          import json
+          import csv, json
           from pathlib import Path
           x=json.loads(Path('result/jpn38_inat_gbif_japan_source_audit_v1.json').read_text())
           assert x['contract_version']=='jpn38_inat_gbif_japan_source_audit_v1'
           assert set(x['sources'])=={'iNaturalist','GBIF'}
-          for key in [
-            'combined_media_rows','cross_source_unique_open_reusable_records',
-            'cross_source_open_reusable_specimen_records','cross_source_open_reusable_live_records',
-            'conservative_independent_open_reusable_live_records',
-            'conservative_independent_open_reusable_live_locality_cells_0_05deg',
-            'license_blocked_noncommercial_independent_live_records',
-            'license_blocked_noncommercial_independent_live_locality_cells_0_05deg',
-          ]:
-              assert x[key] >= 0, (key,x[key])
-          assert isinstance(x['automated_measurement_candidates'], list)
-          assert isinstance(x['permission_or_license_change_candidates'], list)
-          if x['conservative_independent_open_reusable_live_records'] > 0:
-              assert x['automated_measurement_candidates']
-              for row in x['automated_measurement_candidates']:
-                  assert row['media_url']
-                  assert row['media_license']
-                  assert row['basis_of_record'] in {'HUMAN_OBSERVATION','OBSERVATION','MACHINE_OBSERVATION'}
-          if x['license_blocked_noncommercial_independent_live_records'] > 0:
-              assert x['permission_or_license_change_candidates']
-              for row in x['permission_or_license_change_candidates']:
-                  assert row['media_license_class']=='noncommercial_only'
-                  assert row['basis_of_record'] in {'HUMAN_OBSERVATION','OBSERVATION','MACHINE_OBSERVATION'}
+          assert x['sources']['iNaturalist']['api_records_reported']==4
+          assert x['sources']['iNaturalist']['open_reusable_live_record_keys']==0
+          assert x['sources']['GBIF']['api_records_reported']==34
+          assert x['sources']['GBIF']['open_reusable_record_keys']==22
+          assert x['sources']['GBIF']['open_reusable_specimen_record_keys']==22
+          assert x['sources']['GBIF']['open_reusable_live_record_keys']==0
+          assert x['cross_source_open_reusable_specimen_records']==22
+          assert x['cross_source_open_reusable_live_records']==0
+          assert x['conservative_independent_open_reusable_live_records']==0
+          assert x['license_blocked_noncommercial_independent_live_records']==3
+          assert x['license_blocked_noncommercial_independent_live_locality_cells_0_05deg']==3
+          assert x['automated_measurement_candidates']==[]
+
+          frozen=json.loads(Path('data/evidence/jpn38_inat_gbif_japan_source_audit_v1.json').read_text())
+          assert frozen['cross_source']['open_reusable_specimen_records']==x['cross_source_open_reusable_specimen_records']
+          assert frozen['cross_source']['open_reusable_live_records']==x['cross_source_open_reusable_live_records']
+          assert frozen['cross_source']['license_blocked_noncommercial_independent_live_records']==x['license_blocked_noncommercial_independent_live_records']
+
+          permission_rows=list(csv.DictReader(Path('data/evidence/jpn38_permission_candidates_v1.csv').open(encoding='utf-8')))
+          assert len(permission_rows)==3
+          assert {int(r['inat_observation_id']) for r in permission_rows}=={190462681,268410147,339557766}
+          assert all(r['media_license']=='CC BY-NC 4.0' for r in permission_rows)
+
+          readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v7.json').read_text())
+          audit=readiness['colour']['jpn38_noncommons_live_source_audit']
+          assert audit['open_reusable_gbif_specimen_records']==22
+          assert audit['open_reusable_gbif_live_records']==0
+          assert audit['independent_cc_by_nc_live_records']==3
+          assert readiness['colour']['japan_local_history_ready'] is False
           print(json.dumps(x,indent=2,ensure_ascii=False))
           PY
       - uses: actions/upload-artifact@v4
