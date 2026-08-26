@@ -7,6 +7,9 @@ on:
       - "tests/test_japan38_jpn38_public_colour_recovery_v1.py"
       - "data/evidence/japan38_jpn38_public_colour_recovery_sources_v1.csv"
       - "data/evidence/japan38_jpn29_identity_geography_gate_v1.json"
+      - "data/evidence/japan38_jpn38_public_colour_recovery_summary_v1.json"
+      - "data/evidence/japan38_jpn38_public_colour_recovery_per_image_v1.csv"
+      - "data/evidence/fdt_multitrait_execution_readiness_v5.json"
       - ".github/workflows/validate-japan38-jpn38-public-colour-recovery-v1.yml"
   workflow_dispatch:
 
@@ -53,34 +56,64 @@ jobs:
           set -euo pipefail
           mkdir -p external_images
           python - <<'PY'
-          import csv, html, json, pathlib, re, urllib.parse, urllib.request
+          import csv, html, json, pathlib, re, time, urllib.error, urllib.parse, urllib.request
 
           registry=pathlib.Path('data/evidence/japan38_jpn38_public_colour_recovery_sources_v1.csv')
           out=pathlib.Path('external_images')
-          rows=list(csv.DictReader(registry.open(encoding='utf-8-sig', newline='')))
-          used=0
-          verified=[]
-          ua='EAzami-scientific-reproducibility/1.0 (public Wikimedia metadata verification)'
+          rows=[r for r in csv.DictReader(registry.open(encoding='utf-8-sig', newline='')) if r['automated_use'].strip().lower() == 'true']
+          if len(rows) != 3:
+              raise SystemExit(f"Expected exactly three automated-use sources, got {len(rows)}")
+          ua='EAzami-scientific-reproducibility/1.0 (https://github.com/zuizui0223/EAzami; Wikimedia public metadata verification)'
 
           def clean_html(value):
               return ' '.join(html.unescape(re.sub(r'<[^>]+>', ' ', value or '')).split())
 
+          def urlopen_retry(req, timeout, attempts=5):
+              delays=(0,5,10,20,30)
+              last=None
+              for i in range(attempts):
+                  if delays[i]:
+                      time.sleep(delays[i])
+                  try:
+                      return urllib.request.urlopen(req, timeout=timeout)
+                  except urllib.error.HTTPError as exc:
+                      last=exc
+                      if exc.code != 429 or i == attempts-1:
+                          raise
+                      retry_after=exc.headers.get('Retry-After')
+                      if retry_after and retry_after.isdigit():
+                          time.sleep(min(int(retry_after), 60))
+              raise last
+
+          filename_to_row={}
           for row in rows:
-              if row['automated_use'].strip().lower() != 'true':
-                  continue
               page=row['source_page_url']
               if 'commons.wikimedia.org/wiki/File:' not in page:
                   raise SystemExit(f"Only Commons files are automated in v1: {row['source_id']}")
               filename=urllib.parse.unquote(page.split('/wiki/File:',1)[1]).replace('_',' ')
-              params=urllib.parse.urlencode({
-                  'action':'query','format':'json','prop':'imageinfo',
-                  'iiprop':'url|extmetadata','titles':'File:'+filename,
-              })
-              req=urllib.request.Request('https://commons.wikimedia.org/w/api.php?'+params,headers={'User-Agent':ua})
-              with urllib.request.urlopen(req, timeout=30) as response:
-                  data=json.load(response)
-              page_data=next(iter(data['query']['pages'].values()))
-              info=page_data['imageinfo'][0]
+              filename_to_row[filename]=row
+
+          titles='|'.join('File:'+name for name in filename_to_row)
+          params=urllib.parse.urlencode({
+              'action':'query','format':'json','formatversion':'2','maxlag':'5',
+              'prop':'imageinfo','iiprop':'url|extmetadata','titles':titles,
+          })
+          req=urllib.request.Request('https://commons.wikimedia.org/w/api.php?'+params,headers={'User-Agent':ua})
+          with urlopen_retry(req, timeout=30) as response:
+              data=json.load(response)
+
+          resolved={}
+          for page in data.get('query',{}).get('pages',[]):
+              if page.get('missing'):
+                  raise SystemExit(f"Missing Commons file page: {page.get('title')}")
+              canonical=page['title'].removeprefix('File:')
+              resolved[canonical]=page['imageinfo'][0]
+          if set(resolved) != set(filename_to_row):
+              raise SystemExit(f"Commons batch resolution mismatch: expected={sorted(filename_to_row)} got={sorted(resolved)}")
+
+          verified=[]
+          for filename,row in filename_to_row.items():
+              info=resolved[filename]
               meta=info.get('extmetadata',{})
               description=clean_html(meta.get('ImageDescription',{}).get('value',''))
               license_short=clean_html(meta.get('LicenseShortName',{}).get('value',''))
@@ -95,7 +128,7 @@ jobs:
 
               target=out / f"{row['source_id']}.jpg"
               img_req=urllib.request.Request(info['url'],headers={'User-Agent':ua})
-              with urllib.request.urlopen(img_req, timeout=60) as response, target.open('wb') as handle:
+              with urlopen_retry(img_req, timeout=60) as response, target.open('wb') as handle:
                   while True:
                       chunk=response.read(1024*1024)
                       if not chunk:
@@ -108,10 +141,8 @@ jobs:
                   'license_short_name':license_short,'artist':artist,
                   'description':description,'image_url':info['url'],
               })
-              used += 1
+              time.sleep(1)
 
-          if used != 3:
-              raise SystemExit(f"Expected exactly three automated-use sources, got {used}")
           pathlib.Path('external_images/verified_commons_metadata.json').write_text(
               json.dumps(verified,indent=2,ensure_ascii=False)+'\n',encoding='utf-8'
           )
@@ -148,8 +179,20 @@ jobs:
           gate=json.loads(Path('data/evidence/japan38_jpn29_identity_geography_gate_v1.json').read_text())
           assert gate['paper_japan_member_id']=='JPN_29'
           assert gate['external_taxonomic_geography']['japan_in_native_range'] is False
+          assert gate['decision']['voucher_geography_resolved'] is True
+          assert gate['decision']['voucher_taxon_identity_resolved'] is False
           assert gate['decision']['clean_japan_local_trait_join_allowed'] is False
           assert gate['decision']['keep_raw_nuclear_tip'] is True
+
+          frozen=Path('data/evidence/japan38_jpn38_public_colour_recovery_summary_v1.json')
+          if frozen.exists():
+              f=json.loads(frozen.read_text())
+              for key in ['registered_automated_sources','downloaded_images_measured','usable_images_at_confidence_floor','usable_lightness_median','usable_chroma_median']:
+                  assert f[key] == x[key], (key,f[key],x[key])
+              readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v5.json').read_text())
+              assert readiness['colour']['jpn38_public_japan_screen']['usable_images_at_confidence_floor']==x['usable_images_at_confidence_floor']
+              assert readiness['colour']['jpn29_identity_gate']['voucher_geography_resolved'] is True
+              assert readiness['colour']['jpn29_identity_gate']['voucher_taxon_identity_resolved'] is False
           print(json.dumps({'jpn38':x,'jpn29_decision':gate['decision']},indent=2,ensure_ascii=False))
           PY
 
