@@ -11,11 +11,21 @@
       "status": "benchmark module with robust recurrence but unresolved transition placement; not sole programme focus"
     },
     "display": {
-      "trait_coverage": "15 source-backed direct size rows compiled across Japan/Ryukyu/Taiwan; directly comparable measured subset includes seven focal taxa",
+      "broad_direct_seed": "15 source-backed direct size rows compiled across Japan/Ryukyu/Taiwan",
+      "japan38_direct_coverage": "5/38 exact Japan38 concepts (13.2%) have directly comparable source-backed involucre_live_diameter values: JPN_03 Cirsium alpicola, JPN_09 C. gyojanum, JPN_19 C. nippoense, JPN_30 C. yezoense, JPN_37 C. kamtschaticum",
+      "comparability_gate": "Only the five exact Japan38 involucre_live_diameter rows form one directly comparable metric family. Cirsium suffultum is not mapped to JPN_24 C. pseudosuffultum; infraspecific taxa are not collapsed to species-level concepts; measured capitulum length/width and involucre diameter are not discretized into one state merely to increase coverage.",
       "head_number": "qualitative architecture available for some taxa but standardized plant-level simultaneous/seasonal head count remains missing",
       "functional_prior": "pollinator-benefit and reproductive-enemy-cost evidence both available",
       "pilot_result": "direct measured capitulum width has no detectable U/D coupling in the seven-taxon PGLS diagnostic",
-      "status": "size component ready for phylogenetic expansion; head-number component still needs direct table"
+      "high_leverage_missing": [
+        "JPN_36",
+        "JPN_06",
+        "JPN_34",
+        "JPN_15",
+        "JPN_24"
+      ],
+      "next_measurement": "Prioritize standardized direct capitulum/involucre size for JPN_36 C. sieboldii, JPN_06 C. dipsacolepis, JPN_34 C. microspicatum, JPN_15 C. lineare and JPN_24 C. pseudosuffultum; keep head number as a separate display variable.",
+      "status": "not ready for Japan38-wide evolutionary-history mapping: exact directly comparable coverage is 5/38, so discretization/ASR would add assumptions faster than information"
     },
     "phyllary_spine": {
       "trait_coverage": "Japan38 NMNS phyllary posture resolved for 10 concepts; direct phyllary length/protrusion measurements compiled for seven focal taxa",
@@ -34,9 +44,12 @@
       "status": "useful macroevolutionary negative-control module; do not promote current Mk overlap to shared developmental mechanism"
     },
     "colour": {
-      "trait_coverage": "focal 20-tip tree currently C17/W3",
+      "focal20_trait_coverage": "focal 20-tip tree currently C17/W3",
+      "japan38_azami_bridge_coverage": "retained Azami bridge summary reports exact taxon-concept coverage for 10/38 Japan38 concepts and binomial-level coverage for 11/38, leaving 27/38 without binomial coverage",
+      "history_gate": "The retained coverage summary is not a row-level exact Japan38 concept-to-colour-state table. Coverage counts alone cannot be converted into colour ASR or transition counts; broad Cirsium japonicum imagery is not assigned to JPN_12 var. horridum.",
       "functional_prior": "pollinator preference and abiotic-pigment hypotheses remain context dependent",
-      "status": "ecological/history module valuable but fixed-white breadth remains the immediate transition-history blocker"
+      "next_action": "Recover or rebuild an identity-resolved row-level Japan38 colour-state bridge before any Japan38 colour-history inference, while continuing fixed-white lineage recovery for directional loss/regain questions.",
+      "status": "high-value module but not ready for Japan38 history: state-table provenance, exact concept resolution and fixed-white breadth remain blockers"
     }
   },
   "cross_module": {
@@ -62,30 +75,57 @@
       "phyllary_stickiness_bootstrap_median": 0.19470195916272703,
       "phyllary_stickiness_bootstrap_fraction_positive": 0.8633093525179856
     },
-    "current_h2_h3_resolution": "No module pair is consistently positive across the branch-length-aware and branch-length-free topology layers. The simple H3 alternative of one shared whole-capitulum lability axis is therefore not supported by the current three-module data. This makes module-specific histories necessary, but does not by itself establish developmental/genetic modular evolvability (H2).",
-    "interpretation": "Repeated evolution is supported within each observed module, while cross-module coupling is assumption-sensitive and heterogeneous. Retain separate module histories rather than collapsing capitulum variation onto one latent lability axis."
+    "current_h2_h3_resolution": "No module pair is consistently positive across the branch-length-aware and branch-length-free topology layers. The simple H3 alternative of one shared whole-capitulum lability axis is therefore not supported by the current three-module data. This makes module-specific histories necessary, but does not by itself establish developmental/genetic modular evolvability (H2). Display and colour are not counted as fourth/fifth historical modules because their Japan38 state coverage fails the current execution gates.",
+    "interpretation": "Repeated evolution is supported within each of the three currently mapped modules, while cross-module coupling is assumption-sensitive and heterogeneous. Retain separate module histories rather than collapsing capitulum variation onto one latent lability axis."
   },
   "trait_completion_design": {
     "criterion": "multi-objective, topology-conditioned and identity-gated design: prefer a missing state that robustly reduces optional transition-placement edges; if none exists, target ancestral-state discrimination, then minimum-step falsification. Enumerated hypothetical states are scenarios, not probabilities.",
     "orientation": {
       "primary_objective": "transition_localization",
       "primary": "JPN_34",
-      "identity_pass_alternates": ["JPN_01", "JPN_25", "JPN_28", "JPN_16"],
-      "identity_caution_high_value": ["JPN_33", "JPN_10", "JPN_21"],
+      "identity_pass_alternates": [
+        "JPN_01",
+        "JPN_25",
+        "JPN_28",
+        "JPN_16"
+      ],
+      "identity_caution_high_value": [
+        "JPN_33",
+        "JPN_10",
+        "JPN_21"
+      ],
       "note": "JPN_33 has the largest raw localization gain but is not operationally first because its cultivated paper concept has a name/voucher identity conflict."
     },
     "phyllary": {
       "primary_objective": "ancestral_state_discrimination",
       "primary": "JPN_15",
-      "identity_pass_alternates": ["JPN_18", "JPN_01", "JPN_04", "JPN_05"],
-      "identity_caution_high_value": ["JPN_29", "JPN_10", "JPN_14"],
+      "identity_pass_alternates": [
+        "JPN_18",
+        "JPN_01",
+        "JPN_04",
+        "JPN_05"
+      ],
+      "identity_caution_high_value": [
+        "JPN_29",
+        "JPN_10",
+        "JPN_14"
+      ],
       "note": "No missing concept guarantees a positive reduction in optional transition edges across all four posture states, so the operational target switches to resolving the currently ambiguous root-state set."
     },
     "stickiness": {
       "primary_objective": "transition_localization",
       "primary": "JPN_24",
-      "identity_pass_alternates": ["JPN_05", "JPN_25", "JPN_08", "JPN_04"],
-      "identity_caution_high_value": ["JPN_10", "JPN_14", "JPN_21"],
+      "identity_pass_alternates": [
+        "JPN_05",
+        "JPN_25",
+        "JPN_08",
+        "JPN_04"
+      ],
+      "identity_caution_high_value": [
+        "JPN_10",
+        "JPN_14",
+        "JPN_21"
+      ],
       "note": "JPN_10 has the same robust localization gain as JPN_24 but carries an NCBI/tree-code naming caution, so JPN_24 is the clean operational first target."
     },
     "observed_state_validation": {
@@ -95,6 +135,11 @@
       "stickiness_second_reason": "JPN_06 is a forced stickiness-change terminal in 67.0% of bootstrap topologies."
     }
   },
+  "next_module_expansion_gate": {
+    "display": "Do not add to historical overlap tests until a denser set of exact Japan38 concepts shares one directly comparable display metric; first fill the five high-leverage taxa listed above.",
+    "colour": "Do not add to historical overlap tests until an identity-resolved row-level exact Japan38 colour-state table is recovered/rebuilt; coverage summary counts are insufficient.",
+    "principle": "A fourth module is added only when trait states are directly comparable, concept identity is resolved, and its uncertainty can be propagated across the Japan38 topology ensemble."
+  },
   "tree_dependency": "Resolved for the current compatibility analysis: frozen 241 locus universe -> 236 current QC loci -> 176 safflower-rootable loci -> 40-tip, 161654-bp IQ-TREE2.4.0 ML analysis. JPN_20 biological samples are non-monophyletic in the ML tree and 0/1000 UFBoot trees; because JPN_20 is fully unresolved for the three analysed traits it is pruned rather than forcibly collapsed. JPN_31 remains excluded from primary trait analysis because of the Japan/Ukraine identity conflict.",
-  "claim_boundary": "Independent Japan38 compatibility reconstruction and source-backed trait lower bounds only; sampling priorities are inferential design heuristics, not probabilities of biological importance; not the unpublished Moreyra final-350 phylogeny, not adaptive-convergence counts, and not proof of developmental modularity or adaptive radiation."
+  "claim_boundary": "Independent Japan38 compatibility reconstruction and source-backed trait lower bounds only; sampling priorities are inferential design heuristics, not probabilities of biological importance; display and colour are not yet Japan38 historical modules; not the unpublished Moreyra final-350 phylogeny, not adaptive-convergence counts, and not proof of developmental modularity or adaptive radiation."
 }
