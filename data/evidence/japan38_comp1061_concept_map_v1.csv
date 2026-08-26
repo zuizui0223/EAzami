@@ -1,0 +1,39 @@
+paper_japan_member_id,paper_taxon_concept,n_biological_samples,tip_ids,trait_asr_primary_allowed
+JPN_01,Cirsium abukumense Kadota,1,J38S001,true
+JPN_02,Cirsium aidzuense i,1,J38S002,true
+JPN_03,Cirsium alpicola Nakai,1,J38S003,true
+JPN_04,Cirsium amplexifolium (Nakai) Kitam.,1,J38S004,true
+JPN_05,Cirsium aomorense Nakai,1,J38S005,true
+JPN_06,Cirsium dipsacolepis Matsum.,1,J38S006,true
+JPN_07,Cirsium domonii Kadota,1,J38S007,true
+JPN_08,Cirsium funagataense Kadota,1,J38S008,true
+JPN_09,Cirsium gyojanum Kitam.,1,J38S009,true
+JPN_10,"Cirsium ishidatense (Horiuchi) Kadota et Horiuchi, comb. ined.",1,J38S010,true
+JPN_11,Cirsium ishizuchiense (Kitam.) Kadota,1,J38S011,true
+JPN_12,Cirsium japonicum Fisch. ex DC. var. horridum Nakai,1,J38S012,true
+JPN_13,Cirsium kasaianum Kadota,1,J38S013,true
+JPN_14,Cirsium kiotoense (Kitam.) Kadota,1,J38S014,true
+JPN_15,Cirsium lineare (Thunb.) Sch.Bip.,1,J38S015,true
+JPN_16,Cirsium magofukui Kitam.,1,J38S016,true
+JPN_17,Cirsium maritimum Makino,1,J38S017,true
+JPN_18,Cirsium matsumurae Nakai var. dubium Kitam.,1,J38S018,true
+JPN_19,Cirsium nippoense Kadota,1,J38S019,true
+JPN_20,Cirsium nipponicum var. incomptum (Maxim.) Kadota,2,J38S020|J38S021,true
+JPN_21,Cirsium nipponicum var. yoshinoi (Nakai) Kitam.,1,J38S022,true
+JPN_22,Cirsium norikurense Nakai,1,J38S023,true
+JPN_23,Cirsium oligophyllum Matsum.,1,J38S024,true
+JPN_24,Cirsium pseudosuffultum Kadota,1,J38S025,true
+JPN_25,Cirsium shidokimontanum Kadota,1,J38S026,true
+JPN_26,Cirsium spicatum Matsum.,1,J38S027,true
+JPN_27,Cirsium suzukaense Kitam.,1,J38S028,true
+JPN_28,Cirsium uzenense Kadota,1,J38S029,true
+JPN_29,Cirsium verutum (D.Don) Spreng.,1,J38S030,true
+JPN_30,Cirsium yezoense (Maxim.) Makino,1,J38S031,true
+JPN_31,Cirsium yuki-uenoanum Kadota,1,J38S032,false
+JPN_32,Cirsium buergeri Miq.,1,J38S033,true
+JPN_33,Cirsium effusum Matsm.,1,J38S034,true
+JPN_34,Cirsium microspicatum Nakai,1,J38S035,true
+JPN_35,Cirsium nipponicum Makino,1,J38S036,true
+JPN_36,Cirsium sieboldii Miq.,1,J38S037,true
+JPN_37,Cirsium kamtschaticum Ledeb. ex DC.,1,J38S038,true
+JPN_38,Cirsium pendulum Fisch. ex DC.,1,J38S039,true
