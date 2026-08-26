@@ -1,0 +1,36 @@
+{
+  "contract_version": "japan38_jpn38_public_colour_recovery_v1",
+  "status_date": "2026-08-26",
+  "paper_japan_member_id": "JPN_38",
+  "taxon_name": "Cirsium pendulum",
+  "measurement_implementation": {
+    "repo": "zuizui0223/azami",
+    "commit": "4e6f66675004207d331fd620d6bcd894287f316a",
+    "path": "ch1_global/v2/52_measure_primary_traits_continuous.py",
+    "function": "colour_measurement",
+    "colour_confidence_floor": 0.55
+  },
+  "registered_automated_sources": 3,
+  "downloaded_images_measured": 3,
+  "usable_images_at_confidence_floor": 1,
+  "usable_lightness_median": 60.7843132019043,
+  "usable_lightness_mad": 0.0,
+  "usable_chroma_median": 34.0,
+  "independent_population_replicates": 1,
+  "population_replicate_note": "All three licensed sources are from the same Fukushima/Aizu locality, date (2008-10-01) and photographer (Qwert1234); they are image replicates, not independent population replicates.",
+  "per_image_result": "data/evidence/japan38_jpn38_public_colour_recovery_per_image_v1.csv",
+  "validation": {
+    "workflow_run": 32930979065,
+    "artifact_id": 9593190257,
+    "artifact_name": "jpn38-public-colour-recovery-32930979065",
+    "artifact_digest": "sha256:feea58634fade502d2ed7390c0177261d0524880d9f3e82035185c563967eec4",
+    "validated_head_sha": "b96a19e6a080ffb8007436ac4e8f9ae3420f007d",
+    "commons_metadata_check": "Three files independently verified in CI as Fukushima/Aizu and CC BY-SA 4.0 before original-image download."
+  },
+  "promotion_gate": {
+    "japan_local_colour_bridge_ready_from_this_recovery": false,
+    "reason": "Only one of three images clears the frozen confidence floor, all three come from one locality/date/photographer, and the images were not produced by the original detector-crop cohort."
+  },
+  "next_evidence": "Acquire independent Japan-local C. pendulum populations with reusable or directly collected images under the same measurement protocol before promoting JPN_38 to a population-matched Japan38 colour tip.",
+  "claim_boundary": "Derived screening calibration only. Raw external images are not committed. The usable L* value must not replace the canonical global species median or be treated as a Japanese population phenotype until independent local replication is obtained."
+}

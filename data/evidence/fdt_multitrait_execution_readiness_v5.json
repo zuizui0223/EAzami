@@ -1,0 +1,56 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v5",
+  "status_date": "2026-08-26",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v4.json",
+  "inheritance": "All discrete-module histories, H2/H3 resolution, display gate, global continuous-colour result, current-climate/topography/soil gates, and the geographic-provenance conclusion are inherited from v4 unless overridden below.",
+  "colour": {
+    "global_species_proxy": "Retain the v4 conclusion: the high-depth LAB-lightness signal is a global exact-concept species proxy, not a validated Japan-local radiation history.",
+    "japan_local_history_ready": false,
+    "existing_clean_japan_window_concepts": ["JPN_17", "JPN_23", "JPN_36", "JPN_37"],
+    "jpn38_public_japan_screen": {
+      "paper_japan_member_id": "JPN_38",
+      "taxon": "Cirsium pendulum",
+      "source_registry": "data/evidence/japan38_jpn38_public_colour_recovery_sources_v1.csv",
+      "canonical_summary": "data/evidence/japan38_jpn38_public_colour_recovery_summary_v1.json",
+      "canonical_per_image": "data/evidence/japan38_jpn38_public_colour_recovery_per_image_v1.csv",
+      "licensed_images_measured": 3,
+      "usable_images_at_confidence_floor": 1,
+      "colour_confidence_floor": 0.55,
+      "usable_lightness": 60.7843132019043,
+      "usable_chroma": 34.0,
+      "independent_japanese_localities": 1,
+      "locality": "Fukushima Prefecture, Aizu",
+      "measurement_implementation": "Pinned Azami commit 4e6f66675004207d331fd620d6bcd894287f316a colour_measurement",
+      "promotion_status": "screening_calibration_only_not_population_proxy",
+      "reason": "Only one image clears the frozen confidence floor and all three images come from one locality/date/photographer; no threshold was relaxed after observing the result."
+    },
+    "jpn29_identity_gate": {
+      "paper_japan_member_id": "JPN_29",
+      "taxon_label": "Cirsium verutum (D.Don) Spreng.",
+      "biosample": "SAMN44017947",
+      "run": "SRR30887232",
+      "voucher": "K. Yonekura 6788 (PE01523822)",
+      "voucher_label_geography": "Japan",
+      "voucher_geography_resolved": true,
+      "voucher_taxon_identity_resolved": false,
+      "accepted_species_native_range_includes_japan": false,
+      "clean_japan_local_trait_join_allowed": false,
+      "status": "voucher_taxon_concept_contradiction_not_missing_photo",
+      "gate": "Inspect PE01523822 determination/annotation history before attaching any Japan-local colour phenotype to this nuclear tip."
+    },
+    "status": "Japan-local colour history remains blocked. JPN_38 now has a reproducible one-locality licensed-image calibration but not a population proxy; JPN_29 is blocked by specimen/taxon identity rather than colour-image scarcity."
+  },
+  "priority_reordering": {
+    "first": "Obtain independent Japan-local C. pendulum evidence beyond the current Fukushima/Aizu series, preferably directly collected or reusable images that can be processed under the same measurement pipeline. Do not promote the one-locality screening value by itself.",
+    "second": "Inspect specimen PE01523822 / K. Yonekura 6788 and its determination history to resolve why a Japanese voucher is labelled as C. verutum despite the accepted species range excluding Japan.",
+    "third": "Once JPN_38 has population-matched local evidence or another clean fifth Japan-local concept is recovered, rerun the continuous-lightness phylogenetic diagnostic on at least five Japan-local identity-resolved concepts.",
+    "fourth": "Only after the Japan-local trait gate passes, resume radiation/rsds, VPD/aridity, wind/sfcWind and improved-soil mechanism screens; then historical climate and biotic interactions.",
+    "discrete_colour": "Do not invent a C/W threshold or infer loss/regain from the present continuous image proxy."
+  },
+  "canonical_results": {
+    "geographic_provenance_gate": "data/evidence/japan38_colour_geographic_provenance_gate_v1.json",
+    "jpn38_public_screen": "data/evidence/japan38_jpn38_public_colour_recovery_summary_v1.json",
+    "jpn29_identity_gate": "data/evidence/japan38_jpn29_identity_geography_gate_v1.json"
+  },
+  "claim_boundary": "The JPN_38 public-image result is a derived screening calibration from one Japanese locality and cannot substitute for a population-matched trait. JPN_29 has an explicitly Japanese sequenced voucher but an unresolved taxon-concept contradiction; retaining the raw nuclear tip does not authorize a clean Japanese phenotype join."
+}
