@@ -5,6 +5,8 @@ on:
     paths:
       - "analysis/audit_jpn38_commons_independent_localities_v1.py"
       - "tests/test_jpn38_commons_independent_localities_v1.py"
+      - "data/evidence/jpn38_commons_independent_locality_audit_v1.csv"
+      - "data/evidence/jpn38_commons_independent_locality_audit_v1.json"
       - ".github/workflows/validate-jpn38-commons-independent-localities-v1.yml"
   workflow_dispatch:
 
@@ -39,9 +41,31 @@ jobs:
           import json
           from pathlib import Path
           x=json.loads(Path('result/jpn38_commons_independent_locality_audit_v1.json').read_text())
-          assert x['files_total'] >= 8
-          assert x['known_fukushima_aizu_files'] >= 3
-          assert x['open_license_files'] >= 3
+          assert x['files_total']==8
+          assert x['open_license_files']==8
+          assert x['explicit_japan_locality_files']==3
+          assert x['known_fukushima_aizu_files']==3
+          assert x['other_explicit_japan_files']==0
+          assert x['independent_japan_locality_candidates']==0
+          assert x['explicit_korea_files']==1
+          assert x['explicit_korea_titles']==['File:Cirsium pendulum.JPG']
+          assert x['location_unresolved_files']==4
+          assert set(x['location_unresolved_titles'])=={
+            'File:Cirsium pendulum 2.JPG','File:Cirsium pendulum 3.JPG',
+            'File:Cirsium pendulum 4.JPG','File:Cirsium pendulum 5.JPG'
+          }
+          assert x['dalgial_2008_09_15_files']==5
+
+          frozen=Path('data/evidence/jpn38_commons_independent_locality_audit_v1.json')
+          if frozen.exists():
+              f=json.loads(frozen.read_text())
+              for key in [
+                'files_total','open_license_files','explicit_japan_locality_files',
+                'known_fukushima_aizu_files','other_explicit_japan_files',
+                'explicit_korea_files','location_unresolved_files',
+                'independent_japan_locality_candidates'
+              ]:
+                  assert f[key]==x[key], (key,f[key],x[key])
           print(json.dumps(x,indent=2,ensure_ascii=False))
           PY
       - uses: actions/upload-artifact@v4
