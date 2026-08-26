@@ -1,0 +1,33 @@
+{
+  "contract_version": "japan38_global_lightness_worldclim_mechanism_gate_v1",
+  "analysis_scope": "global exact-concept species-proxy exploratory sensitivity",
+  "baseline": "WorldClim 2.1 1970-2000, 10 arc-minutes",
+  "primary_predictor": "standardized 3-D distance across annual-mean solar radiation, wind speed, and mean-temperature VPD proxy",
+  "primary_support_rule": "n>=5 rho>0; exact positive-tail p<=0.05; n>=10 rho>0; every n>=5 leave-one-taxon-out rho>0",
+  "secondary_axis_rule": "same direction/LOO rule, with Holm correction across the three axis-specific n>=5 positive-tail tests",
+  "subsets": {
+    "n_ge_5": {
+      "n_taxa": 6,
+      "taxa": ["JPN_17", "JPN_23", "JPN_29", "JPN_36", "JPN_37", "JPN_38"],
+      "results": {
+        "solar_radiation": {"rho": -0.2571428571428571, "n_permutations": 720, "p_positive_exact": 0.6916666666666667, "p_negative_exact": 0.3125, "p_two_sided_exact": 0.5763888888888888, "leave_one_out_rho": {"JPN_17": -0.16363636363636364, "JPN_23": -0.4545454545454545, "JPN_29": 0.24848484848484845, "JPN_36": -0.32121212121212117, "JPN_37": -0.2727272727272727, "JPN_38": -0.5151515151515151}, "leave_one_out_all_positive": false, "p_positive_holm_three_axes": 1.0},
+        "wind_speed": {"rho": -0.2071428571428571, "n_permutations": 720, "p_positive_exact": 0.7069444444444445, "p_negative_exact": 0.3, "p_two_sided_exact": 0.5777777777777777, "leave_one_out_rho": {"JPN_17": -0.04242424242424241, "JPN_23": -0.2727272727272727, "JPN_29": -0.2727272727272727, "JPN_36": 0.07878787878787878, "JPN_37": -0.12727272727272726, "JPN_38": -0.38181818181818183}, "leave_one_out_all_positive": false, "p_positive_holm_three_axes": 1.0},
+        "vpd_tavg_proxy": {"rho": 0.4928571428571427, "n_permutations": 720, "p_positive_exact": 0.10972222222222222, "p_negative_exact": 0.8916666666666667, "p_two_sided_exact": 0.1638888888888889, "leave_one_out_rho": {"JPN_17": 0.5030303030303029, "JPN_23": 0.35757575757575755, "JPN_29": 0.41818181818181815, "JPN_36": 0.5878787878787878, "JPN_37": 0.7454545454545454, "JPN_38": 0.16363636363636364}, "leave_one_out_all_positive": true, "p_positive_holm_three_axes": 0.32916666666666666},
+        "exposure_3d": {"rho": -0.07142857142857141, "n_permutations": 720, "p_positive_exact": 0.5375, "p_negative_exact": 0.46805555555555556, "p_two_sided_exact": 0.9, "leave_one_out_rho": {"JPN_17": 0.22424242424242422, "JPN_23": -0.17575757575757575, "JPN_29": -0.01818181818181818, "JPN_36": 0.01818181818181818, "JPN_37": -0.01818181818181818, "JPN_38": -0.4545454545454545}, "leave_one_out_all_positive": false}
+      }
+    },
+    "n_ge_10": {
+      "n_taxa": 5,
+      "taxa": ["JPN_17", "JPN_23", "JPN_36", "JPN_37", "JPN_38"],
+      "results": {
+        "solar_radiation": {"rho": 0.24848484848484845, "n_permutations": 120, "p_positive_exact": 0.25833333333333336, "p_negative_exact": 0.75, "p_two_sided_exact": 0.55, "leave_one_out_rho": {"JPN_17": 0.6, "JPN_23": 0.028571428571428574, "JPN_36": 0.2571428571428572, "JPN_37": 0.7142857142857143, "JPN_38": -0.14285714285714288}, "leave_one_out_all_positive": false, "p_positive_holm_three_axes": 0.5166666666666667},
+        "wind_speed": {"rho": -0.2727272727272727, "n_permutations": 120, "p_positive_exact": 0.75, "p_negative_exact": 0.26666666666666666, "p_two_sided_exact": 0.5333333333333333, "leave_one_out_rho": {"JPN_17": -0.14285714285714288, "JPN_23": -0.48571428571428577, "JPN_36": -0.028571428571428574, "JPN_37": -0.14285714285714288, "JPN_38": -0.3142857142857143}, "leave_one_out_all_positive": false, "p_positive_holm_three_axes": 0.75},
+        "vpd_tavg_proxy": {"rho": 0.41818181818181815, "n_permutations": 120, "p_positive_exact": 0.125, "p_negative_exact": 0.8833333333333333, "p_two_sided_exact": 0.3333333333333333, "leave_one_out_rho": {"JPN_17": 0.48571428571428577, "JPN_23": 0.2, "JPN_36": 0.7714285714285715, "JPN_37": 0.7714285714285715, "JPN_38": -0.14285714285714288}, "leave_one_out_all_positive": false, "p_positive_holm_three_axes": 0.375},
+        "exposure_3d": {"rho": -0.01818181818181818, "n_permutations": 120, "p_positive_exact": 0.475, "p_negative_exact": 0.5333333333333333, "p_two_sided_exact": 0.975, "leave_one_out_rho": {"JPN_17": 0.2571428571428572, "JPN_23": -0.3714285714285715, "JPN_36": 0.3714285714285715, "JPN_37": 0.5428571428571429, "JPN_38": -0.3142857142857143}, "leave_one_out_all_positive": false}
+      }
+    }
+  },
+  "primary_gate_pass": false,
+  "secondary_axis_robust_leads": {"solar_radiation": false, "wind_speed": false, "vpd_tavg_proxy": false},
+  "claim_boundary": "A pass would identify an exploratory public-data mechanism lead, not prove selection or causation. A fail means these WorldClim exposure axes do not explain the global species-proxy L* pattern under the frozen gate. This analysis is not Japan-local colour history."
+}
