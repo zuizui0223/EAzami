@@ -1,0 +1,49 @@
+{
+  "contract_version": "jpn29_specimen_determination_public_api_audit_v1",
+  "status_date": "2026-08-26",
+  "target": {
+    "paper_japan_member_id": "JPN_29",
+    "paper_taxon_concept": "Cirsium verutum",
+    "catalog_number": "PE01523822",
+    "catalog_number_numeric_variant": "01523822",
+    "collector": "K. Yonekura",
+    "collector_number": "6788",
+    "voucher_label": "Japan: 16.05.2001, K. Yonekura 6788 (PE01523822)"
+  },
+  "all_query_routes_ok": {
+    "GBIF": true,
+    "iDigBio": true
+  },
+  "query_route_summary": {
+    "GBIF": {
+      "catalog_full": {"ok": true, "count": 0},
+      "catalog_numeric_pe": {"ok": true, "count": 0},
+      "record_number_japan": {"ok": true, "count": 30, "note": "Generic record-number route; none matched K. Yonekura 6788."},
+      "collector_taxon_japan": {"ok": true, "count": 0}
+    },
+    "iDigBio": {
+      "catalog_full": {"ok": true, "count": 0},
+      "catalog_numeric_pe": {"ok": true, "count": 0},
+      "record_number": {"ok": true, "count": 1120, "retrieved_rows": 300, "note": "Broad context route only; pagination gap is closed separately by the direct combined route."},
+      "collector": {"ok": true, "count": 1887, "retrieved_rows": 300, "note": "Broad context route only; pagination gap is closed separately by the direct combined route."}
+    }
+  },
+  "exact_catalog_hit_count": 0,
+  "collector_number_hit_count": 0,
+  "determination_history_resolved": false,
+  "direct_idigbio_intersection": {
+    "canonical_result": "data/evidence/jpn29_idigbio_combined_route_v1.json",
+    "query": {"collector": "yonekura", "recordnumber": "6788"},
+    "item_count": 0,
+    "returned_rows": 0,
+    "role": "Closes the first-300 pagination gap in the broad iDigBio record-number and collector routes."
+  },
+  "decision": "GBIF and iDigBio public metadata do not expose the target catalog record or a Yonekura 6788 intersection, and they do not resolve a determination/annotation history for PE01523822. The public-aggregator route is exhausted for the current target. Direct PE herbarium specimen/image, label/annotation history, or curator-level inspection is now required.",
+  "validation": {
+    "workflow_run": 32953447137,
+    "artifact_id": 9601043715,
+    "artifact_name": "jpn29-specimen-determination-audit-32953447137",
+    "artifact_digest": "sha256:60cc6c8e2cf39d4721f8c7c4553911a77710b64ab82399d8aecddbd9b3acb58f"
+  },
+  "claim_boundary": "Failure to recover the specimen in GBIF/iDigBio does not reidentify the voucher and does not prove the Moreyra label is wrong. The raw nuclear tip remains retained. A clean Japan-local phenotype join remains blocked until specimen-level determination is resolved."
+}
