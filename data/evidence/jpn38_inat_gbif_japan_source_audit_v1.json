@@ -62,10 +62,10 @@
   ],
   "decision": "No conservatively independent Japanese open-license live-photo source was recovered. The 22 open-license GBIF records are preserved-specimen images and are excluded from corolla-colour measurement. Three independent live-photo localities exist but are CC BY-NC and therefore remain permission/license-change candidates under the frozen conservative reuse policy.",
   "validation": {
-    "workflow_run": 32932474118,
-    "artifact_id": 9593669064,
-    "artifact_name": "jpn38-inat-gbif-source-audit-32932474118",
-    "artifact_digest": "sha256:99e259197eba53d3b2f3e3509257a3cb871edcab3c6b1313bbbed51d08013d70"
+    "workflow_run": 32951676817,
+    "artifact_id": 9600367595,
+    "artifact_name": "jpn38-inat-gbif-source-audit-32951676817",
+    "artifact_digest": "sha256:9724076ead245834e11fc982cb9ea39e7c5d7cc0a827ff76085777b470b014eb"
   },
   "claim_boundary": "Preserved-specimen scans are not used for corolla colour because drying and preservation alter colour. CC BY-NC live photographs are not automatically processed under this conservative pipeline; they remain permission candidates, not measured phenotypes."
 }
