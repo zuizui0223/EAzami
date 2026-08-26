@@ -1,0 +1,29 @@
+name: Validate Japan38 canonical evidence v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/japan38_comp1061_primary_tree_v1.nwk"
+      - "data/evidence/japan38_comp1061_primary_tree_acceptance_v1.json"
+      - "data/evidence/japan38_multitrait_history_summary_v1.json"
+      - "data/evidence/japan38_colour_continuous_history_summary_v1.json"
+      - "tests/test_japan38_canonical_evidence_v1.py"
+      - ".github/workflows/validate-japan38-canonical-evidence-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install lightweight parser
+        run: pip install "biopython==1.85"
+      - name: Validate frozen Japan38 tree and summaries
+        run: python -m unittest tests/test_japan38_canonical_evidence_v1.py -v
