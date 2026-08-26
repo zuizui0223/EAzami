@@ -32,9 +32,19 @@ def open_license(license_short: str) -> bool:
     return any(token in value for token in ("CC BY", "CC0", "GFDL"))
 
 
-def japan_text(text: str) -> bool:
+def japan_word(text: str) -> bool:
     value = text or ""
     return "日本" in value or re.search(r"\bJapan\b", value, flags=re.I) is not None
+
+
+def fukushima_aizu_text(text: str) -> bool:
+    value = text or ""
+    return ("福島" in value or "Fukushima" in value) and ("会津" in value or "Aizu" in value)
+
+
+def korea_text(text: str) -> bool:
+    value = text or ""
+    return any(token.lower() in value.lower() for token in ("Korea", "Kimpo", "Gimpo", "韓国", "김포"))
 
 
 def request_json(params: dict[str, str], attempts: int = 5):
@@ -116,6 +126,9 @@ def main():
         gps_lat = clean_html(meta.get("GPSLatitude", {}).get("value", ""))
         gps_lon = clean_html(meta.get("GPSLongitude", {}).get("value", ""))
         categories = clean_html(meta.get("Categories", {}).get("value", ""))
+        aizu = fukushima_aizu_text(description)
+        korea = korea_text(description)
+        explicit_japan = japan_word(description) or aizu
         out.append({
             "commons_title": title,
             "page_url": "https://commons.wikimedia.org/wiki/" + urllib.parse.quote(title.replace(" ", "_"), safe=":_/"),
@@ -124,7 +137,9 @@ def main():
             "artist": artist,
             "license_short_name": license_short,
             "open_license": open_license(license_short),
-            "explicit_japan_text": japan_text(description),
+            "explicit_japan_locality": explicit_japan,
+            "known_fukushima_aizu": aizu,
+            "explicit_korea_locality": korea,
             "gps_latitude": gps_lat,
             "gps_longitude": gps_lon,
             "source_credit": source,
@@ -138,19 +153,34 @@ def main():
         writer.writeheader()
         writer.writerows(out)
 
-    known_aizu = [r for r in out if "会津" in r["description"] or "Aizu" in r["description"]]
-    other_japan = [r for r in out if r["explicit_japan_text"] and r not in known_aizu]
+    known_aizu = [r for r in out if r["known_fukushima_aizu"]]
+    other_japan = [r for r in out if r["explicit_japan_locality"] and not r["known_fukushima_aizu"]]
+    explicit_korea = [r for r in out if r["explicit_korea_locality"]]
+    unresolved = [
+        r for r in out
+        if not r["explicit_japan_locality"]
+        and not r["explicit_korea_locality"]
+        and not (r["gps_latitude"] and r["gps_longitude"])
+    ]
+    dalgial_same_date = [r for r in out if r["artist"] == "Dalgial" and r["date"] == "2008-09-15"]
     result = {
         "contract_version": "jpn38_commons_independent_locality_audit_v1",
         "category": args.category,
         "files_total": len(out),
         "open_license_files": sum(bool(r["open_license"]) for r in out),
-        "explicit_japan_text_files": sum(bool(r["explicit_japan_text"]) for r in out),
+        "explicit_japan_locality_files": sum(bool(r["explicit_japan_locality"]) for r in out),
         "known_fukushima_aizu_files": len(known_aizu),
         "other_explicit_japan_files": len(other_japan),
         "other_explicit_japan_titles": [r["commons_title"] for r in other_japan],
+        "explicit_korea_files": len(explicit_korea),
+        "explicit_korea_titles": [r["commons_title"] for r in explicit_korea],
+        "location_unresolved_files": len(unresolved),
+        "location_unresolved_titles": [r["commons_title"] for r in unresolved],
+        "dalgial_2008_09_15_files": len(dalgial_same_date),
+        "independent_japan_locality_candidates": len(other_japan),
+        "decision": "The Commons category provides no explicit Japan locality independent of the already-used Fukushima/Aizu series. One Dalgial file is explicitly Kimpo, Korea; four same-author/same-date Dalgial files lack locality metadata and are not assigned to Korea or Japan by inference.",
         "decision_boundary": "A different filename or photograph is not an independent population replicate. Promote only files whose metadata explicitly establish a Japan locality distinct from Fukushima/Aizu, or whose coordinates can independently establish such a locality.",
-        "claim_boundary": "Commons metadata audit only. Absence of explicit locality metadata is missing provenance, not evidence that the photograph was taken outside Japan."
+        "claim_boundary": "Commons metadata audit only. Absence of explicit locality metadata is missing provenance, not evidence that the photograph was taken outside Japan. Same author/date association with an explicitly Korean file is not used to impute geography for unlabeled files."
     }
     args.json_output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps(result, indent=2, ensure_ascii=False))
