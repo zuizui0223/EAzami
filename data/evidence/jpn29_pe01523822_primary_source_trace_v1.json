@@ -1,0 +1,33 @@
+{
+  "contract_version": "jpn29_pe01523822_primary_source_trace_v1",
+  "status_date": "2026-08-27",
+  "paper_japan_member_id": "JPN_29",
+  "target_voucher": "K. Yonekura 6788 (PE01523822)",
+  "target_taxon_as_published": "Cirsium verutum (D.Don) Spreng.",
+  "sources": [
+    {
+      "source_type": "doctoral_thesis",
+      "citation": "Moreyra Coluccio, L. D. 2024. Evolutionary and Biogeographic history of the Carduus-Cirsium group in the Afromontane archipelago. Universitat Autonoma de Barcelona.",
+      "record_url": "https://ddd.uab.cat/record/299841",
+      "voucher_table_evidence": "Cirsium verutum — Japan: 16.05.2001, K. Yonekura 6788 (PE01523822)",
+      "relationship_to_repository_evidence": "same primary-study specimen table, not an independent redetermination"
+    },
+    {
+      "source_type": "peer_reviewed_article",
+      "citation": "Moreyra et al. 2025. A thorny tale: The origin and diversification of Cirsium (Compositae). Molecular Phylogenetics and Evolution 204:108285.",
+      "doi": "10.1016/j.ympev.2025.108285",
+      "methods_evidence": "The study states that 188 samples were newly sequenced from field material or herbarium specimens, explicitly including PE, and points to Table S1 for studied material.",
+      "relationship_to_repository_evidence": "confirms that PE material was part of the primary phylogenomic sampling framework, but does not provide PE annotation history or an independent taxonomic redetermination of PE01523822"
+    }
+  ],
+  "assessment": {
+    "primary_author_identification_as_cirsium_verutum_supported": true,
+    "independent_specimen_redetermination_supported": false,
+    "pe_annotation_history_resolved": false,
+    "voucher_taxon_identity_resolved": false,
+    "clean_japan_local_trait_join_allowed": false
+  },
+  "interpretation": "The new web trace strengthens provenance: the C. verutum name and Japanese PE01523822 voucher are not an accidental repository transcription but are the designation used in the primary Moreyra study. It does not close the contradiction with the accepted Himalayan-to-Indochinese C. verutum range, because the thesis/article are the same study lineage and do not expose PE determination/annotation history.",
+  "next_action": "Directly inspect PE01523822 determination labels/annotation history or obtain curator-level confirmation. Do not count the Moreyra thesis and article as independent taxonomic confirmations.",
+  "claim_boundary": "This trace licenses saying that the primary phylogenomic study treated the sequenced PE voucher as Cirsium verutum from Japan. It does not license reidentifying the specimen, treating Japan as part of the accepted species range, or joining a Japan-local phenotype to JPN_29."
+}
