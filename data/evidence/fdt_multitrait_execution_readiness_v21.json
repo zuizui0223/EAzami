@@ -1,0 +1,43 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v21",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v20.json",
+  "inheritance": "All JPN36 field authorization gates, state-aware module-function priorities, Japan38 repeated-history results, colour stop rule, exact v3 estimand definitions and absolute-time constraints remain in force.",
+  "azami_capitulum_v3_generator": {
+    "generator_contract": "data/evidence/azami_capitulum_v3_generator_contract_v1.json",
+    "generator": "analysis/simulate_azami_capitulum_v3_conditional.py",
+    "environment_design_extractor": "analysis/extract_azami_v3_environment_design.py",
+    "interface_validation": "data/evidence/azami_capitulum_v3_generator_interface_validation_v1.json",
+    "model_families": 14,
+    "real_design_rows": 1874,
+    "real_design_taxa": 124,
+    "all_families_exact_schema_ready": true,
+    "all_families_emit_62_estimands": true,
+    "upstream_artifact_retrieval_in_eazami_ci": "success",
+    "target_distances_inspected": false,
+    "ranking_inspected": false,
+    "status": "preregistered_generator_interface_ready_for_one_shot_scoring"
+  },
+  "next_one_shot_gate": {
+    "before_execution": [
+      "freeze one primary distance definition and at least one sensitivity distance before any model-family target distances are computed",
+      "freeze the number of prior-predictive draws per family and all draw seeds",
+      "freeze the aggregation rule across 62 targets and across prior-predictive draws",
+      "freeze reporting rules for family ranking, uncertainty and ties",
+      "retain all 14 families regardless of result"
+    ],
+    "prohibited": [
+      "change generator priors or endpoint loadings after seeing family distances",
+      "drop inconvenient target classes or scopes after seeing results",
+      "use observed 18D phenotypes as generator inputs",
+      "interpret an Azami-only structural ranking as proof of ecological mechanism or adaptation"
+    ],
+    "recommended_execution": "Run the 62-target Azami observational layer as a separate one-shot structural-sufficiency model-discrimination result. Only afterward decide how it should be combined with independent FDT1 interaction/fitness evidence."
+  },
+  "parallel_field_state": {
+    "JPN36_protocol_ready": true,
+    "JPN36_field_execution_authorized": false,
+    "field_data_available": false
+  },
+  "claim_boundary": "The v3 generator is now reproducibly compatible with the observational target interface. No target distance has yet been computed, so there is no preferred model family and no causal/mechanistic conclusion."
+}
