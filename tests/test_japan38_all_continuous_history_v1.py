@@ -71,4 +71,4 @@ def test_csv_serialization_drops_numerical_library_tail_digits(tmp_path: Path):
     mod.write_stable_csv(right, right_path)
 
     assert left_path.read_bytes() == right_path.read_bytes()
-    assert mod.CSV_FLOAT_FORMAT == "%.12g"
+    assert mod.CSV_FLOAT_FORMAT == "%.10g"

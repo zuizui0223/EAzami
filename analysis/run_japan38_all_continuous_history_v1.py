@@ -70,7 +70,7 @@ UNIT_MODULE = {
 THRESHOLDS = (2, 5)
 MIN_TAXA = 6
 PERMUTATIONS = 10000
-CSV_FLOAT_FORMAT = "%.12g"
+CSV_FLOAT_FORMAT = "%.10g"
 
 
 def parse_args() -> argparse.Namespace:
