@@ -1,0 +1,28 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v24",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v23.json",
+  "inheritance": "The v1 one-shot winner NULL_COUPLED is frozen and cannot be changed by this validation. All field, Japan38 history, colour stop-rule and absolute-time gates remain in force.",
+  "v3_held_out_support_validation": {
+    "contract": "data/evidence/azami_capitulum_v3_null_heldout_support_contract_v1.json",
+    "status": "preregistered_before_simulation",
+    "frozen_winner": "NULL_COUPLED",
+    "validation_draws": 64,
+    "freedman_lane_permutations_per_test": 99,
+    "held_out_cells": 20,
+    "primary_pattern_cells": 8,
+    "primary_pattern": "at both min5 and min2: within omnibus unsupported, among omnibus supported, within growing-season-water unsupported, among growing-season-water supported",
+    "outcome_inspected": false,
+    "may_change_v1_winner": false,
+    "may_change_v1_interpretation": true,
+    "next_gate": "Run once, freeze outcome, then interpret whether the v1 NULL_COUPLED winner is compatible with or falsified by the held-out inferential-support geometry."
+  },
+  "field_line": {
+    "first_executable_target": "JPN_36 phyllary-access pilot after authorization/census/device gates",
+    "highest_information_stickiness_design": "JPN_15 sticky neutralization within species with JPN_06 nonsticky 100/100 sister as external ancestry-matched comparator",
+    "execution_authorized": false
+  },
+  "coverage_repairs_remaining": ["JPN_15 phyllary posture","JPN_24 stickiness"],
+  "absolute_time": "FDT5/FDT6 remain blocked by calibration limitations.",
+  "claim_boundary": "This readiness state preregisters a post-ranking falsification. It does not reopen v1 model selection and does not identify a causal process."
+}

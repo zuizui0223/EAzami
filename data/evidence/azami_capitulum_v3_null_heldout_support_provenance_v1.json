@@ -1,0 +1,28 @@
+{
+  "status": "frozen_held_out_null_support_completed",
+  "workflow_run": 33042457005,
+  "workflow_head_sha": "f99fda1ebaa1a8c596383a88da773f8936cc9374",
+  "artifact_id": 9634485438,
+  "artifact_name": "azami-v3-null-heldout-support-33042457005",
+  "artifact_digest": "sha256:bfc67eabcb80f13156beaea4630d35c4e1a6b28ec26ac48f90fd0bc244e9ba6a",
+  "contract": "data/evidence/azami_capitulum_v3_null_heldout_support_contract_v1.json",
+  "frozen_v1_winner": "NULL_COUPLED",
+  "primary_pattern_matches": 0,
+  "validation_draws": 64,
+  "output_sha256": {
+    "azami_capitulum_v3_null_heldout_support_decision_v1.json": "46e9e1ab31398ea0aeac5b7f0f67584982312aa8c64c75c651c31634331bc7d3",
+    "azami_capitulum_v3_null_heldout_support_cell_frequencies_v1.csv": "2cb92a13c7609d5a6cc16cc4f0a8bbd9cae745dc8c06e55c450db4005513b2b8",
+    "azami_capitulum_v3_null_heldout_support_draw_summary_v1.csv": "651aeff0a1fd98cb1d668c6e0756f5403eef478c8f56ccfacb42a12d86ca3c16",
+    "azami_capitulum_v3_null_heldout_support_test_ledger_v1.csv": "b5cf67f02cec8ede34835d316eec54c1e4501153820ab8e5d4c7bf0cc6ffbd8f"
+  },
+  "committed_canonical_outputs": [
+    "data/evidence/azami_capitulum_v3_null_heldout_support_decision_v1.json",
+    "data/evidence/azami_capitulum_v3_null_heldout_support_cell_frequencies_v1.csv"
+  ],
+  "artifact_only_audit_outputs": [
+    "held_out/azami_capitulum_v3_null_heldout_support_draw_summary_v1.csv",
+    "held_out/azami_capitulum_v3_null_heldout_support_test_ledger_v1.csv"
+  ],
+  "interpretation": "The frozen NULL_COUPLED winner reproduces the v1 scalar target bundle but does not reproduce the independently held-out replication-stable scale-specific process-support pattern in any of 64 preregistered draws.",
+  "claim_boundary": "This provenance record freezes a post-ranking falsification result. It does not reopen or change the v1 model ranking and does not identify a causal environmental process."
+}

@@ -1,0 +1,131 @@
+name: Validate Azami v3 NULL held-out support v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/azami_capitulum_v3_null_heldout_support_contract_v1.json"
+      - "data/evidence/azami_capitulum_v3_null_heldout_support_decision_v1.json"
+      - "data/evidence/azami_capitulum_v3_null_heldout_support_cell_frequencies_v1.csv"
+      - "data/evidence/azami_capitulum_v3_null_heldout_support_provenance_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v25.json"
+      - "analysis/validate_azami_v3_null_heldout_support.py"
+      - "tests/test_validate_azami_v3_null_heldout_support.py"
+      - ".github/workflows/validate-azami-v3-null-heldout-support-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  held-out-null:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install numpy pandas pytest
+      - name: Compile and test frozen held-out contract
+        run: |
+          python -m py_compile analysis/validate_azami_v3_null_heldout_support.py
+          python -m pytest -q tests/test_validate_azami_v3_null_heldout_support.py
+
+      - name: Download frozen Azami environment design artifact
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/azami
+          run-id: 33035785120
+          name: ch1-geb-v2-within-among-33035785120
+          path: upstream_azami
+          github-token: ${{ github.token }}
+
+      - name: Extract and verify de-geolocated environment design
+        run: |
+          set -euo pipefail
+          mkdir -p result
+          SOURCE="$(find upstream_azami -type f -path '*/process_environment/complete18_chelsa_process.csv' -print -quit)"
+          test -n "$SOURCE"
+          python analysis/extract_azami_v3_environment_design.py \
+            "$SOURCE" \
+            result/azami_v3_environment_design.csv \
+            --report result/azami_v3_environment_design_report.json
+
+      - name: Run frozen 64-draw NULL_COUPLED held-out support validation
+        run: |
+          python analysis/validate_azami_v3_null_heldout_support.py \
+            --design result/azami_v3_environment_design.csv \
+            --observed-incremental data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv \
+            --out-dir result/held_out
+
+      - name: Validate held-out output shape and frozen winner boundary
+        run: |
+          python - <<'PY'
+          import json
+          import pandas as pd
+          from pathlib import Path
+          out=Path('result/held_out')
+          ledger=pd.read_csv(out/'azami_capitulum_v3_null_heldout_support_test_ledger_v1.csv')
+          draws=pd.read_csv(out/'azami_capitulum_v3_null_heldout_support_draw_summary_v1.csv')
+          cells=pd.read_csv(out/'azami_capitulum_v3_null_heldout_support_cell_frequencies_v1.csv')
+          decision=json.loads((out/'azami_capitulum_v3_null_heldout_support_decision_v1.json').read_text())
+          assert len(ledger)==64*20
+          assert ledger['seed'].nunique()==64
+          assert len(draws)==64
+          assert len(cells)==20
+          assert decision['frozen_v1_winner']=='NULL_COUPLED'
+          assert decision['v1_winner_changed'] is False
+          assert decision['validation_draws']==64
+          assert decision['permutations_per_test']==99
+          assert decision['primary_pattern_classification'] in {
+              'not_reproduced_or_exceptional','rare','compatible_frequency'
+          }
+          print(json.dumps(decision,indent=2))
+          PY
+
+      - name: Reproduce frozen held-out canonical outputs
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import numpy as np
+          import pandas as pd
+
+          generated=Path('result/held_out')
+          frozen=Path('data/evidence')
+          gd=json.loads((generated/'azami_capitulum_v3_null_heldout_support_decision_v1.json').read_text())
+          fd=json.loads((frozen/'azami_capitulum_v3_null_heldout_support_decision_v1.json').read_text())
+          categorical=[
+              'status','frozen_v1_winner','v1_winner_changed','validation_draws',
+              'permutations_per_test','primary_pattern_matches',
+              'primary_pattern_classification','exact_20_cell_matches',
+              'claim_boundary','stop_rule'
+          ]
+          for key in categorical:
+              assert gd[key] == fd[key], (key, gd[key], fd[key])
+          numeric=[
+              'primary_pattern_frequency','primary_pattern_wilson95_low',
+              'primary_pattern_wilson95_high','exact_20_cell_frequency',
+              'median_matching_cells_out_of_20'
+          ]
+          for key in numeric:
+              assert abs(float(gd[key])-float(fd[key])) <= 1e-12, (key, gd[key], fd[key])
+
+          gc=pd.read_csv(generated/'azami_capitulum_v3_null_heldout_support_cell_frequencies_v1.csv').sort_values(['scope','scale','test_id']).reset_index(drop=True)
+          fc=pd.read_csv(frozen/'azami_capitulum_v3_null_heldout_support_cell_frequencies_v1.csv').sort_values(['scope','scale','test_id']).reset_index(drop=True)
+          assert gc[['scope','scale','test_id','observed_supported']].equals(fc[['scope','scale','test_id','observed_supported']])
+          for col in ['null_support_frequency','null_frequency_of_observed_state']:
+              assert np.allclose(gc[col], fc[col], rtol=0, atol=1e-12), col
+          assert gd['primary_pattern_matches']==0
+          assert gd['exact_20_cell_matches']==0
+          print('frozen_held_out_outputs_reproduced=true')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: azami-v3-null-heldout-support-${{ github.run_id }}
+          path: result
+          if-no-files-found: error
+          retention-days: 90
