@@ -80,10 +80,11 @@ These results constrain statistical covariance architecture. They are not trait 
 ### Active mainline
 
 - `MAINLINE_V2.md` — canonical scientific line and claim ladder.
+- `MANUSCRIPT_V2_OUTLINE.md` — manuscript architecture for phenotype → function → history → origin → convergence.
 - `../../data/evidence/chapter2_result_role_map_v2.csv` — maps existing repository results onto the new line.
 - `../RESEARCH_PLAN.md` — operational research plan.
 
-### Manuscript package to rewrite against v2
+### Legacy/source-material manuscript package
 
 - `MANUSCRIPT_V1.md` — previous simulation-centred full draft; retained as source material, not current organizing source.
 - `EVIDENCE_MAP_V1.md`
