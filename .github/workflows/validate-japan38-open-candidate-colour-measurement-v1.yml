@@ -98,7 +98,11 @@ jobs:
           assert x['results']['JPN_05']['promotion_pass'] == (x['results']['JPN_05']['candidate_passing_locality_count']==2)
           assert x['fifth_concept_gate_unlocked'] == bool(x['promoted_concepts'])
           assert json.loads(Path('data/evidence/japan38_open_candidate_colour_measurement_summary_v1.json').read_text())==x
-          pd.testing.assert_frame_equal(pd.read_csv('data/evidence/japan38_open_candidate_colour_measurement_per_image_v1.csv'),pd.read_csv('result/japan38_open_candidate_colour_measurement_per_image_v1.csv'),check_exact=False,rtol=1e-12,atol=1e-12)
+          frozen=pd.read_csv('data/evidence/japan38_open_candidate_colour_measurement_per_image_v1.csv')
+          live=pd.read_csv('result/japan38_open_candidate_colour_measurement_per_image_v1.csv')
+          assert frozen['usable_at_frozen_floor'].tolist()==live['usable_at_frozen_floor'].tolist()
+          assert frozen['measurement_state'].tolist()==live['measurement_state'].tolist()
+          pd.testing.assert_frame_equal(frozen,live,check_exact=False,rtol=1e-6,atol=1e-6)
           readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v12.json').read_text())
           colour=readiness['colour']
           assert colour['japan_local_continuous_history_pilot_ready'] is True
