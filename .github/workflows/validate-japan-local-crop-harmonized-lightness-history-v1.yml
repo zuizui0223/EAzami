@@ -1,0 +1,116 @@
+name: Validate Japan-local crop-harmonized lightness history v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_japan_local_crop_harmonized_lightness_history_v1.py"
+      - "data/evidence/eazami_direct_colour_crop_harmonization_v1.json"
+      - "data/evidence/eazami_direct_colour_crop_per_image_v1.csv"
+      - "data/evidence/eazami_direct_colour_crop_per_head_v1.csv"
+      - "data/evidence/eazami_direct_colour_crop_harmonization_provenance_v1.json"
+      - "data/evidence/japan_local_crop_harmonized_lightness_analysis_contract_v1.json"
+      - "data/evidence/japan_local_crop_harmonized_lightness_history_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v14.json"
+      - ".github/workflows/validate-japan-local-crop-harmonized-lightness-history-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: validate-japan-local-crop-harmonized-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  FROZEN_JAPAN38_RUN_ID: "32845725038"
+  FROZEN_JAPAN38_ARTIFACT: "japan38-comp1061-frozen-tree-retry-32845725038"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install analysis dependencies
+        run: python -m pip install --disable-pip-version-check biopython numpy scipy
+      - name: Compile analysis
+        run: python -m py_compile analysis/run_japan_local_crop_harmonized_lightness_history_v1.py
+      - name: Validate transferred crop-harmonization evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('data/evidence/eazami_direct_colour_crop_harmonization_v1.json').read_text())
+          p=json.loads(Path('data/evidence/eazami_direct_colour_crop_harmonization_provenance_v1.json').read_text())
+          assert x['registered_direct_images']==13
+          assert x['detected_images']==12
+          assert x['total_detector_crops']==18
+          assert x['total_colour_usable_crops']==11
+          assert x['detector_contract']['artifact_id']==8076736948
+          assert x['detector_contract']['best_weight_sha256']=='4078e0510532852681b65ee529cd82237b649ec99b17c4ca5f1da460a62d2bed'
+          assert x['detector_contract']['production_confidence_threshold']==0.25
+          assert x['detector_contract']['crop_pad_ratio']==0.12
+          assert x['measurement_contract']['colour_confidence_floor']==0.55
+          assert x['measurement_contract']['thresholds_changed_after_result'] is False
+          assert x['concept_results']['JPN_05']['promotion_pass'] is True
+          assert x['concept_results']['JPN_05']['passing_locality_count']==2
+          assert x['concept_results']['JPN_30']['promotion_pass'] is True
+          assert x['concept_results']['JPN_30']['passing_locality_count']==4
+          assert p['workflow_run']==33031099000
+          assert p['result_artifact_id']==9630287874
+          assert p['result_artifact_digest']=='sha256:5c8c30fb17dd40771159471e1accbb6777520d05683a8a0e19bf8df87a4a8d7b'
+          assert p['compute_pr_disposition']=='closed_unmerged_after_artifact_capture'
+          PY
+      - name: Download frozen Japan38 tree
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.FROZEN_JAPAN38_ARTIFACT }}
+          path: frozen_japan38
+          run-id: ${{ env.FROZEN_JAPAN38_RUN_ID }}
+          github-token: ${{ github.token }}
+      - name: Run exact H5 and E6 history analyses
+        run: |
+          set -euo pipefail
+          mkdir -p result
+          python analysis/run_japan_local_crop_harmonized_lightness_history_v1.py \
+            --tree frozen_japan38/tree_result/japan38_comp1061.treefile \
+            --concept-map frozen_japan38/work/japan38_subset/concept_map.csv \
+            --contract data/evidence/japan_local_crop_harmonized_lightness_analysis_contract_v1.json \
+            --baseline data/evidence/japan5_population_matched_lightness_history_v1.json \
+            --output result/japan_local_crop_harmonized_lightness_history_v1.json
+      - name: Assert frozen panel/permutation semantics and committed output when present
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('result/japan_local_crop_harmonized_lightness_history_v1.json').read_text())
+          h5=x['panels']['harmonized5']; e6=x['panels']['expanded6']
+          assert h5['concept_panel']==['JPN_17','JPN_23','JPN_30','JPN_36','JPN_37']
+          assert e6['concept_panel']==['JPN_05','JPN_17','JPN_23','JPN_30','JPN_36','JPN_37']
+          assert h5['primary_signal']['exact_permutations']==120
+          assert e6['primary_signal']['exact_permutations']==720
+          assert len(h5['leave_one_out']['rho_by_omitted_concept'])==5
+          assert len(e6['leave_one_out']['rho_by_omitted_concept'])==6
+          for panel in [h5,e6]:
+            expected=(panel['primary_signal']['rho']<0 and panel['primary_signal']['negative_tail_p']<=0.05 and panel['leave_one_out']['all_negative'])
+            assert panel['predeclared_gates']['directional_pass']==expected
+            assert panel['predeclared_gates']['strict_two_sided_pass']==(expected and panel['primary_signal']['two_sided_abs_p']<=0.05)
+            assert panel['predeclared_gates']['thresholds_or_panel_changed_after_result'] is False
+          frozen=Path('data/evidence/japan_local_crop_harmonized_lightness_history_v1.json')
+          if frozen.exists():
+            assert json.loads(frozen.read_text())==x
+            r=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v14.json').read_text())
+            assert r['colour']['crop_harmonized_history']['harmonized5']['directional_pass']==h5['predeclared_gates']['directional_pass']
+            assert r['colour']['crop_harmonized_history']['expanded6']['directional_pass']==e6['predeclared_gates']['directional_pass']
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan-local-crop-harmonized-lightness-history-${{ github.run_id }}
+          path: result/japan_local_crop_harmonized_lightness_history_v1.json
+          if-no-files-found: error
+          retention-days: 90
