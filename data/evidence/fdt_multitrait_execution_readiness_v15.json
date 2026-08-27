@@ -1,0 +1,72 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v15",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v14.json",
+  "inheritance": "All discrete-module histories, global continuous-colour results, negative present-day abiotic species-proxy gates, chun Cirsium claim gate, JPN38/JPN29 provenance blockers, frozen Japan5, crop-harmonized H5 and expanded E6 results remain in force unless explicitly updated below.",
+  "colour": {
+    "japan_local_continuous_history_pilot_ready": true,
+    "japan_local_discrete_transition_history_ready": false,
+    "same_pipeline_two_cell_concepts_current": 7,
+    "same_pipeline_panel": ["JPN_05", "JPN_17", "JPN_23", "JPN_27", "JPN_30", "JPN_36", "JPN_37"],
+    "existing_cohort_audit": {
+      "canonical_result": "data/evidence/eazami_japan14_strict_spatial_colour_audit_v1.json",
+      "source_run": 29306454759,
+      "source_artifact": 8301295025,
+      "source_rows": 46276,
+      "audit_run": 33031769678,
+      "audit_artifact": 9630497501,
+      "admission_rule": ">=2 Japan-local colour-usable strict-spatial observations AND >=2 distinct analysis cells; exact concept identity",
+      "one_cell_not_admitted": ["JPN_22", "JPN_26", "JPN_32", "JPN_35"],
+      "zero_japan_colour_rows": ["JPN_15", "JPN_29", "JPN_38"]
+    },
+    "japan7_source_balanced_history": {
+      "canonical_result": "data/evidence/japan7_source_balanced_lightness_history_v1.json",
+      "canonical_input": "data/evidence/japan7_source_balanced_lightness_input_v1.csv",
+      "rho": 0.2675324675324675,
+      "exact_permutations": 5040,
+      "exact_negative_tail_p": 0.7579365079365079,
+      "positive_tail_p_descriptive": 0.24325396825396825,
+      "exact_two_sided_p": 0.5226190476190476,
+      "directional_replication_pass": false,
+      "strict_two_sided_replication_pass": false,
+      "concept_leave_one_out_all_positive": true,
+      "concept_leave_one_out_rho_range": [0.0857142857142857, 0.6392857142857141],
+      "sparse_observation_leave_one_out_concepts": ["JPN_05", "JPN_27", "JPN_30"],
+      "sparse_observation_leave_one_out_cases": 10,
+      "sparse_observation_leave_one_out_all_positive": true,
+      "sparse_observation_leave_one_out_rho_range": [0.2324675324675325, 0.3103896103896104],
+      "validation": {
+        "workflow_run": 33036245414,
+        "artifact_id": 9632100875,
+        "artifact_digest": "sha256:1580e75173b082fbf499b6219fbdc43d6371a779945eece2f9d8eecfcc4a53af",
+        "source_head_sha": "816f1c79a7d80169feaf1b4e582f1a795fcfe790"
+      },
+      "interpretation": "The global species-proxy anti-phylogenetic lightness pattern does not replicate in the Japanese radiation when local phenotype evidence is restricted to a fully source-balanced seven-concept Azami production cohort. The observed sign is positive and remains positive under every concept leave-one-out and every predeclared sparse-observation leave-one-out case, but positive phylogenetic structure was not a preregistered alternative and is not promoted as a new claim."
+    },
+    "result_sequence": {
+      "japan5_baseline_rho": -0.10303030303030303,
+      "harmonized5_rho": -0.01818181818181818,
+      "expanded6_rho": 0.06071428571428571,
+      "source_balanced7_rho": 0.2675324675324675,
+      "interpretation": "The negative global-style signal weakens to zero and then changes sign as source processing is harmonized and same-pipeline Japan-local coverage expands. This pattern argues against treating the original global overdispersion signal as a Japanese-radiation result."
+    },
+    "mainline_role": "secondary_negative_module_not_primary_recurrence_evidence",
+    "status": "The Japan-local continuous lightness module is now sufficiently stress-tested to stop significance-seeking expansion for the anti-phylogenetic hypothesis. Colour remains biologically important for independent functional/molecular questions, but it is not current evidence for repeated Japan-radiation overdispersion."
+  },
+  "priority_reordering": {
+    "first": "Freeze Japan7 and stop acquiring or reprocessing colour observations solely to rescue the anti-phylogenetic lightness hypothesis. New colour sampling is justified only by an independent functional, discrete-state, molecular or field-validation question.",
+    "second": "Return the doctoral repeated-evolution mainline to the discrete capitulum modules with stronger historical evidence: orientation, phyllary posture and stickiness. Treat colour as a negative/contrast module rather than forcing it into the same recurrence conclusion.",
+    "third": "For orientation/phyllary/stickiness, connect recurrent-state history to the quantitative functional-effect registry/meta-analysis and ask whether repeatedly changing branches map to independently supported ecological benefit/cost axes. Keep causality separate from pattern detection.",
+    "fourth": "Absolute-time/event correspondence remains conditional on the unresolved dating gate; do not turn the ~2.4 Ma published radiation statement into a crown calibration. JPN38 permission and JPN29 identity stay as optional colour expansion routes, not current blockers.",
+    "do_not_repeat": "Do not lower evidence thresholds, admit one-cell concepts post hoc, remove taxa because they weaken a preferred sign, search alternate colour transforms on the same panel for significance, or reinterpret the descriptive positive tail as preregistered phylogenetic conservatism."
+  },
+  "canonical_results": {
+    "original_japan5": "data/evidence/japan5_population_matched_lightness_history_v1.json",
+    "crop_harmonized_history": "data/evidence/japan_local_crop_harmonized_lightness_history_v1.json",
+    "japan14_existing_cohort_audit": "data/evidence/eazami_japan14_strict_spatial_colour_audit_v1.json",
+    "japan7_source_balanced_input": "data/evidence/japan7_source_balanced_lightness_input_v1.csv",
+    "japan7_source_balanced_history": "data/evidence/japan7_source_balanced_lightness_history_v1.json",
+    "chun_claim_gate": "data/evidence/cirsium_colour_history_claim_gate_v1.json"
+  },
+  "claim_boundary": "The source-balanced Japan7 result is strong evidence against replicating the prior global anti-phylogenetic lightness diagnostic in the currently sampled Japanese radiation, not proof that colour never evolves repeatedly or adaptively. The positive observed rho is descriptive, not a post-hoc conservatism claim. No ancestral colour, discrete W/C transition, convergence, adaptive radiation or molecular reactivation is inferred."
+}
