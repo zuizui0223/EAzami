@@ -89,6 +89,7 @@ def check_manuscript() -> None:
             "0.0885",
             "0.3504",
             "0.1959",
+            "0.1418",
             "75.4%",
             "not evaluable",
             "global species-level image proxies",
@@ -185,6 +186,20 @@ def check_reconstruction_nulls() -> None:
             raise AssertionError(f"null distribution does not contain 9999 draws: {path.name}")
 
 
+def check_topology_diagnostic_determinism() -> None:
+    topology = load_json(TIME / "japan38_continuous_branch_change_topology_sensitivity_v1.json")
+    tie_contract = topology.get("spearman_tie_contract", "")
+    if not tie_contract.startswith("branch-change magnitudes rounded to 12 decimal places"):
+        raise AssertionError("equal-branch topology diagnostic lacks its deterministic tie contract")
+    summary = topology["global_mean_pairwise_rho_distribution"]
+    if abs(summary["median"] - 0.1417859210142532) > 1e-12:
+        raise AssertionError("deterministic topology median drift")
+    if abs(summary["q05"] - 0.11896314374693295) > 1e-12:
+        raise AssertionError("deterministic topology q05 drift")
+    if summary["fraction_positive"] != 1.0:
+        raise AssertionError("topology diagnostic sign distribution drift")
+
+
 def check_discrete_history() -> None:
     sticky = load_json(ROOT / "data" / "evidence" / "jpn24_stickiness_extension_parsimony_v1.json")
     if sticky["stickiness"]["resolved_concepts_after"] != 13:
@@ -210,6 +225,8 @@ def check_result_registries() -> None:
         raise AssertionError("result registry fails to preserve null decisions")
     if main["R5_topology_diagnostic"]["decision"] != "diagnostic_only":
         raise AssertionError("topology diagnostic was promoted")
+    if "12-decimal tie contract" not in main["R5_topology_diagnostic"]["headline_value"]:
+        raise AssertionError("result registry omits deterministic topology tie contract")
     claims = {r["claim_id"]: r for r in rows(ROOT / "data" / "evidence" / "chapter2_claim_registry_v1.csv")}
     if claims.get("C2_25", {}).get("status") != "synthesis":
         raise AssertionError("active JEB claim missing from claim registry")
@@ -262,7 +279,7 @@ def check_supplementary_figures() -> None:
             raise AssertionError(f"Supporting Information omits Figure S{idx}")
     require(
         supporting,
-        ["P=0.3504", "P=0.1959", "not_evaluable", "substitutions/site", "4/4", "0/4"],
+        ["P=0.3504", "P=0.1959", "not_evaluable", "substitutions/site", "rounded to 12 decimal places", "4/4", "0/4"],
         "JEB_SUPPORTING_INFORMATION_V1",
     )
 
@@ -330,6 +347,7 @@ def main() -> int:
     check_present_integration()
     check_continuous_state_structure()
     check_reconstruction_nulls()
+    check_topology_diagnostic_determinism()
     check_discrete_history()
     check_result_registries()
     check_figures()

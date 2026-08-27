@@ -3,7 +3,7 @@
   "renderer": "matplotlib_3.10.8",
   "outputs": {
     "figure_s1_tree_admission.pdf": {
-      "sha256": "5c16f3d08ca92277a62455cc01c18819d1cfa26e047579af89c57acf0872edc7",
+      "sha256": "a4447ab04178b5d614b75daaf5cb608b99852b853d5712486ef53b7cfb024738",
       "bytes": 25071
     },
     "figure_s1_tree_admission.png": {
@@ -11,7 +11,7 @@
       "bytes": 276436
     },
     "figure_s2_continuous_state_structure.pdf": {
-      "sha256": "35c4aeef42256b45903cbd32cb8c695b4232197f3d30dd34aae5c14c8af01a4c",
+      "sha256": "eabb948f8a3641d77547af1658bba228158c3cb97dbe26e4f1a521144a5f1979",
       "bytes": 29276
     },
     "figure_s2_continuous_state_structure.png": {
@@ -19,15 +19,15 @@
       "bytes": 199874
     },
     "figure_s3_equal_branch_topology.pdf": {
-      "sha256": "c27695412e0d2984d5a8808fb0da27fd8f5d45a7cd9b46013dab78f82e90b195",
-      "bytes": 19705
+      "sha256": "6ab0fc72a44fb6fc4adb4adf6738459185cc19e31a9b10c3942f61dd40ef8321",
+      "bytes": 19706
     },
     "figure_s3_equal_branch_topology.png": {
-      "sha256": "4adc25974e6642ce65d4d34383fb5664a28e7277990d09693c92fedca11105cf",
-      "bytes": 70708
+      "sha256": "2c516d827cd80f438e6a7bce8855dbf99227ff42f1b2b3c260d3575521e01944",
+      "bytes": 70722
     },
     "figure_s4_lightness_nonreplication.pdf": {
-      "sha256": "adbf7b262d31764055a912233aa66977d41fdc0b0d290343b511b938e058f363",
+      "sha256": "8f36eb783d73cf7f78d29d6a388f26eaf1afe215101a9f0b2c89dcfcbca8e714",
       "bytes": 24744
     },
     "figure_s4_lightness_nonreplication.png": {
@@ -35,7 +35,7 @@
       "bytes": 180780
     },
     "figure_s5_species_tip_compression.pdf": {
-      "sha256": "3f2c77a07fa21c7d6dd8a2fb47ef0aa6e8e296aeb470280dbee99a569b5b5513",
+      "sha256": "2290e3121cf029f233a77fab38df6593cb4327e85f3bd3d5004aab0737bf7c95",
       "bytes": 19111
     },
     "figure_s5_species_tip_compression.png": {

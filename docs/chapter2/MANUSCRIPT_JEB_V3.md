@@ -111,7 +111,7 @@ In the original eight-concept panel, the observed mean pairwise branch-change co
 
 The JPN_29-excluded sensitivity produced a larger descriptive correlation (rho=0.4723), but its reconstruction-aware null also shifted upward (median=0.4153; fifth–95th percentiles 0.3154–0.5260). The one-sided P value was 0.1959, again failing the frozen rule. Removing the identity-unresolved join did not reveal coordinated change. It also did not prove independent trait histories.
 
-The earlier equal-branch topology diagnostic remained positive in 1,000/1,000 topologies (median rho=0.1413; fifth percentile=0.1190), but this result pertains to estimator sign stability in the original JPN_29-containing panel. It cannot override either reconstruction-aware FAIL because every topology reused shared reconstruction geometry without a corresponding topology-specific null.
+The earlier equal-branch topology diagnostic remained positive in 1,000/1,000 topologies (median rho=0.1418; fifth percentile=0.1190), but this result pertains to estimator sign stability in the original JPN_29-containing panel. It cannot override either reconstruction-aware FAIL because every topology reused shared reconstruction geometry without a corresponding topology-specific null.
 
 ![Alternative text: Two null histograms place the observed branch-change correlations inside their reconstruction-aware distributions. The original test has P=0.3504 and the JPN29-excluded sensitivity P=0.1959. A separate equal-branch interval is labelled diagnostic only.](figures/figure3_reconstruction_nulls.png)
 

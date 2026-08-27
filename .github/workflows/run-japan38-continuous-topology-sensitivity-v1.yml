@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'analysis/run_japan38_continuous_branch_change_topology_sensitivity_v1.py'
+      - 'tests/test_japan38_continuous_topology_determinism_v1.py'
       - '.github/workflows/run-japan38-continuous-topology-sensitivity-v1.yml'
   workflow_dispatch:
 
@@ -34,10 +35,11 @@ jobs:
           python-version: '3.11'
       - name: Install and compile
         run: |
-          python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<4' 'scipy>=1.12,<2' 'biopython>=1.83,<2'
+          python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<4' 'scipy>=1.12,<2' 'biopython>=1.83,<2' pytest
           python -m py_compile \
             analysis/run_japan38_continuous_branch_change_topology_sensitivity_v1.py \
             analysis/run_japan38_all_continuous_history_v1.py
+          python -m pytest -q tests/test_japan38_continuous_topology_determinism_v1.py
       - name: Download frozen Japan38 tree ensemble
         uses: actions/download-artifact@v4
         with:
@@ -74,6 +76,7 @@ jobs:
           assert x['bootstrap_trees_total']==1000
           assert x['bootstrap_trees_usable']>=900
           assert x['predeclared_topology_robust_rule']=='q05 > 0 and fraction_positive >= 0.95'
+          assert x['spearman_tie_contract'].startswith('branch-change magnitudes rounded to 12 decimal places')
           assert x['global_coordinated_change_decision'] in {'topology_robust_positive','not_topology_robust_positive'}
           assert x['module_specificity_decision'] in {'topology_robust_positive','not_topology_robust_positive'}
           print(json.dumps({

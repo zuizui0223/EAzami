@@ -37,6 +37,12 @@ import run_japan38_colour_continuous_history_pilot_v1 as base
 import run_japan38_all_continuous_history_v1 as hist
 
 
+# Equal-branch pruning creates mathematically tied reconstructed changes.  Raw
+# LAPACK round-off can otherwise break those ties differently across runners,
+# which changes Spearman ranks and makes the committed diagnostic oscillate.
+SPEARMAN_TIE_DECIMALS = 12
+
+
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument("--bridge", type=Path, required=True)
@@ -101,6 +107,12 @@ def unit_values(bridge: pd.DataFrame, ids: list[str], threshold: int):
     return scalar, {mid: sin_raw[mid] for mid in ids}, {mid: cos_raw[mid] for mid in ids}
 
 
+def stable_spearman(frame: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
+    """Calculate Spearman correlations after deterministic near-tie collapse."""
+    values = frame[columns].round(SPEARMAN_TIE_DECIMALS)
+    return values.corr(method="spearman")
+
+
 def topology_statistics(tree, ids, scalar_values, sin_values, cos_values):
     branches = hist.branch_ids(tree)
     frame = pd.DataFrame(index=np.arange(len(branches)))
@@ -123,7 +135,7 @@ def topology_statistics(tree, ids, scalar_values, sin_values, cos_values):
             hue.append(float(np.linalg.norm(vp / npv - vc / ncv)))
     frame[hist.HUE_UNIT] = hue
 
-    corr = frame[hist.PRIMARY_UNITS].corr(method="spearman")
+    corr = stable_spearman(frame, hist.PRIMARY_UNITS)
     upper = corr.to_numpy(float)[np.triu_indices(len(hist.PRIMARY_UNITS), 1)]
     global_mean = float(np.nanmean(upper))
 
@@ -222,6 +234,7 @@ def main() -> int:
         "concept_ids": ids,
         "units": hist.PRIMARY_UNITS,
         "branch_length_contract": "all non-root branches fixed to 1.0 after pruning; no absolute-time or substitution-rate interpretation",
+        "spearman_tie_contract": f"branch-change magnitudes rounded to {SPEARMAN_TIE_DECIMALS} decimal places before ranking so mathematically tied equal-branch changes do not depend on LAPACK round-off",
         "ml_equal_branch": ml_stats,
         "bootstrap_trees_total": len(raw_lines),
         "bootstrap_trees_usable": len(stats),

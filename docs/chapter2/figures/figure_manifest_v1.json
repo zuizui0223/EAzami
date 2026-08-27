@@ -3,7 +3,7 @@
   "renderer": "matplotlib_3.10.8",
   "outputs": {
     "figure1_present_integration.pdf": {
-      "sha256": "5b13bf2b06792ad7a15baf8be228026ff36878ff7dee1ae8cc3760810bf239b6",
+      "sha256": "6f0367adfe0b45fcd6abea34e313c4fb73255c27c60b97a0d11a9b662ae4291a",
       "bytes": 20159
     },
     "figure1_present_integration.png": {
@@ -11,7 +11,7 @@
       "bytes": 117360
     },
     "figure2_recurrence_identifiability.pdf": {
-      "sha256": "09e5ab051ea30464303b476db9c178715cf99ea2bd498b9ca36cc48a75b8507d",
+      "sha256": "fb0453957582529108330fd0b37057abd82585b3e29844cc5c15c7104d65c6c3",
       "bytes": 26376
     },
     "figure2_recurrence_identifiability.png": {
@@ -19,15 +19,15 @@
       "bytes": 206762
     },
     "figure3_reconstruction_nulls.pdf": {
-      "sha256": "b5b11b928dd88f0d62f88f47ae2910e788b3f156b5e24910673a49eb74c640a9",
-      "bytes": 25570
+      "sha256": "0d92db60a4fbaeed63f11506420dea4223965c5306f46a0949da0105c631b65f",
+      "bytes": 25567
     },
     "figure3_reconstruction_nulls.png": {
-      "sha256": "86c443ccc5120a6213fe6006a1a4df3eb313489f50a781e804a3bf1902e1c769",
-      "bytes": 177044
+      "sha256": "5d62253ec3c3deba3a5e5c642e347786767a517031a2c91fa5e540c50f5f7f03",
+      "bytes": 177047
     },
     "figure4_discrete_overlap.pdf": {
-      "sha256": "1c0138779a2000477a8a8b500d1adf17021a06924adb450b93961a1ce5121c60",
+      "sha256": "8f04fa135d29940b6411bc35e776fac37839033f6547ec3fb0f9a92ec19eef85",
       "bytes": 23375
     },
     "figure4_discrete_overlap.png": {
