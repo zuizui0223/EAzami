@@ -7,6 +7,7 @@ on:
       - "data/evidence/japan38_sparse_colour_open_source_candidates_v1.csv"
       - "data/evidence/japan38_open_candidate_colour_measurement_summary_v1.json"
       - "data/evidence/japan38_open_candidate_colour_measurement_per_image_v1.csv"
+      - "data/evidence/fdt_multitrait_execution_readiness_v12.json"
       - ".github/workflows/validate-japan38-open-candidate-colour-measurement-v1.yml"
   workflow_dispatch:
 
@@ -84,7 +85,7 @@ jobs:
             --azami-measure-script _azami/ch1_global/v2/52_measure_primary_traits_continuous.py \
             --per-image-output result/japan38_open_candidate_colour_measurement_per_image_v1.csv \
             --summary-output result/japan38_open_candidate_colour_measurement_summary_v1.json
-      - name: Assert predeclared promotion logic and frozen outputs when present
+      - name: Assert predeclared promotion logic and frozen outputs
         run: |
           python - <<'PY'
           import json
@@ -96,11 +97,18 @@ jobs:
           assert x['results']['JPN_30']['promotion_pass'] == (x['results']['JPN_30']['candidate_passing_locality_count']>=1)
           assert x['results']['JPN_05']['promotion_pass'] == (x['results']['JPN_05']['candidate_passing_locality_count']==2)
           assert x['fifth_concept_gate_unlocked'] == bool(x['promoted_concepts'])
-          frozen=Path('data/evidence/japan38_open_candidate_colour_measurement_summary_v1.json')
-          if frozen.exists():
-            assert json.loads(frozen.read_text())==x
-            pd.testing.assert_frame_equal(pd.read_csv('data/evidence/japan38_open_candidate_colour_measurement_per_image_v1.csv'),pd.read_csv('result/japan38_open_candidate_colour_measurement_per_image_v1.csv'),check_exact=False,rtol=1e-12,atol=1e-12)
-          print(json.dumps(x,indent=2,ensure_ascii=False))
+          assert json.loads(Path('data/evidence/japan38_open_candidate_colour_measurement_summary_v1.json').read_text())==x
+          pd.testing.assert_frame_equal(pd.read_csv('data/evidence/japan38_open_candidate_colour_measurement_per_image_v1.csv'),pd.read_csv('result/japan38_open_candidate_colour_measurement_per_image_v1.csv'),check_exact=False,rtol=1e-12,atol=1e-12)
+          readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v12.json').read_text())
+          colour=readiness['colour']
+          assert colour['japan_local_continuous_history_pilot_ready'] is True
+          assert colour['japan_local_discrete_transition_history_ready'] is False
+          assert colour['minimum_clean_identity_resolved_concepts_current']==5
+          assert colour['population_matched_lightness_concepts']==['JPN_17','JPN_23','JPN_30','JPN_36','JPN_37']
+          assert colour['new_unlock']['promotion_pass'] is True
+          assert abs(float(colour['new_unlock']['concept_lightness_median_across_locality_medians'])-float(x['results']['JPN_30']['concept_lightness_median_across_locality_medians']))<1e-12
+          assert colour['jpn05_parallel_result']['promotion_pass'] is False
+          print(json.dumps({'measurement':x,'readiness_colour':colour},indent=2,ensure_ascii=False))
           PY
       - uses: actions/upload-artifact@v4
         with:
