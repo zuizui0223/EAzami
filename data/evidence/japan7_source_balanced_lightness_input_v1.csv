@@ -1,0 +1,8 @@
+paper_japan_member_id,taxon_name,local_lightness,japan_colour_usable_observations,japan_distinct_analysis_cells,identity_resolved,primary_analysis_allowed,source_class,source_reference
+JPN_05,Cirsium aomorense,67.64705657958984,3,3,true,true,frozen_azami_strict_spatial_detector_crop_japan,azami run 29306454759 artifact 8301295025; audit run 33031769678 artifact 9630497501
+JPN_17,Cirsium maritimum,68.23529434204102,14,14,true,true,frozen_azami_strict_spatial_detector_crop_japan,azami run 29306454759 artifact 8301295025; audit run 33031769678 artifact 9630497501
+JPN_23,Cirsium oligophyllum,63.235294342041016,20,20,true,true,frozen_azami_strict_spatial_detector_crop_japan,azami run 29306454759 artifact 8301295025; audit run 33031769678 artifact 9630497501
+JPN_27,Cirsium suzukaense,67.45097923278809,4,4,true,true,frozen_azami_strict_spatial_detector_crop_japan,azami run 29306454759 artifact 8301295025; audit run 33031769678 artifact 9630497501
+JPN_30,Cirsium yezoense,68.23529052734375,3,3,true,true,frozen_azami_strict_spatial_detector_crop_japan,azami run 29306454759 artifact 8301295025; audit run 33031769678 artifact 9630497501
+JPN_36,Cirsium sieboldii,59.607842445373535,10,10,true,true,frozen_azami_strict_spatial_detector_crop_japan,azami run 29306454759 artifact 8301295025; audit run 33031769678 artifact 9630497501
+JPN_37,Cirsium kamtschaticum,73.43136978149414,11,11,true,true,frozen_azami_strict_spatial_detector_crop_japan,azami run 29306454759 artifact 8301295025; audit run 33031769678 artifact 9630497501
