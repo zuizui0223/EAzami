@@ -70,7 +70,7 @@ Current source-backed Japan38 results:
 
 - orientation: recurrent change is robust; ML minimum 6 changes and UFBoot lower-bound range 4–6 after the JPN34 authority repair; exact branch localization remains weak;
 - phyllary posture: 3 minimum changes across all 1000 UFBoot trees; JPN36 is the strongest partly localizable terminal target;
-- stickiness: canonical main result requires 4–5 changes across UFBoot trees with ML minimum 5; the JPN24 authority extension yields 13 resolved concepts and 5 changes on every 1000 UFBoot topology, but that extension is not yet merged because its final CI failed on a readiness-schema assertion after the scientific recomputation itself succeeded;
+- stickiness: after the merged JPN24 exact-authority repair, 13 concepts are resolved; ML minimum = 5, root = sticky, and all 1000 frozen UFBoot topologies require exactly 5 unordered changes;
 - colour: global/high-depth continuous lightness shows an anti-phylogenetic pattern, but the source-balanced Japan-local replication fails; colour is therefore not promoted to a Japanese-radiation transition history on that evidence.
 
 The simple one-shared-whole-capitulum-lability account is not supported by the current orientation × phyllary × stickiness transition-overlap diagnostics. This is evidence for trait-specific historical structure; it is not proof of developmental or genetic modular evolvability.
