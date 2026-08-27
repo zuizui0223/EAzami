@@ -1,0 +1,36 @@
+{
+  "contract_version": "eazami_japan14_strict_spatial_colour_audit_v1",
+  "status_date": "2026-08-27",
+  "source": {
+    "repo": "zuizui0223/azami",
+    "workflow_run": 29306454759,
+    "artifact_id": 8301295025,
+    "artifact_name": "ch1-strict-spatial-cohort-only-20260713",
+    "artifact_digest": "sha256:f453e36b1867bbb0a239253c2cdfa4a4a6b8f6117a9e814db7224e8b060a440a",
+    "source_file": "strict_spatial_thinned_observations.csv",
+    "source_file_sha256": "63a0352cbb9a728811335ab6da8155776205e914775244b61d1db1f9cee03427",
+    "source_rows": 46276,
+    "audit_run": 33031769678,
+    "audit_artifact_id": 9630497501,
+    "audit_artifact_digest": "sha256:712a2b582e9f05e01afef16fac80130191a782795168f7f1e867b46ef5366553"
+  },
+  "operational_japan_window": "same three frozen coordinate boxes as EAzami geographic-provenance gate v1",
+  "admission_rule": ">=2 Japan-local colour-usable strict-spatial observations AND >=2 distinct frozen analysis_cell values; exact concept identity required",
+  "admission_threshold_frozen_before_audit": true,
+  "admitted_concepts": ["JPN_05", "JPN_17", "JPN_23", "JPN_27", "JPN_30", "JPN_36", "JPN_37"],
+  "admitted_concept_count": 7,
+  "admitted_summary": {
+    "JPN_05": {"taxon_name": "Cirsium aomorense", "japan_colour_usable_rows": 3, "japan_distinct_analysis_cells": 3, "japan_lightness_median": 67.64705657958984},
+    "JPN_17": {"taxon_name": "Cirsium maritimum", "japan_colour_usable_rows": 14, "japan_distinct_analysis_cells": 14, "japan_lightness_median": 68.23529434204102},
+    "JPN_23": {"taxon_name": "Cirsium oligophyllum", "japan_colour_usable_rows": 20, "japan_distinct_analysis_cells": 20, "japan_lightness_median": 63.235294342041016},
+    "JPN_27": {"taxon_name": "Cirsium suzukaense", "japan_colour_usable_rows": 4, "japan_distinct_analysis_cells": 4, "japan_lightness_median": 67.45097923278809},
+    "JPN_30": {"taxon_name": "Cirsium yezoense", "japan_colour_usable_rows": 3, "japan_distinct_analysis_cells": 3, "japan_lightness_median": 68.23529052734375},
+    "JPN_36": {"taxon_name": "Cirsium sieboldii", "japan_colour_usable_rows": 10, "japan_distinct_analysis_cells": 10, "japan_lightness_median": 59.607842445373535},
+    "JPN_37": {"taxon_name": "Cirsium kamtschaticum", "japan_colour_usable_rows": 11, "japan_distinct_analysis_cells": 11, "japan_lightness_median": 73.43136978149414}
+  },
+  "nonadmitted_summary": {
+    "one_japan_cell": ["JPN_22", "JPN_26", "JPN_32", "JPN_35"],
+    "zero_japan_colour_rows": ["JPN_15", "JPN_29", "JPN_38"]
+  },
+  "claim_boundary": "Existing-data coverage audit only. Passing admits a continuous local L* proxy to a later predeclared sensitivity panel; it does not define fixed colour, W/C state, transition direction, ancestry, convergence, adaptation or rate."
+}

@@ -1,0 +1,107 @@
+name: Validate Japan7 source-balanced lightness history v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_japan7_source_balanced_lightness_history_v1.py"
+      - "data/evidence/japan7_source_balanced_lightness_input_v1.csv"
+      - "data/evidence/japan7_sparse_observation_lightness_v1.csv"
+      - "data/evidence/eazami_japan14_strict_spatial_colour_audit_v1.json"
+      - "data/evidence/japan7_source_balanced_lightness_history_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v15.json"
+      - ".github/workflows/validate-japan7-source-balanced-lightness-history-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: validate-japan7-source-balanced-lightness-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  FROZEN_JAPAN38_RUN_ID: "32845725038"
+  FROZEN_JAPAN38_ARTIFACT: "japan38-comp1061-frozen-tree-retry-32845725038"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install biopython numpy scipy
+      - name: Compile
+        run: python -m py_compile analysis/run_japan7_source_balanced_lightness_history_v1.py
+      - name: Validate transferred source-balanced panel contract
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          panel=list(csv.DictReader(open('data/evidence/japan7_source_balanced_lightness_input_v1.csv',encoding='utf-8-sig')))
+          assert [r['paper_japan_member_id'] for r in panel]==['JPN_05','JPN_17','JPN_23','JPN_27','JPN_30','JPN_36','JPN_37']
+          assert all(r['source_class']=='frozen_azami_strict_spatial_detector_crop_japan' for r in panel)
+          assert all(int(r['japan_colour_usable_observations'])>=2 for r in panel)
+          assert all(int(r['japan_distinct_analysis_cells'])>=2 for r in panel)
+          sparse=list(csv.DictReader(open('data/evidence/japan7_sparse_observation_lightness_v1.csv',encoding='utf-8-sig')))
+          assert {r['paper_japan_member_id'] for r in sparse}=={'JPN_05','JPN_27','JPN_30'}
+          assert len(sparse)==10
+          audit=json.loads(Path('data/evidence/eazami_japan14_strict_spatial_colour_audit_v1.json').read_text())
+          assert audit['admitted_concepts']==['JPN_05','JPN_17','JPN_23','JPN_27','JPN_30','JPN_36','JPN_37']
+          assert audit['source']['source_file_sha256']=='63a0352cbb9a728811335ab6da8155776205e914775244b61d1db1f9cee03427'
+          assert audit['source']['audit_artifact_id']==9630497501
+          PY
+      - name: Download frozen Japan38 nuclear tree
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.FROZEN_JAPAN38_ARTIFACT }}
+          path: frozen_japan38
+          run-id: ${{ env.FROZEN_JAPAN38_RUN_ID }}
+          github-token: ${{ github.token }}
+      - name: Run exact Japan7 source-balanced history
+        run: |
+          mkdir -p result
+          python analysis/run_japan7_source_balanced_lightness_history_v1.py \
+            --tree frozen_japan38/tree_result/japan38_comp1061.treefile \
+            --concept-map frozen_japan38/work/japan38_subset/concept_map.csv \
+            --panel data/evidence/japan7_source_balanced_lightness_input_v1.csv \
+            --sparse-observations data/evidence/japan7_sparse_observation_lightness_v1.csv \
+            --output result/japan7_source_balanced_lightness_history_v1.json
+      - name: Assert exact analysis semantics and frozen output when present
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('result/japan7_source_balanced_lightness_history_v1.json').read_text())
+          assert x['concept_panel']==['JPN_05','JPN_17','JPN_23','JPN_27','JPN_30','JPN_36','JPN_37']
+          assert x['n_concepts']==7
+          assert x['evidence_contract']['source_balanced'] is True
+          assert x['evidence_contract']['external_direct_images_used'] is False
+          assert x['primary_signal']['exact_permutations']==5040
+          assert len(x['pairwise_values'])==21
+          assert len(x['concept_leave_one_out']['rho_by_omitted_concept'])==7
+          assert x['sparse_observation_leave_one_out']['n_cases']==10
+          gate=x['predeclared_gates']
+          expected=(x['primary_signal']['rho']<0 and x['primary_signal']['negative_tail_p']<=0.05 and x['concept_leave_one_out']['all_negative'] and x['sparse_observation_leave_one_out']['all_negative'])
+          assert gate['directional_replication_pass']==expected
+          assert gate['strict_two_sided_replication_pass']==(expected and x['primary_signal']['two_sided_abs_p']<=0.05)
+          assert gate['panel_or_threshold_changed_after_result'] is False
+          frozen=Path('data/evidence/japan7_source_balanced_lightness_history_v1.json')
+          if frozen.exists():
+              assert json.loads(frozen.read_text())==x
+              readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v15.json').read_text())
+              j7=readiness['colour']['japan7_source_balanced_history']
+              assert j7['directional_replication_pass']==gate['directional_replication_pass']
+              assert j7['strict_two_sided_replication_pass']==gate['strict_two_sided_replication_pass']
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan7-source-balanced-lightness-history-${{ github.run_id }}
+          path: result/japan7_source_balanced_lightness_history_v1.json
+          if-no-files-found: error
+          retention-days: 90
