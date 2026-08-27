@@ -1,0 +1,69 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v17",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v16.json",
+  "inheritance": "All canonical Japan38 discrete histories, Japan7 colour stop rule, state-aware module-function bridge v2, FDT1 calibration boundaries, and the unresolved absolute-time gate remain in force unless explicitly updated below.",
+  "field_feasibility": {
+    "canonical_registry": "data/evidence/fdt8_field_feasibility_registry_v1.csv",
+    "scientific_priority": [
+      "JPN_06-JPN_15 stickiness sister-pair discrimination",
+      "JPN_36 phyllary transition discrimination"
+    ],
+    "field_execution_priority": [
+      "JPN_36 non-destructive phyllary-state validation and reversible-access pilot",
+      "JPN_15 sticky necessity arm only after abundance/site-permission gate or in common-garden/cultivated material",
+      "JPN_06 nonsticky state/enemy-pressure validation; adhesive-addition sufficiency arm only after material-equivalence and non-target-effect validation"
+    ],
+    "key_reordering_reason": "Scientific information value is not the same as wild-field feasibility. JPN15 is an official EN taxon in Kumamoto Red List 2024 and JPN06 has regional conservation concern; JPN36 is widespread across Honshu/Shikoku wetlands and is better suited to first non-destructive manipulation-pilot work, subject to local permission.",
+    "JPN36": {
+      "taxon": "Cirsium sieboldii",
+      "flowering_window": "August-October",
+      "habitat": "lowland-to-subalpine wetlands and paddy levees in Honshu/Shikoku",
+      "observed_state": "appressed phyllaries; nonsticky/nearly-nonsticky",
+      "primary_module": "phyllary_posture",
+      "first_gate": "confirm live appressed state and validate reversible access proxy without tissue removal",
+      "first_joint_endpoints": ["enemy attack/access", "legitimate visitor access/effective transfer", "mature/viable seed output"]
+    },
+    "JPN15": {
+      "taxon": "Cirsium lineare",
+      "flowering_window": "September-October",
+      "habitat": "grasslands in Yamaguchi/Shikoku/Kyushu within Japan",
+      "observed_state": "sticky; phyllary posture unresolved",
+      "primary_module": "stickiness",
+      "conservation_signal": "Kumamoto Red List 2024 EN; do not assume a wild manipulation population is ethically or administratively available",
+      "first_gate": "identify an abundant explicitly permitted population or controlled/common-garden material before the necessity manipulation",
+      "primary_causal_arm": "natural sticky state neutralization versus sham within JPN15"
+    },
+    "JPN06": {
+      "taxon": "Cirsium dipsacolepis",
+      "flowering_window": "September-November",
+      "habitat": "dry montane grasslands in central/southern Japan",
+      "observed_state": "nonsticky/nearly-nonsticky",
+      "primary_module": "stickiness",
+      "conservation_signal": "regional concern including Kyoto endangered and Hyogo B-rank/rare; grassland loss is documented",
+      "first_gate": "non-destructive live-state and enemy-pressure validation",
+      "secondary_causal_arm": "adhesive/restoration sufficiency treatment only after material-equivalence and non-target-effect validation; not a first wild-field manipulation"
+    }
+  },
+  "coverage_repairs": {
+    "JPN34_orientation": "resolve primary state before experiment ranking",
+    "JPN15_phyllary": "resolve photographically/authority-side; keep separate from JPN15 stickiness role",
+    "JPN24_stickiness": "resolve natural state before experiment ranking"
+  },
+  "execution_order": {
+    "first": "Pilot JPN36 with observation-only state confirmation followed by a reversible non-damaging phyllary-access proxy versus sham if local permission allows.",
+    "second": "In parallel, locate/verify non-destructive JPN06 and JPN15 populations and determine abundance, access, land-manager permission, and conservation constraints without committing to manipulation.",
+    "third": "Run JPN15 sticky neutralization only where the permission/abundance gate is satisfied or using controlled/common-garden material. Keep JPN06 as ancestry-matched external context and reserve adhesive-addition as a secondary sufficiency arm.",
+    "fourth": "Repair JPN34 orientation, JPN15 phyllary, and JPN24 stickiness primary states and recompute histories before adding new transition-specific systems.",
+    "fifth": "After a focal functional contrast is experimentally established, use FDT4/FDT7 to test corresponding niche/context models; do not reverse the order by mining ecology for a preferred adaptive story."
+  },
+  "do_not_repeat": [
+    "Do not rank field systems by phylogenetic information alone while ignoring conservation and permit constraints.",
+    "Do not manipulate a red-listed wild population by default merely because it is the strongest sister contrast.",
+    "Do not use destructive phyllary removal as the first JPN36 manipulation.",
+    "Do not neutralize JPN06 or JPN36 stickiness because both are currently nonsticky/nearly-nonsticky.",
+    "Do not interpret flowering-season overlap of JPN06/JPN15 as a common-garden or sympatric natural experiment; their habitat/range contexts differ.",
+    "Do not treat regional red-list status as a species-wide legal prohibition; verify site-specific rules before field work."
+  ],
+  "claim_boundary": "Field-feasibility and ethical execution contract only. Distribution, phenology and regional conservation information determine where a causal test may be feasible; they do not establish adaptation, transition direction, site occupancy in the coming season, or permission to collect/manipulate plants."
+}

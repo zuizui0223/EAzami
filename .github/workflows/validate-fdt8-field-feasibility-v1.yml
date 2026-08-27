@@ -1,0 +1,45 @@
+name: Validate FDT8 field feasibility v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/fdt8_field_feasibility_registry_v1.csv"
+      - "data/evidence/fdt_multitrait_execution_readiness_v17.json"
+      - ".github/workflows/validate-fdt8-field-feasibility-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate field feasibility registry and readiness
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          rows=list(csv.DictReader(Path('data/evidence/fdt8_field_feasibility_registry_v1.csv').open(encoding='utf-8-sig')))
+          assert len(rows)==6
+          by={(r['paper_japan_member_id'],r['module']):r for r in rows}
+          assert by[('JPN_36','phyllary_posture')]['priority_class']=='field_first'
+          assert by[('JPN_36','phyllary_posture')]['observed_state']=='appressed_phyllaries_nonsticky'
+          assert by[('JPN_15','stickiness')]['observed_state']=='sticky'
+          assert by[('JPN_06','stickiness')]['observed_state']=='nonsticky_or_nearly_nonsticky'
+          assert 'EN' in by[('JPN_15','stickiness')]['conservation_or_permission_signal']
+          assert 'Do not neutralize JPN06' in by[('JPN_06','stickiness')]['prohibited_shortcut']
+          x=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v17.json').read_text())
+          f=x['field_feasibility']
+          assert f['scientific_priority'][0].startswith('JPN_06-JPN_15')
+          assert f['field_execution_priority'][0].startswith('JPN_36')
+          assert f['JPN15']['observed_state'].startswith('sticky')
+          assert f['JPN06']['observed_state']=='nonsticky/nearly-nonsticky'
+          assert x['execution_order']['first'].startswith('Pilot JPN36')
+          assert any('red-listed wild population' in z for z in x['do_not_repeat'])
+          print(json.dumps({'rows':len(rows),'scientific_first':f['scientific_priority'][0],'field_first':f['field_execution_priority'][0]},indent=2))
+          PY
