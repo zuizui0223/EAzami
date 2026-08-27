@@ -12,6 +12,8 @@ REQUIRED = [
     CH / "README.md",
     CH / "MAINLINE_V2.md",
     CH / "MANUSCRIPT_V2_OUTLINE.md",
+    CH / "FIGURE_TABLE_PLAN_V2.md",
+    CH / "SUBMISSION_GATES_V2.md",
     CH / "MANUSCRIPT_V1.md",
     CH / "EVIDENCE_MAP_V1.md",
     CH / "FIGURE_TABLE_PLAN_V1.md",
@@ -65,6 +67,32 @@ def main() -> int:
         "MANUSCRIPT_V2_OUTLINE",
     )
 
+    figures = (CH / "FIGURE_TABLE_PLAN_V2.md").read_text(encoding="utf-8")
+    require(
+        figures,
+        [
+            "Figure 1 — The capitulum is phenotypically decomposable",
+            "Figure 2 — Phenotype → candidate function",
+            "Figure 3 — Trait-specific repeated histories",
+            "Figure 4 — From recurrence to convergence",
+            "Supplementary Figure S1 — Cross-scale generative constraint",
+        ],
+        "FIGURE_TABLE_PLAN_V2",
+    )
+
+    gates = (CH / "SUBMISSION_GATES_V2.md").read_text(encoding="utf-8")
+    require(
+        gates,
+        [
+            "Paper endpoint available with current evidence",
+            "Submission-essential before freezing the current paper",
+            "Not required for the current non-convergence paper",
+            "Required to promote to functional convergence",
+            "Required to promote to adaptive convergence",
+        ],
+        "SUBMISSION_GATES_V2",
+    )
+
     readme = (CH / "README.md").read_text(encoding="utf-8")
     require(
         readme,
@@ -74,6 +102,8 @@ def main() -> int:
             "modular evolvability",
             "endpoint hypothesis",
             "Auxiliary simulation lane",
+            "FIGURE_TABLE_PLAN_V2.md",
+            "SUBMISSION_GATES_V2.md",
         ],
         "Chapter 2 README",
     )
