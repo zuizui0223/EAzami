@@ -339,7 +339,7 @@ def final_decision(draw_summary: pd.DataFrame, contract: dict) -> dict:
     return {
         "status": "completed_held_out_validation",
         "frozen_v1_winner": "NULL_COUPLED",
-        "v1_winner_changed": false,
+        "v1_winner_changed": False,
         "validation_draws": n,
         "permutations_per_test": int(contract["nested_test"]["permutations_per_test"]),
         "primary_pattern_matches": k,
