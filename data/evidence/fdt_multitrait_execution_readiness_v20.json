@@ -1,0 +1,68 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v20",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v19.json",
+  "inheritance": "All JPN36 fail-closed field-pilot gates, state-aware module-function priorities, Japan38 repeated-history results, JPN34 orientation repair, Japan7 colour stop rule and absolute-time constraints remain in force unless explicitly updated below.",
+  "azami_capitulum_v3_scoring": {
+    "observational_handoff_targets": 62,
+    "exact_estimand_contract": "data/evidence/azami_capitulum_v3_estimand_contract_v1.json",
+    "statistics_adapter": "analysis/compute_azami_capitulum_v3_estimands.py",
+    "scoreability_audit": "analysis/audit_azami_capitulum_v3_scoreability_v1.py",
+    "frozen_scoreability_summary": "data/evidence/azami_capitulum_v3_scoreability_summary_v1.json",
+    "validation_run": 33039906007,
+    "validation_artifact_id": 9633445778,
+    "validation_artifact_digest": "sha256:58c655a4c64a9e0f554ceeaf87d8f8aa74b1dd9c5fdd5353cbb3b09ee74f5dee",
+    "statistics_adapter_ready_targets": 62,
+    "current_v2_exact_scoreable_targets": 0,
+    "current_v2_exact_unscoreable_targets": 62,
+    "decision": "The statistics layer is no longer the blocker. The current v2 simulator cannot be scored against the 62 new targets because it does not emit the exact observation-level 18-endpoint plus nine-environment schema.",
+    "source_definition_recovery": {
+      "azami_pr": 72,
+      "analysis_head": "227c0e7b8c338894806785b8545c7c77c8724de1",
+      "source_scripts_recovered": [
+        "analysis/run_capitulum_functional_space.py",
+        "analysis/run_capitulum_environment_blocks.py",
+        "analysis/run_capitulum_environment_incremental.py"
+      ],
+      "target_breakdown": {
+        "structure": 6,
+        "environment_block_r2": 24,
+        "environment_cross_scale_cosine": 12,
+        "environment_incremental_partial_r2": 20
+      }
+    },
+    "frozen_environment_design_available": {
+      "source_artifact_id": 9632715852,
+      "file": "process_environment/complete18_chelsa_process.csv",
+      "columns": [
+        "obs_id", "taxon_name", "latitude", "longitude",
+        "chelsa_bio01", "chelsa_bio04", "chelsa_bio12", "chelsa_bio15",
+        "chelsa_rsds_mean", "chelsa_vpd_mean", "chelsa_sfcwind_mean", "chelsa_gsp", "chelsa_npp"
+      ],
+      "use_rule": "The next v3 generator should condition synthetic phenotype rows on the frozen environmental design. Exact coordinates need not enter the public downstream model table; taxon membership and the nine predictor values are sufficient for the 62 estimands.",
+      "target_leakage_rule": "Do not use observed 18D phenotype values or the 62 target values to tune endpoint loadings or mechanism priors before model-family outcomes are inspected. The fixed environmental design is treated as exogenous conditioning information."
+    },
+    "next_generator_gate": {
+      "required_schema_marker": "AZAMI_CAPITULUM_V3_OBSERVATION_SCHEMA = azami_capitulum_v3_estimand_contract_v1",
+      "required_output": "observation-level synthetic table with taxon_name, 18 frozen response endpoints and nine frozen environmental predictors",
+      "predeclare_before_scoring": [
+        "endpoint-to-module loading architecture",
+        "shared versus module-specific residual architecture",
+        "which model families permit process-environment effects beyond core4",
+        "within-taxon versus among-taxon effect coupling rules",
+        "all parameter priors and random seeds"
+      ],
+      "prohibited": [
+        "fit endpoint loadings to the observed module-contrast targets",
+        "fit process coefficients to the observed block-R2 or partial-R2 targets before the one-shot comparison",
+        "map legacy scalar v2 outputs into the 62-target distance by semantic analogy"
+      ]
+    }
+  },
+  "parallel_field_state": {
+    "JPN36_protocol_ready": true,
+    "JPN36_field_execution_authorized": false,
+    "action_while_field_blocked": "Advance the simulation interface and model-discrimination layer without pretending that field data already exist."
+  },
+  "claim_boundary": "Readiness for a matched model-output interface only. A future low-distance v3 result would establish model reproduction of selected observational structure, not causal mechanism, adaptation, selection, plasticity, defence or genetic/developmental modularity."
+}
