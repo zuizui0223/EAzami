@@ -75,6 +75,7 @@ jobs:
           python - <<'PY'
           import json
           import pandas as pd
+          from decimal import Decimal
           from pathlib import Path
           x=json.loads(Path('output/japan38_all_continuous_history_summary_v1.json').read_text())
           u=pd.read_csv('output/continuous_primary_phylogenetic_structure_v1.csv')
@@ -93,7 +94,7 @@ jobs:
           assert x['candidate_endpoint_decision']=='coverage_audit_only_not_promoted_to_phylogenetic_history'
           assert x['tree_semantics']=='substitutions/site; not absolute time'
           assert x['branch_change_shared_lability']['common_concepts'] >= 6
-          assert all(len(token.replace('.', '').replace('-', '').replace('e', '').replace('+', '')) <= 12
+          assert all(len(Decimal(token).normalize().as_tuple().digits) <= 12
                      for token in Path('output/continuous_primary_branch_change_magnitudes_v1.csv').read_text().splitlines()[1].split(',')[3:])
           print(json.dumps(x,indent=2))
           PY
