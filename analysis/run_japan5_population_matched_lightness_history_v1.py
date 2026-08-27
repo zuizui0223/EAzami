@@ -190,7 +190,7 @@ def main():
             "directional_replication_pass": directional_pass,
             "strict_two_sided_rule": "directional replication pass AND exact two-sided |rho| p <= 0.05",
             "strict_two_sided_replication_pass": strict_two_sided_pass,
-            "thresholds_changed_after_result": false
+            "thresholds_changed_after_result": False
         },
         "claim_boundary": "A passing negative-distance gate is an anti-phylogenetic/overdispersion diagnostic on a substitution-length tree. It does not identify convergence, adaptation, ancestral colour, discrete W/C transitions, evolutionary rate, molecular reactivation, or adaptive radiation. A failed gate is retained as a substantive result rather than repaired post hoc."
     }
