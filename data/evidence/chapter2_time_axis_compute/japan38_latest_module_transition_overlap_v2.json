@@ -1,0 +1,101 @@
+{
+  "contract_version": "japan38_module_transition_overlap_v1",
+  "model": "separate symmetric equal-rates Mk per module",
+  "tree_diagnostic": {
+    "replicate_monophyly": false,
+    "replicate_resolved_for_any_trait": false,
+    "replicate_mode": "pruned_fully_unresolved_replicated_concept",
+    "replicate_mrca_descendants": [
+      "J38S002",
+      "J38S003",
+      "J38S005",
+      "J38S007",
+      "J38S020",
+      "J38S021",
+      "J38S022",
+      "J38S023",
+      "J38S026",
+      "J38S034",
+      "J38S036",
+      "J38S038"
+    ],
+    "excluded_concepts": [
+      "JPN_20",
+      "JPN_31"
+    ],
+    "concept_tips": 36
+  },
+  "traits": {
+    "orientation": {
+      "states": [
+        "U",
+        "D"
+      ],
+      "resolved_tips": 20,
+      "q_equal_rates": 69.47128135013942,
+      "log_likelihood": -24.166470857630728,
+      "median_positive_branch_length": 0.0034134589999999998,
+      "k_q_times_median_branch": 0.4742747411323311,
+      "prior_transition_probability_at_median_branch": 0.1888318761438293,
+      "saturation_warning": false
+    },
+    "phyllary": {
+      "states": [
+        "appressed",
+        "ascending",
+        "spreading",
+        "recurved"
+      ],
+      "resolved_tips": 10,
+      "q_equal_rates": 16.474236989234356,
+      "log_likelihood": -48.31626465212724,
+      "median_positive_branch_length": 0.0034134589999999998,
+      "k_q_times_median_branch": 0.22493653007613965,
+      "prior_transition_probability_at_median_branch": 0.1510748234014494,
+      "saturation_warning": false
+    },
+    "stickiness": {
+      "states": [
+        "sticky",
+        "nonsticky"
+      ],
+      "resolved_tips": 13,
+      "q_equal_rates": 246.4934079024224,
+      "log_likelihood": -24.950191706212674,
+      "median_positive_branch_length": 0.0034134589999999998,
+      "k_q_times_median_branch": 1.6827902832903896,
+      "prior_transition_probability_at_median_branch": 0.4070726676509423,
+      "saturation_warning": false
+    }
+  },
+  "pairwise_overlap": {
+    "orientation__phyllary": {
+      "shared_informative_edges": 33,
+      "spearman_transition_posterior": 0.7690508021390374,
+      "branch_length_stratified_one_sided_p_for_positive_overlap": 0.0286,
+      "spearman_transition_excess_over_branch_prior": 0.3622994652406417,
+      "branch_length_stratified_one_sided_p_for_positive_excess_overlap": 0.0894,
+      "sum_product_transition_posterior": 1.8168349499650205
+    },
+    "orientation__stickiness": {
+      "shared_informative_edges": 38,
+      "spearman_transition_posterior": 0.817923186344239,
+      "branch_length_stratified_one_sided_p_for_positive_overlap": 0.001,
+      "spearman_transition_excess_over_branch_prior": 0.20188204398730714,
+      "branch_length_stratified_one_sided_p_for_positive_excess_overlap": 0.0042,
+      "sum_product_transition_posterior": 1.8673560083681044
+    },
+    "phyllary__stickiness": {
+      "shared_informative_edges": 31,
+      "spearman_transition_posterior": 0.8,
+      "branch_length_stratified_one_sided_p_for_positive_overlap": 0.4097,
+      "spearman_transition_excess_over_branch_prior": 0.08387096774193549,
+      "branch_length_stratified_one_sided_p_for_positive_excess_overlap": 0.2704,
+      "sum_product_transition_posterior": 1.4843703461033768
+    }
+  },
+  "permutations": 9999,
+  "seed": 20260827,
+  "branch_identity": "unique descendant-tip signature on the rooted analysis tree",
+  "claim_boundary": "Branch-wise transition-posterior overlap diagnostic only. Positive overlap can motivate common-lability; weak/heterogeneous overlap can motivate modularity. It does not identify shared developmental genetics, ecological adaptation, or causal selection. Missing/ambiguous states remain uncertain. Fully unresolved replicated concepts and concepts disallowed by the frozen trait-ASR reconciliation are pruned. High Mk saturation diagnostics require caution because transition posteriors can become weakly discriminating."
+}
