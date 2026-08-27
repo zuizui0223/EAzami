@@ -183,18 +183,11 @@ def main() -> int:
         "legacy manuscript source material",
     )
 
+    # Legacy evidence map is retained only as provenance for the simulation-centred
+    # draft. Current convergence boundaries live in MAINLINE_V2/SUBMISSION_GATES_V2
+    # and the canonical trait-function-history table above.
     evidence = (CH / "EVIDENCE_MAP_V1.md").read_text(encoding="utf-8")
-    require(
-        evidence,
-        [
-            "PR #119",
-            "PR #120",
-            "PR #123",
-            "Repeated minimum-change steps prove adaptive convergence",
-            "JPN24 update handling",
-        ],
-        "evidence map",
-    )
+    require(evidence, ["PR #119", "PR #120", "PR #123"], "legacy evidence map")
 
     with (ROOT / "data" / "evidence" / "chapter2_result_role_map_v2.csv").open(
         encoding="utf-8", newline=""
