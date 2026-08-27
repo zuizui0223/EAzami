@@ -7,6 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "data/evidence/functional_diversity_time_meta_registry_v1.csv"
 PROGRAM = ROOT / "docs/FUNCTIONAL_DIVERSITY_TIME_META_ANALYSIS_PROGRAM_2026-08-24.md"
 README = ROOT / "README.md"
+MAINLINE = ROOT / "docs/chapter2/MAINLINE_V2.md"
 
 
 def test_registry_has_complete_analysis_ladder():
@@ -33,9 +34,15 @@ def test_competing_simulation_models_are_predeclared():
     assert "ecological-opportunity pulse" in text
 
 
-def test_first_paper_precedes_causal_field_claims():
-    text = README.read_text(encoding="utf-8")
-    assert "Paper A — Azami global phenomics: **space**" in text
-    assert "Paper B — EAzami functional diversification through **time**" in text
-    assert "trend/hypothesis-generating paper before new causal field experiments" in text
-    assert "Adaptive-radiation inference remains downstream of causal validation" in text
+def test_time_axis_programme_is_supporting_not_repository_mainline():
+    readme = README.read_text(encoding="utf-8")
+    mainline = MAINLINE.read_text(encoding="utf-8")
+    assert "phenotype → function → history → origin → convergence" in readme
+    assert "Auxiliary cross-scale simulation lane" in readme
+    assert "modular evolvability" in mainline
+    assert "endpoint hypothesis" in mainline
+    assert "adaptive convergence" in mainline
+    # The older FDT programme remains available as a supporting time-axis
+    # analysis, but it no longer defines the repository entry point.
+    start_here = readme.split("## Start here", 1)[-1]
+    assert "docs/FUNCTIONAL_DIVERSITY_TIME_META_ANALYSIS_PROGRAM_2026-08-24.md" not in start_here
