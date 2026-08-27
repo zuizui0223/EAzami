@@ -1,0 +1,183 @@
+{
+  "contract_version": "jpn36_phyllary_access_pilot_v1",
+  "status_date": "2026-08-27",
+  "taxon": {
+    "paper_japan_member_id": "JPN_36",
+    "accepted_name": "Cirsium sieboldii",
+    "authority_match_status": "exact_authority_concept_match",
+    "natural_phyllary_state": "appressed",
+    "natural_stickiness_state": "nonsticky_or_nearly_nonsticky",
+    "history_lock": "JPN36 phyllary terminal change forced in 0.754 of the frozen 1000 UFBoot trees"
+  },
+  "scope": {
+    "purpose": "Test whether a reversible, externally supported increase in phyllary access can be applied safely and measured against a handling-matched sham while retaining enemy, legitimate-visitor and reproductive endpoints.",
+    "pilot_role": "manipulation-and-measurement feasibility; not an efficacy or adaptation trial",
+    "current_field_execution_authorized": false,
+    "empirical_result_available": false
+  },
+  "rights_and_conservation_gate": {
+    "required_before_randomization": [
+      "land_manager_authorization_approved",
+      "site_specific_manipulation_authorization_approved",
+      "conservation_review_approved",
+      "mature_head_or_achene_collection_authorization_approved",
+      "viability_assay_authorization_approved",
+      "population_census_complete",
+      "device_qualification_passed"
+    ],
+    "maximum_fraction_of_counted_flowering_individuals": 0.02,
+    "maximum_experimental_heads": 24,
+    "one_experimental_head_per_individual": true,
+    "authorization_record_policy": "Use deidentified approval record IDs in analysis files; keep exact locality, permit documents, personal details and sensitive conservation data outside the public repository.",
+    "failure_action": "No randomized manipulation. Retain only authority/site-approved observation-only state confirmation.",
+    "no_inference_from_regional_status": "Regional red-list or widespread-range statements neither grant nor deny site-specific permission. Current occupancy and local abundance must be verified independently."
+  },
+  "natural_reference_gate": {
+    "minimum_observation_only_heads": 30,
+    "minimum_observation_only_individuals": 30,
+    "same_population_and_phenophase_as_pilot": true,
+    "required_measurements": [
+      "phyllary_posture_class",
+      "minimum_access_gap_mm",
+      "outer_phyllary_angle_deg",
+      "capitulum_diameter_mm",
+      "natural_head_orientation_deg",
+      "baseline_damage_fraction"
+    ],
+    "target_rule": "Freeze the active-arm target access gap before allocation and keep it inside the observed 10th-90th percentile reference range; if no separable, ecologically bounded target exists, stop."
+  },
+  "device": {
+    "active_operation": "Fit a removable inert external collar/frame around the involucre. Blunt external spacer tabs support selected outer phyllaries to the frozen access-gap target without cutting, puncturing, gluing, coating or contacting florets, ovaries or styles.",
+    "sham_operation": "Fit the same collar/frame with matched material, mass, visible profile, attachment positions and handling duration, but keep spacer tabs flush so that phyllaries are not displaced.",
+    "common_requirements": [
+      "device_id and material lot frozen before allocation",
+      "active and sham matched in external structure except spacer engagement",
+      "device removable without tissue loss",
+      "no adhesive or coating on plant tissue",
+      "no phyllary cutting or removal",
+      "no floret, ovary or style contact",
+      "no intentional change to capitulum orientation"
+    ]
+  },
+  "device_qualification_gate": {
+    "minimum_heads_per_arm": 6,
+    "duration_hours": 24,
+    "allowed_material": "common-garden/cultivated material or separately authorized nonexperimental JPN36 heads",
+    "pass_all": [
+      "zero tissue tears, punctures, detached phyllaries, abnormal exudation or wilt attributable to handling/device",
+      "zero floret, ovary or style contact",
+      "all devices retained and removed intact",
+      "active arm reaches the frozen target range in all qualification heads",
+      "median sham gap change is less than 25 percent of the median active gap change",
+      "absolute unintended capitulum-orientation change is at most 5 degrees in every head"
+    ],
+    "failure_action": "Stop v1. Any device/material/threshold revision requires a separately versioned contract and a new qualification run; do not retune after field outcomes are viewed."
+  },
+  "field_design": {
+    "biological_unit": "individual plant",
+    "experimental_head_per_individual": 1,
+    "target_pair_count": 12,
+    "target_individual_count": 24,
+    "arms": [
+      "access_proxy",
+      "sham"
+    ],
+    "allocation_ratio_within_pair": "1:1",
+    "pairing_variables": [
+      "site_id",
+      "population_id",
+      "observation_date_local",
+      "phenological_stage",
+      "capitulum_diameter_bin",
+      "baseline_damage_bin"
+    ],
+    "frozen_randomization_seed": "JPN36-PHYLLARY-ACCESS-V1-20260827",
+    "allocation_method": "Within each predeclared two-individual pair, assign the lower or higher sorted capitulum ID to access_proxy from SHA256(seed|pair_id); assign the mate to sham.",
+    "allocation_timing": "Record eligibility, pairing variables and authorization record IDs before treatment assignment and before any post-treatment outcome observation.",
+    "replacement_rule": "No replacement after assignment. Record loss, manipulation failure and missing outcomes under the assigned arm for intention-to-treat reporting.",
+    "underfill_rule": "If 12 eligible pairs cannot be enrolled without violating the authorization quota or 2 percent population cap, do not run an underfilled efficacy analysis; report the blocked or incomplete feasibility pilot."
+  },
+  "required_observations": {
+    "baseline": [
+      "identity and live appressed-state confirmation",
+      "natural nonsticky/nearly-nonsticky confirmation",
+      "phenological stage",
+      "capitulum diameter",
+      "minimum access gap and outer-phyllary angle",
+      "natural head orientation",
+      "baseline enemy damage",
+      "weather and observation timing"
+    ],
+    "manipulation_integrity": [
+      "assignment and device ID",
+      "handling duration",
+      "target and achieved access gap",
+      "pre/post head orientation",
+      "device retention",
+      "floret contact",
+      "tissue injury",
+      "treatment integrity at each bout"
+    ],
+    "legitimate_visitors": [
+      "observation duration",
+      "legitimate visitor approaches",
+      "landings",
+      "probing visits",
+      "effective reproductive-structure contacts",
+      "visit duration"
+    ],
+    "enemies": [
+      "enemy approaches",
+      "contact or entry attempts",
+      "successful access events",
+      "florivory events",
+      "external damage fraction",
+      "predispersal seed-predator evidence"
+    ],
+    "reproduction": [
+      "mature head recovered under authorization",
+      "total achenes",
+      "filled achenes",
+      "viability assay method",
+      "viable achenes",
+      "missingness and attrition reason"
+    ],
+    "repeated_bouts": [
+      "pre-treatment baseline",
+      "immediate post-fit integrity check",
+      "at least one early-day and one later-day visitor bout",
+      "enemy/damage follow-up through maturation",
+      "final authorized reproductive assessment"
+    ]
+  },
+  "stop_rules": {
+    "before_start": [
+      "Stop if any rights/conservation authorization is absent, expired, site-mismatched or narrower than the planned manipulation and terminal sampling.",
+      "Stop if live JPN36 identity, appressed phyllaries or nonsticky/nearly-nonsticky state is not confirmed.",
+      "Stop if the population cap, individual-level one-head limit or permit quota cannot accommodate 24 individuals.",
+      "Stop if the device qualification record or frozen natural-range target is absent."
+    ],
+    "individual_head": [
+      "Remove the device and stop observation of the manipulation if any tear, puncture, detachment, abnormal exudation, wilt, floret/ovary/style contact or more than 5 degree unintended head-orientation change occurs.",
+      "Keep the head in the intention-to-treat ledger and record the exact stop reason; do not replace it."
+    ],
+    "batch": [
+      "Stop all new assignments and remove devices if two of the first four assigned heads have any device-attributable injury or contact event.",
+      "Stop immediately if the land manager or permit authority withdraws approval, a protected non-target organism is affected, or weather creates an unreviewed device hazard.",
+      "Stop v1 if treatment integrity cannot be distinguished from sham or if the frozen target cannot be maintained without retuning."
+    ],
+    "analysis": [
+      "Do not replace assigned losses or exclude failed manipulations from the primary safety/integrity report.",
+      "Do not infer no effect from a nonsignificant pilot contrast; no equivalence margin or efficacy power is declared.",
+      "Do not invent new mediators, change observation windows or retune the device after viewing visitor, enemy or seed outcomes.",
+      "Do not promote a technical-feasibility pass to an adaptation, natural-defense, transition-direction or fitness-benefit claim."
+    ]
+  },
+  "decision_rules": {
+    "technical_pass": "All rights/conservation and device gates pass; allocation remains balanced; no batch stop is triggered; every assigned head is retained in the integrity/attrition ledger; active manipulation is measurably distinct from sham while remaining inside the frozen natural-reference range.",
+    "technical_fail": "Any mandatory authorization, qualification, injury, non-target, treatment-integrity, allocation or provenance gate fails.",
+    "biological_readout": "Report arm-specific estimates and uncertainty for preregistered visitor, enemy and reproductive endpoints as exploratory pilot results. A new powered protocol is required for efficacy or equivalence.",
+    "success_independent_of_direction": "A safe, auditable null, adverse or beneficial pilot result can all close v1; none licenses device retuning to obtain a preferred direction."
+  },
+  "claim_boundary": "This contract can establish only that a particular qualified external access proxy was or was not safely deployable and that its preregistered pilot endpoints were recorded under a valid randomized sham comparison at the authorized site. It cannot show that natural appressed phyllaries are adaptive, homologous to external bract systems, caused the historical transition, generally exclude enemies, improve pollination or increase fitness across Cirsium."
+}
