@@ -1,0 +1,49 @@
+{
+  "version": "scale_specific_covariance_v4_implementation_priors_2026-08-27",
+  "status": "frozen_before_v4_family_outcomes",
+  "parent_contract": "data/contracts/scale_specific_covariance_v4_contract.json",
+  "shared_baseline": {
+    "source": "analysis/simulate_capitulum_space_mechanism_v3.py",
+    "family": "full_tradeoff_common_lability",
+    "rule": "All shared environmental, pollinator, antagonist, common-lability, global-factor, module-factor and noise priors are inherited unchanged."
+  },
+  "within_only_module_factor": {
+    "factor_distribution": "standard_normal_per_observation_and_registered_module_then_exactly_taxon_centred",
+    "common_scale_distribution": {"distribution": "uniform", "low": 0.05, "high": 0.50},
+    "unit_loading_distribution": "standard_normal_then_rms_normalized_within_registered_module",
+    "loading_sign_constraint": "none",
+    "same_common_scale_all_modules": true,
+    "hue_application": "add_to_latent_angle_before_recomputing_sine_and_cosine"
+  },
+  "among_unit_mosaic_loadings": {
+    "module_shared_taxon_environment_coefficients": "set_to_zero_before_base_simulation",
+    "core_loading_distribution": "standard_normal_per_unit_and_core_predictor_then_zero_mean_within_module_and_global_rms_normalized",
+    "process_loading_distribution": "standard_normal_per_unit_and_process_predictor_then_zero_mean_within_module_and_global_rms_normalized",
+    "core_scale_distribution": {"distribution": "uniform", "low": 0.05, "high": 0.35},
+    "process_scale_distribution": {"distribution": "uniform", "low": 0.25, "high": 0.90},
+    "same_prior_for_all_process_predictors_including_gsp": true,
+    "singleton_module_rule": "centred_loading_is_zero",
+    "hue_application": "add_to_latent_angle_before_recomputing_sine_and_cosine"
+  },
+  "historical_rotation": {
+    "rank_distribution": {"distribution": "discrete_uniform", "values": [1, 2, 3]},
+    "loading_distribution": "standard_normal_matrix_then_qr_orthonormalized",
+    "taxon_score_distribution": "standard_normal",
+    "scale_distribution": {"distribution": "uniform", "low": 0.10, "high": 0.70},
+    "independent_of_environment": true,
+    "independent_of_registered_modules": true,
+    "hue_application": "add_to_latent_angle_before_recomputing_sine_and_cosine"
+  },
+  "nested_randomness": {
+    "same_parameter_seed_for_shared_components_across_families": true,
+    "family_specific_addition_seeds_are_deterministic": true,
+    "main_and_replication_datasets_use_separate_deterministic_seeds": true
+  },
+  "simulation_sizes": {
+    "main_taxa": 60,
+    "main_populations_per_taxon": 6,
+    "replication_taxa": 75,
+    "replication_populations_per_taxon": 5
+  },
+  "no_post_outcome_change_rule": "After the first v4 family result, no distribution, range, normalization, family structure, target, distance or gate may change on the same registered screen. Any revision requires a new contract version and the prior run remains interpretable under this version."
+}
