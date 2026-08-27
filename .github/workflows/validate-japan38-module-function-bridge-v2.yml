@@ -1,0 +1,79 @@
+name: Validate Japan38 module-function bridge v2
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_japan38_module_function_bridge_v2.py"
+      - "data/evidence/japan38_module_function_bridge_v2.csv"
+      - "data/evidence/japan38_module_function_bridge_summary_v2.json"
+      - "data/evidence/japan38_fdt8_priority_targets_v2.csv"
+      - "data/evidence/fdt_multitrait_execution_readiness_v16.json"
+      - ".github/workflows/validate-japan38-module-function-bridge-v2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile bridge
+        run: python -m py_compile analysis/build_japan38_module_function_bridge_v2.py
+      - name: Build state-aware bridge
+        run: |
+          mkdir -p result
+          python analysis/build_japan38_module_function_bridge_v2.py \
+            --history data/evidence/japan38_multitrait_history_summary_v1.json \
+            --functional-summary data/evidence/fdt1_broad_functional_calibration_summary_v1.json \
+            --functional-seed data/evidence/fdt1_broad_functional_calibration_seed_v1.csv \
+            --orientation-meta data/evidence/fdt1_orientation_net_fitness_two_study_meta_v1.json \
+            --cirsium-interactions data/evidence/cirsium_interaction_evidence_seed_v1.csv \
+            --concept-map data/evidence/japan38_comp1061_concept_map_v1.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --tree data/evidence/japan38_comp1061_primary_tree_v1.nwk \
+            --readiness data/evidence/fdt_multitrait_execution_readiness_v15.json \
+            --bridge-output result/japan38_module_function_bridge_v2.csv \
+            --priority-output result/japan38_fdt8_priority_targets_v2.csv \
+            --summary-output result/japan38_module_function_bridge_summary_v2.json
+      - name: Assert state-aware intervention direction and frozen outputs
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          b=list(csv.DictReader(open('result/japan38_module_function_bridge_v2.csv',encoding='utf-8-sig')))
+          assert len(b)==8
+          s=json.loads(Path('result/japan38_module_function_bridge_summary_v2.json').read_text())
+          assert s['state_direction_correction']['JPN06_state']=='nonsticky_or_nearly_nonsticky'
+          assert s['state_direction_correction']['JPN15_state']=='sticky'
+          assert s['state_direction_correction']['JPN36_phyllary_state']=='appressed'
+          assert s['module_decisions']['stickiness']['best_ancestry_matched_pair']==['JPN_06','JPN_15']
+          p=list(csv.DictReader(open('result/japan38_fdt8_priority_targets_v2.csv',encoding='utf-8-sig')))
+          assert [r['paper_japan_member_id'] for r in p]==['JPN_06','JPN_36','JPN_34','JPN_15','JPN_24']
+          assert p[0]['matched_comparator']=='JPN_15' and p[0]['observed_state']=='nonsticky_or_nearly_nonsticky' and p[0]['comparator_state']=='sticky'
+          assert 'JPN15_sticky_neutralization' in [r['next_test'] for r in b if r['module']=='stickiness'][0]
+          fb=Path('data/evidence/japan38_module_function_bridge_v2.csv')
+          if fb.exists():
+              assert fb.read_text()==Path('result/japan38_module_function_bridge_v2.csv').read_text()
+              assert Path('data/evidence/japan38_fdt8_priority_targets_v2.csv').read_text()==Path('result/japan38_fdt8_priority_targets_v2.csv').read_text()
+              assert json.loads(Path('data/evidence/japan38_module_function_bridge_summary_v2.json').read_text())==s
+              r=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v16.json').read_text())
+              assert r['mainline']['highest_information_targets']==['JPN_06','JPN_36']
+              assert r['mainline']['stickiness']['ancestry_matched_pair']==['JPN_06','JPN_15']
+              assert r['mainline']['colour_role']=='secondary_negative_contrast'
+          print(json.dumps(s,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-module-function-bridge-v2-${{ github.run_id }}
+          path: |
+            result/japan38_module_function_bridge_v2.csv
+            result/japan38_fdt8_priority_targets_v2.csv
+            result/japan38_module_function_bridge_summary_v2.json
+          if-no-files-found: error
+          retention-days: 90
