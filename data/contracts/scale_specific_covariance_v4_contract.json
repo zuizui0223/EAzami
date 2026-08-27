@@ -19,7 +19,7 @@
   "frozen_gap_diagnosis": {
     "observed_within_module_contrast": 0.1645023304673242,
     "observed_among_module_contrast": 0.08847536372583811,
-    "observed_among_to_within_module_contrast_ratio": 0.5378350218239834,
+    "observed_among_to_within_module_contrast_ratio": 0.5378365368715087,
     "observed_cross_scale_matrix_spearman": 0.36629931778064023,
     "observed_within_process_partial_r2": 0.013535098842026137,
     "observed_among_process_partial_r2": 0.2149779830807262,
