@@ -85,7 +85,7 @@ jobs:
           assert bs['phyllary']['n']==1000 and bs['stickiness']['n']==1000
           ready=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v27.json').read_text())
           assert ready['jpn24_stickiness_authority_extension']['assigned_state']=='sticky'
-          assert ready['coverage_repairs_remaining_after_authority_assignment']==['JPN_15 phyllary posture']
+          assert ready['coverage_repairs_remaining']==['JPN_15 phyllary posture']
           frozen=Path('data/evidence/jpn24_stickiness_extension_parsimony_v1.json')
           if frozen.exists():
               f=json.loads(frozen.read_text())
