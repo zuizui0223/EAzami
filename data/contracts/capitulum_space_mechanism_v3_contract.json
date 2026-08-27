@@ -1,0 +1,201 @@
+{
+  "contract_version": "capitulum_space_mechanism_v3_2026-08-27",
+  "status": "frozen_before_v3_model_family_outcomes",
+  "purpose": "Discriminate mechanism-family structural sufficiency using statistically matched Azami multilevel capitulum-space targets without promoting observational patterns to causal effects.",
+  "source": {
+    "repository": "zuizui0223/azami",
+    "run_id": "33035785120",
+    "artifact_id": "9632715852",
+    "artifact_digest": "sha256:51e7a26b5bd09e030b67b9342586699abaaf46e630f45b6bb4ee7bfc9152ced6",
+    "head_sha": "227c0e7b8c338894806785b8545c7c77c8724de1",
+    "structure_table": "data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv",
+    "environment_table": "data/evidence/source/azami_capitulum_environment_eazami_targets_run33035785120.csv",
+    "incremental_table": "data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv",
+    "handoff_report": "data/evidence/azami_capitulum_space_handoff_report_v1.json"
+  },
+  "inferential_units": [
+    {"unit_id": "orientation_image_vertical_angle", "module": "orientation"},
+    {"unit_id": "corolla_hue", "module": "colour"},
+    {"unit_id": "corolla_lab_chroma", "module": "colour"},
+    {"unit_id": "corolla_lab_lightness", "module": "colour"},
+    {"unit_id": "capitulum_outline_aspect_ratio", "module": "shape"},
+    {"unit_id": "capitulum_outline_circularity", "module": "shape"},
+    {"unit_id": "capitulum_outline_solidity", "module": "shape"},
+    {"unit_id": "capitulum_width_profile_cv", "module": "shape"},
+    {"unit_id": "involucre_length_width_ratio", "module": "involucre_architecture"},
+    {"unit_id": "involucre_apical_taper_ratio", "module": "involucre_architecture"},
+    {"unit_id": "involucre_basal_taper_ratio", "module": "involucre_architecture"},
+    {"unit_id": "bract_projection_roughness", "module": "involucre_architecture"},
+    {"unit_id": "bract_projection_p95", "module": "involucre_architecture"},
+    {"unit_id": "bract_spread_fraction", "module": "involucre_architecture"},
+    {"unit_id": "bract_projection_asymmetry", "module": "involucre_architecture"},
+    {"unit_id": "bract_projection_maximum", "module": "armature"},
+    {"unit_id": "bract_projection_peak_density", "module": "armature"}
+  ],
+  "model_families": [
+    {
+      "family_id": "environment_only",
+      "environment": true,
+      "pollinator": false,
+      "antagonist": false,
+      "lability_structure": "module_neutral_control"
+    },
+    {
+      "family_id": "pollinator_only",
+      "environment": false,
+      "pollinator": true,
+      "antagonist": false,
+      "lability_structure": "module_neutral_control"
+    },
+    {
+      "family_id": "antagonist_only",
+      "environment": false,
+      "pollinator": false,
+      "antagonist": true,
+      "lability_structure": "module_neutral_control"
+    },
+    {
+      "family_id": "full_tradeoff_common_lability",
+      "environment": true,
+      "pollinator": true,
+      "antagonist": true,
+      "lability_structure": "one_taxon_level_multiplier_shared_across_all_17_units"
+    },
+    {
+      "family_id": "full_tradeoff_modular_evolvability",
+      "environment": true,
+      "pollinator": true,
+      "antagonist": true,
+      "lability_structure": "module_specific_taxon_multipliers_within_predeclared_modules"
+    }
+  ],
+  "generator_constraints": {
+    "n_inferential_units": 17,
+    "modules": ["orientation", "colour", "shape", "involucre_architecture", "armature"],
+    "minimum_taxa": 60,
+    "minimum_populations_per_taxon": 5,
+    "endpoint_specific_parameter_tuning": false,
+    "allowed_parameter_granularity": ["global", "environment_block", "registered_module"],
+    "within_and_among_outputs_must_be_generated_from_same_simulated_taxa": true,
+    "hue_is_one_joint_unit": true,
+    "simulated_output_must_preserve_signed_endpoint_values_before_strength_matrices": true
+  },
+  "required_model_outputs": [
+    "capitulum_within_module_integration_contrast",
+    "capitulum_among_module_integration_contrast",
+    "capitulum_cross_scale_association_matrix_similarity",
+    "environment_incremental:all_process_extension_beyond_core4:within_taxon",
+    "environment_incremental:all_process_extension_beyond_core4:among_taxon",
+    "environment_incremental:growing_season_water_input_beyond_core4:within_taxon",
+    "environment_incremental:growing_season_water_input_beyond_core4:among_taxon"
+  ],
+  "primary_fit_targets": [
+    {
+      "target_id": "capitulum_within_module_integration_contrast",
+      "scope": "complete18_min5",
+      "scale": "within_taxon",
+      "metric": "module_contrast",
+      "distance": "bootstrap_standardized_huber",
+      "weight": 2.0
+    },
+    {
+      "target_id": "capitulum_among_module_integration_contrast",
+      "scope": "complete18_min5",
+      "scale": "among_taxon",
+      "metric": "module_contrast",
+      "distance": "bootstrap_standardized_huber",
+      "weight": 2.0
+    },
+    {
+      "target_id": "capitulum_cross_scale_association_matrix_similarity",
+      "scope": "complete18_min5",
+      "scale": "within_vs_among",
+      "metric": "spearman_upper_triangle",
+      "distance": "bootstrap_standardized_huber",
+      "weight": 2.0
+    },
+    {
+      "target_id": "environment_incremental:all_process_extension_beyond_core4",
+      "scope": "complete18_env_min5",
+      "scale": "within_taxon",
+      "metric": "partial_r2",
+      "distance": "bounded_numeric_plus_support_state",
+      "expected_support": false,
+      "tolerance": 0.03,
+      "weight": 1.5
+    },
+    {
+      "target_id": "environment_incremental:all_process_extension_beyond_core4",
+      "scope": "complete18_env_min5",
+      "scale": "among_taxon",
+      "metric": "partial_r2",
+      "distance": "bounded_numeric_plus_support_state",
+      "expected_support": true,
+      "tolerance": 0.10,
+      "weight": 2.0
+    },
+    {
+      "target_id": "environment_incremental:growing_season_water_input_beyond_core4",
+      "scope": "complete18_env_min5",
+      "scale": "within_taxon",
+      "metric": "partial_r2",
+      "distance": "bounded_numeric_plus_support_state",
+      "expected_support": false,
+      "tolerance": 0.02,
+      "weight": 1.0
+    },
+    {
+      "target_id": "environment_incremental:growing_season_water_input_beyond_core4",
+      "scope": "complete18_env_min5",
+      "scale": "among_taxon",
+      "metric": "partial_r2",
+      "distance": "bounded_numeric_plus_support_state",
+      "expected_support": true,
+      "tolerance": 0.05,
+      "weight": 2.0
+    }
+  ],
+  "replication_targets": {
+    "scope_suffix": "min2",
+    "role": "out_of_primary_fit_replication_check",
+    "must_not_be_double_counted_in_primary_distance": true,
+    "required_patterns": [
+      "positive_within_module_contrast",
+      "positive_among_module_contrast",
+      "positive_cross_scale_matrix_similarity",
+      "within_process_omnibus_unsupported",
+      "among_process_omnibus_supported",
+      "among_growing_season_water_supported"
+    ]
+  },
+  "context_only_targets": {
+    "environment_block_r2_and_coefficient_cosines": "descriptive_not_scored_in_v3_primary_distance",
+    "radiative_atmospheric_drying_increment": "threshold_sensitive_context",
+    "climatic_productivity_increment": "threshold_sensitive_context",
+    "mechanical_exposure_increment": "negative_context",
+    "endpoint_level_A_B_C_rows": "retained_in_existing_EAzami_v2_layer_not_duplicated_here"
+  },
+  "family_comparison": {
+    "draws_per_seed_per_family": 500,
+    "seeds": [20260827, 20261827, 20262827, 20263827],
+    "accept_fraction": 0.05,
+    "minimum_accepted_draws": 50,
+    "ranking_order": [
+      "primary_distance_median",
+      "replication_pattern_rate_descending",
+      "existing_independent_heldout_rate_descending"
+    ],
+    "prohibited_statistics": ["Bayes_factor", "posterior_model_probability", "likelihood_ratio"],
+    "allowed_label": "ABC_like_structural_sufficiency_screen"
+  },
+  "promotion_rule": {
+    "common_vs_modular_decision_requires": [
+      "same_estimand_for_all_seven_primary_targets",
+      "primary_distance_separation_across_all_declared_seeds",
+      "replication_pattern_rate_not_worse_for_winning_family",
+      "existing_independent_literature_heldout_rate_not_worse_for_winning_family"
+    ],
+    "tie_rule": "If bootstrap or seed-wise ranking overlaps materially, retain common_lability_vs_modular_evolvability as unresolved.",
+    "causal_boundary": "No model-family rank establishes functional or genetic modularity, selection, adaptation, plasticity, defence, direct climate causation or a unique mechanism."
+  }
+}
