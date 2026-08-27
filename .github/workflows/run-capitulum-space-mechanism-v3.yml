@@ -1,10 +1,12 @@
-name: Run capitulum-space mechanism v3 screen
+name: Run capitulum-space mechanism v3.1 screen
 
 on:
   pull_request:
     paths:
       - "analysis/simulate_capitulum_space_mechanism_v3.py"
+      - "analysis/run_capitulum_space_mechanism_v3_gated.py"
       - "tests/test_simulate_capitulum_space_mechanism_v3.py"
+      - "tests/test_run_capitulum_space_mechanism_v3_gated.py"
       - "data/contracts/capitulum_space_mechanism_v3_contract.json"
       - "data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv"
       - "data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv"
@@ -35,26 +37,32 @@ jobs:
         run: |
           python -m pip install 'numpy>=1.26,<3'
           python -m pip check
-      - name: Compile and test matched generator
+      - name: Compile and test matched generator and adequacy gate
         run: |
-          python -m py_compile analysis/simulate_capitulum_space_mechanism_v3.py
-          python -m unittest tests/test_simulate_capitulum_space_mechanism_v3.py -v
-      - name: Run frozen v3 family screen
+          python -m py_compile \
+            analysis/simulate_capitulum_space_mechanism_v3.py \
+            analysis/run_capitulum_space_mechanism_v3_gated.py
+          python -m unittest \
+            tests/test_simulate_capitulum_space_mechanism_v3.py \
+            tests/test_run_capitulum_space_mechanism_v3_gated.py -v
+      - name: Run frozen v3.1 family screen
         run: |
-          python analysis/simulate_capitulum_space_mechanism_v3.py \
+          python analysis/run_capitulum_space_mechanism_v3_gated.py \
             --contract data/contracts/capitulum_space_mechanism_v3_contract.json \
             --structure data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv \
             --incremental data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv \
             --v2-heldout data/evidence/macro_interaction_pattern_reduction_result_v2.json \
             --draws-per-seed "$DRAWS_PER_SEED" \
-            --out-dir /tmp/capitulum_space_v3
-      - name: Verify result boundary and registered run size
+            --out-dir /tmp/capitulum_space_v3_1
+      - name: Verify v3.1 boundary, adequacy fields and registered run size
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          result = json.load((Path('/tmp/capitulum_space_v3') / 'capitulum_space_mechanism_v3_result.json').open())
-          assert result['contract_version'] == 'capitulum_space_mechanism_v3_2026-08-27'
+
+          result = json.load((Path('/tmp/capitulum_space_v3_1') / 'capitulum_space_mechanism_v3_result.json').open())
+          assert result['contract_version'] == 'capitulum_space_mechanism_v3_1_2026-08-27'
+          assert result['screen_version'] == 'capitulum_space_mechanism_v3_1_screen_1'
           assert result['draws_per_seed_per_family'] == int('${{ env.DRAWS_PER_SEED }}')
           assert len(result['families']) == 5
           assert set(result['ranking']) == {
@@ -62,19 +70,41 @@ jobs:
               'full_tradeoff_common_lability',
               'full_tradeoff_modular_evolvability'
           }
-          assert result['focal_common_vs_modular']['registered_decision'] in {
+          focal = result['focal_common_vs_modular']
+          for key in [
+              'absolute_primary_adequacy',
+              'minimum_relative_distance_improvement_met',
+              'seedwise_distance_winner_stable',
+              'replication_absolute_adequacy',
+              'replication_not_worse',
+              'independent_v2_heldout_not_worse',
+              'registered_decision',
+          ]:
+              assert key in focal, key
+          assert focal['registered_decision'] in {
               'full_tradeoff_common_lability',
               'full_tradeoff_modular_evolvability',
               'unresolved'
           }
+          if focal['registered_decision'] != 'unresolved':
+              assert all([
+                  focal['absolute_primary_adequacy'],
+                  focal['minimum_relative_distance_improvement_met'],
+                  focal['seedwise_distance_winner_stable'],
+                  focal['replication_absolute_adequacy'],
+                  focal['replication_not_worse'],
+                  focal['independent_v2_heldout_not_worse'],
+              ])
+          assert 'superseded' in result['superseded_uninspected_run_boundary']
           assert 'Not a likelihood' in result['interpretation_boundary']
-          print('v3_screen_complete=true')
+          print('v3_1_screen_complete=true')
           print('ranking=', result['ranking'])
-          print('focal_decision=', result['focal_common_vs_modular']['registered_decision'])
+          print('adequate_families=', result['adequate_families'])
+          print('focal_decision=', focal['registered_decision'])
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: capitulum-space-mechanism-v3-screen
-          path: /tmp/capitulum_space_v3
+          name: capitulum-space-mechanism-v3-1-screen
+          path: /tmp/capitulum_space_v3_1
           if-no-files-found: error
           retention-days: 90
