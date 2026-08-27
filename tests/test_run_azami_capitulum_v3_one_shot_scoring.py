@@ -1,12 +1,16 @@
 import importlib.util
 import json
+import sys
 from pathlib import Path
 
 import pandas as pd
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "analysis" / "run_azami_capitulum_v3_one_shot_scoring.py"
+ANALYSIS = ROOT / "analysis"
+if str(ANALYSIS) not in sys.path:
+    sys.path.insert(0, str(ANALYSIS))
+SCRIPT = ANALYSIS / "run_azami_capitulum_v3_one_shot_scoring.py"
 spec = importlib.util.spec_from_file_location("v3score", SCRIPT)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
