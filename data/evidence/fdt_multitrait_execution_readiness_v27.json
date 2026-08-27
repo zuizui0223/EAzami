@@ -1,0 +1,27 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v27",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v26.json",
+  "inheritance": "All frozen v3 scalar-target, held-out support and post-heldout diagnostic results remain unchanged. All field, Japan38 history, colour stop-rule and absolute-time gates remain in force.",
+  "jpn24_stickiness_authority_extension": {
+    "status": "authority_resolved_before_history_recomputation",
+    "paper_member": "JPN_24",
+    "taxon": "Cirsium pseudosuffultum",
+    "source": "https://www.kahaku.go.jp/research/db/botany/azami/detail.html?no=109",
+    "source_type": "National Museum of Nature and Science exact-concept detail page",
+    "assigned_state": "sticky",
+    "authority_basis": "NMNS explicitly states linear to narrowly lanceolate glands occur on inner and middle phyllaries and that the involucre is well sticky.",
+    "orientation_state": "unknown",
+    "phyllary_posture": "unknown",
+    "outcome_inspected": false,
+    "history_gate": "Recompute stickiness minimum-change history on the same frozen ML and 1000 UFBoot trees; freeze whatever step/root/localization change results without changing the state assignment."
+  },
+  "coverage_repairs_remaining_after_authority_assignment": ["JPN_15 phyllary posture"],
+  "field_line": {
+    "first_executable_target": "JPN_36 phyllary-access pilot after authorization/census/device gates",
+    "highest_information_stickiness_design": "JPN_15 sticky neutralization within species with JPN_06 nonsticky 100/100 sister as external ancestry-matched comparator",
+    "execution_authorized": false
+  },
+  "absolute_time": "FDT5/FDT6 remain blocked by calibration limitations.",
+  "claim_boundary": "The JPN24 assignment is an authority-level categorical state used to improve history coverage. It is not an individual measurement and does not establish defence efficacy, adaptation or causal function."
+}
