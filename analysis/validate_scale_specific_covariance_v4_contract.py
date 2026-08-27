@@ -330,10 +330,7 @@ def v3_primary_ids(v3_contract: dict[str, Any]) -> list[str]:
     ids = []
     for row in v3_contract["primary_fit_targets"]:
         target_id = row["target_id"]
-        if target_id.startswith("environment_incremental:"):
-            ids.append(f"{target_id}:{row['scale']}")
-        else:
-            ids.append(f"{target_id}:{row['scale']}")
+        ids.append(f"{target_id}:{row['scale']}")
     return ids
 
 
@@ -484,7 +481,7 @@ def main() -> int:
         "n_main_environment_r2_context_targets": context_rows,
         "observed_gap": gap,
         "screen_gates": gates,
-        "outcomes_inspected": false,
+        "outcomes_inspected": False,
         "scoring_status": "not_run",
         "claim_status": "structural_covariance_architecture_contract_only",
     }
