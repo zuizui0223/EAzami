@@ -11,6 +11,7 @@ CH = ROOT / "docs" / "chapter2"
 REQUIRED = [
     CH / "README.md",
     CH / "MAINLINE_V2.md",
+    CH / "MANUSCRIPT_V2_OUTLINE.md",
     CH / "MANUSCRIPT_V1.md",
     CH / "EVIDENCE_MAP_V1.md",
     CH / "FIGURE_TABLE_PLAN_V1.md",
@@ -49,6 +50,19 @@ def main() -> int:
             "auxiliary generative constraint",
         ],
         "MAINLINE_V2",
+    )
+
+    outline = (CH / "MANUSCRIPT_V2_OUTLINE.md").read_text(encoding="utf-8")
+    require(
+        outline,
+        [
+            "From complex phenotype to trait-specific history",
+            "The capitulum is not one present-day syndrome",
+            "Component traits have repeated but different historical patterns",
+            "Repeated state is not yet convergence",
+            "Auxiliary result: scale decoupling is also required statistically",
+        ],
+        "MANUSCRIPT_V2_OUTLINE",
     )
 
     readme = (CH / "README.md").read_text(encoding="utf-8")
