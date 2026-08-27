@@ -20,6 +20,8 @@ jobs:
   null-test:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      HYPOTHESIS_ID: H-CH2HIST1
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

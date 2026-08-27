@@ -1,0 +1,56 @@
+{
+  "contract_version": "chapter2_jeb_reframe_contract_v1",
+  "status_date": "2026-08-27",
+  "status": "frozen_before_jpn29_excluded_provenance_sensitivity",
+  "trigger": {
+    "source": "japan38_branch_change_reconstruction_null_v1",
+    "observed_global_mean_pairwise_branch_change_rho": 0.40800627943485085,
+    "one_sided_reconstruction_null_p": 0.3504,
+    "decision": "FAIL"
+  },
+  "primary_question": "Does present-day capitulum integration persist as detectable shared evolutionary history after phylogenetic, reconstruction and topology uncertainty are propagated?",
+  "primary_answer_locked_before_reframe": "The observed continuous branch-change coupling is descriptive and does not exceed the reconstruction-aware null; the coordinated-remodeling headline is prohibited.",
+  "retained_evidence": [
+    "within-taxon registered-module contrast exceeds the among-taxon contrast at both frozen observation thresholds",
+    "orientation, phyllary posture and stickiness require repeated minimum changes",
+    "recurrence-count robustness differs from exact transition-placement identifiability",
+    "discrete transition overlap and module-specific continuous coupling are not topology-robust",
+    "the source-balanced Japan7 lightness analysis does not replicate the earlier global anti-phylogenetic direction"
+  ],
+  "jpn29_provenance_correction": {
+    "reason": "The JPN_29 nuclear voucher taxon identity is unresolved and the existing gate prohibits a clean trait-to-tip join.",
+    "exclusion": [
+      "JPN_29"
+    ],
+    "locked_inputs": {
+      "tree": "data/evidence/japan38_comp1061_primary_tree_v1.nwk",
+      "concept_map": "data/evidence/japan38_comp1061_concept_map_v1.csv",
+      "continuous_bridge": "data/evidence/chapter2_time_axis_compute/source_japan38_continuous_trait_bridge_v1.csv",
+      "primary_units": 8,
+      "thresholds": [
+        2,
+        5
+      ],
+      "minimum_taxa_per_unit": 6,
+      "reconstruction_null_permutations": 9999,
+      "seed": 20260827
+    },
+    "analysis_role": "post_outcome_provenance_sensitivity",
+    "outcome_rule": "Report the result in either direction. A favourable result cannot reinstate the coordinated-remodeling headline or replace the frozen eight-concept FAIL.",
+    "not_evaluable_rule": "If exclusion leaves fewer than six concepts for a unit or common panel, retain not_evaluable and do not substitute another taxon, endpoint or threshold."
+  },
+  "jeb_framing": {
+    "article_type": "Research Article",
+    "headline": "Phenotypic integration is scale dependent and does not automatically predict shared evolutionary history.",
+    "general_insight": "Present-day integration, recurrence counts, exact transition placement and shared branch localization are distinct evolutionary estimands.",
+    "negative_result_boundary": "Absence of robust signal is not evidence of evolutionary independence, zero lability or absence of biological integration."
+  },
+  "prohibited_repairs": [
+    "retune the reconstruction null",
+    "change the eight continuous endpoints after inspecting the null",
+    "promote topology-positive branch correlations without the reconstruction-aware null",
+    "use JPN_29 to represent a clean Japanese phenotype tip before specimen-level identity resolution",
+    "call minimum steps independent origins, convergence or adaptation",
+    "call substitution-scaled branches absolute time or rate per million years"
+  ]
+}

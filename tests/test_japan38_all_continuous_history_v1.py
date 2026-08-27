@@ -5,6 +5,8 @@ import sys
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 ANALYSIS = ROOT / "analysis"
@@ -44,3 +46,16 @@ def test_zscore_has_zero_mean_and_unit_sample_sd():
 def test_candidate_endpoints_are_not_in_primary_units():
     assert "bract_projection_maximum" not in mod.PRIMARY_UNITS
     assert "involucre_length_width_ratio" not in mod.PRIMARY_UNITS
+
+
+def test_concept_exclusion_is_explicit_and_fail_closed():
+    bridge = pd.DataFrame(
+        {
+            "paper_japan_member_id": ["JPN_01", "JPN_29", "JPN_30"],
+            "endpoint_id": ["x", "x", "x"],
+        }
+    )
+    got = mod.apply_concept_exclusions(bridge, ["JPN_29", "JPN_29"])
+    assert got["paper_japan_member_id"].tolist() == ["JPN_01", "JPN_30"]
+    with pytest.raises(ValueError, match="absent from bridge"):
+        mod.apply_concept_exclusions(bridge, ["JPN_99"])

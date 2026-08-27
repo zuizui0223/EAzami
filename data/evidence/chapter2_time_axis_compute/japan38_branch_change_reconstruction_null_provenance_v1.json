@@ -1,0 +1,17 @@
+{
+  "contract_version": "japan38_branch_change_reconstruction_null_provenance_v1",
+  "source_repository": "zuizui0223/EAzami",
+  "workflow_run_id": 33066080267,
+  "artifact_id": 9644303355,
+  "artifact_name": "japan38-branch-change-reconstruction-null-33066080267",
+  "artifact_digest": "sha256:4802e30292d61a14a1d67938156453ca02cca2a487e813022ccb4f834dba7b61",
+  "source_head_sha": "5ba48c0ada2883db809bfc0d4b9629cf4a47a1ba",
+  "created_at_utc": "2026-08-27T11:27:38Z",
+  "materialized_files": {
+    "japan38_branch_change_reconstruction_null_v1.json": "sha256:46b66add92674260917ecb5b98774157b7bf30fe0dce03ff2edb7ef56efd7520",
+    "japan38_branch_change_reconstruction_null_distribution_v1.csv": "sha256:598ca8c1e1e32a2e880e46eb96046fda85d6273c3307c6141a18c4f67e5e6a21"
+  },
+  "decision": "FAIL",
+  "one_sided_reconstruction_null_p": 0.3504,
+  "claim_boundary": "This provenance record materializes the immutable CI outcome. Workflow success means the frozen analysis completed and the decision is internally consistent; it does not convert a scientific FAIL into a PASS."
+}

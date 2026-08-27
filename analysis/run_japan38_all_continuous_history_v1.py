@@ -80,6 +80,12 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--out-dir", type=Path, required=True)
     p.add_argument("--permutations", type=int, default=PERMUTATIONS)
     p.add_argument("--seed", type=int, default=20260827)
+    p.add_argument(
+        "--exclude-concept",
+        action="append",
+        default=[],
+        help="Concept ID to exclude for a separately declared provenance sensitivity; repeatable.",
+    )
     return p.parse_args()
 
 
@@ -97,6 +103,17 @@ def read_bridge(path: Path) -> pd.DataFrame:
     if x.duplicated(["paper_japan_member_id", "endpoint_id"]).any():
         raise ValueError("bridge has duplicate concept/endpoint rows")
     return x
+
+
+def apply_concept_exclusions(bridge: pd.DataFrame, exclusions: list[str]) -> pd.DataFrame:
+    clean = sorted({str(x).strip() for x in exclusions if str(x).strip()})
+    if not clean:
+        return bridge.copy()
+    available = set(bridge["paper_japan_member_id"].astype(str))
+    missing = sorted(set(clean).difference(available))
+    if missing:
+        raise ValueError(f"requested concept exclusions absent from bridge: {missing}")
+    return bridge.loc[~bridge["paper_japan_member_id"].astype(str).isin(clean)].copy()
 
 
 def load_concept_tree(tree_path: Path, cmap: dict[str, list[str]], allowed: dict[str, bool], ids: list[str]):
@@ -460,7 +477,8 @@ def main() -> int:
     a = parse_args()
     if a.permutations < 999:
         raise ValueError("permutations must be >=999")
-    bridge = read_bridge(a.bridge)
+    exclusions = sorted(set(a.exclude_concept))
+    bridge = apply_concept_exclusions(read_bridge(a.bridge), exclusions)
     cmap, allowed = base.read_concept_map(a.concept_map)
     out = a.out_dir
     out.mkdir(parents=True, exist_ok=True)
@@ -520,6 +538,7 @@ def main() -> int:
         "primary_threshold_n_observations": 2,
         "high_depth_threshold_n_observations": 5,
         "minimum_taxa_per_unit": MIN_TAXA,
+        "excluded_concepts": exclusions,
         "primary_units_expected": PRIMARY_UNITS,
         "primary_units_executed_n2": main_scope["unit_id"].tolist(),
         "primary_units_executed_n5": sensitivity["unit_id"].tolist(),

@@ -19,6 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  HYPOTHESIS_ID: H-CH2HIST1
   FROZEN_TREE_RUN_ID: '32923076873'
   FROZEN_TREE_ARTIFACT: 'japan38-comp1061-frozen-tree-retry-32923076873'
 

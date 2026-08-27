@@ -23,6 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
+      HYPOTHESIS_ID: H-CH2HIST1
       AZAMI_BRIDGE_COMMIT: 4e7992e63432704535623d11aa27ecc22cfc753a
       AZAMI_BRIDGE_PATH: data/evidence/eazami_handoff_compute/japan38_continuous_trait_bridge_v1.csv
       AZAMI_BRIDGE_SUMMARY_PATH: data/evidence/eazami_handoff_compute/japan38_continuous_trait_bridge_summary_v1.json

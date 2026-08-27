@@ -1,0 +1,10 @@
+{
+  "contract_version": "chapter2_historical_integration_hypothesis_v1",
+  "hypothesis_id": "H-CH2HIST1",
+  "question": "Does present-day capitulum integration persist as shared evolutionary history beyond common phylogenetic reconstruction geometry?",
+  "decision_if_positive": "If the reconstruction-aware null passes and the topology ensemble remains positive, report excess shared branch localization without inferring a shared mechanism.",
+  "decision_if_negative": "Demote branch-change coupling to a descriptive reconstruction result; retain recurrence, transition-identifiability and scale-specific integration results; prohibit the coordinated-remodeling headline.",
+  "new_data_if_unresolved": "Use an independently frozen identity-resolved taxon panel or an independent radiation; do not retune the current endpoints or common panel.",
+  "stop_rule": "The frozen reconstruction-aware null decision is final for the current eight-concept analysis. A FAIL stops headline rescue and routes provenance corrections to labelled sensitivity only.",
+  "heavy_compute_policy": "Only deterministic reruns of committed inputs and one predeclared JPN_29-excluded provenance sensitivity belong in routine PR CI."
+}
