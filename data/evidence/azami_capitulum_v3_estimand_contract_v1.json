@@ -1,0 +1,146 @@
+{
+  "contract_version": "azami_capitulum_v3_estimand_contract_v1",
+  "status_date": "2026-08-27",
+  "source": {
+    "repository": "zuizui0223/azami",
+    "pr": 72,
+    "analysis_head": "227c0e7b8c338894806785b8545c7c77c8724de1",
+    "workflow_run": 33035785120,
+    "artifact_id": 9632715852,
+    "artifact_digest": "sha256:51e7a26b5bd09e030b67b9342586699abaaf46e630f45b6bb4ee7bfc9152ced6",
+    "source_scripts": [
+      "analysis/run_capitulum_functional_space.py",
+      "analysis/run_capitulum_environment_blocks.py",
+      "analysis/run_capitulum_environment_incremental.py"
+    ]
+  },
+  "observation_schema": {
+    "required_identity_columns": ["obs_id", "taxon_name"],
+    "response_endpoints": [
+      "orientation_image_vertical_angle",
+      "corolla_lab_lightness",
+      "corolla_lab_chroma",
+      "corolla_hue_sin",
+      "corolla_hue_cos",
+      "capitulum_outline_aspect_ratio",
+      "capitulum_outline_circularity",
+      "capitulum_outline_solidity",
+      "capitulum_width_profile_cv",
+      "involucre_length_width_ratio",
+      "involucre_apical_taper_ratio",
+      "involucre_basal_taper_ratio",
+      "bract_projection_roughness",
+      "bract_projection_p95",
+      "bract_spread_fraction",
+      "bract_projection_asymmetry",
+      "bract_projection_maximum",
+      "bract_projection_peak_density"
+    ],
+    "endpoint_modules": {
+      "orientation_image_vertical_angle": "orientation",
+      "corolla_lab_lightness": "colour",
+      "corolla_lab_chroma": "colour",
+      "corolla_hue_sin": "colour",
+      "corolla_hue_cos": "colour",
+      "capitulum_outline_aspect_ratio": "shape",
+      "capitulum_outline_circularity": "shape",
+      "capitulum_outline_solidity": "shape",
+      "capitulum_width_profile_cv": "shape",
+      "involucre_length_width_ratio": "involucre_architecture",
+      "involucre_apical_taper_ratio": "involucre_architecture",
+      "involucre_basal_taper_ratio": "involucre_architecture",
+      "bract_projection_roughness": "involucre_architecture",
+      "bract_projection_p95": "involucre_architecture",
+      "bract_spread_fraction": "involucre_architecture",
+      "bract_projection_asymmetry": "involucre_architecture",
+      "bract_projection_maximum": "armature",
+      "bract_projection_peak_density": "armature"
+    },
+    "inferential_units": [
+      "orientation_image_vertical_angle",
+      "corolla_lab_lightness",
+      "corolla_lab_chroma",
+      "corolla_hue",
+      "capitulum_outline_aspect_ratio",
+      "capitulum_outline_circularity",
+      "capitulum_outline_solidity",
+      "capitulum_width_profile_cv",
+      "involucre_length_width_ratio",
+      "involucre_apical_taper_ratio",
+      "involucre_basal_taper_ratio",
+      "bract_projection_roughness",
+      "bract_projection_p95",
+      "bract_spread_fraction",
+      "bract_projection_asymmetry",
+      "bract_projection_maximum",
+      "bract_projection_peak_density"
+    ],
+    "hue_rule": "corolla_hue is one inferential unit; association with another unit is sqrt(r^T pinv(R_hue) r) using hue sine/cosine components",
+    "environment_predictors": [
+      "chelsa_bio01", "chelsa_bio04", "chelsa_bio12", "chelsa_bio15",
+      "chelsa_rsds_mean", "chelsa_vpd_mean", "chelsa_sfcwind_mean", "chelsa_gsp", "chelsa_npp"
+    ]
+  },
+  "scopes": [
+    {"trait_scope": "complete18_min5", "environment_scope": "complete18_env_min5", "minimum_complete_observations_per_taxon": 5},
+    {"trait_scope": "complete18_min2", "environment_scope": "complete18_env_min2", "minimum_complete_observations_per_taxon": 2}
+  ],
+  "structure_estimands": {
+    "within_rule": "taxon-centre all 18 response endpoints; weight each observation by inverse retained taxon sample size; compute weighted endpoint correlation matrix",
+    "among_rule": "compute taxon medians of all 18 response endpoints; compute ordinary endpoint correlation matrix",
+    "association_strength": "absolute Pearson correlation for non-hue pairs; hue uses the frozen two-component multiple-correlation rule",
+    "module_contrast": "mean within-registered-module inferential-unit association strength minus mean between-module strength",
+    "cross_scale_similarity": "Spearman correlation between upper triangles of the 17x17 within- and among-taxon inferential-unit association-strength matrices",
+    "target_ids": [
+      "capitulum_within_module_integration_contrast",
+      "capitulum_among_module_integration_contrast",
+      "capitulum_cross_scale_association_matrix_similarity"
+    ],
+    "target_count": 6
+  },
+  "environment_blocks": [
+    {"block_id": "core_thermal", "predictors": ["chelsa_bio01", "chelsa_bio04"]},
+    {"block_id": "core_precipitation", "predictors": ["chelsa_bio12", "chelsa_bio15"]},
+    {"block_id": "radiative_atmospheric_drying", "predictors": ["chelsa_rsds_mean", "chelsa_vpd_mean"]},
+    {"block_id": "mechanical_exposure", "predictors": ["chelsa_sfcwind_mean"]},
+    {"block_id": "growing_season_water_input", "predictors": ["chelsa_gsp"]},
+    {"block_id": "climatic_productivity", "predictors": ["chelsa_npp"]}
+  ],
+  "environment_block_estimands": {
+    "within_rule": "taxon-centre response endpoints and block predictors; weighted-standardize both with inverse taxon sample-size weights; weighted multivariate OLS; R2=sum(w*fitted^2)/sum(w*y_standardized^2)",
+    "among_rule": "taxon medians; standardize response endpoints and block predictors; multivariate OLS; R2=sum(fitted^2)/sum(y_standardized^2)",
+    "cross_scale_geometry": "cosine between flattened standardized coefficient matrices from the within- and among-taxon block fits",
+    "target_count": 36
+  },
+  "incremental_environment_estimands": {
+    "core_predictors": ["chelsa_bio01", "chelsa_bio04", "chelsa_bio12", "chelsa_bio15"],
+    "tests": [
+      {"test_id": "all_process_extension_beyond_core4", "family": "omnibus", "extension_predictors": ["chelsa_rsds_mean", "chelsa_vpd_mean", "chelsa_sfcwind_mean", "chelsa_gsp", "chelsa_npp"]},
+      {"test_id": "radiative_atmospheric_drying_beyond_core4", "family": "block_specific", "extension_predictors": ["chelsa_rsds_mean", "chelsa_vpd_mean"]},
+      {"test_id": "mechanical_exposure_beyond_core4", "family": "block_specific", "extension_predictors": ["chelsa_sfcwind_mean"]},
+      {"test_id": "growing_season_water_input_beyond_core4", "family": "block_specific", "extension_predictors": ["chelsa_gsp"]},
+      {"test_id": "climatic_productivity_beyond_core4", "family": "block_specific", "extension_predictors": ["chelsa_npp"]}
+    ],
+    "effect": "delta_r2=max(0,R2_full-R2_core); partial_r2=delta_r2/(1-R2_core)",
+    "observed_target_value": "partial_r2",
+    "permutation": "Freedman-Lane reduced-model response residual rows; within scale permutes residual rows only within taxon and among scale permutes residual rows across taxa; each row preserves the 18D response covariance",
+    "target_count": 20
+  },
+  "scoreability_rule": {
+    "exact_scoreable_requires": [
+      "same 18 response endpoints with the same hue joint-unit treatment",
+      "observation-level taxon membership sufficient to apply min5 and min2 complete-case scopes",
+      "all nine named environmental predictors or explicit model-side analogues frozen before outcomes and emitted on the same observation rows",
+      "same within-taxon centering and inverse taxon-size weighting",
+      "same among-taxon taxon-median aggregation",
+      "same structure, multivariate R2, coefficient-cosine and nested partial-R2 formulas"
+    ],
+    "prohibited_analog_substitutions": [
+      "v2 cross_module_lability correlation is not the 17-unit association-matrix similarity",
+      "v2 scalar environment coefficients are not 18D environment-block R2",
+      "v2 interaction or fitness outputs are not substitutes for observational phenotype-environment targets",
+      "do not score a target merely because a model output has the same sign or verbal interpretation"
+    ]
+  },
+  "claim_boundary": "This contract defines matched output statistics only. Matching an observational Azami target can establish structural/statistical reproduction by a model, not causal mechanism, adaptation, selection, plasticity, defence or genetic/developmental modularity."
+}
