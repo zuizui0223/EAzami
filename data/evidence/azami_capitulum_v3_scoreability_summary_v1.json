@@ -1,0 +1,19 @@
+{
+  "contract_version": "azami_capitulum_v3_estimand_contract_v1",
+  "target_count": 62,
+  "target_class_counts": {
+    "environment_block_r2": 24,
+    "environment_geometry": 12,
+    "environment_incremental": 20,
+    "structure": 6
+  },
+  "statistics_adapter_ready_targets": 62,
+  "current_v2_exact_scoreable_targets": 0,
+  "current_v2_exact_unscoreable_targets": 62,
+  "generator_schema_marker_present": false,
+  "exact_endpoint_names_present_in_generator": 0,
+  "exact_environment_names_present_in_generator": 0,
+  "decision": "statistics_layer_ready_generator_layer_blocked",
+  "next_blocker": "emit observation-level rows on the frozen environment design under a separately versioned v3 model generator",
+  "claim_boundary": "Scoreability is an interface property. It does not establish model fit, causal mechanism or adaptation."
+}
