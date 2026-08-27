@@ -51,6 +51,8 @@ Azami and EAzami are not parallel trait projects.
 - a generic sticky-is-defence rule is not retained;
 - image-derived phyllary/armature proxies remain candidate morphology until directly validated.
 
+The canonical phenotype → function → history ledger is `../../data/evidence/chapter2_trait_function_history_table_v1.csv`, documented in `TRAIT_FUNCTION_EVIDENCE_V1.md`. It keeps measurement, function evidence, history, origin and convergence status separate for every phenotype class.
+
 ### Trait history
 
 - orientation requires repeated historical changes; ML minimum 6 and UFBoot range 4–6 after the JPN34 authority extension;
@@ -81,6 +83,8 @@ These results constrain statistical covariance architecture. They are not trait 
 
 - `MAINLINE_V2.md` — canonical scientific line and claim ladder.
 - `MANUSCRIPT_V2_OUTLINE.md` — manuscript architecture for phenotype → function → history → origin → convergence.
+- `TRAIT_FUNCTION_EVIDENCE_V1.md` — human-readable phenotype/function/history status.
+- `../../data/evidence/chapter2_trait_function_history_table_v1.csv` — machine-readable evidence ladder for eight phenotype classes.
 - `FIGURE_TABLE_PLAN_V2.md` — main figures follow phenotype → function → history → convergence; simulation is supplementary.
 - `SUBMISSION_GATES_V2.md` — separates the bounded current paper from stronger future origin/convergence claims.
 - `../../data/evidence/chapter2_result_role_map_v2.csv` — maps existing repository results onto the new line.
