@@ -1,0 +1,124 @@
+name: Run Azami v3 support-geometry diagnostic v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_contract_v1.json"
+      - "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_decision_v1.json"
+      - "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_family_summary_v1.csv"
+      - "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_provenance_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v26.json"
+      - "analysis/run_azami_v3_support_geometry_diagnostic.py"
+      - "tests/test_run_azami_v3_support_geometry_diagnostic.py"
+      - ".github/workflows/run-azami-v3-support-geometry-diagnostic-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install numpy pandas pytest
+      - name: Compile and test frozen diagnostic contract
+        run: |
+          python -m py_compile analysis/run_azami_v3_support_geometry_diagnostic.py
+          python -m pytest -q tests/test_run_azami_v3_support_geometry_diagnostic.py
+
+      - name: Download frozen Azami environment design artifact
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/azami
+          run-id: 33035785120
+          name: ch1-geb-v2-within-among-33035785120
+          path: upstream_azami
+          github-token: ${{ github.token }}
+
+      - name: Extract and verify de-geolocated environment design
+        run: |
+          set -euo pipefail
+          mkdir -p result
+          SOURCE="$(find upstream_azami -type f -path '*/process_environment/complete18_chelsa_process.csv' -print -quit)"
+          test -n "$SOURCE"
+          python analysis/extract_azami_v3_environment_design.py \
+            "$SOURCE" \
+            result/azami_v3_environment_design.csv \
+            --report result/azami_v3_environment_design_report.json
+
+      - name: Run frozen five-family support-geometry diagnostic
+        run: |
+          python analysis/run_azami_v3_support_geometry_diagnostic.py \
+            --design result/azami_v3_environment_design.csv \
+            --observed-incremental data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv \
+            --out-dir result/diagnostic
+
+      - name: Validate diagnostic output and frozen-v1 boundary
+        run: |
+          python - <<'PY'
+          import json
+          import pandas as pd
+          from pathlib import Path
+          out=Path('result/diagnostic')
+          ledger=pd.read_csv(out/'azami_capitulum_v3_support_geometry_diagnostic_test_ledger_v1.csv')
+          draws=pd.read_csv(out/'azami_capitulum_v3_support_geometry_diagnostic_draws_v1.csv')
+          summary=pd.read_csv(out/'azami_capitulum_v3_support_geometry_diagnostic_family_summary_v1.csv')
+          decision=json.loads((out/'azami_capitulum_v3_support_geometry_diagnostic_decision_v1.json').read_text())
+          assert len(ledger)==5*24*20
+          assert ledger['family'].nunique()==5
+          assert ledger['seed'].nunique()==24
+          assert len(draws)==5*24
+          assert len(summary)==5
+          assert decision['frozen_v1_winner_unchanged']=='NULL_COUPLED'
+          assert decision['candidate_family_count']==5
+          assert decision['paired_draw_count']==24
+          assert decision['status'] in {
+              'diagnostic_minimal_structure_identified','no_diagnostically_adequate_addition'
+          }
+          print(json.dumps(decision,indent=2))
+          PY
+
+      - name: Reproduce frozen diagnostic canonical outputs
+        run: |
+          python - <<'PY'
+          import json
+          import numpy as np
+          import pandas as pd
+          from pathlib import Path
+
+          observed_dir=Path('result/diagnostic')
+          frozen_dir=Path('data/evidence')
+          observed=json.loads((observed_dir/'azami_capitulum_v3_support_geometry_diagnostic_decision_v1.json').read_text())
+          frozen=json.loads((frozen_dir/'azami_capitulum_v3_support_geometry_diagnostic_decision_v1.json').read_text())
+          for key in frozen:
+              a=observed[key]; b=frozen[key]
+              if isinstance(b, float):
+                  assert abs(float(a)-b) <= 1e-12, (key,a,b)
+              else:
+                  assert a == b, (key,a,b)
+
+          obs=pd.read_csv(observed_dir/'azami_capitulum_v3_support_geometry_diagnostic_family_summary_v1.csv').sort_values('family').reset_index(drop=True)
+          ref=pd.read_csv(frozen_dir/'azami_capitulum_v3_support_geometry_diagnostic_family_summary_v1.csv').sort_values('family').reset_index(drop=True)
+          assert list(obs.columns)==list(ref.columns)
+          assert obs['family'].tolist()==ref['family'].tolist()
+          for col in obs.columns[1:]:
+              if obs[col].dtype == bool or ref[col].dtype == bool:
+                  assert obs[col].tolist()==ref[col].tolist(), col
+              else:
+                  assert np.allclose(obs[col].to_numpy(float), ref[col].to_numpy(float), atol=1e-12, rtol=0), col
+          print('frozen_support_geometry_diagnostic_reproduced=true')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: azami-v3-support-geometry-diagnostic-${{ github.run_id }}
+          path: result
+          if-no-files-found: error
+          retention-days: 90

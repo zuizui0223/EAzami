@@ -1,0 +1,48 @@
+{
+  "contract_version": "azami_capitulum_v3_support_geometry_diagnostic_contract_v1",
+  "status_date": "2026-08-27",
+  "status": "frozen_before_diagnostic_support_geometry_screen",
+  "post_heldout_outcome_design": true,
+  "frozen_v1_winner": "NULL_COUPLED",
+  "frozen_heldout_result": "data/evidence/azami_capitulum_v3_null_heldout_support_decision_v1.json",
+  "purpose": "Diagnostic follow-up after the frozen NULL_COUPLED held-out falsification: ask what minimal pre-existing v3 structural addition can reproduce the 8-cell replication-stable support geometry without changing the v1 scalar-target ranking.",
+  "candidate_families": [
+    "NULL_COUPLED",
+    "PROCESS_BOTH_SHARED_COUPLED",
+    "PROCESS_BOTH_INDEPENDENT_COUPLED",
+    "PROCESS_AMONG_ONLY_SHARED_COUPLED",
+    "PROCESS_AMONG_ONLY_INDEPENDENT_COUPLED"
+  ],
+  "candidate_reason": "Residual architecture is held at COUPLED because v1 selected it. The diagnostic changes only whether process predictors enter both scales or taxon means only, and whether within/among coefficient draws are shared or independent. CORE4-only families are omitted because they contain no process-extension coefficients and therefore cannot add the missing process structure beyond the frozen NULL baseline except through false-positive support.",
+  "paired_draws": {
+    "count": 24,
+    "seeds": [2026082900,2026082901,2026082902,2026082903,2026082904,2026082905,2026082906,2026082907,2026082908,2026082909,2026082910,2026082911,2026082912,2026082913,2026082914,2026082915,2026082916,2026082917,2026082918,2026082919,2026082920,2026082921,2026082922,2026082923]
+  },
+  "support_test": {
+    "source_contract": "data/evidence/azami_capitulum_v3_null_heldout_support_contract_v1.json",
+    "permutations_per_test": 99,
+    "support_threshold": 0.05,
+    "multiplicity": "omnibus unadjusted; BH across four block-specific tests within each threshold and biological scale",
+    "primary_cells": "the same 8 replication-stable cells frozen in the held-out NULL validation"
+  },
+  "primary_diagnostic_metrics": [
+    "primary_cells_matched_out_of_8 per paired draw",
+    "full_8_cell_pattern match frequency",
+    "paired superiority fraction versus NULL_COUPLED",
+    "exact 20-cell support-vector match frequency"
+  ],
+  "adequacy_rule": {
+    "median_primary_cells_matched_minimum": 7,
+    "full_pattern_matches_minimum_out_of_24": 6,
+    "paired_superiority_over_null_minimum": 0.75,
+    "interpretation": "A non-null family meeting all three conditions is called diagnostically adequate for the held-out support geometry. Failure of every family is an accepted endpoint."
+  },
+  "minimality_order_if_multiple_adequate": [
+    "PROCESS_AMONG_ONLY_SHARED_COUPLED",
+    "PROCESS_AMONG_ONLY_INDEPENDENT_COUPLED",
+    "PROCESS_BOTH_SHARED_COUPLED",
+    "PROCESS_BOTH_INDEPENDENT_COUPLED"
+  ],
+  "stop_rule": "Run the five-family 24-draw diagnostic once and freeze it. Do not change candidate membership, adequacy thresholds, seed count, permutation count, or minimality ordering because of the outcome. Any further mechanism refinement is a new version.",
+  "claim_boundary": "This is a post-heldout diagnostic designed after seeing the NULL failure. It may identify a useful minimal next model class, but it is not confirmatory model selection and cannot change the frozen v1 scalar-target winner or establish a causal environmental process."
+}

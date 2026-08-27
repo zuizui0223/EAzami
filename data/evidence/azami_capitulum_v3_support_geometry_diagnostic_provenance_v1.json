@@ -1,0 +1,23 @@
+{
+  "status": "frozen_support_geometry_diagnostic_completed",
+  "workflow_run": 33043538496,
+  "workflow_head_sha": "0f608f6a8682317be90f4836be059626c1519802",
+  "artifact_id": 9634968494,
+  "artifact_name": "azami-v3-support-geometry-diagnostic-33043538496",
+  "artifact_digest": "sha256:5e734c29d4b54437684cc910c33168ce1a5b6dfb58f306a3f04f509ad571b2e3",
+  "output_sha256": {
+    "azami_capitulum_v3_support_geometry_diagnostic_decision_v1.json": "aac560b5dd57484c451005cf1dfa941797fdd42cbd9665734755bbad588845ee",
+    "azami_capitulum_v3_support_geometry_diagnostic_family_summary_v1.csv": "b4e514f765e42edfdbe835f4e815f66f21fe2906725ad613d62247e20a536909",
+    "azami_capitulum_v3_support_geometry_diagnostic_draws_v1.csv": "9f99cff3f2de2b7c419f6790255fca5fe4f4ea6593068b9ef9c4a53030c2ed1a",
+    "azami_capitulum_v3_support_geometry_diagnostic_test_ledger_v1.csv": "7becfd21ff449b6d8aeeae92f48c4acdb4b7b644cde9f9d4a05aab5431f61a38"
+  },
+  "committed_canonical_outputs": [
+    "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_decision_v1.json",
+    "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_family_summary_v1.csv"
+  ],
+  "artifact_only_full_outputs": [
+    "diagnostic/azami_capitulum_v3_support_geometry_diagnostic_draws_v1.csv",
+    "diagnostic/azami_capitulum_v3_support_geometry_diagnostic_test_ledger_v1.csv"
+  ],
+  "claim_boundary": "Provenance record only. The diagnostic is post-heldout and cannot change the frozen v1 scalar-target ranking."
+}
