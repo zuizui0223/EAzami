@@ -4,8 +4,15 @@ on:
   pull_request:
     paths:
       - "data/evidence/azami_capitulum_v3_scoring_contract_v1.json"
+      - "data/evidence/azami_capitulum_v3_one_shot_decision_v1.json"
+      - "data/evidence/azami_capitulum_v3_one_shot_family_summary_v1.csv"
+      - "data/evidence/azami_capitulum_v3_one_shot_factor_contrasts_v1.csv"
+      - "data/evidence/azami_capitulum_v3_one_shot_provenance_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v23.json"
       - "analysis/run_azami_capitulum_v3_one_shot_scoring.py"
       - "tests/test_run_azami_capitulum_v3_one_shot_scoring.py"
+      - "docs/AZAMI_CAPITULUM_V3_ONE_SHOT_SCORING_V1.md"
+      - "docs/AZAMI_CAPITULUM_V3_ONE_SHOT_RESULT_V1.md"
       - ".github/workflows/run-azami-capitulum-v3-one-shot-scoring-v1.yml"
   workflow_dispatch:
 
@@ -89,6 +96,23 @@ jobs:
           assert decision['status'] in {'robust_leader', 'no_robust_leader'}
           assert len(wins) == 2 * 14 * 13
           print(json.dumps(decision, indent=2))
+          PY
+
+      - name: Reproduce frozen canonical result and full-ledger hashes
+        run: |
+          set -euo pipefail
+          cmp result/one_shot/azami_capitulum_v3_one_shot_decision_v1.json data/evidence/azami_capitulum_v3_one_shot_decision_v1.json
+          cmp result/one_shot/azami_capitulum_v3_one_shot_family_summary_v1.csv data/evidence/azami_capitulum_v3_one_shot_family_summary_v1.csv
+          cmp result/one_shot/azami_capitulum_v3_one_shot_factor_contrasts_v1.csv data/evidence/azami_capitulum_v3_one_shot_factor_contrasts_v1.csv
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          provenance=json.loads(Path('data/evidence/azami_capitulum_v3_one_shot_provenance_v1.json').read_text())
+          out=Path('result/one_shot')
+          for name, expected in provenance['output_sha256'].items():
+              observed=hashlib.sha256((out/name).read_bytes()).hexdigest()
+              assert observed == expected, (name, observed, expected)
+          print('frozen_one_shot_outputs_reproduced=true')
           PY
 
       - uses: actions/upload-artifact@v4
