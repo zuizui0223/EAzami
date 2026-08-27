@@ -4,6 +4,10 @@ on:
   pull_request:
     paths:
       - "data/evidence/azami_capitulum_v3_null_heldout_support_contract_v1.json"
+      - "data/evidence/azami_capitulum_v3_null_heldout_support_decision_v1.json"
+      - "data/evidence/azami_capitulum_v3_null_heldout_support_cell_frequencies_v1.csv"
+      - "data/evidence/azami_capitulum_v3_null_heldout_support_provenance_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v25.json"
       - "analysis/validate_azami_v3_null_heldout_support.py"
       - "tests/test_validate_azami_v3_null_heldout_support.py"
       - ".github/workflows/validate-azami-v3-null-heldout-support-v1.yml"
@@ -79,6 +83,44 @@ jobs:
               'not_reproduced_or_exceptional','rare','compatible_frequency'
           }
           print(json.dumps(decision,indent=2))
+          PY
+
+      - name: Reproduce frozen held-out canonical outputs
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import numpy as np
+          import pandas as pd
+
+          generated=Path('result/held_out')
+          frozen=Path('data/evidence')
+          gd=json.loads((generated/'azami_capitulum_v3_null_heldout_support_decision_v1.json').read_text())
+          fd=json.loads((frozen/'azami_capitulum_v3_null_heldout_support_decision_v1.json').read_text())
+          categorical=[
+              'status','frozen_v1_winner','v1_winner_changed','validation_draws',
+              'permutations_per_test','primary_pattern_matches',
+              'primary_pattern_classification','exact_20_cell_matches',
+              'claim_boundary','stop_rule'
+          ]
+          for key in categorical:
+              assert gd[key] == fd[key], (key, gd[key], fd[key])
+          numeric=[
+              'primary_pattern_frequency','primary_pattern_wilson95_low',
+              'primary_pattern_wilson95_high','exact_20_cell_frequency',
+              'median_matching_cells_out_of_20'
+          ]
+          for key in numeric:
+              assert abs(float(gd[key])-float(fd[key])) <= 1e-12, (key, gd[key], fd[key])
+
+          gc=pd.read_csv(generated/'azami_capitulum_v3_null_heldout_support_cell_frequencies_v1.csv').sort_values(['scope','scale','test_id']).reset_index(drop=True)
+          fc=pd.read_csv(frozen/'azami_capitulum_v3_null_heldout_support_cell_frequencies_v1.csv').sort_values(['scope','scale','test_id']).reset_index(drop=True)
+          assert gc[['scope','scale','test_id','observed_supported']].equals(fc[['scope','scale','test_id','observed_supported']])
+          for col in ['null_support_frequency','null_frequency_of_observed_state']:
+              assert np.allclose(gc[col], fc[col], rtol=0, atol=1e-12), col
+          assert gd['primary_pattern_matches']==0
+          assert gd['exact_20_cell_matches']==0
+          print('frozen_held_out_outputs_reproduced=true')
           PY
 
       - uses: actions/upload-artifact@v4
