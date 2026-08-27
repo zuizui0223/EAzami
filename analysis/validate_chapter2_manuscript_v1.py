@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CH = ROOT / "docs" / "chapter2"
+TRAIT_TABLE = ROOT / "data" / "evidence" / "chapter2_trait_function_history_table_v1.csv"
 
 REQUIRED = [
     CH / "README.md",
@@ -14,12 +15,14 @@ REQUIRED = [
     CH / "MANUSCRIPT_V2_OUTLINE.md",
     CH / "FIGURE_TABLE_PLAN_V2.md",
     CH / "SUBMISSION_GATES_V2.md",
+    CH / "TRAIT_FUNCTION_EVIDENCE_V1.md",
     CH / "MANUSCRIPT_V1.md",
     CH / "EVIDENCE_MAP_V1.md",
     CH / "FIGURE_TABLE_PLAN_V1.md",
     CH / "SUBMISSION_GATES_V1.md",
     ROOT / "data" / "evidence" / "chapter2_claim_registry_v1.csv",
     ROOT / "data" / "evidence" / "chapter2_result_role_map_v2.csv",
+    TRAIT_TABLE,
     ROOT / "docs" / "RESEARCH_PLAN.md",
     ROOT / "docs" / "archive" / "RESEARCH_PLAN_FLOWER_COLOUR_LEGACY_2026-08-27.md",
 ]
@@ -50,6 +53,8 @@ def main() -> int:
             "cytotype",
             "62-target simulation programme",
             "auxiliary generative constraint",
+            "13 concepts are resolved",
+            "all 1000 frozen UFBoot topologies require exactly 5 unordered changes",
         ],
         "MAINLINE_V2",
     )
@@ -63,6 +68,7 @@ def main() -> int:
             "Component traits have repeated but different historical patterns",
             "Repeated state is not yet convergence",
             "Auxiliary result: scale decoupling is also required statistically",
+            "13 resolved concepts after merged JPN24 authority repair",
         ],
         "MANUSCRIPT_V2_OUTLINE",
     )
@@ -76,6 +82,7 @@ def main() -> int:
             "Figure 3 — Trait-specific repeated histories",
             "Figure 4 — From recurrence to convergence",
             "Supplementary Figure S1 — Cross-scale generative constraint",
+            "all 1000 UFBoot trees require exactly 5 changes",
         ],
         "FIGURE_TABLE_PLAN_V2",
     )
@@ -89,6 +96,7 @@ def main() -> int:
             "Not required for the current non-convergence paper",
             "Required to promote to functional convergence",
             "Required to promote to adaptive convergence",
+            "13 resolved concepts",
         ],
         "SUBMISSION_GATES_V2",
     )
@@ -104,6 +112,7 @@ def main() -> int:
             "Auxiliary simulation lane",
             "FIGURE_TABLE_PLAN_V2.md",
             "SUBMISSION_GATES_V2.md",
+            "13 resolved concepts",
         ],
         "Chapter 2 README",
     )
@@ -121,6 +130,42 @@ def main() -> int:
         ],
         "research plan",
     )
+
+    trait_doc = (CH / "TRAIT_FUNCTION_EVIDENCE_V1.md").read_text(encoding="utf-8")
+    require(
+        trait_doc,
+        [
+            "image phenotype → functional trait",
+            "repeated phenotype → independent origin",
+            "independent origin → adaptive convergence",
+            "13 resolved concepts",
+            "candidate morphology only",
+        ],
+        "trait-function evidence",
+    )
+
+    with TRAIT_TABLE.open(encoding="utf-8", newline="") as handle:
+        trait_rows = list(csv.DictReader(handle))
+    if len(trait_rows) != 8:
+        raise AssertionError(f"expected 8 phenotype/function rows, found {len(trait_rows)}")
+    by_trait = {r["phenotype_component"]: r for r in trait_rows}
+    for required_trait in {
+        "orientation",
+        "phyllary_posture",
+        "armature",
+        "stickiness",
+        "colour_continuous",
+        "capitulum_outline_shape",
+        "involucre_architecture",
+        "display_quantity",
+    }:
+        if required_trait not in by_trait:
+            raise AssertionError(f"missing phenotype/function row: {required_trait}")
+    sticky = by_trait["stickiness"]
+    if "13 resolved" not in sticky["current_history_result"] or "all 1000 UFBoot trees exactly 5 changes" not in sticky["current_history_result"]:
+        raise AssertionError("stickiness trait/function row is not post-JPN24 canonical")
+    if any(r["convergence_status"] != "not_established" for r in trait_rows):
+        raise AssertionError("no Chapter 2 trait may be promoted to convergence yet")
 
     manuscript = (CH / "MANUSCRIPT_V1.md").read_text(encoding="utf-8")
     require(
@@ -186,6 +231,7 @@ def main() -> int:
         raise AssertionError("modular evolvability must remain an endpoint hypothesis")
 
     print("chapter2_mainline_v2_valid=true")
+    print(f"trait_function_rows={len(trait_rows)}")
     print(f"result_role_rows={len(role_rows)}")
     print(f"legacy_claim_registry_rows={len(rows)}")
     return 0
