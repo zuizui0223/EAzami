@@ -1,61 +1,111 @@
-# Chapter 2 — from present phenotypic fields to admissible generative histories
+# Chapter 2 — phenotype → function → history → origin → convergence
 
 ## Status
 
-This directory is the Chapter 2 source of truth for the current Azami → EAzami thesis line.
+`MAINLINE_V2.md` is the active Chapter 2 scientific source of truth.
 
-The dependency is one-way:
+The previous simulation-centred framing (`present phenotypic field → admissible generative histories`) remains useful as an auxiliary cross-scale constraint programme, but it no longer defines the biological mainline of EAzami.
+
+## One-way dependency
 
 ```text
 Azami
-reconstruct the present phenotypic field
+phenotypic decomposition of the capitulum
         ↓
-frozen empirical constraints
+EAzami-I
+candidate functional annotation and validation
         ↓
-EAzami
-ask which generative-history classes remain admissible
+EAzami-II
+trait-specific evolutionary histories
         ↓
-Japan38 / population genomics / functional experiments
-constrain realized history and causal function
+EAzami-III
+origin discrimination
+        ↓
+EAzami-IV
+functional / adaptive convergence
 ```
 
-Azami and EAzami are **not parallel trait projects**. Azami defines the empirical object to be explained; EAzami receives that frozen object and rejects or retains generative-history classes.
+Azami and EAzami are not parallel trait projects.
 
-## Core definition
+- **Azami = decompose the phenotypic present.** The capitulum is not treated as one adaptive syndrome; component phenotypes are measured separately and their within/among environmental and association structure is reconstructed.
+- **EAzami-I = ask what the components do.** Image phenotypes remain candidate functional traits until independent evidence and focal performance/manipulation validate function.
+- **EAzami-II = reconstruct each trait history separately.** Orientation, phyllary posture, stickiness and later other validated traits are mapped independently onto the nuclear history rather than collapsed into one capitulum syndrome.
+- **EAzami-III = distinguish historical origin.** Repeated states may reflect ancestral retention, independent change, ancestral polymorphism, introgression/gene flow or other reticulate histories. Nuclear population genomics + matched plastid + cytotype are the next discriminator.
+- **EAzami-IV = test convergence only after origin is resolved.** Independent origins must then be linked to repeated ecological conditions, equivalent function and reproductive fitness before adaptive convergence is claimed.
 
-- **Azami = phenotypic present**: a multivariate, hierarchical present-day capitulum field reconstructed from images and environmental context.
-- **EAzami = constraints on admissible generative histories**: a fail-closed inverse problem over models capable or incapable of reproducing the frozen present.
-- **Japan38 = realized-history evidence layer**: nuclear phylogenomic topology plus source-backed categorical trait states used to localize repeated historical changes. Repeated parsimony steps are not adaptive-convergence counts.
-- **Next population layer = ancestry discrimination**: nuclear population-genomic DNA + same-individual/tightly matched plastid haplotype + cytotype/genome-size information to distinguish standing variation, introgression/gene flow and lineage-specific origin.
+## Current core result chain
 
-## Current frozen result chain
+### Present phenotype
 
-1. Azami hands off 62 observational estimands summarizing present-day structure and environment alignment.
-2. In the preregistered 14-family prior-predictive screen, `NULL_COUPLED` is the robust scalar-target structural-sufficiency winner (PR #119).
-3. The same winner fails the independently held-out scale-specific inferential-support geometry: primary pattern 0/64, exact 20-cell pattern 0/64 (PR #120).
-4. A post-heldout diagnostic shows that among-taxon-only process structure is directionally closer, but no tested addition meets the preregistered adequacy rule; `PROCESS_AMONG_ONLY_SHARED_COUPLED` improves on NULL in 22/24 paired draws but has median 6/8 primary-cell matches, below the required 7/8 (PR #123).
-5. Therefore the current conclusion is **not** that environment is absent. Scalar snapshot geometry alone does not identify environmental history, while the held-out hierarchical support geometry contains information absent from the snapshot-null generator.
+- the capitulum is decomposable into multiple continuous or explicitly defined phenotype components;
+- within-taxon organization is stronger than among-taxon organization;
+- within/among association geometry is only partially aligned;
+- broad climate distance, colonization-history separation and ploidy do not provide simple deterministic explanations of current capitulum disparity.
 
-## Manuscript files
+### Candidate function
 
-- `MANUSCRIPT_V1.md` — answer-first full manuscript draft.
-- `EVIDENCE_MAP_V1.md` — what is publishable, supporting, provisional or excluded.
-- `FIGURE_TABLE_PLAN_V1.md` — figure/table architecture and exact source artifacts.
-- `SUBMISSION_GATES_V1.md` — what must be finished before submission versus what belongs to later thesis chapters.
-- `../../data/evidence/chapter2_claim_registry_v1.csv` — machine-readable claim boundary.
+- reproductive insect antagonists impose a large, repeatable seed-output cost in harmonizable Cirsium experiments (RR 2.674, 95% CI 2.388–2.993);
+- factorial selection literature rejects universal pollinator or antagonist dominance and supports a selection-mosaic working architecture;
+- orientation requires at least time-window pollination and abiotic-protection candidate pathways;
+- display can increase both pollinator discovery and antagonist exposure;
+- a generic sticky-is-defence rule is not retained;
+- image-derived phyllary/armature proxies remain candidate morphology until directly validated.
 
-## Paper core versus thesis extension
+### Trait history
 
-**Paper core:** present phenotypic field → 62 frozen constraints → preregistered model discrimination → held-out falsification → post-heldout diagnostic.
+- orientation requires repeated historical changes; ML minimum 6 and UFBoot range 4–6 after the JPN34 authority extension;
+- phyllary posture requires exactly 3 changes across all 1000 UFBoot trees;
+- stickiness has ML minimum 5 and canonical UFBoot range 4–5; the unmerged JPN24 extension yields five changes in every UFBoot topology;
+- no module pair shows consistently positive transition overlap across branch-length-aware and topology-only layers, so simple whole-capitulum historical lability is not supported;
+- global/high-depth continuous lightness overdispersion does not replicate as the same source-balanced Japan-local signal.
 
-**Thesis extension / bridge:** Japan38 repeated-history evidence, ancestry discrimination, functional manipulation and molecular mechanism. These layers motivate and constrain next observations but are not required to claim that the currently tested generative families are insufficient.
+### Origin and convergence
 
-## Claims that remain prohibited
+These are not yet resolved. The next empirical bridge is standardized phenotype linked to nuclear population ancestry, matched plastid haplotype and cytotype/genome size. Trait-function manipulation and reproductive-fitness endpoints then determine whether independent histories represent functional or adaptive convergence.
 
-- `NULL_COUPLED` means climate has no biological effect.
-- residual covariance coupling proves common evolutionary lability.
-- repeated minimum-change steps prove adaptive convergence.
-- image-derived modules are already validated functional modules.
-- one true historical trajectory has been reconstructed.
-- the post-heldout among-only diagnostic is confirmatory model selection.
-- flower-colour loss/regain is the central Chapter 2 result; colour remains a secondary historical/mechanistic module under its existing stop rules.
+## Auxiliary simulation lane
+
+The 62-target Azami → EAzami simulator is retained as a cross-scale generative-constraint analysis:
+
+1. v3.1: no declared biological driver family passes absolute adequacy;
+2. scalar one-shot: `NULL_COUPLED` is the frozen scalar-target winner;
+3. held-out falsification: the null reproduces the primary scale-specific support pattern in 0/64 draws;
+4. post-heldout diagnostic: among-only process structure improves strongly but remains inadequate;
+5. draft v4.1: scale-specific covariance families are the first to pass the registered seven-target adequacy screen, pending canonical freeze and held-out validation.
+
+These results constrain statistical covariance architecture. They are not trait transition histories and are not evidence for a unique evolutionary mechanism.
+
+## Files
+
+### Active mainline
+
+- `MAINLINE_V2.md` — canonical scientific line and claim ladder.
+- `../../data/evidence/chapter2_result_role_map_v2.csv` — maps existing repository results onto the new line.
+- `../RESEARCH_PLAN.md` — operational research plan.
+
+### Manuscript package to rewrite against v2
+
+- `MANUSCRIPT_V1.md` — previous simulation-centred full draft; retained as source material, not current organizing source.
+- `EVIDENCE_MAP_V1.md`
+- `FIGURE_TABLE_PLAN_V1.md`
+- `SUBMISSION_GATES_V1.md`
+- `../../data/evidence/chapter2_claim_registry_v1.csv`
+
+These files remain valid evidence inventories but require v2 narrative remapping before submission.
+
+## Higher-order hypotheses
+
+- **modular evolvability** = endpoint hypothesis, not organizing premise;
+- **common lability** = higher-order competitor, distinct from snapshot residual covariance coupling;
+- **scale-specific covariance formation** = auxiliary structural constraint;
+- **selection mosaic / local functional leverage** = leading ecological working architecture.
+
+## Prohibited shortcuts
+
+- repeated minimum-change steps → adaptive convergence;
+- image phenotype → validated function without independent evidence;
+- residual covariance coupling → evolutionary common lability;
+- global colour signal → Japanese ancestral colour;
+- coloured descendant → molecular reactivation;
+- species sister-state contrast → causality without within-species manipulation;
+- present-day environment correlation → transition direction or selection.
