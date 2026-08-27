@@ -1,0 +1,33 @@
+{
+  "contract_version": "japan38_branch_change_provenance_sensitivity_provenance_v1",
+  "source_repository": "zuizui0223/EAzami",
+  "source_contract_commit": "ea02a2bc7cd8c005ae0d9c821433824a12a441a8",
+  "created_at_utc": "2026-08-27T12:09:11Z",
+  "excluded_concepts": [
+    "JPN_29"
+  ],
+  "locked_parameters": {
+    "threshold": 2,
+    "minimum_taxa_per_unit": 6,
+    "primary_units": 8,
+    "common_concepts": 7,
+    "branches": 12,
+    "permutations": 9999,
+    "seed": 20260827
+  },
+  "materialized_files": {
+    "candidate_continuous_history_coverage.csv": "sha256:08dde1db50d2a41ea02fbef8aacab1e169cd6af34c4b41781c046d38949adb40",
+    "continuous_primary_branch_change_coupling_v1.csv": "sha256:7e4e2283ac818b137763fc9c8c9992247a480b67b184da1aba465907885b8f1e",
+    "continuous_primary_branch_change_magnitudes_v1.csv": "sha256:444875bc104867ef7fbcd969d28bfe0153dc5efbae1e54f47a45f0d372857594",
+    "continuous_primary_branch_change_summary_v1.json": "sha256:2d268e11b6f5210616139ee7a90e450dedb613561883416b9fecde96a7fa3644",
+    "continuous_primary_phylogenetic_structure_v1.csv": "sha256:50de6797d6a2d88ace6ca22c61c119f304d95fa344ec128cc99ea1245a7dbca5",
+    "japan38_all_continuous_history_summary_v1.json": "sha256:55344e9289fedd1b54324fd9780d0de61312a2d8705ea8e12fa96e693498e623",
+    "japan38_branch_change_provenance_sensitivity_null_distribution_v1.csv": "sha256:e280110e8cabcfe5b0a26499397f35bacf04ff0739cfbdb1a4268915f49e6af7",
+    "japan38_branch_change_provenance_sensitivity_v1.json": "sha256:5ed6550e7753dab2ed79df5bb2d7b76726c5349ebbd8b2d8eb306a1a9d97b055"
+  },
+  "source_original_decision": "FAIL",
+  "source_original_one_sided_reconstruction_null_p": 0.3504,
+  "sensitivity_decision": "FAIL",
+  "sensitivity_one_sided_reconstruction_null_p": 0.1959,
+  "claim_boundary": "The sensitivity was frozen before its outcome and removes only JPN_29. It is a provenance correction, not a confirmatory rescue; it cannot replace the original eight-concept FAIL or establish evolutionary independence."
+}

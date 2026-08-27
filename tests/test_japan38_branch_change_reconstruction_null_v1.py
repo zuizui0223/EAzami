@@ -44,3 +44,9 @@ def test_mean_pairwise_spearman_detects_shared_rank_order():
         ]
     )
     assert abs(target.mean_pairwise_spearman(x) - 1.0) < 1e-12
+
+
+def test_quantile_summary_preserves_requested_null_size():
+    got = target.quantile_summary(np.asarray([0.1, 0.2, 0.3, 0.4]))
+    assert got["n"] == 4
+    assert abs(got["median"] - 0.25) < 1e-12

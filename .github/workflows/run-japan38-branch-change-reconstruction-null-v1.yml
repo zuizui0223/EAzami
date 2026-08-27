@@ -4,8 +4,14 @@ on:
   pull_request:
     paths:
       - 'analysis/run_japan38_branch_change_reconstruction_null_v1.py'
+      - 'analysis/run_japan38_branch_change_provenance_sensitivity_v1.py'
+      - 'analysis/run_japan38_all_continuous_history_v1.py'
       - 'tests/test_japan38_branch_change_reconstruction_null_v1.py'
+      - 'tests/test_japan38_branch_change_provenance_sensitivity_v1.py'
       - 'docs/chapter2/BRANCH_CHANGE_RECONSTRUCTION_NULL_CONTRACT_V1.md'
+      - 'data/evidence/chapter2_jeb_reframe_contract_v1.json'
+      - 'data/evidence/chapter2_time_axis_compute/japan38_branch_change_reconstruction_null_v1.json'
+      - 'data/evidence/chapter2_provenance_sensitivity_compute/**'
       - '.github/workflows/run-japan38-branch-change-reconstruction-null-v1.yml'
   workflow_dispatch:
 
@@ -30,8 +36,12 @@ jobs:
       - name: Install, compile and test
         run: |
           python -m pip install 'pandas>=2.2,<4' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'biopython>=1.83,<2' pytest
-          python -m py_compile analysis/run_japan38_branch_change_reconstruction_null_v1.py
-          python -m pytest -q tests/test_japan38_branch_change_reconstruction_null_v1.py
+          python -m py_compile \
+            analysis/run_japan38_branch_change_reconstruction_null_v1.py \
+            analysis/run_japan38_branch_change_provenance_sensitivity_v1.py
+          python -m pytest -q \
+            tests/test_japan38_branch_change_reconstruction_null_v1.py \
+            tests/test_japan38_branch_change_provenance_sensitivity_v1.py
       - name: Run frozen reconstruction-aware null
         run: |
           set -euo pipefail
@@ -45,7 +55,19 @@ jobs:
             --seed 20260827 \
             --output output/japan38_branch_change_reconstruction_null_v1.json \
             --null-out output/japan38_branch_change_reconstruction_null_distribution_v1.csv
-      - name: Validate contract without forcing a favorable outcome
+      - name: Run the single frozen JPN29-excluded provenance sensitivity
+        run: |
+          set -euo pipefail
+          python analysis/run_japan38_branch_change_provenance_sensitivity_v1.py \
+            --bridge data/evidence/chapter2_time_axis_compute/source_japan38_continuous_trait_bridge_v1.csv \
+            --tree data/evidence/japan38_comp1061_primary_tree_v1.nwk \
+            --concept-map data/evidence/japan38_comp1061_concept_map_v1.csv \
+            --original-null data/evidence/chapter2_time_axis_compute/japan38_branch_change_reconstruction_null_v1.json \
+            --output output/japan38_branch_change_provenance_sensitivity_v1.json \
+            --null-out output/japan38_branch_change_provenance_sensitivity_null_distribution_v1.csv \
+            --permutations 9999 \
+            --seed 20260827
+      - name: Validate both frozen scientific outcomes
         run: |
           python - <<'PY'
           import json
@@ -56,12 +78,20 @@ jobs:
           assert x['branches']==14
           assert x['permutations']==9999
           assert abs(x['observed_global_mean_pairwise_branch_change_rho']-0.40800627943485085)<1e-10
-          assert x['decision'] in {'PASS','FAIL'}
-          if x['decision']=='PASS':
-              assert x['one_sided_reconstruction_null_p'] < 0.05
-          else:
-              assert x['one_sided_reconstruction_null_p'] >= 0.05
+          assert x['decision']=='FAIL'
+          assert abs(x['one_sided_reconstruction_null_p']-0.3504)<1e-12
+
+          s=json.loads(Path('output/japan38_branch_change_provenance_sensitivity_v1.json').read_text())
+          assert s['contract_version']=='japan38_branch_change_provenance_sensitivity_v1'
+          assert s['excluded_concepts']==['JPN_29']
+          assert s['common_concepts']==7
+          assert s['branches']==12
+          assert s['permutations']==9999
+          assert abs(s['observed_global_mean_pairwise_branch_change_rho']-0.4722777222777223)<1e-12
+          assert s['decision']=='FAIL'
+          assert abs(s['one_sided_reconstruction_null_p']-0.1959)<1e-12
           print(json.dumps(x,indent=2,ensure_ascii=False))
+          print(json.dumps(s,indent=2,ensure_ascii=False))
           PY
       - uses: actions/upload-artifact@v4
         with:

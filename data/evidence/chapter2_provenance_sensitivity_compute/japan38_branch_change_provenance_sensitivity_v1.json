@@ -1,0 +1,55 @@
+{
+  "contract_version": "japan38_branch_change_provenance_sensitivity_v1",
+  "status": "post_outcome_provenance_sensitivity_frozen",
+  "threshold": 2,
+  "concept_ids": [
+    "JPN_05",
+    "JPN_17",
+    "JPN_23",
+    "JPN_27",
+    "JPN_36",
+    "JPN_37",
+    "JPN_38"
+  ],
+  "common_concepts": 7,
+  "branches": 12,
+  "units": [
+    "orientation_image_vertical_angle",
+    "corolla_lab_lightness",
+    "corolla_lab_chroma",
+    "corolla_hue",
+    "capitulum_outline_aspect_ratio",
+    "capitulum_outline_circularity",
+    "capitulum_outline_solidity",
+    "capitulum_width_profile_cv"
+  ],
+  "permutations": 9999,
+  "seed": 20260827,
+  "observed_global_mean_pairwise_branch_change_rho": 0.4722777222777223,
+  "null": {
+    "n": 9999,
+    "mean": 0.41746669671962205,
+    "median": 0.41533466533466534,
+    "q01": 0.2727222777222778,
+    "q05": 0.31543456543456544,
+    "q95": 0.5259740259740261,
+    "q99": 0.5711838161838163,
+    "min": 0.20029970029970037,
+    "max": 0.6895604395604398
+  },
+  "observed_minus_null_median": 0.05694305694305696,
+  "observed_empirical_percentile": 0.8044304430443044,
+  "one_sided_reconstruction_null_p": 0.1959,
+  "null_exceedances": 1958,
+  "decision": "FAIL",
+  "pass_rule": "one_sided_reconstruction_null_p < 0.05",
+  "null_definition": "independent tip-label permutation for every scalar phenotype; paired sine/cosine hue vectors permuted together; each permutation reruns the same BM conditional ancestral reconstruction on the same substitution-length phylogram",
+  "claim_boundary": "This one fixed rerun removes the identity-unresolved JPN_29 join. Report either direction, but no result can reinstate the coordinated-remodeling headline, replace the frozen eight-concept FAIL, or establish independence or mechanism.",
+  "excluded_concepts": [
+    "JPN_29"
+  ],
+  "source_original_null": "data/evidence/chapter2_time_axis_compute/japan38_branch_change_reconstruction_null_v1.json",
+  "source_original_decision": "FAIL",
+  "source_original_p": 0.3504,
+  "analysis_role": "provenance_sensitivity_not_confirmatory_rescue"
+}

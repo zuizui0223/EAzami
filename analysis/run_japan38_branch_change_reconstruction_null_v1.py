@@ -157,35 +157,41 @@ def quantile_summary(values: np.ndarray) -> dict:
     }
 
 
-def main() -> int:
-    a = parse_args()
-    if a.permutations != 9999:
-        raise ValueError("v1 contract fixes permutations at exactly 9999")
-    if a.threshold != 2:
-        raise ValueError("v1 contract fixes the common-panel threshold at 2")
-
-    bridge = hist.read_bridge(a.bridge)
-    cmap, allowed = hist.base.read_concept_map(a.concept_map)
-    ids = hist.common_primary_ids(bridge, a.threshold)
-    if len(ids) != 8:
-        raise ValueError(f"v1 contract expects exactly 8 common concepts, found {len(ids)}")
-    tree = hist.load_concept_tree(a.tree, cmap, allowed, ids)
+def compute_reconstruction_null(
+    bridge: pd.DataFrame,
+    tree_path: Path,
+    cmap: dict[str, list[str]],
+    allowed: dict[str, bool],
+    threshold: int,
+    permutations: int,
+    seed: int,
+    *,
+    expected_common_concepts: int | None = None,
+    expected_branches: int | None = None,
+    expected_observed: float | None = None,
+) -> tuple[dict, np.ndarray]:
+    ids = hist.common_primary_ids(bridge, threshold)
+    if expected_common_concepts is not None and len(ids) != expected_common_concepts:
+        raise ValueError(
+            f"contract expects exactly {expected_common_concepts} common concepts, found {len(ids)}"
+        )
+    tree = hist.load_concept_tree(tree_path, cmap, allowed, ids)
     weights, branches = conditional_state_weights(tree, ids)
-    if len(branches) != 14:
-        raise ValueError(f"v1 contract expects 14 branches, found {len(branches)}")
+    if expected_branches is not None and len(branches) != expected_branches:
+        raise ValueError(f"contract expects {expected_branches} branches, found {len(branches)}")
 
-    scalar, hue = input_assignments(bridge, ids, a.threshold)
+    scalar, hue = input_assignments(bridge, ids, threshold)
     observed_matrix = branch_matrix(weights, branches, scalar, hue)
     observed = mean_pairwise_spearman(observed_matrix)
-    if abs(observed - EXPECTED_OBSERVED) > 1e-10:
+    if expected_observed is not None and abs(observed - expected_observed) > 1e-10:
         raise ValueError(
-            f"observed statistic drifted from frozen analysis: {observed} vs {EXPECTED_OBSERVED}"
+            f"observed statistic drifted from frozen analysis: {observed} vs {expected_observed}"
         )
 
-    rng = np.random.default_rng(a.seed)
-    null = np.empty(a.permutations, dtype=float)
+    rng = np.random.default_rng(seed)
+    null = np.empty(permutations, dtype=float)
     n = len(ids)
-    for i in range(a.permutations):
+    for i in range(permutations):
         perm_scalar = {
             unit: values[rng.permutation(n)]
             for unit, values in scalar.items()
@@ -195,21 +201,22 @@ def main() -> int:
         null[i] = mean_pairwise_spearman(matrix)
 
     exceed = int(np.sum(null >= observed - 1e-15))
-    p = float((1 + exceed) / (a.permutations + 1))
+    p = float((1 + exceed) / (permutations + 1))
     null_summary = quantile_summary(null)
-    empirical_percentile = float((np.sum(null < observed) + 0.5 * np.sum(null == observed)) / len(null))
+    empirical_percentile = float(
+        (np.sum(null < observed) + 0.5 * np.sum(null == observed)) / len(null)
+    )
     decision = "PASS" if p < 0.05 else "FAIL"
-
     result = {
         "contract_version": "japan38_branch_change_reconstruction_null_v1",
         "status": "outcome_frozen",
-        "threshold": a.threshold,
+        "threshold": threshold,
         "concept_ids": ids,
         "common_concepts": len(ids),
         "branches": len(branches),
         "units": hist.PRIMARY_UNITS,
-        "permutations": a.permutations,
-        "seed": a.seed,
+        "permutations": permutations,
+        "seed": seed,
         "observed_global_mean_pairwise_branch_change_rho": observed,
         "null": null_summary,
         "observed_minus_null_median": float(observed - null_summary["median"]),
@@ -229,6 +236,30 @@ def main() -> int:
             "selection, adaptation, convergence, absolute timing, or evolutionary rate."
         ),
     }
+    return result, null
+
+
+def main() -> int:
+    a = parse_args()
+    if a.permutations != 9999:
+        raise ValueError("v1 contract fixes permutations at exactly 9999")
+    if a.threshold != 2:
+        raise ValueError("v1 contract fixes the common-panel threshold at 2")
+
+    bridge = hist.read_bridge(a.bridge)
+    cmap, allowed = hist.base.read_concept_map(a.concept_map)
+    result, null = compute_reconstruction_null(
+        bridge,
+        a.tree,
+        cmap,
+        allowed,
+        a.threshold,
+        a.permutations,
+        a.seed,
+        expected_common_concepts=8,
+        expected_branches=14,
+        expected_observed=EXPECTED_OBSERVED,
+    )
 
     a.output.parent.mkdir(parents=True, exist_ok=True)
     a.output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
