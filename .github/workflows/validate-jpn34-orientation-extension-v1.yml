@@ -1,0 +1,100 @@
+name: Validate JPN34 orientation extension v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/japan38_nmns_capitulum_trait_seed_extension_v1.csv"
+      - "data/evidence/jpn34_orientation_extension_parsimony_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v18.json"
+      - ".github/workflows/validate-jpn34-orientation-extension-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  FROZEN_TREE_RUN_ID: "32923076873"
+  FROZEN_TREE_ARTIFACT: "japan38-comp1061-frozen-tree-retry-32923076873"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install biopython
+      - name: Merge authority extension fail-closed
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          base=list(csv.DictReader(Path('data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv').open(encoding='utf-8-sig')))
+          ext=list(csv.DictReader(Path('data/evidence/japan38_nmns_capitulum_trait_seed_extension_v1.csv').open(encoding='utf-8-sig')))
+          assert len(ext)==1 and ext[0]['paper_japan_member_id']=='JPN_34'
+          assert ext[0]['orientation_state']=='upward_or_erect'
+          assert ext[0]['phyllary_posture']=='unknown' and ext[0]['stickiness_state']=='unknown'
+          assert not any(r['paper_japan_member_id']=='JPN_34' for r in base)
+          rows=base+ext
+          with Path('merged_trait_seed.csv').open('w',encoding='utf-8',newline='') as h:
+            w=csv.DictWriter(h,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
+          PY
+      - name: Download frozen canonical tree/UFBoot artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.FROZEN_TREE_ARTIFACT }}
+          path: frozen_tree
+          run-id: ${{ env.FROZEN_TREE_RUN_ID }}
+          github-token: ${{ github.token }}
+      - name: Locate canonical tree files
+        run: |
+          set -euo pipefail
+          TREE="$(find frozen_tree -type f -name 'japan38_comp1061.treefile' -print -quit)"
+          UFBOOT="$(find frozen_tree -type f -name 'japan38_comp1061.ufboot' -print -quit)"
+          test -n "$TREE" && test -n "$UFBOOT"
+          echo "TREE=$TREE" >> "$GITHUB_ENV"
+          echo "UFBOOT=$UFBOOT" >> "$GITHUB_ENV"
+      - name: Recompute minimum-change history with JPN34 orientation
+        run: |
+          mkdir -p result
+          python analysis/summarize_japan38_multitrait_parsimony_v1.py \
+            --tree "$TREE" \
+            --bootstrap-trees "$UFBOOT" \
+            --concept-map data/evidence/japan38_comp1061_concept_map_v1.csv \
+            --trait-seed merged_trait_seed.csv \
+            --output result/jpn34_orientation_extension_parsimony_v1.json
+      - name: Assert only intended coverage change and frozen summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('result/jpn34_orientation_extension_parsimony_v1.json').read_text())
+          assert x['trait_asr_ready'] is True
+          assert x['traits']['orientation']['resolved_concepts']==20
+          assert x['traits']['orientation']['minimum_unordered_steps']==6
+          assert x['traits']['orientation']['minimum_root_state_set']==['U']
+          assert x['traits']['phyllary']['resolved_concepts']==10
+          assert x['traits']['stickiness']['resolved_concepts']==12
+          bs=x['bootstrap_sensitivity']['step_distributions']
+          assert bs['orientation']=={'n':1000,'min':4,'median':5.0,'max':6,'q05':5,'q95':6}
+          assert bs['phyllary']['n']==1000 and bs['stickiness']['n']==1000
+          frozen=json.loads(Path('data/evidence/jpn34_orientation_extension_parsimony_v1.json').read_text())
+          assert frozen['orientation']['resolved_concepts_after']==20
+          assert frozen['orientation']['ml_minimum_unordered_steps']==6
+          assert frozen['orientation']['ufboot1000_steps_min']==4
+          assert frozen['orientation']['ufboot1000_steps_median']==5
+          assert frozen['orientation']['ufboot1000_steps_max']==6
+          ready=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v18.json').read_text())
+          assert ready['orientation_update']['resolved_concepts']==20
+          assert ready['coverage_repairs_remaining']==['JPN_15 phyllary posture','JPN_24 stickiness']
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jpn34-orientation-extension-${{ github.run_id }}
+          path: result/jpn34_orientation_extension_parsimony_v1.json
+          if-no-files-found: error
+          retention-days: 90

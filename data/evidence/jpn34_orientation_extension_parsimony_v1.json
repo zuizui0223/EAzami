@@ -1,0 +1,29 @@
+{
+  "contract_version": "jpn34_orientation_extension_parsimony_v1",
+  "status_date": "2026-08-27",
+  "source_extension": "data/evidence/japan38_nmns_capitulum_trait_seed_extension_v1.csv",
+  "source_tree_run": 32923076873,
+  "source_tree_artifact": 9590650447,
+  "validation_run": 33037864744,
+  "validation_artifact": 9632693041,
+  "validation_artifact_digest": "sha256:20ad34d0eaad407ceba3a2666376aec834669e72c4bd6fafe6bef1ce500b1c31",
+  "orientation": {
+    "resolved_concepts_before": 19,
+    "resolved_concepts_after": 20,
+    "ml_minimum_unordered_steps": 6,
+    "ml_minimum_root_state_set": ["U"],
+    "ufboot1000_steps_min": 4,
+    "ufboot1000_steps_median": 5,
+    "ufboot1000_steps_max": 6,
+    "ufboot_q05": 5,
+    "ufboot_q95": 6,
+    "interpretation": "JPN34 authority orientation resolves one missing concept but does not alter the minimum-change recurrence conclusion. Orientation remains recurrent and branch-localization-limited."
+  },
+  "unchanged_modules": {
+    "phyllary_resolved_concepts": 10,
+    "phyllary_minimum_steps": 3,
+    "stickiness_resolved_concepts": 12,
+    "stickiness_ml_minimum_steps": 5
+  },
+  "claim_boundary": "Authority-state coverage repair and minimum-change sensitivity only. No branch-specific orientation transition, adaptation, selection, or ecological driver is inferred."
+}
