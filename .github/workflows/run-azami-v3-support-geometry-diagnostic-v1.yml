@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_contract_v1.json"
+      - "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_decision_v1.json"
+      - "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_family_summary_v1.csv"
+      - "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_provenance_v1.json"
       - "data/evidence/fdt_multitrait_execution_readiness_v26.json"
       - "analysis/run_azami_v3_support_geometry_diagnostic.py"
       - "tests/test_run_azami_v3_support_geometry_diagnostic.py"
@@ -80,6 +83,37 @@ jobs:
               'diagnostic_minimal_structure_identified','no_diagnostically_adequate_addition'
           }
           print(json.dumps(decision,indent=2))
+          PY
+
+      - name: Reproduce frozen diagnostic canonical outputs
+        run: |
+          python - <<'PY'
+          import json
+          import numpy as np
+          import pandas as pd
+          from pathlib import Path
+
+          observed_dir=Path('result/diagnostic')
+          frozen_dir=Path('data/evidence')
+          observed=json.loads((observed_dir/'azami_capitulum_v3_support_geometry_diagnostic_decision_v1.json').read_text())
+          frozen=json.loads((frozen_dir/'azami_capitulum_v3_support_geometry_diagnostic_decision_v1.json').read_text())
+          for key in frozen:
+              a=observed[key]; b=frozen[key]
+              if isinstance(b, float):
+                  assert abs(float(a)-b) <= 1e-12, (key,a,b)
+              else:
+                  assert a == b, (key,a,b)
+
+          obs=pd.read_csv(observed_dir/'azami_capitulum_v3_support_geometry_diagnostic_family_summary_v1.csv').sort_values('family').reset_index(drop=True)
+          ref=pd.read_csv(frozen_dir/'azami_capitulum_v3_support_geometry_diagnostic_family_summary_v1.csv').sort_values('family').reset_index(drop=True)
+          assert list(obs.columns)==list(ref.columns)
+          assert obs['family'].tolist()==ref['family'].tolist()
+          for col in obs.columns[1:]:
+              if obs[col].dtype == bool or ref[col].dtype == bool:
+                  assert obs[col].tolist()==ref[col].tolist(), col
+              else:
+                  assert np.allclose(obs[col].to_numpy(float), ref[col].to_numpy(float), atol=1e-12, rtol=0), col
+          print('frozen_support_geometry_diagnostic_reproduced=true')
           PY
 
       - uses: actions/upload-artifact@v4
