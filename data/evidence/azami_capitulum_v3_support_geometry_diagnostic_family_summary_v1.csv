@@ -1,0 +1,6 @@
+family,median_primary_cells_matched_out_of_8,mean_primary_cells_matched_out_of_8,full_8_cell_pattern_matches,full_8_cell_pattern_frequency,exact_20_cell_matches,median_matching_cells_out_of_20,among_gsp_both_frequency,among_omnibus_both_frequency,within_clean_frequency,paired_superiority_over_null_fraction,paired_equal_to_null_fraction,median_primary_cell_advantage_over_null,diagnostically_adequate
+PROCESS_AMONG_ONLY_SHARED_COUPLED,6.0,6.375,6,0.25,0,15.0,0.25,0.8333333333333334,0.9166666666666666,0.9166666666666666,0.08333333333333333,2.0,False
+PROCESS_AMONG_ONLY_INDEPENDENT_COUPLED,6.0,6.166666666666667,1,0.041666666666666664,0,15.0,0.08333333333333333,0.8333333333333334,0.875,1.0,0.0,2.0,False
+NULL_COUPLED,4.0,4.208333333333333,0,0.0,0,14.0,0.0,0.041666666666666664,0.9583333333333334,0.0,1.0,0.0,False
+PROCESS_BOTH_SHARED_COUPLED,3.0,2.625,0,0.0,0,5.0,0.3333333333333333,0.75,0.0,0.0,0.20833333333333334,-1.5,False
+PROCESS_BOTH_INDEPENDENT_COUPLED,2.0,2.4166666666666665,0,0.0,0,4.0,0.125,0.7083333333333334,0.0,0.0,0.041666666666666664,-2.0,False
