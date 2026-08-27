@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "data/evidence/capitulum_adaptive_module_registry_v1.csv"
-README = ROOT / "README.md"
+MAINLINE = ROOT / "docs/chapter2/MAINLINE_V2.md"
 
 
 def rows():
@@ -35,13 +35,14 @@ def test_every_trait_module_has_selection_mechanism_history_and_fitness_contract
         assert row["claim_boundary"]
 
 
-def test_orientation_is_not_the_only_or_central_trait_contract():
-    text = README.read_text(encoding="utf-8")
-    lower = text.lower()
-    assert "orientation" in lower
-    assert "not the central doctoral trait" in lower
-    assert "display quantity | orientation | phyllary/spine defence | stickiness/mucilage | flower colour/pigmentation" in text
-    assert "multiple functional modules" in lower or "different functional modules" in lower
+def test_orientation_is_one_component_not_the_organizing_trait():
+    text = MAINLINE.read_text(encoding="utf-8").lower()
+    assert "orientation" in text
+    assert "phyllary posture" in text
+    assert "stickiness" in text
+    assert "trait-specific histories" in text
+    assert "phenotype → function → history → origin → convergence" in text
+    assert "modular evolvability" in text and "endpoint hypothesis" in text
 
 
 def test_cold_dark_colour_is_not_promoted_to_conclusion():
