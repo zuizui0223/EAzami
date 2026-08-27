@@ -2,18 +2,36 @@
   "contract_version": "fdt_multitrait_execution_readiness_v26",
   "status_date": "2026-08-27",
   "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v25.json",
-  "inheritance": "PR #119 scalar-target ranking and PR #120 held-out NULL falsification are both frozen. All field, Japan38 history, colour stop-rule and absolute-time gates remain in force.",
+  "inheritance": "PR #119 scalar-target ranking and PR #120 held-out NULL falsification remain frozen. All field, Japan38 history, colour stop-rule and absolute-time gates remain in force.",
   "support_geometry_diagnostic": {
     "contract": "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_contract_v1.json",
-    "status": "preregistered_before_diagnostic_screen",
+    "decision": "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_decision_v1.json",
+    "family_summary": "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_family_summary_v1.csv",
+    "provenance": "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_provenance_v1.json",
+    "status": "completed_and_frozen",
     "post_heldout_outcome_design": true,
     "candidate_families": 5,
     "paired_draws": 24,
     "permutations_per_test": 99,
-    "outcome_inspected": false,
-    "question": "Does adding process effects at both scales or only among taxa, with shared or independent scale coefficients, provide a diagnostically adequate minimal explanation of the frozen 8-cell support geometry?",
+    "diagnostically_adequate_families": [],
+    "minimal_diagnostically_adequate_family": null,
+    "best_descriptive_family": "PROCESS_AMONG_ONLY_SHARED_COUPLED",
+    "best_median_primary_cells_matched_out_of_8": 6.0,
+    "best_full_8_cell_pattern_matches": 6,
+    "best_full_8_cell_pattern_frequency": 0.25,
+    "best_paired_superiority_over_null_fraction": 0.9166666666666666,
+    "best_among_omnibus_both_frequency": 0.8333333333333334,
+    "best_among_gsp_both_frequency": 0.25,
+    "best_within_clean_frequency": 0.9166666666666666,
+    "interpretation": "Explicit process effects confined to among-taxon phenotype means, especially with shared scale coefficients, strongly improve the held-out support geometry relative to NULL_COUPLED but do not meet the preregistered adequacy gate. Process effects at both scales fail badly because they destroy the observed within-taxon non-support geometry.",
     "may_change_v1_winner": false,
-    "next_gate": "Run once and freeze. If no candidate is diagnostically adequate, stop this generator family and design a new version rather than retuning it."
+    "stop_rule": "Do not retune the five-family diagnostic. No existing v3 candidate is diagnostically adequate; any further mechanism refinement requires a separately versioned generator hypothesis."
+  },
+  "next_scientific_gate": {
+    "question": "What extra structure, beyond generic among-only process loadings, can make growing-season-water support replication-stable while preserving within-taxon non-support?",
+    "evidence": "PROCESS_AMONG_ONLY_SHARED_COUPLED improves 8-cell matching and omnibus support, but joint among-taxon growing-season-water support occurs in only 25% of paired draws and the median remains 6/8.",
+    "allowed_direction": "A new version may predeclare structured among-taxon process effects, for example module-specific or predictor-specific loading sparsity motivated independently of the diagnostic outcome, while preserving the frozen v1 and held-out results as separate evidence layers.",
+    "prohibited_direction": "Do not alter v1 ranking, v120 held-out pattern, v123 adequacy thresholds, or retune the existing five v3 families."
   },
   "field_line": {
     "first_executable_target": "JPN_36 phyllary-access pilot after authorization/census/device gates",
@@ -22,5 +40,5 @@
   },
   "coverage_repairs_remaining": ["JPN_15 phyllary posture", "JPN_24 stickiness"],
   "absolute_time": "FDT5/FDT6 remain blocked by calibration limitations.",
-  "claim_boundary": "This is a post-heldout diagnostic, not confirmatory model selection. It cannot change the frozen scalar-target winner or identify a causal environmental process."
+  "claim_boundary": "The diagnostic identifies a directional improvement toward among-taxon-only process structure but no adequate existing model. It is post-heldout, cannot change the frozen scalar-target winner, and does not identify a causal environmental process or prove modular adaptation."
 }
