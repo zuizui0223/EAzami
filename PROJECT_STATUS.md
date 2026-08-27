@@ -93,19 +93,19 @@ Active title:
 
 Completed:
 
-- active manuscript v3, 227-word abstract and 3,730-word main text including legends/alt text;
+- active manuscript v3, 227-word abstract and 3,749-word main text including legends/alt text;
 - complete Moreyra reference metadata;
-- four main figures in PDF and 300-dpi PNG, visually inspected;
-- Supporting Information plan, separate title-page template and cover-letter template;
+- four main and five supplementary figures in PDF and 300-dpi PNG, visually inspected;
+- complete Supporting Information with six tables, separate title-page template and cover-letter template;
 - AI-use, data, ethics and claim-boundary wording;
-- machine-readable result and claim registries.
+- machine-readable result and claim registries;
+- four privacy-scrubbed, accessibility-audited DOCX files with continuous line numbering where required.
 
 Remaining author-only metadata:
 
 - author order, affiliations, corresponding author and ORCIDs;
 - funding, acknowledgements and conflict confirmation;
 - public archive URL/DOI no later than revision;
-- final line-numbered DOCX/PDF submission render.
 
 ## Active sources of truth
 
@@ -122,8 +122,9 @@ Versions v1/v2 of the JEB manuscript are superseded audit history, not submissio
 ## Programme routing
 
 - Present-state v3/v4 covariance simulations: Chapter 1 Supplement or thesis methods.
-- FDT1/FDT8 function synthesis and field pilots: Chapter 3.
-- Population nuclear + plastid + cytotype sampling: later origin discrimination.
+- FDT1 trait-to-function evidence, FDT8 field readiness and field pilots: Chapter 3.
+- Cirsium reproductive-herbivory RR = 2.674 is Chapter 3 functional context, not a Chapter 2 admission gate.
+- Later origin discrimination requires nuclear population genomics, plastid haplotype and cytotype evidence from linked biological individuals where possible.
 - Absolute-time transition analyses: STOP until a defensible calibration exists.
 
 ## Stop rules

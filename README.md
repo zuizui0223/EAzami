@@ -62,7 +62,7 @@ Start here:
 5. `docs/chapter2/JEB_SUPPORTING_INFORMATION_V1.md` — supplementary crosswalk;
 6. `data/evidence/chapter2_jeb_main_result_table_v1.csv` — machine-readable results.
 
-The four main figures are under `docs/chapter2/figures/` as vector PDF and 300-dpi PNG. Manuscript v1/v2 files remain audit history only.
+The four main and five supplementary figures are under `docs/chapter2/figures/` as vector PDF and 300-dpi PNG. The privacy-scrubbed DOCX package is under `docs/chapter2/submission_package/`. Manuscript v1/v2 files remain audit history only.
 
 ## Evidence boundaries
 
