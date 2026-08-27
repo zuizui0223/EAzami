@@ -97,7 +97,6 @@ jobs:
           assert set(a['pairwise_overlap'])=={
               'orientation__phyllary','orientation__stickiness','phyllary__stickiness'
           }
-          # These resolved-tip counts directly verify that both authority repairs entered the run.
           assert a['traits']['orientation']['resolved_tips']==20
           assert a['traits']['phyllary']['resolved_tips']==10
           assert a['traits']['stickiness']['resolved_tips']==13
@@ -132,4 +131,5 @@ jobs:
             exit 0
           fi
           git commit -m 'Capture latest Japan38 module overlap results'
-          git push origin HEAD:${{ github.head_ref }}
+          git pull --rebase origin "${{ github.head_ref }}"
+          git push origin HEAD:"${{ github.head_ref }}"
