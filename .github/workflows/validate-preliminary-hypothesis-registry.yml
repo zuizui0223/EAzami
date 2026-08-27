@@ -125,7 +125,7 @@ jobs:
           assert totals==Counter({'Cirsium brevicaule':60,'Cirsium irumtiense':60,'Cirsium pendulum':40,'Cirsium sieboldii':30})
 
           support=list(csv.DictReader(Path('data/evidence/preliminary_hypothesis_registry_v1.csv').open(encoding='utf-8',newline='')))
-          expected={'H-RAD1','H-EVOL1','H-CLIM1','H-PL1','H-COL1','H-RET1','H-MECH1','H-CYTO1','H-ADAPT1','H-RYK1'}
+          expected={'H-RAD1','H-EVOL1','H-CLIM1','H-PL1','H-COL1','H-RET1','H-MECH1','H-CYTO1','H-ADAPT1','H-RYK1','H-CH2HIST1'}
           assert {r['hypothesis_id'] for r in support}==expected
 
           doc=Path('docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md').read_text(encoding='utf-8')
