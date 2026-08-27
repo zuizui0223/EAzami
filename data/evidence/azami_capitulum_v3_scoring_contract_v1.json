@@ -1,0 +1,109 @@
+{
+  "contract_version": "azami_capitulum_v3_scoring_contract_v1",
+  "status_date": "2026-08-27",
+  "status": "frozen_before_any_v3_target_distance_or_ranking",
+  "generator_contract": "data/evidence/azami_capitulum_v3_generator_contract_v1.json",
+  "estimand_contract": "data/evidence/azami_capitulum_v3_estimand_contract_v1.json",
+  "observed_target_provenance": {
+    "source_repository": "zuizui0223/azami",
+    "source_run": 33035785120,
+    "source_artifact_id": 9632715852,
+    "source_artifact_digest": "sha256:51e7a26b5bd09e030b67b9342586699abaaf46e630f45b6bb4ee7bfc9152ced6",
+    "target_rows": 62
+  },
+  "one_shot_draws": {
+    "paired_draw_count": 16,
+    "seeds": [
+      2026082700, 2026082701, 2026082702, 2026082703,
+      2026082704, 2026082705, 2026082706, 2026082707,
+      2026082708, 2026082709, 2026082710, 2026082711,
+      2026082712, 2026082713, 2026082714, 2026082715
+    ],
+    "pairing_rule": "Every frozen model family is evaluated at every listed seed. The same seed is used across families so shared generator components remain paired where their structural definitions coincide.",
+    "no_replacement": true
+  },
+  "score_channels": {
+    "primary": {
+      "trait_scope": "complete18_min5",
+      "environment_scope": "complete18_env_min5",
+      "role": "main preregistered model-discrimination score"
+    },
+    "replication_sensitivity": {
+      "trait_scope": "complete18_min2",
+      "environment_scope": "complete18_env_min2",
+      "role": "predeclared lower-replication-threshold sensitivity; never substituted for the primary score"
+    }
+  },
+  "class_weighting": {
+    "classes": [
+      "structure",
+      "environment_block_r2",
+      "environment_geometry",
+      "environment_incremental"
+    ],
+    "weight_per_class": 0.25,
+    "within_class_rule": "arithmetic mean of row losses within the requested scope",
+    "reason": "Prevent the 24 block-R2 or 20 incremental rows from dominating the six structure rows merely by row count."
+  },
+  "row_loss": {
+    "structure": {
+      "transform": "identity",
+      "loss": "squared standardized error",
+      "scale": "max(observed bootstrap 95-percent half-width, 0.05)",
+      "note": "The 0.05 model-discrepancy floor prevents bootstrap sampling precision from being treated as exact mechanistic tolerance."
+    },
+    "environment_block_r2": {
+      "transform": "sqrt(max(value,0))",
+      "loss": "squared transformed difference divided by 0.10 squared",
+      "scale": 0.10,
+      "note": "Square-root R2 places small and moderate explained fractions on an effect-amplitude scale without target-specific tuning."
+    },
+    "environment_geometry": {
+      "transform": "identity",
+      "loss": "squared difference divided by 0.25 squared",
+      "scale": 0.25,
+      "note": "Cosine is already bounded on [-1,1]; 0.25 is the frozen operational geometry discrepancy scale."
+    },
+    "environment_incremental": {
+      "transform": "sqrt(max(partial_r2,0))",
+      "loss": "squared transformed difference divided by 0.10 squared",
+      "scale": 0.10,
+      "note": "Only the preregistered partial-R2 scalar enters model distance. Observed permutation P/Q/support states remain descriptive evidence and are not double-counted."
+    }
+  },
+  "family_summary": {
+    "primary_statistic": "median total class-balanced distance across the 16 paired draws",
+    "uncertainty_summary": ["q25", "q75", "min", "max"],
+    "draw_rank_summary": ["median_rank", "mean_rank", "rank1_count"],
+    "primary_tie_rule": "A family is tied with the primary median leader when its primary median is no more than max(5 percent of the leader median, 0.01) above the leader median.",
+    "paired_win_fraction": "For each ordered family pair, fraction of the 16 matched seeds on which the first family has lower total distance; exact ties count 0.5."
+  },
+  "robust_leader_rule": {
+    "requirements": [
+      "exactly one family is outside the primary tie ambiguity set as the lowest primary median",
+      "its primary paired-win fraction is at least 0.75 against every other family",
+      "its replication-sensitivity median rank is at most 2",
+      "its replication-sensitivity median is within 10 percent of the best replication-sensitivity median"
+    ],
+    "failure_state": "no_robust_leader",
+    "failure_interpretation": "The frozen target bundle does not identify one structural family strongly enough under the preregistered comparison; do not retune priors, weights, transforms or family membership to rescue a winner."
+  },
+  "factor_contrasts": {
+    "residual_architecture": "paired score(COUPLED) - score(MODULAR) within otherwise matched families; positive values favour MODULAR",
+    "scale_coefficient_architecture": "paired score(SHARED) - score(INDEPENDENT) within otherwise matched non-null families; positive values favour INDEPENDENT",
+    "process_both_vs_core4": "paired score(CORE4) - score(PROCESS_BOTH) within matched scale/residual architecture; positive values favour PROCESS_BOTH",
+    "process_among_only_vs_core4": "paired score(CORE4) - score(PROCESS_AMONG_ONLY) within matched scale/residual architecture; positive values favour PROCESS_AMONG_ONLY",
+    "process_among_only_vs_process_both": "paired score(PROCESS_BOTH) - score(PROCESS_AMONG_ONLY) within matched scale/residual architecture; positive values favour PROCESS_AMONG_ONLY",
+    "direction_consistency_rule": "report the median contrast and fraction of paired contrasts with the preregistered positive direction; >=0.75 is labelled direction-consistent, not causal support"
+  },
+  "held_out_evidence_rule": "FDT1 pollinator, antagonist, orientation, phyllary and stickiness evidence is not part of this 62-target fit. It remains independent interpretation/validation evidence and cannot be used to change the one-shot ranking after inspection.",
+  "prohibited_post_outcome_actions": [
+    "change any target-class weight or row-loss scale",
+    "drop a target, scope, model family or draw because of its effect on ranking",
+    "change generator priors, endpoint loadings, residual architecture or process permissions",
+    "replace min5 with min2 as the primary analysis",
+    "add observed P/Q/support states as extra score terms after seeing results",
+    "declare a causal or adaptive mechanism from the structural ranking"
+  ],
+  "claim_boundary": "This one-shot comparison can discriminate structural sufficiency among the 14 frozen generator families for the 62 Azami observational estimands. It is not a likelihood analysis, posterior inference, causal identification, proof of adaptation, plasticity, defence, or genetic/developmental modularity."
+}
