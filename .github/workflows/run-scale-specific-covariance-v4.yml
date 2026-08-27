@@ -1,0 +1,116 @@
+name: Run scale-specific covariance v4 screen
+
+on:
+  pull_request:
+    paths:
+      - "analysis/simulate_scale_specific_covariance_v4.py"
+      - "tests/test_simulate_scale_specific_covariance_v4.py"
+      - "data/contracts/scale_specific_covariance_v4_contract.json"
+      - "data/contracts/scale_specific_covariance_v4_implementation_priors.json"
+      - "data/contracts/capitulum_space_mechanism_v3_contract.json"
+      - "data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv"
+      - "data/evidence/source/azami_capitulum_environment_eazami_targets_run33035785120.csv"
+      - "data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv"
+      - "data/evidence/macro_interaction_pattern_reduction_result_v2.json"
+      - ".github/workflows/run-scale-specific-covariance-v4.yml"
+  workflow_dispatch:
+    inputs:
+      draws_per_seed:
+        description: Prior draws per deterministic seed and family
+        required: true
+        default: "750"
+        type: string
+
+permissions: {contents: read}
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      DRAWS_PER_SEED: ${{ inputs.draws_per_seed || '750' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install numerical dependency
+        run: |
+          python -m pip install 'numpy>=1.26,<3'
+          python -m pip check
+      - name: Compile and test registered v4 generator
+        run: |
+          python -m py_compile analysis/simulate_scale_specific_covariance_v4.py
+          python -m unittest tests/test_simulate_scale_specific_covariance_v4.py -v
+      - name: Run frozen v4 structural-family screen
+        run: |
+          python analysis/simulate_scale_specific_covariance_v4.py \
+            --contract data/contracts/scale_specific_covariance_v4_contract.json \
+            --priors data/contracts/scale_specific_covariance_v4_implementation_priors.json \
+            --v3-contract data/contracts/capitulum_space_mechanism_v3_contract.json \
+            --structure data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv \
+            --environment data/evidence/source/azami_capitulum_environment_eazami_targets_run33035785120.csv \
+            --incremental data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv \
+            --v2-heldout data/evidence/macro_interaction_pattern_reduction_result_v2.json \
+            --draws-per-seed "$DRAWS_PER_SEED" \
+            --out-dir /tmp/scale_specific_covariance_v4
+      - name: Verify registered gates and noncausal boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.load((Path('/tmp/scale_specific_covariance_v4') / 'scale_specific_covariance_v4_result.json').open())
+          assert result['contract_version'] == 'scale_specific_covariance_v4_2026-08-27'
+          assert result['implementation_prior_version'] == 'scale_specific_covariance_v4_implementation_priors_2026-08-27'
+          assert result['screen_version'] == 'scale_specific_covariance_v4_screen_1'
+          assert result['draws_per_seed_per_family'] == int('${{ env.DRAWS_PER_SEED }}')
+          assert len(result['families']) == 5
+          assert set(result['ranking']) == {
+              'shared_scale_baseline',
+              'within_only_module_factor',
+              'among_unit_mosaic_loadings',
+              'combined_scale_decoupling',
+              'combined_scale_decoupling_with_rotation',
+          }
+          for row in result['families']:
+              assert row['accepted_draws'] >= 100
+              gates = row['eligibility_gates']
+              for key in [
+                  'absolute_primary_adequacy', 'replication_adequacy',
+                  'relative_improvement_gate', 'context_gate', 'seedwise_gate'
+              ]:
+                  assert key in gates
+              assert row['eligible'] == all([
+                  gates['absolute_primary_adequacy'],
+                  gates['replication_adequacy'],
+                  gates['relative_improvement_gate'],
+                  gates['context_gate'],
+                  gates['seedwise_gate'],
+              ])
+          assert result['registered_decision'] in {
+              'no_adequate_family',
+              'structural_nonidentifiability',
+              'shared_scale_baseline',
+              'within_only_module_factor',
+              'among_unit_mosaic_loadings',
+              'combined_scale_decoupling',
+              'combined_scale_decoupling_with_rotation',
+          }
+          if result['registered_decision'] not in {'no_adequate_family', 'structural_nonidentifiability'}:
+              assert result['selected_families'] == [result['registered_decision']]
+              assert result['registered_decision'] in result['eligible_families']
+          assert 'Not a likelihood' in result['interpretation_boundary']
+          assert 'biological rather than photographic' in result['interpretation_boundary']
+          print('scale_specific_covariance_v4_screen_complete=true')
+          print('ranking=', result['ranking'])
+          print('eligible_families=', result['eligible_families'])
+          print('registered_decision=', result['registered_decision'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: scale-specific-covariance-v4-screen
+          path: /tmp/scale_specific_covariance_v4
+          if-no-files-found: error
+          retention-days: 90
