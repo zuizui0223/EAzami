@@ -1,0 +1,80 @@
+name: Run capitulum-space mechanism v3 screen
+
+on:
+  pull_request:
+    paths:
+      - "analysis/simulate_capitulum_space_mechanism_v3.py"
+      - "tests/test_simulate_capitulum_space_mechanism_v3.py"
+      - "data/contracts/capitulum_space_mechanism_v3_contract.json"
+      - "data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv"
+      - "data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv"
+      - "data/evidence/macro_interaction_pattern_reduction_result_v2.json"
+      - ".github/workflows/run-capitulum-space-mechanism-v3.yml"
+  workflow_dispatch:
+    inputs:
+      draws_per_seed:
+        description: Prior draws per deterministic seed and family
+        required: true
+        default: "500"
+        type: string
+
+permissions: {contents: read}
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      DRAWS_PER_SEED: ${{ inputs.draws_per_seed || '500' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install numerical dependency
+        run: |
+          python -m pip install 'numpy>=1.26,<3'
+          python -m pip check
+      - name: Compile and test matched generator
+        run: |
+          python -m py_compile analysis/simulate_capitulum_space_mechanism_v3.py
+          python -m unittest tests/test_simulate_capitulum_space_mechanism_v3.py -v
+      - name: Run frozen v3 family screen
+        run: |
+          python analysis/simulate_capitulum_space_mechanism_v3.py \
+            --contract data/contracts/capitulum_space_mechanism_v3_contract.json \
+            --structure data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv \
+            --incremental data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv \
+            --v2-heldout data/evidence/macro_interaction_pattern_reduction_result_v2.json \
+            --draws-per-seed "$DRAWS_PER_SEED" \
+            --out-dir /tmp/capitulum_space_v3
+      - name: Verify result boundary and registered run size
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.load((Path('/tmp/capitulum_space_v3') / 'capitulum_space_mechanism_v3_result.json').open())
+          assert result['contract_version'] == 'capitulum_space_mechanism_v3_2026-08-27'
+          assert result['draws_per_seed_per_family'] == int('${{ env.DRAWS_PER_SEED }}')
+          assert len(result['families']) == 5
+          assert set(result['ranking']) == {
+              'environment_only', 'pollinator_only', 'antagonist_only',
+              'full_tradeoff_common_lability',
+              'full_tradeoff_modular_evolvability'
+          }
+          assert result['focal_common_vs_modular']['registered_decision'] in {
+              'full_tradeoff_common_lability',
+              'full_tradeoff_modular_evolvability',
+              'unresolved'
+          }
+          assert 'Not a likelihood' in result['interpretation_boundary']
+          print('v3_screen_complete=true')
+          print('ranking=', result['ranking'])
+          print('focal_decision=', result['focal_common_vs_modular']['registered_decision'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: capitulum-space-mechanism-v3-screen
+          path: /tmp/capitulum_space_v3
+          if-no-files-found: error
+          retention-days: 90
