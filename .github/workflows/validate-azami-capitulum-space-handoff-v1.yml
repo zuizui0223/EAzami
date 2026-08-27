@@ -1,0 +1,23 @@
+name: Validate Azami capitulum-space handoff v1
+on:
+  pull_request:
+    paths:
+      - "analysis/import_azami_capitulum_space_targets.py"
+      - "tests/test_import_azami_capitulum_space_targets.py"
+      - "docs/AZAMI_CAPITULUM_SPACE_HANDOFF_CONTRACT_V1.md"
+      - ".github/workflows/validate-azami-capitulum-space-handoff-v1.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Install bridge dependency
+        run: python -m pip install 'pandas>=2.2,<4'
+      - name: Compile and test the provenance-gated importer
+        run: |
+          python -m py_compile analysis/import_azami_capitulum_space_targets.py
+          python -m unittest tests/test_import_azami_capitulum_space_targets.py -v
