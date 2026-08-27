@@ -1,0 +1,68 @@
+name: Validate Azami capitulum v3 output contract v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/compute_azami_capitulum_v3_estimands.py"
+      - "analysis/audit_azami_capitulum_v3_scoreability_v1.py"
+      - "data/evidence/azami_capitulum_v3_estimand_contract_v1.json"
+      - "data/evidence/azami_capitulum_v3_scoreability_ledger_v1.csv"
+      - "data/evidence/azami_capitulum_v3_scoreability_summary_v1.json"
+      - "tests/test_azami_capitulum_v3_estimands.py"
+      - ".github/workflows/validate-azami-capitulum-v3-output-contract-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install numpy pandas pytest
+      - name: Compile
+        run: |
+          python -m py_compile analysis/compute_azami_capitulum_v3_estimands.py
+          python -m py_compile analysis/audit_azami_capitulum_v3_scoreability_v1.py
+      - name: Test exact estimand formulas and fail-closed v2 gate
+        run: python -m pytest -q tests/test_azami_capitulum_v3_estimands.py
+      - name: Audit current v2 scoreability
+        run: |
+          mkdir -p result
+          python analysis/audit_azami_capitulum_v3_scoreability_v1.py \
+            --ledger result/azami_capitulum_v3_scoreability_ledger_v1.csv \
+            --summary result/azami_capitulum_v3_scoreability_summary_v1.json
+      - name: Assert frozen output when committed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+          result=Path('result')
+          ledger=pd.read_csv(result/'azami_capitulum_v3_scoreability_ledger_v1.csv')
+          summary=json.loads((result/'azami_capitulum_v3_scoreability_summary_v1.json').read_text())
+          assert len(ledger)==62
+          assert summary['statistics_adapter_ready_targets']==62
+          assert summary['current_v2_exact_scoreable_targets']==0
+          assert summary['current_v2_exact_unscoreable_targets']==62
+          frozen=Path('data/evidence/azami_capitulum_v3_scoreability_summary_v1.json')
+          if frozen.exists():
+              assert json.loads(frozen.read_text())==summary
+          frozen_ledger=Path('data/evidence/azami_capitulum_v3_scoreability_ledger_v1.csv')
+          if frozen_ledger.exists():
+              expected=pd.read_csv(frozen_ledger)
+              pd.testing.assert_frame_equal(expected, ledger, check_dtype=False)
+          print(summary)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: azami-capitulum-v3-output-contract-${{ github.run_id }}
+          path: result
+          if-no-files-found: error
+          retention-days: 90
