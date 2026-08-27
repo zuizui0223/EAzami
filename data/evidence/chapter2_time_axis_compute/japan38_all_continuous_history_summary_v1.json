@@ -3,6 +3,7 @@
   "primary_threshold_n_observations": 2,
   "high_depth_threshold_n_observations": 5,
   "minimum_taxa_per_unit": 6,
+  "excluded_concepts": [],
   "primary_units_expected": [
     "orientation_image_vertical_angle",
     "corolla_lab_lightness",
