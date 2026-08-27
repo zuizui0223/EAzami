@@ -1,0 +1,82 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v16",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v15.json",
+  "inheritance": "All canonical Japan38 discrete histories, the source-balanced Japan7 colour stop rule, global-to-local colour claim boundaries, FDT1 calibration evidence, and the unresolved absolute-time gate remain in force unless explicitly updated below.",
+  "mainline": {
+    "primary_repeated_evolution_modules": ["orientation", "phyllary_posture", "stickiness"],
+    "colour_role": "secondary_negative_contrast",
+    "highest_information_targets": ["JPN_36", "JPN_06"],
+    "coverage_repair_targets": ["JPN_34", "JPN_15", "JPN_24"],
+    "module_function_bridge": {
+      "canonical_bridge": "data/evidence/japan38_module_function_bridge_v1.csv",
+      "canonical_summary": "data/evidence/japan38_module_function_bridge_summary_v1.json",
+      "canonical_fdt8_priorities": "data/evidence/japan38_fdt8_priority_targets_v1.csv",
+      "validation": {
+        "workflow_run": 33036788403,
+        "artifact_id": 9632281843,
+        "artifact_digest": "sha256:a9cad1f324ac184a47e34abedfea3c22aeedc47d99202e8d5d2671c72ab0867e",
+        "source_head_sha": "02ccd97648a065853e1c07e190d3ac2550d6a427"
+      }
+    },
+    "orientation": {
+      "history_state": "robust_recurrence_branch_localization_limited",
+      "minimum_steps_ufboot_range": [4, 6],
+      "ml_minimum_steps": 6,
+      "function_state": "calibration_ready_not_transportable",
+      "functional_axes": ["effective_pollination", "abiotic_reproductive_protection", "net_reproductive_fitness"],
+      "net_fitness_calibration_fixed_RR": 1.497566445,
+      "net_fitness_calibration_I2_percent": 93.5714188738,
+      "current_decision": "Do not map an orientation adaptation to a named Japan38 branch until transition placement improves. Use functional effects only to define what a future focal manipulation must measure."
+    },
+    "phyllary_posture": {
+      "history_state": "topology_robust_recurrence_partly_localizable",
+      "minimum_steps": 3,
+      "best_transition_target": "JPN_36",
+      "JPN36_terminal_forced_ufboot_fraction": 0.754,
+      "function_state": "protective_envelope_analog_mechanism_and_fitness_direction_ready_not_poolable",
+      "functional_axes": ["reproductive_enemy_exclusion", "net_reproductive_fitness", "pollinator_access_tradeoff"],
+      "current_decision": "JPN36 is the strongest current ancestry-aware phyllary experiment target, but external bract manipulations are nonhomologous analogs and do not establish Cirsium phyllary adaptation."
+    },
+    "stickiness": {
+      "history_state": "robust_recurrence_partly_localizable",
+      "minimum_steps_ufboot_range": [4, 5],
+      "best_transition_targets": ["JPN_06", "JPN_36"],
+      "JPN06_terminal_forced_ufboot_fraction": 0.67,
+      "JPN36_terminal_forced_ufboot_fraction": 0.4,
+      "function_state": "context_discrimination_ready_no_generic_sign",
+      "functional_axes": ["reproductive_enemy_exclusion", "net_reproductive_fitness", "trait_cost"],
+      "counterevidence": ["Bejaria_strong_benefit", "Cirsium_discolor_direct_null", "Datura_whole_plant_cost"],
+      "current_decision": "JPN06 and JPN36 are high-information tests because benefit, null and cost models make opposing predictions; do not assign a universal sticky-is-defence coefficient."
+    },
+    "colour": {
+      "history_state": "anti_phylogenetic_recurrence_not_supported_in_source_balanced_Japan7",
+      "source_balanced_Japan7_rho": 0.2675324675324675,
+      "anti_phylogenetic_negative_tail_p": 0.7579365079365079,
+      "current_decision": "No further sampling or reprocessing solely to rescue the anti-phylogenetic lightness hypothesis. Colour remains available for independent functional, discrete-state, molecular or field questions."
+    }
+  },
+  "execution_order": {
+    "first": "Validate observed phyllary and stickiness states for JPN36 and stickiness for JPN06, then assess field/manipulation feasibility. These are the highest-information focal systems because transition localization and competing functional models overlap.",
+    "second": "Repair missing primary trait states: JPN34 orientation, JPN15 phyllary posture, JPN24 stickiness. Recompute histories after those states are added before selecting any new branch-specific targets.",
+    "third": "For orientation, add branch-localization evidence before ancestry-specific adaptive tests; meanwhile use the existing pollination/protection/net-fitness calibration to preregister mediator and fitness endpoints.",
+    "fourth": "For JPN36/JPN06 focal tests, measure mediator and final fitness jointly: enemy access/damage, pollinator access/effective transfer where relevant, and mature/viable seed output. For stickiness, include a cost axis rather than assuming defence benefit.",
+    "fifth": "Only after these focal functional contrasts are established should FDT4/FDT7 connect transition histories to niche regimes or simulations. Absolute-time FDT5/FDT6 remains conditional on the dating gate."
+  },
+  "do_not_repeat": [
+    "Do not resume colour sampling merely to obtain a negative anti-phylogenetic rho.",
+    "Do not pool orientation, phyllary and stickiness into one common effect size.",
+    "Do not treat Pedicularis bracts as homologous Cirsium phyllaries or Bejaria/Datura as a transported Cirsium stickiness effect.",
+    "Do not label JPN36 orientation as a transition target from the current history because no orientation ML edge is individually forced.",
+    "Do not call the absence of common-lability overlap proof of developmental or genetic modular evolvability."
+  ],
+  "canonical_results": {
+    "japan38_discrete_history": "data/evidence/japan38_multitrait_history_summary_v1.json",
+    "japan7_colour_stop": "data/evidence/japan7_source_balanced_lightness_history_v1.json",
+    "fdt1_broad_calibration": "data/evidence/fdt1_broad_functional_calibration_summary_v1.json",
+    "orientation_net_fitness_meta": "data/evidence/fdt1_orientation_net_fitness_two_study_meta_v1.json",
+    "module_function_bridge": "data/evidence/japan38_module_function_bridge_v1.csv",
+    "fdt8_priority_targets": "data/evidence/japan38_fdt8_priority_targets_v1.csv"
+  },
+  "claim_boundary": "Readiness and experiment-prioritization contract only. Repeated-state histories plus external functional calibrations generate discriminating hypotheses, not adaptation claims. Functional homology, branch-specific selection, niche coupling, timing and molecular mechanism each require separate evidence gates."
+}
