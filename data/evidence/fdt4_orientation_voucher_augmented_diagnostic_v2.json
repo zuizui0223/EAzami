@@ -1,0 +1,91 @@
+{
+  "contract_version": "fdt4_orientation_voucher_augmented_diagnostic_v2",
+  "status_date": "2026-08-26",
+  "purpose": "Close the frozen n>=10 Taiwan orientation-niche coverage gate with source-backed published vouchers, rerun the six-topology present-day PGLS, and rerun the branchwise transition-niche diagnostic with executable source.",
+  "source_lineage": {
+    "japan_occurrence_workflow_run_id": 32716015605,
+    "japan_artifact_id": 9516784077,
+    "japan_artifact_digest": "sha256:cb5717c90cbc769398f9ffce38787704a02e34253c1ff16cf8f368ba55aeda96",
+    "taiwan_occurrence_workflow_run_id": 32725842871,
+    "taiwan_artifact_id": 9520157997,
+    "taiwan_artifact_digest": "sha256:819936ceeb6008f356c580622fb72972617700402afaa3d3ab125bff2e6d9106",
+    "au_workflow_run_id": 32614839764,
+    "au_artifact_id": 9486643703,
+    "au_artifact_digest": "sha256:d90f30e4fcc3a2a0296a7d0cfa13d0f3ecc008b36d28298ac9782a001e6f63c5",
+    "au_optimized_trees_sha256": "ba18f5509766d72845557dd6a654321e1cf52dd0d45c69add650aa01ddaa0d33",
+    "published_voucher_seed": "data/evidence/fdt4_taiwan_published_voucher_occurrence_seed_v1.csv",
+    "published_voucher_seed_sha256": "0187ac195c9160fbad221e99d85db497d84d5f7d4dfb4263b75bb0971e3a892a",
+    "voucher_augmented_occurrence_sha256": "492b6e431c0eb844e1483f93c5b2c675bf24b307317b1157b5affea1ced161a6"
+  },
+  "voucher_augmentation": {
+    "selection_rule": "All eligible source-backed vouchers were screened before the frozen 0.05-degree cell thinning; an existing guarded GBIF record wins a cell tie.",
+    "published_vouchers_screened": 7,
+    "published_voucher_cells_added": 3,
+    "Cirsium_morii": {
+      "cells_before": 9,
+      "vouchers_in_existing_cells": 2,
+      "cells_added": 1,
+      "cells_after": 10,
+      "added_record_ids": ["CYT90_C_MORII_CCY779"],
+      "n_ge_10_gate": true
+    },
+    "Cirsium_tatakaense": {
+      "cells_before": 9,
+      "vouchers_in_existing_cells": 2,
+      "cells_added": 2,
+      "cells_after": 11,
+      "added_record_ids": ["CHANG2025_C_TATAKAENSE_CCY3338", "CHANG2025_C_TATAKAENSE_CCY4022"],
+      "n_ge_10_gate": true
+    },
+    "gate_decision": "closed_without_lowering_the_frozen_threshold"
+  },
+  "pgls_11_taxa_across_six_topologies": {
+    "n_taxa": 11,
+    "n_U": 6,
+    "n_D": 5,
+    "chelsa_bio15": {
+      "beta_D_minus_U_sd_range": [1.1406118821877504, 1.1475024764477555],
+      "p_range": [0.03654256891099627, 0.03838652582992947],
+      "all_six_topologies_p_lt_0_05": true,
+      "direction": "D taxa have higher present-day precipitation seasonality centroids"
+    },
+    "chelsa_bio01": {
+      "beta_D_minus_U_sd_range": [-1.0198633312324847, -1.0121049837147453],
+      "p_range": [0.0455792787632837, 0.04647376203354872],
+      "all_six_topologies_p_lt_0_05": true,
+      "direction": "D taxa have lower present-day annual mean temperature centroids"
+    },
+    "other_axes_supported": false,
+    "interpretation": "The previously threshold-sensitive BIO15/BIO1 terminal association now passes the frozen n>=10 primary screen on all six retained topologies. This remains a present-day taxon-centroid association."
+  },
+  "branchwise_method_recovery": {
+    "v1_executable_source_available": false,
+    "v2_script": "analysis/run_fdt4_branchwise_niche_transition_concordance_v2.py",
+    "baseline_9_taxon_point_estimates_reproduced": true,
+    "maximum_absolute_point_range_difference_from_v1_rounded_contract": 0.000000619750114,
+    "v1_permutation_seed_available": false,
+    "v2_frozen_base_seed": 20260825,
+    "v2_permutations_per_topology": 499,
+    "note": "Directional shifts and expected-transition ranges reproduce v1 numerically. Exact v1 permutation p-values cannot be regenerated because v1 did not record its RNG seed or executable implementation."
+  },
+  "branchwise_11_taxa_across_six_topologies": {
+    "result_table": "data/evidence/fdt4_orientation_voucher_augmented_branchwise_by_topology_v2.csv",
+    "expected_orientation_transitions_range": [5.835093075154485, 5.875619824114929],
+    "chelsa_bio15": {
+      "directional_shift_sd_range": [0.21236498679095409, 0.213448123027281],
+      "two_sided_permutation_p_range": [0.078, 0.094],
+      "all_six_topologies_p_lt_0_05": false,
+      "direction": "U_to_D aligned with higher precipitation seasonality"
+    },
+    "chelsa_bio01": {
+      "directional_shift_sd_range": [-0.20412535316836034, -0.2025720886006764],
+      "two_sided_permutation_p_range": [0.044, 0.066],
+      "all_six_topologies_p_lt_0_05": false,
+      "topology_range_crosses_0_05": true,
+      "direction": "U_to_D aligned with lower annual mean temperature"
+    },
+    "robust_repeated_transition_niche_concordance_supported": false,
+    "decision": "Coverage was the predeclared discriminator and is now closed. Retain the topology-stable directions, but do not promote either axis to repeated niche-associated convergence and do not add occurrences merely to chase significance."
+  },
+  "claim_boundary": "The 11-taxon result supports topology-robust present-day BIO15/BIO1 orientation associations, not ancestral niche states, historical range, absolute event timing, same-voucher orientation, parallel/convergent adaptation, fitness effects or ecological causation."
+}

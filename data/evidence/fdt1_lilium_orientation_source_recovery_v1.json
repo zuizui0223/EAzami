@@ -1,0 +1,22 @@
+{
+  "contract_version": "fdt1_lilium_orientation_source_recovery_v1",
+  "status_date": "2026-08-26",
+  "study": {
+    "taxon": "Lilium duchartrei",
+    "doi": "10.1111/jse.12002",
+    "citation": "Sun and Yao 2013, Journal of Systematics and Evolution 51:405-412"
+  },
+  "routes_checked": 6,
+  "primary_abstract_verified": true,
+  "verified_numeric_fulltext_recovered": false,
+  "orientation_by_slope_coefficient_and_covariance_recovered": false,
+  "generic_orientation_response_ratio_identified": false,
+  "retained_estimand": "direction of the orientation-by-slope interaction",
+  "retained_direction_only_finding": "Seed set correlates positively with slope angle for natural down-slope controls and negatively for flowers manipulated to face up slope; visitation has the same reported tendency.",
+  "effect_size_ready": false,
+  "cross_study_orientation_meta_analysis_addition_ready": false,
+  "stop_reason": "The primary abstract identifies a slope-dependent interaction, but bounded public access checks did not yield the model coefficient, covariance, sample sizes, group summaries, figures, or raw data.",
+  "reopen_condition": "Obtain verified article tables/models or raw data through a lawful institutional or author route, preserving slope as a continuous moderator.",
+  "do_not_repeat": "Do not convert the abstract's opposite slope correlations into a generic down-versus-up response ratio, infer coefficients from significance or direction, or treat an unresolved open-access badge as retrieved full text.",
+  "claim_limit": "Lilium supports context dependence of orientation effects along slope. It does not currently supply a common effect size, a universal down-slope fitness advantage, or a transportable Cirsium parameter."
+}

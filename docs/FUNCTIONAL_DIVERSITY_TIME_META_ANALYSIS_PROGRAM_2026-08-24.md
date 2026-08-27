@@ -1,6 +1,13 @@
-# Functional-diversity through time meta-analysis programme
+# Azami series Chapter 2 — functional-diversity through time programme
 
-Status: 2026-08-24
+Status: 2026-08-26
+
+This is the execution programme for **Chapter 2**, not a free-standing repeat
+of Azami. Chapter 1 supplies frozen global spatial hypotheses. Chapter 2 adds
+functional-effect calibration, ancestry, evolutionary time, repeated
+transitions, niche history and competing generative models. Its final layer
+selects downstream causal experiments; it does not count those experiments as
+already observed evidence.
 
 ## Core distinction from Azami
 
@@ -12,7 +19,47 @@ EAzami should be explicitly temporal and evolutionary:
 
 `literature-derived functional effect sizes -> dated evolutionary history -> repeated functional transitions -> niche/distribution change -> ecological-event correspondence -> simulation-based model discrimination -> empirical validation targets`.
 
-The first EAzami paper should therefore ask how **functional disparity of reproductive/head traits changes through evolutionary time**, rather than repeating a present-day environment-trait map.
+Chapter 2 should therefore ask how **functional disparity of reproductive/head traits changes through evolutionary time**, rather than repeating Chapter 1's present-day environment-trait map.
+
+## Current Chapter 2 gate state
+
+- **FDT1:** the quantitative *Aquilegia* calibration supports a
+  context-dependent trichome -> enemy damage -> healthy-fruit pathway within one
+  coordinated eight-population study cluster. Independent *Erica* corolla-
+  stickiness and *Passiflora* sticky glandular-bract manipulations replicate an
+  enemy damage/access mechanism, but they are not homologous pool-ready effects:
+  the *Erica* link scale/sample size and *Passiflora* paired-plant covariance are
+  unavailable, and whole-bract removal confounds adhesion with enclosure.
+  Neither supplies a new fruit/seed fitness effect. *Ipomopsis* display and
+  *Lilium* orientation remain direction-only because the accessible sources do
+  not provide a lawful homologous numerical estimand. The three *Pedicularis*
+  water-holding-bract rows retain exact model coefficients and reported SEs.
+  The visitor model is binomial-logit, but the seed-set/predation link is
+  unnamed. Independent envelope manipulations now add Cardueae spine removal
+  (*Centaurea*), Asteraceae phyllary cutting (*Taraxacum*), a compound bract-
+  concealment package (*Monotropsis*) and a liquid calyx barrier
+  (*Chrysothemis*), with final seed/fruit directions in *Centaurea* and
+  *Monotropsis*. *Rheum* supplies an opposite antagonist direction. This
+  promotes the defensive-envelope mechanism and fitness direction to replicated
+  calibration, but not to one pooled magnitude or a focal *Cirsium* adaptation.
+  The colour gate is now stratified: a complete 64-cell *Ipomoea purpurea*
+  CHS-null factorial extract opens bounded E14 whole-flavonoid thermoprotection
+  analysis, and tomato complementation/antioxidant rescue supports a pollen-
+  flavonol ROS mechanism. These studies do not isolate visible petal
+  anthocyanin, each environmental experiment has chamber/greenhouse replication
+  limits, and a direct *Mimulus* counterexample blocks a universal positive
+  colour-protection prior. Equal-cell and reported-`n` descriptive margins both
+  reproduce the author-reported genotype-by-maternal-temperature direction, but
+  no interval is constructed from missing repeated-plant/cross-cell covariance.
+  E13 visible-petal function remains partial.
+- **FDT4:** present-day BIO15/BIO1 directions are stable across all six retained
+  topologies after the frozen 11-taxon voucher augmentation, but the branchwise
+  transition-niche concordance does not pass all-topology robustness.
+- **FDT5-FDT7:** blocked until a machine-readable dated tree and node-age
+  uncertainty are recovered. The current substitutions/site trees cannot be
+  treated as absolute time.
+- **FDT8:** remains a reverse-engineering output. It may prioritize orientation
+  and W/coloured systems, but cannot close their causal fitness gates.
 
 ## Central question
 
@@ -35,6 +82,13 @@ Provisional function axes:
 Head size, head number, orientation, phyllary/spine architecture, stickiness and pigmentation may load on more than one functional axis. The loading must come from evidence, not intuition.
 
 The resulting object is a **trait x function effect matrix**. This matrix can later transform Cirsium morphology into a literature-informed functional trait space.
+
+The executable interface is now
+`data/evidence/fdt1_trait_function_loading_contract_v1.csv`. It carries 15
+module-function rows and records evidence state, allowable Chapter 2 use,
+uncertainty treatment, counterevidence and claim ceiling. It deliberately has
+no fixed numeric Cirsium tip weights: every external loading remains conditional
+on homology, measurement scale and focal proxy validation.
 
 ## Analysis layer 1 — experimental trait-to-function meta-analysis
 
@@ -113,6 +167,38 @@ Examples:
 
 These surfaces provide priors for the later evolutionary analysis.
 
+### Current FDT2 gate (2026-08-26)
+
+The 49 FDT1 seed rows collapse to **23 primary-source study clusters**. The
+source-context audit preserves reported study geography and imposed exposure,
+but it does not identify any cross-study family that simultaneously has a
+homologous module -> mediator -> fitness estimand, recoverable effect variance
+and independent environmental variation.
+
+- only three source-cluster rows have one usable exact treatment-site
+  coordinate; additional exact multi-site geography remains nested within two
+  papers;
+- ten sources can inform directional exposure calibration, but temperature,
+  UV, rain/water and light differ in tissue, dose, duration and endpoint;
+- five experimental contexts are additionally confounded with one chamber,
+  greenhouse, bench or plot-level exposure;
+- author affiliation, taxon range and source-population locality are forbidden
+  substitutes for an unreported outcome environment.
+
+Therefore FDT2 is **`READINESS_REGISTRY_ONLY /
+STOP_BEFORE_MODERATOR_MODEL`**. No latitude slope, geographic response surface
+or pooled exposure moderator is fitted. Reopening requires a preregistered
+effect-level ledger for one homologous estimand family, with study clustering,
+sampling variance/covariance and field versus experimental exposure explicitly
+separated. This threshold must be fixed before effect access rather than chosen
+from the observed outcome pattern.
+
+Canonical audit and machine-readable gate:
+
+- `docs/FDT2_PRIMARY_STUDY_CONTEXT_AUDIT_2026-08-26.md`;
+- `data/evidence/fdt2_source_context_registry_v1.csv`;
+- `data/evidence/fdt2_context_readiness_summary_v1.json`.
+
 ## Analysis layer 3 — repeated/convergent evolution evidence synthesis across plants
 
 ### Question
@@ -138,6 +224,51 @@ Maintain strict terminology:
 - **repeated/homoplastic state** = same state appears independently;
 - **convergence/parallelism** = requires a defined ancestral relationship and mechanism/trajectory criterion;
 - **parallel/convergent adaptation** = additionally requires ecological function/fitness evidence.
+
+### Current FDT3 preflight (2026-08-26)
+
+The repository currently contains six relevant material classes, but none is
+an extracted external repeated-evolution event ledger:
+
+- 23 FDT1/FDT2 study clusters calibrate trait -> function and exposure;
+- 54 citation/DOI entries inventory focal *Cirsium* phylogeny and biogeography;
+- the focal orientation analysis supports a topology-robust lower bound of at
+  least five state changes, but not direction, historical niche or adaptation;
+- six capitulum modules define Chapter 2 hypotheses;
+- eight method/theory anchors define comparative models.
+- a bounded orientation pilot audited seven primary comparative sources and
+  admitted zero branch events.
+
+These units are not exchangeable. Functional experiments are not transition
+events, papers and tips are not independent origins, focal *Cirsium* evidence
+belongs to FDT4, and method papers are not observations. Therefore the v1 event
+ledger is deliberately schema-complete and row-empty, and FDT3 is
+**`NOT_READY_ZERO_PRIMARY_EVENT_LEDGER_ROWS_SOURCE_FAMILY_IDENTIFIED`**.
+
+The orientation pilot identified Xiang et al.'s 41-species *Lonicera* analysis
+as the priority source family because it combines orientation ancestral-state
+reconstruction, pollinator shift, phenology/temperature and experimental seed
+output. It is not yet event-row-ready: the lawful accessible record did not
+expose Supporting Figure S1/Table S3 node probabilities or a branchwise joint
+orientation-ecology ledger. Six additional studies were retained as
+topology-limited trait histories or explicit near misses rather than being
+silently dropped.
+
+Reopening requires a bounded primary-source extraction within one prespecified
+module-function family. Each retained event must separate trait transition from
+ecological transition, preserve topology/direction uncertainty, use one study
+cluster denominator, and leave age, molecular reuse and fitness validation
+missing when they were not demonstrated. Negative screens and directionally
+unresolved cases remain in the audit rather than disappearing from the
+denominator.
+
+Canonical machine contracts:
+
+- `data/evidence/fdt3_existing_material_preflight_v1.csv`;
+- `data/evidence/fdt3_repeated_evolution_event_ledger_v1.csv`;
+- `data/evidence/fdt3_existing_material_preflight_v1.json`;
+- `data/evidence/fdt3_orientation_primary_pilot_v1.csv`;
+- `docs/FDT3_ORIENTATION_REPEATED_EVOLUTION_PRIMARY_PILOT_2026-08-26.md`.
 
 ## Analysis layer 4 — Cirsium dated evolutionary-history + niche linkage
 
@@ -279,7 +410,7 @@ Deep Pleistocene pollinator and antagonist distributions usually cannot be recon
 
 Historical biotic selection is inferred only when supported by multiple independent lines: trait transition, ecological context, lineage history and ideally functional evidence.
 
-## First-paper hypothesis set
+## Chapter 2 hypothesis set
 
 ### H1 — functional selection mosaic
 Different head/reproductive modules respond to different ecological agents; one universal driver is insufficient.
@@ -299,7 +430,7 @@ Module-specific ecological models predict transition histories better than a sin
 ### H6 — functional rather than morphological convergence
 Lineages may reach similar ecological functions through different raw morphologies. Literature-informed functional space should therefore reveal convergence not obvious in raw trait space.
 
-## What the first paper can and cannot claim
+## What Chapter 2 can and cannot claim
 
 ### Can claim if supported
 
@@ -317,7 +448,7 @@ Lineages may reach similar ecological functions through different raw morphologi
 - adaptive radiation as a demonstrated fitness process;
 - molecular parallelism/reuse without ancestry-resolved molecular data.
 
-The first paper should therefore end by **reverse-engineering the empirical systems that maximize discrimination among competing mechanisms**.
+Chapter 2 should therefore end by **reverse-engineering the empirical systems that maximize discrimination among competing mechanisms**.
 
 ## Reverse engineering empirical work
 
@@ -334,7 +465,7 @@ For every transition cluster identified, compute information value based on:
 
 The top-ranked systems become Aim 2/Aim 3 field experiments. Thus the meta/comparative paper determines what the doctorate should experimentally test rather than the experiment list being fixed in advance.
 
-## Intended first-paper figures
+## Intended Chapter 2 figures
 
 1. **Functional architecture:** trait modules -> functional axes -> selection agents -> fitness stages, with meta-analytic effect sizes.
 2. **Selection-regime geography:** environment-dependent functional benefit/cost surfaces.

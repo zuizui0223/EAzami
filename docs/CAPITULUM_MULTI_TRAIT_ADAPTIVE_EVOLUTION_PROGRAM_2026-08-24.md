@@ -1,6 +1,11 @@
-# Capitulum multi-trait adaptive-evolution programme
+# Azami series Chapter 2 — capitulum multi-trait adaptive-evolution programme
 
-Status: 2026-08-24
+Status: 2026-08-26
+
+Chapter placement: Chapter 1 discovers global spatial phenotype structure;
+Chapter 2 tests multi-trait functional and evolutionary-time hypotheses in the
+East-Asian/Japanese radiation. Later causal module papers validate the systems
+selected by Chapter 2.
 
 ## Central question
 
@@ -113,6 +118,13 @@ Repeated increases in excluding architecture should occur where reproductive ene
 **Current evidence boundary**
 A direct *C. discolor* neutralization experiment weakens the generic `sticky inflorescence = reproductive defence` hypothesis. Stickiness therefore remains a separate low-priority module rather than being merged with spines into a generic defence score.
 
+Independent *Erica* and *Passiflora* manipulations now replicate an enemy
+damage/access mechanism outside *Cirsium*, while *Aquilegia* shows strong
+species-level context dependence. These interventions are not one homologous
+trait family and the new studies do not provide final fruit/seed fitness
+effects. They strengthen a testable pathway, not a universal defence rule or a
+focal adaptation claim.
+
 **Evolutionary prediction**
 No general adaptive direction is assumed. The module is reopened only if Japan-wide phylogenetic/environmental mapping or focal natural variation predicts a specific repeatable function.
 
@@ -212,18 +224,18 @@ Conceptual priority is multi-trait:
 
 all tested under the same selection-pressure -> mechanism -> evolutionary-history -> fitness architecture.
 
-## Intended paper architecture
+## Dissertation-series architecture
 
-### Paper A — Azami global phenomics
+### Chapter 1 — Azami global phenomics
 Global continuous within/among-taxon capitulum phenotype and environmental structure. No adaptive claim.
 
-### Paper B — Multi-trait evolutionary history of Japanese capitula
+### Chapter 2 — Multi-trait functional history of Japanese capitula through time
 Japan-wide common-locus nuclear history + population/voucher-validated capitulum traits. Main question: did a young radiation repeatedly redeploy multiple capitulum modules, and do transition contexts differ among display, orientation, defence and colour?
 
 This should be **multi-trait**, not an orientation-only paper.
 
-### Papers C/D — causal module papers
-Use the strongest discriminating systems emerging from Paper B. Orientation can be first because it is experimentally tractable; colour/re-expression is a likely mechanistic flagship; display and defence can become independent causal papers if their trait -> mechanism -> fitness paths are sufficiently strong.
+### Downstream causal module chapters/papers
+Use the strongest discriminating systems emerging from Chapter 2. Orientation can be first because it is experimentally tractable; colour/re-expression is a likely mechanistic flagship; display and defence can become independent causal papers if their trait -> mechanism -> fitness paths are sufficiently strong.
 
 ### Thesis synthesis
 Compare module-specific versus common-lability models and ask whether repeated ecological function across modules is sufficient to justify an adaptive-radiation interpretation.

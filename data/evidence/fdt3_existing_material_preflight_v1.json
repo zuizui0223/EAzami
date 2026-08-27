@@ -1,0 +1,44 @@
+{
+  "contract_version": "fdt3_existing_material_preflight_v1",
+  "material_classes_audited": 6,
+  "registered_input_units": 99,
+  "current_role_counts": {
+    "chapter2_hypothesis_and_test_registry": 1,
+    "comparative_method_and_theory_design": 1,
+    "focal_Cirsium_phylogeny_inventory": 1,
+    "focal_orientation_repeated_state_and_niche_screen": 1,
+    "primary_orientation_candidate_screen": 1,
+    "trait_function_and_exposure_calibration": 1
+  },
+  "extracted_external_transition_events": 0,
+  "orientation_primary_pilot": {
+    "primary_sources_audited": 7,
+    "event_rows_admitted": 0,
+    "disposition_counts": {
+      "directionally_suggestive_not_event_ready": 1,
+      "near_miss_different_orientation_ontology": 1,
+      "near_miss_ecology_without_orientation_event": 1,
+      "near_miss_nonhomologous_organ_orientation": 1,
+      "priority_source_branchwise_extraction_pending": 1,
+      "repeated_state_ecology_coupling_stop": 1,
+      "trait_history_calibration_only": 1
+    },
+    "priority_source": "10.1111/jse.12554",
+    "decision": "NO_EVENT_ROWS_ADMITTED_SOURCE_FAMILY_IDENTIFIED_BRANCHWISE_EXTRACTION_PENDING"
+  },
+  "gate_decision": "NOT_READY_ZERO_PRIMARY_EVENT_LEDGER_ROWS_SOURCE_FAMILY_IDENTIFIED",
+  "terminology_contract": {
+    "repeated_or_homoplastic_state": "independent origin is reconstructed under declared topology uncertainty",
+    "convergence_or_parallelism": "ancestral relationship plus trajectory or mechanism criterion is explicit",
+    "parallel_or_convergent_adaptation": "ecological function and fitness validation are additionally present"
+  },
+  "reopen_requirements": [
+    "primary-source branch or node with ancestral and derived functional states",
+    "declared topology and transition-direction uncertainty",
+    "ecological transition evidence coded separately from trait transition",
+    "age and molecular/fitness validation retained as optional rather than imputed",
+    "study-cluster and independent-origin rules fixed before event coupling analysis"
+  ],
+  "next_valid_action": "Lawfully recover Lonicera Supporting Fig. S1 and Table S3; freeze the node-state probability and branch-independence rules before extracting all accepted, rejected and directionally unresolved branches.",
+  "claim_boundary": "This preflight inventories current repository roles. It does not infer external repeated evolution, convergence, parallelism or adaptation."
+}

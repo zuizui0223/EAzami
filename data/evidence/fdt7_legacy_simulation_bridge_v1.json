@@ -1,6 +1,6 @@
 {
   "contract_version": "fdt7_legacy_simulation_bridge_v1",
-  "status_date": "2026-08-24",
+  "status_date": "2026-08-26",
   "purpose": "Freeze the reusable evidence boundary between the existing capitulum pattern-reduction simulation v2 and the developing FDT7 time-axis simulation, without inventing time-history mechanisms that are not yet represented.",
   "legacy_simulation": {
     "implementation": "analysis/simulate_capitulum_pattern_reduction_v2.py",
@@ -79,11 +79,20 @@
       "island-emergence or isolation event alignment"
     ]
   },
+  "chapter_2_execution_gate": {
+    "FDT4": "present-day BIO15/BIO1 directions are topology-stable, but branchwise transition-niche concordance is not all-topology robust",
+    "FDT5_FDT7_absolute_time": "closed until a machine-readable dated tree and node-age uncertainty are recovered",
+    "forbidden_shortcut": "do not relabel substitutions-per-site branches or hybrid partial-node-age scaffolds as absolute time"
+  },
   "model_aliases": {
-    "M0": null,
-    "M3": null,
-    "M4": null,
-    "M5": null,
-    "reason": "The repository does not yet contain a frozen definition of the M0/M3/M4/M5 labels. Do not assign aliases by inference. M5 is nevertheless operationally blocked because ecological-opportunity pulse tests require a dated tree."
+    "definition_source": "docs/FUNCTIONAL_DIVERSITY_TIME_META_ANALYSIS_PROGRAM_2026-08-24.md",
+    "alias_scope": "semantic Chapter 2 model definitions only; not a one-to-one mapping onto legacy implementation families",
+    "M0": "neutral_or_unconstrained",
+    "M1": "single_abiotic_driver",
+    "M2": "single_biotic_driver",
+    "M3": "common_lability",
+    "M4": "modular_selection_mosaic",
+    "M5": "ecological_opportunity_pulse",
+    "reason": "The Chapter 2 programme now freezes M0-M5 semantics. Legacy FULL_COUPLED/FULL_MODULAR screens remain structural precursors, not automatically equivalent fitted time-axis models. M5 and all absolute-time comparisons remain operationally blocked without the dated-tree gate."
   }
 }

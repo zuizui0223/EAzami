@@ -1,14 +1,30 @@
 {
   "version": "v2_evidence_ladder",
-  "status_date": "2026-08-23",
+  "status_date": "2026-08-26",
+  "dissertation_placement": {
+    "series": "Azami",
+    "chapter": 2,
+    "chapter_title": "functional_diversification_through_time_in_the_East_Asian_Cirsium_radiation",
+    "chapter_1_boundary": "global_spatial_observational_discovery_without_adaptive_inference",
+    "chapter_2_unit": "literature_informed_functional_effects_plus_repeated_transition_niche_and_model_discrimination",
+    "downstream_validation": "ancestry_resolved_trait_mechanism_reproductive_fitness_tests_selected_by_chapter_2"
+  },
   "evidence_ladder_rows": 10,
   "architecture": [
-    "Azami global observational phenomics",
-    "EAzami quantitative ecological literature synthesis",
-    "EAzami East-Asian rapid-radiation evolutionary-history zoom",
-    "Doctoral ancestry-resolved ecological function tests",
-    "Flower-colour molecular reuse test"
+    "Chapter 1 Azami global observational phenomics",
+    "Chapter 2 EAzami quantitative ecological literature synthesis",
+    "Chapter 2 EAzami East-Asian rapid-radiation evolutionary-history zoom",
+    "Downstream ancestry-resolved ecological function tests selected by Chapter 2",
+    "Downstream flower-colour molecular reuse test"
   ],
+  "chapter_2_gate_state": {
+    "FDT1": "stickiness_and_defensive_envelope_mechanisms_replicated_but_nonhomologous_plus_whole_flavonoid_heat_fitness_bounded_extraction_ready_while_visible_petal_anthocyanin_and_focal_Cirsium_causal_targets_remain_open",
+    "FDT2": "readiness_registry_only_23_study_clusters_zero_homologous_georeferenced_effect_families_exposure_direction_calibration_only",
+    "FDT3": "not_ready_zero_primary_external_transition_event_ledger_rows_Lonicera_source_family_identified_branchwise_extraction_pending",
+    "FDT4": "present_day_BIO15_BIO1_directions_topology_stable_but_branchwise_transition_concordance_not_all_topology_robust",
+    "FDT5_FDT7_absolute_time": "closed_without_machine_readable_dated_tree_and_node_age_uncertainty",
+    "FDT8": "reverse_engineering_output_not_observed_causal_evidence"
+  },
   "meta_conclusions": {
     "single_universal_driver": "not_supported_as_general_model",
     "selection_mosaic": "working_general_support",
@@ -17,7 +33,8 @@
     "stickiness_general_defence": "weakened",
     "display_tradeoff": "working_mechanistic_support",
     "orientation_timing_protection": "mechanistic_candidate",
-    "phyllary_spine_defence": "mechanistic_candidate_requires_direct_validation"
+    "phyllary_spine_defence": "external_mechanism_and_fitness_calibrated_focal_Cirsium_proxy_and_causal_validation_required",
+    "reproductive_flavonoid_thermoprotection": "bounded_extraction_ready_chamber_confounded_not_visible_petal_anthocyanin"
   },
   "self_analysis_resolutions": {
     "azami": "large_below_taxon_visible_variance_and_trait_specific_environmental_structure_without_causal_claim",

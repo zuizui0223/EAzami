@@ -41,8 +41,22 @@ class DoctoralEvidenceLadderV2Tests(unittest.TestCase):
 
     def test_summary_keeps_meta_and_empirical_frontiers_separate(self):
         x = json.loads(SUMMARY_PATH.read_text(encoding="utf-8"))
+        self.assertEqual(x["dissertation_placement"]["series"], "Azami")
+        self.assertEqual(x["dissertation_placement"]["chapter"], 2)
+        self.assertIn("global_spatial_observational", x["dissertation_placement"]["chapter_1_boundary"])
+        self.assertIn("repeated_transition", x["dissertation_placement"]["chapter_2_unit"])
+        self.assertIn("Chapter 1", x["architecture"][0])
+        self.assertIn("Chapter 2", x["architecture"][1])
+        self.assertIn("defensive_envelope", x["chapter_2_gate_state"]["FDT1"])
+        self.assertIn("readiness_registry_only", x["chapter_2_gate_state"]["FDT2"])
+        self.assertIn("23_study_clusters", x["chapter_2_gate_state"]["FDT2"])
+        self.assertIn("zero_primary_external_transition_event", x["chapter_2_gate_state"]["FDT3"])
+        self.assertIn("not_all_topology_robust", x["chapter_2_gate_state"]["FDT4"])
+        self.assertIn("closed_without_machine_readable_dated_tree", x["chapter_2_gate_state"]["FDT5_FDT7_absolute_time"])
         self.assertEqual(x["meta_conclusions"]["selection_mosaic"], "working_general_support")
         self.assertEqual(x["meta_conclusions"]["stickiness_general_defence"], "weakened")
+        self.assertIn("external_mechanism_and_fitness_calibrated", x["meta_conclusions"]["phyllary_spine_defence"])
+        self.assertIn("bounded_extraction_ready", x["meta_conclusions"]["reproductive_flavonoid_thermoprotection"])
         self.assertEqual(
             x["self_analysis_resolutions"]["orientation"],
             "minimum_five_state_changes_on_all_six_topologies_direction_and_ancestor_unresolved",

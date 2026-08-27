@@ -2,6 +2,11 @@
 
 Status: 2026-08-20
 
+Dissertation-series placement: Azami is Chapter 1; the EAzami functional and
+evolutionary-time synthesis is Chapter 2. The three Aims below supply the
+ancestry-resolved causal and molecular gates that Chapter 2 identifies but
+cannot presume closed.
+
 ## One central question
 
 > **Why did one young Japanese *Cirsium* radiation generate such large capitulum and ecological diversity so quickly, despite shallow lineage divergence?**

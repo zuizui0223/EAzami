@@ -6,7 +6,7 @@
 Azami / Chapter 1
 Global public-image macro screen
         ↓ hypotheses, trait distributions, auxiliary involucre/spine proxies
-EAzami
+EAzami / Chapter 2
 East Asian nuclear history + explicit transition reconstruction
         ↓ replicated focal transitions
 Population / mechanism studies
@@ -50,7 +50,12 @@ Chapter 1 may support global macroecological patterns and hypothesis generation.
 - genetic variance or evolutionary rate from image variance;
 - molecular flower-colour loss/regain mechanisms.
 
-## Stage 2 — EAzami evolutionary reconstruction
+## Stage 2 — EAzami / Chapter 2 functional evolutionary reconstruction
+
+Chapter 2 combines quantitative trait-to-function priors with the East-Asian
+history, repeated module transitions, niche-transition tests and predeclared
+simulation alternatives. It does not repeat Chapter 1's global spatial
+association analysis and does not infer adaptation from state recurrence alone.
 
 ### Current nuclear state
 
