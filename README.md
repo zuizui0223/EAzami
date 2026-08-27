@@ -1,217 +1,162 @@
-# EAzami — rapid East Asian/Japanese *Cirsium* radiation
+# EAzami — from phenotype to function, history, origin and convergence in *Cirsium*
 
-EAzami is organized around one doctoral-level question:
+EAzami is the downstream evolutionary/functional layer of Azami. The two repositories are not parallel trait projects.
 
-> **How did one young East-Asian/Japanese *Cirsium* radiation generate such large capitulum functional diversity so quickly, and which ecological selection pressures repeatedly favour different functional solutions through time?**
+```text
+Azami
+phenotypic decomposition of the capitulum
+        ↓
+EAzami-I
+phenotype → candidate function → validated functional trait
+        ↓
+EAzami-II
+trait-specific evolutionary histories
+        ↓
+EAzami-III
+origin discrimination
+        ↓
+EAzami-IV
+functional / adaptive convergence
+```
 
-## Azami -> EAzami: space versus time
+## Canonical biological question
 
-`zuizui0223/azami` and EAzami answer different questions.
+> **Once a complex capitulum is decomposed into component phenotypes, what do those components do, how often did their states change through evolutionary history, where did repeated states come from, and do independent origins repeatedly solve the same ecological problem?**
 
-### Azami = global spatial discovery
+The active source of truth is:
 
-Azami stops at:
+- `docs/chapter2/MAINLINE_V2.md`
+- `docs/chapter2/MANUSCRIPT_V2_OUTLINE.md`
+- `docs/chapter2/FIGURE_TABLE_PLAN_V2.md`
+- `docs/chapter2/SUBMISSION_GATES_V2.md`
+- `data/evidence/chapter2_result_role_map_v2.csv`
+- `PROJECT_STATUS.md`
 
-`present-day global images -> continuous capitulum phenotypes -> within/among-taxon variation -> environmental structure across space`.
+## Azami endpoint — decompose the present
 
-It establishes that visible capitulum variation is substantial below taxon means and that orientation and visible colour have particularly clear environmental structure. Its involucre/spine measurements are 2-D image proxies. Azami does **not** claim pollinator causation, defence, local adaptation, evolutionary rate, parallel evolution or adaptive radiation.
+Azami treats the capitulum as a multivariate phenotype rather than one adaptive syndrome. Orientation, colour, outline/shape, involucre/phyllary architecture, armature and display-related traits are measured separately.
 
-### EAzami = functional diversity through evolutionary time
+The key handoff is not a list of isolated correlations. It preserves within- and among-taxon organization and shows that association structure changes across biological scale. Image-derived modules remain phenotypic modules; they are not automatically functional or genetic modules.
 
-EAzami begins with the patterns frozen by Azami but makes the time axis explicit:
+## EAzami-I — phenotype to candidate function
 
-`literature-derived trait -> function -> fitness effects`
+A measured phenotype is promoted in stages:
 
-`-> dated evolutionary history`
+```text
+observed phenotype
+→ candidate functional annotation
+→ independent functional evidence
+→ focal manipulation/performance response
+→ validated functional trait
+```
 
-`-> repeated functional transitions`
+Current ecological constraints include:
 
-`-> niche/distribution change and ecological-event correspondence`
+- experimentally reduced reproductive insect herbivory increases viable/mature seed output in harmonizable *Cirsium* studies by RR **2.674** (95% CI **2.388–2.993**), establishing a large antagonist fitness channel without identifying which capitulum morphology mediates it;
+- factorial selection literature rejects universal pollinator or antagonist dominance and supports a **selection mosaic** working architecture;
+- orientation requires at least time-window pollination and abiotic-protection candidate pathways rather than one static visitation coefficient;
+- display can increase both mutualist discovery and antagonist exposure;
+- a generic `sticky = defence` rule is not retained;
+- image-derived phyllary/armature geometry remains candidate morphology until direct focal validation.
 
-`-> evolutionary simulation/model discrimination`
+## EAzami-II — trait-specific evolutionary histories
 
-`-> reverse-engineered focal experiments`.
+Current Japan38 nuclear-history results are reconstructed separately by trait.
 
-The modules remain parallel:
+- **orientation:** 20 resolved concepts; ML minimum 6 changes; UFBoot range 4–6; exact branch localization remains weak.
+- **phyllary posture:** 10 resolved concepts; exactly 3 minimum changes across all 1000 UFBoot trees; JPN36 is the strongest partly localizable terminal target.
+- **stickiness:** 13 resolved concepts after merged JPN24 authority repair; ML minimum 5, ML root sticky, and all 1000 UFBoot trees require exactly 5 changes.
+- **colour:** the global/high-depth continuous-lightness anti-phylogenetic pattern does not replicate in the source-balanced Japan-local panel, so it is not promoted to a Japanese-radiation transition history.
 
-`display quantity | orientation | phyllary/spine defence | stickiness/mucilage | flower colour/pigmentation | validated architecture`.
+The current three-module transition-overlap analysis does not support a simple one-shared-whole-capitulum historical-lability model. This does **not** prove developmental/genetic modular evolvability.
 
-Orientation is the first module with a robust repeated-state result and the cleanest initial manipulation, not the central doctoral trait.
+## EAzami-III — origin discrimination
 
-### Canonical current synthesis
+Repeated tip states do not yet establish independent origins. The live alternatives include:
 
-- `docs/FUNCTIONAL_DIVERSITY_TIME_META_ANALYSIS_PROGRAM_2026-08-24.md` — current **time-axis** first-paper programme;
-- `data/evidence/functional_diversity_time_meta_registry_v1.csv` — eight analysis layers from meta-analysis to experiment reverse-engineering;
-- `docs/CAPITULUM_MULTI_TRAIT_ADAPTIVE_EVOLUTION_PROGRAM_2026-08-24.md` — multi-trait adaptive-evolution framework;
-- `data/evidence/capitulum_adaptive_module_registry_v1.csv` — module -> selection pressure -> mechanism -> history -> fitness registry;
-- `docs/DOCTORAL_EVIDENCE_LADDER_GLOBAL_TO_EAST_ASIA_2026-08-23.md` — evidence-order interface;
-- `data/evidence/doctoral_global_to_east_asia_summary_v2.json` — machine-readable programme state.
+- ancestral retention;
+- independent lineage-specific transition;
+- ancestral polymorphism and sorting;
+- introgression / gene flow;
+- hybridization / cytoplasmic capture;
+- reversal or re-expression where biologically justified.
 
-## Central hypotheses
+The next discriminator links standardized phenotype to:
 
-### Selection mosaic
+`nuclear population genomics + matched plastid haplotype + cytotype/genome size`.
 
-Different combinations of pollinator opportunity, reproductive assurance, reproductive-antagonist pressure, rain/wetting, UV, temperature, drought, density and resource context favour different functional modules or trait combinations. There is no universal best capitulum.
+The aim is not merely a denser tree; it is to determine where repeated phenotype states came from.
 
-### Repeated functional solutions
+## EAzami-IV — convergence
 
-Independent lineages can reach similar ecological functions repeatedly, potentially through different raw morphologies. Functional convergence is therefore not identical to morphological similarity.
+The claim ladder is strict:
+
+```text
+repeated present state
+→ independent origin supported
+→ repeated ecological association
+→ same or equivalent function
+→ reproductive-fitness consequence
+→ functional / adaptive convergence
+```
+
+Repeated parsimony changes are not convergence counts. Phenotypic convergence, functional convergence and adaptive convergence are distinct claims.
+
+## Higher-order hypotheses
+
+### Selection mosaic / local functional leverage
+
+This is the leading ecological working architecture. Interaction opportunity alone is insufficient; the focal phenotype must change effective pollination, antagonist access or abiotic protection and that difference must reach fitness.
 
 ### Modular evolvability
 
-Standing ancestral variation, gene flow/introgression and cytotype/genome changes may allow semi-independent developmental/genetic modules for display, orientation, defence and pigmentation to be retained and redeployed across shallow lineages, so functional phenotype can diverge faster than genome-wide lineage sorting.
+Retained as a **higher-order endpoint hypothesis**, not the organizing premise. It becomes stronger only if multiple component traits show semi-independent histories and repeated origins reuse standing variation, introgressed variants or regulatory machinery.
 
-### Competing common-lability model
+### Common lability
 
-One shared whole-capitulum lability axis may generate correlated phenotype variation without semi-independent ecological modules. Modular evolvability is supported only if module-specific transition histories and ecological models outperform this shared-latent alternative.
+Retained as a higher-order competitor. Snapshot residual covariance coupling is not equivalent to evolutionary common lability.
 
-Neither adaptive model is a recovered conclusion yet.
+## Auxiliary cross-scale simulation lane
 
-## What the prior meta-analysis already establishes
+The 62-target Azami → EAzami simulation programme remains intact but is not the definition of evolutionary history.
 
-The current generic literature synthesis provides priors rather than the final first-paper analysis.
+- v3.1: none of five declared biological driver families passes absolute adequacy;
+- PR #119: `NULL_COUPLED` is the frozen scalar-target winner;
+- PR #120: the same null fails held-out support geometry, 0/64 primary matches;
+- PR #123: among-only process structure improves strongly but remains inadequate;
+- draft PR #122: scale-specific covariance families are the first to pass the registered seven-target adequacy screen, pending canonical freeze and independent held-out validation.
 
-- **single universal driver:** direct climate-only or pollinator-only explanations are insufficient as general models;
-- **selection mosaic:** strict pollination x antagonism manipulations include antagonist-, pollinator- and mixed-dominance outcomes;
-- **reproductive antagonist pressure in Cirsium:** reduced-herbivory seed-output RR = **2.674** (95% CI **2.388-2.993**), equivalent to **62.6%** ambient loss of potential seed output;
-- **reproductive assurance:** animal-pollinator dependence is not equivalent to current open pollen limitation;
-- **display:** simultaneous pollinator benefit and predispersal seed-predator cost are supported, with density dependence;
-- **orientation:** timing and rain/UV/wetting protection are candidate mechanisms;
-- **phyllary/spine:** defence remains a candidate until direct focal botanical traits are validated;
-- **stickiness:** generic reproductive-defence evidence is weakened, making it a useful low-priority/negative-control module;
-- **colour/pigmentation:** pollinator and abiotic roles are both plausible; `colder -> darker` remains a hypothesis, not a rule.
+These results constrain **statistical covariance formation across scales**. They do not reconstruct trait transitions, historical origins or adaptation.
 
-The next literature phase is therefore not more undirected paper accumulation. It is the preregistered **functional effect-size meta-analysis** described in `FUNCTIONAL_DIVERSITY_TIME_META_ANALYSIS_PROGRAM_2026-08-24.md`.
+## Doctoral data gates
 
-## Functional disparity rather than raw trait count
+The existing three empirical gates remain useful under the new mainline:
 
-EAzami treats head/reproductive traits as inputs to experimentally supported functional axes such as:
+1. **Origin gate:** same-individual phenotype + nuclear ancestry + plastid + cytotype.
+2. **Function gate:** focal trait → interaction/protection mediator → mature/viable seed fitness.
+3. **Colour molecular-reuse gate:** for independently resolved W/C transitions, ancestry + coding/regulatory haplotype + floral RNA + pigment + calibrated colour.
 
-- pollinator attraction/discovery;
-- pollination efficiency/effective contact;
-- reproductive-organ protection;
-- antagonist exclusion/damage reduction;
-- resource/display cost;
-- pigment-mediated sensory/abiotic performance;
-- reproductive assurance.
+## Current paper boundary
 
-Meta-analysis estimates a `trait x function` effect matrix. That matrix converts Cirsium morphology into a **literature-informed functional space**.
+A bounded Chapter 2 paper can already claim that the capitulum is not one fixed syndrome and that currently resolved component traits show different candidate functions and repeated, partly decoupled histories.
 
-The time-axis question is then:
+It must not yet claim:
 
-> **When did this functional space expand, contract, or get reoccupied during the radiation?**
-
-## East Asian temporal scaffold
-
-Published phylogenomics already provides key anchors:
-
-- dominant Japanese radiation after a Middle-Asia -> Japan dispersal at about **2.4 Ma** (95% CI 1.7-3.6 Ma);
-- *C. lineare* Japanese range expansion about **1.4 Ma**;
-- *C. dipsacolepis* secondary Japanese founder about **1.0 Ma**;
-- major East-Asian subsection splits about **1.30-1.02 Ma**;
-- *C. brevicaule* vs. *C. irumtiense* about **0.93 Ma**.
-
-Current EAzami also has a 153-locus focal compatibility tree with explicit topology uncertainty. Orientation is the first proof of repeated evolution: 17 resolved states require at least five changes under every retained topology.
-
-The Japan-wide backbone will now be used to reconstruct **multiple functional modules**, not orientation alone.
-
-## Niche and distribution linkage
-
-The biological comparison is not `trait ~ current climate`.
-
-For each lineage/module:
-
-`dated trait transition`
-
-`<-> branch-wise climatic/edaphic niche shift`
-
-`<-> biogeographic/range event`
-
-`<-> ecological opportunity window`.
-
-Use current SDMs/ENMs, niche overlap/equivalency, ancestral niche axes, selected paleodistribution models and published biogeographic/paleodemographic evidence. Present pollinator/enemy maps are contemporary interaction-opportunity data; they are not assumed to be literal Pleistocene distributions.
-
-## Functional disparity through time
-
-The first paper will quantify:
-
-- phylomorphospace / phylo-functional space;
-- functional disparity through time;
-- rate of functional-space expansion versus packing;
-- repeated occupation of similar functional regimes;
-- transition accumulation by module;
-- sister-lineage functional divergence versus time.
-
-A simple classic early-burst result is not required. Ecological opportunity can generate episodic shifts and repeated occupation of functional solutions.
-
-## Evolutionary simulations
-
-The empirical history will be compared against predeclared competing generative models:
-
-- **M0 neutral:** BM/Mk with no ecological coupling;
-- **M1 single abiotic driver:** one climate axis drives all modules;
-- **M2 single biotic driver:** one pollinator/antagonist axis dominates;
-- **M3 common lability:** one latent branch rate drives all modules together;
-- **M4 modular selection mosaic:** module-specific ecology-dependent transition/optimum models informed by meta-analysis;
-- **M5 ecological-opportunity pulse:** M4 plus temporary increases in functional diversification after colonization/fragmentation/niche-opening events.
-
-Compare observed and simulated independent-origin counts, functional-disparity trajectories, convergence/reoccupation, trait-niche concordance, cross-module covariance and transition concentration near ecological-event windows.
-
-Simulation is for model discrimination, not proof of adaptation.
-
-## Reverse engineering the empirical doctorate
-
-The first paper ends by ranking unresolved transition systems by expected information value:
-
-- transition independence/confidence;
-- strength of meta-derived functional prediction;
-- ecological contrast;
-- ancestry matching;
-- manipulability;
-- flowering overlap;
-- seed-fitness measurement feasibility;
-- molecular sampling feasibility.
-
-The highest-information systems become Aim 2/Aim 3 experiments. Thus the experimental programme is **derived from the meta/comparative result**, not fixed in advance.
-
-## Paper architecture
-
-### Paper A — Azami global phenomics: **space**
-
-Present-day global continuous capitulum phenotype and environmental structure. No adaptive claim.
-
-### Paper B — EAzami functional diversification through **time**
-
-Systematic review/meta-analysis + geographic effect modifiers + dated Cirsium functional history + niche/distribution linkage + repeated evolution + functional disparity through time + simulation model discrimination.
-
-Main question:
-
-> Did changing ecological opportunity repeatedly reorganize different capitulum functions during a young radiation, and is the observed history better predicted by a modular selection mosaic than by neutral, single-driver or common-lability alternatives?
-
-This is the planned **trend/hypothesis-generating paper before new causal field experiments**.
-
-### Papers C/D — empirical causal tests
-
-Use the systems selected by Paper B. Orientation can be first because it is experimentally tractable; colour/re-expression is a likely mechanistic flagship; display and defence become standalone causal papers only if their trait -> function -> fitness paths are strong enough.
-
-### Thesis synthesis
-
-Compare module-specific versus common-lability models and ask whether multiple independently validated functional modules jointly support an adaptive-radiation interpretation.
-
-## Adaptive-radiation boundary
-
-Use **rapid radiation** as the current system premise.
-
-Paper B may support `ecological-opportunity-consistent functional diversification` or `repeated functional evolution`. It must not claim that a particular Japanese trait state is adaptive without trait-specific fitness evidence. Adaptive-radiation inference remains downstream of causal validation.
+- independent origin for every repeated state;
+- functional or adaptive convergence;
+- adaptive radiation;
+- molecular colour reactivation;
+- demonstrated modular evolvability.
 
 ## Start here
 
-1. `docs/FUNCTIONAL_DIVERSITY_TIME_META_ANALYSIS_PROGRAM_2026-08-24.md`
-2. `data/evidence/functional_diversity_time_meta_registry_v1.csv`
-3. `docs/CAPITULUM_MULTI_TRAIT_ADAPTIVE_EVOLUTION_PROGRAM_2026-08-24.md`
-4. `data/evidence/capitulum_adaptive_module_registry_v1.csv`
-5. `docs/DOCTORAL_EVIDENCE_LADDER_GLOBAL_TO_EAST_ASIA_2026-08-23.md`
-6. `sampling/JAPAN_WIDE_PHYLOGENY_ORIENTATION_ADDITION_PANEL_V1.csv`
-7. `sampling/SAMPLING_DESIGN.md`
+1. `docs/chapter2/MAINLINE_V2.md`
+2. `docs/chapter2/MANUSCRIPT_V2_OUTLINE.md`
+3. `data/evidence/chapter2_result_role_map_v2.csv`
+4. `PROJECT_STATUS.md`
+5. `docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md`
+6. `sampling/SAMPLING_DESIGN.md`
 
-The target end point is not another present-day environment-trait correlation. It is a **time-resolved, functional, simulation-tested account of how ecological opportunity and repeated selection mosaics generated and reorganized capitulum functions during rapid radiation**.
+The canonical short axis is:
+
+> **phenotype → function → history → origin → convergence**
