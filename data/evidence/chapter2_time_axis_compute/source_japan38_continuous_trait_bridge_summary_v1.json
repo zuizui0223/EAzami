@@ -1,0 +1,514 @@
+{
+  "contract_version": "japan38_continuous_trait_bridge_v1",
+  "source_trait_rows": 1018072,
+  "source_unique_observations": 46276,
+  "eligible_endpoints": 18,
+  "exact_japan38_concepts_with_any_continuous_trait": 14,
+  "exact_japan38_concept_ids": [
+    "JPN_05",
+    "JPN_15",
+    "JPN_17",
+    "JPN_22",
+    "JPN_23",
+    "JPN_26",
+    "JPN_27",
+    "JPN_29",
+    "JPN_30",
+    "JPN_32",
+    "JPN_35",
+    "JPN_36",
+    "JPN_37",
+    "JPN_38"
+  ],
+  "exact_concepts_complete_for_all_18_endpoints": 5,
+  "complete18_concept_ids": [
+    "JPN_17",
+    "JPN_22",
+    "JPN_23",
+    "JPN_37",
+    "JPN_38"
+  ],
+  "coverage_by_endpoint": [
+    {
+      "endpoint_id": "bract_projection_asymmetry",
+      "module": "involucre_architecture",
+      "analysis_tier": "candidate",
+      "exact_concepts_n1": 5,
+      "exact_concepts_n2": 2,
+      "exact_concepts_n5": 2,
+      "exact_concepts_n10": 0,
+      "concept_ids_n2": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": []
+    },
+    {
+      "endpoint_id": "bract_projection_maximum",
+      "module": "armature",
+      "analysis_tier": "candidate",
+      "exact_concepts_n1": 5,
+      "exact_concepts_n2": 2,
+      "exact_concepts_n5": 2,
+      "exact_concepts_n10": 0,
+      "concept_ids_n2": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": []
+    },
+    {
+      "endpoint_id": "bract_projection_p95",
+      "module": "involucre_architecture",
+      "analysis_tier": "candidate",
+      "exact_concepts_n1": 5,
+      "exact_concepts_n2": 2,
+      "exact_concepts_n5": 2,
+      "exact_concepts_n10": 0,
+      "concept_ids_n2": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": []
+    },
+    {
+      "endpoint_id": "bract_projection_peak_density",
+      "module": "armature",
+      "analysis_tier": "candidate",
+      "exact_concepts_n1": 5,
+      "exact_concepts_n2": 2,
+      "exact_concepts_n5": 2,
+      "exact_concepts_n10": 0,
+      "concept_ids_n2": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": []
+    },
+    {
+      "endpoint_id": "bract_projection_roughness",
+      "module": "involucre_architecture",
+      "analysis_tier": "candidate",
+      "exact_concepts_n1": 5,
+      "exact_concepts_n2": 2,
+      "exact_concepts_n5": 2,
+      "exact_concepts_n10": 0,
+      "concept_ids_n2": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": []
+    },
+    {
+      "endpoint_id": "bract_spread_fraction",
+      "module": "involucre_architecture",
+      "analysis_tier": "candidate",
+      "exact_concepts_n1": 5,
+      "exact_concepts_n2": 2,
+      "exact_concepts_n5": 2,
+      "exact_concepts_n10": 0,
+      "concept_ids_n2": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": []
+    },
+    {
+      "endpoint_id": "capitulum_outline_aspect_ratio",
+      "module": "shape",
+      "analysis_tier": "primary",
+      "exact_concepts_n1": 14,
+      "exact_concepts_n2": 10,
+      "exact_concepts_n5": 6,
+      "exact_concepts_n10": 4,
+      "concept_ids_n2": [
+        "JPN_05",
+        "JPN_15",
+        "JPN_17",
+        "JPN_23",
+        "JPN_27",
+        "JPN_29",
+        "JPN_30",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_29",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_37",
+        "JPN_38"
+      ]
+    },
+    {
+      "endpoint_id": "capitulum_outline_circularity",
+      "module": "shape",
+      "analysis_tier": "primary",
+      "exact_concepts_n1": 14,
+      "exact_concepts_n2": 10,
+      "exact_concepts_n5": 6,
+      "exact_concepts_n10": 4,
+      "concept_ids_n2": [
+        "JPN_05",
+        "JPN_15",
+        "JPN_17",
+        "JPN_23",
+        "JPN_27",
+        "JPN_29",
+        "JPN_30",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_29",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_37",
+        "JPN_38"
+      ]
+    },
+    {
+      "endpoint_id": "capitulum_outline_solidity",
+      "module": "shape",
+      "analysis_tier": "primary",
+      "exact_concepts_n1": 14,
+      "exact_concepts_n2": 10,
+      "exact_concepts_n5": 6,
+      "exact_concepts_n10": 4,
+      "concept_ids_n2": [
+        "JPN_05",
+        "JPN_15",
+        "JPN_17",
+        "JPN_23",
+        "JPN_27",
+        "JPN_29",
+        "JPN_30",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_29",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_37",
+        "JPN_38"
+      ]
+    },
+    {
+      "endpoint_id": "capitulum_width_profile_cv",
+      "module": "shape",
+      "analysis_tier": "primary",
+      "exact_concepts_n1": 14,
+      "exact_concepts_n2": 10,
+      "exact_concepts_n5": 6,
+      "exact_concepts_n10": 4,
+      "concept_ids_n2": [
+        "JPN_05",
+        "JPN_15",
+        "JPN_17",
+        "JPN_23",
+        "JPN_27",
+        "JPN_29",
+        "JPN_30",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_29",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_37",
+        "JPN_38"
+      ]
+    },
+    {
+      "endpoint_id": "corolla_hue_cos",
+      "module": "colour",
+      "analysis_tier": "primary",
+      "exact_concepts_n1": 14,
+      "exact_concepts_n2": 10,
+      "exact_concepts_n5": 6,
+      "exact_concepts_n10": 5,
+      "concept_ids_n2": [
+        "JPN_05",
+        "JPN_15",
+        "JPN_17",
+        "JPN_23",
+        "JPN_27",
+        "JPN_29",
+        "JPN_30",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_29",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ]
+    },
+    {
+      "endpoint_id": "corolla_hue_sin",
+      "module": "colour",
+      "analysis_tier": "primary",
+      "exact_concepts_n1": 14,
+      "exact_concepts_n2": 10,
+      "exact_concepts_n5": 6,
+      "exact_concepts_n10": 5,
+      "concept_ids_n2": [
+        "JPN_05",
+        "JPN_15",
+        "JPN_17",
+        "JPN_23",
+        "JPN_27",
+        "JPN_29",
+        "JPN_30",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_29",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ]
+    },
+    {
+      "endpoint_id": "corolla_lab_chroma",
+      "module": "colour",
+      "analysis_tier": "primary",
+      "exact_concepts_n1": 14,
+      "exact_concepts_n2": 10,
+      "exact_concepts_n5": 6,
+      "exact_concepts_n10": 5,
+      "concept_ids_n2": [
+        "JPN_05",
+        "JPN_15",
+        "JPN_17",
+        "JPN_23",
+        "JPN_27",
+        "JPN_29",
+        "JPN_30",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_29",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ]
+    },
+    {
+      "endpoint_id": "corolla_lab_lightness",
+      "module": "colour",
+      "analysis_tier": "primary",
+      "exact_concepts_n1": 14,
+      "exact_concepts_n2": 10,
+      "exact_concepts_n5": 6,
+      "exact_concepts_n10": 5,
+      "concept_ids_n2": [
+        "JPN_05",
+        "JPN_15",
+        "JPN_17",
+        "JPN_23",
+        "JPN_27",
+        "JPN_29",
+        "JPN_30",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_29",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ]
+    },
+    {
+      "endpoint_id": "involucre_apical_taper_ratio",
+      "module": "involucre_architecture",
+      "analysis_tier": "candidate",
+      "exact_concepts_n1": 5,
+      "exact_concepts_n2": 2,
+      "exact_concepts_n5": 2,
+      "exact_concepts_n10": 0,
+      "concept_ids_n2": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": []
+    },
+    {
+      "endpoint_id": "involucre_basal_taper_ratio",
+      "module": "involucre_architecture",
+      "analysis_tier": "candidate",
+      "exact_concepts_n1": 5,
+      "exact_concepts_n2": 2,
+      "exact_concepts_n5": 2,
+      "exact_concepts_n10": 0,
+      "concept_ids_n2": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": []
+    },
+    {
+      "endpoint_id": "involucre_length_width_ratio",
+      "module": "involucre_architecture",
+      "analysis_tier": "candidate",
+      "exact_concepts_n1": 5,
+      "exact_concepts_n2": 2,
+      "exact_concepts_n5": 2,
+      "exact_concepts_n10": 0,
+      "concept_ids_n2": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": []
+    },
+    {
+      "endpoint_id": "orientation_image_vertical_angle",
+      "module": "orientation",
+      "analysis_tier": "primary",
+      "exact_concepts_n1": 14,
+      "exact_concepts_n2": 8,
+      "exact_concepts_n5": 6,
+      "exact_concepts_n10": 4,
+      "concept_ids_n2": [
+        "JPN_05",
+        "JPN_17",
+        "JPN_23",
+        "JPN_27",
+        "JPN_29",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n5": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_29",
+        "JPN_36",
+        "JPN_37",
+        "JPN_38"
+      ],
+      "concept_ids_n10": [
+        "JPN_17",
+        "JPN_23",
+        "JPN_37",
+        "JPN_38"
+      ]
+    }
+  ],
+  "aggregation": "exact-concept endpoint medians over frozen observation rows; no imputation or discretization",
+  "claim_boundary": "Continuous phenotype bridge only. Exact concept matching preserves infraspecific rank. The bridge does not infer phylogenetic signal, ancestral states, evolutionary rates, convergence, adaptation, or trait function."
+}

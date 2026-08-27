@@ -1,0 +1,79 @@
+{
+  "contract_version": "japan38_all_continuous_history_v1",
+  "primary_threshold_n_observations": 2,
+  "high_depth_threshold_n_observations": 5,
+  "minimum_taxa_per_unit": 6,
+  "primary_units_expected": [
+    "orientation_image_vertical_angle",
+    "corolla_lab_lightness",
+    "corolla_lab_chroma",
+    "corolla_hue",
+    "capitulum_outline_aspect_ratio",
+    "capitulum_outline_circularity",
+    "capitulum_outline_solidity",
+    "capitulum_width_profile_cv"
+  ],
+  "primary_units_executed_n2": [
+    "orientation_image_vertical_angle",
+    "corolla_lab_lightness",
+    "corolla_lab_chroma",
+    "capitulum_outline_aspect_ratio",
+    "capitulum_outline_circularity",
+    "capitulum_outline_solidity",
+    "capitulum_width_profile_cv",
+    "corolla_hue"
+  ],
+  "primary_units_executed_n5": [
+    "orientation_image_vertical_angle",
+    "corolla_lab_lightness",
+    "corolla_lab_chroma",
+    "capitulum_outline_aspect_ratio",
+    "capitulum_outline_circularity",
+    "capitulum_outline_solidity",
+    "capitulum_width_profile_cv",
+    "corolla_hue"
+  ],
+  "n2_history_classes": {
+    "two_sided_not_supported": 8
+  },
+  "n5_history_classes": {
+    "two_sided_not_supported": 8
+  },
+  "candidate_endpoint_decision": "coverage_audit_only_not_promoted_to_phylogenetic_history",
+  "branch_change_shared_lability": {
+    "threshold": 2,
+    "common_concepts": 8,
+    "concept_ids": [
+      "JPN_05",
+      "JPN_17",
+      "JPN_23",
+      "JPN_27",
+      "JPN_29",
+      "JPN_36",
+      "JPN_37",
+      "JPN_38"
+    ],
+    "branches": 14,
+    "units": [
+      "orientation_image_vertical_angle",
+      "corolla_lab_lightness",
+      "corolla_lab_chroma",
+      "corolla_hue",
+      "capitulum_outline_aspect_ratio",
+      "capitulum_outline_circularity",
+      "capitulum_outline_solidity",
+      "capitulum_width_profile_cv"
+    ],
+    "global_mean_pairwise_branch_change_rho": 0.40800627943485085,
+    "global_shared_lability_permutation_p_positive": 9.999000099990002e-05,
+    "within_module_mean_rho": 0.494993894993895,
+    "between_module_mean_rho": 0.36680161943319833,
+    "within_minus_between_module_contrast": 0.12819227556069668,
+    "module_label_exact_permutation_p_positive": 0.16785714285714284,
+    "module_label_permutations": 280,
+    "branch_change_definition": "absolute BM-conditional phenotype change standardized by tip SD (scalar units) or hue chord distance, divided by sqrt(substitution-length branch)",
+    "claim_boundary": "Shared branch-change diagnostic only; substitutions/site are not absolute time, ancestral states are BM conditional expectations, and positive coupling would not prove genetic/developmental modularity or common selection."
+  },
+  "tree_semantics": "substitutions/site; not absolute time",
+  "claim_boundary": "Continuous phenotype phylogenetic-structure and branch-change diagnostics only. No functional interpretation, adaptation, absolute evolutionary rate, convergence, or unique generating mechanism is inferred."
+}
