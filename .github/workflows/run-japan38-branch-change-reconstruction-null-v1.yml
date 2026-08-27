@@ -1,0 +1,69 @@
+name: Run Japan38 branch-change reconstruction null v1
+
+on:
+  pull_request:
+    paths:
+      - 'analysis/run_japan38_branch_change_reconstruction_null_v1.py'
+      - 'tests/test_japan38_branch_change_reconstruction_null_v1.py'
+      - 'docs/chapter2/BRANCH_CHANGE_RECONSTRUCTION_NULL_CONTRACT_V1.md'
+      - '.github/workflows/run-japan38-branch-change-reconstruction-null-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: japan38-branch-change-reconstruction-null-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  null-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install, compile and test
+        run: |
+          python -m pip install 'pandas>=2.2,<4' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'biopython>=1.83,<2' pytest
+          python -m py_compile analysis/run_japan38_branch_change_reconstruction_null_v1.py
+          python -m pytest -q tests/test_japan38_branch_change_reconstruction_null_v1.py
+      - name: Run frozen reconstruction-aware null
+        run: |
+          set -euo pipefail
+          mkdir -p output
+          python analysis/run_japan38_branch_change_reconstruction_null_v1.py \
+            --bridge data/evidence/chapter2_time_axis_compute/source_japan38_continuous_trait_bridge_v1.csv \
+            --tree data/evidence/japan38_comp1061_primary_tree_v1.nwk \
+            --concept-map data/evidence/japan38_comp1061_concept_map_v1.csv \
+            --threshold 2 \
+            --permutations 9999 \
+            --seed 20260827 \
+            --output output/japan38_branch_change_reconstruction_null_v1.json \
+            --null-out output/japan38_branch_change_reconstruction_null_distribution_v1.csv
+      - name: Validate contract without forcing a favorable outcome
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('output/japan38_branch_change_reconstruction_null_v1.json').read_text())
+          assert x['contract_version']=='japan38_branch_change_reconstruction_null_v1'
+          assert x['common_concepts']==8
+          assert x['branches']==14
+          assert x['permutations']==9999
+          assert abs(x['observed_global_mean_pairwise_branch_change_rho']-0.40800627943485085)<1e-10
+          assert x['decision'] in {'PASS','FAIL'}
+          if x['decision']=='PASS':
+              assert x['one_sided_reconstruction_null_p'] < 0.05
+          else:
+              assert x['one_sided_reconstruction_null_p'] >= 0.05
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-branch-change-reconstruction-null-${{ github.run_id }}
+          path: output
+          if-no-files-found: error
+          retention-days: 90
