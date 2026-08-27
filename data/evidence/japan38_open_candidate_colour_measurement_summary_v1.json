@@ -1,0 +1,40 @@
+{
+  "contract_version": "japan38_open_candidate_colour_measurement_v1",
+  "colour_confidence_floor": 0.55,
+  "threshold_relaxation_allowed": false,
+  "results": {
+    "JPN_05": {
+      "taxon_name": "Cirsium aomorense",
+      "candidate_locality_summaries": [
+        {"locality_id": "HAKODATE_20240918", "usable_images": 0, "lightness_median": null, "chroma_median": null},
+        {"locality_id": "TSUGARU_20250820", "usable_images": 2, "lightness_median": 56.07843017578125, "chroma_median": 44.34706115722656}
+      ],
+      "existing_passing_localities": [],
+      "candidate_passing_locality_count": 1,
+      "total_passing_locality_count_if_promoted": 1,
+      "promotion_pass": false,
+      "promotion_rule": "At least one passing image in each of Hakodate and Tsugaru series.",
+      "concept_lightness_median_across_locality_medians": null,
+      "concept_chroma_median_across_locality_medians": null
+    },
+    "JPN_30": {
+      "taxon_name": "Cirsium yezoense",
+      "candidate_locality_summaries": [
+        {"locality_id": "SENDAI_20221005", "usable_images": 1, "lightness_median": 59.60784149169922, "chroma_median": 10.198039054870605},
+        {"locality_id": "TOWADA_20251018", "usable_images": 0, "lightness_median": null, "chroma_median": null}
+      ],
+      "existing_passing_localities": [
+        {"locality_id": "AIZU_20080927", "lightness_median": 65.49019622802734, "chroma_median": 47.16990661621094, "source": "japan38_jpn30_public_colour_recovery_v1"}
+      ],
+      "candidate_passing_locality_count": 1,
+      "total_passing_locality_count_if_promoted": 2,
+      "promotion_pass": true,
+      "promotion_rule": "Existing Aizu passing series plus at least one passing Sendai/Towada candidate series.",
+      "concept_lightness_median_across_locality_medians": 62.54901885986328,
+      "concept_chroma_median_across_locality_medians": 28.68397283554077
+    }
+  },
+  "fifth_concept_gate_unlocked": true,
+  "promoted_concepts": ["JPN_30"],
+  "claim_boundary": "Direct licensed live-image quality gate only. Promotion supplies population-local continuous colour proxies for the next history pilot; it does not define W/C states or establish ancestry, adaptation, convergence, transition direction, or anthocyanin reactivation."
+}

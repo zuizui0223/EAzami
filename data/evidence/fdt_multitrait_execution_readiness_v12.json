@@ -1,0 +1,73 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v12",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v11.json",
+  "inheritance": "All discrete-module histories, global continuous-colour results, negative present-day abiotic species-proxy gates, chun Cirsium claim gate, JPN38 permission/licensing routes, JPN29 specimen-identity blocker, and the JPN30 Aizu calibration from v11 remain in force unless explicitly updated below.",
+  "colour": {
+    "japan_local_continuous_history_pilot_ready": true,
+    "japan_local_discrete_transition_history_ready": false,
+    "minimum_clean_identity_resolved_concepts_current": 5,
+    "minimum_required_for_next_population_matched_history": 5,
+    "population_matched_lightness_concepts": [
+      "JPN_17",
+      "JPN_23",
+      "JPN_30",
+      "JPN_36",
+      "JPN_37"
+    ],
+    "new_unlock": {
+      "paper_japan_member_id": "JPN_30",
+      "taxon_name": "Cirsium yezoense",
+      "promotion_pass": true,
+      "passing_localities": [
+        {
+          "locality_id": "AIZU_20080927",
+          "lightness_median": 65.49019622802734,
+          "chroma_median": 47.16990661621094,
+          "source": "licensed Wikimedia Commons recovery frozen in PR #104"
+        },
+        {
+          "locality_id": "SENDAI_20221005",
+          "lightness_median": 59.60784149169922,
+          "chroma_median": 10.198039054870605,
+          "source": "iNaturalist observation 190665296, CC BY; one photo passed frozen confidence 0.55"
+        }
+      ],
+      "concept_lightness_median_across_locality_medians": 62.54901885986328,
+      "concept_chroma_median_across_locality_medians": 28.68397283554077,
+      "failed_new_locality": "TOWADA_20251018",
+      "threshold_relaxed": false
+    },
+    "jpn05_parallel_result": {
+      "paper_japan_member_id": "JPN_05",
+      "taxon_name": "Cirsium aomorense",
+      "promotion_pass": false,
+      "tsugaru_passing_locality_lightness_median": 56.07843017578125,
+      "hakodate_passing": false,
+      "status": "one usable locality only; not promoted"
+    },
+    "evidence_heterogeneity": "JPN17/JPN23/JPN36/JPN37 use Japan-window medians from the frozen Azami strict-spatial cohort; JPN30 uses the median across two direct licensed Japan-local locality medians. The next analysis is therefore a population-matched continuous-colour proxy pilot, not a fully source-balanced trait dataset.",
+    "validation": {
+      "workflow_run": 33029876795,
+      "artifact_id": 9629814606,
+      "artifact_digest": "sha256:b52f6da3ff8cbd6b037b1d99edd4bc40feb29c137e9e2b958a1dabbf2be76110",
+      "source_head_sha": "abe384d95f3522cc9c4e59e53d182bf86727f80d"
+    },
+    "status": "Five identity-resolved Japan-local continuous-lightness concepts are now available. The population-matched continuous history pilot is unlocked; discrete W/C/polymorphism transition direction remains blocked."
+  },
+  "priority_reordering": {
+    "first": "Immediately run the five-concept population-matched continuous-lightness history using JPN17/JPN23/JPN30/JPN36/JPN37, the canonical Japan38 tree, exact 120 label permutations and leave-one-out sensitivity.",
+    "second": "Treat a negative or unstable five-concept result as a real result and expand local concept coverage; do not search for a different post hoc threshold or trait transform.",
+    "third": "Only after the Japan-local continuous signal is characterized should colour be discretized, and only with an independently frozen W/C/polymorphism ontology plus topology/reticulation sensitivity.",
+    "fourth": "JPN38 permission and JPN29 PE01523822 identity remain useful expansion routes but no longer block the first five-concept continuous pilot.",
+    "do_not_repeat": "Do not lower the 0.55 confidence floor, count multiple photos from one observation/locality as independent populations, or promote JPN05 until a second independent locality passes."
+  },
+  "canonical_results": {
+    "open_candidate_measurement_summary": "data/evidence/japan38_open_candidate_colour_measurement_summary_v1.json",
+    "open_candidate_measurement_per_image": "data/evidence/japan38_open_candidate_colour_measurement_per_image_v1.csv",
+    "sparse_open_source_sweep": "data/evidence/japan38_sparse_colour_open_source_sweep_v1.json",
+    "jpn30_previous_aizu_calibration": "data/evidence/japan38_jpn30_public_colour_recovery_summary_v1.json",
+    "chun_claim_gate": "data/evidence/cirsium_colour_history_claim_gate_v1.json"
+  },
+  "claim_boundary": "The fifth-concept gate unlocks a Japan-local continuous-colour proxy history pilot only. It does not establish a discrete white/coloured state, ancestral colour, transition direction, convergence, adaptation, molecular reactivation, or adaptive radiation."
+}
