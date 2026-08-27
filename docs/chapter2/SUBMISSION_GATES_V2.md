@@ -11,27 +11,22 @@ This paper does not need to prove adaptive convergence.
 ## Submission-essential before freezing the current paper
 
 1. **Freeze the v2 narrative**
-   - `MAINLINE_V2.md` and `MANUSCRIPT_V2_OUTLINE.md` must remain the organizing source;
-   - simulation results must remain auxiliary rather than being called evolutionary transition history.
+   - `MAINLINE_V2.md` and `MANUSCRIPT_V2_OUTLINE.md` remain the organizing source;
+   - simulation results remain auxiliary rather than being called evolutionary transition history.
 
-2. **Close the JPN24 integration state**
-   - either merge the authority-backed JPN24 stickiness extension after green revalidation;
-   - or explicitly retain canonical main 12-resolved / UFBoot 4–5 and report JPN24 as unmerged sensitivity.
-   - do not mix the two states in one figure or result sentence.
+2. **Use the canonical post-JPN24 stickiness state**
+   - JPN24 authority repair is merged in PR #124 (`4276930a0bbd0e02fcdddcfb070812ebe8df8561`);
+   - stickiness is therefore 13 resolved concepts, ML minimum 5, ML root sticky and exactly 5 minimum changes in all 1000 UFBoot trees;
+   - the former 12-resolved / UFBoot 4–5 result is retained only as the superseded pre-JPN24 baseline.
 
 3. **Freeze the trait-history table**
-   - orientation: exact resolved count, ML lower bound, UFBoot distribution and branch-localization limitation;
-   - phyllary: exact resolved count, 3-step UFBoot distribution and JPN36 localization support;
-   - stickiness: canonical state matching item 2;
+   - orientation: 20 resolved, ML 6, UFBoot 4–6, branch localization limited;
+   - phyllary: 10 resolved, exactly 3 changes across 1000 UFBoot trees, JPN36 localization support retained;
+   - stickiness: 13 resolved, ML 5, all 1000 UFBoot trees = 5;
    - colour: negative-control status under the source-balanced Japan-local stop rule.
 
 4. **Build a phenotype → candidate-function evidence table**
-   For each phenotype report:
-   - candidate function;
-   - directness of evidence;
-   - whether evidence is Cirsium-specific;
-   - whether manipulation reaches reproductive fitness;
-   - whether transport to focal Cirsium is allowed.
+   For each phenotype report candidate function, evidence directness, whether evidence is Cirsium-specific, whether manipulation reaches reproductive fitness and whether transport to focal Cirsium is allowed.
 
 5. **Keep the antagonist meta-analysis exact**
    Report pooled viable/mature-seed RR 2.674 (95% CI 2.388–2.993), k=4 independent data-generation studies, and the restriction that this does not identify a protective capitulum trait.
@@ -41,8 +36,8 @@ This paper does not need to prove adaptive convergence.
    - independent origin ≠ functional convergence;
    - functional convergence ≠ adaptive convergence.
 
-7. **Figure set must follow the biological mainline**
-   Main figures should not lead with `NULL_COUPLED` or model-family rankings.
+7. **Figure set follows the biological mainline**
+   Main figures do not lead with `NULL_COUPLED` or model-family rankings.
 
 ## Recommended main-paper figures
 
@@ -56,7 +51,6 @@ The 62-target simulation belongs in supplement or a late auxiliary panel unless 
 ## Not required for the current non-convergence paper
 
 The following are not submission prerequisites if the paper claim stops at trait-specific recurrence and functional candidates:
-
 - new nuclear population-genomic sampling;
 - new plastid sequencing;
 - new cytotype measurements;
@@ -71,12 +65,7 @@ These are next-stage discriminators, not missing controls for a carefully bounde
 
 ## Required to promote the paper to historical-origin claims
 
-To say a repeated state arose independently rather than being retained or transferred, require population-aware evidence capable of discriminating:
-
-- ancestral retention;
-- ancestral polymorphism/sorting;
-- introgression/gene flow;
-- lineage-specific origin.
+To say a repeated state arose independently rather than being retained or transferred, require population-aware evidence capable of discriminating ancestral retention, ancestral polymorphism/sorting, introgression/gene flow and lineage-specific origin.
 
 Minimum evidence layer:
 
@@ -85,7 +74,6 @@ Minimum evidence layer:
 ## Required to promote to functional convergence
 
 For at least two independent origins:
-
 1. establish independent historical origin;
 2. demonstrate the same or functionally equivalent performance pathway;
 3. show the phenotype manipulation changes that pathway in focal material.
@@ -93,7 +81,6 @@ For at least two independent origins:
 ## Required to promote to adaptive convergence
 
 For at least two independent origins, add:
-
 - comparable ecological selection regime;
 - preregistered trait → interaction/protection mediator;
 - final mature/viable-seed or equivalent reproductive-fitness response;
