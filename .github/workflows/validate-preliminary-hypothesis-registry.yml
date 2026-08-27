@@ -143,7 +143,9 @@ jobs:
               assert phrase in protocol, phrase
           for phrase in ['time-window pollination + abiotic protection','18.3%','aim2_capitulum_observation_bout_ledger_v1.csv','no all-day visitation = no orientation effect shortcut']:
               assert phrase in fieldplan, phrase
-          assert 'three unresolved new-data gates' in status
+          assert ('three unresolved new-data gates' in status.lower())
+          assert 'phenotypic decomposition' in status
+          assert 'origin discrimination' in status
 
           sampling_readme=Path('sampling/README.md').read_text(encoding='utf-8')
           assert 'Orientation timing rule' in sampling_readme
@@ -152,6 +154,7 @@ jobs:
 
           print('doctoral_centers=1')
           print('doctoral_aims=3')
+          print('doctoral_mainline_v2_alignment=true')
           print('aim2_orientation_time_window_schema_valid=true')
           print('tranche1_populations=14')
           print('tranche1_minimum_individuals=190')
