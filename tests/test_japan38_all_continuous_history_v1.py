@@ -59,3 +59,16 @@ def test_concept_exclusion_is_explicit_and_fail_closed():
     assert got["paper_japan_member_id"].tolist() == ["JPN_01", "JPN_30"]
     with pytest.raises(ValueError, match="absent from bridge"):
         mod.apply_concept_exclusions(bridge, ["JPN_99"])
+
+
+def test_csv_serialization_drops_numerical_library_tail_digits(tmp_path: Path):
+    left = pd.DataFrame({"value": [0.1417859210142532, 3.0098671428329915]})
+    right = pd.DataFrame({"value": [0.1417859210142517, 3.009867142832988]})
+    left_path = tmp_path / "left.csv"
+    right_path = tmp_path / "right.csv"
+
+    mod.write_stable_csv(left, left_path)
+    mod.write_stable_csv(right, right_path)
+
+    assert left_path.read_bytes() == right_path.read_bytes()
+    assert mod.CSV_FLOAT_FORMAT == "%.12g"

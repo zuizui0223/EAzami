@@ -93,6 +93,8 @@ jobs:
           assert x['candidate_endpoint_decision']=='coverage_audit_only_not_promoted_to_phylogenetic_history'
           assert x['tree_semantics']=='substitutions/site; not absolute time'
           assert x['branch_change_shared_lability']['common_concepts'] >= 6
+          assert all(len(token.replace('.', '').replace('-', '').replace('e', '').replace('+', '')) <= 12
+                     for token in Path('output/continuous_primary_branch_change_magnitudes_v1.csv').read_text().splitlines()[1].split(',')[3:])
           print(json.dumps(x,indent=2))
           PY
       - name: Record provenance and source bridge

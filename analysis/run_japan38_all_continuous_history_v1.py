@@ -70,6 +70,7 @@ UNIT_MODULE = {
 THRESHOLDS = (2, 5)
 MIN_TAXA = 6
 PERMUTATIONS = 10000
+CSV_FLOAT_FORMAT = "%.12g"
 
 
 def parse_args() -> argparse.Namespace:
@@ -228,6 +229,11 @@ def bh(values: list[float]) -> list[float]:
     out = np.empty(n, float)
     out[order] = np.clip(q, 0, 1)
     return out.tolist()
+
+
+def write_stable_csv(frame: pd.DataFrame, path: Path) -> None:
+    """Serialize scientific floats without platform-specific tail digits."""
+    frame.to_csv(path, index=False, float_format=CSV_FLOAT_FORMAT)
 
 
 def scalar_unit_summary(bridge, tree_path, cmap, allowed, endpoint, threshold, permutations, seed):
@@ -494,7 +500,7 @@ def main() -> int:
         }), include_groups=False)
         .reset_index()
     )
-    candidate_cov.to_csv(out / "candidate_continuous_history_coverage.csv", index=False)
+    write_stable_csv(candidate_cov, out / "candidate_continuous_history_coverage.csv")
 
     rows = []
     for threshold in THRESHOLDS:
@@ -520,13 +526,13 @@ def main() -> int:
         np.where(units["rho_patristic_vs_trait_distance"].astype(float) > 0, "positive_phylogenetic_structure", "anti_phylogenetic_structure"),
         "two_sided_not_supported",
     )
-    units.to_csv(out / "continuous_primary_phylogenetic_structure_v1.csv", index=False)
+    write_stable_csv(units, out / "continuous_primary_phylogenetic_structure_v1.csv")
 
     branch_frame, coupling, coupling_summary = branch_change_analysis(
         bridge, a.tree, cmap, allowed, threshold=2, permutations=a.permutations, seed=a.seed + 5000
     )
-    branch_frame.to_csv(out / "continuous_primary_branch_change_magnitudes_v1.csv", index=False)
-    coupling.to_csv(out / "continuous_primary_branch_change_coupling_v1.csv", index=False)
+    write_stable_csv(branch_frame, out / "continuous_primary_branch_change_magnitudes_v1.csv")
+    write_stable_csv(coupling, out / "continuous_primary_branch_change_coupling_v1.csv")
     (out / "continuous_primary_branch_change_summary_v1.json").write_text(
         json.dumps(coupling_summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
