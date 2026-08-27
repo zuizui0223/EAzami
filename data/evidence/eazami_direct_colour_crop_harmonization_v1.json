@@ -1,0 +1,51 @@
+{
+  "contract_version": "eazami_direct_colour_crop_harmonization_v1",
+  "status_date": "2026-08-27",
+  "detector_contract": {
+    "artifact_id": 8076736948,
+    "best_weight_sha256": "4078e0510532852681b65ee529cd82237b649ec99b17c4ca5f1da460a62d2bed",
+    "production_confidence_threshold": 0.25,
+    "crop_pad_ratio": 0.12
+  },
+  "measurement_contract": {
+    "azami_commit": "4e6f66675004207d331fd620d6bcd894287f316a",
+    "colour_confidence_floor": 0.55,
+    "aggregation": "usable detector crops -> image median -> locality median -> concept median; no head/image pseudo-replication",
+    "thresholds_changed_after_result": false
+  },
+  "registered_direct_images": 13,
+  "detected_images": 12,
+  "total_detector_crops": 18,
+  "total_colour_usable_crops": 11,
+  "concept_results": {
+    "JPN_05": {
+      "taxon_name": "Cirsium aomorense",
+      "registered_localities": 2,
+      "passing_localities": ["HAKODATE_20240918", "TSUGARU_20250820"],
+      "passing_locality_count": 2,
+      "promotion_rule": ">=2 independent locality/date series with >=1 image containing >=1 detector crop that passes the frozen colour confidence floor 0.55",
+      "promotion_pass": true,
+      "concept_lightness_median_across_locality_medians": 64.41176414489746,
+      "concept_chroma_median_across_locality_medians": 37.48669910430908
+    },
+    "JPN_30": {
+      "taxon_name": "Cirsium yezoense",
+      "registered_localities": 4,
+      "passing_localities": ["AIZU_20080927", "SENDAI_20221005", "TOWADA_20251018", "YANAIZU_20070929"],
+      "passing_locality_count": 4,
+      "promotion_rule": ">=2 independent locality/date series with >=1 image containing >=1 detector crop that passes the frozen colour confidence floor 0.55",
+      "promotion_pass": true,
+      "concept_lightness_median_across_locality_medians": 66.37254905700684,
+      "concept_chroma_median_across_locality_medians": 27.939539909362793
+    }
+  },
+  "locality_summaries": [
+    {"paper_japan_member_id":"JPN_05","taxon_name":"Cirsium aomorense","locality_id":"HAKODATE_20240918","registered_images":1,"passing_images":1,"locality_lightness_median":72.54901885986328,"locality_chroma_median":27.80287742614746,"locality_pass":true},
+    {"paper_japan_member_id":"JPN_05","taxon_name":"Cirsium aomorense","locality_id":"TSUGARU_20250820","registered_images":4,"passing_images":2,"locality_lightness_median":56.27450942993164,"locality_chroma_median":47.1705207824707,"locality_pass":true},
+    {"paper_japan_member_id":"JPN_30","taxon_name":"Cirsium yezoense","locality_id":"AIZU_20080927","registered_images":2,"passing_images":2,"locality_lightness_median":69.2156867980957,"locality_chroma_median":29.280221939086914,"locality_pass":true},
+    {"paper_japan_member_id":"JPN_30","taxon_name":"Cirsium yezoense","locality_id":"SENDAI_20221005","registered_images":4,"passing_images":2,"locality_lightness_median":63.72549057006836,"locality_chroma_median":12.209062576293945,"locality_pass":true},
+    {"paper_japan_member_id":"JPN_30","taxon_name":"Cirsium yezoense","locality_id":"TOWADA_20251018","registered_images":1,"passing_images":1,"locality_lightness_median":69.01960754394531,"locality_chroma_median":29.4108829498291,"locality_pass":true},
+    {"paper_japan_member_id":"JPN_30","taxon_name":"Cirsium yezoense","locality_id":"YANAIZU_20070929","registered_images":1,"passing_images":1,"locality_lightness_median":63.13725662231445,"locality_chroma_median":26.598857879638672,"locality_pass":true}
+  ],
+  "claim_boundary": "Detector-crop source harmonization only. A passing concept is a continuous Japan-local colour proxy for sensitivity analysis. This does not define W/C states, transition direction, ancestry, convergence, adaptation, evolutionary rate or molecular reactivation."
+}
