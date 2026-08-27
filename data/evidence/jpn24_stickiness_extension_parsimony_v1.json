@@ -1,0 +1,43 @@
+{
+  "contract_version": "jpn24_stickiness_extension_parsimony_v1",
+  "status_date": "2026-08-27",
+  "authority_extension": {
+    "paper_japan_member_id": "JPN_24",
+    "paper_taxon_concept": "Cirsium pseudosuffultum",
+    "assigned_stickiness_state": "sticky",
+    "source_url": "https://www.kahaku.go.jp/research/db/botany/azami/detail.html?no=109",
+    "assignment_frozen_before_history_outcome": true
+  },
+  "frozen_tree_source": {
+    "run_id": 32923076873,
+    "artifact_name": "japan38-comp1061-frozen-tree-retry-32923076873",
+    "artifact_id": 9590650447,
+    "artifact_digest": "sha256:4f7d85bed338e0cc899b3ac77da7a6abae326befd014d3a256b038a75d9bf37e"
+  },
+  "stickiness": {
+    "resolved_concepts_before": 12,
+    "resolved_concepts_after": 13,
+    "ml_minimum_unordered_steps": 5,
+    "ml_root_state_set": ["sticky"],
+    "ufboot1000_steps_min": 5,
+    "ufboot1000_steps_median": 5.0,
+    "ufboot1000_steps_max": 5,
+    "ufboot1000_steps_q05": 5,
+    "ufboot1000_steps_q95": 5,
+    "interpretation": "Adding the pre-frozen JPN24 sticky state removes the previous 4-step bootstrap sensitivity: every one of the 1000 frozen UFBoot trees now requires five unordered stickiness changes. This strengthens the recurrence lower bound but does not identify adaptive convergence or a causal selective mechanism."
+  },
+  "unchanged_controls": {
+    "orientation_resolved_concepts": 20,
+    "orientation_ml_minimum_unordered_steps": 6,
+    "orientation_ufboot_steps_min_median_max": [4,5.0,6],
+    "phyllary_resolved_concepts": 10,
+    "phyllary_ml_minimum_unordered_steps": 3,
+    "phyllary_ufboot_steps_min_median_max": [3,3.0,3]
+  },
+  "initial_validation": {
+    "run_id": 33045048766,
+    "artifact_id": 9635307454,
+    "artifact_digest": "sha256:8ff4e6b37fdb8c513eaf5736c14eae4cbef0e0e94363154ea42ca5fed50e0d83"
+  },
+  "claim_boundary": "Authority-backed categorical-state coverage plus unordered parsimony sensitivity only. The five required changes are not adaptive-convergence counts, and the authority state is not an individual-level measurement or defence-effect estimate."
+}
