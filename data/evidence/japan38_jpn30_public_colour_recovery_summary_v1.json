@@ -29,11 +29,5 @@
     "rule": "At least one image from each of both predeclared independent locality/date series must pass the frozen confidence floor 0.55.",
     "threshold_relaxation_allowed": false
   },
-  "validation": {
-    "workflow_run": 33029261980,
-    "artifact_id": 9629592082,
-    "artifact_digest": "sha256:72701446f81029ead98476016de97bf7d077c491fae74a6df915fa4d96ed2897",
-    "head_sha": "37ced0035df576543fb8361891cf955f2fb2ccf7"
-  },
-  "claim_boundary": "Licensed direct-image recovery only. JPN30 remains a one-usable-locality calibration because Yanaizu did not pass the frozen confidence floor. It is not promoted to the fifth Japan-local concept, and no discrete W/C state, ancestral colour, transition direction, adaptation, convergence, or anthocyanin reactivation is inferred."
+  "claim_boundary": "Licensed direct-image recovery only. Promotion, if passed, supplies a fifth identity-resolved Japan-local continuous-colour concept for the next population-matched history pilot; it does not establish a discrete W/C state, ancestral colour, transition direction, adaptation, convergence, or anthocyanin reactivation."
 }
