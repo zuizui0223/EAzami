@@ -1,6 +1,7 @@
 {
-  "contract_version": "capitulum_space_mechanism_v3_2026-08-27",
-  "status": "frozen_before_v3_model_family_outcomes",
+  "contract_version": "capitulum_space_mechanism_v3_1_2026-08-27",
+  "status": "amended_before_v3_model_family_outcome_inspection",
+  "amendment_note": "The first screen job was already running when the missing absolute-adequacy and minimum-separation gates were identified. No v3 result, log or artifact was inspected. This amendment supersedes that uninspected run; only a later run on this contract version is interpretable.",
   "purpose": "Discriminate mechanism-family structural sufficiency using statistically matched Azami multilevel capitulum-space targets without promoting observational patterns to causal effects.",
   "source": {
     "repository": "zuizui0223/azami",
@@ -180,6 +181,9 @@
     "seeds": [20260827, 20261827, 20262827, 20263827],
     "accept_fraction": 0.05,
     "minimum_accepted_draws": 50,
+    "maximum_accepted_primary_distance_median_for_adequacy": 1.0,
+    "minimum_relative_median_distance_improvement_for_focal_promotion": 0.10,
+    "minimum_replication_pattern_rate_for_adequacy": 0.75,
     "ranking_order": [
       "primary_distance_median",
       "replication_pattern_rate_descending",
@@ -191,11 +195,14 @@
   "promotion_rule": {
     "common_vs_modular_decision_requires": [
       "same_estimand_for_all_seven_primary_targets",
+      "winning_accepted_primary_distance_median_at_or_below_1_0",
+      "at_least_10_percent_relative_median_distance_improvement",
       "primary_distance_separation_across_all_declared_seeds",
+      "winning_replication_pattern_rate_at_or_above_0_75",
       "replication_pattern_rate_not_worse_for_winning_family",
       "existing_independent_literature_heldout_rate_not_worse_for_winning_family"
     ],
-    "tie_rule": "If bootstrap or seed-wise ranking overlaps materially, retain common_lability_vs_modular_evolvability as unresolved.",
+    "tie_rule": "If absolute adequacy, minimum separation, replication adequacy, bootstrap or seed-wise ranking is not satisfied, retain common_lability_vs_modular_evolvability as unresolved.",
     "causal_boundary": "No model-family rank establishes functional or genetic modularity, selection, adaptation, plasticity, defence, direct climate causation or a unique mechanism."
   }
 }
