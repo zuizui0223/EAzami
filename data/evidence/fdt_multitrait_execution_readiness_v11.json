@@ -1,0 +1,49 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v11",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v10.json",
+  "inheritance": "All discrete-module histories, global continuous-colour results, negative present-day abiotic species-proxy gates, chun Cirsium claim gate, JPN38 licensing routes, and JPN29 specimen-identity blocker from v10 remain in force unless explicitly updated below.",
+  "colour": {
+    "japan_local_history_ready": false,
+    "minimum_clean_identity_resolved_concepts_current": 4,
+    "minimum_required_for_next_population_matched_history": 5,
+    "jpn30_public_japan_screen": {
+      "paper_japan_member_id": "JPN_30",
+      "taxon_name": "Cirsium yezoense",
+      "canonical_sources": "data/evidence/japan38_jpn30_public_colour_recovery_sources_v1.csv",
+      "canonical_summary": "data/evidence/japan38_jpn30_public_colour_recovery_summary_v1.json",
+      "canonical_per_image": "data/evidence/japan38_jpn30_public_colour_recovery_per_image_v1.csv",
+      "predeclared_independent_locality_series": 2,
+      "colour_confidence_floor": 0.55,
+      "aizu_usable_images": 1,
+      "yanaizu_usable_images": 0,
+      "usable_locality_series": 1,
+      "promotion_pass": false,
+      "result": "Aizu 2008-09-27 yielded one usable image (confidence 0.61284, L*=65.49); Yanaizu 2007-09-29 yielded no image above the frozen 0.55 floor (confidence 0.37016). The threshold was not relaxed.",
+      "validation": {
+        "workflow_run": 33029261980,
+        "artifact_id": 9629592082,
+        "artifact_digest": "sha256:72701446f81029ead98476016de97bf7d077c491fae74a6df915fa4d96ed2897",
+        "head_sha": "37ced0035df576543fb8361891cf955f2fb2ccf7"
+      },
+      "status": "licensed_two-locality_source_set_found_but_only_one_locality_passes_frozen_image_quality_gate"
+    },
+    "status": "Japan-local colour history remains blocked at four clean concepts. JPN30 is now a licensed one-usable-locality calibration rather than an untested candidate; one additional independent JPN30 locality with a usable image would still be sufficient to promote JPN30 without waiting for JPN38 or JPN29."
+  },
+  "priority_reordering": {
+    "first": "Search for a third independent Japan-local Cirsium yezoense live-flower source with compatible reuse rights, because JPN30 already has one passing locality and needs only one additional passing locality under the frozen promotion rule.",
+    "second": "In parallel retain the JPN38 permission/license routes and JPN29 PE01523822 annotation route. The first route that yields a fifth clean concept unlocks the next colour-history run.",
+    "third": "If no additional JPN30 source is found, audit other exact Japan38 colour concepts with current sparse coverage (JPN05, JPN15, JPN22, JPN26, JPN27, JPN32) for independently licensed Japan-local live images before collecting new field data.",
+    "fourth": "Once the fifth concept is secured, rerun population-matched continuous-lightness history before constructing discrete W/C/polymorphism transition models.",
+    "do_not_repeat": "Do not lower the 0.55 image-quality threshold, count two Aizu photographs as independent localities, or treat the failed Yanaizu image as usable because its visible colour appears plausible."
+  },
+  "canonical_results": {
+    "jpn30_public_japan_screen": "data/evidence/japan38_jpn30_public_colour_recovery_summary_v1.json",
+    "jpn30_public_japan_per_image": "data/evidence/japan38_jpn30_public_colour_recovery_per_image_v1.csv",
+    "jpn30_public_japan_sources": "data/evidence/japan38_jpn30_public_colour_recovery_sources_v1.csv",
+    "chun_claim_gate": "data/evidence/cirsium_colour_history_claim_gate_v1.json",
+    "jpn38_external_live_image_candidates": "data/evidence/jpn38_external_live_image_candidates_v1.csv",
+    "jpn29_primary_source_trace": "data/evidence/jpn29_pe01523822_primary_source_trace_v1.json"
+  },
+  "claim_boundary": "JPN30 failed its predeclared two-locality promotion gate and remains a calibration only. No threshold relaxation, discrete colour-state assignment, ancestral-state inference, transition-direction claim, adaptation claim, convergence claim, or anthocyanin-reactivation claim is licensed by this screen."
+}

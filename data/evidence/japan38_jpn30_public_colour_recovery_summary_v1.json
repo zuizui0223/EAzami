@@ -1,0 +1,33 @@
+{
+  "contract_version": "japan38_jpn30_public_colour_recovery_v1",
+  "paper_japan_member_id": "JPN_30",
+  "taxon_name": "Cirsium yezoense",
+  "registered_automated_sources": 3,
+  "downloaded_images_measured": 3,
+  "predeclared_independent_locality_series": 2,
+  "colour_confidence_floor": 0.55,
+  "locality_summaries": [
+    {
+      "locality_id": "AIZU_20080927",
+      "usable_images": 1,
+      "lightness_median": 65.49019622802734,
+      "chroma_median": 47.16990661621094
+    },
+    {
+      "locality_id": "YANAIZU_20070929",
+      "usable_images": 0,
+      "lightness_median": null,
+      "chroma_median": null
+    }
+  ],
+  "usable_locality_series": 1,
+  "concept_lightness_median_across_locality_medians": 65.49019622802734,
+  "concept_lightness_mad_across_locality_medians": 0.0,
+  "concept_chroma_median_across_locality_medians": 47.16990661621094,
+  "promotion_gate": {
+    "japan_local_colour_bridge_ready_from_this_recovery": false,
+    "rule": "At least one image from each of both predeclared independent locality/date series must pass the frozen confidence floor 0.55.",
+    "threshold_relaxation_allowed": false
+  },
+  "claim_boundary": "Licensed direct-image recovery only. Promotion, if passed, supplies a fifth identity-resolved Japan-local continuous-colour concept for the next population-matched history pilot; it does not establish a discrete W/C state, ancestral colour, transition direction, adaptation, convergence, or anthocyanin reactivation."
+}
