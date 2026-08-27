@@ -1,0 +1,26 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v26",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v25.json",
+  "inheritance": "PR #119 scalar-target ranking and PR #120 held-out NULL falsification are both frozen. All field, Japan38 history, colour stop-rule and absolute-time gates remain in force.",
+  "support_geometry_diagnostic": {
+    "contract": "data/evidence/azami_capitulum_v3_support_geometry_diagnostic_contract_v1.json",
+    "status": "preregistered_before_diagnostic_screen",
+    "post_heldout_outcome_design": true,
+    "candidate_families": 5,
+    "paired_draws": 24,
+    "permutations_per_test": 99,
+    "outcome_inspected": false,
+    "question": "Does adding process effects at both scales or only among taxa, with shared or independent scale coefficients, provide a diagnostically adequate minimal explanation of the frozen 8-cell support geometry?",
+    "may_change_v1_winner": false,
+    "next_gate": "Run once and freeze. If no candidate is diagnostically adequate, stop this generator family and design a new version rather than retuning it."
+  },
+  "field_line": {
+    "first_executable_target": "JPN_36 phyllary-access pilot after authorization/census/device gates",
+    "highest_information_stickiness_design": "JPN_15 sticky neutralization within species with JPN_06 nonsticky 100/100 sister as external ancestry-matched comparator",
+    "execution_authorized": false
+  },
+  "coverage_repairs_remaining": ["JPN_15 phyllary posture", "JPN_24 stickiness"],
+  "absolute_time": "FDT5/FDT6 remain blocked by calibration limitations.",
+  "claim_boundary": "This is a post-heldout diagnostic, not confirmatory model selection. It cannot change the frozen scalar-target winner or identify a causal environmental process."
+}
