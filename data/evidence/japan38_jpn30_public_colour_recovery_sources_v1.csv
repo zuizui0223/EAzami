@@ -1,0 +1,4 @@
+source_id,paper_japan_member_id,taxon_name,source_page_url,location,locality_id,observation_date,author,license,automated_use,measurement_role
+JPN30_COMMONS_AIZU_20080927_1,JPN_30,Cirsium yezoense,https://commons.wikimedia.org/wiki/File:Cirsium_yezoense_080927.JPG,"Fukushima, Aizu region, Japan",AIZU_20080927,2008-09-27,Qwert1234,CC BY-SA 4.0,true,japan_local_population_proxy_screen
+JPN30_COMMONS_AIZU_20080927_2,JPN_30,Cirsium yezoense,https://commons.wikimedia.org/wiki/File:Cirsium_yezoense_080927_2.JPG,"Fukushima, Aizu region, Japan",AIZU_20080927,2008-09-27,Qwert1234,CC BY-SA 4.0,true,japan_local_population_proxy_screen
+JPN30_COMMONS_YANAIZU_20070929,JPN_30,Cirsium yezoense,https://commons.wikimedia.org/wiki/File:%E3%82%B5%E3%83%AF%E3%82%A2%E3%82%B6%E3%83%9F0929_Cirsium_yezoense.JPG,"Yanaizu, Kawanuma District, Fukushima, Japan",YANAIZU_20070929,2007-09-29,Qwert1234,CC BY-SA 4.0,true,japan_local_population_proxy_screen
