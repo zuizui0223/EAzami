@@ -95,7 +95,8 @@ jobs:
                   focal['replication_not_worse'],
                   focal['independent_v2_heldout_not_worse'],
               ])
-          assert 'superseded' in result['superseded_uninspected_run_boundary']
+          boundary = result['superseded_uninspected_run_boundary']
+          assert 'uninspected' in boundary and 'supersed' in boundary
           assert 'Not a likelihood' in result['interpretation_boundary']
           print('v3_1_screen_complete=true')
           print('ranking=', result['ranking'])
@@ -103,6 +104,7 @@ jobs:
           print('focal_decision=', focal['registered_decision'])
           PY
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: capitulum-space-mechanism-v3-1-screen
           path: /tmp/capitulum_space_v3_1
