@@ -11,6 +11,9 @@ on:
       - "data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv"
       - "data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv"
       - "data/evidence/macro_interaction_pattern_reduction_result_v2.json"
+      - "data/evidence/capitulum_space_mechanism_v3_1_result_summary.json"
+      - "docs/CAPITULUM_SPACE_MECHANISM_V3_CONTRACT.md"
+      - "docs/CAPITULUM_SPACE_MECHANISM_V3_1_RESULT.md"
       - ".github/workflows/run-capitulum-space-mechanism-v3.yml"
   workflow_dispatch:
     inputs:
@@ -102,6 +105,40 @@ jobs:
           print('ranking=', result['ranking'])
           print('adequate_families=', result['adequate_families'])
           print('focal_decision=', focal['registered_decision'])
+          PY
+      - name: Reproduce frozen scientific result byte-for-byte
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          import math
+          from pathlib import Path
+
+          out = Path('/tmp/capitulum_space_v3_1')
+          result_path = out / 'capitulum_space_mechanism_v3_result.json'
+          draws_path = out / 'capitulum_space_mechanism_v3_draws.csv'
+          expected = json.load(open('data/evidence/capitulum_space_mechanism_v3_1_result_summary.json'))
+          observed = json.load(result_path.open())
+
+          def digest(path):
+              return hashlib.sha256(path.read_bytes()).hexdigest()
+
+          assert digest(result_path) == expected['result_json_sha256']
+          assert digest(draws_path) == expected['draws_csv_sha256']
+          assert observed['ranking'] == expected['ranking']
+          assert observed['adequate_families'] == expected['adequate_families']
+          assert observed['focal_common_vs_modular'] == expected['focal_common_vs_modular']
+          by = {row['family']: row for row in observed['families']}
+          for frozen in expected['families']:
+              row = by[frozen['family']]
+              assert math.isclose(row['primary_distance_median'], frozen['accepted_primary_distance_median'], rel_tol=0, abs_tol=1e-12)
+              assert math.isclose(row['replication_pattern_rate_mean'], frozen['accepted_replication_pattern_rate_mean'], rel_tol=0, abs_tol=1e-12)
+              assert math.isclose(row['existing_v2_heldout_rate'], frozen['existing_v2_heldout_rate'], rel_tol=0, abs_tol=1e-12)
+          assert observed['adequate_families'] == []
+          assert observed['focal_common_vs_modular']['registered_decision'] == 'unresolved'
+          print('v3_1_frozen_result_reproduced=true')
+          print('result_sha256=', digest(result_path))
+          print('draws_sha256=', digest(draws_path))
           PY
       - uses: actions/upload-artifact@v4
         if: always()
