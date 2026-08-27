@@ -6,6 +6,8 @@ on:
       - "analysis/simulate_azami_capitulum_v3_conditional.py"
       - "analysis/extract_azami_v3_environment_design.py"
       - "data/evidence/azami_capitulum_v3_generator_contract_v1.json"
+      - "data/evidence/azami_capitulum_v3_generator_interface_validation_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v21.json"
       - "tests/test_simulate_azami_capitulum_v3_conditional.py"
       - ".github/workflows/validate-azami-capitulum-v3-conditional-generator-v1.yml"
   workflow_dispatch:
@@ -47,7 +49,7 @@ jobs:
         run: |
           mkdir -p result
           python - <<'PY'
-          import json, os
+          import json
           from pathlib import Path
           status = '${{ steps.upstream.outcome }}'
           files = [str(p) for p in Path('upstream_azami').rglob('*') if p.is_file()] if Path('upstream_azami').exists() else []
@@ -101,6 +103,25 @@ jobs:
           x=json.loads(p.read_text())
           x['environment_design_interface_validation']='passed_all_14_families_exact_62_rows'
           p.write_text(json.dumps(x,indent=2)+'\n')
+          PY
+
+      - name: Assert frozen interface validation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          frozen=json.loads(Path('data/evidence/azami_capitulum_v3_generator_interface_validation_v1.json').read_text())
+          availability=json.loads(Path('result/upstream_design_availability.json').read_text())
+          assert frozen['model_families_frozen']==14
+          assert frozen['expected_estimands_per_family']==62
+          assert frozen['target_distance_or_ranking_generated'] is False
+          assert availability['download_outcome']=='success'
+          assert availability['environment_design_interface_validation']=='passed_all_14_families_exact_62_rows'
+          design=json.loads(Path('result/azami_v3_environment_design_report.json').read_text())
+          assert design['derived_sha256']==frozen['upstream_environment_design']['derived_degeolocated_design_sha256']
+          assert design['rows']==frozen['upstream_environment_design']['rows']==1874
+          assert design['taxa']==frozen['upstream_environment_design']['taxa']==124
+          print('frozen_generator_interface_valid=true')
           PY
 
       - name: Confirm no target-distance output was created
