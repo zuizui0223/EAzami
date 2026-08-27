@@ -1,0 +1,45 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v13",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v12.json",
+  "inheritance": "All discrete-module histories, global continuous-colour results, negative present-day abiotic species-proxy gates, chun Cirsium claim gate, JPN38 permission/licensing routes, JPN29 specimen-identity blocker, JPN30 two-locality promotion, and the five-concept local input panel from v12 remain in force unless explicitly updated below.",
+  "colour": {
+    "japan_local_continuous_history_pilot_ready": true,
+    "japan_local_discrete_transition_history_ready": false,
+    "minimum_clean_identity_resolved_concepts_current": 5,
+    "population_matched_lightness_concepts": ["JPN_17", "JPN_23", "JPN_30", "JPN_36", "JPN_37"],
+    "japan5_population_matched_history": {
+      "canonical_result": "data/evidence/japan5_population_matched_lightness_history_v1.json",
+      "rho": -0.10303030303030303,
+      "exact_negative_tail_p": 0.48333333333333334,
+      "exact_two_sided_p": 0.8166666666666667,
+      "directional_replication_pass": false,
+      "strict_two_sided_replication_pass": false,
+      "leave_one_out_all_negative": false,
+      "leave_one_out_sign_reversal_when_omitting": ["JPN_23"],
+      "interpretation": "The strong global species-proxy anti-phylogenetic lightness pattern does not replicate in the first five identity-resolved Japan-local concepts. The observed rho is weakly negative, nonsignificant under all 120 exact label permutations, and unstable to omission of JPN23.",
+      "validation": {
+        "workflow_run": 33030368228,
+        "artifact_id": 9629986569,
+        "artifact_digest": "sha256:1c2d6ae6cd855ab38bbb92c0c9b7ea832c638ce8dc82bc340f24ebd014ae689e",
+        "source_head_sha": "6a83beacb2ba505d1db74412b069e1bd597d9772"
+      }
+    },
+    "status": "The first five-concept population-matched Japan-local lightness history has been executed and is negative/unstable. Colour remains a continuous local module under active coverage expansion; no discrete transition or reactivation inference is licensed."
+  },
+  "priority_reordering": {
+    "first": "Freeze and retain the negative Japan5 result; do not change the panel, sign, transformation or p-value rule post hoc.",
+    "second": "Expand identity-resolved Japan-local colour coverage beyond five concepts, prioritizing JPN05 and other exact sparse concepts. Reassess whether direct external images can be processed through the same head-detection/crop stage used by the frozen Azami cohort before colour measurement so source classes are more comparable.",
+    "third": "Repeat the population-matched continuous-lightness history only after at least one additional clean concept is admitted under a predeclared gate; compare the five-concept result as a frozen baseline rather than replacing it.",
+    "fourth": "Keep JPN38 permission and JPN29 specimen identity as parallel expansion routes. Do not discretize colour or infer W/C transition direction until continuous local history is characterized with broader coverage and an independently frozen state ontology.",
+    "do_not_repeat": "Do not lower the 0.55 colour-confidence floor, count multiple images from one observation as population replicates, remove JPN23 because its omission changes the sign, or rerun the same five-concept panel with alternate transformations merely to obtain significance."
+  },
+  "canonical_results": {
+    "japan5_population_matched_input": "data/evidence/japan5_population_matched_lightness_input_v1.csv",
+    "japan5_population_matched_history": "data/evidence/japan5_population_matched_lightness_history_v1.json",
+    "jpn30_unlock": "data/evidence/japan38_open_candidate_colour_measurement_summary_v1.json",
+    "sparse_open_source_sweep": "data/evidence/japan38_sparse_colour_open_source_sweep_v1.json",
+    "chun_claim_gate": "data/evidence/cirsium_colour_history_claim_gate_v1.json"
+  },
+  "claim_boundary": "The first Japan-local five-concept test is a negative anti-phylogenetic/overdispersion replication result on a substitution-length tree. It does not prove absence of repeated colour evolution, selection or adaptation; it blocks promotion of the prior global lightness pattern into a Japan-radiation conclusion at current coverage. No ancestral colour, discrete W/C transition, convergence, adaptive radiation or molecular reactivation is inferred."
+}
