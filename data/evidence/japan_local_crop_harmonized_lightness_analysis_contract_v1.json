@@ -1,0 +1,70 @@
+{
+  "contract_version": "japan_local_crop_harmonized_lightness_analysis_contract_v1",
+  "status_date": "2026-08-27",
+  "frozen_before_execution": true,
+  "tree_contract": {
+    "source": "frozen Japan38 Comp1061 compatibility ML tree",
+    "workflow_run": 32845725038,
+    "artifact_name": "japan38-comp1061-frozen-tree-retry-32845725038",
+    "branch_length_semantics": "substitutions/site; not absolute time"
+  },
+  "common_gate": {
+    "directional_rule": "rho < 0 AND exact negative-tail p <= 0.05 AND all leave-one-out rho < 0",
+    "strict_two_sided_rule": "directional rule passes AND exact two-sided |rho| p <= 0.05",
+    "trait_transform": "absolute pairwise difference in raw CIELAB L*; no post-result transform",
+    "thresholds_or_panel_may_change_after_result": false
+  },
+  "panels": {
+    "harmonized5": {
+      "analysis_role": "source-harmonization sensitivity against the frozen five-concept baseline; not a replacement of the baseline",
+      "concept_order": ["JPN_17", "JPN_23", "JPN_30", "JPN_36", "JPN_37"],
+      "lightness": {
+        "JPN_17": 68.23529434204102,
+        "JPN_23": 63.235294342041016,
+        "JPN_30": 66.37254905700684,
+        "JPN_36": 59.607842445373535,
+        "JPN_37": 73.43136978149414
+      },
+      "source_class": {
+        "JPN_17": "Azami_Japan_window_strict_spatial_observations",
+        "JPN_23": "Azami_Japan_window_strict_spatial_observations",
+        "JPN_30": "production_detector_crop_harmonized_direct_locality_medians",
+        "JPN_36": "Azami_Japan_window_strict_spatial_observations",
+        "JPN_37": "Azami_Japan_window_strict_spatial_observations"
+      },
+      "expected_exact_permutations": 120,
+      "frozen_baseline_reference": "data/evidence/japan5_population_matched_lightness_history_v1.json",
+      "baseline_jpn30_lightness": 62.54901885986328,
+      "harmonized_jpn30_lightness": 66.37254905700684
+    },
+    "expanded6": {
+      "analysis_role": "first coverage expansion beyond the frozen five-concept panel using an independently admitted sixth concept",
+      "concept_order": ["JPN_05", "JPN_17", "JPN_23", "JPN_30", "JPN_36", "JPN_37"],
+      "lightness": {
+        "JPN_05": 64.41176414489746,
+        "JPN_17": 68.23529434204102,
+        "JPN_23": 63.235294342041016,
+        "JPN_30": 66.37254905700684,
+        "JPN_36": 59.607842445373535,
+        "JPN_37": 73.43136978149414
+      },
+      "source_class": {
+        "JPN_05": "production_detector_crop_harmonized_direct_locality_medians",
+        "JPN_17": "Azami_Japan_window_strict_spatial_observations",
+        "JPN_23": "Azami_Japan_window_strict_spatial_observations",
+        "JPN_30": "production_detector_crop_harmonized_direct_locality_medians",
+        "JPN_36": "Azami_Japan_window_strict_spatial_observations",
+        "JPN_37": "Azami_Japan_window_strict_spatial_observations"
+      },
+      "expected_exact_permutations": 720,
+      "sixth_concept_gate": {
+        "paper_japan_member_id": "JPN_05",
+        "taxon_name": "Cirsium aomorense",
+        "passing_localities": ["HAKODATE_20240918", "TSUGARU_20250820"],
+        "passing_locality_count": 2,
+        "source_reference": "data/evidence/eazami_direct_colour_crop_harmonization_v1.json"
+      }
+    }
+  },
+  "claim_boundary": "These panels test phylogenetic structure of continuous Japan-local L* proxies only. Passing or failing does not identify convergence, adaptation, ancestral colour, discrete W/C transitions, evolutionary rate, adaptive radiation or molecular reactivation. The frozen original five-concept negative result remains canonical baseline regardless of sensitivity outcomes."
+}

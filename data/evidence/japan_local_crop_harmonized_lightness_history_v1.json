@@ -1,0 +1,68 @@
+{
+  "contract_version": "japan_local_crop_harmonized_lightness_history_v1",
+  "status_date": "2026-08-27",
+  "frozen_contract": "data/evidence/japan_local_crop_harmonized_lightness_analysis_contract_v1.json",
+  "frozen_baseline": "data/evidence/japan5_population_matched_lightness_history_v1.json",
+  "tree_contract": {
+    "source": "frozen Japan38 Comp1061 compatibility ML tree",
+    "workflow_run": 32845725038,
+    "artifact_name": "japan38-comp1061-frozen-tree-retry-32845725038",
+    "branch_length_semantics": "substitutions/site; not absolute time"
+  },
+  "panels": {
+    "harmonized5": {
+      "analysis_role": "source-harmonization sensitivity against the frozen five-concept baseline; not a replacement of the baseline",
+      "concept_panel": ["JPN_17", "JPN_23", "JPN_30", "JPN_36", "JPN_37"],
+      "n_concepts": 5,
+      "lightness_values": {"JPN_17":68.23529434204102,"JPN_23":63.235294342041016,"JPN_30":66.37254905700684,"JPN_36":59.607842445373535,"JPN_37":73.43136978149414},
+      "source_class": {"JPN_17":"Azami_Japan_window_strict_spatial_observations","JPN_23":"Azami_Japan_window_strict_spatial_observations","JPN_30":"production_detector_crop_harmonized_direct_locality_medians","JPN_36":"Azami_Japan_window_strict_spatial_observations","JPN_37":"Azami_Japan_window_strict_spatial_observations"},
+      "raw_tree_tips": {"JPN_17":"J38S017","JPN_23":"J38S024","JPN_30":"J38S031","JPN_36":"J38S037","JPN_37":"J38S038"},
+      "primary_signal": {"rho":-0.01818181818181818,"exact_permutations":120,"negative_tail_p":0.5333333333333333,"positive_tail_p":0.49166666666666664,"two_sided_abs_p":0.9833333333333333,"null_min_rho":-0.6363636363636362,"null_max_rho":0.8787878787878788},
+      "leave_one_out": {"rho_by_omitted_concept":{"JPN_17":-0.028571428571428574,"JPN_23":0.2571428571428572,"JPN_30":-0.3142857142857143,"JPN_36":0.4285714285714286,"JPN_37":-0.2571428571428572},"min_rho":-0.3142857142857143,"max_rho":0.4285714285714286,"all_negative":false,"all_positive":false},
+      "pairwise_values": [
+        {"concept_a":"JPN_17","concept_b":"JPN_23","patristic_distance":0.025898444700000002,"absolute_lightness_difference":5.0},
+        {"concept_a":"JPN_17","concept_b":"JPN_30","patristic_distance":0.0145463118,"absolute_lightness_difference":1.8627452850341797},
+        {"concept_a":"JPN_23","concept_b":"JPN_30","patristic_distance":0.027992624899999995,"absolute_lightness_difference":3.1372547149658203},
+        {"concept_a":"JPN_17","concept_b":"JPN_36","patristic_distance":0.0164770598,"absolute_lightness_difference":8.62745189666748},
+        {"concept_a":"JPN_23","concept_b":"JPN_36","patristic_distance":0.029923372899999995,"absolute_lightness_difference":3.6274518966674805},
+        {"concept_a":"JPN_30","concept_b":"JPN_36","patristic_distance":0.0123178702,"absolute_lightness_difference":6.764706611633301},
+        {"concept_a":"JPN_17","concept_b":"JPN_37","patristic_distance":0.0230712421,"absolute_lightness_difference":5.196075439453125},
+        {"concept_a":"JPN_23","concept_b":"JPN_37","patristic_distance":0.036517555199999996,"absolute_lightness_difference":10.196075439453125},
+        {"concept_a":"JPN_30","concept_b":"JPN_37","patristic_distance":0.0180427487,"absolute_lightness_difference":7.058820724487305},
+        {"concept_a":"JPN_36","concept_b":"JPN_37","patristic_distance":0.0208428005,"absolute_lightness_difference":13.823527336120605}
+      ],
+      "predeclared_gates": {"directional_rule":"rho < 0 AND exact negative-tail p <= 0.05 AND all leave-one-out rho < 0","directional_pass":false,"strict_two_sided_rule":"directional rule passes AND exact two-sided |rho| p <= 0.05","strict_two_sided_pass":false,"thresholds_or_panel_changed_after_result":false}
+    },
+    "expanded6": {
+      "analysis_role": "first coverage expansion beyond the frozen five-concept panel using an independently admitted sixth concept",
+      "concept_panel": ["JPN_05", "JPN_17", "JPN_23", "JPN_30", "JPN_36", "JPN_37"],
+      "n_concepts": 6,
+      "lightness_values": {"JPN_05":64.41176414489746,"JPN_17":68.23529434204102,"JPN_23":63.235294342041016,"JPN_30":66.37254905700684,"JPN_36":59.607842445373535,"JPN_37":73.43136978149414},
+      "source_class": {"JPN_05":"production_detector_crop_harmonized_direct_locality_medians","JPN_17":"Azami_Japan_window_strict_spatial_observations","JPN_23":"Azami_Japan_window_strict_spatial_observations","JPN_30":"production_detector_crop_harmonized_direct_locality_medians","JPN_36":"Azami_Japan_window_strict_spatial_observations","JPN_37":"Azami_Japan_window_strict_spatial_observations"},
+      "raw_tree_tips": {"JPN_05":"J38S005","JPN_17":"J38S017","JPN_23":"J38S024","JPN_30":"J38S031","JPN_36":"J38S037","JPN_37":"J38S038"},
+      "primary_signal": {"rho":0.06071428571428571,"exact_permutations":720,"negative_tail_p":0.6166666666666667,"positive_tail_p":0.3861111111111111,"two_sided_abs_p":0.8680555555555556,"null_min_rho":-0.5785714285714285,"null_max_rho":0.932142857142857},
+      "leave_one_out": {"rho_by_omitted_concept":{"JPN_05":-0.01818181818181818,"JPN_17":0.06666666666666665,"JPN_23":0.5393939393939393,"JPN_30":-0.09090909090909088,"JPN_36":0.24848484848484845,"JPN_37":-0.28484848484848485},"min_rho":-0.28484848484848485,"max_rho":0.5393939393939393,"all_negative":false,"all_positive":false},
+      "pairwise_values": [
+        {"concept_a":"JPN_05","concept_b":"JPN_17","patristic_distance":0.0166930935,"absolute_lightness_difference":3.8235301971435547},
+        {"concept_a":"JPN_05","concept_b":"JPN_23","patristic_distance":0.030139406599999995,"absolute_lightness_difference":1.1764698028564453},
+        {"concept_a":"JPN_17","concept_b":"JPN_23","patristic_distance":0.025898444700000002,"absolute_lightness_difference":5.0},
+        {"concept_a":"JPN_05","concept_b":"JPN_30","patristic_distance":0.011664600099999999,"absolute_lightness_difference":1.960784912109375},
+        {"concept_a":"JPN_17","concept_b":"JPN_30","patristic_distance":0.0145463118,"absolute_lightness_difference":1.8627452850341797},
+        {"concept_a":"JPN_23","concept_b":"JPN_30","patristic_distance":0.027992624899999995,"absolute_lightness_difference":3.1372547149658203},
+        {"concept_a":"JPN_05","concept_b":"JPN_36","patristic_distance":0.0144646519,"absolute_lightness_difference":4.803921699523926},
+        {"concept_a":"JPN_17","concept_b":"JPN_36","patristic_distance":0.0164770598,"absolute_lightness_difference":8.62745189666748},
+        {"concept_a":"JPN_23","concept_b":"JPN_36","patristic_distance":0.029923372899999995,"absolute_lightness_difference":3.6274518966674805},
+        {"concept_a":"JPN_30","concept_b":"JPN_36","patristic_distance":0.0123178702,"absolute_lightness_difference":6.764706611633301},
+        {"concept_a":"JPN_05","concept_b":"JPN_37","patristic_distance":0.0179285892,"absolute_lightness_difference":9.01960563659668},
+        {"concept_a":"JPN_17","concept_b":"JPN_37","patristic_distance":0.0230712421,"absolute_lightness_difference":5.196075439453125},
+        {"concept_a":"JPN_23","concept_b":"JPN_37","patristic_distance":0.036517555199999996,"absolute_lightness_difference":10.196075439453125},
+        {"concept_a":"JPN_30","concept_b":"JPN_37","patristic_distance":0.0180427487,"absolute_lightness_difference":7.058820724487305},
+        {"concept_a":"JPN_36","concept_b":"JPN_37","patristic_distance":0.0208428005,"absolute_lightness_difference":13.823527336120605}
+      ],
+      "predeclared_gates": {"directional_rule":"rho < 0 AND exact negative-tail p <= 0.05 AND all leave-one-out rho < 0","directional_pass":false,"strict_two_sided_rule":"directional rule passes AND exact two-sided |rho| p <= 0.05","strict_two_sided_pass":false,"thresholds_or_panel_changed_after_result":false}
+    }
+  },
+  "baseline_comparison": {"baseline_rho":-0.10303030303030303,"baseline_negative_tail_p":0.48333333333333334,"baseline_directional_pass":false,"harmonized5_rho":-0.01818181818181818,"harmonized5_negative_tail_p":0.5333333333333333,"harmonized5_directional_pass":false,"jpn30_lightness_shift_crop_minus_full_image":3.8235301971435547},
+  "coverage_expansion": {"baseline_n_concepts":5,"expanded_n_concepts":6,"added_concept":"JPN_05","expanded6_directional_pass":false,"expanded6_strict_two_sided_pass":false},
+  "claim_boundary": "These panels test phylogenetic structure of continuous Japan-local L* proxies only. Passing or failing does not identify convergence, adaptation, ancestral colour, discrete W/C transitions, evolutionary rate, adaptive radiation or molecular reactivation. The frozen original five-concept negative result remains canonical baseline regardless of sensitivity outcomes."
+}

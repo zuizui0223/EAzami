@@ -1,0 +1,77 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v14",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v13.json",
+  "inheritance": "All discrete-module histories, global continuous-colour results, negative present-day abiotic species-proxy gates, chun Cirsium claim gate, JPN38 permission/licensing routes, JPN29 specimen-identity blocker, and the frozen original Japan5 negative result from v13 remain in force unless explicitly updated below.",
+  "colour": {
+    "japan_local_continuous_history_pilot_ready": true,
+    "japan_local_discrete_transition_history_ready": false,
+    "minimum_clean_identity_resolved_concepts_current": 6,
+    "crop_harmonized_direct_evidence": {
+      "canonical_result": "data/evidence/eazami_direct_colour_crop_harmonization_v1.json",
+      "canonical_provenance": "data/evidence/eazami_direct_colour_crop_harmonization_provenance_v1.json",
+      "production_detector_artifact": 8076736948,
+      "production_detector_sha256": "4078e0510532852681b65ee529cd82237b649ec99b17c4ca5f1da460a62d2bed",
+      "detector_confidence": 0.25,
+      "crop_pad_ratio": 0.12,
+      "colour_confidence_floor": 0.55,
+      "jpn05_promotion_pass": true,
+      "jpn05_passing_localities": 2,
+      "jpn05_lightness": 64.41176414489746,
+      "jpn30_promotion_pass": true,
+      "jpn30_passing_localities": 4,
+      "jpn30_lightness": 66.37254905700684,
+      "jpn30_prior_full_image_lightness": 62.54901885986328,
+      "interpretation": "Applying the frozen Azami production detector/crop stage to every current licensed direct image removes the previous source-processing mismatch. JPN05 now clears the two-locality gate and becomes the sixth clean Japan-local continuous-colour concept. JPN30 remains admitted but its L* shifts upward by 3.8235 units relative to the earlier whole-image proxy."
+    },
+    "crop_harmonized_history": {
+      "canonical_contract": "data/evidence/japan_local_crop_harmonized_lightness_analysis_contract_v1.json",
+      "canonical_result": "data/evidence/japan_local_crop_harmonized_lightness_history_v1.json",
+      "harmonized5": {
+        "concepts": ["JPN_17", "JPN_23", "JPN_30", "JPN_36", "JPN_37"],
+        "rho": -0.01818181818181818,
+        "exact_negative_tail_p": 0.5333333333333333,
+        "exact_two_sided_p": 0.9833333333333333,
+        "directional_pass": false,
+        "strict_two_sided_pass": false,
+        "leave_one_out_all_negative": false,
+        "interpretation": "Replacing only JPN30 with its production-crop proxy makes the already weak local negative signal approximately zero. The frozen Japan5 negative conclusion is therefore not an artifact of the earlier whole-image JPN30 proxy."
+      },
+      "expanded6": {
+        "concepts": ["JPN_05", "JPN_17", "JPN_23", "JPN_30", "JPN_36", "JPN_37"],
+        "rho": 0.06071428571428571,
+        "exact_permutations": 720,
+        "exact_negative_tail_p": 0.6166666666666667,
+        "exact_two_sided_p": 0.8680555555555556,
+        "directional_pass": false,
+        "strict_two_sided_pass": false,
+        "leave_one_out_all_negative": false,
+        "interpretation": "Adding independently admitted JPN05 does not recover the global anti-phylogenetic lightness pattern; the six-concept estimate is slightly positive and unstable under leave-one-out."
+      },
+      "validation": {
+        "workflow_run": 33031447517,
+        "artifact_id": 9630378600,
+        "artifact_digest": "sha256:2991f04ec20715bc889d80a474b74a0f037ebbc0ff8394936a75c377c77c05ce",
+        "source_head_sha": "8331db1d3b3b957c949aeecc49a9b6550e7aac7d"
+      }
+    },
+    "current_inference": "Across the frozen five-concept baseline, the production-crop harmonized five-concept sensitivity, and the independently expanded six-concept panel, there is no supported Japan-local anti-phylogenetic L* structure. The strong global species-proxy lightness overdispersion must remain separated from the Japan-radiation history.",
+    "status": "Six identity-resolved Japan-local continuous-colour concepts are now admitted, with direct-image sources harmonized to the frozen Azami detector/crop/colour pipeline. Both H5 and E6 exact tests are negative. Discrete W/C transition history remains blocked."
+  },
+  "priority_reordering": {
+    "first": "Retain all three local tests as frozen results: original Japan5, crop-harmonized H5, and expanded E6. Do not choose among them post hoc based on significance.",
+    "second": "Before acquiring more external images, re-audit all 14 exact Japan38 concepts already present in the frozen 46,276-observation Azami strict-spatial cohort for Japan-window colour observations and independent locality cells. Some low-depth exact concepts may already contain admissible Japan-local detector-crop evidence that was ignored by the earlier n>=5 high-depth gate.",
+    "third": "For any newly recovered exact concept, require identity resolution plus at least two independent Japan-local locality/date or spatial-cell replicates under a predeclared aggregation rule before adding it to the local history panel. Preserve the six-concept result as baseline for the next expansion.",
+    "fourth": "Keep JPN38 permission and JPN29 specimen identity as parallel routes only after exhausting already-generated detector-crop evidence. Do not discretize colour or infer W/C transition direction while continuous local structure remains coverage-limited and unsupported.",
+    "do_not_repeat": "Do not lower detector or colour-confidence thresholds, revert to whole-image colour because it is more favorable, remove sign-changing taxa, or search alternate transformations on the same panel."
+  },
+  "canonical_results": {
+    "original_japan5": "data/evidence/japan5_population_matched_lightness_history_v1.json",
+    "direct_crop_harmonization": "data/evidence/eazami_direct_colour_crop_harmonization_v1.json",
+    "direct_crop_harmonization_provenance": "data/evidence/eazami_direct_colour_crop_harmonization_provenance_v1.json",
+    "crop_harmonized_analysis_contract": "data/evidence/japan_local_crop_harmonized_lightness_analysis_contract_v1.json",
+    "crop_harmonized_history": "data/evidence/japan_local_crop_harmonized_lightness_history_v1.json",
+    "chun_claim_gate": "data/evidence/cirsium_colour_history_claim_gate_v1.json"
+  },
+  "claim_boundary": "The absence of supported anti-phylogenetic L* structure across the current Japan-local panels does not prove that colour has not evolved repeatedly or adaptively. It shows that the earlier global species-level overdispersion signal cannot be promoted to a Japan-radiation conclusion under current identity-resolved, population-local evidence. No ancestral colour, discrete W/C transition, convergence, adaptive radiation or molecular reactivation is inferred."
+}

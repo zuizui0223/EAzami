@@ -1,0 +1,29 @@
+{
+  "contract_version": "eazami_direct_colour_crop_harmonization_provenance_v1",
+  "status_date": "2026-08-27",
+  "compute_repository": "zuizui0223/azami",
+  "compute_pr": 73,
+  "compute_pr_disposition": "closed_unmerged_after_artifact_capture",
+  "compute_branch": "agent/eazami-direct-colour-crop-harmonization-20260827",
+  "compute_head_sha": "d5353168eb0bd7c69be9953d65fb39dd53dedc1b",
+  "workflow_run": 33031099000,
+  "result_artifact_id": 9630287874,
+  "result_artifact_name": "eazami-direct-colour-crop-harmonization-33031099000",
+  "result_artifact_digest": "sha256:5c8c30fb17dd40771159471e1accbb6777520d05683a8a0e19bf8df87a4a8d7b",
+  "production_detector": {
+    "artifact_id": 8076736948,
+    "best_weight_sha256": "4078e0510532852681b65ee529cd82237b649ec99b17c4ca5f1da460a62d2bed",
+    "production_confidence_threshold": 0.25,
+    "crop_pad_ratio": 0.12,
+    "source_protocol": "zuizui0223/azami manuscript/DETECTOR_INDEPENDENT_AUDIT_PROTOCOL.md"
+  },
+  "measurement_code": {
+    "repository": "zuizui0223/azami",
+    "commit": "4e6f66675004207d331fd620d6bcd894287f316a",
+    "script": "ch1_global/v2/52_measure_primary_traits_continuous.py",
+    "colour_confidence_floor": 0.55
+  },
+  "raw_media_policy": "Raw licensed source images and detector crop JPGs were deleted before artifact upload. Only derived measurements, verified public metadata, screening rows and crop metadata were retained in the compute artifact.",
+  "interpretation": "This run harmonizes the direct-image branch with the frozen Azami detector/crop/colour pipeline. It is a sensitivity/coverage bridge, not a replacement of the frozen global Azami dataset.",
+  "claim_boundary": "Provenance only. The compute PR and source harmonization do not define discrete flower-colour states, evolutionary transitions, ancestry, convergence, adaptation or molecular reactivation."
+}
