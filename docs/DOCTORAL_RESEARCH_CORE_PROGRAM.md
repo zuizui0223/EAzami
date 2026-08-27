@@ -1,44 +1,65 @@
 # Doctoral research core program
 
-Status: 2026-08-20
+Status: 2026-08-27
 
 ## One central question
 
-> **Why did one young Japanese *Cirsium* radiation generate such large capitulum and ecological diversity so quickly, despite shallow lineage divergence?**
+> **How are the decomposed components of the Cirsium capitulum converted into functional traits, how did their states arise and recur through evolutionary history, and when do independent origins represent genuine functional or adaptive convergence?**
+
+This replaces the older organization in which rapid-radiation / modular-evolvability was treated as the premise of every analysis. Rapid Japanese radiation remains the historical setting; modular evolvability remains a higher-order endpoint hypothesis.
 
 ## One central hypothesis
 
-> **Modular evolvability:** standing ancestral variation, gene flow/introgression and cytotype/genome changes allow pre-existing genetic/developmental modules to be reused and recombined, so capitulum phenotype can diverge faster than genome-wide lineage sorting.
+> **Trait-specific history under a selection mosaic:** capitulum components need not form one fixed adaptive syndrome. Different phenotype components can have different functional leverage and partly distinct histories; repeated present states may arise by ancestral retention, standing variation, introgression or lineage-specific change, and only a subset of independent origins may converge functionally under similar ecological conditions.
 
-The rapid-radiation premise is already strong enough for sampling decisions: 36/38 sampled Japanese concepts fall in the dominant radiation; *C. lineare* is the strongest replicated secondary-history exception and *C. dipsacolepis* remains a secondary-arrival candidate. The heavy 294→296 rebuild is optional unless branch-scaled inference later becomes publication-critical.
+Higher-order endpoint hypothesis:
+
+> **Modular evolvability** becomes supported only if multiple components show partly independent histories and repeated origins reuse standing variation, introgressed variants or retained developmental/regulatory machinery. It is not assumed in advance.
+
+The rapid-radiation premise remains useful for sampling: 36/38 sampled Japanese concepts fall in the dominant radiation; *C. lineare* is the strongest replicated secondary-history exception and *C. dipsacolepis* remains a secondary-arrival candidate. The current accepted nuclear history is sufficient for trait-recurrence preflight; heavier tree rebuilding is not a field prerequisite.
 
 # Three Aims
 
-## Aim 1 — Historical/genomic source of rapid phenotypic divergence
+The existing three-Aim data programme is retained because it maps cleanly onto the new claim ladder. The Aims are evidence gates, not three independent stories.
+
+## Aim 1 — Historical/genomic source of repeated phenotype states
 
 **Priority 1 / indispensable.**
 
+Mainline role: **origin discrimination**.
+
 Question:
 
-> Are repeated capitulum states produced by standing ancestral variation and/or introgression, with cytotype and cytonuclear history modifying the reusable variation pool?
+> When the same capitulum state occurs in more than one lineage, is it ancestral retention/standing variation, introgression or gene flow, or lineage-specific origin?
 
-Core systems: *C. brevicaule* + *C. irumtiense*, W/coloured *C. pendulum*, W/coloured *C. sieboldii*, with W/BP *takaoense* as molecular/public anchor. *C. lineare* and *C. dipsacolepis* are controls.
+Core systems remain *C. brevicaule* + *C. irumtiense*, W/coloured *C. pendulum*, W/coloured *C. sieboldii*, with W/BP *takaoense* as molecular/public anchor. *C. lineare* and *C. dipsacolepis* remain ancestry/history controls.
 
 Required chain:
 
 `standardized phenotype -> nuclear population ancestry -> plastid haplotype -> cytotype`
 
-Success criterion: at least two independent focal systems discriminate among lineage-specific change, retained ancestral variation and introgression.
+Interpretation rules:
 
-## Aim 2 — Adaptive function of capitulum modules
+- species-level tree recurrence is not sufficient to infer independent origin;
+- nuclear–plastid discordance is informative rather than a nuisance when testing introgression/cytoplasmic capture;
+- cytotype/genome size is a potential ancestry/history modifier, not a deterministic phenotype label;
+- repeated states remain unresolved among ancestral retention, sorting, introgression and lineage-specific change until population-aware evidence discriminates them.
+
+Success criterion: at least two independent focal systems discriminate among lineage-specific change, retained ancestral variation and introgression well enough to determine where repeated phenotype states came from.
+
+## Aim 2 — Adaptive function of capitulum components
 
 **Priority 2 / indispensable for the word “adaptive”.**
 
-The bounded interaction evidence map still contains **13 independent studies, 10 taxa and 15 taxon-study rows**. It remains the broad source map; the quantitative conclusion below comes from a narrower harmonized experimental subset. The map also retains the Japanese *C. purpuratum* prior that increasing seasonal floral display can increase pre-dispersal seed-predator exposure, making mutualist attraction versus antagonist cost a concrete trade-off rather than a purely conceptual one.
+Mainline role: **phenotype → validated functional trait → reproductive fitness**.
 
-### Updated question
+A measured phenotype is not automatically functional. The required chain is:
 
-The existence of an antagonist fitness cost is no longer the main uncertainty.
+`observed phenotype -> candidate function -> manipulation/performance mediator -> reproductive fitness`.
+
+### Resolved antagonist baseline
+
+The existence of a reproductive-antagonist fitness cost is no longer the main uncertainty.
 
 A direct random-effects lnRR meta-analysis of harmonizable experimental *Cirsium* seed-output data gives:
 
@@ -53,31 +74,27 @@ Canonical result:
 
 `data/evidence/cirsium_floral_herbivory_lnrr_meta_v2.json`
 
-Therefore the Aim 2 question is now:
+Therefore the Aim 2 question is:
 
-> **Which rapidly divergent capitulum modules reduce or redistribute this established antagonist cost, and what pollination or abiotic costs accompany that protection?**
+> **Which decomposed capitulum phenotypes change effective pollination, abiotic protection or antagonist access strongly enough to change reproductive fitness, and what trade-offs accompany those effects?**
 
-This is a stronger causal target than asking whether insects can reduce seed production.
+### Current candidate functional axes
 
-### Current predictions
+- **orientation:** time-window pollination / thermal presentation / rain-UV-wetting protection; static all-day visitation alone is insufficient;
+- **display:** pollinator discovery/probing and antagonist discovery/exposure can move together;
+- **phyllary/spine:** candidate antagonist exclusion only after direct botanical validation and defensible manipulation;
+- **stickiness:** context-dependent candidate function with benefit/null/cost evidence; no generic defence sign;
+- **colour:** local availability-dependent pollinator choice and pigment/abiotic physiology, nested with Aim 3.
 
-- **orientation:** changing presentation can alter pollinator access, wetting/protection and antagonist access; any adaptive interpretation requires final seed output;
-- **colour:** W/coloured states can alter effective pollination and abiotic response; colour-function tests remain ancestry-resolved and share material with Aim 3;
-- **phyllary/spine:** if direct botanical spine/phyllary architecture is defensive, greater exclusion of floral/seed antagonists should preserve seed output, potentially at a cost to pollinator access;
-- **stickiness:** remains lower priority because the recovered direct manipulation was null.
+### Ecological architecture
 
-### Field order
-
-1. **orientation manipulation first**;
-2. **W/coloured comparison second**;
-3. **phyllary/spine conditional third**, only after direct botanical validation of the Azami image proxies and repeatable focal variation;
-4. **stickiness lower priority**.
+The factorial literature contains pollinator-dominant, antagonist-dominant and mixed/no-fixed-dominance systems. The working architecture is therefore a **selection mosaic** in which local trait-specific functional leverage determines which component matters.
 
 Required evidence chain:
 
 `trait -> mutualist/antagonist or abiotic pathway -> reproductive fitness`
 
-For defence-related traits, explicitly retain both sides of the trade-off:
+For defence-related hypotheses preserve both sides:
 
 `trait -> antagonist access/damage -> seed output`
 
@@ -85,31 +102,52 @@ and
 
 `trait -> pollinator access/effective contact -> seed output`.
 
-### Quantitative evidence boundary
+### Field order
 
-The seed-output lnRR result is a real narrow meta-analysis because all included effects share one explicit estimand. It **does not** authorize pooling heterogeneous pollinator visitation, florivory, seed predation, foliar herbivory or unrelated trait contrasts into a single effect.
+1. **head orientation first** where a defensible manipulation and ancestry/context match are possible;
+2. W/coloured comparison as a trait-specific function test nested with Aim 3;
+3. phyllary/spine only after direct botanical validation;
+4. stickiness only as a context-specific hypothesis, not a generic defence proxy.
 
-It also does not prove that orientation, phyllaries or spines are adaptations. It establishes that the antagonist fitness pressure they might mediate is large enough to merit direct causal tests.
-
-Success criterion: replicated trait→interaction/protection→fitness evidence for at least one capitulum module in ancestry-resolved populations, with pollinator and antagonist outcomes kept separable.
+Success criterion: replicated trait→interaction/protection→fitness evidence for at least one capitulum component in ancestry-resolved populations, with pollinator, antagonist and abiotic pathways kept separable.
 
 ## Aim 3 — Flower-colour reversibility as a mechanistic case
 
 **Priority 3 / mechanistic flagship.**
 
+Mainline role: a trait-specific test of **historical origin + molecular reuse**, not the organizing story of all EAzami.
+
 Question:
 
-> Are repeated white↔coloured transitions enabled by retention and regulatory reuse of anthocyanin machinery rather than repeated pathway destruction and rebuilding?
+> If independent white↔coloured transitions are established, do they reuse retained anthocyanin machinery through regulatory/expression changes rather than repeated pathway destruction and rebuilding?
 
 Required chain:
 
 `population ancestry -> coding/regulatory haplotype -> floral RNA -> pigment -> standardized colour`
 
-Existing DFR/ANS evidence remains pathway-retention plausibility only. The *C. palustre* colour-pollination prior strengthens the ecological motivation for colour but does not resolve the molecular switch or its fitness consequence.
+Current boundaries:
+
+- global/high-depth continuous lightness overdispersion does not license Japanese-radiation transition direction because the source-balanced Japan-local replication fails;
+- coloured descendant alone does not imply regain/reactivation;
+- DFR/ANS or other pathway-gene presence alone is retention plausibility, not floral reactivation;
+- at least two independent W/C transitions are required before claiming recurrent molecular reuse.
 
 Success criterion: at least two independent W/C transitions resolve whether regulatory reuse is recurrent.
 
+# Relationship to the current Japan38 history results
+
+The current nuclear topology ensemble already establishes recurrence lower bounds for several component states:
+
+- orientation: ML minimum 6, UFBoot 4–6 after JPN34 authority repair;
+- phyllary posture: exactly 3 changes across all 1000 UFBoot trees;
+- stickiness: canonical ML 5 / UFBoot 4–5, with the pending JPN24 authority extension yielding 5 changes in every UFBoot tree;
+- colour: no Japanese-radiation repeated-history promotion through the failed source-balanced anti-phylogenetic replication.
+
+The current cross-module overlap diagnostic does not support one shared whole-capitulum historical-lability model. This motivates trait-specific histories but does not prove genetic/developmental modular evolvability.
+
 # Sampling priority
+
+Protected core:
 
 - *C. brevicaule* 60
 - *C. irumtiense* 60
@@ -124,16 +162,59 @@ Controls: *C. lineare* 16 + *C. dipsacolepis* 16.
 
 Aim 2 experiments are nested inside the same ancestry-resolved populations. Do not reduce Aim 1 population replication to create a separate interaction-only campaign.
 
+# How the three Aims map onto the new mainline
+
+```text
+Azami: phenotype decomposition
+        ↓
+Aim 2: validate function
+        ↓
+Japan38: reconstruct trait-specific recurrence
+        ↓
+Aim 1: discriminate historical origin
+        ↓
+Aim 2: compare function/fitness across independent origins
+        ↓
+functional/adaptive convergence
+
+Aim 3: mechanistic molecular reuse test for the colour module
+```
+
+The order above is a claim ladder, not necessarily the chronological order of field collection; Aim 1/Aim 2/Aim 3 materials should remain linked by the same individual IDs where feasible.
+
+# Auxiliary programme — scale-specific covariance constraints
+
+The 62-target simulator remains valuable but does not define evolutionary history.
+
+Its role is to ask which statistical covariance/process architectures can reproduce the Azami within/among phenotype field.
+
+Current findings:
+
+- v3.1: no declared biological driver family is absolutely adequate;
+- scalar one-shot: `NULL_COUPLED` is the frozen scalar-target winner;
+- held-out support geometry rejects that null as a full explanation (0/64 primary-pattern matches);
+- among-only process structure improves strongly but remains inadequate;
+- draft v4.1 points to scale-specific covariance formation as the first adequate seven-target architecture, pending canonical/held-out validation.
+
+These results are complementary structural constraints, not trait-transition histories.
+
 # Supporting lanes, not extra Aims
 
-Radiation asymmetry is premise; reticulation/cytonuclear/ploidy/colour compression/Ryukyu history are Aim 1 diagnostics; the quantitative antagonist meta-analysis and bounded interaction map support Aim 2 design; anthocyanin evidence supports Aim 3.
+- radiation asymmetry = historical setting/premise;
+- selection-mosaic meta-analysis = functional hypothesis prior;
+- demographic transmission = downstream gate after maternal seed fitness;
+- scale-specific covariance simulation = structural constraint;
+- colour molecular work = trait-specific mechanistic extension;
+- modular evolvability = higher-order endpoint hypothesis.
 
 # Stop rules
 
 - Do not create new thesis Aims from supporting analyses.
 - Do not use visitor abundance as effective pollination or fitness.
 - Do not pool biologically different interaction outcomes merely to increase k.
-- Do not spend new preliminary effort re-establishing that insect herbivory can lower *Cirsium* seed output; test the **capitulum module that changes the cost**.
-- Do not substitute more broad climate models for Aim 2 experiments.
-- Do not call the radiation adaptive until Aim 2 reaches reproductive-fitness evidence tied to a focal trait.
-- Do not claim regulatory reuse until Aim 3 links genotype/expression/pigment/phenotype.
+- Do not spend new effort re-establishing that insect herbivory can lower *Cirsium* seed output; test the **capitulum phenotype that changes the cost**.
+- Do not substitute more broad climate models for phenotype→function, history, origin or convergence discrimination.
+- Do not call repeated parsimony changes adaptive convergence.
+- Do not call the radiation adaptive until a focal trait is linked through a preregistered ecological mechanism to reproductive fitness.
+- Do not claim modular evolvability until multiple trait histories and origin mechanisms support it.
+- Do not claim regulatory reuse until Aim 3 links ancestry/genotype/expression/pigment/phenotype.
