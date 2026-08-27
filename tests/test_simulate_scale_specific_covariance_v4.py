@@ -15,6 +15,12 @@ assert spec is not None and spec.loader is not None
 MOD = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(MOD)
 
+V41_SCRIPT = ROOT / "analysis" / "simulate_scale_specific_covariance_v4_1.py"
+v41_spec = importlib.util.spec_from_file_location("scale_cov_v4_1_screen", V41_SCRIPT)
+assert v41_spec is not None and v41_spec.loader is not None
+V41 = importlib.util.module_from_spec(v41_spec)
+v41_spec.loader.exec_module(V41)
+
 V4_CONTRACT_PATH = ROOT / "data" / "contracts" / "scale_specific_covariance_v4_contract.json"
 PRIORS_PATH = ROOT / "data" / "contracts" / "scale_specific_covariance_v4_implementation_priors.json"
 V3_CONTRACT_PATH = ROOT / "data" / "contracts" / "capitulum_space_mechanism_v3_contract.json"
@@ -35,7 +41,9 @@ class ScaleSpecificCovarianceV4ScreenTests(unittest.TestCase):
         cls.heldout = MOD.v3.load_v2_heldout(HELDOUT_PATH)["full_tradeoff_common_lability"]
 
     def test_registered_priors_validate(self):
-        MOD.validate_priors(self.v4, self.priors)
+        # The v4.1 wrapper records the uninspected-run amendment and then reuses
+        # every numerical range/size check from the shared v4 implementation.
+        V41.validate_priors(self.v4, self.priors)
 
     def test_taxon_centring_is_exact_to_machine_precision(self):
         taxa = np.repeat(np.arange(4), 5)
