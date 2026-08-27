@@ -1,0 +1,44 @@
+{
+  "contract_version": "japan38_module_function_bridge_v2",
+  "status_date": "2026-08-27",
+  "state_direction_correction": {
+    "reason": "JPN06 and JPN36 are observed nonsticky/nearly nonsticky, so neutralization cannot be the focal intervention on them.",
+    "JPN06_state": "nonsticky_or_nearly_nonsticky",
+    "JPN15_state": "sticky",
+    "JPN36_stickiness_state": "nonsticky_or_nearly_nonsticky",
+    "JPN36_phyllary_state": "appressed",
+    "JPN06_JPN15_sister_support": "100/100_on_canonical_ML_tree"
+  },
+  "module_decisions": {
+    "orientation": {
+      "history_ready": true,
+      "function_ready": "calibration_ready",
+      "transition_localizable": false,
+      "decision": "Keep functional endpoint priors but block named-branch adaptation until transition localization improves."
+    },
+    "phyllary_posture": {
+      "history_ready": true,
+      "function_ready": "analog_mechanism_and_fitness_direction_ready",
+      "transition_localizable": true,
+      "best_target": "JPN_36",
+      "decision": "JPN36 appressed phyllaries are the strongest current transition-localized phyllary target; first prove a damage-free manipulation."
+    },
+    "stickiness": {
+      "history_ready": true,
+      "function_ready": "context_discrimination_ready",
+      "transition_localizable": true,
+      "best_ancestry_matched_pair": ["JPN_06", "JPN_15"],
+      "secondary_target": "JPN_36",
+      "decision": "Use sticky JPN15 neutralization as the primary necessity experiment and JPN06 nonsticky restoration only as a separately validated sufficiency test."
+    },
+    "colour_lightness": {
+      "history_ready": false,
+      "function_ready": "independent_questions_only",
+      "transition_localizable": false,
+      "decision": "Retain as negative/contrast module; no rescue sampling."
+    }
+  },
+  "highest_information_design": "JPN06 nonsticky vs JPN15 sticky sister pair, with within-JPN15 sticky neutralization as the primary causal test.",
+  "next_mainline_action": "First verify field feasibility and live phenotype expression for JPN06/JPN15 and JPN36. In parallel repair JPN34 orientation, JPN15 phyllary and JPN24 stickiness primary states. Then run JPN15 stickiness-neutralization and JPN36 phyllary-access pilot only if manipulation/sham quality gates pass.",
+  "claim_boundary": "State-aware experiment prioritization only. Sister-state contrast is not causal by itself; external function evidence is calibration, not a transported Cirsium effect or adaptation proof."
+}

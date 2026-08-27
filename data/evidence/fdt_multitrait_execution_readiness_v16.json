@@ -1,0 +1,92 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v16",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v15.json",
+  "inheritance": "All canonical Japan38 discrete histories, the source-balanced Japan7 colour stop rule, global-to-local colour claim boundaries, FDT1 calibration evidence, and the unresolved absolute-time gate remain in force unless explicitly updated below.",
+  "mainline": {
+    "primary_repeated_evolution_modules": ["orientation", "phyllary_posture", "stickiness"],
+    "colour_role": "secondary_negative_contrast",
+    "highest_information_targets": ["JPN_06", "JPN_36"],
+    "coverage_repair_targets": ["JPN_34", "JPN_15", "JPN_24"],
+    "module_function_bridge": {
+      "canonical_bridge": "data/evidence/japan38_module_function_bridge_v2.csv",
+      "canonical_summary": "data/evidence/japan38_module_function_bridge_summary_v2.json",
+      "canonical_fdt8_priorities": "data/evidence/japan38_fdt8_priority_targets_v2.csv",
+      "version_note": "v1 was removed before merge because focal stickiness intervention direction was inconsistent with the observed nonsticky states of JPN06 and JPN36."
+    },
+    "orientation": {
+      "history_state": "robust_recurrence_branch_localization_limited",
+      "minimum_steps_ufboot_range": [4, 6],
+      "ml_minimum_steps": 6,
+      "function_state": "calibration_ready_not_transportable",
+      "functional_axes": ["effective_pollination", "abiotic_reproductive_protection", "net_reproductive_fitness"],
+      "net_fitness_calibration_fixed_RR": 1.497566445,
+      "net_fitness_calibration_I2_percent": 93.5714188738,
+      "current_decision": "Do not map an orientation adaptation to a named Japan38 branch until transition placement improves. Use functional effects only to define mediator and final-fitness endpoints for future focal manipulation."
+    },
+    "phyllary_posture": {
+      "history_state": "topology_robust_recurrence_partly_localizable",
+      "minimum_steps": 3,
+      "best_transition_target": "JPN_36",
+      "JPN36_observed_state": "appressed",
+      "JPN36_terminal_forced_ufboot_fraction": 0.754,
+      "function_state": "protective_envelope_analog_mechanism_and_fitness_direction_ready_not_poolable",
+      "functional_axes": ["reproductive_enemy_exclusion", "net_reproductive_fitness", "pollinator_access_tradeoff"],
+      "current_decision": "JPN36 is the strongest current ancestry-aware phyllary target. First establish a reversible damage-free phyllary-access manipulation or validated mechanical-access proxy; external Pedicularis bracts are nonhomologous analogs."
+    },
+    "stickiness": {
+      "history_state": "robust_recurrence_partly_localizable",
+      "minimum_steps_ufboot_range": [4, 5],
+      "primary_transition_target": "JPN_06",
+      "secondary_transition_target": "JPN_36",
+      "JPN06_observed_state": "nonsticky_or_nearly_nonsticky",
+      "JPN36_observed_state": "nonsticky_or_nearly_nonsticky",
+      "JPN15_observed_state": "sticky",
+      "ancestry_matched_pair": ["JPN_06", "JPN_15"],
+      "JPN06_JPN15_ML_sister_support": "100/100",
+      "JPN06_terminal_forced_ufboot_fraction": 0.67,
+      "JPN36_terminal_forced_ufboot_fraction": 0.4,
+      "function_state": "context_discrimination_ready_no_generic_sign",
+      "functional_axes": ["reproductive_enemy_exclusion", "net_reproductive_fitness", "trait_cost"],
+      "counterevidence": ["Bejaria_strong_benefit", "Cirsium_discolor_direct_null", "Datura_whole_plant_cost"],
+      "intervention_direction": {
+        "primary_necessity_test": "Neutralize natural stickiness in sticky JPN15 versus sham, then measure enemy access/damage, pollinator effective transfer and mature/viable seed output.",
+        "secondary_sufficiency_test": "Only after material-equivalence and non-target-effect validation, add a biologically defensible adhesive/restoration treatment to nonsticky JPN06 versus vehicle/sham.",
+        "prohibited_design": "Do not describe JPN06 or JPN36 as candidates for stickiness neutralization because their observed authority states are nonsticky/nearly nonsticky."
+      },
+      "current_decision": "The JPN06 nonsticky - JPN15 sticky 100/100 sister pair is the highest-information current stickiness design. Species contrast is not causal by itself; JPN15 within-species neutralization supplies the primary causal test."
+    },
+    "colour": {
+      "history_state": "anti_phylogenetic_recurrence_not_supported_in_source_balanced_Japan7",
+      "source_balanced_Japan7_rho": 0.2675324675324675,
+      "anti_phylogenetic_negative_tail_p": 0.7579365079365079,
+      "current_decision": "No further sampling or reprocessing solely to rescue the anti-phylogenetic lightness hypothesis. Colour remains available for independent functional, discrete-state, molecular or field questions."
+    }
+  },
+  "execution_order": {
+    "first": "Confirm live field expression and manipulation feasibility for JPN06/JPN15 stickiness and JPN36 appressed phyllaries. Do not proceed from authority categories directly to destructive manipulation.",
+    "second": "Use JPN15 sticky neutralization versus sham as the primary stickiness necessity test; measure enemy access/damage, pollinator effective transfer and mature/viable seed jointly. JPN06 restoration/addition is a secondary sufficiency experiment only after material equivalence is validated.",
+    "third": "Pilot a reversible damage-free JPN36 phyllary-access manipulation or validated mechanical-access proxy versus sham, measuring enemy attack, pollinator access and mature/viable seed jointly.",
+    "fourth": "Repair missing primary states in parallel: JPN34 orientation, JPN15 phyllary posture, JPN24 stickiness; recompute histories before naming additional branch-specific targets.",
+    "fifth": "For orientation, improve transition localization before ancestry-specific testing; meanwhile retain the pollination/protection/net-fitness calibration as endpoint priors only.",
+    "sixth": "Only after focal functional contrasts are established should FDT4/FDT7 connect transition histories to niche regimes or simulations. Absolute-time FDT5/FDT6 remains conditional on the dating gate."
+  },
+  "do_not_repeat": [
+    "Do not resume colour sampling merely to obtain a negative anti-phylogenetic rho.",
+    "Do not pool orientation, phyllary and stickiness into one common effect size.",
+    "Do not treat Pedicularis bracts as homologous Cirsium phyllaries or Bejaria/Datura as transported Cirsium stickiness effects.",
+    "Do not neutralize stickiness in JPN06 or JPN36 when the frozen observed states are nonsticky/nearly nonsticky.",
+    "Do not infer causality from the JPN06-JPN15 sister-state contrast without within-species manipulation.",
+    "Do not label JPN36 orientation as a transition target because no orientation ML edge is individually forced.",
+    "Do not call the absence of common-lability overlap proof of developmental or genetic modular evolvability."
+  ],
+  "canonical_results": {
+    "japan38_discrete_history": "data/evidence/japan38_multitrait_history_summary_v1.json",
+    "japan7_colour_stop": "data/evidence/japan7_source_balanced_lightness_history_v1.json",
+    "fdt1_broad_calibration": "data/evidence/fdt1_broad_functional_calibration_summary_v1.json",
+    "orientation_net_fitness_meta": "data/evidence/fdt1_orientation_net_fitness_two_study_meta_v1.json",
+    "module_function_bridge": "data/evidence/japan38_module_function_bridge_v2.csv",
+    "fdt8_priority_targets": "data/evidence/japan38_fdt8_priority_targets_v2.csv"
+  },
+  "claim_boundary": "State-aware readiness and experiment-prioritization contract only. Repeated-state histories plus external functional calibrations generate discriminating hypotheses, not adaptation claims. Sister-state contrast, functional homology, branch-specific selection, niche coupling, timing and molecular mechanism each require separate evidence gates."
+}
