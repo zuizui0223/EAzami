@@ -1,0 +1,157 @@
+{
+  "contract_version": "japan5_population_matched_lightness_history_v1",
+  "status_date": "2026-08-27",
+  "question": "Does the directional anti-phylogenetic L* pattern replicate in the first five identity-resolved Japan-local continuous-colour concepts?",
+  "concept_panel": [
+    "JPN_17",
+    "JPN_23",
+    "JPN_30",
+    "JPN_36",
+    "JPN_37"
+  ],
+  "n_concepts": 5,
+  "lightness_values": {
+    "JPN_17": 68.23529434204102,
+    "JPN_23": 63.235294342041016,
+    "JPN_30": 62.54901885986328,
+    "JPN_36": 59.607842445373535,
+    "JPN_37": 73.43136978149414
+  },
+  "raw_tree_tips": {
+    "JPN_17": "J38S017",
+    "JPN_23": "J38S024",
+    "JPN_30": "J38S031",
+    "JPN_36": "J38S037",
+    "JPN_37": "J38S038"
+  },
+  "evidence_sources": {
+    "JPN_17": {
+      "taxon_name": "Cirsium maritimum",
+      "source_class": "Azami_Japan_window_strict_spatial_observations",
+      "source_reference": "data/evidence/japan38_colour_geographic_provenance_gate_v1.json",
+      "local_population_or_observation_count": 14
+    },
+    "JPN_23": {
+      "taxon_name": "Cirsium oligophyllum",
+      "source_class": "Azami_Japan_window_strict_spatial_observations",
+      "source_reference": "data/evidence/japan38_colour_geographic_provenance_gate_v1.json",
+      "local_population_or_observation_count": 20
+    },
+    "JPN_30": {
+      "taxon_name": "Cirsium yezoense",
+      "source_class": "direct_licensed_Japan_locality_medians",
+      "source_reference": "data/evidence/japan38_open_candidate_colour_measurement_summary_v1.json",
+      "local_population_or_observation_count": 2
+    },
+    "JPN_36": {
+      "taxon_name": "Cirsium sieboldii",
+      "source_class": "Azami_Japan_window_strict_spatial_observations",
+      "source_reference": "data/evidence/japan38_colour_geographic_provenance_gate_v1.json",
+      "local_population_or_observation_count": 10
+    },
+    "JPN_37": {
+      "taxon_name": "Cirsium kamtschaticum",
+      "source_class": "Azami_Japan_window_strict_spatial_observations",
+      "source_reference": "data/evidence/japan38_colour_geographic_provenance_gate_v1.json",
+      "local_population_or_observation_count": 11
+    }
+  },
+  "evidence_heterogeneity": "JPN17/JPN23/JPN36/JPN37 use Japan-window medians from the frozen Azami strict-spatial cohort; JPN30 uses a median across two direct licensed Japan-local locality medians.",
+  "tree_contract": {
+    "source": "frozen Japan38 Comp1061 compatibility ML tree",
+    "branch_length_semantics": "substitutions/site; not absolute time",
+    "analysis_uses": "patristic distances only; no dating or evolutionary-rate inference"
+  },
+  "primary_signal": {
+    "rho": -0.10303030303030303,
+    "exact_permutations": 120,
+    "negative_tail_p": 0.48333333333333334,
+    "positive_tail_p": 0.5333333333333333,
+    "two_sided_abs_p": 0.8166666666666667,
+    "null_min_rho": -0.6121212121212121,
+    "null_max_rho": 0.8303030303030302
+  },
+  "leave_one_out": {
+    "rho_by_omitted_concept": {
+      "JPN_17": -0.028571428571428574,
+      "JPN_23": 0.4285714285714286,
+      "JPN_30": -0.3142857142857143,
+      "JPN_36": -0.3142857142857143,
+      "JPN_37": -0.2571428571428572
+    },
+    "min_rho": -0.3142857142857143,
+    "max_rho": 0.4285714285714286,
+    "all_negative": false,
+    "all_positive": false
+  },
+  "pairwise_values": [
+    {
+      "concept_a": "JPN_17",
+      "concept_b": "JPN_23",
+      "patristic_distance": 0.025898444700000002,
+      "absolute_lightness_difference": 5.0
+    },
+    {
+      "concept_a": "JPN_17",
+      "concept_b": "JPN_30",
+      "patristic_distance": 0.0145463118,
+      "absolute_lightness_difference": 5.686275482177734
+    },
+    {
+      "concept_a": "JPN_23",
+      "concept_b": "JPN_30",
+      "patristic_distance": 0.027992624899999995,
+      "absolute_lightness_difference": 0.6862754821777344
+    },
+    {
+      "concept_a": "JPN_17",
+      "concept_b": "JPN_36",
+      "patristic_distance": 0.0164770598,
+      "absolute_lightness_difference": 8.62745189666748
+    },
+    {
+      "concept_a": "JPN_23",
+      "concept_b": "JPN_36",
+      "patristic_distance": 0.029923372899999995,
+      "absolute_lightness_difference": 3.6274518966674805
+    },
+    {
+      "concept_a": "JPN_30",
+      "concept_b": "JPN_36",
+      "patristic_distance": 0.0123178702,
+      "absolute_lightness_difference": 2.941176414489746
+    },
+    {
+      "concept_a": "JPN_17",
+      "concept_b": "JPN_37",
+      "patristic_distance": 0.0230712421,
+      "absolute_lightness_difference": 5.196075439453125
+    },
+    {
+      "concept_a": "JPN_23",
+      "concept_b": "JPN_37",
+      "patristic_distance": 0.036517555199999996,
+      "absolute_lightness_difference": 10.196075439453125
+    },
+    {
+      "concept_a": "JPN_30",
+      "concept_b": "JPN_37",
+      "patristic_distance": 0.0180427487,
+      "absolute_lightness_difference": 10.88235092163086
+    },
+    {
+      "concept_a": "JPN_36",
+      "concept_b": "JPN_37",
+      "patristic_distance": 0.0208428005,
+      "absolute_lightness_difference": 13.823527336120605
+    }
+  ],
+  "predeclared_gates": {
+    "directional_replication_rule": "rho < 0 AND exact negative-tail p <= 0.05 AND all five leave-one-out rho < 0",
+    "directional_replication_pass": false,
+    "strict_two_sided_rule": "directional replication pass AND exact two-sided |rho| p <= 0.05",
+    "strict_two_sided_replication_pass": false,
+    "thresholds_changed_after_result": false
+  },
+  "claim_boundary": "A passing negative-distance gate is an anti-phylogenetic/overdispersion diagnostic on a substitution-length tree. It does not identify convergence, adaptation, ancestral colour, discrete W/C transitions, evolutionary rate, molecular reactivation, or adaptive radiation. A failed gate is retained as a substantive result rather than repaired post hoc."
+}

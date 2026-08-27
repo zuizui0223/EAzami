@@ -1,0 +1,102 @@
+name: Validate Japan5 population-matched lightness history v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_japan5_population_matched_lightness_history_v1.py"
+      - "data/evidence/japan5_population_matched_lightness_input_v1.csv"
+      - "data/evidence/japan5_population_matched_lightness_history_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v13.json"
+      - ".github/workflows/validate-japan5-population-matched-lightness-history-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: validate-japan5-population-matched-lightness-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  FROZEN_JAPAN38_RUN_ID: "32845725038"
+  FROZEN_JAPAN38_ARTIFACT: "japan38-comp1061-frozen-tree-retry-32845725038"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install biopython numpy scipy
+      - name: Compile analysis
+        run: python -m py_compile analysis/run_japan5_population_matched_lightness_history_v1.py
+      - name: Download frozen Japan38 nuclear tree artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.FROZEN_JAPAN38_ARTIFACT }}
+          path: frozen_japan38
+          run-id: ${{ env.FROZEN_JAPAN38_RUN_ID }}
+          github-token: ${{ github.token }}
+      - name: Verify frozen input contract before analysis
+        run: |
+          python - <<'PY'
+          import csv
+          rows=list(csv.DictReader(open('data/evidence/japan5_population_matched_lightness_input_v1.csv',encoding='utf-8-sig')))
+          assert [r['paper_japan_member_id'] for r in rows]==['JPN_17','JPN_23','JPN_30','JPN_36','JPN_37']
+          expected={
+            'JPN_17':68.23529434204102,
+            'JPN_23':63.235294342041016,
+            'JPN_30':62.54901885986328,
+            'JPN_36':59.607842445373535,
+            'JPN_37':73.43136978149414,
+          }
+          for r in rows:
+            assert abs(float(r['local_lightness'])-expected[r['paper_japan_member_id']])<1e-12
+            assert r['identity_resolved']=='true'
+            assert r['primary_analysis_allowed']=='true'
+          assert rows[2]['source_class']=='direct_licensed_Japan_locality_medians'
+          PY
+      - name: Run exact Japan5 history gate
+        run: |
+          set -euo pipefail
+          mkdir -p result
+          python analysis/run_japan5_population_matched_lightness_history_v1.py \
+            --tree frozen_japan38/tree_result/japan38_comp1061.treefile \
+            --concept-map frozen_japan38/work/japan38_subset/concept_map.csv \
+            --input data/evidence/japan5_population_matched_lightness_input_v1.csv \
+            --output result/japan5_population_matched_lightness_history_v1.json
+      - name: Assert predeclared gate semantics and frozen output when present
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('result/japan5_population_matched_lightness_history_v1.json').read_text())
+          assert x['concept_panel']==['JPN_17','JPN_23','JPN_30','JPN_36','JPN_37']
+          assert x['n_concepts']==5
+          assert x['primary_signal']['exact_permutations']==120
+          assert len(x['pairwise_values'])==10
+          assert set(x['leave_one_out']['rho_by_omitted_concept'])==set(x['concept_panel'])
+          gate=x['predeclared_gates']
+          expected_directional=(x['primary_signal']['rho']<0 and x['primary_signal']['negative_tail_p']<=0.05 and x['leave_one_out']['all_negative'])
+          assert gate['directional_replication_pass']==expected_directional
+          assert gate['strict_two_sided_replication_pass']==(expected_directional and x['primary_signal']['two_sided_abs_p']<=0.05)
+          assert gate['thresholds_changed_after_result'] is False
+          frozen=Path('data/evidence/japan5_population_matched_lightness_history_v1.json')
+          if frozen.exists():
+            assert json.loads(frozen.read_text())==x
+            readiness=json.loads(Path('data/evidence/fdt_multitrait_execution_readiness_v13.json').read_text())
+            assert readiness['colour']['japan5_population_matched_history']['directional_replication_pass']==gate['directional_replication_pass']
+            assert readiness['colour']['japan5_population_matched_history']['strict_two_sided_replication_pass']==gate['strict_two_sided_replication_pass']
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan5-population-matched-lightness-history-${{ github.run_id }}
+          path: result/japan5_population_matched_lightness_history_v1.json
+          if-no-files-found: error
+          retention-days: 90
