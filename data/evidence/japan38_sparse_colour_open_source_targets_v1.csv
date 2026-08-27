@@ -1,0 +1,8 @@
+paper_japan_member_id,taxon_name,current_exact_colour_n,role,reason
+JPN_05,Cirsium aomorense,3,new_fifth_concept_candidate,exact concept with sparse existing colour coverage
+JPN_15,Cirsium lineare,2,new_fifth_concept_candidate,exact concept with sparse existing colour coverage
+JPN_22,Cirsium norikurense,1,new_fifth_concept_candidate,exact concept with sparse existing colour coverage
+JPN_26,Cirsium spicatum,1,new_fifth_concept_candidate,exact concept with sparse existing colour coverage
+JPN_27,Cirsium suzukaense,4,new_fifth_concept_candidate,exact concept with sparse existing colour coverage
+JPN_30,Cirsium yezoense,3,second_locality_candidate,one licensed Japan-local locality already passes the frozen colour-quality gate
+JPN_32,Cirsium buergeri,1,new_fifth_concept_candidate,exact concept with sparse existing colour coverage

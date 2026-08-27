@@ -1,0 +1,60 @@
+name: Validate sparse Japan38 colour open-source sweep v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_japan38_sparse_colour_open_sources_v1.py"
+      - "data/evidence/japan38_sparse_colour_open_source_targets_v1.csv"
+      - "data/evidence/japan38_sparse_colour_open_source_sweep_v1.json"
+      - "data/evidence/japan38_sparse_colour_open_source_candidates_v1.csv"
+      - ".github/workflows/validate-japan38-sparse-colour-open-source-sweep-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile
+        run: python -m py_compile analysis/audit_japan38_sparse_colour_open_sources_v1.py
+      - name: Run public metadata sweep
+        run: |
+          mkdir -p result
+          python analysis/audit_japan38_sparse_colour_open_sources_v1.py \
+            --targets data/evidence/japan38_sparse_colour_open_source_targets_v1.csv \
+            --candidate-output result/japan38_sparse_colour_open_source_candidates_v1.csv \
+            --summary-output result/japan38_sparse_colour_open_source_sweep_v1.json
+      - name: Assert scope and frozen outputs when present
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('result/japan38_sparse_colour_open_source_sweep_v1.json').read_text())
+          assert x['targets']==['JPN_05','JPN_15','JPN_22','JPN_26','JPN_27','JPN_30','JPN_32']
+          assert set(x['per_target'])==set(x['targets'])
+          for mid,v in x['per_target'].items():
+              assert v['open_reusable_live_media_rows_after_dedup'] >= v['open_reusable_live_record_keys_after_dedup']
+              assert v['open_reusable_live_record_keys_after_dedup'] >= v['open_reusable_georeferenced_locality_cells_0_05deg'] or v['open_reusable_live_record_keys_after_dedup'] >= 0
+          frozen=Path('data/evidence/japan38_sparse_colour_open_source_sweep_v1.json')
+          if frozen.exists():
+              f=json.loads(frozen.read_text())
+              for mid in x['targets']:
+                  for key in ['inaturalist_photo_observations','gbif_stillimage_records','open_reusable_live_record_keys_after_dedup','open_reusable_georeferenced_locality_cells_0_05deg']:
+                      assert f['per_target'][mid][key]==x['per_target'][mid][key],(mid,key,f['per_target'][mid][key],x['per_target'][mid][key])
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-sparse-colour-open-source-sweep-${{ github.run_id }}
+          path: |
+            result/japan38_sparse_colour_open_source_candidates_v1.csv
+            result/japan38_sparse_colour_open_source_sweep_v1.json
+          if-no-files-found: error
+          retention-days: 90
