@@ -1,0 +1,180 @@
+{
+  "result_version": "capitulum_space_mechanism_v3_1_result_summary_2026-08-27",
+  "status": "all_declared_families_inadequate_focal_common_vs_modular_unresolved",
+  "workflow_run_id": "33040972884",
+  "workflow_head_sha": "fb658d3a846d3c1e290dd3a96b64ac121bcb824d",
+  "artifact_id": "9633915699",
+  "artifact_digest": "sha256:fb66b22b073a406432b02fba207e8ebe0c79b3e12d092ba48078ad1752e7d4dc",
+  "result_json_sha256": "73d48a52fed65ff11f7132c22874742c244c2ed76b25804e79c612c16d53165f",
+  "draws_csv_sha256": "24b19df06c4b014c10263614aded966eaf062a8fbd0a53ef10013ce280db3533",
+  "contract_version": "capitulum_space_mechanism_v3_1_2026-08-27",
+  "screen_version": "capitulum_space_mechanism_v3_1_screen_1",
+  "draws_per_seed_per_family": 500,
+  "seeds": [20260827, 20261827, 20262827, 20263827],
+  "accept_fraction": 0.05,
+  "ranking": [
+    "pollinator_only",
+    "antagonist_only",
+    "full_tradeoff_common_lability",
+    "environment_only",
+    "full_tradeoff_modular_evolvability"
+  ],
+  "absolute_adequacy_thresholds": {
+    "maximum_primary_distance_median": 1.0,
+    "minimum_relative_improvement": 0.1,
+    "minimum_replication_rate": 0.75
+  },
+  "adequate_families": [],
+  "focal_common_vs_modular": {
+    "distance_winner": "full_tradeoff_common_lability",
+    "other": "full_tradeoff_modular_evolvability",
+    "winner_primary_distance_median": 1.7117906344600484,
+    "other_primary_distance_median": 2.0190873604206976,
+    "relative_median_distance_improvement": 0.15219585441643335,
+    "winner_replication_pattern_rate": 0.84,
+    "absolute_primary_adequacy": false,
+    "minimum_relative_distance_improvement_met": true,
+    "seedwise_distance_winner_stable": true,
+    "replication_absolute_adequacy": true,
+    "replication_not_worse": true,
+    "independent_v2_heldout_not_worse": false,
+    "registered_decision": "unresolved",
+    "decision_reason": "one_or_more_absolute_adequacy_separation_replication_or_heldout_gates_failed"
+  },
+  "families": [
+    {
+      "family": "pollinator_only",
+      "accepted_primary_distance_median": 1.4002262523180118,
+      "accepted_primary_distance_q10_q90": [1.1445723343428562, 1.5195519862041953],
+      "best_primary_distance": 0.7494531481847918,
+      "accepted_replication_pattern_rate_mean": 0.6766666666666669,
+      "existing_v2_heldout_rate": 0.3167,
+      "seedwise_accepted_distance_medians": {
+        "20260827": 1.4315347237578901,
+        "20261827": 1.3881990068841963,
+        "20262827": 1.4739450486905752,
+        "20263827": 1.3843981434572283
+      },
+      "accepted_target_medians": {
+        "within_module_contrast": 0.16295589984734077,
+        "among_module_contrast": 0.31309660462957195,
+        "cross_scale_matrix_spearman": 0.41139974237870325,
+        "within_process_partial_r2": 0.015995975177891003,
+        "among_process_partial_r2": 0.11141356399462625,
+        "within_gsp_partial_r2": 0.00306130681459415,
+        "among_gsp_partial_r2": 0.02792666201518665
+      }
+    },
+    {
+      "family": "antagonist_only",
+      "accepted_primary_distance_median": 1.4727813345373493,
+      "accepted_primary_distance_q10_q90": [1.16581719025572, 1.5651246391983342],
+      "best_primary_distance": 0.7196960350307924,
+      "accepted_replication_pattern_rate_mean": 0.6733333333333335,
+      "existing_v2_heldout_rate": 0.4167,
+      "seedwise_accepted_distance_medians": {
+        "20260827": 1.4493677142735215,
+        "20261827": 1.368920283228026,
+        "20262827": 1.5259494708844437,
+        "20263827": 1.527988707802952
+      },
+      "accepted_target_medians": {
+        "within_module_contrast": 0.16522982487343635,
+        "among_module_contrast": 0.3934720649530281,
+        "cross_scale_matrix_spearman": 0.4051810505223987,
+        "within_process_partial_r2": 0.0156386842085799,
+        "among_process_partial_r2": 0.10907930321861355,
+        "within_gsp_partial_r2": 0.0029547715366343,
+        "among_gsp_partial_r2": 0.027070365064972
+      }
+    },
+    {
+      "family": "full_tradeoff_common_lability",
+      "accepted_primary_distance_median": 1.7117906344600484,
+      "accepted_primary_distance_q10_q90": [1.3333785644957885, 1.9195463836813147],
+      "best_primary_distance": 0.9962817803004909,
+      "accepted_replication_pattern_rate_mean": 0.84,
+      "existing_v2_heldout_rate": 0.6889,
+      "seedwise_accepted_distance_medians": {
+        "20260827": 1.639890354635036,
+        "20261827": 1.641156374690369,
+        "20262827": 1.739725001594991,
+        "20263827": 1.855031334712065
+      },
+      "accepted_target_medians": {
+        "within_module_contrast": 0.19527279550338475,
+        "among_module_contrast": 0.5239752909774286,
+        "cross_scale_matrix_spearman": 0.44361433137731976,
+        "within_process_partial_r2": 0.024823289169044152,
+        "among_process_partial_r2": 0.18551960165960457,
+        "within_gsp_partial_r2": 0.0036517976276025,
+        "among_gsp_partial_r2": 0.035117978850896
+      }
+    },
+    {
+      "family": "environment_only",
+      "accepted_primary_distance_median": 1.7520186943803437,
+      "accepted_primary_distance_q10_q90": [1.3401732793172483, 1.938791007939506],
+      "best_primary_distance": 1.1044773888744162,
+      "accepted_replication_pattern_rate_mean": 0.8266666666666665,
+      "existing_v2_heldout_rate": 0.1333,
+      "seedwise_accepted_distance_medians": {
+        "20260827": 1.5832030382472668,
+        "20261827": 1.7439462656401457,
+        "20262827": 1.8078224675549348,
+        "20263827": 1.8344593817873613
+      },
+      "accepted_target_medians": {
+        "within_module_contrast": 0.1916503396573525,
+        "among_module_contrast": 0.5296184908797653,
+        "cross_scale_matrix_spearman": 0.4442798530604455,
+        "within_process_partial_r2": 0.0290540035476258,
+        "among_process_partial_r2": 0.22574291476720276,
+        "within_gsp_partial_r2": 0.00446373845462115,
+        "among_gsp_partial_r2": 0.03888748507485095
+      }
+    },
+    {
+      "family": "full_tradeoff_modular_evolvability",
+      "accepted_primary_distance_median": 2.0190873604206976,
+      "accepted_primary_distance_q10_q90": [1.9528659879156574, 2.065434021931885],
+      "best_primary_distance": 1.9335734906589663,
+      "accepted_replication_pattern_rate_mean": 0.8249999999999998,
+      "existing_v2_heldout_rate": 0.7056,
+      "seedwise_accepted_distance_medians": {
+        "20260827": 2.0069175034085234,
+        "20261827": 2.031815719897921,
+        "20262827": 2.02628128678324,
+        "20263827": 2.0155882240331597
+      },
+      "accepted_target_medians": {
+        "within_module_contrast": 0.6027574020751827,
+        "among_module_contrast": 0.6968920614090409,
+        "cross_scale_matrix_spearman": 0.39289394589952764,
+        "within_process_partial_r2": 0.0242820034161962,
+        "among_process_partial_r2": 0.18466098312975635,
+        "within_gsp_partial_r2": 0.00395588686597475,
+        "among_gsp_partial_r2": 0.04774434138384885
+      }
+    }
+  ],
+  "observed_targets": {
+    "within_module_contrast": 0.1645023304673242,
+    "among_module_contrast": 0.08847536372583811,
+    "cross_scale_matrix_spearman": 0.36629931778064023,
+    "within_process_partial_r2": 0.013535098842026137,
+    "among_process_partial_r2": 0.2149779830807262,
+    "within_gsp_partial_r2": 0.0019789539652597513,
+    "among_gsp_partial_r2": 0.07865226872803101
+  },
+  "diagnosis": {
+    "dominant_shared_failure": "declared families generally overproduce among-taxon registered-module integration relative to observed 0.0885",
+    "pollinator_only": "closest relative fit but inadequate median distance and inadequate replication; underproduces among-taxon process and GSP increments",
+    "antagonist_only": "second relative fit but inadequate median distance and replication; overproduces among-module contrast and underproduces among process/GSP increments",
+    "environment_only": "reproduces among process omnibus most closely but strongly overproduces among-module integration and fails independent heldouts",
+    "common_lability": "better than modular in all four seedwise medians and replication adequate, but absolutely inadequate and worse than modular on independent v2 heldouts",
+    "modular_evolvability": "strongly overproduces within- and among-module integration, yielding the worst accepted median distance"
+  },
+  "registered_conclusion": "No declared family meets absolute structural adequacy. The common-lability versus modular-evolvability distinction remains unresolved. The current generator is missing a mechanism that permits strong within-taxon organization but much weaker among-taxon integration while retaining among-taxon process-environment structure.",
+  "claim_boundary": "ABC-like prior-predictive structural sufficiency under the frozen v3 contract. Not a likelihood, posterior model probability, Bayes factor, functional/genetic modularity estimate, selection test, adaptation test, plasticity test, or unique causal mechanism."
+}
