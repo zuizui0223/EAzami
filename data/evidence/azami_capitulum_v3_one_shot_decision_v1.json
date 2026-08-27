@@ -1,0 +1,19 @@
+{
+  "status": "robust_leader",
+  "primary_median_leader": "NULL_COUPLED",
+  "primary_leader_median": 2.213280419016901,
+  "primary_tie_tolerance": 0.11066402095084504,
+  "primary_tie_set": [
+    "NULL_COUPLED"
+  ],
+  "primary_min_pairwise_win_fraction": 1.0,
+  "replication_sensitivity_best": "NULL_COUPLED",
+  "leader_replication_sensitivity_median_rank": 1,
+  "leader_replication_sensitivity_within_10_percent_of_best": true,
+  "robust_leader": "NULL_COUPLED",
+  "no_retuning_rule": "The frozen target bundle does not identify one structural family strongly enough under the preregistered comparison; do not retune priors, weights, transforms or family membership to rescue a winner.",
+  "claim_boundary": "This one-shot comparison can discriminate structural sufficiency among the 14 frozen generator families for the 62 Azami observational estimands. It is not a likelihood analysis, posterior inference, causal identification, proof of adaptation, plasticity, defence, or genetic/developmental modularity.",
+  "paired_draw_count": 16,
+  "model_family_count": 14,
+  "observed_target_count": 62
+}
