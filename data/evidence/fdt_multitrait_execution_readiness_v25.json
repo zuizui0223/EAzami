@@ -1,0 +1,50 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v25",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v24.json",
+  "inheritance": "The v1 one-shot winner NULL_COUPLED remains frozen as the scalar-target structural-sufficiency winner. All field, Japan38 history, colour stop-rule and absolute-time gates remain in force.",
+  "v3_scalar_target_result": {
+    "status": "frozen",
+    "winner": "NULL_COUPLED",
+    "meaning": "best structural sufficiency among the 14 preregistered families for the frozen 62 scalar observational estimands",
+    "not_meaning": "no environmental biology, no adaptation, no selection, no plasticity, and not common evolutionary lability"
+  },
+  "v3_held_out_support_validation": {
+    "contract": "data/evidence/azami_capitulum_v3_null_heldout_support_contract_v1.json",
+    "decision": "data/evidence/azami_capitulum_v3_null_heldout_support_decision_v1.json",
+    "cell_frequencies": "data/evidence/azami_capitulum_v3_null_heldout_support_cell_frequencies_v1.csv",
+    "provenance": "data/evidence/azami_capitulum_v3_null_heldout_support_provenance_v1.json",
+    "status": "completed_and_frozen",
+    "frozen_winner": "NULL_COUPLED",
+    "validation_draws": 64,
+    "freedman_lane_permutations_per_test": 99,
+    "primary_pattern_matches": 0,
+    "primary_pattern_frequency": 0.0,
+    "primary_pattern_classification": "not_reproduced_or_exceptional",
+    "primary_pattern_wilson95_high": 0.05662405979280534,
+    "exact_20_cell_matches": 0,
+    "median_matching_cells_out_of_20": 14.0,
+    "critical_cell_results": {
+      "min5_among_omnibus_null_support_frequency": 0.09375,
+      "min2_among_omnibus_null_support_frequency": 0.09375,
+      "min5_among_growing_season_water_null_support_frequency": 0.0,
+      "min2_among_growing_season_water_null_support_frequency": 0.015625
+    },
+    "interpretation": "The snapshot NULL_COUPLED family is sufficient for the frozen raw scalar target bundle but is not sufficient for the held-out replication-stable inferential-support geometry. The scale-specific among-taxon process-support pattern therefore contains information not captured by the frozen snapshot-null generator.",
+    "winner_changed": false,
+    "stop_rule": "Do not rerank v1, increase the 64 held-out draws, change 99 permutations, redefine the primary support pattern, or add held-out support back into the v1 score."
+  },
+  "next_scientific_gate": {
+    "question": "What minimal additional structure can reproduce the held-out among-taxon process-support geometry without refitting the frozen v1 scalar target ranking?",
+    "allowed_direction": "A separately versioned falsification follow-up may compare predeclared additions such as explicit among-taxon process structure against the frozen NULL_COUPLED baseline using the held-out support geometry as its own endpoint.",
+    "prohibited_direction": "Do not use the held-out result to retroactively tune or rescue the v1 one-shot ranking."
+  },
+  "field_line": {
+    "first_executable_target": "JPN_36 phyllary-access pilot after authorization/census/device gates",
+    "highest_information_stickiness_design": "JPN_15 sticky neutralization within species with JPN_06 nonsticky 100/100 sister as external ancestry-matched comparator",
+    "execution_authorized": false
+  },
+  "coverage_repairs_remaining": ["JPN_15 phyllary posture", "JPN_24 stickiness"],
+  "absolute_time": "FDT5/FDT6 remain blocked by calibration limitations.",
+  "claim_boundary": "The combined result supports a two-layer distinction between reproducing snapshot scalar geometry and reproducing scale-specific inferential support. It does not identify a causal environmental process or prove modular adaptation."
+}
