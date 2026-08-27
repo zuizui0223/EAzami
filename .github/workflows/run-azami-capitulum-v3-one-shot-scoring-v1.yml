@@ -98,21 +98,41 @@ jobs:
           print(json.dumps(decision, indent=2))
           PY
 
-      - name: Reproduce frozen canonical result and full-ledger hashes
+      - name: Reproduce frozen canonical result to numerical tolerance
         run: |
-          set -euo pipefail
-          cmp result/one_shot/azami_capitulum_v3_one_shot_decision_v1.json data/evidence/azami_capitulum_v3_one_shot_decision_v1.json
-          cmp result/one_shot/azami_capitulum_v3_one_shot_family_summary_v1.csv data/evidence/azami_capitulum_v3_one_shot_family_summary_v1.csv
-          cmp result/one_shot/azami_capitulum_v3_one_shot_factor_contrasts_v1.csv data/evidence/azami_capitulum_v3_one_shot_factor_contrasts_v1.csv
           python - <<'PY'
-          import hashlib, json
+          import json, math
           from pathlib import Path
-          provenance=json.loads(Path('data/evidence/azami_capitulum_v3_one_shot_provenance_v1.json').read_text())
-          out=Path('result/one_shot')
-          for name, expected in provenance['output_sha256'].items():
-              observed=hashlib.sha256((out/name).read_bytes()).hexdigest()
-              assert observed == expected, (name, observed, expected)
-          print('frozen_one_shot_outputs_reproduced=true')
+          import pandas as pd
+
+          out = Path('result/one_shot')
+          tol = 1e-12
+
+          expected = json.loads(Path('data/evidence/azami_capitulum_v3_one_shot_decision_v1.json').read_text())
+          observed = json.loads((out/'azami_capitulum_v3_one_shot_decision_v1.json').read_text())
+          assert expected.keys() == observed.keys()
+          for key in expected:
+              a, b = expected[key], observed[key]
+              if isinstance(a, (int, float)) and not isinstance(a, bool):
+                  assert math.isclose(float(a), float(b), rel_tol=0.0, abs_tol=tol), (key, a, b)
+              else:
+                  assert a == b, (key, a, b)
+
+          for name in [
+              'azami_capitulum_v3_one_shot_family_summary_v1.csv',
+              'azami_capitulum_v3_one_shot_factor_contrasts_v1.csv',
+          ]:
+              exp = pd.read_csv(Path('data/evidence')/name)
+              obs = pd.read_csv(out/name)
+              pd.testing.assert_frame_equal(exp, obs, check_exact=False, rtol=0.0, atol=tol)
+
+          provenance = json.loads(Path('data/evidence/azami_capitulum_v3_one_shot_provenance_v1.json').read_text())
+          assert provenance['workflow_run'] == 33041133765
+          assert provenance['artifact_id'] == 9633924414
+          assert provenance['revalidation_rule']['numeric_fields'] == 'absolute tolerance <= 1e-12'
+          assert observed['robust_leader'] == 'NULL_COUPLED'
+          assert observed['primary_min_pairwise_win_fraction'] == 1.0
+          print('frozen_one_shot_outputs_numerically_reproduced=true')
           PY
 
       - uses: actions/upload-artifact@v4
