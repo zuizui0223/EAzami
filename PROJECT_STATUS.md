@@ -2,264 +2,257 @@
 
 Status date: 2026-08-27
 
-## Canonical mainline
+## Canonical dissertation mainline
 
 ```text
-Azami
-phenotypic decomposition
+shared continuous capitulum phenotype ontology
+        │
+        ├── Chapter 1 — phenotype × present-day space/environment
+        │     where phenotypes occur; within/among variation; environmental alignment
+        │
+        ├── Chapter 2 — phenotype × evolutionary time/history
+        │     phylogenetic state structure; recurrence; branch-wise change; historical coupling
+        │
+        └── Chapter 3 — phenotype × function/fitness
+              trait → performance → reproductive fitness; mutualist/antagonist/abiotic pathways
+
+Chapter 2 recurrence
         ↓
-EAzami-I
-phenotype → candidate function → validated functional trait
+origin discrimination — nuclear population genomics + plastid haplotype + cytotype
         ↓
-EAzami-II
-trait-specific evolutionary histories
-        ↓
-EAzami-III
-origin discrimination
-        ↓
-EAzami-IV
-functional / adaptive convergence
+functional / adaptive convergence synthesis
 ```
 
-Active source of truth:
+This replaces the previous `phenotype → function → history` ordering. Function is not an admission gate for Chapter 2. Chapter 1 and Chapter 2 use the same phenotype ontology on orthogonal axes: space versus evolutionary history.
 
-- `docs/chapter2/MAINLINE_V2.md`
-- `docs/chapter2/MANUSCRIPT_V2_OUTLINE.md`
-- `docs/chapter2/FIGURE_TABLE_PLAN_V2.md`
-- `docs/chapter2/SUBMISSION_GATES_V2.md`
-- `data/evidence/chapter2_result_role_map_v2.csv`
-- `docs/RESEARCH_PLAN.md`
+Active Chapter 2 sources of truth:
 
-The 62-target simulation programme is an **auxiliary cross-scale generative-constraint lane**, not the definition of evolutionary history.
+- `docs/chapter2/TIME_AXIS_MAINLINE_V3.md`
+- `docs/chapter2/MANUSCRIPT_JEB_V1.md`
+- `docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V1.md`
+- `docs/chapter2/META_SIM_DISPOSITION_V1.md`
+- `data/evidence/chapter2_analysis_disposition_v1.csv`
+- `data/evidence/chapter2_time_axis_compute/`
 
-## Azami endpoint inherited by EAzami
+## Chapter 1 endpoint inherited by Chapter 2
 
-> **The capitulum is not one adaptive syndrome. Its component phenotypes are decomposable and occupy different environmental and hierarchical structures.**
+Azami establishes the present phenotypic field rather than a fixed floral syndrome:
 
-Key inherited constraints:
+- categorical databases are replaced by repeated continuous image-derived measurements;
+- below-taxon variation is retained rather than collapsed to one species value;
+- the same observations carry geographic coordinates;
+- component phenotypes have trait-specific spatial/environmental structure;
+- within- and among-taxon organization are only partially aligned.
 
-- component phenotypes are measured separately rather than collapsed into one syndrome;
-- within-taxon organization is stronger than among-taxon organization;
-- within/among association geometry is only partially aligned;
-- broad current-climate distance, colonization-history separation and ploidy do not provide simple deterministic explanations of current capitulum disparity.
+Chapter 2 does **not** select only Chapter-1 environmentally significant traits. It asks how the same measurable phenotype dimensions are distributed through evolutionary history.
 
-## EAzami-I — phenotype to function
-
-A measured image phenotype is not automatically a functional trait.
-
-Promotion path:
-
-`observed phenotype → candidate functional annotation → independent evidence → focal manipulation/performance → validated functional trait`.
-
-Current candidate axes:
-
-- **orientation** — time-window pollination / thermal presentation / rain-UV-wetting protection;
-- **display** — pollinator discovery/probing + antagonist discovery/exposure;
-- **phyllary posture** — reproductive-enemy access/exclusion + possible pollinator-access cost;
-- **armature** — candidate enemy exclusion/handling cost, pending direct botanical validation;
-- **stickiness** — context-dependent enemy interaction/cost; no universal defence sign;
-- **colour** — local availability-dependent pollinator choice + pigment/abiotic physiology.
-
-Strongest resolved ecological prior:
-
-- strict Cirsium reproductive-herbivory meta-analysis;
-- pooled viable/mature-seed RR under reduced versus ambient herbivory = **2.674**;
-- 95% CI **2.388–2.993**;
-- equivalent ambient loss of potential seed output = **62.6%**;
-- I² ≈ **1%**.
-
-Resolved conclusion:
-
-> Reproductive insect antagonists can impose a large, repeatable maternal-fitness cost in Cirsium.
-
-Unresolved:
-
-> Which capitulum phenotype changes that cost, and what mutualist or abiotic trade-off accompanies it?
-
-Selection literature also rejects a universal pollinator- or antagonist-dominance model. The leading ecological working architecture is local **selection mosaic + trait-specific functional leverage**.
-
-## EAzami-II — trait-specific evolutionary histories
+## Chapter 2 — phenotype through evolutionary history
 
 ### Nuclear history scaffold
 
-Canonical Japan38 Comp1061 compatibility tree:
+Canonical Japan38 Comp1061 compatibility reconstruction:
 
+- 38 paper taxon concepts;
 - 39 focal biological samples;
-- 40 tips including outgroup;
-- 241 locus universe / 236 QC loci / 176 rootable loci;
+- 40 tips including safflower outgroup;
+- 241 frozen locus universe / 236 QC loci / 176 rootable loci;
 - 161,654-bp concatenated alignment;
-- UFBoot 1000 / SH-aLRT 1000;
+- IQ-TREE with UFBoot 1000 and SH-aLRT 1000;
 - branch lengths = substitutions/site, **not absolute time**;
-- JPN20 two biological samples are non-monophyletic in ML and 0/1000 UFBoot trees and are not forcibly collapsed.
+- JPN20 is represented by two non-monophyletic samples in ML and 0/1000 UFBoot trees and is not forcibly collapsed;
+- JPN31 is excluded from primary phenotype-history inference because of the frozen identity/locality conflict.
 
-### Orientation
+Published phylogenomics provides the broader context: 36/38 sampled Japanese concepts belong to the dominant Pleistocene Japanese radiation, while the compatibility tree is used for the focal reproducible trait-history analyses.
 
-- resolved concepts = **20**;
-- ML minimum unordered steps = **6**;
-- UFBoot range = **4–6**, median 5;
-- recurrence is robust;
-- exact branch localization remains weak.
+### Continuous phenotype recovery
 
-### Phyllary posture
+Azami compute-only PR #77 reused the frozen Chapter-1 artifact rather than rebuilding phenotype data for the phylogeny:
 
-- resolved concepts = **10**;
-- minimum changes = **3**;
-- all 1000 UFBoot trees require exactly 3 changes;
-- JPN36 terminal transition is forced in 75.4% of UFBoot trees.
+- 46,276 strict-spatial observations;
+- 1,018,072 long-format trait rows;
+- 18 continuous endpoints;
+- exact Japan38 continuous-trait coverage for 14 concepts;
+- no broad-species substitution for infraspecific concepts;
+- no missing-data imputation;
+- no discretization to increase historical coverage.
 
-### Stickiness
+Primary Chapter-2 continuous units:
 
-Canonical main:
+1. orientation angle;
+2. CIELAB lightness;
+3. CIELAB chroma;
+4. circular hue;
+5. outline aspect ratio;
+6. outline circularity;
+7. outline solidity;
+8. width-profile CV.
 
-- resolved concepts = 12;
-- ML minimum = **5**;
-- UFBoot = **4–5**, median 5.
+Main threshold = >=2 observations per exact concept; high-depth sensitivity = >=5. Candidate continuous involucre/armature endpoints remain coverage-audit-only because only two exact concepts reach >=2 observations.
 
-JPN24 authority extension, pending merge:
+### Result 1 — trait states are weakly conserved
 
-- JPN24 = sticky from exact NMNS authority;
-- resolved concepts = **13**;
-- scientific recomputation gives ML = 5 and **all 1000 UFBoot trees = 5**;
-- the previous failing final CI was a readiness-schema assertion after the scientific recomputation succeeded; the schema assertion has been corrected and is being revalidated.
+Across the eight primary continuous inferential units:
 
-### Cross-module history
+- **0/8** pass the two-sided BH-corrected phylogenetic-structure family at >=2;
+- **0/8** pass at >=5;
+- Pagel lambda MLE = **0** for every scalar unit at both thresholds.
 
-No orientation × phyllary × stickiness pair is consistently positive across branch-length-aware and topology-only transition-overlap diagnostics.
+The high-depth lightness subset retains a strong directional anti-phylogenetic diagnostic (rho = -0.707; exact two-sided P = 0.0444), but it does not survive the eight-unit two-sided family (q = 0.356). Therefore Chapter 2 does not promote a universal anti-phylogenetic colour claim.
 
-Current conclusion:
+Supported statement:
 
-> **The simple one-shared-whole-capitulum historical-lability model is not supported.**
+> **The measured continuous capitulum states are not strongly conserved by relatedness in the current exact-concept Japanese panel.**
 
-Boundary:
+### Result 2 — discrete states recur
 
-> This does not demonstrate developmental or genetic modular evolvability.
+Authority-backed discrete histories remain separate from image-derived continuous metrics:
 
-### Colour negative-control history
+- **orientation:** 20 resolved; ML minimum 6; UFBoot 4–6, median 5;
+- **phyllary posture:** 10 resolved; exactly 3 minimum changes on all 1000 UFBoot topologies;
+- **stickiness:** 13 resolved after the merged JPN24 authority repair; ML minimum 5 and **1000/1000 UFBoot topologies = 5**.
 
-Global/high-depth continuous lightness shows anti-phylogenetic structure, but the source-balanced Japan7 panel does not replicate the same directional signal.
+These are recurrence lower bounds. They are not counts of adaptive convergence or proof of independent origin.
 
-Current decision:
+### Result 3 — large continuous changes are coordinated across traits
 
-- no promotion of the global lightness pattern to a Japanese-radiation colour-transition history;
-- no further sampling/reprocessing solely to rescue that sign;
-- Ryukyu white/coloured direction and C. irumtiense reactivation remain unresolved.
+On the substitution-length ML phylogram, BM-conditional branch-change magnitudes show broad positive coordination:
 
-## EAzami-III — origin discrimination
+- mean of 28 pairwise branch-change Spearman correlations = **0.408006**;
+- independent-branch permutation P = **0.00010**.
 
-Repeated present states are not yet independent-origin claims.
+This is not simply a present-day covariance result. It asks whether large reconstructed changes in different continuous phenotype dimensions occur on the same branches.
 
-Competing histories retained:
+### Result 4 — global coordination is topology-robust, module specificity is not
+
+A branch-length-free sensitivity set every non-root branch to 1.0 and repeated the continuous branch-change analysis across all 1000 raw UFBoot topologies.
+
+Global mean pairwise branch-change correlation:
+
+- usable topologies = **1000/1000**;
+- median rho = **0.141287**;
+- 5th percentile = **0.118995**;
+- 95th percentile = **0.199615**;
+- fraction positive = **1.000**.
+
+Thus the global coordinated-change tendency survives topology uncertainty and removal of substitution-length information, although its magnitude is weaker than on the ML phylogram.
+
+Module-specific coordination does **not** meet the preregistered topology-robust rule:
+
+- within-minus-between median = **0.112435**;
+- 5th percentile = **-0.095160**;
+- fraction positive = **0.946**.
+
+Supported statement:
+
+> **Evolutionary remodeling is broadly coordinated across phenotype dimensions, but the coordination is not confined robustly to the present-day measurement modules.**
+
+### Result 5 — discrete transition overlap is topology-sensitive
+
+With the latest authority states, branch-length-aware ML overlap can be positive for some pairs, especially orientation × stickiness, but equal-branch UFBoot sensitivity changes the pattern:
+
+- orientation × phyllary: median rho = **-0.0594**, fraction positive = **0.349**;
+- orientation × stickiness: median rho = **-0.3870**, fraction positive = **0.009**;
+- phyllary × stickiness: median rho = **0.1840**, fraction positive = **0.782**.
+
+Therefore no discrete pair has a consistently positive shared-transition history across branch-length-aware and topology-only layers.
+
+## Current Chapter 2 interpretation
+
+The current evidence rejects both extreme simplifications:
+
+1. **fixed conserved syndrome** — unsupported because continuous trait states show little robust phylogenetic conservation and multiple discrete traits require repeated changes;
+2. **fully independent trait histories** — also incomplete because large continuous changes concentrate on shared evolutionary branches across every bootstrap topology.
+
+The bounded interpretation is:
+
+> **A complex capitulum can lose phylogenetic conservation of its component states while retaining coordinated episodes of broad phenotypic remodeling. Present-day modules do not map cleanly onto stable historical modules.**
+
+This is a historical pattern claim, not a developmental-genetic mechanism, adaptation claim, or absolute evolutionary-rate result.
+
+## Submission target
+
+Primary target: **Journal of Evolutionary Biology — Research Article**.
+
+Reason: the paper asks a general evolutionary question about multivariate phenotype history, combines morphology/phylogenetics/macroevolution, explicitly propagates topology uncertainty, and contains informative negative results. The manuscript is organized around a general distinction among **state conservation, recurrence, and change localization**, not around Cirsium natural history alone.
+
+Current title:
+
+> **Coordinated evolutionary change without a conserved phenotypic syndrome in a rapid thistle radiation**
+
+Stretch target: *Evolution* only if the general branch-change result is strengthened enough to justify a broader conceptual claim. Plant-focused fallback: *Evolutionary Journal of the Linnean Society* / *Botanical Journal of the Linnean Society* if generality is judged insufficient for JEB.
+
+## Where the meta-analysis and simulations go
+
+### Chapter 1 Supplement / thesis structural methods
+
+Retain, but do not call these evolutionary transition histories:
+
+- v3.1 generator-family inadequacy;
+- PR #119 NULL_COUPLED scalar-target winner;
+- PR #120 held-out support geometry 0/64;
+- PR #123 among-only process diagnostic;
+- draft PR #122 scale-specific covariance v4.1.
+
+These address how the **present within/among phenotypic field** can be generated statistically.
+
+### Chapter 2 Supplement
+
+- detailed Japan-origin evidence ledger;
+- absolute-time calibration/blocking audit;
+- coverage and taxon-concept reconciliation;
+- full topology-sensitivity distributions;
+- external repeated-evolution benchmark if completed.
+
+### Chapter 3 — function/fitness
+
+Move the functional meta-synthesis here as primary evidence rather than burying it in Chapter 2:
+
+- FDT1 trait-to-function evidence;
+- Cirsium reproductive-herbivory RR = 2.674 (95% CI 2.388–2.993);
+- pollinator × antagonist selection mosaic;
+- selection leverage;
+- demographic transmission;
+- orientation/display/stickiness/phyllary functional calibrations.
+
+Function/fitness is used later to explain **why** historical changes occurred and whether repeated histories can be promoted to adaptive convergence.
+
+## Later origin and convergence gates
+
+Repeated states still allow:
 
 - ancestral retention;
 - independent lineage-specific change;
-- ancestral polymorphism / differential sorting;
+- ancestral polymorphism / sorting;
 - introgression / gene flow;
 - hybridization / cytoplasmic capture;
-- reversal or re-expression where biologically justified.
+- reversal or re-expression.
 
-Next discriminator, preferably linked in the same biological individuals:
+Next origin discriminator should link the same biological individuals where possible:
 
 - standardized phenotype;
-- **nuclear population-genomic DNA**;
-- same-individual or tightly matched **plastid haplotype**;
-- **cytotype / genome-size** information.
+- nuclear population genomics;
+- plastid haplotype;
+- cytotype / genome size.
 
-Objective:
+Claim ladder remains:
 
-> Determine where repeated phenotype states came from, not merely build a denser species tree.
+`repeated state → independent origin → repeated ecological association → same/equivalent function → reproductive fitness → functional/adaptive convergence`.
 
-## EAzami-IV — convergence
+## Immediate executable priorities
 
-Claim ladder:
-
-`repeated state → independent origin → repeated ecological association → same/equivalent function → reproductive-fitness consequence → functional/adaptive convergence`.
-
-Current position:
-
-- recurrence reached for orientation/phyllary/stickiness;
-- independent origin not yet established population-wise;
-- focal trait function not yet broadly validated in Cirsium;
-- adaptive convergence not established.
-
-## Three unresolved new-data gates retained
-
-The existing doctoral sampling programme remains useful, but its gates are now interpreted under the new mainline rather than as three competing central Aims.
-
-1. **Gate 1 — origin discrimination**
-   - same-individual phenotype + nuclear population ancestry + plastid + cytotype;
-   - distinguish standing ancestral variation, introgression/gene flow and lineage-specific origin;
-   - current protected minimum remains core190 before optional controls.
-
-2. **Gate 2 — functional validation**
-   - **head orientation first** where manipulable and ancestry/context can be controlled;
-   - preserve effective contact, rain/wetting/thermal context, antagonist damage and final filled/mature seed;
-   - phyllary/spine only after direct botanical validation and a defensible manipulation;
-   - stickiness as a context-specific test, not a generic defence proxy.
-
-3. **Gate 3 — molecular reuse for colour**
-   - at least **two independent W/C transitions** before a repeated molecular-reuse claim;
-   - ancestry + coding/regulatory haplotype + floral RNA at late bud/pigmentation onset and anthesis + pigment + calibrated colour;
-   - coloured descendant alone does not license reactivation.
-
-These gates correspond directly to `origin`, `function`, and a trait-specific molecular-mechanism extension of the convergence ladder.
-
-## Higher-order hypotheses
-
-### Modular evolvability
-
-Status: **endpoint hypothesis, not organizing premise**.
-
-It becomes stronger only if multiple traits show partly independent histories and repeated origins reuse standing variation, introgressed variants or retained regulatory/developmental machinery.
-
-### Common lability
-
-Status: higher-order competitor.
-
-The simple whole-capitulum historical form is weakened by transition-overlap results. Snapshot residual covariance coupling must not be called evolutionary common lability.
-
-### Selection mosaic / local functional leverage
-
-Status: leading ecological working architecture.
-
-## Auxiliary cross-scale generative-constraint lane
-
-Purpose:
-
-> Which statistical covariance/process architectures can reproduce the observed within/among phenotypic field?
-
-Current results:
-
-- v3.1: none of five declared driver families passes absolute adequacy;
-- frozen 62-target one-shot: `NULL_COUPLED` rank 1 in 16/16 paired draws;
-- held-out falsification: primary support pattern **0/64**, exact 20-cell pattern **0/64**;
-- post-heldout diagnostic: `PROCESS_AMONG_ONLY_SHARED_COUPLED` improves on NULL in **22/24** draws but remains inadequate at median **6/8** primary cells;
-- draft v4.1: scale-specific covariance families are the first to pass the registered seven-target adequacy screen, but this remains provisional/unmerged and requires canonical/held-out validation.
-
-Role under the new mainline:
-
-> independent evidence for scale-specific covariance formation, not reconstruction of evolutionary transition history.
-
-## Current bounded Chapter 2 paper
-
-Current-data endpoint:
-
-> **The Cirsium capitulum is not one fixed adaptive syndrome. Its decomposed phenotype components have different candidate functional pathways and repeated, partly decoupled histories on the current nuclear topology ensemble. Repeated states are recurrence lower bounds; historical origin and adaptive convergence remain explicit next tests.**
-
-## Next executable priorities
-
-1. close JPN24 stickiness integration without changing its authority state or scientific result;
-2. repair only the remaining authority-level history gap, JPN15 phyllary posture, and leave unknown if no exact source maps safely to the ontology;
-3. build the paper phenotype→candidate-function evidence table from existing functional registries;
-4. prepare one nuclear-tree figure with separate orientation/phyllary/stickiness panels and no composite syndrome;
-5. protect the next ancestry layer: same-individual phenotype + nuclear population genomics + plastid + cytotype;
-6. run focal functional tests only where the trait and manipulation are defensible.
+1. finish the JEB manuscript against the frozen continuous/discrete topology-sensitivity results;
+2. make the main figure set: conceptual state-vs-change distinction, continuous trait/state panel, discrete recurrence tree, branch-change coordination/topology sensitivity;
+3. keep JPN15 phyllary posture unknown unless an exact authority safely maps it to the frozen ontology; it is not a license to invent a state;
+4. do not reopen colour acquisition solely to rescue an anti-phylogenetic sign;
+5. do not run more present-state generator families for Chapter 2;
+6. keep function/fitness meta-analysis intact for Chapter 3.
 
 ## Stop rules
 
-- no new generic climate model unless it changes phenotype→function, history, origin or convergence discrimination;
-- no re-testing whether Cirsium reproductive enemies can reduce seed output; test which phenotype changes the cost;
-- no image-derived defence claim without direct botanical/functional validation;
-- no repeated-state → adaptive-convergence shortcut;
-- no coloured-descendant → reactivation shortcut;
-- no modular-evolvability premise before the lower evidence ladder is satisfied;
+- no present covariance → historical mechanism shortcut;
+- no repeated state → independent origin shortcut;
+- no repeated state → adaptive convergence shortcut;
+- no branch-change coordination → shared developmental/genetic mechanism shortcut;
+- no substitutions/site → absolute time or rate/Myr shortcut;
+- no image-derived phenotype → validated function shortcut;
 - no simulation adequacy → realized evolutionary history shortcut.
