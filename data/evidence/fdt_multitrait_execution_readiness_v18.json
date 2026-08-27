@@ -1,0 +1,36 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v18",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v17.json",
+  "inheritance": "All field-feasibility ordering from v17, state-aware module-function bridge v2, Japan7 colour stop rule, phyllary/stickiness histories, and absolute-time constraints remain in force unless updated below.",
+  "orientation_update": {
+    "new_authority_state": {
+      "paper_japan_member_id": "JPN_34",
+      "taxon": "Cirsium microspicatum",
+      "state": "upward_or_erect",
+      "source": "NMNS detail page no=7; prose states capitula erect or ascending"
+    },
+    "resolved_concepts": 20,
+    "ml_minimum_steps": 6,
+    "ufboot1000_step_range": [4, 6],
+    "ufboot1000_median_steps": 5,
+    "minimum_root_state_set": ["U"],
+    "decision": "Coverage improved but recurrence summary did not change. Do not promote a named orientation branch target; branch localization remains the blocker.",
+    "canonical_sensitivity": "data/evidence/jpn34_orientation_extension_parsimony_v1.json"
+  },
+  "coverage_repairs_remaining": [
+    "JPN_15 phyllary posture",
+    "JPN_24 stickiness"
+  ],
+  "field_execution_priority": {
+    "first": "JPN36 non-destructive phyllary-state validation and reversible-access pilot, conditional on local permission.",
+    "second": "JPN15/JPN06 abundance, access and permission reconnaissance; JPN15 wild manipulation remains gated by conservation status and site rules.",
+    "third": "Resolve JPN15 phyllary and JPN24 stickiness primary states from authority-quality evidence before additional branch-specific nominations."
+  },
+  "do_not_repeat": [
+    "Do not continue searching JPN34 orientation; the authority gap is closed.",
+    "Do not interpret unchanged minimum-change counts as proof that JPN34 is irrelevant to all model-based transition placement.",
+    "Do not nominate a branch-specific orientation adaptation from the JPN34 coverage repair alone."
+  ],
+  "claim_boundary": "Coverage repair plus minimum-change sensitivity. The additional state increases observed orientation coverage but does not identify an adaptive transition edge or ecological mechanism."
+}
