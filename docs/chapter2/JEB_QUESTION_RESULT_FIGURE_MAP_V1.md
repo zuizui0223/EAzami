@@ -1,138 +1,70 @@
-# JEB question → recovery → result → figure map v1
+# JEB question–result–figure map v2
 
-## Central question
+## Submission spine
 
-> **When a complex reproductive phenotype is decomposed into continuous components, does evolutionary history primarily preserve trait states, allow independent component change, or concentrate multidimensional change in shared evolutionary episodes?**
+| Question | Estimand | Frozen result | Decision | Main display | Claim ceiling |
+| --- | --- | --- | --- | --- | --- |
+| Q1. Is present-day capitulum integration scale invariant? | registered-module association contrast within and among taxa | nobs>=5: 0.1645 within vs 0.0885 among; nobs>=2: 0.1577 vs 0.0837; matrix rho=0.3663 | integration exists but is scale dependent | **Figure 1** | observational modules only |
+| Q2. Are continuous states phylogenetically structured and discrete states recurrent? | corrected state structure plus unordered minimum changes | continuous 0/8 corrected; JPN29-excluded high-depth not evaluable; orientation 4–6, phyllary 3, stickiness 5 | state structure not detected; discrete recurrence required | **Figure 2** | no zero-signal, origin or convergence claim |
+| Q3. Do recurrent states identify the same branches? | forced-edge frequency and transition placement | orientation no forced ML edge; JPN36 phyllary edge fraction=0.754 | count robustness differs from placement identifiability | **Figure 2** | no known mechanism or event age |
+| Q4. Do continuous changes share more branch localization than expected from reconstruction geometry? | mean pairwise rho under tip-permutation + reconstruction null | original rho=0.4080, P=0.3504; JPN29-excluded rho=0.4723, P=0.1959 | both FAIL | **Figure 3** | descriptive observed rhos; no coordinated-remodelling claim |
+| Q5. Do discrete traits share topology-robust transition localization? | pairwise Mk transition-overlap distributions | O–P median=-0.0594; O–S=-0.3870; P–S=0.1840 with q05<0 | no pair consistently positive | **Figure 4** | does not prove independent histories or modular evolvability |
 
-The manuscript is deliberately not framed as `Is the capitulum modular?` because the evidence distinguishes state conservation, recurrence, change localization and module specificity as different estimands.
+## Figure 1 — Present integration changes with biological scale
 
-| Question | Why it matters | How evidence was recovered | Current result | Main display | Licensed claim |
-|---|---|---|---|---|---|
-| Q1. Do continuous phenotype states track ancestry? | A conserved syndrome predicts lineage-specific state similarity. | Frozen Azami 46,276-photo continuous trait universe → exact Japan38 concept bridge → nuclear compatibility phylogram. | 8/8 units fail corrected two-sided phylogenetic-structure test; scalar lambda MLE=0. | **Fig. 2** forest/heat summary of lambda, rho, q at n>=2 and n>=5. | No robust continuous state conservation in current exact Japanese panel. |
-| Q2. Are defined categorical states recurrent? | Weak continuous signal could still hide repeated threshold/state transitions. | Independent NMNS/authority state ontology; no discretization of image metrics; unordered parsimony over ML+1000 UFBoot. | Orientation 4–6; phyllary exactly 3; stickiness exactly 5 after JPN24 repair. | **Fig. 3a–c** state maps + bootstrap minimum-step distributions. | Multiple capitulum state dimensions require repeated historical changes. |
-| Q3. Do large continuous changes occur on the same branches? | State conservation and localization of change are different estimands. | Common 8-concept panel; BM conditional internal states; standardized parent-child magnitude on ML substitution-length branches. | Mean pairwise branch-change rho=0.408; P=0.00010. | **Fig. 4a** branch-change heatmap; **Fig. 4b** 8×8 coupling matrix. | On the ML phylogram, continuous phenotype change is broadly coordinated. |
-| Q4. Is coordination restricted to present-day modules? | A strong evolutionary module model predicts stronger within-module than between-module coupling. | Module labels frozen independently from Chapter 1; all unique module-label permutations. | Within mean=.495; between=.367; difference=.128; P=.168. | **Fig. 4c** within vs between distributions. | Coordination is not significantly module-restricted on the ML phylogram. |
-| Q5. Is shared history robust to topology uncertainty? | Rapid radiation and ILS/reticulation make one-tree conclusions fragile. | Equal-branch raw UFBoot topology sensitivities for discrete transitions and continuous branch-change magnitude. | Continuous global rho remains positive in 1000/1000 trees, median=.141, q05=.119; module contrast q05=-.095 and positive fraction=.946. Discrete overlap remains heterogeneous/sign-changing. | **Fig. 5** bootstrap distributions. | Broad continuous coordinated change is topology-robust; module-specific coordination and one shared discrete-transition history are not. |
+**Panel a:** paired within- and among-taxon registered-module contrasts at the >=5 and >=2 thresholds, with frozen intervals.
+**Panel b:** within/among association-matrix similarity (rho=0.3663) and a compact schematic separating contemporary scale from phylogenetic history.
+**Panel c:** evidence ladder: present association -> state structure -> recurrence -> exact edge placement -> shared localization. No arrow means that one level logically proves the next.
 
-## Figure 1 — From phenomics across space to phenotype through history
+**Legend claim:** Registered capitulum modules are stronger within taxa than among taxa, establishing scale-dependent present-day integration.
 
-**Panel a:** Chapter 1 and Chapter 2 share one phenotype ontology but different axes.
+**Alternative text:** Two paired estimates show larger registered-module contrasts within taxa than among taxa at both observation thresholds. A separate value of 0.3663 indicates only partial similarity between the two association matrices. A five-step ladder separates present association from four historical estimands.
 
-```text
-photos → continuous phenotype → Chapter 1: space/environment
-                              → Chapter 2: evolutionary history
-```
+## Figure 2 — Recurrence counts and transition identifiability are distinct
 
-**Panel b:** published Japan radiation context (36/38 in dominant radiation) plus focal compatibility-tree provenance.
+**Panel a:** minimum-step distributions for orientation (4–6), phyllary posture (3) and stickiness (5) over 1,000 topologies.
+**Panel b:** forced terminal-edge fractions: orientation JPN36=0.201, phyllary JPN36=0.754, stickiness JPN06=0.67 and JPN36=0.40 from the placement audit.
+**Panel c:** continuous state-structure decision strip: original 0/8 corrected, JPN29-excluded >=2 8/8 not supported, JPN29-excluded >=5 not evaluable.
 
-**Panel c:** exact phenotype coverage by unit and threshold. Candidate involucre/armature coverage is shown as intentionally excluded rather than omitted silently.
+**Legend claim:** All three discrete states recur, but the branches responsible for their minimum histories are not equally identifiable.
 
-Purpose: establish that Chapter 2 is not a functional follow-up of only significant Chapter 1 traits; it is an orthogonal time-axis projection of the same phenotype universe.
+**Alternative text:** The recurrence panel shows orientation varying from four to six steps, while phyllary posture remains at three and stickiness at five. The edge panel shows a much higher forced fraction for the JPN36 phyllary edge than for the orientation edge. The continuous panel records no supported family result and one non-evaluable high-depth sensitivity.
 
-## Figure 2 — Trait states are weakly phylogenetically structured
+## Figure 3 — Reconstruction geometry explains apparent continuous shared change
 
-Rows = eight primary continuous units.
+**Panel a:** original reconstruction-aware null distribution with observed rho=0.4080 and P=0.3504.
+**Panel b:** fixed JPN29-excluded distribution with observed rho=0.4723 and P=0.1959.
+**Panel c:** the equal-branch 1,000-topology sign distribution is labelled `diagnostic_only` and visually separated from the inferential nulls.
 
-Columns/display:
-- n concepts at threshold 2 and 5;
-- scalar Pagel lambda where defined;
-- patristic-vs-phenotype-distance rho;
-- raw two-sided P;
-- BH q;
-- LOO sign stability.
+**Legend claim:** Neither observed branch-change correlation exceeds the null generated by independently permuting tip phenotypes and repeating ancestral reconstruction.
 
-Headline:
+**Alternative text:** Two null histograms place the observed correlations well inside their distributions rather than beyond the upper tail. The original test has P=0.3504 and the identity-corrected sensitivity P=0.1959. A separate inset notes positive estimator signs across topologies but labels them as non-rescuing diagnostics.
 
-> **No continuous unit has family-level robust phylogenetic state structure.**
+## Figure 4 — Shared discrete localization is topology dependent
 
-The high-depth lightness and shape anti-phylogenetic tendencies remain visible but secondary.
+**Panel a:** distributions of equal-branch transition-overlap rho for orientation–phyllary, orientation–stickiness and phyllary–stickiness.
+**Panel b:** comparison of branch-length-aware maximum-likelihood signs and equal-branch topology distributions.
+**Panel c:** claim boundary from recurrence to convergence: repeated state -> independent origin -> equivalent function -> repeated ecological association -> fitness consequence.
 
-## Figure 3 — Repeated discrete histories differ among capitulum components
+**Legend claim:** No discrete trait pair shows consistently positive shared transition localization across branch-length-aware and topology-only evidence layers.
 
-Three aligned panels:
-- orientation;
-- phyllary posture;
-- stickiness.
+**Alternative text:** Three distributions differ in sign and width. Orientation–stickiness is predominantly negative across equal-branch topologies despite a positive maximum-likelihood excess estimate. Phyllary–stickiness is often positive but crosses zero. An evidence ladder shows that recurrence alone is below the evidence required for convergence.
 
-For each:
-- ML state map;
-- minimum-change result;
-- 1000 UFBoot step distribution;
-- root/branch-localization uncertainty where appropriate.
+## Supporting displays
 
-Current values:
-- orientation: ML 6, UFBoot 4–6;
-- phyllary: exactly 3 on all 1000 trees;
-- stickiness: exactly 5 on all 1000 trees after JPN24.
+- **Figure S1:** exact Japan38 tree and taxon-admission ledger, including JPN20, JPN31 and JPN29 boundaries.
+- **Figure S2:** full continuous state-structure estimates and coverage by endpoint and threshold.
+- **Figure S3:** equal-branch continuous topology diagnostic, explicitly non-inferential.
+- **Figure S4:** source-balanced Japan7 lightness non-replication.
+- **Table S1:** tree, concept and phenotype-join provenance.
+- **Table S2:** complete continuous state-structure and reconstruction-null results.
+- **Table S3:** discrete state sources, recurrence, roots and forced-edge fractions.
+- **Table S4:** transition-overlap estimates across branch-length treatments.
 
-Do not label minimum steps as convergence counts.
+## Display gates
 
-## Figure 4 — Coordinated continuous change without module-restricted coupling
-
-Panel a: branches × eight traits heatmap of standardized reconstructed change magnitude on the ML phylogram.
-
-Panel b: pairwise Spearman branch-change correlation matrix. Highlight strong cross-module pairs as well as within-shape correlations.
-
-Panel c: observed within-minus-between module contrast against exact module-label null.
-
-Headline:
-
-> **Large continuous changes are broadly coordinated on the ML phylogram (mean pairwise rho=.408, P=.00010), but that coordination is not significantly restricted to present-day modules (P=.168).**
-
-## Figure 5 — What survives topology uncertainty?
-
-Panel a: discrete pairwise overlap distributions across 1000 UFBoot equal-branch topologies.
-
-Panel b: continuous global mean branch-change correlation distribution across 1000 equal-branch topologies.
-
-- median=.141287;
-- q05=.118995;
-- q95=.199615;
-- fraction positive=1.000.
-
-Panel c: continuous within-minus-between module contrast distribution.
-
-- median=.112435;
-- q05=-.095160;
-- fraction positive=.946.
-
-Decision:
-
-- continuous global coordination **passes** the preregistered topology-robust rule (`q05 > 0` and positive fraction >=.95);
-- module specificity **fails** the same rule;
-- discrete common-transition overlap remains topology-sensitive.
-
-## Integrated result architecture
-
-```text
-weak trait-state conservation
-        +
-repeated discrete states
-        +
-topology-robust broad continuous change localization
-        +
-no topology-robust module boundary
-        +
-no one shared discrete-transition history
-        ↓
-coordinated evolutionary remodeling without a conserved phenotypic syndrome
-```
-
-The final phrase is a pattern claim. It does not identify a shared developmental/genetic mechanism or adaptive selective regime.
-
-## Supplement routing
-
-### Chapter 2 Supplement
-- exact Japan38 concept reconciliation;
-- full 18-endpoint bridge and candidate coverage audit;
-- full trait-level permutation/LOO tables;
-- full continuous branch-change matrices;
-- full continuous topology-sensitivity distributions;
-- full discrete transition-posterior outputs;
-- Japanese-origin evidence ledger;
-- absolute-time calibration/blocking audit;
-- optional external FDT3 repeated-evolution benchmark if completed.
-
-### Not Chapter 2 Supplement by default
-- present-state v3/v4 covariance generator screens → Chapter 1 Supplement / thesis methods;
-- trait→function and fitness meta-analyses → next function/fitness chapter.
+- Main figures are generated from frozen machine-readable files, not manually re-entered values.
+- Each figure has PDF and TIFF/PNG output plus alternative text.
+- Scientific FAIL and `not_evaluable` states must be visible rather than encoded as missing bars.
+- Figure captions may say `repeated minimum changes`; they may not say `independent origins`, `convergence`, `adaptation` or `rate`.
+- The value P=0.00010 from the invalid independent-branch null does not appear in active submission displays.

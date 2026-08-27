@@ -1,120 +1,82 @@
-# Chapter 2 submission target v1
+# Chapter 2 JEB submission target v2
 
 Status date: 2026-08-27
+Target: **Journal of Evolutionary Biology, Research Article**
 
-## Primary target
+## Active title and question
 
-**Journal of Evolutionary Biology (JEB) — Research Article**
+> **Present-day phenotypic integration does not imply a shared evolutionary history in a rapid thistle radiation**
 
-Working title:
+The general question is whether a module inferred from contemporary covariance persists when the same phenotype is projected onto phylogenetic history.
 
-> **Coordinated evolutionary change without a conserved phenotypic syndrome in a rapid thistle radiation**
+## Why JEB remains the correct first target after the null failure
 
-## Why JEB is the primary target
+JEB explicitly accepts rigorous negative results when they provide broadly informative evolutionary insight. The paper now offers a stronger methodological and biological distinction than the superseded positive-remodelling draft:
 
-The current paper is not a taxonomic or descriptive Cirsium paper. Its general evolutionary question is:
+- present-day registered-module integration is detectable but differs within and among taxa;
+- continuous state structure is not robustly detected in the sparse exact-concept panel;
+- several independent state ontologies require repeated minimum changes;
+- stable recurrence counts can coexist with uncertain edge placement;
+- apparent continuous shared change is explained by common reconstruction geometry;
+- discrete shared localization is topology and branch-length sensitive.
 
-> **Can a complex phenotype lose phylogenetic conservation of its component states while retaining coordinated localization of evolutionary change?**
+The contribution is not that *Cirsium* has a null result. It is that present integration, state structure, recurrence, edge identifiability and shared localization are separate evolutionary estimands and can disagree within one phenotype.
 
-The paper separates three historical quantities that are commonly compressed under broad ideas of integration/modularity:
+## Current journal contract
 
-1. phylogenetic conservation of present states;
-2. recurrence of independently defined discrete states;
-3. localization and coordination of continuous change across branches.
+The official JEB Author Guidelines checked on 2026-08-27 require:
 
-The empirical answer is non-trivial:
+- Research Article main text <=7,500 words;
+- abstract <=250 words;
+- 4–10 keywords;
+- double-anonymous main manuscript;
+- a separate title page containing authors, affiliations, correspondence, acknowledgements, funding, conflicts, data availability and ethics statements;
+- line numbering in the main manuscript and figures placed near first mention;
+- figure alternative text and publication-quality files;
+- Supporting Information supplied at submission;
+- disclosure of generative-AI assistance in the cover letter and Methods or Acknowledgements;
+- public raw-data archiving no later than revision, with analysis scripts and derived artifacts preferably public.
 
-- continuous tip states show no family-level robust phylogenetic structure;
-- multiple discrete traits require repeated changes;
-- continuous change magnitudes are broadly coordinated across evolutionary branches;
-- global coordination survives 1000/1000 equal-branch bootstrap topologies;
-- present-day module boundaries do not define a topology-robust historical module;
-- discrete transition overlap is itself topology-sensitive.
+Official source: https://academic.oup.com/jeb/pages/author-guidelines
 
-This is broader than `Cirsium traits evolved repeatedly` and is framed as a contribution to multivariate phenotype evolution.
+## Go/no-go gate
 
-## Current JEB fit
+### Scientific gates
 
-JEB states that it prioritizes rigorous studies that advance understanding of evolutionary processes and provide novel insights generalisable across taxa. Its stated scope includes evolutionary genetics/genomics, phylogenetics, evolutionary ecology, development and morphology, and both micro- and macroevolution. The journal also explicitly welcomes robust negative results when they provide new insight.
+- [x] original reconstruction-aware null materialized and frozen as FAIL (P=0.3504);
+- [x] JPN29 exclusion fixed before outcome and frozen as FAIL (P=0.1959);
+- [x] active title, abstract and conclusion remove coordinated-remodelling claims;
+- [x] discrete recurrence and current topology overlap frozen;
+- [x] continuous image values labelled global species proxies;
+- [x] JPN29 identity boundary explicit;
+- [x] negative results do not become independence claims.
 
-The current Chapter 2 fits that scope through:
+### Package gates
 
-- evolutionary morphology;
-- phylogenetic comparative analysis;
-- rapid-radiation history;
-- explicit topology uncertainty;
-- informative negative results about state conservation and module specificity;
-- a positive general result about branch-localized multivariate remodeling.
+- [x] active main manuscript <=7,500 words and abstract <=250 words;
+- [x] Figures 1–4 generated and visually checked;
+- [x] Supporting Information tables and five supplementary figures complete;
+- [x] complete Moreyra author metadata verified against PubMed DOI metadata;
+- [ ] title-page author/funding/correspondence placeholders completed by the authors;
+- [ ] public archival identifier inserted or repository plan accepted for initial submission;
+- [x] anonymous manuscript, title-page template, Supporting Information and cover-letter template rendered and audited;
 
-## JEB article-format contract
+## Claim ceiling
 
-Research Article:
+The submission may claim:
 
-- maximum manuscript length: **7,500 words**;
-- Abstract: **<=250 words**;
-- Keywords: **4–10**;
-- expected structure: Introduction / Materials and methods / Results / Discussion; Conclusions optional;
-- initial submission can use flexible formatting.
+> Present-day capitulum integration is scale dependent, and the available continuous and discrete histories do not support one persistent historical capitulum module.
 
-Internal manuscript must therefore remain below those limits before journal-specific style cleanup.
+It may not claim:
 
-## Why not make New Phytologist the first target
+- coordinated evolutionary remodeling;
+- zero phylogenetic signal or evolutionary independence;
+- adaptive radiation or adaptive convergence;
+- independent origins from parsimony counts;
+- developmental or genetic modularity;
+- validated ecological function of image-derived traits;
+- absolute evolutionary rates or dated transition ages.
 
-The biological system is a plant radiation, but the current paper is strongest as a general evolutionary-history result rather than as a mechanistic plant-function paper. New Phytologist would become more realistic if the paper added a stronger plant-mechanistic axis linking historical remodeling to ecological function, developmental biology or causal fitness.
+## Work that must not delay this submission
 
-Those data belong to the next function/fitness chapter and should not be imported merely to raise journal prestige.
-
-## Stretch target
-
-**Evolution**
-
-Use only if the paper can make and defend the general claim at a level clearly beyond a single-taxon demonstration. The current topology-robust continuous branch-change result moves the paper in that direction, but coverage remains only eight exact concepts in the common multivariate panel. JEB is therefore the better first target now.
-
-## Plant/evolution fallbacks
-
-If JEB judges the insight insufficiently general:
-
-1. **Evolutionary Journal of the Linnean Society** — broad evolutionary biology, explicitly open to morphometric/morphological and modern analytical work;
-2. **Botanical Journal of the Linnean Society** — appropriate if the paper is ultimately read as a plant-evolution/morphology contribution, provided the broader botanical significance remains explicit.
-
-## Go/no-go rule for submission
-
-### Submit to JEB when all are true
-
-- continuous trait-state analysis frozen;
-- continuous branch-change topology sensitivity frozen;
-- discrete recurrence and topology-sensitive overlap frozen;
-- exact concept/provenance ledger complete;
-- main Figures 1–5 generated from frozen evidence only;
-- Abstract <=250 words;
-- manuscript <=7,500 words;
-- bibliography normalized;
-- data/code availability written;
-- claims do not exceed the frozen boundaries.
-
-### Do not delay JEB submission for
-
-- field manipulation;
-- population genomics;
-- plastid haplotypes;
-- cytotype sampling;
-- functional meta-analysis expansion;
-- absolute trait-transition ages;
-- further present-state generator families.
-
-Those are later chapters/evidence layers.
-
-## Claim boundary
-
-JEB submission may claim:
-
-> **coordinated evolutionary remodeling without a conserved phenotypic syndrome**
-
-It may not claim from the current data alone:
-
-- adaptive radiation;
-- adaptive convergence;
-- independent genetic origin of repeated states;
-- developmental/genetic modularity;
-- one shared selective regime;
-- absolute evolutionary rates or transition ages.
+Field manipulation, population genomics, plastid haplotypes, cytotypes and trait-function-fitness experiments are later evidence layers. They can distinguish origins and mechanisms but are not required for this bounded Research Article.

@@ -1,0 +1,39 @@
+{
+  "contract_version": "chapter2_jeb_figure_manifest_v1",
+  "renderer": "matplotlib_3.10.8",
+  "outputs": {
+    "figure1_present_integration.pdf": {
+      "sha256": "5b13bf2b06792ad7a15baf8be228026ff36878ff7dee1ae8cc3760810bf239b6",
+      "bytes": 20159
+    },
+    "figure1_present_integration.png": {
+      "sha256": "8fed1cb12eb1bf7b536fb95919ef626d7620781e1f949b7eb61596b08d86e1c2",
+      "bytes": 117360
+    },
+    "figure2_recurrence_identifiability.pdf": {
+      "sha256": "09e5ab051ea30464303b476db9c178715cf99ea2bd498b9ca36cc48a75b8507d",
+      "bytes": 26376
+    },
+    "figure2_recurrence_identifiability.png": {
+      "sha256": "d128fddc98500692eaa41410a7b15b06d508273d65a255cd615eb1c423da115d",
+      "bytes": 206762
+    },
+    "figure3_reconstruction_nulls.pdf": {
+      "sha256": "b5b11b928dd88f0d62f88f47ae2910e788b3f156b5e24910673a49eb74c640a9",
+      "bytes": 25570
+    },
+    "figure3_reconstruction_nulls.png": {
+      "sha256": "86c443ccc5120a6213fe6006a1a4df3eb313489f50a781e804a3bf1902e1c769",
+      "bytes": 177044
+    },
+    "figure4_discrete_overlap.pdf": {
+      "sha256": "1c0138779a2000477a8a8b500d1adf17021a06924adb450b93961a1ce5121c60",
+      "bytes": 23375
+    },
+    "figure4_discrete_overlap.png": {
+      "sha256": "7837ba31c80af800a55ff2bd582a403df6211724af07bf2a1879aa446d663d00",
+      "bytes": 165269
+    }
+  },
+  "claim_boundary": "Static displays of frozen results. Scientific FAIL and not_evaluable outcomes remain explicit; figures do not establish independence, convergence, adaptation or absolute rates."
+}

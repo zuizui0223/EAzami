@@ -23,3 +23,6 @@ temp/
 
 # Generated local knowledge graph
 graphify-out/
+
+# Local document render QA
+docs/chapter2/submission_package/.qa/
