@@ -1,0 +1,68 @@
+name: Validate capitulum-space mechanism v3 contract
+
+on:
+  pull_request:
+    paths:
+      - "data/contracts/capitulum_space_mechanism_v3_contract.json"
+      - "data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv"
+      - "data/evidence/source/azami_capitulum_environment_eazami_targets_run33035785120.csv"
+      - "data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv"
+      - "data/evidence/azami_capitulum_space_handoff_report_v1.json"
+      - "analysis/validate_capitulum_space_mechanism_v3_contract.py"
+      - "tests/test_capitulum_space_mechanism_v3_contract.py"
+      - "docs/CAPITULUM_SPACE_MECHANISM_V3_CONTRACT.md"
+      - ".github/workflows/validate-capitulum-space-mechanism-v3-contract.yml"
+  workflow_dispatch:
+
+permissions: {contents: read}
+
+jobs:
+  validate-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile and test contract validator
+        run: |
+          python -m py_compile analysis/validate_capitulum_space_mechanism_v3_contract.py
+          python -m unittest tests/test_capitulum_space_mechanism_v3_contract.py -v
+      - name: Resolve frozen primary targets and audit contract
+        run: |
+          python analysis/validate_capitulum_space_mechanism_v3_contract.py \
+            --contract data/contracts/capitulum_space_mechanism_v3_contract.json \
+            --structure data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv \
+            --environment data/evidence/source/azami_capitulum_environment_eazami_targets_run33035785120.csv \
+            --incremental data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv \
+            --handoff-report data/evidence/azami_capitulum_space_handoff_report_v1.json \
+            --out-dir /tmp/capitulum_space_v3_contract
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          root = Path('/tmp/capitulum_space_v3_contract')
+          audit = json.load((root / 'capitulum_space_mechanism_v3_contract_audit.json').open())
+          with (root / 'capitulum_space_mechanism_v3_primary_targets.csv').open(newline='') as handle:
+              rows = list(csv.DictReader(handle))
+          assert audit['status'] == 'v3_contract_validated_before_model_family_outcomes'
+          assert audit['scoring_status'] == 'not_run'
+          assert audit['n_inferential_units'] == 17
+          assert audit['n_primary_fit_targets'] == 7
+          assert len(rows) == 7
+          assert all(not row['scope'].endswith('min2') for row in rows)
+          assert set(audit['model_families']) == {
+              'environment_only', 'pollinator_only', 'antagonist_only',
+              'full_tradeoff_common_lability',
+              'full_tradeoff_modular_evolvability'
+          }
+          print('v3_contract_frozen=true')
+          print('primary_targets=', len(rows))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: capitulum-space-mechanism-v3-contract
+          path: /tmp/capitulum_space_v3_contract
+          if-no-files-found: error
+          retention-days: 90
