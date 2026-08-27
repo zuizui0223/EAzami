@@ -1,0 +1,65 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v19",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v18.json",
+  "inheritance": "All FDT8 field-feasibility ordering, JPN34 orientation coverage repair, state-aware module-function bridge v2, Japan7 colour stop rule, phyllary/stickiness histories and absolute-time constraints remain in force unless updated below.",
+  "jpn36_phyllary_access_pilot": {
+    "protocol": "data/evidence/jpn36_phyllary_access_pilot_contract_v1.json",
+    "human_readable_protocol": "docs/JPN36_PHYLLARY_ACCESS_PILOT_PROTOCOL_V1_2026-08-27.md",
+    "validation": "data/evidence/jpn36_phyllary_access_pilot_validation_v1.json",
+    "status": "protocol_ready_field_execution_not_authorized",
+    "fdt8_alignment": {
+      "paper_japan_member_id": "JPN_36",
+      "taxon": "Cirsium sieboldii",
+      "natural_phyllary_state": "appressed",
+      "natural_stickiness_state": "nonsticky_or_nearly_nonsticky",
+      "ufboot_terminal_forced_fraction": 0.754,
+      "field_priority": "first"
+    },
+    "active_operation": "removable inert external collar/frame with blunt spacer tabs supporting outer phyllaries to a frozen natural-range access target",
+    "sham": "same material, mass, visible profile, attachment positions and handling duration with spacer tabs flush and no phyllary displacement",
+    "sample_allocation": {
+      "target_pairs": 12,
+      "target_individuals": 24,
+      "biological_unit": "individual plant",
+      "experimental_heads_per_individual": 1,
+      "allocation_within_pair": "1 access_proxy : 1 sham",
+      "frozen_seed": "JPN36-PHYLLARY-ACCESS-V1-20260827",
+      "no_replacement_after_assignment": true
+    },
+    "joint_endpoints": [
+      "enemy approach/access/damage",
+      "legitimate visitor access and effective reproductive-structure contact",
+      "total, filled and viable achene output"
+    ],
+    "execution_authorized": false,
+    "blocking_gates": [
+      "same-population observation-only natural reference and frozen access target",
+      "v1 device qualification",
+      "site-specific land-manager and manipulation approval",
+      "conservation review plus flowering-individual census and 2 percent population cap",
+      "terminal collection approval",
+      "viability-assay approval"
+    ],
+    "stop_rule_summary": [
+      "no randomization with an absent, expired or site-mismatched authorization",
+      "no cutting, removal, puncture, adhesive/coating or reproductive-tissue contact",
+      "remove the device and retain the assigned head in the integrity ledger after any injury/contact or more than 5 degree unintended orientation change",
+      "stop the batch if two of the first four assigned heads show device-attributable injury/contact",
+      "no outcome-informed device retuning, replacement, mediator expansion or underfilled efficacy rescue"
+    ],
+    "next_gate": "Complete non-manipulative reference/state confirmation and device qualification, then supply a deidentified site authorization record before deterministic allocation.",
+    "claim_boundary": "Protocol readiness only. No site is currently authorized, no manipulation has been performed, and no safety, enemy, pollinator, reproductive, historical-mechanism or adaptation result is available."
+  },
+  "coverage_repairs_remaining": [
+    "JPN_15 phyllary posture",
+    "JPN_24 stickiness"
+  ],
+  "do_not_repeat": [
+    "Do not treat a protocol-schema pass as field permission or empirical execution.",
+    "Do not begin the randomized pilot without terminal collection and viability approval; otherwise the FDT8 joint endpoint chain is incomplete.",
+    "Do not replace the access proxy with phyllary cutting/removal or infer that the proxy recreates a historical natural state.",
+    "Do not use pilot nonsignificance as evidence of no phyllary effect or pilot direction as evidence of adaptation."
+  ],
+  "claim_boundary": "Fail-closed execution readiness for the JPN36 pilot. It freezes what must be authorized, randomized, observed and stopped; it does not establish current site access, manipulation safety, causal function or adaptation."
+}

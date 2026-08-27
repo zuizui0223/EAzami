@@ -1,0 +1,43 @@
+name: Validate JPN36 phyllary-access pilot v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/randomize_jpn36_phyllary_access_pairs_v1.py"
+      - "analysis/validate_jpn36_phyllary_access_pilot_v1.py"
+      - "data/evidence/jpn36_phyllary_access_pilot_contract_v1.json"
+      - "data/evidence/jpn36_phyllary_access_pilot_validation_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v19.json"
+      - "data/schema/jpn36_phyllary_access_authorization_schema_v1.json"
+      - "docs/JPN36_PHYLLARY_ACCESS_PILOT_PROTOCOL_V1_2026-08-27.md"
+      - "sampling/jpn36_phyllary_access_eligible_heads_v1.csv"
+      - "sampling/jpn36_phyllary_access_assignment_v1.csv"
+      - "sampling/jpn36_phyllary_access_observations_v1.csv"
+      - "tests/test_validate_jpn36_phyllary_access_pilot_v1.py"
+      - ".github/workflows/validate-jpn36-phyllary-access-pilot-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependency
+        run: python -m pip install pytest
+      - name: Compile validators
+        run: |
+          python -m py_compile analysis/randomize_jpn36_phyllary_access_pairs_v1.py
+          python -m py_compile analysis/validate_jpn36_phyllary_access_pilot_v1.py
+      - name: Recompute frozen protocol validation
+        run: python analysis/validate_jpn36_phyllary_access_pilot_v1.py
+      - name: Verify frozen validation output
+        run: git diff --exit-code -- data/evidence/jpn36_phyllary_access_pilot_validation_v1.json
+      - name: Run focused fail-closed tests
+        run: python -m pytest -q tests/test_validate_jpn36_phyllary_access_pilot_v1.py
