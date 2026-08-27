@@ -1,0 +1,87 @@
+name: Validate scale-specific covariance v4 contract
+
+on:
+  pull_request:
+    paths:
+      - "data/contracts/scale_specific_covariance_v4_contract.json"
+      - "data/contracts/capitulum_space_mechanism_v3_contract.json"
+      - "data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv"
+      - "data/evidence/source/azami_capitulum_environment_eazami_targets_run33035785120.csv"
+      - "data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv"
+      - "data/evidence/azami_capitulum_space_handoff_report_v1.json"
+      - "data/evidence/capitulum_space_mechanism_v3_1_result_summary.json"
+      - "analysis/validate_scale_specific_covariance_v4_contract.py"
+      - "tests/test_scale_specific_covariance_v4_contract.py"
+      - "docs/SCALE_SPECIFIC_COVARIANCE_V4_CONTRACT.md"
+      - ".github/workflows/validate-scale-specific-covariance-v4-contract.yml"
+  workflow_dispatch:
+
+permissions: {contents: read}
+
+jobs:
+  validate-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile and test frozen contract validator
+        run: |
+          python -m py_compile analysis/validate_scale_specific_covariance_v4_contract.py
+          python -m unittest tests/test_scale_specific_covariance_v4_contract.py -v
+      - name: Resolve immutable gap and audit v4 design
+        run: |
+          python analysis/validate_scale_specific_covariance_v4_contract.py \
+            --contract data/contracts/scale_specific_covariance_v4_contract.json \
+            --v3-contract data/contracts/capitulum_space_mechanism_v3_contract.json \
+            --structure data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv \
+            --environment data/evidence/source/azami_capitulum_environment_eazami_targets_run33035785120.csv \
+            --incremental data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv \
+            --handoff-report data/evidence/azami_capitulum_space_handoff_report_v1.json \
+            --v3-result data/evidence/capitulum_space_mechanism_v3_1_result_summary.json \
+            --out-dir /tmp/scale_specific_covariance_v4_contract
+      - name: Verify pre-outcome boundary and design counts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          audit = json.load((Path('/tmp/scale_specific_covariance_v4_contract') / 'scale_specific_covariance_v4_contract_audit.json').open())
+          assert audit['status'] == 'scale_specific_covariance_v4_contract_validated_before_family_outcomes'
+          assert audit['contract_version'] == 'scale_specific_covariance_v4_2026-08-27'
+          assert audit['n_model_families'] == 5
+          assert audit['model_families'] == [
+              'shared_scale_baseline',
+              'within_only_module_factor',
+              'among_unit_mosaic_loadings',
+              'combined_scale_decoupling',
+              'combined_scale_decoupling_with_rotation',
+          ]
+          assert audit['complexity_levels'] == {
+              'shared_scale_baseline': 0,
+              'within_only_module_factor': 1,
+              'among_unit_mosaic_loadings': 1,
+              'combined_scale_decoupling': 2,
+              'combined_scale_decoupling_with_rotation': 3,
+          }
+          assert audit['n_primary_fit_targets'] == 7
+          assert audit['n_min2_replication_patterns'] == 6
+          assert audit['n_main_environment_r2_context_targets'] == 12
+          assert audit['outcomes_inspected'] is False
+          assert audit['scoring_status'] == 'not_run'
+          assert audit['screen_gates'] == {
+              'absolute_primary_adequacy_threshold': 1.0,
+              'minimum_replication_pattern_rate': 0.75,
+              'minimum_relative_primary_distance_improvement_over_parent': 0.15,
+              'maximum_context_r2_rmse_increase_relative_to_parent': 0.05,
+          }
+          print('scale_specific_covariance_v4_contract_frozen=true')
+          print('observed_among_to_within_ratio=', audit['observed_gap']['observed_among_to_within_module_contrast_ratio'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scale-specific-covariance-v4-contract
+          path: /tmp/scale_specific_covariance_v4_contract
+          if-no-files-found: error
+          retention-days: 90
