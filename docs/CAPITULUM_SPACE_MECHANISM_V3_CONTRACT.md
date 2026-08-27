@@ -1,6 +1,18 @@
-# Capitulum-space mechanism v3 contract
+# Capitulum-space mechanism v3.1 contract
 
-Status: **frozen before any v3 model-family outcome is generated**.
+Status: **amended before any v3 model-family outcome was inspected**.
+
+## Pre-outcome amendment boundary
+
+The original v3 contract fixed the seven matched estimands, five families, four deterministic seeds and replication/held-out checks. After the first implementation job had started, but before its result, log or artifact was inspected, we identified one missing rule: a relative winner could be declared even if every family fit the frozen pattern badly, or if the focal separation was negligible.
+
+Contract v3.1 therefore supersedes that uninspected run and adds three outcome-blind gates:
+
+- the winning focal family must have accepted median primary distance <= 1.0;
+- it must improve on the other focal family by at least 10% in median distance;
+- its accepted replication-pattern rate must be >= 0.75.
+
+The existing seed-wise stability, replication-not-worse and independent-literature-heldout-not-worse gates are retained. Only a workflow run started from `capitulum_space_mechanism_v3_1_2026-08-27` is interpretable. If any gate fails, common lability versus modular evolvability remains unresolved.
 
 ## Why v3 is needed
 
@@ -70,16 +82,19 @@ Parameters may be global, environment-block-level or registered-module-level. Pe
 
 ## Simulation and ranking rule
 
-The first registered screen will use:
+The registered v3.1 screen uses:
 
 - 500 draws per seed per family;
 - four deterministic seeds;
 - top 5% acceptance with at least 50 accepted draws;
-- ranking by median primary distance, then replication-pattern rate, then the already existing independent literature held-out rate.
+- ranking by median primary distance, then replication-pattern rate, then the already existing independent literature held-out rate;
+- absolute accepted-median distance <= 1.0 for focal adequacy;
+- at least 10% relative median-distance improvement for focal promotion;
+- accepted replication-pattern rate >= 0.75.
 
 The screen is not a likelihood, posterior model probability or Bayes factor. Those labels are prohibited.
 
-A common-versus-modular decision is allowed only when the same estimands are generated for all seven primary targets, the separation is stable across all declared seeds, the winning family is not worse on the >=2 replication pattern and it is not worse on independent literature held-outs. Otherwise the distinction remains unresolved.
+A common-versus-modular decision is allowed only when all seven matched estimands are generated, the winning family is absolutely adequate, separation is at least 10%, the winner is stable across all declared seeds, its replication rate is absolutely adequate and not worse than the alternative, and its existing independent literature-heldout rate is not worse. Otherwise the distinction remains unresolved.
 
 ## What v3 must generate
 
@@ -97,7 +112,7 @@ Producing the correct sign for one environmental coefficient is not equivalent t
 
 ## Interpretation boundary
 
-Even a stable v3 ranking cannot establish:
+Even a stable v3.1 ranking cannot establish:
 
 - functional or genetic modularity;
 - modular evolvability as a measured biological property;
@@ -106,12 +121,14 @@ Even a stable v3 ranking cannot establish:
 - pollinator-mediated selection or antagonist defence;
 - a unique evolutionary mechanism.
 
-The output is a diagnosis of which declared mechanism family is sufficient to reproduce a frozen pattern bundle under declared priors and constraints.
+The output is a diagnosis of which declared mechanism family is sufficient to reproduce a frozen pattern bundle under declared priors and constraints. Failure of every family to meet absolute adequacy is retained as a mechanism-gap result rather than hidden by relative ranking.
 
 ## Machine-readable files
 
 - contract: `data/contracts/capitulum_space_mechanism_v3_contract.json`;
-- validator: `analysis/validate_capitulum_space_mechanism_v3_contract.py`;
-- tests: `tests/test_capitulum_space_mechanism_v3_contract.py`.
+- contract validator: `analysis/validate_capitulum_space_mechanism_v3_contract.py`;
+- gated screen entry point: `analysis/run_capitulum_space_mechanism_v3_gated.py`;
+- generator: `analysis/simulate_capitulum_space_mechanism_v3.py`;
+- tests: `tests/test_capitulum_space_mechanism_v3_contract.py`, `tests/test_simulate_capitulum_space_mechanism_v3.py`, and `tests/test_run_capitulum_space_mechanism_v3_gated.py`.
 
-The validator resolves the seven primary targets against the imported Azami tables, verifies provenance hashes, rejects duplicated sensitivity targets and writes the exact future simulator target table. No v3 family outcome is generated in this contract PR.
+The contract validator resolves the seven primary targets against the imported Azami tables, verifies provenance hashes and rejects duplicated sensitivity targets. The v3.1 wrapper additionally validates the absolute adequacy and separation gates before running the family screen.
