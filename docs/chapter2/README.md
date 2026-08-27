@@ -55,7 +55,7 @@ Azami and EAzami are not parallel trait projects.
 
 - orientation requires repeated historical changes; ML minimum 6 and UFBoot range 4–6 after the JPN34 authority extension;
 - phyllary posture requires exactly 3 changes across all 1000 UFBoot trees;
-- stickiness has ML minimum 5 and canonical UFBoot range 4–5; the unmerged JPN24 extension yields five changes in every UFBoot topology;
+- stickiness is now canonical at 13 resolved concepts, ML minimum 5, and exactly 5 changes on all 1000 UFBoot trees after the merged JPN24 authority repair (PR #124; merge `4276930a0bbd0e02fcdddcfb070812ebe8df8561`);
 - no module pair shows consistently positive transition overlap across branch-length-aware and topology-only layers, so simple whole-capitulum historical lability is not supported;
 - global/high-depth continuous lightness overdispersion does not replicate as the same source-balanced Japan-local signal.
 
@@ -93,8 +93,6 @@ These results constrain statistical covariance architecture. They are not trait 
 - `FIGURE_TABLE_PLAN_V1.md`
 - `SUBMISSION_GATES_V1.md`
 - `../../data/evidence/chapter2_claim_registry_v1.csv`
-
-These files remain valid evidence inventories but require v2 narrative remapping before submission.
 
 ## Higher-order hypotheses
 
