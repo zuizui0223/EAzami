@@ -1,0 +1,20 @@
+{
+  "status": "validated_observational_handoff",
+  "n_targets": 62,
+  "n_structure_targets": 6,
+  "n_environment_block_targets": 24,
+  "n_descriptive_geometry_targets": 12,
+  "n_incremental_environment_targets": 20,
+  "source_run_id": "33035785120",
+  "source_artifact_id": "9632715852",
+  "source_artifact_digest": "sha256:51e7a26b5bd09e030b67b9342586699abaaf46e630f45b6bb4ee7bfc9152ced6",
+  "source_head_sha": "227c0e7b8c338894806785b8545c7c77c8724de1",
+  "source_pr_merge_sha": "523c4ca0a1e6988a2b62f3d2f53df8b7442dff72",
+  "source_geb_v2_artifact_id": "9612943217",
+  "source_geb_v2_artifact_sha256": "101e996b638996a0c5ae79d358bf51293c3585f0e84c4a961b91dcbedf96211e",
+  "space_table_sha256": "8341d590b178f57fbafb299d703c64ba7d35a9831645cb668c02665c8524228b",
+  "environment_table_sha256": "e9c36f4ce2a45a32ef41eb26848411cbd67e5442fef204dcdd919d58f55ac2dc",
+  "incremental_table_sha256": "7d85d5394742e341fc30dd28734960211befa9531e0f238131d1062237bac8af",
+  "simulation_role": "unscored_observational_target",
+  "boundary": "Importer validates provenance only; a later explicit model contract must decide whether and how any target is scoreable."
+}
