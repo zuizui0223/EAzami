@@ -1,0 +1,36 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v27",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v26.json",
+  "inheritance": "All frozen v3 scalar-target, held-out support and post-heldout diagnostic results remain unchanged. All field, Japan38 history, colour stop-rule and absolute-time gates remain in force.",
+  "jpn24_stickiness_authority_extension": {
+    "status": "completed_and_frozen",
+    "paper_member": "JPN_24",
+    "taxon": "Cirsium pseudosuffultum",
+    "source": "https://www.kahaku.go.jp/research/db/botany/azami/detail.html?no=109",
+    "source_type": "National Museum of Nature and Science exact-concept detail page",
+    "assigned_state": "sticky",
+    "authority_basis": "NMNS explicitly states linear to narrowly lanceolate glands occur on inner and middle phyllaries and that the involucre is well sticky.",
+    "orientation_state": "unknown",
+    "phyllary_posture": "unknown",
+    "history_result": "data/evidence/jpn24_stickiness_extension_parsimony_v1.json",
+    "resolved_concepts_before": 12,
+    "resolved_concepts_after": 13,
+    "ml_minimum_unordered_steps": 5,
+    "ml_root_state_set": ["sticky"],
+    "ufboot1000_steps": {"min":5,"median":5.0,"max":5,"q05":5,"q95":5},
+    "history_interpretation": "The authority repair removes the previous 4-step topology sensitivity: all 1000 frozen UFBoot trees now require five unordered stickiness changes. This strengthens recurrence coverage without converting recurrence into an adaptive-convergence claim.",
+    "initial_validation_run": 33045048766,
+    "initial_validation_artifact": 9635307454,
+    "initial_validation_artifact_digest": "sha256:8ff4e6b37fdb8c513eaf5736c14eae4cbef0e0e94363154ea42ca5fed50e0d83"
+  },
+  "coverage_repairs_remaining": ["JPN_15 phyllary posture"],
+  "field_line": {
+    "first_executable_target": "JPN_36 phyllary-access pilot after authorization/census/device gates",
+    "highest_information_stickiness_design": "JPN_15 sticky neutralization within species with JPN_06 nonsticky 100/100 sister as external ancestry-matched comparator",
+    "execution_authorized": false
+  },
+  "absolute_time": "FDT5/FDT6 remain blocked by calibration limitations.",
+  "next_gate": "Do not search JPN24 stickiness further. The only remaining authority-level module coverage repair is JPN15 phyllary posture; leave it unknown unless an exact authority or primary taxonomic source maps safely to the frozen posture ontology.",
+  "claim_boundary": "The JPN24 assignment is an authority-level categorical state used to improve history coverage. It is not an individual measurement and does not establish defence efficacy, adaptation or causal function."
+}
