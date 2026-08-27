@@ -97,13 +97,18 @@ jobs:
           assert set(a['pairwise_overlap'])=={
               'orientation__phyllary','orientation__stickiness','phyllary__stickiness'
           }
-          assert b['bootstrap_topology_sensitivity']['bootstrap_trees_total']==1000
-          assert b['bootstrap_topology_sensitivity']['jpn20_monophyletic_trees']==0
-          # Coverage must reflect both merged authority repairs.
-          cov=a.get('trait_coverage') or a.get('trait_diagnostic') or {}
-          text=json.dumps(a)
-          assert 'JPN_34' in text and 'JPN_24' in text
-          print(json.dumps({'ml_pairwise':a['pairwise_overlap'],'bootstrap_pairwise':b['bootstrap_topology_sensitivity']['pairwise_spearman_distributions']},indent=2))
+          # These resolved-tip counts directly verify that both authority repairs entered the run.
+          assert a['traits']['orientation']['resolved_tips']==20
+          assert a['traits']['phyllary']['resolved_tips']==10
+          assert a['traits']['stickiness']['resolved_tips']==13
+          boot=b['bootstrap_topology_sensitivity']
+          assert boot['bootstrap_trees_total']==1000
+          assert boot['jpn20_monophyletic_trees']==0
+          print(json.dumps({
+              'resolved_tips':{k:a['traits'][k]['resolved_tips'] for k in ['orientation','phyllary','stickiness']},
+              'ml_pairwise':a['pairwise_overlap'],
+              'bootstrap_pairwise':boot['pairwise_spearman_distributions'],
+          },indent=2))
           PY
       - uses: actions/upload-artifact@v4
         with:
