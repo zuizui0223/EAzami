@@ -81,6 +81,8 @@ These results constrain statistical covariance architecture. They are not trait 
 
 - `MAINLINE_V2.md` — canonical scientific line and claim ladder.
 - `MANUSCRIPT_V2_OUTLINE.md` — manuscript architecture for phenotype → function → history → origin → convergence.
+- `FIGURE_TABLE_PLAN_V2.md` — main figures follow phenotype → function → history → convergence; simulation is supplementary.
+- `SUBMISSION_GATES_V2.md` — separates the bounded current paper from stronger future origin/convergence claims.
 - `../../data/evidence/chapter2_result_role_map_v2.csv` — maps existing repository results onto the new line.
 - `../RESEARCH_PLAN.md` — operational research plan.
 
