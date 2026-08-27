@@ -1,0 +1,201 @@
+{
+  "contract_version": "scale_specific_covariance_v4_2026-08-27",
+  "status": "frozen_before_v4_family_outcomes",
+  "purpose": "Test which structural extension can decouple moderate within-taxon capitulum organization from weak among-taxon integration while retaining stronger among-taxon process-environment structure.",
+  "source": {
+    "azami_run_id": "33035785120",
+    "azami_artifact_id": "9632715852",
+    "azami_artifact_digest": "sha256:51e7a26b5bd09e030b67b9342586699abaaf46e630f45b6bb4ee7bfc9152ced6",
+    "azami_head_sha": "227c0e7b8c338894806785b8545c7c77c8724de1",
+    "structure_table": "data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv",
+    "environment_table": "data/evidence/source/azami_capitulum_environment_eazami_targets_run33035785120.csv",
+    "incremental_table": "data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv",
+    "handoff_report": "data/evidence/azami_capitulum_space_handoff_report_v1.json",
+    "v3_1_result": "data/evidence/capitulum_space_mechanism_v3_1_result_summary.json",
+    "v3_1_result_run_id": "33040972884",
+    "v3_1_result_artifact_id": "9633915699",
+    "v3_1_result_artifact_digest": "sha256:fb66b22b073a406432b02fba207e8ebe0c79b3e12d092ba48078ad1752e7d4dc"
+  },
+  "frozen_gap_diagnosis": {
+    "observed_within_module_contrast": 0.1645023304673242,
+    "observed_among_module_contrast": 0.08847536372583811,
+    "observed_among_to_within_module_contrast_ratio": 0.5378350218239834,
+    "observed_cross_scale_matrix_spearman": 0.36629931778064023,
+    "observed_within_process_partial_r2": 0.013535098842026137,
+    "observed_among_process_partial_r2": 0.2149779830807262,
+    "observed_within_gsp_partial_r2": 0.0019789539652597513,
+    "observed_among_gsp_partial_r2": 0.07865226872803101,
+    "v3_1_shared_failure": "Every declared family overproduced among-taxon registered-module integration; families closest to the covariance geometry underproduced among-taxon process and growing-season-water increments.",
+    "required_new_structure": "Scale-specific covariance formation rather than an additional driver class or endpoint-specific tuning."
+  },
+  "shared_generator_requirements": {
+    "driver_classes": ["environment", "pollinator", "antagonist"],
+    "interaction_layer": "inherit_full_tradeoff_common_lability_v2_interaction_generator_without_change",
+    "n_inferential_units": 17,
+    "n_response_endpoints": 18,
+    "registered_modules": {
+      "orientation": 1,
+      "colour": 3,
+      "shape": 4,
+      "involucre_architecture": 7,
+      "armature": 2
+    },
+    "hue_is_one_joint_unit": true,
+    "within_and_among_outputs_from_same_simulated_taxa": true,
+    "signed_endpoint_values_retained_before_strength_matrices": true,
+    "shared_parameters_have_identical_priors_across_families": true,
+    "endpoint_specific_parameter_tuning": false,
+    "outcome_conditioned_prior_truncation": false,
+    "allowed_new_parameter_granularity": ["global", "registered_module", "exchangeable_inferential_unit"],
+    "minimum_taxa": 60,
+    "minimum_populations_per_taxon": 5
+  },
+  "model_families": [
+    {
+      "family_id": "shared_scale_baseline",
+      "complexity_level": 0,
+      "parent_family": null,
+      "within_only_module_factor": false,
+      "among_unit_mosaic_loadings": false,
+      "historical_rotation": false,
+      "definition": "The v3.1 common-lability covariance generator retained unchanged as the nested baseline."
+    },
+    {
+      "family_id": "within_only_module_factor",
+      "complexity_level": 1,
+      "parent_family": "shared_scale_baseline",
+      "within_only_module_factor": true,
+      "among_unit_mosaic_loadings": false,
+      "historical_rotation": false,
+      "definition": "Adds a module-level latent factor whose values are centred to exactly zero within each taxon, so it can alter within-taxon covariance but cannot be inherited directly by taxon medians.",
+      "identifiability_boundary": "The factor may represent local biological/developmental covariance, observation-layer covariance, or both; current Azami targets cannot distinguish those sources."
+    },
+    {
+      "family_id": "among_unit_mosaic_loadings",
+      "complexity_level": 1,
+      "parent_family": "shared_scale_baseline",
+      "within_only_module_factor": false,
+      "among_unit_mosaic_loadings": true,
+      "historical_rotation": false,
+      "definition": "Replaces module-shared taxon-level process loadings with exchangeable unit-level loadings that are centred within registered modules before use, allowing strong multivariate environmental information without forcing positive module-wide among-taxon integration."
+    },
+    {
+      "family_id": "combined_scale_decoupling",
+      "complexity_level": 2,
+      "parent_family": "shared_scale_baseline",
+      "within_only_module_factor": true,
+      "among_unit_mosaic_loadings": true,
+      "historical_rotation": false,
+      "definition": "Combines a taxon-centred within-only module factor with centred unit-level among-taxon process loadings."
+    },
+    {
+      "family_id": "combined_scale_decoupling_with_rotation",
+      "complexity_level": 3,
+      "parent_family": "combined_scale_decoupling",
+      "within_only_module_factor": true,
+      "among_unit_mosaic_loadings": true,
+      "historical_rotation": true,
+      "definition": "Adds to the combined family a low-rank taxon-level trait rotation with orthonormal loadings independent of environment and registered-module labels.",
+      "maximum_rotation_rank": 3
+    }
+  ],
+  "structural_constraints": {
+    "within_only_module_factor": {
+      "exact_taxon_mean": 0.0,
+      "independent_of_taxon_level_environment": true,
+      "same_prior_scale_for_all_registered_modules": true,
+      "cannot_enter_taxon_median_directly": true
+    },
+    "among_unit_mosaic_loadings": {
+      "drawn_exchangeably_before_outcomes": true,
+      "centred_to_zero_mean_within_registered_module": true,
+      "shared_prior_scale_across_units": true,
+      "no_unit_selected_by_observed_loading_or_residual": true
+    },
+    "historical_rotation": {
+      "independent_of_environment": true,
+      "independent_of_registered_module_labels": true,
+      "orthonormal_loading_columns": true,
+      "rank_drawn_from": [1, 2, 3],
+      "not_labelled_phylogeny_without_a_tree": true
+    }
+  },
+  "primary_fit_targets": {
+    "source_contract": "data/contracts/capitulum_space_mechanism_v3_contract.json",
+    "scope": "main_min5_only",
+    "n_targets": 7,
+    "target_ids": [
+      "capitulum_within_module_integration_contrast:within_taxon",
+      "capitulum_among_module_integration_contrast:among_taxon",
+      "capitulum_cross_scale_association_matrix_similarity:within_vs_among",
+      "environment_incremental:all_process_extension_beyond_core4:within_taxon",
+      "environment_incremental:all_process_extension_beyond_core4:among_taxon",
+      "environment_incremental:growing_season_water_input_beyond_core4:within_taxon",
+      "environment_incremental:growing_season_water_input_beyond_core4:among_taxon"
+    ],
+    "distance_definition": "reuse_v3_1_seven_target_distance_without_change",
+    "prohibit_min2_double_counting": true
+  },
+  "replication_and_context_validation": {
+    "min2_replication_patterns": [
+      "positive_within_module_contrast",
+      "positive_among_module_contrast",
+      "positive_cross_scale_matrix_similarity",
+      "within_process_omnibus_unsupported",
+      "among_process_omnibus_supported",
+      "among_growing_season_water_supported"
+    ],
+    "main_environment_block_r2_context": {
+      "source": "data/evidence/source/azami_capitulum_environment_eazami_targets_run33035785120.csv",
+      "scope": "complete18_env_min5",
+      "scales": ["within_taxon", "among_taxon"],
+      "n_r2_targets": 12,
+      "cross_scale_cosines_excluded": true,
+      "metric": "root_mean_squared_error",
+      "role": "out_of_primary_fit_context_validation"
+    },
+    "existing_literature_heldout_rate": {
+      "source": "data/evidence/macro_interaction_pattern_reduction_result_v2.json",
+      "inherited_family": "full_tradeoff_common_lability",
+      "same_value_for_all_v4_families": true,
+      "role": "non_discriminating_independent_safety_check"
+    }
+  },
+  "screen_design": {
+    "draws_per_seed_per_family": 750,
+    "seeds": [20260827, 20261827, 20262827, 20263827],
+    "accept_fraction": 0.05,
+    "minimum_accepted_draws": 100,
+    "absolute_primary_adequacy_threshold": 1.0,
+    "minimum_replication_pattern_rate": 0.75,
+    "minimum_relative_primary_distance_improvement_over_parent": 0.15,
+    "maximum_context_r2_rmse_increase_relative_to_parent": 0.05,
+    "complexity_selection_rule": "Among adequate families within 5% of the best accepted median primary distance and not worse on replication/context gates, select the lowest declared complexity level; otherwise retain multiple adequate structures.",
+    "prohibited_labels": ["Bayes_factor", "posterior_model_probability", "likelihood_ratio", "causal_model_selection"],
+    "allowed_label": "nested_prior_predictive_structural_sufficiency_screen"
+  },
+  "promotion_rule": {
+    "family_eligible_only_if": [
+      "accepted_median_primary_distance_at_or_below_1_0",
+      "accepted_replication_pattern_rate_at_or_above_0_75",
+      "at_least_15_percent_relative_primary_distance_improvement_over_declared_parent_for_nonbaseline_family",
+      "main_environment_block_r2_context_rmse_no_more_than_5_percent_worse_than_parent",
+      "seedwise_primary_distance_not_worse_than_parent_in_at_least_3_of_4_seeds"
+    ],
+    "baseline_rule": "The shared-scale baseline is retained only as a failure reference and cannot be promoted unless it independently meets absolute adequacy.",
+    "multiple_family_rule": "If more than one nonnested structure is adequate and their accepted median primary distances differ by less than 5%, report structural non-identifiability rather than a single winner.",
+    "claim_boundary": "Adequacy identifies a sufficient covariance architecture under declared priors, not whether the within-only factor is biological versus photographic, not phylogenetic history, and not a unique ecological or evolutionary mechanism."
+  },
+  "next_data_discrimination": {
+    "within_only_module_factor_biological_vs_observation_layer": [
+      "repeat_photo_trait_remeasurement",
+      "developmental_stage_labels",
+      "independent_reference_trait_measurements"
+    ],
+    "historical_rotation_interpretation": [
+      "resolved_species_tree",
+      "phylogenetic_covariance_model",
+      "ploidy_and_hybridization_information"
+    ]
+  }
+}
