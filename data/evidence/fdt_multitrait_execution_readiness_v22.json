@@ -1,0 +1,33 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v22",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v21.json",
+  "inheritance": "All field-feasibility, Japan38 trait-history, colour stop-rule, module-function bridge, exact v3 estimand and conditional-generator constraints remain in force unless updated below.",
+  "azami_capitulum_v3_one_shot": {
+    "scoring_contract": "data/evidence/azami_capitulum_v3_scoring_contract_v1.json",
+    "status": "preregistered_scoring_ready_outcomes_not_yet_frozen",
+    "model_families": 14,
+    "paired_draws": 16,
+    "primary_scope": "complete18_min5 / complete18_env_min5",
+    "replication_sensitivity_scope": "complete18_min2 / complete18_env_min2",
+    "target_count_total": 62,
+    "target_count_per_scope": 31,
+    "class_balancing": "four classes receive equal total weight: structure, environment block R2, cross-scale coefficient geometry, incremental partial R2",
+    "robust_leader_rule_frozen": true,
+    "factor_contrasts_frozen": true,
+    "target_distances_inspected_after_scoring_contract_freeze": false,
+    "ranking_inspected_after_scoring_contract_freeze": false,
+    "next_gate": "Execute the one-shot workflow once, freeze all draw-level and summary outputs exactly as produced, then accept robust_leader or no_robust_leader without retuning."
+  },
+  "field_line": {
+    "first_executable_target": "JPN_36 phyllary-access pilot after authorization/census/device gates",
+    "highest_information_stickiness_design": "JPN_15 sticky neutralization within species with JPN_06 nonsticky 100/100 sister as ancestry-matched external comparator",
+    "execution_authorized": false
+  },
+  "coverage_repairs_remaining": [
+    "JPN_15 phyllary posture",
+    "JPN_24 stickiness"
+  ],
+  "absolute_time": "FDT5/FDT6 remain blocked by calibration limitations; do not promote the Japan38 compatibility tree to a resolved absolute chronogram.",
+  "claim_boundary": "Readiness v22 records a frozen one-shot structural model comparison before its outcomes are inspected. It does not imply a winning mechanism or any causal/adaptive conclusion."
+}
