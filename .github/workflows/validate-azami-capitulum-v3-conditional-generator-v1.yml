@@ -1,0 +1,139 @@
+name: Validate Azami capitulum v3 conditional generator v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/simulate_azami_capitulum_v3_conditional.py"
+      - "analysis/extract_azami_v3_environment_design.py"
+      - "data/evidence/azami_capitulum_v3_generator_contract_v1.json"
+      - "data/evidence/azami_capitulum_v3_generator_interface_validation_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v21.json"
+      - "tests/test_simulate_azami_capitulum_v3_conditional.py"
+      - ".github/workflows/validate-azami-capitulum-v3-conditional-generator-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install numpy pandas pytest
+      - name: Compile
+        run: |
+          python -m py_compile analysis/simulate_azami_capitulum_v3_conditional.py
+          python -m py_compile analysis/extract_azami_v3_environment_design.py
+      - name: Test all 14 preregistered families and exact 62-target interface
+        run: python -m pytest -q tests/test_simulate_azami_capitulum_v3_conditional.py
+
+      - name: Try to download frozen Azami environment design artifact
+        id: upstream
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/azami
+          run-id: 33035785120
+          name: ch1-geb-v2-within-among-33035785120
+          path: upstream_azami
+          github-token: ${{ github.token }}
+
+      - name: Record upstream availability
+        run: |
+          mkdir -p result
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          status = '${{ steps.upstream.outcome }}'
+          files = [str(p) for p in Path('upstream_azami').rglob('*') if p.is_file()] if Path('upstream_azami').exists() else []
+          report = {
+              'source_repository': 'zuizui0223/azami',
+              'source_run': 33035785120,
+              'source_artifact_id': 9632715852,
+              'download_outcome': status,
+              'files_found': len(files),
+              'environment_design_interface_validation': 'pending' if status != 'success' else 'available_for_validation',
+              'claim_boundary': 'Artifact availability only; no model-family target distances are computed in this workflow.'
+          }
+          Path('result/upstream_design_availability.json').write_text(json.dumps(report, indent=2)+'\n')
+          print(json.dumps(report, indent=2))
+          PY
+
+      - name: Validate real frozen design and all-family 62-row output interface
+        if: steps.upstream.outcome == 'success'
+        run: |
+          set -euo pipefail
+          SOURCE="$(find upstream_azami -type f -path '*/process_environment/complete18_chelsa_process.csv' -print -quit)"
+          test -n "$SOURCE"
+          python analysis/extract_azami_v3_environment_design.py "$SOURCE" result/azami_v3_environment_design.csv --report result/azami_v3_environment_design_report.json
+          for FAMILY in \
+            NULL_COUPLED NULL_MODULAR \
+            CORE4_SHARED_COUPLED CORE4_SHARED_MODULAR CORE4_INDEPENDENT_COUPLED CORE4_INDEPENDENT_MODULAR \
+            PROCESS_BOTH_SHARED_COUPLED PROCESS_BOTH_SHARED_MODULAR PROCESS_BOTH_INDEPENDENT_COUPLED PROCESS_BOTH_INDEPENDENT_MODULAR \
+            PROCESS_AMONG_ONLY_SHARED_COUPLED PROCESS_AMONG_ONLY_SHARED_MODULAR PROCESS_AMONG_ONLY_INDEPENDENT_COUPLED PROCESS_AMONG_ONLY_INDEPENDENT_MODULAR
+          do
+            python analysis/simulate_azami_capitulum_v3_conditional.py \
+              --design result/azami_v3_environment_design.csv \
+              --family "$FAMILY" \
+              --seed 20260827 \
+              --strict-frozen-design \
+              --out "result/${FAMILY}_observations.csv"
+            python analysis/compute_azami_capitulum_v3_estimands.py \
+              --observations "result/${FAMILY}_observations.csv" \
+              --out "result/${FAMILY}_estimands.csv"
+            python - "$FAMILY" <<'PY'
+          import pandas as pd, sys
+          family=sys.argv[1]
+          x=pd.read_csv(f'result/{family}_estimands.csv')
+          assert len(x)==62
+          assert not x.duplicated(['target_id','scope','scale']).any()
+          PY
+          done
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('result/upstream_design_availability.json')
+          x=json.loads(p.read_text())
+          x['environment_design_interface_validation']='passed_all_14_families_exact_62_rows'
+          p.write_text(json.dumps(x,indent=2)+'\n')
+          PY
+
+      - name: Assert frozen interface validation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          frozen=json.loads(Path('data/evidence/azami_capitulum_v3_generator_interface_validation_v1.json').read_text())
+          availability=json.loads(Path('result/upstream_design_availability.json').read_text())
+          assert frozen['model_families_frozen']==14
+          assert frozen['expected_estimands_per_family']==62
+          assert frozen['target_distance_or_ranking_generated'] is False
+          assert availability['download_outcome']=='success'
+          assert availability['environment_design_interface_validation']=='passed_all_14_families_exact_62_rows'
+          design=json.loads(Path('result/azami_v3_environment_design_report.json').read_text())
+          assert design['derived_sha256']==frozen['upstream_environment_design']['derived_degeolocated_design_sha256']
+          assert design['rows']==frozen['upstream_environment_design']['rows']==1874
+          assert design['taxa']==frozen['upstream_environment_design']['taxa']==124
+          print('frozen_generator_interface_valid=true')
+          PY
+
+      - name: Confirm no target-distance output was created
+        run: |
+          if find result -type f \( -name '*distance*' -o -name '*ranking*' \) | grep -q .; then
+            echo 'Target-distance/ranking output is prohibited in the generator-interface PR' >&2
+            exit 1
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: azami-capitulum-v3-generator-interface-${{ github.run_id }}
+          path: result
+          if-no-files-found: error
+          retention-days: 90

@@ -1,0 +1,31 @@
+{
+  "contract_version": "azami_capitulum_v3_generator_interface_validation_v1",
+  "status_date": "2026-08-27",
+  "generator_contract": "data/evidence/azami_capitulum_v3_generator_contract_v1.json",
+  "estimand_contract": "data/evidence/azami_capitulum_v3_estimand_contract_v1.json",
+  "workflow_run": 33040373028,
+  "artifact_id": 9633617215,
+  "artifact_digest": "sha256:9949188672d8ec69e8242d85ed4bb886b36f5791808dd1aa9848bd88a09c8b39",
+  "upstream_environment_design": {
+    "repository": "zuizui0223/azami",
+    "run": 33035785120,
+    "artifact_id": 9632715852,
+    "artifact_name": "ch1-geb-v2-within-among-33035785120",
+    "download_in_eazami_ci": "success",
+    "source_file": "process_environment/complete18_chelsa_process.csv",
+    "source_sha256": "1ab84254a80493776b4c435152ed3d2a1c1e68dd0e0342da0ea081eeb5cd3d9b",
+    "derived_degeolocated_design_sha256": "b3a01ff795f6a88f1290576be5b161119bb342c67b498fd9fa76770d419b408d",
+    "rows": 1874,
+    "taxa": 124,
+    "taxa_min5": 42,
+    "taxa_min2": 75
+  },
+  "model_families_frozen": 14,
+  "synthetic_interface_test_all_families_pass": true,
+  "real_frozen_design_all_families_pass": true,
+  "expected_estimands_per_family": 62,
+  "all_families_emit_62_unique_target_keys": true,
+  "target_distance_or_ranking_generated": false,
+  "decision": "generator_interface_ready_for_separate_one_shot_scoring",
+  "claim_boundary": "Interface validation only. No family has been scored or ranked against observed Azami targets, so no structural or mechanistic model preference is available from this result."
+}

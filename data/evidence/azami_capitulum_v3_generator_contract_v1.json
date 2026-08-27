@@ -1,0 +1,78 @@
+{
+  "contract_version": "azami_capitulum_v3_generator_contract_v1",
+  "status_date": "2026-08-27",
+  "status": "frozen_before_v3_model_family_scoring",
+  "estimand_contract": "data/evidence/azami_capitulum_v3_estimand_contract_v1.json",
+  "environment_design": {
+    "source_repository": "zuizui0223/azami",
+    "source_run": 33035785120,
+    "source_artifact_id": 9632715852,
+    "source_artifact_name": "ch1-geb-v2-within-among-33035785120",
+    "source_artifact_digest": "sha256:51e7a26b5bd09e030b67b9342586699abaaf46e630f45b6bb4ee7bfc9152ced6",
+    "source_file": "process_environment/complete18_chelsa_process.csv",
+    "source_file_sha256": "1ab84254a80493776b4c435152ed3d2a1c1e68dd0e0342da0ea081eeb5cd3d9b",
+    "expected_rows": 1874,
+    "expected_taxa": 124,
+    "expected_taxa_min5": 42,
+    "expected_taxa_min2": 75,
+    "derived_design_rule": "drop latitude, longitude and original obs_id; retain taxon_name and nine environmental predictors in source row order; add AZ72_0000... stable design_row_id",
+    "derived_design_sha256": "b3a01ff795f6a88f1290576be5b161119bb342c67b498fd9fa76770d419b408d",
+    "role": "fixed exogenous design only; observed 18D response phenotypes are not generator inputs"
+  },
+  "model_axes": {
+    "environment_mode": {
+      "NONE": "no environmental coefficients",
+      "CORE4": "BIO1/BIO4/BIO12/BIO15 effects only",
+      "PROCESS_BOTH": "core4 plus all five process predictors can affect both within- and among-taxon phenotype components",
+      "PROCESS_AMONG_ONLY": "core4 can affect both scales; all five process predictors can affect taxon means only"
+    },
+    "scale_coefficient_architecture": {
+      "SHARED": "the same module-by-predictor coefficient draw is used at within- and among-taxon scales wherever that predictor is permitted",
+      "INDEPENDENT": "within- and among-taxon module-by-predictor coefficients are independent prior draws"
+    },
+    "residual_architecture": {
+      "COUPLED": "75 percent of module-level residual variance is carried by a shared latent at each biological scale and 25 percent by module-specific latents",
+      "MODULAR": "module-level residuals are independent across registered measurement modules"
+    }
+  },
+  "model_families": [
+    "NULL_COUPLED",
+    "NULL_MODULAR",
+    "CORE4_SHARED_COUPLED",
+    "CORE4_SHARED_MODULAR",
+    "CORE4_INDEPENDENT_COUPLED",
+    "CORE4_INDEPENDENT_MODULAR",
+    "PROCESS_BOTH_SHARED_COUPLED",
+    "PROCESS_BOTH_SHARED_MODULAR",
+    "PROCESS_BOTH_INDEPENDENT_COUPLED",
+    "PROCESS_BOTH_INDEPENDENT_MODULAR",
+    "PROCESS_AMONG_ONLY_SHARED_COUPLED",
+    "PROCESS_AMONG_ONLY_SHARED_MODULAR",
+    "PROCESS_AMONG_ONLY_INDEPENDENT_COUPLED",
+    "PROCESS_AMONG_ONLY_INDEPENDENT_MODULAR"
+  ],
+  "priors": {
+    "core_module_coefficient_sd": 0.35,
+    "process_module_coefficient_sd": 0.25,
+    "among_taxon_residual_sd": 0.45,
+    "within_taxon_residual_sd": 0.75,
+    "endpoint_noise_sd": 0.40,
+    "coupled_shared_residual_variance_fraction": 0.75,
+    "endpoint_loading_rule": "deterministic SHA256(endpoint_id) mapped to [0.80,1.20]; positive loading; not fit to observed targets",
+    "hue_rule": "theta = 0.60 * colour_module_latent + Normal(0,0.35); emit sin(theta), cos(theta)",
+    "coefficient_rule": "module-by-predictor coefficients are zero-mean Normal prior draws using the fixed SD above; no coefficient is initialized from observed Azami R2, cosine, module contrast or partial-R2 targets"
+  },
+  "environment_component_rule": {
+    "among": "taxon medians of each design predictor, standardized across all taxa",
+    "within": "observation predictor minus within-taxon mean, then weighted-standardized with inverse taxon sample-size weights",
+    "note": "Using the frozen environmental design conditions the model on sampled ecological opportunity; it does not provide observed response phenotypes."
+  },
+  "output_rule": {
+    "schema_marker": "azami_capitulum_v3_estimand_contract_v1",
+    "one_row_per_design_row": true,
+    "columns": "design row identity renamed obs_id, taxon_name, nine frozen environmental predictors, eighteen frozen response endpoints",
+    "downstream": "analysis/compute_azami_capitulum_v3_estimands.py must emit exactly 62 unique target keys"
+  },
+  "one_shot_rule": "Do not remove model families, change coefficient/residual priors, modify endpoint loadings, or add target-specific effects after any 62-target model-family distances are inspected. Changes require v2 generator contract and a fresh one-shot run.",
+  "claim_boundary": "These are deliberately minimal structural sufficiency models. Family ranking can show which architectural ingredients are needed to reproduce selected observational structure; it does not identify true causal environmental mechanisms, adaptation, selection, plasticity, defence or genetic/developmental modularity."
+}
