@@ -1,0 +1,113 @@
+name: Validate Japan38 open-candidate colour measurement v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_japan38_open_candidate_colour_measurement_v1.py"
+      - "data/evidence/japan38_sparse_colour_open_source_candidates_v1.csv"
+      - "data/evidence/japan38_open_candidate_colour_measurement_summary_v1.json"
+      - "data/evidence/japan38_open_candidate_colour_measurement_per_image_v1.csv"
+      - ".github/workflows/validate-japan38-open-candidate-colour-measurement-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  AZAMI_COMMIT: "4e6f66675004207d331fd620d6bcd894287f316a"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: zuizui0223/azami
+          ref: ${{ env.AZAMI_COMMIT }}
+          path: _azami
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install numpy pandas opencv-python-headless
+      - name: Verify frozen iNaturalist candidates live and download originals
+        run: |
+          set -euo pipefail
+          mkdir -p external_images result
+          python - <<'PY'
+          import csv,json,pathlib,time,urllib.request
+          rows=[r for r in csv.DictReader(open('data/evidence/japan38_sparse_colour_open_source_candidates_v1.csv',encoding='utf-8-sig')) if r['paper_japan_member_id'] in {'JPN_05','JPN_30'}]
+          expected={
+            'JPN_05':{'242578598':{'432457670'},'322349973':{'583115875','583115911','583115925','583115972'}},
+            'JPN_30':{'190665296':{'334294953','334294963','334294970','334294975'},'323137995':{'584678305'}},
+          }
+          target={'JPN_05':'Cirsium aomorense','JPN_30':'Cirsium yezoense'}
+          ua='EAzami-scientific-reproducibility/1.0 (https://github.com/zuizui0223/EAzami)'
+          verified=[]
+          for mid,obsmap in expected.items():
+            for obs_id,photo_ids in obsmap.items():
+              req=urllib.request.Request(f'https://api.inaturalist.org/v1/observations/{obs_id}',headers={'User-Agent':ua,'Accept':'application/json'})
+              with urllib.request.urlopen(req,timeout=45) as response: data=json.load(response)
+              if len(data.get('results',[]))!=1: raise SystemExit(f'observation unresolved {obs_id}')
+              obs=data['results'][0]
+              if (obs.get('taxon') or {}).get('name') != target[mid]: raise SystemExit(f'taxon changed {obs_id}: {(obs.get("taxon") or {}).get("name")}')
+              if bool(obs.get('captive')): raise SystemExit(f'candidate marked captive/cultivated {obs_id}')
+              live={str(p.get('id')):p for p in (obs.get('photos') or [])}
+              if not photo_ids.issubset(set(live)): raise SystemExit(f'photo set missing {obs_id}')
+              for pid in sorted(photo_ids):
+                p=live[pid]
+                lic=(p.get('license_code') or '').lower()
+                if lic not in {'cc0','cc-by','cc-by-sa'}: raise SystemExit(f'license changed {obs_id}/{pid}: {lic}')
+                url=p.get('url') or ''
+                if '/square.' not in url: raise SystemExit(f'unexpected iNaturalist photo URL {url}')
+                original=url.replace('/square.','/original.')
+                target_path=pathlib.Path('external_images')/f'INAT_{obs_id}_{pid}.jpg'
+                req2=urllib.request.Request(original,headers={'User-Agent':ua})
+                with urllib.request.urlopen(req2,timeout=90) as response, target_path.open('wb') as h:
+                  while True:
+                    chunk=response.read(1024*1024)
+                    if not chunk: break
+                    h.write(chunk)
+                if target_path.stat().st_size < 10000: raise SystemExit(f'image too small {target_path}')
+                verified.append({'paper_japan_member_id':mid,'observation_id':obs_id,'photo_id':pid,'taxon_name':target[mid],'quality_grade':obs.get('quality_grade'),'captive':obs.get('captive'),'place_guess':obs.get('place_guess'),'license_code':lic,'original_url':original})
+                time.sleep(0.5)
+          pathlib.Path('result/verified_inat_candidates.json').write_text(json.dumps(verified,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+          assert len(verified)==10
+          PY
+      - name: Run pinned Azami measurements
+        run: |
+          python analysis/run_japan38_open_candidate_colour_measurement_v1.py \
+            --candidates data/evidence/japan38_sparse_colour_open_source_candidates_v1.csv \
+            --image-dir external_images \
+            --azami-measure-script _azami/ch1_global/v2/52_measure_primary_traits_continuous.py \
+            --per-image-output result/japan38_open_candidate_colour_measurement_per_image_v1.csv \
+            --summary-output result/japan38_open_candidate_colour_measurement_summary_v1.json
+      - name: Assert predeclared promotion logic and frozen outputs when present
+        run: |
+          python - <<'PY'
+          import json
+          import pandas as pd
+          from pathlib import Path
+          x=json.loads(Path('result/japan38_open_candidate_colour_measurement_summary_v1.json').read_text())
+          assert x['colour_confidence_floor']==0.55
+          assert x['threshold_relaxation_allowed'] is False
+          assert x['results']['JPN_30']['promotion_pass'] == (x['results']['JPN_30']['candidate_passing_locality_count']>=1)
+          assert x['results']['JPN_05']['promotion_pass'] == (x['results']['JPN_05']['candidate_passing_locality_count']==2)
+          assert x['fifth_concept_gate_unlocked'] == bool(x['promoted_concepts'])
+          frozen=Path('data/evidence/japan38_open_candidate_colour_measurement_summary_v1.json')
+          if frozen.exists():
+            assert json.loads(frozen.read_text())==x
+            pd.testing.assert_frame_equal(pd.read_csv('data/evidence/japan38_open_candidate_colour_measurement_per_image_v1.csv'),pd.read_csv('result/japan38_open_candidate_colour_measurement_per_image_v1.csv'),check_exact=False,rtol=1e-12,atol=1e-12)
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-open-candidate-colour-measurement-${{ github.run_id }}
+          path: |
+            result/japan38_open_candidate_colour_measurement_summary_v1.json
+            result/japan38_open_candidate_colour_measurement_per_image_v1.csv
+            result/verified_inat_candidates.json
+          if-no-files-found: error
+          retention-days: 90
