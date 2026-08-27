@@ -1,0 +1,27 @@
+{
+  "status": "frozen_one_shot_completed",
+  "workflow_run": 33041133765,
+  "workflow_head_sha": "5af697d144a8bb19b80d3f7b606e33705dbc4005",
+  "artifact_id": 9633924414,
+  "artifact_name": "azami-capitulum-v3-one-shot-33041133765",
+  "artifact_digest": "sha256:0b84dc1d95f2780412167d7de557b3319ba9da7a2fd5eaf0ff450bc3824c06d2",
+  "frozen_scoring_contract_commit": "44c9f56727a1c14b83c742e3bd36f4c8fc9f5b3f",
+  "output_sha256": {
+    "azami_capitulum_v3_one_shot_decision_v1.json": "33bc20caf13b1a1365176ae506ea93fc66f8e754d4d65a8a79cd5bd6fbe7f8c9",
+    "azami_capitulum_v3_one_shot_draw_scores_v1.csv": "2b28204836ffcb9823ba1c1b25cc40399885fde69d9c40eb2c05e142b058ec50",
+    "azami_capitulum_v3_one_shot_factor_contrasts_v1.csv": "9a619581640ed259cebb2e2e285cd0c7fdbc0b9ab6e2bc7b4e7193a5852c5295",
+    "azami_capitulum_v3_one_shot_family_summary_v1.csv": "aed4cb0356e7ef29fb0c94dddbb18342d5b6a98701ccc49d4c1bb973fafebfdc",
+    "azami_capitulum_v3_one_shot_pairwise_wins_v1.csv": "aef51f5791d6a6a92b1ab2d600a23655e9d2b14da42be9f131f5517e96239665"
+  },
+  "committed_canonical_outputs": [
+    "data/evidence/azami_capitulum_v3_one_shot_decision_v1.json",
+    "data/evidence/azami_capitulum_v3_one_shot_family_summary_v1.csv",
+    "data/evidence/azami_capitulum_v3_one_shot_factor_contrasts_v1.csv"
+  ],
+  "artifact_only_full_outputs": [
+    "one_shot/azami_capitulum_v3_one_shot_draw_scores_v1.csv",
+    "one_shot/azami_capitulum_v3_one_shot_pairwise_wins_v1.csv"
+  ],
+  "reason_full_outputs_artifact_only": "The full draw and pairwise ledgers are deterministic audit detail; their immutable SHA256 values and workflow artifact provenance are frozen here while compact canonical decision/family/factor outputs are committed.",
+  "claim_boundary": "Provenance record only; does not add or change any model ranking."
+}
