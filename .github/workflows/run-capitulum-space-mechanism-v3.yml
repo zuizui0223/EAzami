@@ -106,12 +106,15 @@ jobs:
           print('adequate_families=', result['adequate_families'])
           print('focal_decision=', focal['registered_decision'])
           PY
-      - name: Reproduce frozen scientific result byte-for-byte
+      - name: Reproduce frozen scientific result within machine precision
         run: |
           python - <<'PY'
+          import csv
           import hashlib
           import json
           import math
+          import statistics
+          from collections import defaultdict
           from pathlib import Path
 
           out = Path('/tmp/capitulum_space_v3_1')
@@ -119,26 +122,88 @@ jobs:
           draws_path = out / 'capitulum_space_mechanism_v3_draws.csv'
           expected = json.load(open('data/evidence/capitulum_space_mechanism_v3_1_result_summary.json'))
           observed = json.load(result_path.open())
+          tolerance = 1e-12
 
           def digest(path):
               return hashlib.sha256(path.read_bytes()).hexdigest()
 
-          assert digest(result_path) == expected['result_json_sha256']
-          assert digest(draws_path) == expected['draws_csv_sha256']
+          def close(left, right, label):
+              assert math.isclose(float(left), float(right), rel_tol=0, abs_tol=tolerance), (
+                  label, left, right
+              )
+
+          assert observed['contract_version'] == expected['contract_version']
+          assert observed['screen_version'] == expected['screen_version']
+          assert observed['draws_per_seed_per_family'] == expected['draws_per_seed_per_family']
+          assert observed['seeds'] == expected['seeds']
+          close(observed['accept_fraction'], expected['accept_fraction'], 'accept_fraction')
           assert observed['ranking'] == expected['ranking']
-          assert observed['adequate_families'] == expected['adequate_families']
-          assert observed['focal_common_vs_modular'] == expected['focal_common_vs_modular']
-          by = {row['family']: row for row in observed['families']}
+          assert observed['adequate_families'] == expected['adequate_families'] == []
+          assert observed['absolute_adequacy_thresholds'] == expected['absolute_adequacy_thresholds']
+
+          observed_focal = observed['focal_common_vs_modular']
+          expected_focal = expected['focal_common_vs_modular']
+          focal_exact = [
+              'distance_winner', 'other', 'absolute_primary_adequacy',
+              'minimum_relative_distance_improvement_met',
+              'seedwise_distance_winner_stable', 'replication_absolute_adequacy',
+              'replication_not_worse', 'independent_v2_heldout_not_worse',
+              'registered_decision', 'decision_reason',
+          ]
+          for key in focal_exact:
+              assert observed_focal[key] == expected_focal[key], (key, observed_focal[key], expected_focal[key])
+          for key in [
+              'winner_primary_distance_median', 'other_primary_distance_median',
+              'relative_median_distance_improvement',
+              'winner_replication_pattern_rate',
+          ]:
+              close(observed_focal[key], expected_focal[key], f'focal:{key}')
+          assert observed_focal['registered_decision'] == 'unresolved'
+
+          by_family = {row['family']: row for row in observed['families']}
           for frozen in expected['families']:
-              row = by[frozen['family']]
-              assert math.isclose(row['primary_distance_median'], frozen['accepted_primary_distance_median'], rel_tol=0, abs_tol=1e-12)
-              assert math.isclose(row['replication_pattern_rate_mean'], frozen['accepted_replication_pattern_rate_mean'], rel_tol=0, abs_tol=1e-12)
-              assert math.isclose(row['existing_v2_heldout_rate'], frozen['existing_v2_heldout_rate'], rel_tol=0, abs_tol=1e-12)
-          assert observed['adequate_families'] == []
-          assert observed['focal_common_vs_modular']['registered_decision'] == 'unresolved'
-          print('v3_1_frozen_result_reproduced=true')
-          print('result_sha256=', digest(result_path))
-          print('draws_sha256=', digest(draws_path))
+              row = by_family[frozen['family']]
+              close(row['primary_distance_median'], frozen['accepted_primary_distance_median'], f"{frozen['family']}:median")
+              close(row['best_primary_distance'], frozen['best_primary_distance'], f"{frozen['family']}:best")
+              close(row['replication_pattern_rate_mean'], frozen['accepted_replication_pattern_rate_mean'], f"{frozen['family']}:replication")
+              close(row['existing_v2_heldout_rate'], frozen['existing_v2_heldout_rate'], f"{frozen['family']}:heldout")
+              for observed_q, frozen_q, label in zip(
+                  row['primary_distance_q10_q90'], frozen['accepted_primary_distance_q10_q90'], ['q10', 'q90']
+              ):
+                  close(observed_q, frozen_q, f"{frozen['family']}:{label}")
+              seed_rows = {str(seed_row['seed']): seed_row for seed_row in row['seed_summaries']}
+              for seed, frozen_median in frozen['seedwise_accepted_distance_medians'].items():
+                  close(seed_rows[str(seed)]['primary_distance_median'], frozen_median, f"{frozen['family']}:seed:{seed}")
+
+          draw_rows = defaultdict(list)
+          with draws_path.open(newline='') as handle:
+              for row in csv.DictReader(handle):
+                  draw_rows[row['family']].append(row)
+          metric_columns = {
+              'within_module_contrast': 'main_capitulum_within_module_integration_contrast',
+              'among_module_contrast': 'main_capitulum_among_module_integration_contrast',
+              'cross_scale_matrix_spearman': 'main_capitulum_cross_scale_association_matrix_similarity',
+              'within_process_partial_r2': 'main_within_process_partial_r2',
+              'among_process_partial_r2': 'main_among_process_partial_r2',
+              'within_gsp_partial_r2': 'main_within_gsp_partial_r2',
+              'among_gsp_partial_r2': 'main_among_gsp_partial_r2',
+          }
+          for frozen in expected['families']:
+              accepted = sorted(
+                  draw_rows[frozen['family']],
+                  key=lambda row: float(row['primary_distance'])
+              )[:100]
+              assert len(accepted) == 100
+              for metric, column in metric_columns.items():
+                  generated = statistics.median(float(row[column]) for row in accepted)
+                  close(generated, frozen['accepted_target_medians'][metric], f"{frozen['family']}:{metric}")
+
+          print('v3_1_frozen_science_reproduced=true')
+          print('original_result_sha256=', expected['result_json_sha256'])
+          print('current_result_sha256=', digest(result_path))
+          print('original_draws_sha256=', expected['draws_csv_sha256'])
+          print('current_draws_sha256=', digest(draws_path))
+          print('hash_note=hashes are provenance only; floating-point text can differ across NumPy/BLAS builds')
           PY
       - uses: actions/upload-artifact@v4
         if: always()
