@@ -1,0 +1,13 @@
+{
+  "status": "no_diagnostically_adequate_addition",
+  "frozen_v1_winner_unchanged": "NULL_COUPLED",
+  "candidate_family_count": 5,
+  "paired_draw_count": 24,
+  "diagnostically_adequate_families": [],
+  "minimal_diagnostically_adequate_family": null,
+  "best_descriptive_family": "PROCESS_AMONG_ONLY_SHARED_COUPLED",
+  "best_median_primary_cells_matched_out_of_8": 6.0,
+  "best_full_8_cell_pattern_matches": 6,
+  "claim_boundary": "This is a post-heldout diagnostic designed after seeing the NULL failure. It may identify a useful minimal next model class, but it is not confirmatory model selection and cannot change the frozen v1 scalar-target winner or establish a causal environmental process.",
+  "stop_rule": "Run the five-family 24-draw diagnostic once and freeze it. Do not change candidate membership, adequacy thresholds, seed count, permutation count, or minimality ordering because of the outcome. Any further mechanism refinement is a new version."
+}
