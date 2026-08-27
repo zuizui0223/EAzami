@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed consistency checks for the Chapter 2 manuscript package."""
+"""Fail-closed consistency checks for the Chapter 2 scientific mainline."""
 from __future__ import annotations
 
 import csv
@@ -10,11 +10,13 @@ CH = ROOT / "docs" / "chapter2"
 
 REQUIRED = [
     CH / "README.md",
+    CH / "MAINLINE_V2.md",
     CH / "MANUSCRIPT_V1.md",
     CH / "EVIDENCE_MAP_V1.md",
     CH / "FIGURE_TABLE_PLAN_V1.md",
     CH / "SUBMISSION_GATES_V1.md",
     ROOT / "data" / "evidence" / "chapter2_claim_registry_v1.csv",
+    ROOT / "data" / "evidence" / "chapter2_result_role_map_v2.csv",
     ROOT / "docs" / "RESEARCH_PLAN.md",
     ROOT / "docs" / "archive" / "RESEARCH_PLAN_FLOWER_COLOUR_LEGACY_2026-08-27.md",
 ]
@@ -31,6 +33,51 @@ def main() -> int:
         if not path.exists() or path.stat().st_size == 0:
             raise AssertionError(f"missing/empty Chapter 2 file: {path.relative_to(ROOT)}")
 
+    mainline = (CH / "MAINLINE_V2.md").read_text(encoding="utf-8")
+    require(
+        mainline,
+        [
+            "phenotype → function → history → origin → convergence",
+            "candidate functional trait",
+            "trait-specific evolutionary histories",
+            "origin discrimination",
+            "adaptive convergence",
+            "nuclear population-genomic DNA",
+            "plastid haplotype",
+            "cytotype",
+            "62-target simulation programme",
+            "auxiliary generative constraint",
+        ],
+        "MAINLINE_V2",
+    )
+
+    readme = (CH / "README.md").read_text(encoding="utf-8")
+    require(
+        readme,
+        [
+            "MAINLINE_V2.md",
+            "phenotype → function → history → origin → convergence",
+            "modular evolvability",
+            "endpoint hypothesis",
+            "Auxiliary simulation lane",
+        ],
+        "Chapter 2 README",
+    )
+
+    plan = (ROOT / "docs" / "RESEARCH_PLAN.md").read_text(encoding="utf-8")
+    require(
+        plan,
+        [
+            "phenotype → function → history → origin → convergence",
+            "Stage 1 — phenotype to candidate functional trait",
+            "Stage 2 — trait-specific evolutionary histories",
+            "Stage 3 — discriminate origins of repeated states",
+            "Stage 4 — test convergence",
+            "Auxiliary lane — cross-scale generative constraints",
+        ],
+        "research plan",
+    )
+
     manuscript = (CH / "MANUSCRIPT_V1.md").read_text(encoding="utf-8")
     require(
         manuscript,
@@ -40,12 +87,11 @@ def main() -> int:
             "0/64",
             "22/24",
             "median primary-cell match = **6/8**",
-            "not a single reconstructed history",
             "nuclear population-genomic DNA",
             "plastid haplotype",
             "cytotype",
         ],
-        "manuscript",
+        "legacy manuscript source material",
     )
 
     evidence = (CH / "EVIDENCE_MAP_V1.md").read_text(encoding="utf-8")
@@ -61,52 +107,43 @@ def main() -> int:
         "evidence map",
     )
 
-    gates = (CH / "SUBMISSION_GATES_V1.md").read_text(encoding="utf-8")
-    require(
-        gates,
-        [
-            "Submission-essential",
-            "Preserve the negative result",
-            "No new biological sampling is required",
-            "nuclear population-genomic DNA",
-        ],
-        "submission gates",
-    )
-
-    plan = (ROOT / "docs" / "RESEARCH_PLAN.md").read_text(encoding="utf-8")
-    require(
-        plan,
-        [
-            "present phenotypic fields to admissible generative histories",
-            "docs/chapter2/MANUSCRIPT_V1.md",
-            "flower-colour loss/regain plan has been archived",
-        ],
-        "research plan",
-    )
+    with (ROOT / "data" / "evidence" / "chapter2_result_role_map_v2.csv").open(
+        encoding="utf-8", newline=""
+    ) as handle:
+        role_rows = list(csv.DictReader(handle))
+    if len(role_rows) < 20:
+        raise AssertionError(f"expected >=20 result-role rows, found {len(role_rows)}")
+    required_stages = {
+        "Azami_phenotypic_decomposition",
+        "EAzami_function",
+        "EAzami_history",
+        "EAzami_origin",
+        "EAzami_convergence",
+        "Auxiliary_scale_constraint",
+        "Higher_order_synthesis",
+    }
+    observed_stages = {r["mainline_stage"] for r in role_rows}
+    if not required_stages.issubset(observed_stages):
+        raise AssertionError(f"missing result-role stages: {sorted(required_stages - observed_stages)}")
 
     with (ROOT / "data" / "evidence" / "chapter2_claim_registry_v1.csv").open(
         encoding="utf-8", newline=""
     ) as handle:
         rows = list(csv.DictReader(handle))
     if len(rows) < 16:
-        raise AssertionError(f"expected >=16 claims, found {len(rows)}")
-    ids = {r["claim_id"] for r in rows}
-    if ids != {f"C2_{i:02d}" for i in range(1, 17)}:
-        raise AssertionError(f"unexpected claim registry IDs: {sorted(ids)}")
+        raise AssertionError(f"expected >=16 legacy claims, found {len(rows)}")
     if not all(r["prohibited_interpretation"].strip() for r in rows):
-        raise AssertionError("every Chapter 2 claim needs a prohibited interpretation")
+        raise AssertionError("every legacy Chapter 2 claim needs a prohibited interpretation")
 
-    # The manuscript must preserve the distinction between the three model stages.
-    for phrase in [
-        "preregistered 14-family",
-        "Held-out falsification",
-        "Post-heldout minimal-structure diagnostic",
-    ]:
-        if phrase not in manuscript:
-            raise AssertionError(f"missing stage distinction: {phrase}")
+    # Prevent the statistical simulator from silently regaining the top-level history role.
+    if "EAzami = constraints on admissible generative histories" in readme:
+        raise AssertionError("README still defines EAzami primarily as a generative-history simulator")
+    if "modular evolvability = organizing premise" in mainline:
+        raise AssertionError("modular evolvability must remain an endpoint hypothesis")
 
-    print("chapter2_manuscript_v1_valid=true")
-    print(f"claim_registry_rows={len(rows)}")
+    print("chapter2_mainline_v2_valid=true")
+    print(f"result_role_rows={len(role_rows)}")
+    print(f"legacy_claim_registry_rows={len(rows)}")
     return 0
 
 
