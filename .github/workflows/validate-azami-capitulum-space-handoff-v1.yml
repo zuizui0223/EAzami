@@ -5,6 +5,10 @@ on:
       - "analysis/import_azami_capitulum_space_targets.py"
       - "tests/test_import_azami_capitulum_space_targets.py"
       - "docs/AZAMI_CAPITULUM_SPACE_HANDOFF_CONTRACT_V1.md"
+      - "data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv"
+      - "data/evidence/source/azami_capitulum_environment_eazami_targets_run33035785120.csv"
+      - "data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv"
+      - "data/evidence/azami_capitulum_space_handoff_report_v1.json"
       - ".github/workflows/validate-azami-capitulum-space-handoff-v1.yml"
   workflow_dispatch:
 permissions: {contents: read}
@@ -21,3 +25,39 @@ jobs:
         run: |
           python -m py_compile analysis/import_azami_capitulum_space_targets.py
           python -m unittest tests/test_import_azami_capitulum_space_targets.py -v
+      - name: Validate committed artifact-backed Azami targets
+        run: |
+          mkdir -p /tmp/azami_handoff
+          python analysis/import_azami_capitulum_space_targets.py \
+            --capitulum-space data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv \
+            --environment-space data/evidence/source/azami_capitulum_environment_eazami_targets_run33035785120.csv \
+            --incremental-environment data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv \
+            --source-run-id 33035785120 \
+            --source-artifact-id 9632715852 \
+            --source-artifact-digest sha256:51e7a26b5bd09e030b67b9342586699abaaf46e630f45b6bb4ee7bfc9152ced6 \
+            --source-head-sha 227c0e7b8c338894806785b8545c7c77c8724de1 \
+            --out /tmp/azami_handoff/azami_capitulum_space_targets_v1.csv \
+            --report /tmp/azami_handoff/azami_capitulum_space_handoff_report_v1.json
+          python - <<'PY'
+          import json
+          import pandas as pd
+
+          expected = json.load(open('data/evidence/azami_capitulum_space_handoff_report_v1.json'))
+          observed = json.load(open('/tmp/azami_handoff/azami_capitulum_space_handoff_report_v1.json'))
+          for key, value in observed.items():
+              assert expected[key] == value, (key, expected.get(key), value)
+          targets = pd.read_csv('/tmp/azami_handoff/azami_capitulum_space_targets_v1.csv', low_memory=False)
+          assert len(targets) == 62
+          assert targets['simulation_role'].eq('unscored_observational_target').all()
+          assert targets['causal_status'].eq('observational_noncausal').all()
+          assert targets['source_run_id'].astype(str).eq('33035785120').all()
+          assert targets['source_artifact_id'].astype(str).eq('9632715852').all()
+          print('artifact_backed_handoff_valid=true')
+          print('n_targets=', len(targets))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: azami-capitulum-space-handoff-v1
+          path: /tmp/azami_handoff
+          if-no-files-found: error
+          retention-days: 90
