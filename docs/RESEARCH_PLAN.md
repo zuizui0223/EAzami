@@ -1,129 +1,180 @@
-# Chapter 2 research plan — repeated flower-colour transitions in East Asian Cirsium
+# Chapter 2 research plan — phenotype → function → history → origin → convergence
 
-## Central problem
+## Current source of truth
 
-East Asian *Cirsium* contains repeated white, pink and purple flower states, including white/coloured sister lineages and within-lineage colour polymorphism. The project asks whether floral anthocyanin pigmentation has been repeatedly lost and, in some lineages, regained or reactivated, and whether repeated transitions use homologous molecular mechanisms.
+The active Chapter 2 scientific mainline is:
 
-A second linked objective is to improve the nuclear phylogenetic framework required to test these transitions. Existing phylogenomic studies are used as starting backbones, but the project explicitly identifies taxa/populations whose absence or weak placement prevents reliable ancestral-state reconstruction. These gaps become priorities for RAD-seq.
+- `docs/chapter2/MAINLINE_V2.md`
+- `data/evidence/chapter2_result_role_map_v2.csv`
 
-Recent phylotranscriptomic work already resolves important local backbones. Chang et al. (2026; DOI 10.1186/s12870-026-08097-6) analysed 12 *Cirsium* taxa and 33 *Cirsium* samples across the *C. japonicum* complex, Arenicola and selected related taxa. Chang et al. (2025; DOI 10.1186/s40529-025-00454-2) analysed seven *Cirsium* species in Nipponocirsium/related sampling and documented strong ploidy/chromosome-number structure. Therefore RAD-seq is not justified as a simple repeat of those species placements. It is justified to (i) fill the much larger Japan–China regional taxon gap, (ii) add population replication around flower-colour transitions, and (iii) test reticulation/ploidy-sensitive histories that a single plastid tree cannot resolve.
+The existing manuscript package remains under `docs/chapter2/`, but `MANUSCRIPT_V1.md` is now a prior simulation-centred draft to be rewritten against MAINLINE_V2 rather than the organizing source of truth.
 
-## Aim 1 — Build a population-aware East Asian flower-colour atlas
+The previous flower-colour loss/regain plan remains archived at:
 
-Scope: Japan, Ryukyu Islands, Taiwan and China.
+`docs/archive/RESEARCH_PLAN_FLOWER_COLOUR_LEGACY_2026-08-27.md`
 
-For each evidence record retain:
+Colour is retained as one trait-specific history/mechanism module, not as the Chapter 2 organizing question.
 
-- accepted taxon and source name;
-- population/locality;
-- country/region;
-- individual-level colour state where possible;
-- continuous image/spectral colour where available;
-- evidence type and source;
-- whether colour is directly observed or literature-reported;
-- confidence and assessability.
+## Central dependency
 
-Primary output: a vetted atlas that distinguishes fixed white, fixed coloured and polymorphic taxa/populations.
+```text
+Azami
+phenotypic decomposition
+        ↓
+EAzami-I
+candidate functional annotation / validation
+        ↓
+EAzami-II
+trait-specific evolutionary history
+        ↓
+EAzami-III
+origin discrimination
+        ↓
+EAzami-IV
+functional / adaptive convergence
+```
 
-## Aim 2 — Audit the existing phylogenetic framework and build a targeted nuclear RAD-seq panel
+Azami and EAzami are not parallel trait projects.
 
-The project does not assume that current trees are complete enough for colour-transition inference. For every accepted taxon and transition-critical population, record:
+### Azami
 
-- representation in published nuclear phylogenomic trees;
-- representation only in plastid phylogenies;
-- support/resolution of placement;
-- nuclear–plastid conflict;
-- ploidy information;
-- suspected hybridization/reticulation;
-- whether missing placement changes a colour-history hypothesis.
+> **The capitulum is not one adaptive syndrome. Its component phenotypes are decomposable and occupy different environmental and hierarchical structures.**
 
-RAD-seq priorities follow three tiers:
+Azami defines the phenotype components and their present-day within/among structure. It does not assign adaptive function or reconstruct evolutionary origin.
 
-- Tier A: placement or population history directly distinguishes alternative loss/regain histories;
-- Tier B: fills a major East Asian nuclear-backbone gap or unstable placement;
-- Tier C: adds replication or lower marginal-information coverage.
+### EAzami
 
-Within Tier A, population-level sampling is prioritized even when the species-level placement is already well resolved. This applies especially to *C. brevicaule*, *C. irumtiense*, *C. japonicum* var. *takaoense* and var. *albescens*.
+> **For each decomposed phenotype, determine what function it can perform, when and how often its states changed, whether repeated states share or differ in origin, and only then whether independent origins repeatedly solve the same ecological problem.**
 
-The nuclear phylogeny itself is a project objective because polyploidy, young divergence, hybridization and potential chloroplast capture can make plastid-only history inadequate. However, RAD-seq outputs will be interpreted with explicit ploidy-aware filtering and network/gene-flow analyses rather than forced into one bifurcating species tree.
+## Stage 1 — phenotype to candidate functional trait
 
-## Aim 3 — Reconstruct repeated loss and candidate regain
+A measured image phenotype is not automatically a functional trait. The required promotion path is:
 
-Map population-aware colour states onto a topology set rather than one fixed tree.
+```text
+observed phenotype
+→ candidate functional annotation
+→ independent functional evidence
+→ focal manipulation / performance response
+→ validated functional trait
+```
 
-Test:
+Current evidence supports the following candidate axes:
 
-- number of independent white-flower origins;
-- transitions between coloured and white states;
-- whether any coloured tips require a white ancestor/intermediate with meaningful posterior support;
-- sensitivity of transition counts to uncertain nodes, missing taxa and reticulation;
-- whether ancestral polymorphism or introgression provides a more plausible explanation than simple regain.
+- orientation: time-window pollination, thermal presentation, rain/UV/wetting protection;
+- display: pollinator discovery/probing and antagonist discovery/exposure;
+- phyllary posture: reproductive-enemy access/exclusion and possible pollinator-access cost;
+- armature: candidate enemy exclusion/handling cost, pending direct botanical validation;
+- stickiness: context-dependent enemy interaction/cost with no universal defence sign;
+- colour: pollinator choice and pigment/abiotic physiology under local availability and ancestry context.
 
-A candidate `regain` must survive phylogenetic sensitivity analysis. A molecular `reactivation` claim additionally requires evidence that the anthocyanin pathway was retained but suppressed in the white lineage and restored in the descendant coloured lineage.
+The strongest resolved ecological prior is that reproductive insect herbivory can impose a large maternal-fitness cost in Cirsium (pooled viable/mature-seed RR under reduced versus ambient herbivory = 2.674, 95% CI 2.388–2.993). This establishes the importance of the antagonist channel, not the protective function of any particular phenotype.
 
-## Aim 4 — Identify the molecular mechanism of replicated transitions
+## Stage 2 — trait-specific evolutionary histories
 
-Select 3–5 phylogenetically independent or otherwise highly informative systems after Aims 1–3.
+Use the accepted nuclear phylogenomic topology ensemble and source-backed state definitions. Reconstruct each trait separately rather than forcing one whole-capitulum syndrome history.
 
-For the same biological individuals whenever possible collect:
+Current history results:
 
-- standardized flower-colour measurement;
-- anthocyanin/flavonoid chemistry;
-- floral tissue for RNA-seq;
-- high-quality leaf DNA;
-- voucher material.
+- orientation: repeated change, ML minimum 6 and UFBoot range 4–6 after the JPN34 authority extension; branch localization remains weak;
+- phyllary posture: exactly 3 minimum changes across all 1000 UFBoot trees; JPN36 is the strongest current partly localizable target;
+- stickiness: canonical main ML minimum 5 with UFBoot range 4–5; JPN24 authority extension yields 13 resolved concepts and 5 changes on every UFBoot topology but is not yet merged;
+- colour: global/high-depth continuous lightness overdispersion does not replicate as the same source-balanced Japan-local pattern, so colour history is not promoted by that route.
 
-Mechanistic questions:
+The simple whole-capitulum common-lability alternative is not supported by the current three-module transition-overlap diagnostic. This does not prove genetic/developmental modular evolvability.
 
-- structural-gene loss versus regulatory suppression;
-- repeated use of MYB/bHLH/WD40 or other regulatory nodes;
-- cis versus trans changes;
-- retention of functional ancestral haplotypes;
-- introgression of pigmentation alleles;
-- whether independent white/regain events use homologous or distinct molecular routes.
+## Stage 3 — discriminate origins of repeated states
 
-Genome resequencing/WGS is targeted to these transitions rather than applied to all atlas taxa.
+Repeated present states can arise through:
 
-Important existing evidence: Chang et al. (2026) explicitly reports an experimental linkage between the white/bluish-purple polymorphism of var. *takaoense*, anthocyanin expression and pollinator preference. EAzami therefore treats *takaoense* as a replication/causal-genomics system, not as an untouched first demonstration of expression differences.
+- ancestral retention;
+- independent lineage-specific change;
+- ancestral polymorphism and sorting;
+- introgression / gene flow;
+- hybridization / cytoplasmic capture;
+- reversal or re-expression where justified.
 
-## Aim 5 — Selection is downstream, not assumed
+Species-level topology cannot distinguish all of these. The next ancestry layer therefore links standardized phenotype to:
 
-Pollinator preference, UV, temperature, drought, herbivory and pigment-production costs are candidate selective agents. They are not used to infer evolutionary direction.
+- nuclear population-genomic DNA;
+- same-individual or tightly matched plastid haplotype;
+- cytotype / genome-size information.
 
-Selection-pressure tests should be designed after the responsible transition and molecular phenotype are sufficiently resolved, so allele/haplotype state, pigment phenotype and fitness can be linked explicitly.
+The objective is not simply a denser tree. It is to identify where repeated phenotype states came from.
 
-## Primary hypotheses
+## Stage 4 — test convergence
 
-- H1: anthocyanin loss evolved independently multiple times in East Asian *Cirsium*.
-- H2: at least one coloured lineage represents a credible regain/reactivation candidate after accounting for missing taxa and topology uncertainty.
-- H3: repeated white-flower evolution disproportionately involves regulatory suppression of a conserved pathway rather than repeated irreversible structural-gene loss.
-- H4: independent regain candidates reuse homologous regulatory modules or ancestral functional haplotypes more often than expected under unconstrained molecular routes.
-- H5: adding transition-critical taxa and populations with nuclear RAD-seq changes at least some inferred flower-colour histories relative to current incomplete/plastid-biased backbones.
-- H6: some apparent repeated transitions are better explained by ancestral polymorphism or introgression than by independent mutation/reversal.
+The claim ladder is:
 
-## Current priority order
+```text
+repeated state
+→ independent origin
+→ repeated ecological association
+→ same / equivalent functional consequence
+→ reproductive-fitness consequence
+→ functional or adaptive convergence
+```
 
-1. Complete taxon list for Japan–Ryukyu–Taiwan–China.
-2. Populate flower-colour evidence and identify white/coloured polymorphism.
-3. Join the atlas to the published nuclear-coverage seed table and identify genuinely missing taxa/populations.
-4. Rank the first RAD-seq sampling panel using transition information gain + phylogeny gap + ploidy/reticulation + geographic backbone value.
-5. Reconstruct transitions across existing and newly generated nuclear topologies.
-6. Choose mechanistic focal systems.
-7. Conduct pigment chemistry + floral RNA-seq.
-8. Add targeted resequencing/WGS for causal-region and population-history tests.
-9. Design selection-pressure experiments around resolved molecular variants/phenotypes.
+Repeated parsimony changes alone are not convergence counts. A phenotype can be multifunctional, and different phenotypes may provide the same function.
 
-## Initial focal systems
+## Auxiliary lane — cross-scale generative constraints
 
-- Ryukyu *C. brevicaule* / *C. irumtiense*: already resolved at species level, so RAD-seq emphasis is population structure, gene flow and transition history.
-- Taiwan *C. japonicum* complex: especially fixed-white var. *albescens* and colour-polymorphic var. *takaoense*; species-lineage placement is already strong, so emphasis is paired colour morph/population sampling and causal variation.
-- Nipponocirsium: existing nuclear transcriptomic anchor plus known diploid/tetraploid/dysploid structure; use primarily as a ploidy-aware backbone/test case unless the colour atlas discovers informative transitions.
-- Additional Japanese and Chinese systems are discovered by the atlas rather than assumed in advance.
+The 62-target simulation programme is retained but no longer defines EAzami's primary meaning of history.
 
-## Claims deliberately not made yet
+Its question is:
 
-- that *C. irumtiense* definitively represents re-expression after a white ancestor;
-- that white-flower evolution is caused by pollinator shifts;
-- that plastid and nuclear histories are concordant;
-- that RAD-seq fully resolves allopolyploid or reticulate history;
-- that visible white flowers have complete loss of anthocyanin synthesis.
+> **Which covariance/process architectures are statistically compatible with the observed within/among phenotypic field?**
+
+Current results remain valid:
+
+- v3.1: no declared biological driver family passes absolute adequacy;
+- scalar one-shot: `NULL_COUPLED` is the frozen scalar-target winner;
+- held-out support test: `NULL_COUPLED` fails the primary scale-specific pattern in 0/64 draws;
+- post-heldout diagnostic: among-only process structure improves strongly but is still inadequate;
+- draft v4.1: scale-specific covariance families are the first structures to pass the registered seven-target adequacy screen, but the result is not yet canonical or independently held-out validated.
+
+These simulations diagnose scale-specific covariance formation. They do not reconstruct transition number, ancestral state or historical origin.
+
+## Higher-order endpoint hypotheses
+
+### Modular evolvability
+
+Retain as an endpoint hypothesis generated by partly independent trait histories, standing variation, introgression and regulatory reuse. Do not use it as the premise that organizes every analysis.
+
+### Common lability
+
+Retain as a competing higher-order explanation. Distinguish evolutionary common lability from contemporaneous residual covariance coupling.
+
+### Selection mosaic
+
+Retain as the leading ecological working architecture: local interaction opportunity and trait-specific functional leverage determine which component matters in a given population, while downstream demographic context can gate whether seed-fitness differences propagate to recruitment.
+
+## Current completion boundary
+
+### Already established
+
+- phenotypic decomposition and within/among scale asymmetry;
+- strong reproductive-antagonist fitness cost in harmonizable Cirsium experiments;
+- no universal pollinator/antagonist dominance;
+- repeated orientation, phyllary and stickiness histories on the current nuclear topology ensemble;
+- failure of simple whole-capitulum historical lability;
+- failure of the global colour-overdispersion pattern to replicate as the same Japan-local historical signal;
+- several simple deterministic explanations (broad climate distance, colonization-history distance, ploidy class) are inadequate for current capitulum disparity.
+
+### Still required
+
+- focal Cirsium trait-function validation;
+- population-level origin discrimination;
+- ecological-regime matching across independent origins;
+- final reproductive-fitness links;
+- molecular retention/expression evidence for any colour reactivation claim.
+
+## Operational rule
+
+Every new analysis or sample must advance one of four biological transitions:
+
+1. phenotype → function;
+2. function/state → evolutionary history;
+3. repeated state → historical origin;
+4. independent origin → convergence.
+
+Analyses that only add another descriptive model without changing one of these transitions are lower priority.

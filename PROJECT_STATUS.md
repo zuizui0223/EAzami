@@ -1,227 +1,265 @@
 # EAzami current state
 
-Status date: 2026-08-21
+Status date: 2026-08-27
 
-## Doctoral center
+## Canonical mainline
 
-> **Why did one young Japanese *Cirsium* radiation generate such large capitulum and ecological diversity so quickly, despite shallow lineage divergence?**
+```text
+Azami
+phenotypic decomposition
+        ↓
+EAzami-I
+phenotype → candidate function → validated functional trait
+        ↓
+EAzami-II
+trait-specific evolutionary histories
+        ↓
+EAzami-III
+origin discrimination
+        ↓
+EAzami-IV
+functional / adaptive convergence
+```
 
-Central working hypothesis: **modular evolvability** — reusable standing variation, gene flow/introgression and cytotype/genome changes may allow phenotype modules to diverge faster than genome-wide lineage sorting.
+Active source of truth:
 
-This remains a hypothesis, not a conclusion. Current pattern-reduction results do not decisively distinguish modular evolvability from a common-lability full model.
+- `docs/chapter2/MAINLINE_V2.md`
+- `docs/chapter2/MANUSCRIPT_V2_OUTLINE.md`
+- `docs/chapter2/FIGURE_TABLE_PLAN_V2.md`
+- `docs/chapter2/SUBMISSION_GATES_V2.md`
+- `data/evidence/chapter2_result_role_map_v2.csv`
+- `docs/RESEARCH_PLAN.md`
 
-Priority:
-1. **Aim 1 — source of variation**.
-2. **Aim 2 — adaptive function**.
-3. **Aim 3 — colour mechanism**.
+The 62-target simulation programme is an **auxiliary cross-scale generative-constraint lane**, not the definition of evolutionary history.
 
-## Existing-data premise
+## Azami endpoint inherited by EAzami
 
-- 36/38 sampled Japanese concepts are in the dominant young radiation.
-- *C. lineare* is the strongest replicated secondary-history exception.
-- *C. dipsacolepis* remains a candidate secondary arrival.
-- large capitulum disparity occurs inside the dominant radiation.
-- broad current-climate distance does not positively order capitulum distance in the current nine-taxon subset.
-- ploidy is not a deterministic explanation of orientation.
-- species-tip coding compresses documented W/C polymorphism.
-- the heavy 294→296 raw-read tree is preserved but deferred.
+> **The capitulum is not one adaptive syndrome. Its component phenotypes are decomposable and occupy different environmental and hierarchical structures.**
 
-## Aim 2 — quantified antagonist baseline
+Key inherited constraints:
 
-Canonical result:
+- component phenotypes are measured separately rather than collapsed into one syndrome;
+- within-taxon organization is stronger than among-taxon organization;
+- within/among association geometry is only partially aligned;
+- broad current-climate distance, colonization-history separation and ploidy do not provide simple deterministic explanations of current capitulum disparity.
 
-`data/evidence/cirsium_floral_herbivory_lnrr_meta_v2.json`
+## EAzami-I — phenotype to function
 
-Estimand:
+A measured image phenotype is not automatically a functional trait.
 
-`RR = viable/mature seed output under experimentally reduced insect herbivory / seed output under ambient herbivory`
+Promotion path:
 
-Current harmonized coverage:
+`observed phenotype → candidate functional annotation → independent evidence → focal manipulation/performance → validated functional trait`.
 
-- **9 within-study contrasts**;
-- **4 independent data-generation studies**;
-- **2 *Cirsium* taxa/taxon concepts**.
+Current candidate axes:
 
-Random-effects result:
+- **orientation** — time-window pollination / thermal presentation / rain-UV-wetting protection;
+- **display** — pollinator discovery/probing + antagonist discovery/exposure;
+- **phyllary posture** — reproductive-enemy access/exclusion + possible pollinator-access cost;
+- **armature** — candidate enemy exclusion/handling cost, pending direct botanical validation;
+- **stickiness** — context-dependent enemy interaction/cost; no universal defence sign;
+- **colour** — local availability-dependent pollinator choice + pigment/abiotic physiology.
 
-- pooled **RR = 2.674**;
+Strongest resolved ecological prior:
+
+- strict Cirsium reproductive-herbivory meta-analysis;
+- pooled viable/mature-seed RR under reduced versus ambient herbivory = **2.674**;
 - 95% CI **2.388–2.993**;
-- equivalent ambient-herbivory loss of potential seed output = **62.6%**;
-- 95% CI **58.1–66.6%**;
-- **I² = 1.0%**.
+- equivalent ambient loss of potential seed output = **62.6%**;
+- I² ≈ **1%**.
 
-Resolved:
+Resolved conclusion:
 
-> **insect herbivory on reproductive structures imposes a large and repeatable maternal-fitness cost in the currently harmonizable *Cirsium* experiments.**
+> Reproductive insect antagonists can impose a large, repeatable maternal-fitness cost in Cirsium.
 
-Aim 2 therefore asks which capitulum modules alter this established antagonist cost, what pollination/abiotic costs accompany those modules, and whether the effect reaches reproductive fitness.
+Unresolved:
 
-## Cross-layer pattern reduction — current conclusion
+> Which capitulum phenotype changes that cost, and what mutualist or abiotic trade-off accompanies it?
 
-EAzami keeps the global Azami environment/trait layer observational and uses frozen Azami patterns plus independent interaction/fitness literature as mechanism-reduction targets.
+Selection literature also rejects a universal pollinator- or antagonist-dominance model. The leading ecological working architecture is local **selection mosaic + trait-specific functional leverage**.
 
-The literature-number-rich registry contains concrete pollination, antagonist, display, orientation/rain, size-predation and colour-choice targets rather than only Azami environmental signs.
+## EAzami-II — trait-specific evolutionary histories
 
-### 36-target v2 screen
+### Nuclear history scaffold
 
-Best-distance ranking in the seven-family screen:
+Canonical Japan38 Comp1061 compatibility tree:
 
-1. FULL_MODULAR_HET — **7.61**
-2. FULL_MODULAR_GLOBAL — **18.95**
-3. FULL_COUPLED_HET — **25.49**
-4. FULL_COUPLED_GLOBAL — **29.83**
-
-Five fixed simulation replicates per parameter draw preserved the full-model ordering:
-
-1. FULL_MODULAR_HET — **7.75**
-2. FULL_MODULAR_GLOBAL — **23.03**
-3. FULL_COUPLED_HET — **27.00**
-4. FULL_COUPLED_GLOBAL — **37.22**
-
-This demonstrates that the v2 ordering is not a single-simulation lottery, but it does not make the distances posterior model probabilities.
-
-### Broader multi-seed held-out screen
-
-The separate 31-row robust screen gives:
-
-- full modular: accepted median core distance **0.287**, held-out reproduction **0.706**;
-- full common-lability: **0.297**, held-out reproduction **0.689**;
-- antagonist-only: **0.419**, held-out **0.417**;
-- pollinator-only: **0.429**, held-out **0.317**;
-- environment-only: **0.586**, held-out **0.133**.
-
-The common-lability full model produced the only 11/11 core draw in that run. Therefore the defensible conclusion is:
-
-> **joint environmental structure + mutualist response + antagonist cost is structurally supported much more strongly than any single-driver family; current evidence does not yet decisively distinguish common lability from modular evolvability.**
-
-The simulations are structural-sufficiency screens, not likelihood fits, Bayes factors, posterior model probabilities or causal proof.
-
-## Mechanism-gap reductions now completed
+- 39 focal biological samples;
+- 40 tips including outgroup;
+- 241 locus universe / 236 QC loci / 176 rootable loci;
+- 161,654-bp concatenated alignment;
+- UFBoot 1000 / SH-aLRT 1000;
+- branch lengths = substitutions/site, **not absolute time**;
+- JPN20 two biological samples are non-monophyletic in ML and 0/1000 UFBoot trees and are not forcibly collapsed.
 
 ### Orientation
 
-A static `orientation → pollinator preference` mechanism is insufficient for the current cross-study pattern. The reduced orientation screen instead requires separate candidate pathways:
+- resolved concepts = **20**;
+- ML minimum unordered steps = **6**;
+- UFBoot range = **4–6**, median 5;
+- recurrence is robust;
+- exact branch localization remains weak.
 
-- time-window pollination / thermal timing;
-- rain/UV/wetting protection.
+### Phyllary posture
 
-The field schema therefore preserves early-day versus later/all-day bouts, head-scale microclimate, wetting, pollen presentation/viability, effective contacts and final achenes. An all-day visitation null is not treated as evidence of no orientation effect.
+- resolved concepts = **10**;
+- minimum changes = **3**;
+- all 1000 UFBoot trees require exactly 3 changes;
+- JPN36 terminal transition is forced in 75.4% of UFBoot trees.
 
-### Pollinator display × density/context
+### Stickiness
 
-Four *C. purpuratum* heads-probed slopes show residual under one shared mean and one shared density ratio. Exact log-space decomposition shows that context flexibility can remove the training residual, but the fully context-specific four-parameter form is saturated for four observations.
+Canonical main:
 
-Predictive shrinkage/leave-one-out validation gives:
+- resolved concepts = 12;
+- ML minimum = **5**;
+- UFBoot = **4–5**, median 5.
 
-- shared density-only LOO log-RMSE = **0.244791**;
-- partial-pooling LOO log-RMSE = **0.239090**;
-- improvement = **2.33%**;
-- effective df = **2.484**.
+JPN24 authority extension, pending merge:
 
-Decision:
+- JPN24 = sticky from exact NMNS authority;
+- resolved concepts = **13**;
+- scientific recomputation gives ML = 5 and **all 1000 UFBoot trees = 5**;
+- the previous failing final CI was a readiness-schema assertion after the scientific recomputation succeeded; the schema assertion has been corrected and is being revalidated.
 
-> **do not promote unpooled year/site pollinator parameters into the full macro-interaction simulation yet.**
+### Cross-module history
 
-Instead the Aim 2 bout ledger records focal display, quantitative local plant/head density, `heads_probed_total`, visits and effective contacts so the context term can be estimated from replicated focal-system data with partial pooling.
+No orientation × phyllary × stickiness pair is consistently positive across branch-length-aware and topology-only transition-overlap diagnostics.
 
-### Flower colour
+Current conclusion:
 
-The former sign-only *C. palustre* prior `white preferred` is now quantitative. Six significant white-preference bee-type × population cases reconstructed from Mogford Fig. 24 give
+> **The simple one-shared-whole-capitulum historical-lability model is not supported.**
 
-`white selection ratio = white visit share / white morph share`
+Boundary:
 
-with:
+> This does not demonstrate developmental or genetic modular evolvability.
 
-- conditional range **1.1516–1.6118**;
-- geometric mean **1.3019**.
+### Colour negative-control history
 
-This is a **soft, significance-conditioned calibration**, not a pooled effect: the cases are clustered within one study system and included because significant white preference was reported.
+Global/high-depth continuous lightness shows anti-phylogenetic structure, but the source-balanced Japan7 panel does not replicate the same directional signal.
 
-Decision:
+Current decision:
 
-> **do not hard-code `white always preferred`; measure the same availability-normalized selection ratio in the W/coloured focal system.**
+- no promotion of the global lightness pattern to a Japanese-radiation colour-transition history;
+- no further sampling/reprocessing solely to rescue that sign;
+- Ryukyu white/coloured direction and C. irumtiense reactivation remain unresolved.
 
-The field schema now preserves focal `colour_class`, local same/alternative-colour open-head availability, pollinator visits and effective contacts within a defined colour-choice context.
+## EAzami-III — origin discrimination
 
-Canonical note:
+Repeated present states are not yet independent-origin claims.
 
-`docs/AIM2_CIRSIUM_PALUSTRE_COLOUR_PREFERENCE_2026-08-21.md`
+Competing histories retained:
 
-## Aim 2 functional order
+- ancestral retention;
+- independent lineage-specific change;
+- ancestral polymorphism / differential sorting;
+- introgression / gene flow;
+- hybridization / cytoplasmic capture;
+- reversal or re-expression where biologically justified.
 
-1. **head orientation first** — timing/protection pathways and reproductive fitness;
-2. **W/coloured comparison second** — availability-normalized colour choice, effective contact, abiotic context and fitness, nested with Aim 3;
-3. **phyllary/spine conditional third** — only after direct botanical validation and a defensible manipulation;
-4. **stickiness lower priority / negative-control evidence**, not a generic defence proxy.
+Next discriminator, preferably linked in the same biological individuals:
 
-The image-derived involucre/spine metrics remain morphological proxies; existing antagonist costs do not prove these proxies are defensive traits.
+- standardized phenotype;
+- **nuclear population-genomic DNA**;
+- same-individual or tightly matched **plastid haplotype**;
+- **cytotype / genome-size** information.
 
-## Sampling
+Objective:
 
-Core minimum = **190**:
-- *C. brevicaule* 60
-- *C. irumtiense* 60
-- *C. pendulum* 40
-- *C. sieboldii* 30
+> Determine where repeated phenotype states came from, not merely build a denser species tree.
 
-Controls +32:
-- *C. lineare* 16
-- *C. dipsacolepis* 16
+## EAzami-IV — convergence
 
-Full minimum = **222**, recommended fuller design = **298**.
+Claim ladder:
 
-Aim 2 measurements remain nested within the same ancestry-resolved populations. Exact P001–P014 localities remain field/current-source verified rather than invented.
+`repeated state → independent origin → repeated ecological association → same/equivalent function → reproductive-fitness consequence → functional/adaptive convergence`.
 
-## Three unresolved new-data gates
+Current position:
 
-Doctoral execution remains compressed to **three unresolved new-data gates**; the mechanism reductions sharpen Gate 2 but do not add a fourth gate.
+- recurrence reached for orientation/phyllary/stickiness;
+- independent origin not yet established population-wise;
+- focal trait function not yet broadly validated in Cirsium;
+- adaptive convergence not established.
 
-1. **Aim 1:** same-individual phenotype + population ancestry + plastid + cytotype to resolve standing variation vs introgression vs lineage-specific origin.
-2. **Aim 2:** determine which ancestry-linked capitulum modules alter antagonist cost, pollination/protection pathways and reproductive fitness.
-3. **Aim 3:** same-individual floral-stage RNA + coding/regulatory haplotype + pigment + calibrated colour in at least two independent W/C transitions.
+## Three unresolved new-data gates retained
 
-Canonical execution files:
+The existing doctoral sampling programme remains useful, but its gates are now interpreted under the new mainline rather than as three competing central Aims.
 
-- `data/evidence/doctoral_next_data_minimum_v1.csv`;
-- `docs/DOCTORAL_NEXT_DATA_GATE_2026-08-19.md`;
-- `sampling/SAMPLING_DESIGN.md`.
+1. **Gate 1 — origin discrimination**
+   - same-individual phenotype + nuclear population ancestry + plastid + cytotype;
+   - distinguish standing ancestral variation, introgression/gene flow and lineage-specific origin;
+   - current protected minimum remains core190 before optional controls.
 
-## Gate 2 operationalization
+2. **Gate 2 — functional validation**
+   - **head orientation first** where manipulable and ancestry/context can be controlled;
+   - preserve effective contact, rain/wetting/thermal context, antagonist damage and final filled/mature seed;
+   - phyllary/spine only after direct botanical validation and a defensible manipulation;
+   - stickiness as a context-specific test, not a generic defence proxy.
 
-Aim 2 uses four linked levels:
+3. **Gate 3 — molecular reuse for colour**
+   - at least **two independent W/C transitions** before a repeated molecular-reuse claim;
+   - ancestry + coding/regulatory haplotype + floral RNA at late bud/pigmentation onset and anthesis + pigment + calibrated colour;
+   - coloured descendant alone does not license reactivation.
 
-1. individual/sample identity — `sampling/aim13_individual_sample_ledger_v1.csv`;
-2. focal capitulum/treatment and final fitness — `sampling/aim2_capitulum_field_ledger_v1.csv`;
-3. repeated time-stamped microclimate + display/density/colour context + pollinator + antagonist observation — `sampling/aim2_capitulum_observation_bout_ledger_v1.csv`;
-4. plant-season display/predation — `sampling/aim2_plant_display_predation_ledger_v1.csv`.
+These gates correspond directly to `origin`, `function`, and a trait-specific molecular-mechanism extension of the convergence ladder.
 
-Repeated bouts are not biological replicates. Final achene/seed output remains in the focal-head table. Pollinator and antagonist channels stay separate.
+## Higher-order hypotheses
 
-Detailed protocol:
+### Modular evolvability
 
-`docs/AIM2_TRANCHE1_JOINT_OBSERVATION_PROTOCOL_2026-08-20.md`
+Status: **endpoint hypothesis, not organizing premise**.
 
-## What must be secured during flowering
+It becomes stronger only if multiple traits show partly independent histories and repeated origins reuse standing variation, introgressed variants or retained regulatory/developmental machinery.
 
-- immutable individual/population IDs and voucher-linked phenotype;
-- calibrated visible/UV colour plus focal `colour_class`;
-- natural orientation and direct phyllary/spine traits;
-- time-stamped head-scale microclimate where measurable;
-- focal display, quantitative local density and local colour availability;
-- pollinator visits, heads probed and effective contacts as separate quantities;
-- antagonist records on the same functional individuals/heads;
-- total and filled achenes / mature seed output;
-- Aim 3 floral RNA at late bud/pigmentation onset and pre-anthesis/fresh anthesis;
-- separate pigment tissue linked to the same individual.
+### Common lability
+
+Status: higher-order competitor.
+
+The simple whole-capitulum historical form is weakened by transition-overlap results. Snapshot residual covariance coupling must not be called evolutionary common lability.
+
+### Selection mosaic / local functional leverage
+
+Status: leading ecological working architecture.
+
+## Auxiliary cross-scale generative-constraint lane
+
+Purpose:
+
+> Which statistical covariance/process architectures can reproduce the observed within/among phenotypic field?
+
+Current results:
+
+- v3.1: none of five declared driver families passes absolute adequacy;
+- frozen 62-target one-shot: `NULL_COUPLED` rank 1 in 16/16 paired draws;
+- held-out falsification: primary support pattern **0/64**, exact 20-cell pattern **0/64**;
+- post-heldout diagnostic: `PROCESS_AMONG_ONLY_SHARED_COUPLED` improves on NULL in **22/24** draws but remains inadequate at median **6/8** primary cells;
+- draft v4.1: scale-specific covariance families are the first to pass the registered seven-target adequacy screen, but this remains provisional/unmerged and requires canonical/held-out validation.
+
+Role under the new mainline:
+
+> independent evidence for scale-specific covariance formation, not reconstruction of evolutionary transition history.
+
+## Current bounded Chapter 2 paper
+
+Current-data endpoint:
+
+> **The Cirsium capitulum is not one fixed adaptive syndrome. Its decomposed phenotype components have different candidate functional pathways and repeated, partly decoupled histories on the current nuclear topology ensemble. Repeated states are recurrence lower bounds; historical origin and adaptive convergence remain explicit next tests.**
+
+## Next executable priorities
+
+1. close JPN24 stickiness integration without changing its authority state or scientific result;
+2. repair only the remaining authority-level history gap, JPN15 phyllary posture, and leave unknown if no exact source maps safely to the ontology;
+3. build the paper phenotype→candidate-function evidence table from existing functional registries;
+4. prepare one nuclear-tree figure with separate orientation/phyllary/stickiness panels and no composite syndrome;
+5. protect the next ancestry layer: same-individual phenotype + nuclear population genomics + plastid + cytotype;
+6. run focal functional tests only where the trait and manipulation are defensible.
 
 ## Stop rules
 
-- no heavy tree prerequisite for field sampling;
-- no more broad climate-only preliminary models;
-- no SRA/BLAST fishing as a substitute for morph-linked population/floral data;
-- no broad interaction pooling simply because several studies exist;
-- do not re-test whether insect antagonists can reduce *Cirsium* seed output; test **which module changes the cost**;
-- no unpooled year/site pollinator parameter from four context slopes;
-- no `white always preferred` parameter from significance-conditioned *C. palustre* cases;
-- no colour-preference claim without local morph availability;
-- no “adaptive radiation” claim until Aim 2 links a focal trait through interaction/protection to reproductive fitness.
+- no new generic climate model unless it changes phenotype→function, history, origin or convergence discrimination;
+- no re-testing whether Cirsium reproductive enemies can reduce seed output; test which phenotype changes the cost;
+- no image-derived defence claim without direct botanical/functional validation;
+- no repeated-state → adaptive-convergence shortcut;
+- no coloured-descendant → reactivation shortcut;
+- no modular-evolvability premise before the lower evidence ladder is satisfied;
+- no simulation adequacy → realized evolutionary history shortcut.

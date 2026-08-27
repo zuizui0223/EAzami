@@ -1,0 +1,30 @@
+name: Validate Chapter 2 mainline v2
+
+on:
+  pull_request:
+    paths:
+      - "PROJECT_STATUS.md"
+      - "docs/chapter2/**"
+      - "docs/RESEARCH_PLAN.md"
+      - "docs/archive/RESEARCH_PLAN_FLOWER_COLOUR_LEGACY_2026-08-27.md"
+      - "data/evidence/chapter2_claim_registry_v1.csv"
+      - "data/evidence/chapter2_result_role_map_v2.csv"
+      - "analysis/validate_chapter2_manuscript_v1.py"
+      - ".github/workflows/validate-chapter2-manuscript-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validator
+        run: python -m py_compile analysis/validate_chapter2_manuscript_v1.py
+      - name: Validate Chapter 2 scientific mainline
+        run: python analysis/validate_chapter2_manuscript_v1.py
