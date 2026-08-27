@@ -1,6 +1,6 @@
 # Chapter 2 target journal v1 — Journal of Evolutionary Biology
 
-Status: active submission target for the phenotype × evolutionary-history paper.
+Status: **active first submission target** for the phenotype × evolutionary-history paper.
 
 ## Primary target
 
@@ -9,7 +9,7 @@ Status: active submission target for the phenotype × evolutionary-history paper
 Current journal contract checked 2026-08-27:
 
 - JEB prioritizes rigorous studies that advance understanding of evolutionary process and yield insights of interest beyond the focal taxon;
-- negative results are explicitly acceptable when they provide robust new findings;
+- robust negative results are acceptable when they provide new evolutionary information;
 - phylogenetics, morphology, evolutionary ecology, micro- and macroevolution are in scope;
 - Research Articles allow up to 7,500 words and a 250-word abstract.
 
@@ -23,32 +23,51 @@ The paper is not framed as a descriptive history of Japanese *Cirsium*. The foca
 
 > **When a complex phenotype is decomposed into continuous components, are evolutionary histories expressed primarily as conserved trait states, independent trait changes, or coordinated episodes of multidimensional change?**
 
-The current result is informative partly because the obvious alternatives both fail in simple form:
+The result is informative because two simple alternatives both fail:
 
 1. **Conserved-syndrome expectation:** individual continuous trait values should retain detectable phylogenetic structure and trait suites should remain lineage-specific.
 2. **Fully independent-component expectation:** if trait values are labile, branch-wise changes in different phenotype dimensions should be largely uncoupled.
 
-The frozen continuous analysis instead finds weak individual state-level phylogenetic structure but positive coordination of branch-wise change magnitude on the ML phylogram. The discrete-state layer independently shows repeated changes in orientation, phyllary posture and stickiness, while their transition overlap is not topology-robust. The paper therefore tests a general distinction between **state conservation** and **where evolutionary change is concentrated**.
+The frozen analyses instead show weak individual state-level phylogenetic structure, repeated changes in independently coded discrete states, and **topology-robust positive coordination of branch-wise continuous change**. That coordination is broad rather than robustly confined within the present-day phenotype modules. The paper therefore contributes a general distinction between **state conservation** and **where evolutionary change is concentrated**.
 
-## Headline only if topology sensitivity survives
+## Headline gate — PASSED
 
-The strongest candidate headline is:
+The active headline is:
 
 > **Coordinated evolutionary change without a conserved phenotypic syndrome.**
 
-This headline is licensed only if the new equal-branch UFBoot sensitivity retains positive global continuous branch-change coupling under the preregistered rule (`q05 > 0` and positive fraction >=0.95).
+The predeclared continuous topology-robustness rule was:
 
-If the continuous coupling fails that topology test, the paper remains viable but is reframed more conservatively around:
+- empirical bootstrap-topology fifth percentile of global mean branch-change rho > 0; and
+- fraction of usable bootstrap topologies with positive global mean rho >= 0.95.
 
-> **Trait-specific and topology-sensitive histories of a multidimensional reproductive phenotype in a rapid radiation.**
+Observed equal-branch UFBoot result:
 
-The ML branch-change coupling then moves to a sensitivity/exploratory result rather than the abstract headline.
+- usable topologies: **1000/1000**;
+- global mean pairwise branch-change rho median: **0.141287**;
+- q05: **0.118995**;
+- q95: **0.199615**;
+- positive fraction: **1.000**;
+- decision: **topology_robust_positive**.
+
+Thus the headline survives removal of substitution-length heterogeneity and propagation across the full raw UFBoot topology ensemble.
+
+The stronger claim that coordinated change is preferentially confined within the Chapter 1 phenotype modules did **not** pass the parallel robustness rule:
+
+- within-minus-between median: **0.112435**;
+- q05: **-0.095160**;
+- positive fraction: **0.946**;
+- decision: **not_topology_robust_positive**.
+
+Therefore the JEB framing is **broad coordinated change without a stable module boundary**, not demonstrated modular evolvability.
 
 ## Stretch target
 
-**Evolution** is retained only if the topology-sensitive continuous result survives and the Discussion can make a genuinely general contribution rather than documenting an established phenomenon in another taxon. Its current author guidance explicitly notes that demonstrating a well-established phenomenon in another taxon/context may be insufficient.
+**Evolution** remains a stretch target because the topology-sensitive continuous result now survives. Promotion from JEB to Evolution would still require the final manuscript to make a genuinely general conceptual contribution rather than merely documenting a known phenomenon in another taxon/context. Its current author guidance explicitly notes that demonstrating a well-established phenomenon in another taxon/context may be insufficient.
 
 Official source: https://academic.oup.com/evolut/pages/author-guidelines
+
+Current decision: **submit to JEB first**. The exact continuous panel (eight concepts in the complete 8-unit coupling analysis) is strong enough for a concept-driven JEB test but still makes Evolution a higher-risk first submission.
 
 ## Backup target
 
@@ -56,7 +75,7 @@ Official source: https://academic.oup.com/evolut/pages/author-guidelines
 
 ## Not the first target
 
-**New Phytologist** is not the first submission target. The paper is concept-driven, but the present exact continuous panel is still narrow enough that a broad plant-journal desk decision could reasonably judge the result too taxon-limited. Reconsider only after stronger population/lineage replication or a second radiation is added.
+**New Phytologist** is not the first submission target. The paper is concept-driven, but the present exact continuous panel remains narrow enough that a broad plant-journal desk decision could reasonably judge the result too taxon-limited. Reconsider only after stronger population/lineage replication or a second radiation is added.
 
 ## Article architecture for JEB
 
