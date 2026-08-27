@@ -1,0 +1,143 @@
+name: Run Azami capitulum v3 one-shot scoring v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/azami_capitulum_v3_scoring_contract_v1.json"
+      - "data/evidence/azami_capitulum_v3_one_shot_decision_v1.json"
+      - "data/evidence/azami_capitulum_v3_one_shot_family_summary_v1.csv"
+      - "data/evidence/azami_capitulum_v3_one_shot_factor_contrasts_v1.csv"
+      - "data/evidence/azami_capitulum_v3_one_shot_provenance_v1.json"
+      - "data/evidence/fdt_multitrait_execution_readiness_v23.json"
+      - "analysis/run_azami_capitulum_v3_one_shot_scoring.py"
+      - "tests/test_run_azami_capitulum_v3_one_shot_scoring.py"
+      - "docs/AZAMI_CAPITULUM_V3_ONE_SHOT_SCORING_V1.md"
+      - "docs/AZAMI_CAPITULUM_V3_ONE_SHOT_RESULT_V1.md"
+      - ".github/workflows/run-azami-capitulum-v3-one-shot-scoring-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  one-shot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install numpy pandas pytest
+      - name: Compile and test frozen scoring contract
+        run: |
+          python -m py_compile analysis/run_azami_capitulum_v3_one_shot_scoring.py
+          python -m pytest -q tests/test_run_azami_capitulum_v3_one_shot_scoring.py
+
+      - name: Download frozen Azami environment design artifact
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/azami
+          run-id: 33035785120
+          name: ch1-geb-v2-within-among-33035785120
+          path: upstream_azami
+          github-token: ${{ github.token }}
+
+      - name: Extract and verify de-geolocated frozen environment design
+        run: |
+          set -euo pipefail
+          mkdir -p result
+          SOURCE="$(find upstream_azami -type f -path '*/process_environment/complete18_chelsa_process.csv' -print -quit)"
+          test -n "$SOURCE"
+          python analysis/extract_azami_v3_environment_design.py \
+            "$SOURCE" \
+            result/azami_v3_environment_design.csv \
+            --report result/azami_v3_environment_design_report.json
+
+      - name: Execute preregistered 16-draw x 14-family one-shot comparison
+        run: |
+          python analysis/run_azami_capitulum_v3_one_shot_scoring.py \
+            --design result/azami_v3_environment_design.csv \
+            --space-targets data/evidence/source/azami_capitulum_space_eazami_targets_run33035785120.csv \
+            --environment-targets data/evidence/source/azami_capitulum_environment_eazami_targets_run33035785120.csv \
+            --incremental-targets data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv \
+            --out-dir result/one_shot
+
+      - name: Validate complete one-shot output without changing the frozen decision rule
+        run: |
+          python - <<'PY'
+          import json
+          import numpy as np
+          import pandas as pd
+          from pathlib import Path
+
+          out = Path('result/one_shot')
+          draws = pd.read_csv(out/'azami_capitulum_v3_one_shot_draw_scores_v1.csv')
+          summary = pd.read_csv(out/'azami_capitulum_v3_one_shot_family_summary_v1.csv')
+          wins = pd.read_csv(out/'azami_capitulum_v3_one_shot_pairwise_wins_v1.csv')
+          factors = pd.read_csv(out/'azami_capitulum_v3_one_shot_factor_contrasts_v1.csv')
+          decision = json.loads((out/'azami_capitulum_v3_one_shot_decision_v1.json').read_text())
+
+          assert len(draws) == 16 * 14 * 2
+          assert draws['seed'].nunique() == 16
+          assert draws['family'].nunique() == 14
+          assert set(draws['channel']) == {'primary', 'replication_sensitivity'}
+          assert np.isfinite(draws['total']).all()
+          assert (draws['total'] >= 0).all()
+          assert len(summary) == 14 * 2
+          assert len(factors) == 5 * 2
+          assert set(decision) >= {
+              'status', 'primary_median_leader', 'primary_tie_set',
+              'primary_min_pairwise_win_fraction', 'replication_sensitivity_best',
+              'robust_leader', 'claim_boundary'
+          }
+          assert decision['status'] in {'robust_leader', 'no_robust_leader'}
+          assert len(wins) == 2 * 14 * 13
+          print(json.dumps(decision, indent=2))
+          PY
+
+      - name: Reproduce frozen canonical result to numerical tolerance
+        run: |
+          python - <<'PY'
+          import json, math
+          from pathlib import Path
+          import pandas as pd
+
+          out = Path('result/one_shot')
+          tol = 1e-12
+
+          expected = json.loads(Path('data/evidence/azami_capitulum_v3_one_shot_decision_v1.json').read_text())
+          observed = json.loads((out/'azami_capitulum_v3_one_shot_decision_v1.json').read_text())
+          assert expected.keys() == observed.keys()
+          for key in expected:
+              a, b = expected[key], observed[key]
+              if isinstance(a, (int, float)) and not isinstance(a, bool):
+                  assert math.isclose(float(a), float(b), rel_tol=0.0, abs_tol=tol), (key, a, b)
+              else:
+                  assert a == b, (key, a, b)
+
+          for name in [
+              'azami_capitulum_v3_one_shot_family_summary_v1.csv',
+              'azami_capitulum_v3_one_shot_factor_contrasts_v1.csv',
+          ]:
+              exp = pd.read_csv(Path('data/evidence')/name)
+              obs = pd.read_csv(out/name)
+              pd.testing.assert_frame_equal(exp, obs, check_exact=False, rtol=0.0, atol=tol)
+
+          provenance = json.loads(Path('data/evidence/azami_capitulum_v3_one_shot_provenance_v1.json').read_text())
+          assert provenance['workflow_run'] == 33041133765
+          assert provenance['artifact_id'] == 9633924414
+          assert provenance['revalidation_rule']['numeric_fields'] == 'absolute tolerance <= 1e-12'
+          assert observed['robust_leader'] == 'NULL_COUPLED'
+          assert observed['primary_min_pairwise_win_fraction'] == 1.0
+          print('frozen_one_shot_outputs_numerically_reproduced=true')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: azami-capitulum-v3-one-shot-${{ github.run_id }}
+          path: result
+          if-no-files-found: error
+          retention-days: 90

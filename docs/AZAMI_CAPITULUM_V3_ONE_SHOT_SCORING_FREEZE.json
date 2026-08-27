@@ -1,0 +1,7 @@
+{
+  "scoring_contract_commit": "44c9f56727a1c14b83c742e3bd36f4c8fc9f5b3f",
+  "scoring_contract_path": "data/evidence/azami_capitulum_v3_scoring_contract_v1.json",
+  "status": "frozen_before_first_model_distance_or_ranking",
+  "frozen_at_date": "2026-08-27",
+  "note": "Implementation commits after this marker may only implement the already-frozen contract. They may not change scoring rules after outcome inspection."
+}

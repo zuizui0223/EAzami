@@ -1,0 +1,47 @@
+{
+  "contract_version": "fdt_multitrait_execution_readiness_v23",
+  "status_date": "2026-08-27",
+  "supersedes": "data/evidence/fdt_multitrait_execution_readiness_v22.json",
+  "inheritance": "All field-feasibility, Japan38 history, colour stop-rule, module-function bridge, exact v3 estimand, generator and v1 scoring constraints remain in force unless updated below.",
+  "azami_capitulum_v3_one_shot": {
+    "status": "frozen_completed_robust_leader",
+    "scoring_contract_commit": "44c9f56727a1c14b83c742e3bd36f4c8fc9f5b3f",
+    "workflow_run": 33041133765,
+    "artifact_id": 9633924414,
+    "artifact_digest": "sha256:0b84dc1d95f2780412167d7de557b3319ba9da7a2fd5eaf0ff450bc3824c06d2",
+    "robust_leader": "NULL_COUPLED",
+    "primary_median_distance": 2.213280419016901,
+    "primary_rank1_draws": "16/16",
+    "primary_min_pairwise_win_fraction": 1.0,
+    "replication_sensitivity_rank": 1,
+    "next_primary_family": "CORE4_INDEPENDENT_COUPLED",
+    "next_primary_family_median": 14.761203366391678,
+    "retuning_allowed": false
+  },
+  "factor_diagnosis": {
+    "coupled_vs_modular": "COUPLED favoured in 78.6 percent of primary and 82.1 percent of replication-sensitivity matched contrasts; this is snapshot residual covariance, not common evolutionary lability.",
+    "process_among_only_vs_process_both": "PROCESS_AMONG_ONLY direction-consistent over PROCESS_BOTH: 89.1 percent primary and 93.8 percent sensitivity.",
+    "process_among_only_vs_core4": "no direction-consistent advantage for PROCESS_AMONG_ONLY over CORE4",
+    "scale_shared_vs_independent": "no direction-consistent result"
+  },
+  "critical_boundary": "The v1 score uses raw structure, R2, cosine and partial-R2 scalar values. Observed incremental permutation P/Q/support states were not score terms. NULL_COUPLED therefore does not negate the Azami permutation-supported among-taxon process-extension result.",
+  "next_computational_gate": {
+    "name": "held_out_inferential_support_validation",
+    "question": "Can frozen NULL_COUPLED reproduce the observed incremental-environment permutation support pattern under the same nested test logic?",
+    "role": "post-ranking falsification only",
+    "may_change_v1_winner": false,
+    "may_change_interpretation_of_v1_winner": true,
+    "prohibited": "Do not add held-out P/Q/support states back into the v1 distance or retune the v1 generator after validation."
+  },
+  "field_line": {
+    "first_executable_target": "JPN_36 phyllary-access pilot after authorization/census/device gates",
+    "highest_information_stickiness_design": "JPN_15 sticky neutralization within species with JPN_06 nonsticky 100/100 sister as ancestry-matched external comparator",
+    "execution_authorized": false
+  },
+  "coverage_repairs_remaining": [
+    "JPN_15 phyllary posture",
+    "JPN_24 stickiness"
+  ],
+  "absolute_time": "FDT5/FDT6 remain blocked by calibration limitations.",
+  "claim_boundary": "The v1 winner is a structural-sufficiency result for scored snapshot statistics, not evidence of no environmental biology and not proof of common evolutionary lability or causal mechanism."
+}
