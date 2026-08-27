@@ -1,0 +1,110 @@
+{
+  "contract_version": "azami_capitulum_v3_null_heldout_support_contract_v1",
+  "status_date": "2026-08-27",
+  "status": "frozen_before_held_out_null_support_simulation",
+  "frozen_v1_winner": "NULL_COUPLED",
+  "v1_decision": "data/evidence/azami_capitulum_v3_one_shot_decision_v1.json",
+  "winner_may_change": false,
+  "purpose": "Post-ranking falsification: test whether the frozen NULL_COUPLED winner can reproduce the held-out incremental-environment inferential-support pattern that was not included in the v1 scalar distance.",
+  "source_observed_support": {
+    "repository": "zuizui0223/azami",
+    "run": 33035785120,
+    "artifact_id": 9632715852,
+    "incremental_target_file": "data/evidence/source/azami_capitulum_environment_incremental_eazami_targets_run33035785120.csv",
+    "multiplicity": "omnibus is one unadjusted predeclared test per scope/scale; BH across the four block-specific tests separately within each scope/scale"
+  },
+  "validation_draws": {
+    "count": 64,
+    "seeds": [
+      2026082800,2026082801,2026082802,2026082803,2026082804,2026082805,2026082806,2026082807,
+      2026082808,2026082809,2026082810,2026082811,2026082812,2026082813,2026082814,2026082815,
+      2026082816,2026082817,2026082818,2026082819,2026082820,2026082821,2026082822,2026082823,
+      2026082824,2026082825,2026082826,2026082827,2026082828,2026082829,2026082830,2026082831,
+      2026082832,2026082833,2026082834,2026082835,2026082836,2026082837,2026082838,2026082839,
+      2026082840,2026082841,2026082842,2026082843,2026082844,2026082845,2026082846,2026082847,
+      2026082848,2026082849,2026082850,2026082851,2026082852,2026082853,2026082854,2026082855,
+      2026082856,2026082857,2026082858,2026082859,2026082860,2026082861,2026082862,2026082863
+    ],
+    "generator_contract": "data/evidence/azami_capitulum_v3_generator_contract_v1.json",
+    "fixed_environment_design": "Azami run 33035785120 artifact 9632715852, de-geolocated by the already-frozen extractor"
+  },
+  "nested_test": {
+    "method": "Freedman-Lane reduced-model response-residual row permutation matching Azami PR72 logic",
+    "permutations_per_test": 99,
+    "within_rule": "residual 18D response rows permuted only among observations of the same taxon",
+    "among_rule": "residual 18D response rows permuted across taxa",
+    "core_predictors": ["chelsa_bio01","chelsa_bio04","chelsa_bio12","chelsa_bio15"],
+    "tests": [
+      "all_process_extension_beyond_core4",
+      "radiative_atmospheric_drying_beyond_core4",
+      "mechanical_exposure_beyond_core4",
+      "growing_season_water_input_beyond_core4",
+      "climatic_productivity_beyond_core4"
+    ],
+    "support_threshold": 0.05,
+    "omnibus_rule": "permutation_p < 0.05",
+    "block_rule": "BH q across the four block-specific tests < 0.05",
+    "note": "99 permutations are sufficient for binary alpha=0.05 support-state validation but are not used to reproduce the exact observed P-value magnitudes."
+  },
+  "observed_support_vector": {
+    "complete18_env_min5": {
+      "within_taxon": {
+        "all_process_extension_beyond_core4": false,
+        "radiative_atmospheric_drying_beyond_core4": false,
+        "mechanical_exposure_beyond_core4": false,
+        "growing_season_water_input_beyond_core4": false,
+        "climatic_productivity_beyond_core4": false
+      },
+      "among_taxon": {
+        "all_process_extension_beyond_core4": true,
+        "radiative_atmospheric_drying_beyond_core4": true,
+        "mechanical_exposure_beyond_core4": false,
+        "growing_season_water_input_beyond_core4": true,
+        "climatic_productivity_beyond_core4": true
+      }
+    },
+    "complete18_env_min2": {
+      "within_taxon": {
+        "all_process_extension_beyond_core4": false,
+        "radiative_atmospheric_drying_beyond_core4": false,
+        "mechanical_exposure_beyond_core4": false,
+        "growing_season_water_input_beyond_core4": false,
+        "climatic_productivity_beyond_core4": false
+      },
+      "among_taxon": {
+        "all_process_extension_beyond_core4": true,
+        "radiative_atmospheric_drying_beyond_core4": false,
+        "mechanical_exposure_beyond_core4": false,
+        "growing_season_water_input_beyond_core4": true,
+        "climatic_productivity_beyond_core4": false
+      }
+    }
+  },
+  "primary_held_out_pattern": {
+    "name": "replication_stable_scale_specific_process_support",
+    "required_cells": [
+      ["complete18_env_min5","within_taxon","all_process_extension_beyond_core4",false],
+      ["complete18_env_min5","among_taxon","all_process_extension_beyond_core4",true],
+      ["complete18_env_min5","within_taxon","growing_season_water_input_beyond_core4",false],
+      ["complete18_env_min5","among_taxon","growing_season_water_input_beyond_core4",true],
+      ["complete18_env_min2","within_taxon","all_process_extension_beyond_core4",false],
+      ["complete18_env_min2","among_taxon","all_process_extension_beyond_core4",true],
+      ["complete18_env_min2","within_taxon","growing_season_water_input_beyond_core4",false],
+      ["complete18_env_min2","among_taxon","growing_season_water_input_beyond_core4",true]
+    ],
+    "reason": "These cells encode the replication-stable Azami result: no within-taxon process increment, but among-taxon omnibus and growing-season-water support at both replication thresholds."
+  },
+  "secondary_diagnostics": [
+    "exact 20-cell support-vector match frequency",
+    "20-cell Hamming similarity distribution",
+    "within-supported and among-supported counts by threshold",
+    "marginal support frequency for every one of the 20 cells"
+  ],
+  "interpretation_bins_for_primary_pattern": {
+    "not_reproduced_or_exceptional": "0 or 1 matches among 64 draws",
+    "rare": "2 through 6 matches among 64 draws",
+    "compatible_frequency": "7 or more matches among 64 draws"
+  },
+  "stop_rule": "Freeze the 64-draw result exactly as produced. Do not increase draws, change permutation count, redefine the primary pattern, alter the winner generator, or add the held-out support pattern back into the v1 score because of the outcome.",
+  "claim_boundary": "This validation tests whether a frozen snapshot-null generator can reproduce the held-out binary inferential-support geometry. It cannot change the v1 winner and does not by itself identify a causal environmental process."
+}
