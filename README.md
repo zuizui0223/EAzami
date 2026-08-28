@@ -4,11 +4,11 @@
 
 EAzami is a standalone evolutionary-history study. Chapter 1 and Chapter 2 are linked conceptually as **diversity breadth -> diversity depth**, but EAzami does not require Azami results, phenotype artifacts or significance-selected traits. The repositories may share only the biological system and predefined trait concepts.
 
-The executable standalone core is the Comp1061 ancestry scaffold, authority-backed orientation/phyllary/stickiness histories and topology-sensitive recurrence/localization analyses. GBIF + CHELSA orientation-niche analyses and a source-clustered seven-taxon direct continuous panel are bounded secondary diagnostics. The existing eight-continuous-trait Japan38 history remains audit-only.
+The executable standalone core is the Comp1061 ancestry scaffold, the concentration of sampled diversity in one dominant radiation, at least three harmonized authority-backed orientation x stickiness configurations, and topology-sensitive orientation/phyllary/stickiness recurrence and event-resolution analyses. GBIF + CHELSA orientation-niche analyses and a source-clustered seven-taxon direct continuous panel are Supporting Information only. The existing eight-continuous-trait Japan38 history remains audit-only.
 
 Scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_CORE**. Submission state: **HOLD_JEB_PACKAGE_REBUILD_ONLY**. Own Japan38 phenotype, RAD-seq, dated-tree and field results are not Chapter 2 completion gates. See `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md` and `docs/chapter2/CHAPTER2_TO_CHAPTER3_RADSEQ_BRIDGE_V1.md`.
 
-The fixed seven-taxon direct-history diagnostic found no topology-robust corrected phylogenetic-retention result among capitulum length, capitulum width, phyllary length and phyllary protrusion. Phyllary protrusion showed the strongest consistent positive pattern but did not pass multiplicity control; it is retained only as a sampling-priority clue.
+The active result selection is frozen in `data/evidence/chapter2_core_result_recovery_v1.csv`. Five result groups enter the JEB main text; completed continuous, niche, cytotype, function, simulation and field-readiness lanes are explicitly routed to Supporting Information or other chapters.
 
 The material below describes the frozen PR #126 JEB audit snapshot. It remains reproducible but is not the active standalone submission story.
 
@@ -22,7 +22,7 @@ continuous capitulum phenotype
 
 ## Current Chapter 2 result
 
-> **Authority-backed capitulum states require repeated but trait-specific histories; recurrence counts are more robust than exact transition locations, and no one whole-capitulum history is required by the current data.**
+> **A dominant young radiation contains multiple capitulum configurations and requires repeated changes in three constituent traits, but public evidence resolves recurrence counts more reliably than the individual evolutionary events responsible for them.**
 
 The standalone paper separates properties that are often conflated:
 
@@ -54,7 +54,7 @@ Primary target: **Journal of Evolutionary Biology**, Research Article.
 
 Active standalone title:
 
-> **Robust recurrence but uncertain localization of capitulum trait evolution in a young thistle radiation**
+> **Capitulum configuration diversity, recurrent trait change and uneven event resolution in a young thistle radiation**
 
 Start here:
 
@@ -63,7 +63,9 @@ Start here:
 3. `data/evidence/chapter2_diversity_depth_contract_v1.json` — fail-closed machine contract;
 4. `data/evidence/chapter2_eazami_native_continuous_trait_registry_summary_v1.json` — independent-input coverage;
 5. `docs/chapter2/MANUSCRIPT_JEB_V4.md` — active standalone manuscript draft;
-6. `data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv` — inverse-inference sampling priorities.
+6. `docs/chapter2/CHAPTER2_CORE_RESULT_RECOVERY_V1.md` — compressed positioning and hypothesis recovery;
+7. `data/evidence/chapter2_core_result_recovery_v1.csv` — machine-readable result selection;
+8. `data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv` — inverse-inference sampling priorities.
 
 Submission authorization is withheld only until the revised figures, anonymous DOCX, reference audit and author declarations pass. `MANUSCRIPT_JEB_V3.md`, its figures and DOCX package are reproducible audit snapshots, not active submission files.
 

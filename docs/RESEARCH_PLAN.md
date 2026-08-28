@@ -8,11 +8,11 @@ Chapter 1 asks how broad capitulum diversity is across present space and environ
 
 The active Chapter 2 question is:
 
-> **How deeply is present capitulum diversity embedded in evolutionary history, and which trait histories or trait-environment relationships were repeatedly reassembled?**
+> **How much recurrent change is required in the traits that form alternative capitulum configurations within a young Japanese thistle radiation, and which evolutionary events remain identifiable under phylogenetic and observation uncertainty?**
 
-The full pipeline, 17-item inventory, PR #126 disposition and JEB gate are frozen in `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md`. The public-evidence historical core is scientifically complete. Zero comparable scalar Japan38 tips limits the continuous extension but is not a Chapter 2 completion gate. The prior present-integration question and reconstruction-aware negative results remain audit history.
+The full pipeline, 17-item inventory, PR #126 disposition and JEB gate are frozen in `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md`. The five-group main result selection is frozen in `docs/chapter2/CHAPTER2_CORE_RESULT_RECOVERY_V1.md` and `data/evidence/chapter2_core_result_recovery_v1.csv`. The public-evidence historical core is scientifically complete. Zero comparable scalar Japan38 tips limits the continuous extension but is not a Chapter 2 completion gate. The prior present-integration question and reconstruction-aware negative results remain audit history.
 
-The first independent continuous-history screen is complete on the only four traits with the same seven direct-measurement taxa. No trait meets the exact-permutation, BH-corrected, all-six-topology retention rule. The consistently positive but unsupported phyllary-protrusion pattern is used only to prioritize broader measurement; it is not a retained-history claim.
+Completed continuous, niche and cytotype screens are retained as Supporting Information boundaries. They are no longer presented alongside the five main result groups as if every available analysis were an equal Chapter 2 contribution.
 
 ## Dissertation architecture
 
@@ -26,18 +26,21 @@ Validated function is not required before a measurable phenotype enters Chapter 
 
 ## Chapter 2 central question
 
-> **Do orientation, phyllary posture and stickiness share one evolutionary history, or do recurrence and transition localization differ among modules?**
+> **How much recurrent change is required in three traits forming capitulum configurations within the dominant radiation, and why are recurrence counts more recoverable than individual events?**
 
-The primary analysis separates four estimands:
+The primary analysis separates five estimands:
 
+- observed configuration diversity within the dominant radiation;
 - minimum recurrence of independently defined discrete states;
 - exact transition-placement identifiability;
 - shared discrete branch localization;
-- prospective discriminatory sampling implied by the remaining histories.
+- loss of event information under species-tip compression;
+
+Prospective discriminatory sampling is then derived from the remaining histories; it is a design output rather than a sixth empirical estimand.
 
 The current evidence does not require a shared whole-capitulum history and does not prove fully independent histories. Recurrence and localization are empirically distinct.
 
-## Frozen evidence
+## Supporting and legacy frozen evidence
 
 ### Present phenotype
 
@@ -63,7 +66,9 @@ The current evidence does not require a shared whole-capitulum history and does 
 
 ## Chapter 2 paper claim
 
-> **Authority-backed capitulum traits show repeated but trait-specific histories in a young thistle radiation; recurrence counts and transition localization are distinct estimands.**
+> **A dominant young radiation contains multiple capitulum configurations and requires repeated changes in three constituent traits, while recurrence counts remain more recoverable than the individual evolutionary events responsible for them.**
+
+This **configuration diversity plus recurrent trait change** result is the active biological contribution; unsupported common localization is a secondary boundary rather than the headline.
 
 The independent seven-taxon continuous diagnostic does not detect corrected topology-robust retention and remains supporting evidence only. This does not mean the traits have zero phylogenetic structure, are labile, evolve independently, arose independently or lack shared development or selection.
 
@@ -71,19 +76,19 @@ The independent seven-taxon continuous diagnostic does not detect corrected topo
 
 Primary submission target: **Journal of Evolutionary Biology**, Research Article.
 
-1. Establish the young-radiation scaffold and fail-closed trait admission.
-2. Show that three discrete state ontologies require trait-specific repeated minimum changes.
+1. Establish that 36/38 sampled concepts belong to the dominant radiation and enumerate observed authority-backed configurations within it.
+2. Show that three discrete state ontologies require repeated minimum changes.
 3. Separate recurrence-count robustness from exact edge identifiability.
-4. Report the independent n=7 continuous and niche diagnostics as not supported or borderline and explicitly coverage-limited.
-5. Convert unresolved histories into predeclared Chapter 3 sample priorities and falsifiers.
-6. Route shared continuous localization, DTT and event correspondence outside Chapter 2 completion.
+4. Use the species-tip compression audit to expose a second event-resolution limit.
+5. Treat overlap, continuous, niche and cytotype analyses as boundary tests rather than additional discovery claims.
+6. Convert unresolved histories into predeclared Chapter 3 sample priorities and falsifiers.
 
 Main figures:
 
-- Figure 1: radiation scaffold and independent trait-admission coverage;
-- Figure 2: trait-specific recurrence and state coverage;
-- Figure 3: recurrence-count robustness versus edge identifiability;
-- Figure 4: Chapter 2 uncertainty mapped to Chapter 3 sampling and falsifiers.
+- Figure 1: dominant-radiation context, independent trait admission and observed configuration diversity;
+- Figure 2: trait-specific recurrence-count distributions;
+- Figure 3: recurrence robustness versus forced-edge localization;
+- Figure 4: overlap boundary, species-tip compression and Chapter 3 sampling consequences.
 
 The n=7 continuous diagnostic belongs in Supporting Information or the Figure 1 coverage panel, not as a headline positive result.
 

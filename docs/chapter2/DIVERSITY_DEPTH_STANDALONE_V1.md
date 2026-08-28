@@ -26,17 +26,18 @@ This dependency is directional. Chapter 2 uncertainty may determine Chapter 3 sa
 
 **Central question**
 
-> Do orientation, phyllary posture and involucre stickiness share one evolutionary history in a young Japanese thistle radiation, or do recurrence and transition localization differ among modules?
+> How much recurrent change is required in the traits that form alternative capitulum configurations within a young Japanese thistle radiation, and which evolutionary events remain identifiable under phylogenetic and observation uncertainty?
 
 Subquestions:
 
 1. How many unordered state changes are minimally required for each authority-defined trait?
 2. Are these recurrence lower bounds robust across 1,000 UFBoot topologies?
 3. Are the responsible branches identifiable, or do several histories remain equally admissible?
-4. Do module pairs show the same transition localization across branch-length-aware and topology-only diagnostics?
-5. Which own-data samples would most strongly distinguish the remaining histories?
+4. Do observed trait configurations map onto one shared transition-localization pattern?
+5. Does species-tip compression hide state multiplicity or minimum changes?
+6. Which own-data samples would most strongly distinguish the remaining histories?
 
-The general contribution is that **recurrence count and transition localization are separate properties**. A stable count can coexist with uncertain evolutionary events.
+The biological contribution is **configuration diversity with recurrent trait change within a dominant radiation**. The inferential contribution is that **recurrence count and transition localization are separate properties**. A stable count can coexist with uncertain evolutionary events.
 
 ## 3. Standalone EAzami analysis pipeline
 
@@ -63,17 +64,17 @@ The absence of an EAzami-owned Japan38 scalar phenotype panel limits continuous-
 
 ## 5. Analyses runnable now and final Chapter 2 result
 
-The public-evidence core produces five bounded results:
+The public-evidence core produces five bounded result groups:
 
-1. Orientation has 20 resolved concepts, requires six changes on the ML tree and four to six across UFBoot trees (median five), but no edge is individually forced on the ML tree.
-2. Phyllary posture has ten resolved concepts and requires exactly three changes on all 1,000 trees. The JPN36 terminal edge is forced in 75.4% of trees, while root posture remains ambiguous.
-3. Stickiness has 13 resolved concepts after the JPN24 authority extension and requires exactly five changes across all 1,000 trees.
-4. No module pair is consistently positive across branch-length-aware and equal-branch topology diagnostics. The simple one-history whole-capitulum common-lability model is not supported.
-5. The seven-taxon four-trait continuous diagnostic supports no topology-robust corrected retention result. Phyllary protrusion is a weak measurement-priority hint only.
+1. **Radiation and configurations.** Published evidence places 36/38 sampled Japanese concepts in the dominant radiation. The authority-covered dominant-radiation subset contains at least three harmonized orientation x stickiness configurations; the source ontology retains four named combinations.
+2. **Repeated assembly.** Orientation requires four to six changes, phyllary posture exactly three and stickiness exactly five across the admitted topology ensemble.
+3. **Uneven event resolution.** Orientation has no individually forced ML edge and the JPN36 orientation terminal fraction is 0.201; the JPN36 phyllary terminal fraction is 0.754 despite an ambiguous root.
+4. **Shared-history boundary.** Zero of three module pairs is consistently positive across branch-length-aware and equal-branch treatments.
+5. **Observation-resolution bridge.** Species-tip coding hides white/coloured state multiplicity in 4/4 audited polymorphic systems; in the only morph-linked testable system the minimum changes from one to two.
 
 The corresponding conclusion is:
 
-> Robust repeated states coexist with uneven transition localization across capitulum modules. Existing evidence does not require one shared whole-capitulum history, while topology-conditioned alternatives identify high-information samples for prospective phylogenomic testing.
+> A dominant young radiation contains multiple capitulum configurations and requires repeated changes in three constituent traits, but public evidence resolves recurrence counts more reliably than the individual evolutionary events responsible for them.
 
 ## 6. Chapter 2 to Chapter 3 inverse design
 
@@ -113,17 +114,17 @@ The all-Japan same-library RAD-seq product is a **sensitivity phylogeny/network*
 
 **Title**
 
-> **Robust recurrence but uncertain localization of capitulum trait evolution in a young thistle radiation**
+> **Capitulum configuration diversity, recurrent trait change and uneven event resolution in a young thistle radiation**
 
 **Figure sequence**
 
-1. public Comp1061 scaffold, taxon admission and state coverage;
-2. module-specific minimum-step distributions and forced-edge fractions;
-3. branch-length-aware versus equal-branch module overlap;
-4. Chapter 2 uncertainty mapped to Chapter 3 sampling and falsifiers.
+1. dominant-radiation context, taxon admission and observed configuration diversity;
+2. module-specific recurrence-count distributions;
+3. recurrence robustness versus forced-edge localization;
+4. overlap boundary, species-tip compression and prospective sampling consequences.
 
 The scientific paper no longer waits for own continuous measurements, RAD-seq, a dated tree or field outcomes. Submission authorization is held only for production work: revised figures, anonymous DOCX, reference audit and author declarations.
 
 **Claim ceiling**
 
-> Authority-backed capitulum traits show repeated but trait-specific histories in a young Japanese thistle radiation; recurrence counts, transition localization and present or reconstructed niche concordance are distinct estimands. Current evidence does not establish independent origins, adaptive convergence, a shared historical module, or ecological-event causation.
+> Alternative capitulum configurations occur within the dominant young Japanese radiation and each of three authority-backed traits requires repeated minimum changes. Recurrence counts are resolved more strongly than individual event locations. Current evidence does not establish independent origins, adaptive convergence, developmental modularity, absolute timing or ecological-event causation.

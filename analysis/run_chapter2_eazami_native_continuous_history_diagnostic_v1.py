@@ -25,7 +25,9 @@ from scipy.stats import rankdata
 
 
 def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    """Hash frozen UTF-8 text canonically so LF and CRLF checkouts are identical."""
+    text = path.read_text(encoding="utf-8")
+    return hashlib.sha256(text.replace("\r\n", "\n").encode("utf-8")).hexdigest()
 
 
 def read_json(path: Path) -> dict:

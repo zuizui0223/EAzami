@@ -12,29 +12,32 @@ Submission status: **HOLD_JEB_PACKAGE_REBUILD_ONLY**
 
 ## Active title and question
 
-> **Robust recurrence but uncertain localization of capitulum trait evolution in a young thistle radiation**
+> **Capitulum configuration diversity, recurrent trait change and uneven event resolution in a young thistle radiation**
 
-The paper asks whether three traits in one capitulum require one shared evolutionary history. Its general result is that recurrence lower bounds can remain stable while exact event localization differs strongly among traits.
+The paper asks how configuration diversity and repeated trait changes occur within the dominant Japanese radiation and which parts of that history can be resolved. Its biological result is configuration diversity with recurrent trait change; its general inferential result is that recurrence lower bounds can remain stable while exact event localization differs strongly among traits.
 
 ## Why JEB is the first target
 
 The contribution is an evolutionary-inference distinction rather than a species inventory:
 
-1. repeated-state lower bounds and event placement are different estimands;
-2. topology propagation can preserve one while destabilizing the other;
-3. one present structure need not require one historical trajectory;
-4. remaining histories can prospectively determine own-data sampling without making future data a prerequisite for the current paper.
+1. 36/38 sampled Japanese concepts belong to the dominant radiation, whose authority-covered subset already contains at least three harmonized configurations;
+2. three constituent traits each require repeated minimum change;
+3. repeated-state lower bounds and event placement are different estimands;
+4. topology propagation can preserve counts while destabilizing event identity;
+5. species-tip compression independently hides extant states and at least one additional minimum change;
+6. remaining histories can prospectively determine own-data sampling without making future data a prerequisite for the current paper.
 
 The paper retains negative and non-evaluable results and does not promote them to independence. This is compatible with a full Research Article because the inference depends on taxon admission, a topology ensemble, forced-edge reconstruction and complementary branch treatments.
 
 ## Current scientific spine
 
+- dominant-radiation context: 36/38 sampled concepts and at least three harmonized orientation x stickiness configurations in the authority-covered subset;
 - orientation: 20 resolved concepts; ML=6; UFBoot=4–6; no individually forced ML edge;
 - phyllary posture: ten resolved; exactly three changes; JPN36 terminal fraction 0.754; root posture ambiguous;
 - stickiness: 13 resolved; exactly five changes after the JPN24 authority extension;
 - no module pair is consistently positive across branch-length-aware and equal-branch overlap diagnostics;
-- four-trait n=7 continuous panel: no corrected topology-robust retention; phyllary protrusion is a weak measurement-priority hint only;
-- orientation–niche results are unsupported or borderline and remain secondary;
+- one-tip coding hides extant colour-state multiplicity in 4/4 audited systems and changes the minimum from one to two in the only morph-linked testable system;
+- continuous, niche and cytotype results remain Supporting Information boundaries;
 - Chapter 2 uncertainty predeclares Chapter 3 RAD-seq/phenotype falsifiers.
 
 ## Current JEB format contract
@@ -55,10 +58,10 @@ Official source: https://academic.oup.com/jeb/pages/author-guidelines
 
 ## Active figure order
 
-1. Comp1061 scaffold, exclusions and trait coverage.
-2. Trait-specific minimum-step distributions and transition-placement fractions.
-3. Branch-length-aware versus equal-branch module overlap.
-4. Remaining histories mapped to Chapter 3 sampling priorities and falsifiers.
+1. Dominant-radiation context, exclusions, trait coverage and observed configurations.
+2. Trait-specific recurrence-count distributions.
+3. Recurrence robustness versus forced-edge localization.
+4. Overlap boundary, species-tip compression and Chapter 3 sampling consequences.
 
 The seven-taxon continuous and niche diagnostics belong in Supporting Information unless a compact limitations panel improves reviewer comprehension.
 
@@ -86,12 +89,12 @@ The seven-taxon continuous and niche diagnostics belong in Supporting Informatio
 
 ## Cover-letter emphasis
 
-Lead with the inference problem: repeated states are often summarized by one event count, yet topology uncertainty can preserve recurrence while redistributing the responsible branches. The Japanese radiation demonstrates that this mismatch differs among traits of the same structure and can be used to select future samples prospectively.
+Lead with the biological result: one dominant young radiation contains multiple capitulum configurations and each of three constituent traits requires repeated minimum changes. Then state the inference result: topology and species-tip resolution preserve recurrence less uniformly than they preserve event identity, and those specific gaps select future samples prospectively.
 
 Do not lead with field-function hypotheses, a desired RAD-seq tree or the unsupported continuous hint.
 
 ## Claim boundary
 
-The submission may claim that authority-backed traits require repeated but trait-specific histories, that recurrence and localization differ, and that no one whole-capitulum common-lability history is required by the present evidence.
+The submission may claim configuration diversity within the dominant radiation, repeated minimum changes in three constituent traits, unequal event resolution and the absence of a cross-treatment-robust common localization pattern.
 
 It may not claim independent origins, convergence, evolutionary independence, developmental/genetic modularity, adaptive function, absolute event times or that future targeted data constitute independent replication.

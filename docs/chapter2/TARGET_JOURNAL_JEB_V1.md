@@ -1,26 +1,26 @@
 # Chapter 2 target journal — Journal of Evolutionary Biology
 
 Status: **active first-submission target**
-Checked: 2026-08-27
+Checked: 2026-08-28
 Article type: **Research Article**
 
 ## Editorial fit
 
-The manuscript tests a general evolutionary inference: whether present-day phenotypic integration persists as shared phylogenetic history. Its contribution spans evolutionary morphology, phylogenetic comparative analysis and uncertainty in a rapid radiation. The informative negative result is supported by a frozen reconstruction-aware null rather than by absence of nominal significance alone.
+The manuscript tests how alternative configurations of one complex structure accumulated within a rapid radiation and how much of the responsible event history remains identifiable. Its contribution spans evolutionary morphology, phylogenetic comparative analysis and resolution-aware sampling in a rapid radiation.
 
 JEB is preferable to a taxon-focused outlet because the paper's primary output is a portable estimand framework:
 
-1. measure present integration at explicit biological scales;
-2. keep continuous state structure separate from categorical recurrence;
-3. keep recurrence count separate from edge identifiability;
-4. test shared localization with nulls that repeat ancestral reconstruction;
-5. propagate topology without using stability as a substitute for a null model.
+1. distinguish configuration diversity from colonization-history class;
+2. keep recurrence count separate from edge identifiability;
+3. propagate topology without turning stable counts into identified events;
+4. expose event loss caused by species-tip compression;
+5. convert the remaining histories into prospective sampling falsifiers.
 
 ## Current decision
 
-**Submit to JEB first.** The null failure does not trigger a journal downgrade. JEB's guidance allows robust negative results when they yield new insight, and the scale-dependent integration result makes the paper more than a single unsupported association.
+**Submit to JEB first.** JEB explicitly prioritizes rigorous studies that provide broadly relevant new evolutionary insight and accepts negative results when they do so. The active paper is no longer organized as a negative-result package: configuration diversity, recurrent trait change and unequal event resolution are the discoveries, while unsupported shared localization is a bounded alternative.
 
-The stretch target `Evolution` is not preferred because the historical continuous panel remains only seven clean common concepts after the identity correction. A plant-evolution or morphology journal remains a fallback only if JEB judges the cross-scale inference insufficiently general.
+The stretch target `Evolution` is not preferred because independent origins, process models and population-aware histories remain unresolved. A plant-evolution or morphology journal remains a fallback only if JEB judges the resolution framework insufficiently general.
 
 ## Format contract
 
@@ -38,19 +38,20 @@ Official guidance: https://academic.oup.com/jeb/pages/author-guidelines
 
 ## Headline gate
 
-Status: **PASS for bounded negative-result framing**.
+Status: **PASS for recurrent-assembly framing with bounded negative alternatives**.
 
-> **Present-day phenotypic integration does not imply a shared evolutionary history in a rapid thistle radiation.**
+> **A dominant rapid radiation contains multiple capitulum configurations and recurrent change in three constituent traits, while the responsible events remain unevenly identifiable.**
 
 Evidence required for this gate:
 
-- within-taxon module contrast exceeds the among-taxon contrast at both frozen thresholds;
-- original reconstruction-aware continuous test is FAIL, P=0.3504;
-- fixed JPN29 exclusion sensitivity is FAIL, P=0.1959;
+- 36/38 sampled Japanese concepts occur in the dominant radiation;
+- at least three harmonized orientation x stickiness configurations occur in its authority-covered subset;
 - discrete recurrence remains supported as lower bounds;
+- recurrence robustness and forced-edge localization differ among traits;
 - no discrete pair has consistently positive transition localization across branch-length treatments;
-- active text does not convert FAIL into independence, absence, convergence or adaptation.
+- the population-resolution audit remains bounded to 4/4 state-compression systems and 1/1 count-testable system;
+- active text does not convert repeated change into independent origin, convergence or adaptation.
 
 ## Scope boundary
 
-Branch lengths remain substitutions/site. Image-derived continuous values are species-level proxies rather than sequenced-voucher phenotypes. Population origin, trait function and fitness are future empirical gates, not hidden assumptions of this article.
+Branch lengths remain substitutions/site. Authority states are concept-level observations rather than phenotypes of the sequenced individuals. Population origin, trait function and fitness are future empirical gates, not hidden assumptions of this article.

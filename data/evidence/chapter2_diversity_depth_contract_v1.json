@@ -1,7 +1,7 @@
 {
   "contract_version": "chapter2_diversity_depth_contract_v1",
   "status_date": "2026-08-28",
-  "active_question": "How deeply is present capitulum diversity embedded in evolutionary history, and which trait histories or trait-environment relationships were repeatedly reassembled?",
+  "active_question": "How much recurrent change is required in the traits that form alternative capitulum configurations within a young Japanese thistle radiation, and which evolutionary events remain identifiable under phylogenetic and observation uncertainty?",
   "chapter_relation": {
     "chapter_1": "diversity breadth in present geographic and environmental space",
     "chapter_2": "diversity depth in phylogenetic and biogeographic history",
@@ -26,7 +26,10 @@
     ]
   },
   "chapter2_scientific_status": "COMPLETE_EXISTING_PUBLIC_HISTORY_CORE",
+  "chapter2_core_result_name": "CONFIGURATION_DIVERSITY_WITH_RECURRENT_TRAIT_CHANGE_AND_UNEVEN_EVENT_RESOLUTION",
+  "core_result_recovery_path": "data/evidence/chapter2_core_result_recovery_v1.csv",
   "current_submission_status": "HOLD_JEB_PACKAGE_REBUILD_ONLY",
+  "frozen_text_hash_semantics": "SHA-256 of UTF-8 text after CRLF-to-LF normalization; binary artifacts retain exact-byte SHA-256",
   "submission_hold_reasons": [
     "The active standalone JEB v4 Markdown manuscript exists, but the figures, Supporting Information and anonymous DOCX still belong to the legacy Azami-dependent v3 package.",
     "The revised reference audit, data-availability statement and author declarations have not yet been frozen as a submission bundle."
@@ -100,7 +103,7 @@
     "own_radseq_required_for_chapter2": false,
     "feedback_prohibition": "Chapter 3 outcomes may revise counts and placements prospectively but cannot retroactively promote Chapter 2 recurrence to adaptation, convergence or causal function"
   },
-  "claim_ceiling": "Authority-backed capitulum traits show repeated but trait-specific histories in a young Japanese thistle radiation; recurrence counts, transition localization and present or reconstructed niche concordance are distinct estimands. Current evidence does not establish independent origins, adaptive convergence, a shared historical module, or ecological-event causation.",
+  "claim_ceiling": "Alternative capitulum configurations occur within the dominant young Japanese radiation and each of three authority-backed traits requires repeated minimum changes. Recurrence counts are resolved more strongly than individual event locations. Current evidence does not establish independent origins, adaptive convergence, developmental modularity, absolute timing or ecological-event causation.",
   "prohibited_claims": [
     "Azami findings are replicated by EAzami without independent measurement",
     "minimum parsimony steps equal independent origins or convergence events",

@@ -15,6 +15,10 @@ sys.path.insert(0, str(ROOT / "analysis"))
 import build_chapter2_eazami_native_continuous_registry_v1 as target
 
 
+def canonical_text_bytes(path: Path) -> bytes:
+    return path.read_text(encoding="utf-8").replace("\r\n", "\n").encode("utf-8")
+
+
 class NativeContinuousRegistryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -30,7 +34,7 @@ class NativeContinuousRegistryTests(unittest.TestCase):
         self.assertEqual(len(self.rows), 45)
         self.assertEqual(len({row["record_id"] for row in self.rows}), 45)
         self.assertEqual(len({row["taxon_concept"] for row in self.rows}), 15)
-        digest = hashlib.sha256(self.registry.read_bytes()).hexdigest()
+        digest = hashlib.sha256(canonical_text_bytes(self.registry)).hexdigest()
         self.assertEqual(digest, "a8f472d57040522e0fba755e0153f64b389352b0d6819ffc8b018dd00c1ddb39")
         self.assertEqual(self.summary["registry_sha256"], digest)
 
@@ -88,7 +92,7 @@ class NativeContinuousRegistryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "registry.csv"
             digest = target.write_registry(output, records)
-            self.assertEqual(output.read_bytes(), self.registry.read_bytes())
+            self.assertEqual(canonical_text_bytes(output), canonical_text_bytes(self.registry))
             self.assertEqual(digest, self.summary["registry_sha256"])
 
 

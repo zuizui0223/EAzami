@@ -6,15 +6,16 @@ Status date: 2026-08-28
 
 Chapter 1 now supplies the conceptual **breadth** question; Chapter 2 independently estimates historical **depth**. EAzami must build its own literature/specimen/flora/public-image trait registry and cannot use Azami phenotype values or Azami significance as an admission gate.
 
-- standalone-ready now: Comp1061 scaffold; discrete orientation/phyllary/stickiness recurrence and localization; topology ensemble; GBIF + CHELSA orientation-niche analyses; an admitted 45-record EAzami-native continuous registry; a four-trait seven-taxon direct diagnostic panel; bounded colonization/cytotype context;
+- standalone-ready now: 36/38 dominant-radiation context; at least three harmonized orientation x stickiness configurations in the authority-covered dominant subset; discrete orientation/phyllary/stickiness recurrence and event resolution; topology ensemble; a validated species-tip compression audit;
+- supporting only: GBIF + CHELSA orientation-niche analyses; an admitted 45-record EAzami-native continuous registry; a four-trait seven-taxon diagnostic panel; bounded cytotype context;
 - bounded, not completion gates: Japan38 continuous history, dated event correspondence, DTT and evolutionary simulations;
 - routed to Chapter 3: own Japan-wide RAD-seq, same-individual phenotype/cytotype, population structure and field causality;
 - scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_CORE**;
 - submission status: **HOLD_JEB_PACKAGE_REBUILD_ONLY**.
 
-Canonical plan: `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md`. The previous present-integration package remains a frozen audit snapshot and its negative results are retained below.
+Canonical plan: `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md`. The compressed result selection is `docs/chapter2/CHAPTER2_CORE_RESULT_RECOVERY_V1.md` plus `data/evidence/chapter2_core_result_recovery_v1.csv`. The previous present-integration package remains a frozen audit snapshot and its negative results are retained below.
 
-The independent n=7 direct continuous-history diagnostic is complete across all six AU-nonrejected topologies. No one of the four fixed traits met the corrected topology-robust retention rule. Phyllary protrusion was consistently positive but remained unsupported after BH correction, so it is a priority for added measurement rather than a paper conclusion.
+The active main text is limited to five result groups. Completed continuous, niche and cytotype diagnostics remain available in Supporting Information, but none is used to manufacture an additional headline.
 
 ## Dissertation mainline
 
@@ -35,7 +36,7 @@ Function is not an admission gate for Chapter 2. Chapter 1 and Chapter 2 reuse t
 
 ## Chapter 2 current answer
 
-> **Authority-backed capitulum states require repeated but trait-specific histories. Recurrence lower bounds are more robust than exact transition locations, and no module pair requires one common history across branch-length treatments.**
+> **A dominant young radiation contains multiple capitulum configurations and requires repeated changes in three constituent traits, but public evidence resolves recurrence counts more reliably than the individual evolutionary events responsible for them.**
 
 This statement does not imply zero phylogenetic signal, lability, fully independent traits, independent origins, convergence, adaptation or a shared mechanism.
 
@@ -103,7 +104,7 @@ Target: **Journal of Evolutionary Biology — Research Article**.
 
 Active standalone title:
 
-> **Robust recurrence but uncertain localization of capitulum trait evolution in a young thistle radiation**
+> **Capitulum configuration diversity, recurrent trait change and uneven event resolution in a young thistle radiation**
 
 Current active state:
 
@@ -119,7 +120,9 @@ The former V3 manuscript, figures, Supporting Information and privacy-scrubbed D
 ## Active sources of truth
 
 - `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md`
+- `docs/chapter2/CHAPTER2_CORE_RESULT_RECOVERY_V1.md`
 - `data/evidence/chapter2_diversity_depth_contract_v1.json`
+- `data/evidence/chapter2_core_result_recovery_v1.csv`
 - `data/evidence/chapter2_diversity_depth_inventory_v1.csv`
 - `data/evidence/chapter2_eazami_native_continuous_trait_registry_summary_v1.json`
 - `data/evidence/chapter2_eazami_native_continuous_history_diagnostic_v1.json`

@@ -40,7 +40,14 @@ class DiversityDepthContractTests(unittest.TestCase):
         target.validate_frozen_results()
         target.validate_native_history_diagnostic()
 
-    def test_active_jeb_v4_is_standalone_and_bounded(self) -> None:
+    def test_repo_wide_recovery_has_five_main_result_groups(self) -> None:
+        rows = target.validate_core_result_recovery()
+        main = [row for row in rows if row["result_id"].startswith("M")]
+        self.assertEqual([row["result_id"] for row in main], ["M01", "M02", "M03", "M04", "M05"])
+        self.assertEqual(main[1]["paper_role"], "MAIN_BIOLOGICAL_RESULT")
+        self.assertIn("at least three harmonized", main[1]["headline_result"])
+
+    def test_active_jeb_v4_is_recurrent_assembly_framed_and_bounded(self) -> None:
         target.validate_active_manuscript()
 
 

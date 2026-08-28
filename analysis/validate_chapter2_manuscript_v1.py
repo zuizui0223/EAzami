@@ -23,6 +23,7 @@ REQUIRED = [
     ROOT / "PROJECT_STATUS.md",
     ROOT / "docs" / "RESEARCH_PLAN.md",
     CH / "README.md",
+    CH / "CHAPTER2_CORE_RESULT_RECOVERY_V1.md",
     CH / "TIME_AXIS_MAINLINE_V3.md",
     CH / "MANUSCRIPT_JEB_V3.md",
     CH / "JEB_SUBMISSION_TARGET_V1.md",
@@ -38,6 +39,7 @@ REQUIRED = [
     ROOT / "data" / "evidence" / "chapter2_claim_registry_v1.csv",
     ROOT / "data" / "evidence" / "chapter2_result_role_map_v2.csv",
     ROOT / "data" / "evidence" / "chapter2_jeb_main_result_table_v1.csv",
+    ROOT / "data" / "evidence" / "chapter2_core_result_recovery_v1.csv",
     ROOT / "data" / "evidence" / "source" / "azami_capitulum_space_eazami_targets_run33035785120.csv",
     TIME / "continuous_primary_phylogenetic_structure_v1.csv",
     TIME / "japan38_branch_change_reconstruction_null_v1.json",
@@ -331,7 +333,7 @@ def check_entry_points() -> None:
     for path, needles in {
         ROOT / "README.md": [
             "COMPLETE_EXISTING_PUBLIC_HISTORY_CORE",
-            "Robust recurrence but uncertain localization",
+            "Capitulum configuration diversity, recurrent trait change",
             "MANUSCRIPT_JEB_V3.md",
             "audit snapshots",
         ],
@@ -339,14 +341,15 @@ def check_entry_points() -> None:
             "HOLD_JEB_PACKAGE_REBUILD_ONLY",
             "Active standalone title",
             "v4 is current submission text",
+            "CHAPTER2_CORE_RESULT_RECOVERY_V1.md",
         ],
         ROOT / "docs" / "RESEARCH_PLAN.md": [
             "standalone",
-            "not supported",
+            "configuration diversity plus recurrent trait change",
             "Journal of Evolutionary Biology",
             "immutable audit snapshot",
         ],
-        CH / "README.md": ["MANUSCRIPT_JEB_V4.md", "Frozen legacy submission package", "0.3504", "0.1959"],
+        CH / "README.md": ["MANUSCRIPT_JEB_V4.md", "Frozen legacy submission package", "0.3504", "0.1959", "CHAPTER2_CORE_RESULT_RECOVERY_V1.md"],
         CH / "TIME_AXIS_MAINLINE_V3.md": ["frozen audit", "not_evaluable", "Diagnostic only"],
         CH / "JEB_SUBMISSION_TARGET_V1.md": ["7,500 words", "<=250 words", "double-anonymous", "generative-AI"],
     }.items():

@@ -33,6 +33,8 @@ RADSEQ_PRIORITY_PATH = (
     ROOT / "data" / "evidence" / "chapter2_to_chapter3_sampling_priorities_v1.csv"
 )
 MANUSCRIPT_PATH = ROOT / "docs" / "chapter2" / "MANUSCRIPT_JEB_V4.md"
+CORE_RECOVERY_PATH = ROOT / "data" / "evidence" / "chapter2_core_result_recovery_v1.csv"
+CORE_POSITION_PATH = ROOT / "docs" / "chapter2" / "CHAPTER2_CORE_RESULT_RECOVERY_V1.md"
 
 ALLOWED_CLASSES = {"directly_usable", "reanalysis_needed", "design_only", "new_data_needed"}
 EXPECTED_CLASSES = {
@@ -68,10 +70,27 @@ REQUIRED_NATIVE_FIELDS = {
     "admission_status",
     "exclusion_reason",
 }
+EXPECTED_CORE_RESULT_IDS = [
+    "M01", "M02", "M03", "M04", "M05",
+    "S01", "S02", "S03", "S04",
+    "X01", "X02", "X03", "X04",
+]
+EXPECTED_MAIN_ROLES = {
+    "M01": "MAIN_CONTEXT",
+    "M02": "MAIN_BIOLOGICAL_RESULT",
+    "M03": "MAIN_BIOLOGICAL_RESULT",
+    "M04": "MAIN_INFERENCE_RESULT",
+    "M05": "MAIN_BOUNDARY",
+}
 
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def canonical_text_sha256(path: Path) -> str:
+    text = path.read_text(encoding="utf-8")
+    return hashlib.sha256(text.replace("\r\n", "\n").encode("utf-8")).hexdigest()
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:
@@ -150,7 +169,12 @@ def validate_native_input(contract: dict) -> str:
     if not SUMMARY_PATH.exists():
         raise AssertionError("admitted native registry requires its frozen summary")
     summary = load_json(SUMMARY_PATH)
-    digest = hashlib.sha256(native_path.read_bytes()).hexdigest()
+    if contract.get("frozen_text_hash_semantics") != (
+        "SHA-256 of UTF-8 text after CRLF-to-LF normalization; "
+        "binary artifacts retain exact-byte SHA-256"
+    ):
+        raise AssertionError("frozen text hash semantics are not explicit")
+    digest = canonical_text_sha256(native_path)
     if summary["registry_sha256"] != digest or native.get("registry_sha256") != digest:
         raise AssertionError("native registry hash differs from summary or contract")
     expected = {
@@ -221,7 +245,7 @@ def validate_native_history_diagnostic() -> None:
         raise AssertionError("native history frozen panel drift")
     if design["null"]["exact_permutations"] != 5040:
         raise AssertionError("native history exact-null drift")
-    if result["design_sha256"] != hashlib.sha256(NATIVE_HISTORY_DESIGN_PATH.read_bytes()).hexdigest():
+    if result["design_sha256"] != canonical_text_sha256(NATIVE_HISTORY_DESIGN_PATH):
         raise AssertionError("native history design hash drift")
     if result["topology_count"] != 6 or result["exact_permutations_per_trait_topology"] != 5040:
         raise AssertionError("native history topology or permutation count drift")
@@ -321,6 +345,155 @@ def validate_frozen_results() -> None:
             raise AssertionError(f"unsupported branchwise result promoted for {axis}")
 
 
+def validate_core_result_recovery() -> list[dict[str, str]]:
+    rows = read_rows(CORE_RECOVERY_PATH)
+    ids = [row["result_id"] for row in rows]
+    if ids != EXPECTED_CORE_RESULT_IDS:
+        raise AssertionError(f"core-result ledger order or membership drift: {ids}")
+    lookup = {row["result_id"]: row for row in rows}
+    main = {rid: row["paper_role"] for rid, row in lookup.items() if rid.startswith("M")}
+    if main != EXPECTED_MAIN_ROLES:
+        raise AssertionError(f"active main-result selection drift: {main}")
+    for row in rows:
+        if not row["evidence_status"].startswith("COMPLETE_"):
+            raise AssertionError(f"unfinished result entered recovery ledger: {row['result_id']}")
+        for field in ("question", "headline_result", "allowed_interpretation", "claim_ceiling"):
+            if not row[field].strip():
+                raise AssertionError(f"{row['result_id']} has empty {field}")
+        for raw_path in row["source_paths"].split(";"):
+            path = ROOT / raw_path.strip()
+            if not path.exists() or path.stat().st_size == 0:
+                raise AssertionError(
+                    f"{row['result_id']} source missing or empty: {raw_path.strip()}"
+                )
+
+    origin = load_json(ROOT / "data" / "evidence" / "japan_cirsium_origin_meta_analysis_v1.json")
+    dominant = origin["dominant_main_radiation"]
+    if dominant["japanese_species_sampled"] != 38 or dominant["species_in_main_radiation"] != 36:
+        raise AssertionError("M01 dominant-radiation context drift")
+
+    combos = load_json(ROOT / "data" / "evidence" / "japan38_authority_module_combinations_v1.json")
+    if combos["n_dominant_seed_concepts"] != 20:
+        raise AssertionError("M02 authority-covered dominant subset drift")
+    if combos["n_dominant_orientation_stickiness_combinations"] != 4:
+        raise AssertionError("M02 observed configuration count drift")
+    allowed_orientation_labels = {
+        "downward_or_nodding", "upward_or_ascending", "upward_or_erect",
+    }
+    allowed_stickiness_labels = {
+        "nonsticky_or_nearly_nonsticky", "sticky",
+    }
+    harmonized = set()
+    for item in combos["dominant_orientation_stickiness_combinations"]:
+        orientation_label, stickiness_label = item.split(" + ", 1)
+        if orientation_label not in allowed_orientation_labels:
+            raise AssertionError(f"M02 unknown orientation label: {orientation_label}")
+        if stickiness_label not in allowed_stickiness_labels:
+            raise AssertionError(f"M02 unknown stickiness label: {stickiness_label}")
+        orientation_state = "D" if orientation_label == "downward_or_nodding" else "U"
+        stickiness_state = (
+            "nonsticky" if stickiness_label == "nonsticky_or_nearly_nonsticky" else "sticky"
+        )
+        harmonized.add((orientation_state, stickiness_state))
+    if harmonized != {("D", "nonsticky"), ("U", "nonsticky"), ("U", "sticky")}:
+        raise AssertionError(f"M02 harmonized configuration set drift: {harmonized}")
+
+    orientation = load_json(ROOT / "data" / "evidence" / "jpn34_orientation_extension_parsimony_v1.json")
+    phyllary = load_json(ROOT / "data" / "evidence" / "japan38_multitrait_history_summary_v1.json")
+    sticky = load_json(ROOT / "data" / "evidence" / "jpn24_stickiness_extension_parsimony_v1.json")
+    if orientation["orientation"]["resolved_concepts_after"] != 20:
+        raise AssertionError("M03 orientation coverage drift")
+    if orientation["orientation"]["ufboot1000_steps_min"] != 4 or orientation["orientation"]["ufboot1000_steps_max"] != 6:
+        raise AssertionError("M03 orientation recurrence drift")
+    posture = phyllary["minimum_change_history"]["phyllary_posture"]
+    if {posture["ufboot1000_steps_min"], posture["ufboot1000_steps_max"]} != {3}:
+        raise AssertionError("M03 phyllary recurrence drift")
+    if {sticky["stickiness"]["ufboot1000_steps_min"], sticky["stickiness"]["ufboot1000_steps_max"]} != {5}:
+        raise AssertionError("M03 stickiness recurrence drift")
+
+    ident = phyllary["transition_identifiability"]
+    if ident["orientation"]["ml_individually_forced_change_edges"] != 0:
+        raise AssertionError("M04 orientation forced-edge drift")
+    if abs(ident["orientation"]["highest_terminal_forced_edge_ufboot_fraction"] - 0.201) > 1e-12:
+        raise AssertionError("M04 orientation terminal fraction drift")
+    if abs(ident["phyllary_posture"]["JPN_36_ufboot_forced_fraction"] - 0.754) > 1e-12:
+        raise AssertionError("M04 phyllary terminal fraction drift")
+
+    branch_overlap = load_json(
+        ROOT / "data" / "evidence" / "chapter2_time_axis_compute"
+        / "japan38_latest_module_transition_overlap_v2.json"
+    )
+    overlap = load_json(
+        ROOT / "data" / "evidence" / "chapter2_time_axis_compute"
+        / "japan38_latest_module_overlap_topology_sensitivity_v2.json"
+    )
+    dist = overlap["bootstrap_topology_sensitivity"]["pairwise_spearman_distributions"]
+    expected_branch_rho = {
+        "orientation__phyllary": 0.3622994652406417,
+        "orientation__stickiness": 0.20188204398730714,
+        "phyllary__stickiness": 0.08387096774193549,
+    }
+    expected_medians = {
+        "orientation__phyllary": -0.059394365771196084,
+        "orientation__stickiness": -0.387012001175683,
+        "phyllary__stickiness": 0.18399015228406285,
+    }
+    expected_q05 = {
+        "orientation__phyllary": -0.20588270079151355,
+        "orientation__stickiness": -0.39198786339609276,
+        "phyllary__stickiness": -0.07345437846675106,
+    }
+    for pair, expected in expected_medians.items():
+        branch_rho = branch_overlap["pairwise_overlap"][pair][
+            "spearman_transition_excess_over_branch_prior"
+        ]
+        if abs(branch_rho - expected_branch_rho[pair]) > 1e-12:
+            raise AssertionError(f"M05 branch-aware overlap drift for {pair}")
+        if abs(dist[pair]["median"] - expected) > 1e-12:
+            raise AssertionError(f"M05 equal-branch overlap drift for {pair}")
+        if abs(dist[pair]["q05"] - expected_q05[pair]) > 1e-12:
+            raise AssertionError(f"M05 equal-branch fifth-percentile drift for {pair}")
+        if not branch_rho > 0 or not dist[pair]["q05"] < 0:
+            raise AssertionError(f"M05 cross-treatment robustness classification drift for {pair}")
+
+    hmm2 = load_json(ROOT / "data" / "evidence" / "hmm2_population_aware_transition_test_v1.json")
+    if hmm2["stage_A_state_compression"]["systems_exposing_W_C_multiplicity_hidden_by_one_P_tip"] != 4:
+        raise AssertionError("S01 species-tip compression drift")
+    stage_b = hmm2["stage_B_minimum_transition_count"]
+    if stage_b["systems_with_morph_linked_nuclear_genealogy"] != 1:
+        raise AssertionError("S01 morph-linked system count drift")
+    if (stage_b["takaoense_species_tip_minimum"], stage_b["takaoense_population_sample_minimum"]) != (1, 2):
+        raise AssertionError("S01 population-aware minimum-count drift")
+
+    native = load_json(NATIVE_HISTORY_RESULT_PATH)
+    if native["supported_traits"] or native["topology_count"] != 6:
+        raise AssertionError("S02 direct continuous boundary drift")
+
+    pgls = load_json(ROOT / "data" / "evidence" / "fdt4_eastasia_pgls_recovered_diagnostic_v1.json")
+    bio15 = pgls["primary_min_n_10"]["axis_ranges_across_six_topologies"]["chelsa_bio15"]
+    if bio15["p_min"] < 0.05 or bio15["p_max"] < 0.05:
+        raise AssertionError("S03 primary ecological lead was promoted")
+
+    cytotype = load_json(ROOT / "data" / "evidence" / "japan38_cytotype_trait_overlap_v1.json")
+    if cytotype["n_source_backed_cytotype_concepts"] != 9:
+        raise AssertionError("S04 cytotype coverage drift")
+
+    position = CORE_POSITION_PATH.read_text(encoding="utf-8")
+    required = [
+        "COMPLETE_CONFIGURATION_DIVERSITY_AND_RECURRENT_TRAIT_CHANGE_CORE",
+        "How much recurrent change is required in the traits",
+        "36 of 38 sampled Japanese concepts",
+        "recurrence robustness",
+        "event resolution",
+        "five result groups only",
+        "Capitulum configuration diversity, recurrent trait change",
+    ]
+    missing = [needle for needle in required if needle not in position]
+    if missing:
+        raise AssertionError(f"core-result positioning document missing: {missing}")
+    return rows
+
+
 def validate_design_document(contract: dict) -> None:
     text = DESIGN_PATH.read_text(encoding="utf-8")
     required = [
@@ -332,6 +505,7 @@ def validate_design_document(contract: dict) -> None:
         "final Chapter 2 result",
         "PR #126 and legacy V3 disposition",
         "recurrence count and transition localization are separate properties",
+        "configuration diversity with recurrent trait change within a dominant radiation",
         "scientifically complete with existing public evidence",
         "Chapter 3 is not a completion gate",
     ]
@@ -345,7 +519,7 @@ def validate_design_document(contract: dict) -> None:
 def validate_active_manuscript() -> None:
     text = MANUSCRIPT_PATH.read_text(encoding="utf-8")
     required = [
-        "# Robust recurrence but uncertain localization",
+        "# Capitulum configuration diversity, recurrent trait change",
         "## Abstract",
         "# Introduction",
         "# Materials and methods",
@@ -357,7 +531,10 @@ def validate_active_manuscript() -> None:
         "phyllary posture exactly three",
         "stickiness exactly five",
         "75.4%",
-        "does not require one whole-capitulum common-lability history",
+        "36 of 38 sampled Japanese concepts",
+        "at least three harmonized orientation × stickiness configurations",
+        "All four audited colour-polymorphic systems",
+        "Zero of three trait pairs",
         "No new RAD-seq, phenotype, dated-tree or field result is a submission gate",
     ]
     missing = [needle for needle in required if needle not in text]
@@ -370,6 +547,10 @@ def validate_active_manuscript() -> None:
     prohibited = [
         "46,276 unique strict-spatial image observations",
         "Present-day capitulum integration is scale dependent",
+        "P=0.3504",
+        "P=0.1959",
+        "Robust recurrence but uncertain localization",
+        "Recurrent assembly of capitulum trait configurations",
         "minimum steps equal independent origins",
         "field execution authorized",
     ]
@@ -379,7 +560,10 @@ def validate_active_manuscript() -> None:
 
 
 def main() -> int:
-    for path in (CONTRACT_PATH, INVENTORY_PATH, DESIGN_PATH, MANUSCRIPT_PATH):
+    for path in (
+        CONTRACT_PATH, INVENTORY_PATH, DESIGN_PATH, MANUSCRIPT_PATH,
+        CORE_RECOVERY_PATH, CORE_POSITION_PATH,
+    ):
         if not path.exists() or path.stat().st_size == 0:
             raise AssertionError(f"missing or empty standalone Chapter 2 file: {path.relative_to(ROOT)}")
     contract = load_json(CONTRACT_PATH)
@@ -391,6 +575,7 @@ def main() -> int:
     validate_native_history_diagnostic()
     priorities = validate_chapter2_to_chapter3_bridge(contract)
     validate_frozen_results()
+    recovered = validate_core_result_recovery()
     validate_design_document(contract)
     validate_active_manuscript()
     print("chapter2_diversity_depth_contract_valid=true")
@@ -398,6 +583,8 @@ def main() -> int:
     print(f"standalone_continuous_gate={gate}")
     print(f"submission_status={contract['current_submission_status']}")
     print(f"radseq_sampling_priorities={len(priorities)}")
+    print(f"core_result_rows={len(recovered)}")
+    print("main_result_groups=5")
     print("legacy_pr126_package=frozen_audit_snapshot")
     return 0
 

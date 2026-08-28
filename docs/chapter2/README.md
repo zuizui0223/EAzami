@@ -2,10 +2,12 @@
 
 ## Active contract (2026-08-28)
 
-The active paper asks how deeply independently assembled capitulum diversity is embedded in history. It starts from EAzami-owned authority/literature/specimen/public-image data rather than an Azami observational handoff.
+The active paper asks how configuration diversity and repeated trait changes occur within the dominant young radiation and which parts of that history remain identifiable. It starts from EAzami-owned authority/literature/specimen/public-image data rather than an Azami observational handoff.
 
 - canonical design: `DIVERSITY_DEPTH_STANDALONE_V1.md`;
+- compressed result recovery: `CHAPTER2_CORE_RESULT_RECOVERY_V1.md`;
 - machine contract: `../../data/evidence/chapter2_diversity_depth_contract_v1.json`;
+- machine result ledger: `../../data/evidence/chapter2_core_result_recovery_v1.csv`;
 - 17-item inventory: `../../data/evidence/chapter2_diversity_depth_inventory_v1.csv`;
 - native registry: **ADMITTED_EAZAMI_NATIVE_VALUES** (45 records; 35 scalar; 10 range-only);
 - scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_CORE**;
@@ -14,13 +16,13 @@ The active paper asks how deeply independently assembled capitulum diversity is 
 
 The JEB V3 files below are a frozen audit package. `MANUSCRIPT_JEB_V4.md` is the active standalone submission draft.
 
-The first independent continuous-history diagnostic is also frozen: four complete direct traits on seven taxa, six AU-nonrejected topologies and exact 7! label permutations. No trait passes the corrected all-topology retention rule. Phyllary protrusion is a consistent but uncorrected measurement-priority hint, not a supported result and not transferable to Japan38.
+Completed continuous, niche and cytotype diagnostics remain frozen as Supporting Information boundaries. They are not additional main-text questions and cannot replace the five-group result selection.
 
 ## Active conclusion
 
-> **Authority-backed capitulum states require repeated but trait-specific histories; recurrence lower bounds are more robust than exact transition locations, and current evidence does not require one shared whole-capitulum history.**
+> **A dominant young radiation contains multiple capitulum configurations and requires repeated changes in three constituent traits, but public evidence resolves recurrence counts more reliably than the individual evolutionary events responsible for them.**
 
-The chapter distinguishes continuous retention, discrete recurrence, transition-placement identifiability, trait-niche concordance and shared branch localization. A negative diagnostic is not evidence for lability or independent evolution.
+The main text now contains five result groups only: radiation/configuration context, three-trait recurrence, event resolution, the shared-localization boundary and species-tip compression. Continuous retention, trait-niche concordance and cytotype results are Supporting Information. A negative diagnostic is not evidence for lability or independent evolution.
 
 ## Active manuscript and Chapter 3 bridge
 
@@ -42,7 +44,7 @@ The chapter distinguishes continuous retention, discrete recurrence, transition-
 
 `MANUSCRIPT_JEB_V1.md` and `MANUSCRIPT_JEB_V2.md` are superseded audit history. They contain the pre-reconstruction-null interpretation and are not submission text.
 
-## Headline evidence
+## Legacy audit evidence retained outside the active mainline
 
 ### Present integration
 
