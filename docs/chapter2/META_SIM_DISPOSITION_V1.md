@@ -22,6 +22,8 @@ The completed functional syntheses answer `phenotype x function/fitness`, not `p
 - orientation fitness: k=2, random-effects RR=2.102 [0.773, 5.716], I2=93.6%; feasibility diagnostic only;
 - broad functional calibration: 26 rows; endpoint and sham registry only, with no cross-angiosperm pooled effect;
 - cross-scale identifiability: species-tip compression in 4/4 systems, but direct morph-genotype linkage in only 1/4.
+- cytotype context: nine source-backed concepts contain 2x, 4x and 6x taxa; upward heads occur at every observed ploidy level and diploids include both upward and downward heads. This contradicts a deterministic mapping but does not prove independence.
+- FDT programme registry: eight lanes are routed explicitly; completed FDT1 components are evidence, FDT2-FDT7 remain planned or blocked, and FDT8 technical readiness remains non-empirical until authorization and execution.
 
 Disposition: bounded priors and experimental-design constraints for Chapter 3. These results do not explain the Chapter 2 minimum counts and cannot identify focal Cirsium function or adaptation.
 
@@ -38,6 +40,11 @@ The v1-v4 simulation programme tests the formation of present within/among pheno
 - held-out falsification: primary 8-cell pattern 0/64, exact 20-cell vector 0/64 and median 14/20 matching cells. This falsifies the frozen generator on that held-out contract only.
 - post-heldout diagnostic: best family reached median 6/8 cells and improved over `NULL_COUPLED` in 22/24 paired draws, but zero families met adequacy. This is hypothesis generation, not confirmatory selection.
 - v4.1: a frozen contract exists, but no canonical independently validated outcome is admitted here.
+
+Two earlier function-oriented simulation programmes are also retained rather than silently dropped:
+
+- orientation mechanism reduction: 5 x 1,500 draws; `combined_time_abiotic` ranked first, with a 0.183333 full-core match rate and held-out mean 1.0. The screen combines nonhomologous cross-study targets and is not fitted to Cirsium.
+- macro-interaction pattern reduction: the v1 modular family reached 11/11 targets in 1/180 draws; v2 again ranked it first across four seeds while common-lability retained substantial held-out support. These historical relative rankings were superseded by later adequacy screens and do not identify modularity.
 
 These simulation negatives apply only to the declared generators, priors, targets and gates. They are not negative evidence for ecology, genetic modularity, adaptation or historical trait coupling.
 
