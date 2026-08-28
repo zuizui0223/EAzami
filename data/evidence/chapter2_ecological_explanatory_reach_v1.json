@@ -19,8 +19,13 @@
     "n_taxa": 9,
     "n_U": 5,
     "n_D": 4,
-    "topology_ensemble": "first six AU-nonrejected optimized Comp1061 topologies; topology 1 is ML within the preregistered candidate set",
+    "topology_ensemble": "first six AU-nonrejected optimized Comp1061 topologies; topology 1 is ML within preregistered candidate set",
     "raw_ufboot_ecology_sign_rate": "not_evaluable: raw Comp1061 UFBoot trees were not preserved in the accepted archived ecological input bundle",
+    "prediction_baselines": {
+      "null": "training-set mean only; no trait and no phylogenetic covariance",
+      "phylogeny_only": "intercept plus Brownian conditional prediction on the accepted topology",
+      "phylogeny_plus_orientation": "intercept plus U/D orientation and Brownian conditional prediction"
+    },
     "chelsa_bio15": {
       "direction": "downward/nodding state associated with higher precipitation seasonality",
       "beta_D_minus_U_sd_range": [1.3199975182508858, 1.3302025884233368],
@@ -32,9 +37,14 @@
       "species_loo_evaluations": 54,
       "branchwise_directional_shift_sd_range": [0.267907, 0.269417],
       "branchwise_permutation_p_range": [0.094, 0.124],
-      "loo_delta_mse_range": [-0.10752728604912962, -0.10192548867278381],
-      "loo_delta_mse_median": -0.10472957189240567,
-      "loo_delta_mae_range": [-0.09576219430485616, -0.09192860644705464]
+      "loo_delta_mse_vs_null_range": [0.22432043604960816, 0.2296668075699117],
+      "loo_delta_mse_vs_null_median": 0.22700144213806334,
+      "loo_delta_mae_vs_null_range": [0.08244369329043198, 0.08390936727329784],
+      "loo_delta_mse_vs_phylogeny_only_range": [-0.10752728604912962, -0.10192548867278381],
+      "loo_delta_mse_vs_phylogeny_only_median": -0.10472957189240567,
+      "loo_delta_mae_vs_phylogeny_only_range": [-0.09576219430485616, -0.09192860644705464],
+      "phylogeny_only_delta_mse_vs_null_range": [0.33159229624269554, 0.33184772209873786],
+      "prediction_interpretation": "Orientation adds predictive information relative to a naive mean-only null, but degrades held-out prediction relative to phylogeny-only Brownian kriging."
     },
     "chelsa_bio01": {
       "direction": "downward/nodding state associated with lower annual mean temperature",
@@ -47,12 +57,17 @@
       "species_loo_evaluations": 54,
       "branchwise_directional_shift_sd_range": [-0.199306, -0.199151],
       "branchwise_permutation_p_range": [0.108, 0.136],
-      "loo_delta_mse_range": [-0.19948382445725388, -0.19243517016086534],
-      "loo_delta_mse_median": -0.1959493187236214,
-      "loo_delta_mae_range": [-0.14409602677127353, -0.14179676294542043]
+      "loo_delta_mse_vs_null_range": [0.3640379432028111, 0.3704508868413376],
+      "loo_delta_mse_vs_null_median": 0.36725281083637673,
+      "loo_delta_mae_vs_null_range": [0.16395459837057455, 0.1664457761244066],
+      "loo_delta_mse_vs_phylogeny_only_range": [-0.19948382445725388, -0.19243517016086534],
+      "loo_delta_mse_vs_phylogeny_only_median": -0.1959493187236214,
+      "loo_delta_mae_vs_phylogeny_only_range": [-0.14409602677127353, -0.14179676294542043],
+      "phylogeny_only_delta_mse_vs_null_range": [0.562690072280705, 0.5637141868392912],
+      "prediction_interpretation": "Orientation adds predictive information relative to a naive mean-only null, but degrades held-out prediction relative to phylogeny-only Brownian kriging."
     },
-    "prediction_improvement_rule": ">0 means phylogeny+orientation predicts held-out climate better than phylogeny-only Brownian kriging",
-    "interpretation": "BIO15 and BIO1 show topology-stable and species-LOO-stable directions, and the branchwise diagnostic has the same signs on all six accepted topologies. However, the frozen primary PGLS threshold is not passed, branchwise permutation thresholds are not passed, and held-out prediction does not improve over phylogeny-only. The correct result class is unresolved rather than no relationship."
+    "prediction_improvement_rule": ">0 means phylogeny+orientation predicts held-out climate better than the named baseline",
+    "interpretation": "BIO15 and BIO1 show topology-stable and species-LOO-stable directions, and the branchwise diagnostic has the same signs on all six accepted topologies. Orientation also improves held-out prediction over a naive mean-only null for both axes. However, the frozen primary PGLS threshold is not passed, branchwise permutation thresholds are not passed, and held-out prediction is worse than phylogeny-only Brownian kriging. The correct result class is unresolved rather than no relationship."
   },
   "phyllary_posture": {
     "status": "not_evaluable",
@@ -73,6 +88,6 @@
     "phyllary_posture": "not_evaluable",
     "stickiness": "not_evaluable"
   },
-  "chapter2_result": "Repeated minimum changes are shared across the three discrete traits, but ecological explanatory reach is asymmetric: orientation has a stable directional climate correspondence that remains unresolved as a predictive explanation, whereas phyllary posture and stickiness are not evaluable with the frozen climate panel.",
+  "chapter2_result": "Repeated minimum changes are shared across the three discrete traits, but ecological explanatory reach is asymmetric: orientation has a stable directional climate correspondence that improves prediction over a naive null but not over phylogeny-only, whereas phyllary posture and stickiness are not evaluable with the frozen climate panel.",
   "claim_boundary": "Do not call the orientation pattern adaptation, convergence, historical niche causation or event-specific environmental matching. not_evaluable is a data-resolution result, not evidence of no ecological relation."
 }
