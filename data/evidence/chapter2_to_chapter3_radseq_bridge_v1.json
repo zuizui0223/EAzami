@@ -2,7 +2,7 @@
   "contract_version": "chapter2_to_chapter3_radseq_bridge_v1",
   "status_date": "2026-08-28",
   "chapter2_status": "COMPLETE_EXISTING_PUBLIC_HISTORY_CORE",
-  "chapter2_estimand": "trait-specific recurrence lower bounds and transition-placement identifiability conditional on the published Comp1061 topology ensemble and authority-backed states",
+  "chapter2_estimand": "trait-specific minimum-change lower bounds and transition-placement identifiability conditional on the published Comp1061 topology ensemble and authority-backed states",
   "chapter3_estimand": "Japan-wide own RAD-seq ancestry and topology sensitivity, linked to same-individual phenotype and cytotype, for discrimination among the Chapter 2 histories that remain admissible",
   "dependency_direction": "chapter2_uncertainty_informs_chapter3_sampling; chapter3_is_not_required_to_make_chapter2_valid",
   "chapter2_locked_results": {
@@ -54,5 +54,5 @@
     "the JPN36 phyllary terminal placement loses its current concentration under admitted own-data topologies",
     "same-individual multi-trait data support topology-robust shared localization that the current authority-backed analysis did not require"
   ],
-  "claim_boundary": "Chapter 2 establishes conditional recurrence and unequal localization under existing public evidence. Chapter 3 may refine or falsify exact histories with own data, but a topology update is not independent replication of Chapter 2 and cannot by itself establish developmental integration, convergence, adaptation, mechanism or fitness benefit."
+  "claim_boundary": "Chapter 2 establishes conditional minimum-change lower bounds and unequal localization under existing public evidence. Chapter 3 may refine or falsify exact histories with own data, but a topology update is not independent replication of Chapter 2 and cannot by itself establish developmental integration, convergence, adaptation, mechanism or fitness benefit."
 }

@@ -207,7 +207,7 @@ def check_discrete_history() -> None:
     if sticky["stickiness"]["resolved_concepts_after"] != 13:
         raise AssertionError("stickiness coverage drift")
     if sticky["stickiness"]["ufboot1000_steps_min"] != 5 or sticky["stickiness"]["ufboot1000_steps_max"] != 5:
-        raise AssertionError("stickiness recurrence drift")
+        raise AssertionError("stickiness minimum-change drift")
     dtop = load_json(TIME / "japan38_latest_module_overlap_topology_sensitivity_v2.json")
     if dtop["bootstrap_topology_sensitivity"]["bootstrap_trees_total"] != 1000:
         raise AssertionError("discrete topology ensemble incomplete")
@@ -333,7 +333,7 @@ def check_entry_points() -> None:
     for path, needles in {
         ROOT / "README.md": [
             "COMPLETE_EXISTING_PUBLIC_HISTORY_CORE",
-            "Capitulum configuration diversity, recurrent trait change",
+            "Capitulum configuration diversity, minimum change counts",
             "MANUSCRIPT_JEB_V3.md",
             "audit snapshots",
         ],
@@ -345,7 +345,7 @@ def check_entry_points() -> None:
         ],
         ROOT / "docs" / "RESEARCH_PLAN.md": [
             "standalone",
-            "configuration diversity plus recurrent trait change",
+            "configuration diversity plus multiple minimum changes",
             "Journal of Evolutionary Biology",
             "immutable audit snapshot",
         ],

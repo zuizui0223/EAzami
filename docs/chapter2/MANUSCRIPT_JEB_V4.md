@@ -1,28 +1,28 @@
-# Capitulum configuration diversity, recurrent trait change and uneven event resolution in a young thistle radiation
+# Capitulum configuration diversity, minimum change counts and uneven event resolution in a young thistle radiation
 
 **Target journal:** *Journal of Evolutionary Biology* — Research Article
 
 **Manuscript status:** active standalone submission draft v4; scientifically complete, production bundle pending
 
-**Running title:** Trait recurrence and event resolution
+**Running title:** Minimum changes and event resolution
 
 **Word-limit contract:** main text <=7,500 words; abstract <=250 words; 4–10 keywords
 
 ## Abstract
 
-Rapid radiations can accumulate alternative configurations of a complex structure even when individual evolutionary events remain difficult to identify. We quantified configuration diversity, recurrence lower bounds and transition-placement identifiability for capitulum traits in Japanese *Cirsium*. Published phylogenomics places 36 of 38 sampled Japanese concepts in one dominant radiation, within which the authority-covered subset contains at least three harmonized orientation × stickiness configurations. Exact-concept states for orientation, phyllary posture and involucre stickiness were mapped to an independently reconstructed nuclear maximum-likelihood phylogram and 1,000 ultrafast-bootstrap topologies. Orientation required four to six unordered changes, phyllary posture exactly three and stickiness exactly five. Count stability differed sharply from event resolution: no orientation edge was forced in every minimum reconstruction on the maximum-likelihood tree, whereas the JPN36 terminal phyllary edge was forced in 75.4% of bootstrap topologies. No trait pair met a cross-treatment overlap rule requiring positive branch-aware overlap and a positive equal-branch fifth percentile. A separate population-resolution audit showed that one-tip coding hid extant colour-state multiplicity in four of four polymorphic systems and doubled the minimum count from one to two in the only morph-linked testable system. The dominant radiation therefore combines configuration diversity with recurrent change in multiple constituent traits, but public evidence resolves recurrence more reliably than the individual events responsible. These results do not establish independent origins, convergence, developmental modularity or adaptation.
+Rapid radiations can accumulate alternative configurations of a complex structure even when individual evolutionary events remain difficult to identify. We quantified configuration diversity, minimum state-change counts and transition-placement identifiability for capitulum traits in Japanese *Cirsium*. Published phylogenomics places 36 of 38 sampled Japanese concepts in one dominant radiation, within which the authority-covered subset contains at least three harmonized orientation × stickiness configurations. Exact-concept states for orientation, phyllary posture and involucre stickiness were mapped to an independently reconstructed nuclear maximum-likelihood phylogram and 1,000 ultrafast-bootstrap topologies. Orientation required four to six unordered changes, phyllary posture exactly three and stickiness exactly five. Count stability differed sharply from event resolution: no orientation edge was forced in every minimum reconstruction on the maximum-likelihood tree, whereas the JPN36 terminal phyllary edge was forced in 75.4% of bootstrap topologies. No trait pair met a cross-treatment overlap rule requiring positive branch-aware overlap and a positive equal-branch fifth percentile. A separate population-resolution audit showed that one-tip coding hid extant colour-state multiplicity in four of four polymorphic systems and doubled the minimum count from one to two in the only morph-linked testable system. The dominant radiation therefore combines configuration diversity with multiple minimally required changes in each constituent trait, but public evidence resolves minimum counts more reliably than the individual events responsible. These results do not establish independent origins, convergence, developmental modularity or adaptation.
 
-**Keywords:** *Cirsium*; ancestral-state reconstruction; capitulum; mosaic evolution; phylogenetic uncertainty; rapid radiation; trait recurrence
+**Keywords:** *Cirsium*; ancestral-state reconstruction; capitulum; character evolution; mosaic evolution; phylogenetic uncertainty; rapid radiation
 
 # Introduction
 
-Complex structures combine traits that can share development, genetics and function, yet diversification can repeatedly assemble those traits into different configurations. Morphological integration and modularity are scale-dependent concepts, and mosaic evolution can distribute change unevenly among components of one structure (Klingenberg, 2014; Goswami et al., 2014; Felice & Goswami, 2018; Zelditch & Goswami, 2021). A historical analysis should therefore ask both whether alternative configurations accumulated and which evolutionary events are actually recoverable.
+Complex structures combine traits that can share development, genetics and function, yet diversification can generate different combinations of those traits. Morphological integration and modularity are scale-dependent concepts, and mosaic evolution can distribute change unevenly among components of one structure (Klingenberg, 2014; Goswami et al., 2014; Felice & Goswami, 2018; Zelditch & Goswami, 2021). A historical analysis should therefore ask both how many state changes are minimally required and which evolutionary events are actually recoverable.
 
-This distinction matters in rapid radiations. Short internodes, incomplete lineage sorting, introgression and uneven taxon coverage can leave several ancestral reconstructions equally compatible with the observations. Phylogenetic error can bias inferred transition counts, and probabilistic character mapping was developed in part to represent uncertainty in ancestral states and histories (Bollback, 2006; Duchêne & Lanfear, 2015). Yet two empirical properties remain useful even under a bounded parsimony analysis: how stable a minimum recurrence count is across topologies, and whether any particular edge is required to change across all equally minimal reconstructions. Stable counts need not identify stable events.
+This distinction matters in rapid radiations. Short internodes, incomplete lineage sorting, introgression and uneven taxon coverage can leave several ancestral reconstructions equally compatible with the observations. Phylogenetic error can bias inferred transition counts, and probabilistic character mapping was developed in part to represent uncertainty in ancestral states and histories (Bollback, 2006; Duchêne & Lanfear, 2015). Yet two empirical properties remain useful even under a bounded parsimony analysis: how stable a minimum-change count is across topologies, and whether any particular edge is required to change across all equally minimal reconstructions. Stable counts need not identify stable events.
 
 The thistle genus *Cirsium* provides a suitable system. A broad nuclear phylogenomic study recovered rapid Pleistocene radiations, including a large Japanese radiation with substantial gene-tree discordance (Moreyra et al., 2025). The capitulum is assembled from separable traits including its orientation, the posture of surrounding phyllaries and sticky secretions of the involucre. These traits occur together in the present structure but have distinct biological definitions and can form several observed configurations within the same radiation.
 
-We ask how much recurrent change is required in the traits that form alternative capitulum configurations within the dominant Japanese radiation and which evolutionary events remain identifiable. We first establish radiation membership and observed configuration diversity. We then quantify trait-specific recurrence across a nuclear topology ensemble and measure whether particular edges are forced to change across all minimum reconstructions. We compare transition localization among traits under branch-length-aware and topology-only diagnostics and audit whether species-tip compression can hide extant state multiplicity. Finally, we convert the histories that remain admissible into prospective own-data sampling priorities. This last step is design inference, not a new empirical result.
+We ask how many state changes are minimally required in the traits that form alternative capitulum configurations within the dominant Japanese radiation and which inferred event placements remain identifiable. We first establish radiation membership and observed configuration diversity. We then quantify trait-specific minimum-change counts across a nuclear topology ensemble and measure whether particular edges are forced to change across all minimum reconstructions. We compare transition localization among traits under branch-length-aware and topology-only diagnostics and audit whether species-tip compression can hide extant state multiplicity. Finally, we convert the histories that remain admissible into prospective own-data sampling priorities. This last step is design inference, not a new empirical result.
 
 # Materials and methods
 
@@ -30,7 +30,7 @@ We ask how much recurrent change is required in the traits that form alternative
 
 The primary estimands were (i) observed configuration richness in the admitted authority subset, (ii) the minimum number of unordered state changes for each trait and (iii) transition-placement identifiability conditional on the admitted phylogenetic ensemble. Pairwise overlap of inferred transition localization was a secondary boundary test. A separate population-resolution audit assessed whether one-tip coding hid within-species state multiplicity. Continuous-trait, niche and cytotype screens were retained in Supporting Information rather than treated as additional main questions.
 
-We precluded four promotions. Minimum steps were not labelled independent origins; repeated states were not labelled convergence; branch overlap was not labelled developmental or genetic integration; and trait-history patterns were not labelled adaptation or function. Outcomes from future own RAD-seq, phenotyping or experiments cannot retroactively change these definitions.
+We precluded four promotions. Minimum steps were not labelled independent origins; similar tip states were not labelled convergence; branch overlap was not labelled developmental or genetic integration; and trait-history patterns were not labelled adaptation or function. Outcomes from future own RAD-seq, phenotyping or experiments cannot retroactively change these definitions.
 
 ## Nuclear scaffold and taxon admission
 
@@ -48,11 +48,11 @@ Final coverage was 20 concepts for orientation, ten for phyllary posture and 13 
 
 We retained the source-typed published synthesis of Japanese colonization history. Radiation membership was used as historical context rather than as an estimated diversification rate. Within the authority-backed dominant-radiation subset, we enumerated the distinct observed orientation × stickiness label combinations without treating missing cells as absences or collapsing upward/ascending and upward/erect authority descriptions after inspection.
 
-## Recurrence and transition-placement identifiability
+## Minimum-change counts and transition-placement identifiability
 
 For the maximum-likelihood tree and each raw bootstrap topology, we calculated the unordered parsimony minimum for each trait. We also enumerated whether each parent–child edge was forced to change across all minimum-cost ancestral assignments. The fraction of bootstrap trees in which a named terminal edge was forced quantified placement concentration. Root-state sets and ambiguity were reported separately.
 
-The recurrence statistic answers how many changes are minimally required on a given topology. The forced-edge statistic answers whether every equally parsimonious reconstruction assigns a change to a particular edge. Neither statistic estimates transition direction, homology, selective cause or a rate per unit time.
+The minimum-change statistic answers how many changes are minimally required on a given topology. The forced-edge statistic answers whether every equally parsimonious reconstruction assigns a change to a particular edge. Neither statistic estimates transition direction, homology, selective cause or a rate per unit time.
 
 ## Module-overlap diagnostics
 
@@ -74,23 +74,23 @@ The proposed all-Japan same-library RAD-seq product is a topology/network sensit
 
 Published phylogenomic evidence placed 36 of 38 sampled Japanese concepts (94.7%) in the dominant radiation. After harmonizing upward/ascending and upward/erect as upward for this descriptive count, the authority-backed subset contained at least three orientation × stickiness configurations: downward with nonsticky/nearly nonsticky, upward with nonsticky/nearly nonsticky and upward with sticky. The source ontology retained four named combinations because upward/ascending and upward/erect descriptions were not silently rewritten. The two sampled secondary-history comparators were both upward/erect but differed in stickiness. Thus, observed capitulum configuration did not map one-to-one onto the broad colonization-history class.
 
-## All three traits require repeated changes
+## All three traits require multiple minimum changes
 
 Orientation required six changes on the maximum-likelihood tree and four to six changes across 1,000 bootstrap topologies (median five). Its minimum root state was upward/erect across the bootstrap ensemble. Phyllary posture required exactly three changes on the maximum-likelihood tree and every bootstrap topology, but its minimum root set contained ascending, recurved and spreading postures. Stickiness, after the JPN24 authority extension, required exactly five changes on all 1,000 topologies and had a sticky maximum-likelihood root state.
 
-Thus, repeated changes are not a peculiarity of one capitulum ontology. Nevertheless, the different counts do not indicate different evolutionary rates because the tree is not dated, coverage differs among traits and the statistics are lower bounds.
+Thus, every focal ontology requires more than one state change on every admitted topology. Nevertheless, the different counts do not indicate different evolutionary rates because the tree is not dated, coverage differs among traits and the statistics are lower bounds.
 
-## Stable recurrence does not imply stable placement
+## Stable minimum counts do not imply stable placement
 
 No orientation edge was individually forced across every minimum reconstruction on the maximum-likelihood tree. JPN36 was the most frequently forced terminal orientation edge across bootstrap topologies, but its fraction was only 0.201. In contrast, the JPN36 terminal phyllary edge was forced in 0.754 of bootstrap trees. This concentrated placement coexisted with uncertainty in ancestral phyllary posture. In the pre-extension stickiness placement audit, the JPN06 and JPN36 terminal fractions were 0.67 and 0.40, respectively; the JPN24 extension subsequently stabilized the total count at five but was not used to claim every placement had become known.
 
-The comparisons therefore reveal two independent uncertainty axes. Orientation has a clear recurrence lower bound but weak event localization. Phyllary posture has a stable count and one comparatively concentrated terminal placement, yet an ambiguous root. Stickiness has a stable final count and only partial placement information.
+The comparisons therefore reveal two independent uncertainty axes. Orientation has a stable minimum-change range but weak event localization. Phyllary posture has a stable count and one comparatively concentrated terminal placement, yet an ambiguous root. Stickiness has a stable final count and only partial placement information.
 
 ## No single transition-localization pattern spans the three traits
 
 On the branch-length-aware maximum-likelihood tree, orientation–phyllary, orientation–stickiness and phyllary–stickiness transition-excess correlations were 0.362, 0.202 and 0.084. Their equal-branch bootstrap medians were -0.059, -0.387 and 0.184, and their fifth percentiles were -0.206, -0.392 and -0.073, respectively. Zero of three trait pairs met the cross-treatment robustness rule.
 
-The simple alternative in which the whole capitulum shares one common transition-localization pattern is therefore not supported. This is a boundary on the recurrent-assembly result, not evidence that the traits are evolutionarily independent or form separate genetic or developmental modules.
+The simple alternative in which the whole capitulum shares one common transition-localization pattern is therefore not supported. This bounds the minimum-change result but is not evidence that the traits are evolutionarily independent or form separate genetic or developmental modules.
 
 ## Species-tip compression hides event information
 
@@ -104,17 +104,17 @@ Orientation requires broad Japan-wide topology discrimination rather than select
 
 # Discussion
 
-## Configuration diversity with recurrent trait change within a rapid radiation
+## Configuration diversity with multiple minimum changes within a rapid radiation
 
-The dominant Japanese radiation contains several observed capitulum configurations, and all three focal trait ontologies require repeated state changes. The positive result is therefore configuration diversity accompanied by recurrent change in multiple constituent traits, rather than merely failure to recover one shared history. The present data do not jointly reconstruct configuration transitions and do not show whether the trait changes were independent origins, reversals, sorting of ancestral variation or introgression.
+The dominant Japanese radiation contains several observed capitulum configurations, and all three focal trait ontologies require more than one state change under every admitted topology. The positive result is therefore configuration diversity accompanied by non-zero, multiple minimum-change histories in each constituent trait, rather than merely failure to recover one shared history. The present data do not jointly reconstruct configuration transitions and do not show whether the inferred changes reflect independent origins, reversals, sorting of ancestral variation or introgression.
 
-## Recurrence and event resolution are distinct evolutionary properties
+## Minimum-count stability and event resolution are distinct properties
 
-The certainty of a recurrence lower bound can be substantially greater than certainty about the branches on which changes occurred. Orientation and phyllary posture illustrate the contrast: both require repeated changes, but only the latter contains a strongly concentrated terminal placement. Analyses that report only one reconstructed history or one event count would conceal this difference.
+The certainty of a minimum-change count can be substantially greater than certainty about the branches on which changes occurred. Orientation and phyllary posture illustrate the contrast: both require multiple minimum changes, but only the latter contains a strongly concentrated terminal placement. Analyses that report only one reconstructed history or one event count would conceal this difference.
 
-This distinction is broadly relevant to rapid radiations. Bootstrap topologies may preserve a minimum count while redistributing changes among short or discordant branches. The population-resolution audit adds a second source of compression: a phylogeny can be fixed while species-tip coding still hides extant states and additional minimum changes. Reporting recurrence and event resolution separately prevents uncertainty in one estimand from either erasing or exaggerating support in the other.
+This distinction is broadly relevant to rapid radiations. Bootstrap topologies may preserve a minimum count while redistributing changes among short or discordant branches. The population-resolution audit adds a second source of compression: a phylogeny can be fixed while species-tip coding still hides extant states and additional minimum changes. Reporting count stability and event resolution separately prevents uncertainty in one estimand from either erasing or exaggerating support in the other.
 
-We do not propose a new ancestral-state reconstruction algorithm. The general advance is a reporting and study-design framework that treats recurrence robustness and event resolution as separate empirical coordinates, compares them across constituent traits of one biological structure and links each unresolved coordinate to a prospective observation that can falsify it. The strong count but weak placement of orientation and the concentrated JPN36 phyllary placement occupy different regions of that two-coordinate space.
+We do not propose a new ancestral-state reconstruction algorithm. The general advance is a reporting and study-design framework that treats minimum-count stability and event resolution as separate empirical coordinates, compares them across constituent traits of one biological structure and links each unresolved coordinate to a prospective observation that can falsify it. The stable count but weak placement of orientation and the concentrated JPN36 phyllary placement occupy different regions of that two-coordinate space.
 
 ## One present structure need not have one historical trajectory
 
@@ -126,7 +126,7 @@ Continuous, niche and cytotype diagnostics are retained in Supporting Informatio
 
 Comparative studies often end by requesting more taxa. Here, the two observed resolution limits specify which data are valuable and what outcome would matter. JPN36 is prioritized because own topology can falsify a concentrated phyllary placement. JPN06 and JPN15 are prioritized because their current sister relationship makes a state contrast unusually informative, while network analysis can reveal whether that match is misleading. Broad orientation sampling is prioritized because no single edge is currently identifiable, and same-individual phenotype sampling addresses species-tip compression.
 
-This is not circular confirmation. Chapter 3 will estimate a different object from independently collected individuals and may revise the exact Chapter 2 histories. Because focal samples were selected from pre-existing uncertainty, later results must be described as targeted resolution or falsification rather than independent replication. The Chapter 2 conclusion survives either outcome: present public evidence requires repeated trait-specific changes and leaves unevenly localized histories.
+This is not circular confirmation. Chapter 3 will estimate a different object from independently collected individuals and may revise the exact Chapter 2 histories. Because focal samples were selected from pre-existing uncertainty, later results must be described as targeted resolution or falsification rather than independent replication. The Chapter 2 conclusion survives either outcome: present public evidence requires multiple minimum changes in each trait and leaves their placements unevenly localized.
 
 ## Boundaries for phylogenomics and function
 
@@ -136,7 +136,7 @@ Function remains outside the present paper. The JPN36 non-destructive phyllary-a
 
 # Conclusion
 
-The dominant young Japanese *Cirsium* radiation combines multiple observed capitulum configurations with repeated changes in orientation, phyllary posture and stickiness. Recurrence lower bounds were more robust than the locations of the individual events, and no trait pair met the cross-treatment robustness rule for a common transition-localization pattern. Species-tip compression supplied a second, independently visible limit on event recovery. This is a positive account of configuration diversity and recurrent trait change with an explicit resolution boundary, not a claim that particular configurations were independently reassembled, converged or adapted. The remaining event histories prospectively define the own genomic and same-individual phenotype samples required in the next chapter.
+The dominant young Japanese *Cirsium* radiation combines multiple observed capitulum configurations with multiple minimally required changes in orientation, phyllary posture and stickiness. Minimum-change counts were more robust than the locations of the individual inferred events, and no trait pair met the cross-treatment robustness rule for a common transition-localization pattern. Species-tip compression supplied a second, independently visible limit on event recovery. This is a positive account of configuration diversity and stable minimum-change burdens with an explicit resolution boundary, not a claim that particular configurations were independently reassembled, converged or adapted. The remaining admissible histories prospectively define the own genomic and same-individual phenotype samples required in the next chapter.
 
 # References
 

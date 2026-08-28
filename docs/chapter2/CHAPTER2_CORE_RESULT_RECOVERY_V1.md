@@ -2,7 +2,7 @@
 
 Status date: 2026-08-28
 
-Scientific status: **COMPLETE_CONFIGURATION_DIVERSITY_AND_RECURRENT_TRAIT_CHANGE_CORE**
+Scientific status: **COMPLETE_CONFIGURATION_DIVERSITY_AND_MINIMUM_CHANGE_CORE**
 
 Machine-readable ledger: `data/evidence/chapter2_core_result_recovery_v1.csv`
 
@@ -14,21 +14,21 @@ The active paper therefore uses only results that are complete, source-backed, r
 
 ## New Chapter 2 position
 
-Chapter 1 measures the breadth of capitulum phenotype in present space. Chapter 2 asks how much recurrent change is required in the traits that form alternative capitulum configurations and which evolutionary events are identifiable from current public evidence. Chapter 3 then resolves the remaining event histories with own genomic and same-individual phenotype data and tests causal function separately.
+Chapter 1 measures the breadth of capitulum phenotype in present space. Chapter 2 asks how many state changes are minimally required in the traits that form alternative capitulum configurations and which inferred event placements are identifiable from current public evidence. Chapter 3 then resolves the remaining admissible histories with own genomic and same-individual phenotype data and tests causal function separately.
 
 The active question is:
 
-> **How much recurrent change is required in the traits that form alternative capitulum configurations within a young Japanese thistle radiation, and which evolutionary events remain identifiable under phylogenetic and observation uncertainty?**
+> **How many state changes are minimally required in the traits that form alternative capitulum configurations within a young Japanese thistle radiation, and which inferred event placements remain identifiable under phylogenetic and observation uncertainty?**
 
 This is not a test of whether Chapter 1 significance is repeated. It is a standalone evolutionary-morphology question using an independently assembled EAzami evidence base.
 
 ## Three contributions
 
-### 1. Biological result: configuration diversity with recurrent trait change within a dominant radiation
+### 1. Biological result: configuration diversity with multiple minimum changes within a dominant radiation
 
 The historical context is unusually concentrated: 36 of 38 sampled Japanese concepts, or 94.7%, occur in the dominant radiation. Within the authority-covered dominant-radiation subset, at least three harmonized orientation x stickiness configurations are observed: downward/nonsticky, upward/nonsticky and upward/sticky. The source ontology retains four named combinations because upward/ascending and upward/erect are not silently collapsed. Alternative configurations therefore occur within the main radiation rather than mapping one-to-one onto rare secondary-history comparators.
 
-The accepted topology ensemble then requires repeated change in every focal trait ontology:
+The accepted topology ensemble then requires more than one minimum change in every focal trait ontology:
 
 - orientation: 20 resolved concepts; ML minimum 6; UFBoot range 4-6, median 5;
 - phyllary posture: ten resolved concepts; exactly 3 changes in all 1,000 UFBoot trees;
@@ -36,13 +36,13 @@ The accepted topology ensemble then requires repeated change in every focal trai
 
 The positive biological conclusion is that capitulum diversity in this young radiation cannot be represented only as retention of one unchanged set of trait states. Multiple state changes are required in each of three constituent traits. Because joint configuration transitions were not reconstructed, this is not yet a count of how often any complete configuration was assembled.
 
-### 2. Inferential result: recurrence and event resolution are different properties
+### 2. Inferential result: minimum-count stability and event resolution are different properties
 
 Stable counts do not imply identifiable events. Orientation has no individually forced maximum-likelihood edge, and its most frequent focal terminal placement, JPN36, occurs in only 20.1% of bootstrap topologies. The JPN36 phyllary terminal edge is forced in 75.4% of bootstrap topologies even though the root posture remains ambiguous.
 
 The novel emphasis is not that ancestral-state reconstruction is uncertain. That is established. The contribution is an empirical two-coordinate description of each trait history:
 
-1. **recurrence robustness** — how stable the minimum count is across topologies;
+1. **minimum-count stability** — how stable the parsimony minimum is across topologies;
 2. **event resolution** — how strongly a particular edge is required across all equally minimal reconstructions.
 
 This distinction converts a generic uncertainty warning into a trait-comparative biological result.
@@ -58,20 +58,20 @@ Together with topology-dependent edge placement, this shows that event recovery 
 | Hypothesis | Result | Status |
 | --- | --- | --- |
 | The dominant radiation contains multiple capitulum configurations | at least three harmonized combinations; four source-level named combinations | supported descriptively |
-| Each focal trait requires repeated state change | orientation 4-6; phyllary 3; stickiness 5 | supported as lower bounds |
-| Stable recurrence counts imply equally stable event locations | orientation 0 forced ML edges versus JPN36 phyllary 75.4% | not supported |
+| Each focal trait requires more than one minimum state change | orientation 4-6; phyllary 3; stickiness 5 | supported as topology-conditioned lower bounds |
+| Stable minimum-change counts imply equally stable event locations | orientation 0 forced ML edges versus JPN36 phyllary 75.4% | not supported |
 | One branch-localization pattern is retained across all three traits | zero of three pairs meets the cross-treatment rule; all equal-branch fifth percentiles are negative | not supported; secondary boundary |
 | Species-tip coding preserves all event information | state multiplicity hidden in 4/4 systems; count 1 to 2 in 1/1 testable system | partial direct contradiction |
-| Broad climate currently explains the repeated histories | primary BIO15 P=0.0505-0.0524; branchwise P=0.094-0.124 | unresolved supporting lead |
-| Repeated changes are independent origins or adaptations | ancestry, mechanism and fitness are not jointly observed | not tested |
+| Broad climate currently explains the admitted histories | primary BIO15 P=0.0505-0.0524; branchwise P=0.094-0.124 | unresolved supporting lead |
+| Minimum changes are independent origins or adaptations | ancestry, direction, mechanism and fitness are not jointly observed | not tested |
 
 ## What belongs in the JEB main text
 
 The main text has five result groups only:
 
 1. 36/38 concepts in the dominant radiation and at least three harmonized orientation x stickiness configurations in the authority-covered subset;
-2. three trait-specific recurrence distributions;
-3. recurrence robustness versus edge-identifiability contrast;
+2. three trait-specific minimum-change distributions;
+3. minimum-count stability versus edge-identifiability contrast;
 4. the zero-of-three cross-treatment overlap boundary;
 5. population-resolution compression as a short prospective bridge.
 
@@ -90,21 +90,21 @@ The continuous n=7 screen, orientation-niche analysis, cytotype overlap, source-
 
 **Recommended title**
 
-> **Capitulum configuration diversity, recurrent trait change and uneven event resolution in a young thistle radiation**
+> **Capitulum configuration diversity, minimum change counts and uneven event resolution in a young thistle radiation**
 
 **Four-figure order**
 
 1. dominant-radiation context, trait admission and observed configuration diversity;
-2. recurrence-count distributions for orientation, phyllary posture and stickiness;
-3. recurrence robustness versus forced-edge localization;
+2. minimum-change-count distributions for orientation, phyllary posture and stickiness;
+3. minimum-count stability versus forced-edge localization;
 4. branch-treatment overlap boundary plus species-tip compression and prospective sampling consequences.
 
 The central sentence is:
 
-> **A dominant young radiation contains multiple capitulum configurations and requires repeated changes in three constituent traits, but public evidence resolves recurrence counts more reliably than the individual evolutionary events responsible for them.**
+> **A dominant young radiation contains multiple capitulum configurations and each of three constituent traits requires multiple minimum changes, but public evidence resolves minimum counts more reliably than individual event placements.**
 
 This is a positive evolutionary-morphology result with an explicit resolution boundary. The zero-of-three overlap result constrains the interpretation but is not the paper's discovery claim.
 
 ## Claim ceiling
 
-The paper establishes topology-conditioned recurrence lower bounds, observed configuration diversity and trait-dependent event resolution. It does not jointly reconstruct configuration transitions or establish independent origins, convergence, developmental modularity, adaptation, absolute transition timing or evolutionary rate.
+The paper establishes topology-conditioned minimum-change lower bounds, observed configuration diversity and trait-dependent event resolution. It does not jointly reconstruct configuration transitions or establish independent origins, convergence, developmental modularity, adaptation, absolute transition timing or evolutionary rate.

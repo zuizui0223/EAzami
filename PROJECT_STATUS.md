@@ -6,7 +6,7 @@ Status date: 2026-08-28
 
 Chapter 1 now supplies the conceptual **breadth** question; Chapter 2 independently estimates historical **depth**. EAzami must build its own literature/specimen/flora/public-image trait registry and cannot use Azami phenotype values or Azami significance as an admission gate.
 
-- standalone-ready now: 36/38 dominant-radiation context; at least three harmonized orientation x stickiness configurations in the authority-covered dominant subset; discrete orientation/phyllary/stickiness recurrence and event resolution; topology ensemble; a validated species-tip compression audit;
+- standalone-ready now: 36/38 dominant-radiation context; at least three harmonized orientation x stickiness configurations in the authority-covered dominant subset; discrete orientation/phyllary/stickiness minimum-change counts and event resolution; topology ensemble; a validated species-tip compression audit;
 - supporting only: GBIF + CHELSA orientation-niche analyses; an admitted 45-record EAzami-native continuous registry; a four-trait seven-taxon diagnostic panel; bounded cytotype context;
 - bounded, not completion gates: Japan38 continuous history, dated event correspondence, DTT and evolutionary simulations;
 - routed to Chapter 3: own Japan-wide RAD-seq, same-individual phenotype/cytotype, population structure and field causality;
@@ -26,7 +26,7 @@ shared continuous capitulum phenotype ontology
         |     within/among variation; geography; environmental alignment
         |
         |-- Chapter 2 — phenotype × evolutionary time/history
-        |     public trait recurrence; transition localization; topology uncertainty
+        |     public minimum-change counts; transition localization; topology uncertainty
         |
         `-- Chapter 3 — own RAD-seq × linked phenotype/function
               history discrimination -> mechanism -> reproductive fitness
@@ -36,7 +36,7 @@ Function is not an admission gate for Chapter 2. Chapter 1 and Chapter 2 reuse t
 
 ## Chapter 2 current answer
 
-> **A dominant young radiation contains multiple capitulum configurations and requires repeated changes in three constituent traits, but public evidence resolves recurrence counts more reliably than the individual evolutionary events responsible for them.**
+> **A dominant young radiation contains multiple capitulum configurations and each of three constituent traits requires multiple minimum changes, but public evidence resolves minimum counts more reliably than individual event placements.**
 
 This statement does not imply zero phylogenetic signal, lability, fully independent traits, independent origins, convergence, adaptation or a shared mechanism.
 
@@ -90,7 +90,7 @@ The earlier positive equal-branch result across 1,000/1,000 topologies is retain
 - phyllary posture: ten resolved, exactly three changes across all 1,000 topologies;
 - stickiness: 13 resolved, exactly five changes across all 1,000 topologies.
 
-These are recurrence lower bounds. Placement identifiability differs:
+These are topology-conditioned minimum-change lower bounds. Placement identifiability differs:
 
 - orientation has no individually forced ML edge; JPN36 terminal fraction 0.201;
 - phyllary JPN36 terminal fraction 0.754, with root posture ambiguous;
@@ -104,14 +104,14 @@ Target: **Journal of Evolutionary Biology — Research Article**.
 
 Active standalone title:
 
-> **Capitulum configuration diversity, recurrent trait change and uneven event resolution in a young thistle radiation**
+> **Capitulum configuration diversity, minimum change counts and uneven event resolution in a young thistle radiation**
 
 Current active state:
 
 - standalone diversity-depth contract and repository-wide inventory frozen;
 - EAzami-native continuous registry admitted with identity/source/rights/measurement gates;
 - exact-permutation seven-taxon diagnostic complete and `not_supported`;
-- discrete recurrence/localization and bounded niche layers independently executable;
+- discrete minimum-change/localization and bounded niche layers independently executable;
 - active standalone manuscript rebuilt as `docs/chapter2/MANUSCRIPT_JEB_V4.md`;
 - submission authorization held only for revised figures, anonymous DOCX, reference audit and author declarations.
 
@@ -129,6 +129,9 @@ The former V3 manuscript, figures, Supporting Information and privacy-scrubbed D
 - `docs/chapter2/MANUSCRIPT_JEB_V4.md`
 - `data/evidence/chapter2_to_chapter3_radseq_bridge_v1.json`
 - `data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv`
+- `docs/chapter2/CHAPTER2_RESOLUTION_AWARE_EVIDENCE_SPLIT_V1.md`
+- `data/evidence/chapter2_resolution_classification_v1.csv`
+- `data/evidence/meta_simulation_resolution_audit_v1.csv`
 
 JEB manuscript versions v1-v3 are audit history; v4 is current submission text.
 
