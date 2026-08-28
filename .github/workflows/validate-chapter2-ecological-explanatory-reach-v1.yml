@@ -1,0 +1,67 @@
+name: Validate Chapter 2 ecological explanatory reach v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/summarize_chapter2_ecological_explanatory_reach_v1.py"
+      - "data/evidence/chapter2_ecological_explanatory_reach_v1.json"
+      - "data/evidence/chapter2_core_result_recovery_v1.csv"
+      - ".github/workflows/validate-chapter2-ecological-explanatory-reach-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install analysis dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas scipy biopython
+          python -m pip check
+      - name: Recover frozen niche and topology artifacts
+        run: |
+          mkdir -p recovered/japan recovered/taiwan recovered/au
+          gh run download 32716015605 --name fdt4-japan-orientation-niche-v1 --dir recovered/japan
+          gh run download 32725842871 --name fdt4-taiwan-orientation-niche-v1 --dir recovered/taiwan
+          gh run download 32614839764 --name comp1061-alt-topology-au-32614839764 --dir recovered/au
+      - name: Recompute ecological explanatory reach
+        run: |
+          python analysis/summarize_chapter2_ecological_explanatory_reach_v1.py \
+            --occurrences recovered/japan/focal_occurrences_environment_complete.csv recovered/taiwan/focal_occurrences_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --au-trees recovered/au/au.trees \
+            --out recovered/chapter2_ecological_explanatory_reach_v1.json
+      - name: Check frozen result contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          got=json.loads(Path('recovered/chapter2_ecological_explanatory_reach_v1.json').read_text())
+          frozen=json.loads(Path('data/evidence/chapter2_ecological_explanatory_reach_v1.json').read_text())
+          assert got['orientation']['status']==frozen['orientation']['status']=='unresolved'
+          assert got['orientation']['n_taxa']==9
+          assert got['phyllary_posture']['status']=='not_evaluable'
+          assert got['stickiness']['status']=='not_evaluable'
+          for axis in ['chelsa_bio15','chelsa_bio01']:
+              ga=got['orientation']['axes'][axis]
+              fa=frozen['orientation'][axis]
+              for key in ['beta_D_minus_U_sd_range','p_range','loo_delta_mse_range']:
+                  assert len(ga[key])==len(fa[key])
+                  assert all(abs(a-b)<1e-10 for a,b in zip(ga[key],fa[key])), (axis,key,ga[key],fa[key])
+              assert ga['accepted_topology_sign_agreement']==1.0
+              assert ga['species_loo_sign_agreement']==1.0
+              assert ga['species_loo_evaluations']==54
+          print('chapter2 ecological explanatory reach: valid')
+          PY
