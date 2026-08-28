@@ -1,0 +1,49 @@
+{
+  "contract_version": "japan38_branch_change_reconstruction_null_v1",
+  "status": "outcome_frozen",
+  "threshold": 2,
+  "concept_ids": [
+    "JPN_05",
+    "JPN_17",
+    "JPN_23",
+    "JPN_27",
+    "JPN_29",
+    "JPN_36",
+    "JPN_37",
+    "JPN_38"
+  ],
+  "common_concepts": 8,
+  "branches": 14,
+  "units": [
+    "orientation_image_vertical_angle",
+    "corolla_lab_lightness",
+    "corolla_lab_chroma",
+    "corolla_hue",
+    "capitulum_outline_aspect_ratio",
+    "capitulum_outline_circularity",
+    "capitulum_outline_solidity",
+    "capitulum_width_profile_cv"
+  ],
+  "permutations": 9999,
+  "seed": 20260827,
+  "observed_global_mean_pairwise_branch_change_rho": 0.40800627943485085,
+  "null": {
+    "n": 9999,
+    "mean": 0.38206344967306777,
+    "median": 0.38021978021978026,
+    "q01": 0.2321789638932496,
+    "q05": 0.2726844583987441,
+    "q95": 0.4973626373626375,
+    "q99": 0.5464678178963893,
+    "min": 0.13202511773940348,
+    "max": 0.6481946624803768
+  },
+  "observed_minus_null_median": 0.027786499215070593,
+  "observed_empirical_percentile": 0.65006500650065,
+  "one_sided_reconstruction_null_p": 0.3504,
+  "null_exceedances": 3503,
+  "decision": "FAIL",
+  "pass_rule": "one_sided_reconstruction_null_p < 0.05",
+  "null_definition": "independent tip-label permutation for every scalar phenotype; paired sine/cosine hue vectors permuted together; each permutation reruns the same BM conditional ancestral reconstruction on the same substitution-length phylogram",
+  "claim_boundary": "A PASS establishes excess shared branch-localization information beyond common tree/reconstruction geometry. It does not establish shared genetics, development, selection, adaptation, convergence, absolute timing, or evolutionary rate."
+}

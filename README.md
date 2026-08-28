@@ -1,162 +1,109 @@
-# EAzami — from phenotype to function, history, origin and convergence in *Cirsium*
+# EAzami — standalone evolutionary depth of capitulum diversity
 
-EAzami is the downstream evolutionary/functional layer of Azami. The two repositories are not parallel trait projects.
+## Active Chapter 2 direction (2026-08-28)
 
-```text
-Azami
-phenotypic decomposition of the capitulum
-        ↓
-EAzami-I
-phenotype → candidate function → validated functional trait
-        ↓
-EAzami-II
-trait-specific evolutionary histories
-        ↓
-EAzami-III
-origin discrimination
-        ↓
-EAzami-IV
-functional / adaptive convergence
-```
+EAzami is a standalone evolutionary-history study. Chapter 1 and Chapter 2 are linked conceptually as **diversity breadth -> diversity depth**, but EAzami does not require Azami results, phenotype artifacts or significance-selected traits. The repositories may share only the biological system and predefined trait concepts.
 
-## Canonical biological question
+The current executable standalone core is the Comp1061 ancestry scaffold, authority-backed orientation/phyllary/stickiness histories, topology uncertainty and GBIF + CHELSA orientation-niche analyses. The existing eight-continuous-trait history remains preserved as an audit result, but it is not eligible as primary EAzami evidence until independently measured EAzami inputs are admitted.
 
-> **Once a complex capitulum is decomposed into component phenotypes, what do those components do, how often did their states change through evolutionary history, where did repeated states come from, and do independent origins repeatedly solve the same ecological problem?**
+Current submission state: **STOP_STANDALONE_CONTINUOUS_INPUT_NOT_ADMITTED**. See `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md` and `data/evidence/chapter2_diversity_depth_inventory_v1.csv`.
 
-The active source of truth is:
-
-- `docs/chapter2/MAINLINE_V2.md`
-- `docs/chapter2/MANUSCRIPT_V2_OUTLINE.md`
-- `docs/chapter2/FIGURE_TABLE_PLAN_V2.md`
-- `docs/chapter2/SUBMISSION_GATES_V2.md`
-- `data/evidence/chapter2_result_role_map_v2.csv`
-- `PROJECT_STATUS.md`
-
-## Azami endpoint — decompose the present
-
-Azami treats the capitulum as a multivariate phenotype rather than one adaptive syndrome. Orientation, colour, outline/shape, involucre/phyllary architecture, armature and display-related traits are measured separately.
-
-The key handoff is not a list of isolated correlations. It preserves within- and among-taxon organization and shows that association structure changes across biological scale. Image-derived modules remain phenotypic modules; they are not automatically functional or genetic modules.
-
-## EAzami-I — phenotype to candidate function
-
-A measured phenotype is promoted in stages:
+The material below describes the frozen PR #126 JEB audit snapshot. It remains reproducible but is not the active standalone submission story.
 
 ```text
-observed phenotype
-→ candidate functional annotation
-→ independent functional evidence
-→ focal manipulation/performance response
-→ validated functional trait
+continuous capitulum phenotype
+        |
+        |-- Chapter 1: present-day space/environment
+        |-- Chapter 2: evolutionary time/history
+        `-- Chapter 3: function/fitness
 ```
 
-Current ecological constraints include:
+## Current Chapter 2 result
 
-- experimentally reduced reproductive insect herbivory increases viable/mature seed output in harmonizable *Cirsium* studies by RR **2.674** (95% CI **2.388–2.993**), establishing a large antagonist fitness channel without identifying which capitulum morphology mediates it;
-- factorial selection literature rejects universal pollinator or antagonist dominance and supports a **selection mosaic** working architecture;
-- orientation requires at least time-window pollination and abiotic-protection candidate pathways rather than one static visitation coefficient;
-- display can increase both mutualist discovery and antagonist exposure;
-- a generic `sticky = defence` rule is not retained;
-- image-derived phyllary/armature geometry remains candidate morphology until direct focal validation.
+> **Present-day capitulum integration is scale dependent, but the available continuous and discrete histories do not support one persistent historical capitulum module.**
 
-## EAzami-II — trait-specific evolutionary histories
+The paper separates properties that are often conflated:
 
-Current Japan38 nuclear-history results are reconstructed separately by trait.
+1. present integration within and among taxa;
+2. continuous phylogenetic state structure;
+3. minimum recurrence of independently defined discrete states;
+4. exact transition-placement identifiability;
+5. shared continuous or discrete branch localization.
 
-- **orientation:** 20 resolved concepts; ML minimum 6 changes; UFBoot range 4–6; exact branch localization remains weak.
-- **phyllary posture:** 10 resolved concepts; exactly 3 minimum changes across all 1000 UFBoot trees; JPN36 is the strongest partly localizable terminal target.
-- **stickiness:** 13 resolved concepts after merged JPN24 authority repair; ML minimum 5, ML root sticky, and all 1000 UFBoot trees require exactly 5 changes.
-- **colour:** the global/high-depth continuous-lightness anti-phylogenetic pattern does not replicate in the source-balanced Japan-local panel, so it is not promoted to a Japanese-radiation transition history.
+### Present integration
 
-The current three-module transition-overlap analysis does not support a simple one-shared-whole-capitulum historical-lability model. This does **not** prove developmental/genetic modular evolvability.
+Registered-module association is stronger within taxa than among taxa at both frozen thresholds. At >=5 observations the contrasts are 0.164502 and 0.088475, and the within/among association matrices are only partly aligned (rho=0.3663).
 
-## EAzami-III — origin discrimination
+### Continuous history
 
-Repeated tip states do not yet establish independent origins. The live alternatives include:
+Eight orientation, colour and outline-shape units show no corrected two-sided state-structure result in the original family. A fixed JPN29 identity exclusion retains eight not-supported units at the primary threshold and makes the high-depth family not evaluable.
 
-- ancestral retention;
-- independent lineage-specific transition;
-- ancestral polymorphism and sorting;
-- introgression / gene flow;
-- hybridization / cytoplasmic capture;
-- reversal or re-expression where biologically justified.
+Apparent positive reconstructed branch correlations do not exceed a null that independently permutes tip phenotypes and repeats ancestral reconstruction:
 
-The next discriminator links standardized phenotype to:
+- original panel: P=0.3504, FAIL;
+- JPN29-excluded sensitivity: P=0.1959, FAIL.
 
-`nuclear population genomics + matched plastid haplotype + cytotype/genome size`.
+The previous independent-branch P value and 1,000/1,000 positive equal-branch signs cannot rescue this result.
 
-The aim is not merely a denser tree; it is to determine where repeated phenotype states came from.
+### Discrete history
 
-## EAzami-IV — convergence
+- orientation requires four to six minimum changes;
+- phyllary posture requires exactly three;
+- stickiness requires exactly five.
 
-The claim ladder is strict:
+Recurrence counts are lower bounds, not independent-origin or convergence counts. Edge identifiability differs among traits, and no trait pair shows consistently positive transition overlap across branch-length treatments.
+
+## JEB submission package
+
+Primary target: **Journal of Evolutionary Biology**, Research Article.
+
+Active title:
+
+> **Present-day phenotypic integration does not imply a shared evolutionary history in a rapid thistle radiation**
+
+Start here:
+
+1. `PROJECT_STATUS.md` — current repository and submission state;
+2. `docs/chapter2/TIME_AXIS_MAINLINE_V3.md` — scientific source of truth;
+3. `docs/chapter2/MANUSCRIPT_JEB_V3.md` — active double-anonymous manuscript;
+4. `docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V1.md` — evidence and figure map;
+5. `docs/chapter2/JEB_SUPPORTING_INFORMATION_V1.md` — supplementary crosswalk;
+6. `data/evidence/chapter2_jeb_main_result_table_v1.csv` — machine-readable results.
+
+The four main and five supplementary figures are under `docs/chapter2/figures/` as vector PDF and 300-dpi PNG. The privacy-scrubbed DOCX package is under `docs/chapter2/submission_package/`. Manuscript v1/v2 files remain audit history only.
+
+## Evidence boundaries
+
+- The phylogeny is a substitutions/site tree, not an absolute chronogram.
+- Continuous images provide global species-level proxies, not phenotypes of sequenced Japanese vouchers.
+- JPN29 remains identity unresolved for a clean Japanese phenotype join.
+- Missing or non-evaluable evidence is not biological absence or zero.
+- Minimum steps do not establish independent origin, function or adaptation.
+- Reconstruction-null failure does not establish independent trait histories.
+
+## Programme routing
+
+### Chapter 1 / thesis methods
+
+Present-state v3/v4 covariance generators test statistical formation of within/among phenotype fields. They are not evolutionary-transition simulations.
+
+### Chapter 3
+
+Trait-to-function evidence, reproductive-herbivory synthesis, selection mosaic and non-destructive JPN36 phyllary pilot test candidate performance and fitness pathways. Function is kept separate from Chapter 2 historical inference.
+
+### Later origin discrimination
+
+Repeated states still admit ancestral retention, lineage-specific origin, ancestral sorting, introgression and reversal. The next discriminator links standardized phenotype with nuclear population ancestry, plastid haplotype and cytotype in the same individuals where possible.
+
+## Claim ladder
 
 ```text
-repeated present state
-→ independent origin supported
-→ repeated ecological association
-→ same or equivalent function
-→ reproductive-fitness consequence
-→ functional / adaptive convergence
+repeated state
+    -> independent origin supported
+    -> equivalent function
+    -> repeated ecological association
+    -> reproductive-fitness consequence
+    -> functional/adaptive convergence
 ```
 
-Repeated parsimony changes are not convergence counts. Phenotypic convergence, functional convergence and adaptive convergence are distinct claims.
-
-## Higher-order hypotheses
-
-### Selection mosaic / local functional leverage
-
-This is the leading ecological working architecture. Interaction opportunity alone is insufficient; the focal phenotype must change effective pollination, antagonist access or abiotic protection and that difference must reach fitness.
-
-### Modular evolvability
-
-Retained as a **higher-order endpoint hypothesis**, not the organizing premise. It becomes stronger only if multiple component traits show semi-independent histories and repeated origins reuse standing variation, introgressed variants or regulatory machinery.
-
-### Common lability
-
-Retained as a higher-order competitor. Snapshot residual covariance coupling is not equivalent to evolutionary common lability.
-
-## Auxiliary cross-scale simulation lane
-
-The 62-target Azami → EAzami simulation programme remains intact but is not the definition of evolutionary history.
-
-- v3.1: none of five declared biological driver families passes absolute adequacy;
-- PR #119: `NULL_COUPLED` is the frozen scalar-target winner;
-- PR #120: the same null fails held-out support geometry, 0/64 primary matches;
-- PR #123: among-only process structure improves strongly but remains inadequate;
-- draft PR #122: scale-specific covariance families are the first to pass the registered seven-target adequacy screen, pending canonical freeze and independent held-out validation.
-
-These results constrain **statistical covariance formation across scales**. They do not reconstruct trait transitions, historical origins or adaptation.
-
-## Doctoral data gates
-
-The existing three empirical gates remain useful under the new mainline:
-
-1. **Origin gate:** same-individual phenotype + nuclear ancestry + plastid + cytotype.
-2. **Function gate:** focal trait → interaction/protection mediator → mature/viable seed fitness.
-3. **Colour molecular-reuse gate:** for independently resolved W/C transitions, ancestry + coding/regulatory haplotype + floral RNA + pigment + calibrated colour.
-
-## Current paper boundary
-
-A bounded Chapter 2 paper can already claim that the capitulum is not one fixed syndrome and that currently resolved component traits show different candidate functions and repeated, partly decoupled histories.
-
-It must not yet claim:
-
-- independent origin for every repeated state;
-- functional or adaptive convergence;
-- adaptive radiation;
-- molecular colour reactivation;
-- demonstrated modular evolvability.
-
-## Start here
-
-1. `docs/chapter2/MAINLINE_V2.md`
-2. `docs/chapter2/MANUSCRIPT_V2_OUTLINE.md`
-3. `data/evidence/chapter2_result_role_map_v2.csv`
-4. `PROJECT_STATUS.md`
-5. `docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md`
-6. `sampling/SAMPLING_DESIGN.md`
-
-The canonical short axis is:
-
-> **phenotype → function → history → origin → convergence**
+The current Chapter 2 reaches recurrence and bounded historical localization only.

@@ -43,6 +43,8 @@ jobs:
               with Path(path).open(encoding='utf-8', newline='') as handle:
                   return next(csv.reader(handle))
 
+          # Existing three biological-data aims remain protected. Reordering dissertation
+          # chapters does not delete the sampling commitments they encode.
           core=list(csv.DictReader(Path('data/evidence/doctoral_core_program_v1.csv').open(encoding='utf-8',newline='')))
           centers=[r for r in core if r['level']=='central']; aims=[r for r in core if r['level']=='aim']
           assert len(centers)==1 and centers[0]['id']=='CORE'
@@ -123,7 +125,7 @@ jobs:
           assert totals==Counter({'Cirsium brevicaule':60,'Cirsium irumtiense':60,'Cirsium pendulum':40,'Cirsium sieboldii':30})
 
           support=list(csv.DictReader(Path('data/evidence/preliminary_hypothesis_registry_v1.csv').open(encoding='utf-8',newline='')))
-          expected={'H-RAD1','H-EVOL1','H-CLIM1','H-PL1','H-COL1','H-RET1','H-MECH1','H-CYTO1','H-ADAPT1','H-RYK1'}
+          expected={'H-RAD1','H-EVOL1','H-CLIM1','H-PL1','H-COL1','H-RET1','H-MECH1','H-CYTO1','H-ADAPT1','H-RYK1','H-CH2HIST1'}
           assert {r['hypothesis_id'] for r in support}==expected
 
           doc=Path('docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md').read_text(encoding='utf-8')
@@ -143,9 +145,19 @@ jobs:
               assert phrase in protocol, phrase
           for phrase in ['time-window pollination + abiotic protection','18.3%','aim2_capitulum_observation_bout_ledger_v1.csv','no all-day visitation = no orientation effect shortcut']:
               assert phrase in fieldplan, phrase
-          assert ('three unresolved new-data gates' in status.lower())
-          assert 'phenotypic decomposition' in status
-          assert 'origin discrimination' in status
+
+          # Current dissertation ordering: history is Chapter 2; function is Chapter 3;
+          # origin/convergence gates remain downstream and retain the same sampling design.
+          for phrase in [
+              'Chapter 1 — phenotype × present-day space/environment',
+              'Chapter 2 — phenotype × evolutionary time/history',
+              'Chapter 3 — phenotype × function/fitness',
+              'origin discrimination',
+              'nuclear population genomics',
+              'plastid haplotype',
+              'cytotype',
+          ]:
+              assert phrase in status, phrase
 
           sampling_readme=Path('sampling/README.md').read_text(encoding='utf-8')
           assert 'Orientation timing rule' in sampling_readme
@@ -154,7 +166,8 @@ jobs:
 
           print('doctoral_centers=1')
           print('doctoral_aims=3')
-          print('doctoral_mainline_v2_alignment=true')
+          print('dissertation_space_history_function_alignment=true')
+          print('origin_sampling_gate_retained=true')
           print('aim2_orientation_time_window_schema_valid=true')
           print('tranche1_populations=14')
           print('tranche1_minimum_individuals=190')

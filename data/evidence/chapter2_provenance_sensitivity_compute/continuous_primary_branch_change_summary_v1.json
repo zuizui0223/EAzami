@@ -1,0 +1,33 @@
+{
+  "threshold": 2,
+  "common_concepts": 7,
+  "concept_ids": [
+    "JPN_05",
+    "JPN_17",
+    "JPN_23",
+    "JPN_27",
+    "JPN_36",
+    "JPN_37",
+    "JPN_38"
+  ],
+  "branches": 12,
+  "units": [
+    "orientation_image_vertical_angle",
+    "corolla_lab_lightness",
+    "corolla_lab_chroma",
+    "corolla_hue",
+    "capitulum_outline_aspect_ratio",
+    "capitulum_outline_circularity",
+    "capitulum_outline_solidity",
+    "capitulum_width_profile_cv"
+  ],
+  "global_mean_pairwise_branch_change_rho": 0.47227772227772225,
+  "global_shared_lability_permutation_p_positive": 9.999000099990002e-05,
+  "within_module_mean_rho": 0.491064491064491,
+  "between_module_mean_rho": 0.4633787265366212,
+  "within_minus_between_module_contrast": 0.027685764527869805,
+  "module_label_exact_permutation_p_positive": 0.37142857142857144,
+  "module_label_permutations": 280,
+  "branch_change_definition": "absolute BM-conditional phenotype change standardized by tip SD (scalar units) or hue chord distance, divided by sqrt(substitution-length branch)",
+  "claim_boundary": "Shared branch-change diagnostic only; substitutions/site are not absolute time, ancestral states are BM conditional expectations, and positive coupling would not prove genetic/developmental modularity or common selection."
+}

@@ -1,0 +1,10 @@
+endpoint_id,module,n1,n2,n5
+bract_projection_asymmetry,involucre_architecture,5,2,2
+bract_projection_maximum,armature,5,2,2
+bract_projection_p95,involucre_architecture,5,2,2
+bract_projection_peak_density,armature,5,2,2
+bract_projection_roughness,involucre_architecture,5,2,2
+bract_spread_fraction,involucre_architecture,5,2,2
+involucre_apical_taper_ratio,involucre_architecture,5,2,2
+involucre_basal_taper_ratio,involucre_architecture,5,2,2
+involucre_length_width_ratio,involucre_architecture,5,2,2

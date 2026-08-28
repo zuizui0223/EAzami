@@ -37,12 +37,14 @@ def test_competing_simulation_models_are_predeclared():
 def test_time_axis_programme_is_supporting_not_repository_mainline():
     readme = README.read_text(encoding="utf-8")
     mainline = MAINLINE.read_text(encoding="utf-8")
-    assert "phenotype → function → history → origin → convergence" in readme
-    assert "Auxiliary cross-scale simulation lane" in readme
+    assert "Chapter 1: present-day space/environment" in readme
+    assert "Chapter 2: evolutionary time/history" in readme
+    assert "Chapter 3: function/fitness" in readme
+    assert "Present-state v3/v4 covariance generators" in readme
     assert "modular evolvability" in mainline
     assert "endpoint hypothesis" in mainline
     assert "adaptive convergence" in mainline
     # The older FDT programme remains available as a supporting time-axis
     # analysis, but it no longer defines the repository entry point.
-    start_here = readme.split("## Start here", 1)[-1]
+    start_here = readme.split("Start here:", 1)[-1].split("## Evidence boundaries", 1)[0]
     assert "docs/FUNCTIONAL_DIVERSITY_TIME_META_ANALYSIS_PROGRAM_2026-08-24.md" not in start_here

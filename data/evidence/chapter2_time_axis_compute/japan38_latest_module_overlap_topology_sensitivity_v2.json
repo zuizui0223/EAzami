@@ -1,0 +1,86 @@
+{
+  "contract_version": "japan38_module_overlap_topology_sensitivity_v1",
+  "purpose": "branch-length-free topology sensitivity; not the primary Mk analysis",
+  "branch_length_contract": "all non-root analysis-tree branches fixed to 1.0",
+  "ml_topology_equal_branch": {
+    "tree_diagnostic": {
+      "replicate_monophyly": false,
+      "replicate_resolved_for_any_trait": false,
+      "replicate_mode": "pruned_fully_unresolved_replicated_concept",
+      "replicate_mrca_descendants": [
+        "J38S002",
+        "J38S003",
+        "J38S005",
+        "J38S007",
+        "J38S020",
+        "J38S021",
+        "J38S022",
+        "J38S023",
+        "J38S026",
+        "J38S034",
+        "J38S036",
+        "J38S038"
+      ],
+      "excluded_concepts": [
+        "JPN_20",
+        "JPN_31"
+      ],
+      "concept_tips": 36
+    },
+    "pairwise_overlap": {
+      "orientation__phyllary": {
+        "shared_informative_edges": 33,
+        "spearman_transition_posterior": -0.059394365771196084
+      },
+      "orientation__stickiness": {
+        "shared_informative_edges": 38,
+        "spearman_transition_posterior": -0.38700140797478894
+      },
+      "phyllary__stickiness": {
+        "shared_informative_edges": 31,
+        "spearman_transition_posterior": 0.20435086975252437
+      }
+    }
+  },
+  "bootstrap_topology_sensitivity": {
+    "bootstrap_trees_total": 1000,
+    "jpn20_monophyletic_trees": 0,
+    "jpn20_monophyly_fraction": 0.0,
+    "pairwise_spearman_distributions": {
+      "orientation__phyllary": {
+        "n": 969,
+        "min": -0.33047427514582356,
+        "q05": -0.20588270079151355,
+        "q25": -0.10721117198183865,
+        "median": -0.059394365771196084,
+        "q75": 0.025276209601384138,
+        "q95": 0.2008701089034067,
+        "max": 0.38477668377204477,
+        "fraction_positive": 0.34881320949432404
+      },
+      "orientation__stickiness": {
+        "n": 1000,
+        "min": -0.40239713513769765,
+        "q05": -0.39198786339609276,
+        "q25": -0.3870861744653411,
+        "median": -0.387012001175683,
+        "q75": -0.369544712256702,
+        "q95": -0.18693944014228095,
+        "max": 0.08521347676371537,
+        "fraction_positive": 0.009
+      },
+      "phyllary__stickiness": {
+        "n": 969,
+        "min": -0.15613471821512095,
+        "q05": -0.07345437846675106,
+        "q25": 0.10737233847779984,
+        "median": 0.18399015228406285,
+        "q75": 0.2147568333870494,
+        "q95": 0.25767948125899154,
+        "max": 0.396813907825468,
+        "fraction_positive": 0.782249742002064
+      }
+    }
+  },
+  "interpretation_gate": "Do not call a shared-lability signal topology-robust when the branch-length-aware ML analysis and this equal-branch sensitivity disagree in sign, or when the bootstrap topology distribution does not remain predominantly positive. This sensitivity cannot establish developmental modularity or adaptation."
+}

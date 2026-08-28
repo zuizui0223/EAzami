@@ -1,0 +1,136 @@
+name: Recompute Japan38 latest module overlap v2
+
+on:
+  pull_request:
+    paths:
+      - 'data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv'
+      - 'data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv'
+      - 'analysis/run_japan38_module_transition_overlap_v1.py'
+      - 'analysis/run_japan38_module_overlap_topology_sensitivity_v1.py'
+      - '.github/workflows/run-japan38-latest-module-overlap-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: japan38-latest-module-overlap-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  HYPOTHESIS_ID: H-CH2HIST1
+  FROZEN_TREE_RUN_ID: '32923076873'
+  FROZEN_TREE_ARTIFACT: 'japan38-comp1061-frozen-tree-retry-32923076873'
+
+jobs:
+  overlap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install and compile
+        run: |
+          python -m pip install 'biopython>=1.83,<2'
+          python -m py_compile analysis/run_japan38_module_transition_overlap_v1.py analysis/run_japan38_module_overlap_topology_sensitivity_v1.py
+      - name: Merge canonical authority extensions fail-closed
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          base=list(csv.DictReader(Path('data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv').open(encoding='utf-8-sig')))
+          ext=list(csv.DictReader(Path('data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv').open(encoding='utf-8-sig')))
+          by={r['paper_japan_member_id']:r for r in ext}
+          assert set(by)=={'JPN_34','JPN_24'}
+          assert by['JPN_34']['orientation_state']=='upward_or_erect'
+          assert by['JPN_24']['stickiness_state']=='sticky'
+          assert not any(r['paper_japan_member_id'] in by for r in base)
+          rows=base+ext
+          with Path('merged_trait_seed_latest.csv').open('w',encoding='utf-8',newline='') as h:
+              w=csv.DictWriter(h,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
+          PY
+      - name: Download frozen canonical tree and UFBoot ensemble
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.FROZEN_TREE_ARTIFACT }}
+          path: frozen_tree
+          run-id: ${{ env.FROZEN_TREE_RUN_ID }}
+          github-token: ${{ github.token }}
+      - name: Locate tree files
+        run: |
+          set -euo pipefail
+          TREE="$(find frozen_tree -type f -name 'japan38_comp1061.treefile' -print -quit)"
+          UFBOOT="$(find frozen_tree -type f -name 'japan38_comp1061.ufboot' -print -quit)"
+          test -n "$TREE" && test -n "$UFBOOT"
+          echo "TREE=$TREE" >> "$GITHUB_ENV"
+          echo "UFBOOT=$UFBOOT" >> "$GITHUB_ENV"
+      - name: Run latest branch-length-aware overlap
+        run: |
+          mkdir -p output
+          python analysis/run_japan38_module_transition_overlap_v1.py \
+            --tree "$TREE" \
+            --concept-map data/evidence/japan38_comp1061_concept_map_v1.csv \
+            --trait-seed merged_trait_seed_latest.csv \
+            --permutations 9999 \
+            --seed 20260827 \
+            --output output/japan38_latest_module_transition_overlap_v2.json
+      - name: Run latest topology-only sensitivity
+        run: |
+          python analysis/run_japan38_module_overlap_topology_sensitivity_v1.py \
+            --bootstrap-trees "$UFBOOT" \
+            --ml-tree "$TREE" \
+            --concept-map data/evidence/japan38_comp1061_concept_map_v1.csv \
+            --trait-seed merged_trait_seed_latest.csv \
+            --output output/japan38_latest_module_overlap_topology_sensitivity_v2.json
+      - name: Validate updated coverage and result structure
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('output/japan38_latest_module_transition_overlap_v2.json').read_text())
+          b=json.loads(Path('output/japan38_latest_module_overlap_topology_sensitivity_v2.json').read_text())
+          assert set(a['pairwise_overlap'])=={
+              'orientation__phyllary','orientation__stickiness','phyllary__stickiness'
+          }
+          assert a['traits']['orientation']['resolved_tips']==20
+          assert a['traits']['phyllary']['resolved_tips']==10
+          assert a['traits']['stickiness']['resolved_tips']==13
+          boot=b['bootstrap_topology_sensitivity']
+          assert boot['bootstrap_trees_total']==1000
+          assert boot['jpn20_monophyletic_trees']==0
+          print(json.dumps({
+              'resolved_tips':{k:a['traits'][k]['resolved_tips'] for k in ['orientation','phyllary','stickiness']},
+              'ml_pairwise':a['pairwise_overlap'],
+              'bootstrap_pairwise':boot['pairwise_spearman_distributions'],
+          },indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-latest-module-overlap-${{ github.run_id }}
+          path: output
+          if-no-files-found: error
+          retention-days: 90
+      - name: Persist latest overlap outputs on PR branch
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          dest=data/evidence/chapter2_time_axis_compute
+          mkdir -p "$dest"
+          cp output/japan38_latest_module_transition_overlap_v2.json "$dest/"
+          cp output/japan38_latest_module_overlap_topology_sensitivity_v2.json "$dest/"
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add "$dest"
+          if git diff --cached --quiet; then
+            echo 'No overlap outputs changed.'
+            exit 0
+          fi
+          git commit -m 'Capture latest Japan38 module overlap results'
+          git pull --rebase origin "${{ github.head_ref }}"
+          git push origin HEAD:"${{ github.head_ref }}"

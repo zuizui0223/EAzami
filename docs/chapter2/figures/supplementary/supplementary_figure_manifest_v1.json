@@ -1,0 +1,47 @@
+{
+  "contract_version": "chapter2_jeb_supplementary_figure_manifest_v1",
+  "renderer": "matplotlib_3.10.8",
+  "outputs": {
+    "figure_s1_tree_admission.pdf": {
+      "sha256": "a4447ab04178b5d614b75daaf5cb608b99852b853d5712486ef53b7cfb024738",
+      "bytes": 25071
+    },
+    "figure_s1_tree_admission.png": {
+      "sha256": "cf113994a3f201a2bb52dd6e2b46e0fa800000770c069a327cf55d5a3f823ea2",
+      "bytes": 276436
+    },
+    "figure_s2_continuous_state_structure.pdf": {
+      "sha256": "eabb948f8a3641d77547af1658bba228158c3cb97dbe26e4f1a521144a5f1979",
+      "bytes": 29276
+    },
+    "figure_s2_continuous_state_structure.png": {
+      "sha256": "0b00749615cb15284e8277991c5fc6e98f574b5ddd09f8d715983225d1136674",
+      "bytes": 199874
+    },
+    "figure_s3_equal_branch_topology.pdf": {
+      "sha256": "6ab0fc72a44fb6fc4adb4adf6738459185cc19e31a9b10c3942f61dd40ef8321",
+      "bytes": 19706
+    },
+    "figure_s3_equal_branch_topology.png": {
+      "sha256": "2c516d827cd80f438e6a7bce8855dbf99227ff42f1b2b3c260d3575521e01944",
+      "bytes": 70722
+    },
+    "figure_s4_lightness_nonreplication.pdf": {
+      "sha256": "8f36eb783d73cf7f78d29d6a388f26eaf1afe215101a9f0b2c89dcfcbca8e714",
+      "bytes": 24744
+    },
+    "figure_s4_lightness_nonreplication.png": {
+      "sha256": "ad7a8631876fb62964d5eb39743512fba11fd3e43a8ba80b317f67d622ba109c",
+      "bytes": 180780
+    },
+    "figure_s5_species_tip_compression.pdf": {
+      "sha256": "2290e3121cf029f233a77fab38df6593cb4327e85f3bd3d5004aab0737bf7c95",
+      "bytes": 19111
+    },
+    "figure_s5_species_tip_compression.png": {
+      "sha256": "0e14331936d627d02b1a9e276b12803ff552590bd3776bc4a6eb057c5ca85a02",
+      "bytes": 134553
+    }
+  },
+  "claim_boundary": "Supplementary displays of frozen evidence. They preserve identity warnings, scientific FAIL, not_evaluable, substitutions/site and single-system boundaries."
+}

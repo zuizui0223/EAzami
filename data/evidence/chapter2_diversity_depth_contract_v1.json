@@ -1,0 +1,97 @@
+{
+  "contract_version": "chapter2_diversity_depth_contract_v1",
+  "status_date": "2026-08-28",
+  "active_question": "How deeply is present capitulum diversity embedded in evolutionary history, and which trait histories or trait-environment relationships were repeatedly reassembled?",
+  "chapter_relation": {
+    "chapter_1": "diversity breadth in present geographic and environmental space",
+    "chapter_2": "diversity depth in phylogenetic and biogeographic history",
+    "logical_direction": "breadth_to_historical_depth_not_pattern_to_cause"
+  },
+  "standalone_rule": {
+    "EAzami_must_not_require": [
+      "Azami results",
+      "Azami phenotype artifacts",
+      "selection of traits because they were significant in Azami"
+    ],
+    "shared_with_Azami_only": [
+      "biological system",
+      "predefined trait concepts"
+    ],
+    "allowed_EAzami_sources": [
+      "primary taxonomic literature",
+      "floras and exact-concept authority descriptions",
+      "voucher or specimen measurements",
+      "public images remeasured under an EAzami-owned protocol",
+      "public occurrence and environmental data with source-name guards"
+    ]
+  },
+  "current_submission_status": "STOP_STANDALONE_CONTINUOUS_INPUT_NOT_ADMITTED",
+  "stop_reasons": [
+    "The current eight-continuous-trait history and reconstruction-null outputs consume an Azami-export bridge.",
+    "No EAzami-native continuous-trait registry has yet passed identity, source, licensing, measurement and coverage gates.",
+    "A taxon-reconciled dated Japan38 topology ensemble is not available for event-window or disparity-through-time inference."
+  ],
+  "independent_continuous_input": {
+    "required_path": "data/evidence/chapter2_eazami_native_continuous_trait_registry_v1.csv",
+    "exists_at_freeze": false,
+    "required_fields": [
+      "record_id",
+      "paper_japan_member_id",
+      "taxon_concept",
+      "trait_id",
+      "value",
+      "unit",
+      "source_type",
+      "source_locator",
+      "rights_status",
+      "measurement_protocol",
+      "admission_status",
+      "exclusion_reason"
+    ],
+    "forbidden_provenance_for_primary_analysis": [
+      "Azami-derived value",
+      "Azami workflow artifact",
+      "Azami significance filter"
+    ]
+  },
+  "runnable_now": [
+    "Comp1061 topology and concept-admission audit",
+    "authority-backed orientation phyllary and stickiness recurrence plus placement uncertainty",
+    "six-topology Japan plus Taiwan orientation-niche PGLS",
+    "bounded audit of the frozen orientation-transition by niche-shift result; producer recovery is still required for rerun",
+    "sparse cytotype and colonization-context negative constraints"
+  ],
+  "method_only_until_independent_rerun": [
+    "continuous trait history",
+    "continuous reconstruction-aware branch-change null",
+    "continuous equal-branch topology diagnostic"
+  ],
+  "blocked_layers": {
+    "event_correspondence": "requires a reconciled dated topology ensemble and a sourced event-window registry",
+    "phenotypic_DTT": "requires EAzami-native continuous traits and a reconciled dated topology ensemble",
+    "M0_M5_simulation": "requires frozen empirical summaries and implemented predictive models"
+  },
+  "claim_ceiling": "Authority-backed capitulum traits show repeated but trait-specific histories in a young Japanese thistle radiation; recurrence counts, transition localization and present or reconstructed niche concordance are distinct estimands. Current evidence does not establish independent origins, adaptive convergence, a shared historical module, or ecological-event causation.",
+  "prohibited_claims": [
+    "Azami findings are replicated by EAzami without independent measurement",
+    "minimum parsimony steps equal independent origins or convergence events",
+    "a non-significant result proves zero phylogenetic signal or evolutionary independence",
+    "tip niche centroids are historical ranges",
+    "substitutions per site are absolute time",
+    "trait-function plausibility makes a reconstructed transition adaptive"
+  ],
+  "legacy_pr126_package": {
+    "status": "frozen_audit_snapshot_not_current_standalone_submission",
+    "retain": [
+      "reconstruction-aware null method and frozen FAIL outcomes",
+      "topology uncertainty",
+      "recurrence versus localization distinction",
+      "claim gates negative-result handling and deterministic outputs"
+    ],
+    "remove_from_active_story": [
+      "Azami observational handoff as Result 1",
+      "companion-phenomics dependency",
+      "present-day integration as the paper's starting estimand"
+    ]
+  }
+}

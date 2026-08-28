@@ -46,14 +46,20 @@ jobs:
           assert d['aim2_module_gate']['flower_colour']['fitness_rows']==0
           assert d['aim2_module_gate']['involucre_spine']['direct_rows']==0
           assert d['effect_size_meta_analysis_gate']['status']=='not_yet_authorized'
+
+          # The functional programme remains intact, but is now routed after the
+          # phenotype-through-history chapter rather than serving as its admission gate.
           core=Path('docs/DOCTORAL_RESEARCH_CORE_PROGRAM.md').read_text()
           status=Path('PROJECT_STATUS.md').read_text()
           assert 'Aim 2 — Adaptive function' in core
           assert 'head orientation first' in core
           assert 'selection mosaic' in core
-          assert 'phenotype → candidate function' in status
-          assert 'trait-specific functional leverage' in status
+          assert 'Chapter 3 — phenotype × function/fitness' in status
+          assert 'FDT1 trait-to-function evidence' in status
+          assert 'Cirsium reproductive-herbivory RR = 2.674' in status
+          assert 'function/fitness' in status
+
           print('aim2_evidence_map_valid=true')
-          print('doctoral_functional_mainline_v2=true')
+          print('functional_program_routed_to_chapter3=true')
           print('formal_pooling_authorized=false')
           PY

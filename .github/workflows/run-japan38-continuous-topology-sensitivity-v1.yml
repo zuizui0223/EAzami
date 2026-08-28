@@ -1,0 +1,111 @@
+name: Run Japan38 continuous branch-change topology sensitivity v1
+
+on:
+  pull_request:
+    paths:
+      - 'analysis/run_japan38_continuous_branch_change_topology_sensitivity_v1.py'
+      - 'tests/test_japan38_continuous_topology_determinism_v1.py'
+      - '.github/workflows/run-japan38-continuous-topology-sensitivity-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: japan38-continuous-topology-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  HYPOTHESIS_ID: H-CH2HIST1
+  FROZEN_TREE_RUN_ID: '32923076873'
+  FROZEN_TREE_ARTIFACT: 'japan38-comp1061-frozen-tree-retry-32923076873'
+
+jobs:
+  sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install and compile
+        run: |
+          python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<4' 'scipy>=1.12,<2' 'biopython>=1.83,<2' pytest
+          python -m py_compile \
+            analysis/run_japan38_continuous_branch_change_topology_sensitivity_v1.py \
+            analysis/run_japan38_all_continuous_history_v1.py
+          python -m pytest -q tests/test_japan38_continuous_topology_determinism_v1.py
+      - name: Download frozen Japan38 tree ensemble
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.FROZEN_TREE_ARTIFACT }}
+          path: frozen_tree
+          run-id: ${{ env.FROZEN_TREE_RUN_ID }}
+          github-token: ${{ github.token }}
+      - name: Locate tree files
+        run: |
+          set -euo pipefail
+          TREE="$(find frozen_tree -type f -name 'japan38_comp1061.treefile' -print -quit)"
+          UFBOOT="$(find frozen_tree -type f -name 'japan38_comp1061.ufboot' -print -quit)"
+          test -n "$TREE" && test -n "$UFBOOT"
+          echo "TREE=$TREE" >> "$GITHUB_ENV"
+          echo "UFBOOT=$UFBOOT" >> "$GITHUB_ENV"
+      - name: Run equal-branch topology sensitivity
+        run: |
+          mkdir -p output
+          python analysis/run_japan38_continuous_branch_change_topology_sensitivity_v1.py \
+            --bridge data/evidence/chapter2_time_axis_compute/source_japan38_continuous_trait_bridge_v1.csv \
+            --ml-tree "$TREE" \
+            --bootstrap-trees "$UFBOOT" \
+            --concept-map data/evidence/japan38_comp1061_concept_map_v1.csv \
+            --threshold 2 \
+            --output output/japan38_continuous_branch_change_topology_sensitivity_v1.json
+      - name: Validate frozen decision contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('output/japan38_continuous_branch_change_topology_sensitivity_v1.json').read_text())
+          assert x['common_concepts']==8
+          assert len(x['units'])==8
+          assert x['bootstrap_trees_total']==1000
+          assert x['bootstrap_trees_usable']>=900
+          assert x['predeclared_topology_robust_rule']=='q05 > 0 and fraction_positive >= 0.95'
+          assert x['spearman_tie_contract'].startswith('branch-change magnitudes rounded to 12 decimal places')
+          assert x['global_coordinated_change_decision'] in {'topology_robust_positive','not_topology_robust_positive'}
+          assert x['module_specificity_decision'] in {'topology_robust_positive','not_topology_robust_positive'}
+          print(json.dumps({
+            'global':x['global_mean_pairwise_rho_distribution'],
+            'global_decision':x['global_coordinated_change_decision'],
+            'module_contrast':x['within_minus_between_distribution'],
+            'module_decision':x['module_specificity_decision'],
+          },indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: japan38-continuous-topology-sensitivity-${{ github.run_id }}
+          path: output/japan38_continuous_branch_change_topology_sensitivity_v1.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Persist canonical sensitivity result on PR branch
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          dest=data/evidence/chapter2_time_axis_compute
+          mkdir -p "$dest"
+          cp output/japan38_continuous_branch_change_topology_sensitivity_v1.json "$dest/"
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add "$dest/japan38_continuous_branch_change_topology_sensitivity_v1.json"
+          if git diff --cached --quiet; then
+            echo 'No sensitivity output changed.'
+            exit 0
+          fi
+          git commit -m 'Capture continuous branch-change topology sensitivity'
+          git pull --rebase origin "${{ github.head_ref }}"
+          git push origin HEAD:"${{ github.head_ref }}"
