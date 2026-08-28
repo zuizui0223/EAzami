@@ -57,7 +57,7 @@ jobs:
           assert 'Chapter 3 — own RAD-seq × linked phenotype/function' in status
           assert 'FDT1 trait-to-function evidence' in status
           assert 'Cirsium reproductive-herbivory RR = 2.674' in status
-          assert 'function/fitness' in status
+          assert 'Chapter 3 causal layer' in status
 
           print('aim2_evidence_map_valid=true')
           print('functional_program_routed_to_chapter3=true')
