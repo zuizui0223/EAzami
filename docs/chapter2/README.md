@@ -19,6 +19,7 @@ The sequence is:
 - machine result ledger: `../../data/evidence/chapter2_core_result_recovery_v1.csv`;
 - relative lineage-depth: `RELATIVE_EVENT_DEPTH_CONTRACT_V1.md` and `../../data/evidence/japan38_relative_event_depth_v1.json`;
 - ecological reach: `ECOLOGICAL_EXPLANATORY_REACH_V1.md` and `../../data/evidence/chapter2_ecological_explanatory_reach_v1.json`;
+- non-climate constraints: `../../data/evidence/chapter2_nonclimate_explanatory_constraints_v1.json`;
 - independent nuclear audit: `EAST_ASIA_INDEPENDENT_NUCLEAR_EVIDENCE_AUDIT_V1.md` and `../../data/evidence/east_asia_independent_nuclear_evidence_audit_v1.csv`;
 - active manuscript: `MANUSCRIPT_JEB_V4.md`;
 - active figure map: `JEB_QUESTION_RESULT_FIGURE_MAP_V4.md` (content version v5);
@@ -75,7 +76,7 @@ Use:
 
 for the accepted Comp1061 reconstruction.
 
-Do **not** say that Moreyra 2025 or Comp1061 is the only nuclear evidence. The independent nuclear audit shows substantial pre-2025 and differently scaled nuclear information. Heterogeneous rDNA, MIG-seq, transcriptome and reference-genome data are not pooled into one branch-length tree.
+Do **not** say that Moreyra 2025 or Comp1061 is the only nuclear evidence. Heterogeneous rDNA, MIG-seq, transcriptome and reference-genome data are not pooled into one branch-length tree.
 
 ## Frozen historical results
 
@@ -96,6 +97,10 @@ The old 0.201/0.754/0.67/0.40 fractions reproduce only on superseded run 3284572
 - `not_evaluable` never means no ecological relationship;
 - stable climate correspondence is not adaptation, historical event matching or causal selection;
 - population-level nuclear evidence cannot be substituted for the common-locus species scaffold without an explicit model.
+
+## Frozen legacy submission package
+
+The old JEB V3 audit package remains reproducible history rather than active evidence. Its reconstruction-aware continuous shared-change null gave **P=0.3504**, and the fixed JPN29-excluded provenance sensitivity gave **P=0.1959**; both were `FAIL`. These values are retained so the active ecological/nuclear reframe does not erase earlier negative diagnostics, but neither enters the current five-result scientific spine.
 
 ## Programme routing
 
