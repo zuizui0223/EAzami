@@ -1,0 +1,24 @@
+name: Validate East Asia independent nuclear audit v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/validate_east_asia_independent_nuclear_evidence_audit_v1.py"
+      - "data/evidence/east_asia_independent_nuclear_evidence_audit_v1.csv"
+      - "docs/chapter2/EAST_ASIA_INDEPENDENT_NUCLEAR_EVIDENCE_AUDIT_V1.md"
+      - ".github/workflows/validate-east-asia-independent-nuclear-audit-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate audit ledger and claim boundaries
+        run: python analysis/validate_east_asia_independent_nuclear_evidence_audit_v1.py
