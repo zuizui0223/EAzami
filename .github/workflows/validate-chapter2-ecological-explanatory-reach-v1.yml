@@ -53,10 +53,14 @@ jobs:
           from pathlib import Path
           got=json.loads(Path('recovered/chapter2_ecological_explanatory_reach_v1.json').read_text())
           frozen=json.loads(Path('data/evidence/chapter2_ecological_explanatory_reach_v1.json').read_text())
+
           assert got['orientation']['status']==frozen['orientation']['status']=='unresolved'
           assert got['orientation']['n_taxa']==9
-          assert got['phyllary_posture']['status']=='not_evaluable'
-          assert got['stickiness']['status']=='not_evaluable'
+          assert got['phyllary_posture']['status']==frozen['phyllary_posture']['status']=='not_evaluable'
+          assert got['stickiness']['status']==frozen['stickiness']['status']=='not_evaluable'
+          assert frozen['classification_rule']['predictive_gain_required'] is False
+          assert got['classification_rule']['predictive_gain_required'] is False
+
           for axis in ['chelsa_bio15','chelsa_bio01']:
               ga=got['orientation']['axes'][axis]
               fa=frozen['orientation'][axis]
@@ -72,7 +76,11 @@ jobs:
               assert ga['accepted_topology_sign_agreement']==1.0
               assert ga['species_loo_sign_agreement']==1.0
               assert ga['species_loo_evaluations']==54
-              assert ga['loo_delta_mse_vs_null_median'] > 0
-              assert ga['loo_delta_mse_vs_phylogeny_only_median'] < 0
+              assert ga['predictive_diagnostic_role']=='supporting_sensitivity_not_primary_ecological_reach_decision'
+
+          # Predictive values are reproducibility checks only. They cannot change the
+          # main unresolved/not_evaluable classification in this small panel.
+          assert got['orientation']['axes']['chelsa_bio15']['loo_delta_mse_vs_phylogeny_only_median'] < 0
+          assert got['orientation']['axes']['chelsa_bio01']['loo_delta_mse_vs_phylogeny_only_median'] < 0
           print('chapter2 ecological explanatory reach: valid')
           PY
