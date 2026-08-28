@@ -6,6 +6,9 @@ on:
       - "analysis/summarize_chapter2_ecological_explanatory_reach_v1.py"
       - "data/evidence/chapter2_ecological_explanatory_reach_v1.json"
       - "data/evidence/chapter2_core_result_recovery_v1.csv"
+      - "docs/chapter2/MANUSCRIPT_JEB_V4.md"
+      - "docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V4.md"
+      - "docs/chapter2/JEB_SUPPORTING_INFORMATION_V2.md"
       - ".github/workflows/validate-chapter2-ecological-explanatory-reach-v1.yml"
   workflow_dispatch:
 
@@ -57,11 +60,19 @@ jobs:
           for axis in ['chelsa_bio15','chelsa_bio01']:
               ga=got['orientation']['axes'][axis]
               fa=frozen['orientation'][axis]
-              for key in ['beta_D_minus_U_sd_range','p_range','loo_delta_mse_range']:
-                  assert len(ga[key])==len(fa[key])
-                  assert all(abs(a-b)<1e-10 for a,b in zip(ga[key],fa[key])), (axis,key,ga[key],fa[key])
+              for generated_key,frozen_key in [
+                  ('beta_D_minus_U_sd_range','beta_D_minus_U_sd_range'),
+                  ('p_range','p_range'),
+                  ('loo_delta_mse_vs_null_range','loo_delta_mse_vs_null_range'),
+                  ('loo_delta_mse_vs_phylogeny_only_range','loo_delta_mse_vs_phylogeny_only_range'),
+              ]:
+                  gv=ga[generated_key]; fv=fa[frozen_key]
+                  assert len(gv)==len(fv)
+                  assert all(abs(a-b)<1e-10 for a,b in zip(gv,fv)), (axis,generated_key,gv,fv)
               assert ga['accepted_topology_sign_agreement']==1.0
               assert ga['species_loo_sign_agreement']==1.0
               assert ga['species_loo_evaluations']==54
+              assert ga['loo_delta_mse_vs_null_median'] > 0
+              assert ga['loo_delta_mse_vs_phylogeny_only_median'] < 0
           print('chapter2 ecological explanatory reach: valid')
           PY
