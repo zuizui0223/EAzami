@@ -1,113 +1,89 @@
-# Chapter 2 — standalone diversity depth
+# Chapter 2 — standalone diversity depth and ecological explanatory reach
 
 ## Active contract (2026-08-28)
 
-The active paper asks how many state changes are minimally required in traits forming configurations within the dominant young radiation, what topology-only relative lineage depths remain admissible, and which named placements are identifiable. It starts from EAzami-owned authority/literature/specimen/public-image data rather than an Azami observational handoff.
+The active paper asks three linked empirical questions using an EAzami-owned evidence base:
 
-- canonical design: `DIVERSITY_DEPTH_STANDALONE_V1.md`;
+1. how many state changes are minimally required in constituent capitulum traits;
+2. at what topology-only relative lineage depth and on which named edges those minimum histories remain admissible;
+3. how far existing ecological data explain present trait states after accounting for phylogeny.
+
+The resulting sequence is:
+
+**minimum change count → relative event depth / placement resolution → ecological explanatory reach → explicit Chapter 3 data boundary**.
+
+### Canonical active files
+
+- design: `DIVERSITY_DEPTH_STANDALONE_V1.md`;
 - compressed result recovery: `CHAPTER2_CORE_RESULT_RECOVERY_V1.md`;
-- machine contract: `../../data/evidence/chapter2_diversity_depth_contract_v1.json`;
 - machine result ledger: `../../data/evidence/chapter2_core_result_recovery_v1.csv`;
-- relative lineage-depth contract/result: `RELATIVE_EVENT_DEPTH_CONTRACT_V1.md` and `../../data/evidence/japan38_relative_event_depth_v1.json`;
-- certainty/unknown/negative split: `CHAPTER2_RESOLUTION_AWARE_EVIDENCE_SPLIT_V1.md` and `../../data/evidence/chapter2_resolution_classification_v1.csv`;
-- complete meta-analysis/simulation audit: `META_SIM_DISPOSITION_V1.md` and `../../data/evidence/meta_simulation_resolution_audit_v1.csv`;
-- 17-item inventory: `../../data/evidence/chapter2_diversity_depth_inventory_v1.csv`;
-- native registry: **ADMITTED_EAZAMI_NATIVE_VALUES** (45 records; 35 scalar; 10 range-only);
-- scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_CORE**;
-- submission gate: **HOLD_JEB_PACKAGE_REBUILD_ONLY**;
-- Chapter 3 own RAD-seq/phenotype is a prospective falsification bridge, not a Chapter 2 completion dependency.
+- relative lineage-depth: `RELATIVE_EVENT_DEPTH_CONTRACT_V1.md` and `../../data/evidence/japan38_relative_event_depth_v1.json`;
+- ecological reach: `ECOLOGICAL_EXPLANATORY_REACH_V1.md` and `../../data/evidence/chapter2_ecological_explanatory_reach_v1.json`;
+- active manuscript: `MANUSCRIPT_JEB_V4.md`;
+- active figure map: `JEB_QUESTION_RESULT_FIGURE_MAP_V4.md`;
+- active Supporting Information: `JEB_SUPPORTING_INFORMATION_V2.md`;
+- Chapter 3 bridge: `CHAPTER2_TO_CHAPTER3_RADSEQ_BRIDGE_V1.md` and `../../data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv`.
 
-The JEB V3 files below are a frozen audit package. `MANUSCRIPT_JEB_V4.md` is the active standalone submission draft.
+Scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_AND_BOUNDED_ECOLOGICAL_REACH**.
 
-Completed continuous, niche and cytotype diagnostics remain frozen as Supporting Information boundaries. They are not additional main-text questions and cannot replace the five-group result selection.
+Submission status: **HOLD_JEB_PACKAGE_REBUILD_ONLY**.
+
+Chapter 3 own RAD-seq, same-individual phenotype and field experiments are prospective falsification/mechanism layers, not Chapter 2 completion dependencies.
 
 ## Active conclusion
 
-> **A dominant young radiation contains multiple capitulum configurations and each of exactly three completed discrete traits requires multiple minimum changes, while orientation, phyllary posture and stickiness have distinct count-depth-edge resolution profiles.**
+> **A dominant young radiation contains multiple capitulum configurations and each of three constituent traits requires multiple minimum changes, but historical resolution and ecological explanatory reach are asymmetric among traits. Orientation has a stable climate direction that does not improve prediction beyond phylogeny-only, whereas phyllary posture and stickiness are not evaluable with the current climate/state overlap.**
 
-The main text now contains five result groups only: radiation/configuration context, three-trait minimum-change counts, event resolution, the shared-localization boundary and species-tip compression. Continuous retention, trait-niche concordance and cytotype results are Supporting Information. A negative diagnostic is not evidence for lability or independent evolution.
+## Main-text result groups
 
-## Active manuscript and Chapter 3 bridge
+The main text still uses five result groups only, but the fifth group is now ecological rather than prospective-only:
 
-- `MANUSCRIPT_JEB_V4.md` — standalone JEB Research Article draft;
-- `JEB_QUESTION_RESULT_FIGURE_MAP_V3.md` — active question/result/display contract;
-- `CHAPTER2_TO_CHAPTER3_RADSEQ_BRIDGE_V1.md` — inverse-inference design boundary;
-- `../../data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv` — five ranked prospective tests and falsifiers.
+1. 36/38 sampled concepts in the dominant radiation and at least three harmonized orientation × stickiness configurations;
+2. orientation 4–6, phyllary posture 3 and stickiness 5 minimum changes;
+3. trait-specific relative lineage-depth and named-edge resolution;
+4. zero-of-three cross-treatment shared-localization boundary;
+5. ecological explanatory reach: orientation `unresolved`, phyllary posture `not_evaluable`, stickiness `not_evaluable`.
 
-## Frozen legacy submission package (audit only)
+Species-tip compression moves to Supporting Information as a resolution audit. Continuous EAzami-native, colour, cytotype and legacy reconstruction-null diagnostics remain supplementary boundaries.
 
-- `MANUSCRIPT_JEB_V3.md` — double-anonymous JEB Research Article draft;
-- `TIME_AXIS_MAINLINE_V3.md` — legacy time-axis synthesis retained for audit;
-- `JEB_SUBMISSION_TARGET_V1.md` — current format and go/no-go contract;
-- `JEB_QUESTION_RESULT_FIGURE_MAP_V1.md` — question/result/display map;
-- `JEB_FIGURE_CHART_CONTRACT_V1.md` — static-figure construction and QA rules;
-- `figures/` — four main figures in PDF and 300-dpi PNG plus hash manifest;
-- `JEB_SUPPORTING_INFORMATION_V1.md` — supplementary crosswalk;
-- `JEB_TITLE_PAGE_TEMPLATE_V1.md` — separate identifying metadata and declarations;
-- `JEB_COVER_LETTER_TEMPLATE_V1.md` — bounded significance and AI disclosure.
+## Ecological result frozen in the active paper
 
-`MANUSCRIPT_JEB_V1.md` and `MANUSCRIPT_JEB_V2.md` are superseded audit history. They contain the pre-reconstruction-null interpretation and are not submission text.
+Orientation primary East-Asian panel: n=9, U=5/D=4, each taxon with at least ten independent thinned environment-complete occurrence records.
 
-## Legacy audit evidence retained outside the active mainline
+- BIO15 D−U: +1.320 to +1.330 SD; P=0.05054–0.05239;
+- BIO1 D−U: −0.975 to −0.967 SD; P=0.09604–0.09793;
+- accepted-topology sign agreement: 6/6 for both axes;
+- species LOO sign agreement: 54/54 for both axes;
+- held-out ΔMSE vs mean-only null: BIO15 +0.224 to +0.230; BIO1 +0.364 to +0.370;
+- held-out ΔMSE vs phylogeny-only: BIO15 −0.108 to −0.102; BIO1 −0.199 to −0.192.
 
-### Present integration
+Thus orientation carries ecological information relative to a naive null, but current ancestry already predicts the climate axes better than adding orientation. The result remains `unresolved`.
 
-- >=5: within 0.164502 vs among 0.088475;
-- >=2: within 0.157688 vs among 0.083662;
-- within/among matrix similarity rho=0.3663.
+Phyllary posture and stickiness are `not_evaluable` at the same climate gate because each overlaps only two resolved taxa and neither overlap is state-diverse.
 
-### Continuous state structure
+## Frozen historical results
 
-- original family: 0/8 corrected results at both thresholds;
-- JPN29 excluded: eight not-supported units at >=2;
-- JPN29 excluded high depth: `not_evaluable` because only five concepts remain.
+- orientation: 20 resolved concepts; ML=6; UFBoot=4–6; median depth envelope 0.795–0.994; JPN36 forced fraction=0.227;
+- phyllary posture: 10 resolved; exactly 3 changes; median depth envelope 0.695–1.000; JPN36=0.728;
+- stickiness: 13 resolved; exactly 5 changes; median depth envelope 0.937–0.954; JPN06=0.995; JPN36=0.707; nine-tip internal edge=0.681;
+- no trait pair has a cross-treatment-robust common transition-localization pattern.
 
-### Discrete minimum-change counts
-
-- orientation: 4–6 minimum changes;
-- phyllary posture: exactly 3;
-- stickiness: exactly 5.
-
-The accepted run-329 ensemble gives JPN36 forced-edge fractions of 0.227 for orientation and 0.728 for phyllary posture. After the frozen JPN24 extension, stickiness is more strongly resolved: JPN06=0.995 and JPN36=0.707. Exact relative lineage-depth envelopes further separate a tightly constrained stickiness history from broader orientation and phyllary alternatives. The older 0.201/0.754/0.67/0.40 fractions reproduce only on superseded run 328 and remain audit history.
-
-### Reconstruction-aware continuous null
-
-- original panel: observed rho=0.408006, P=0.3504, **FAIL**;
-- fixed JPN29 exclusion: observed rho=0.472278, P=0.1959, **FAIL**.
-
-The old branch-permutation P=0.00010 is not valid headline evidence. The 1,000/1,000 positive equal-branch signs are diagnostic only and cannot rescue either null failure.
-
-### Discrete transition overlap
-
-Equal-branch medians are -0.0594, -0.3870 and 0.1840 for orientation–phyllary, orientation–stickiness and phyllary–stickiness. No pair is consistently positive across branch-length-aware and topology-only layers.
+The old 0.201/0.754/0.67/0.40 fractions reproduce only on superseded run 32845725038 and remain audit history.
 
 ## Data boundaries
 
 - branch lengths are substitutions/site, not absolute time;
-- continuous images are global species proxies, not sequenced-voucher phenotypes;
-- JPN29 remains identity unresolved for a Japanese trait join;
-- JPN20 is not forcibly collapsed;
-- parsimony counts are minimum-change lower bounds, not convergence counts;
-- candidate continuous involucre/armature endpoints remain coverage-only.
-
-## Machine-readable sources
-
-- `../../data/evidence/chapter2_jeb_main_result_table_v1.csv`
-- `../../data/evidence/chapter2_claim_registry_v1.csv`
-- `../../data/evidence/chapter2_analysis_disposition_v1.csv`
-- `../../data/evidence/chapter2_resolution_classification_v1.csv`
-- `../../data/evidence/meta_simulation_resolution_audit_v1.csv`
-- `../../data/evidence/chapter2_time_axis_compute/japan38_branch_change_reconstruction_null_v1.json`
-- `../../data/evidence/chapter2_provenance_sensitivity_compute/japan38_branch_change_provenance_sensitivity_v1.json`
-- `../../data/evidence/jpn24_stickiness_extension_parsimony_v1.json`
-- `../../data/evidence/chapter2_relative_event_depth_contract_v1.json`
-- `../../data/evidence/japan38_relative_event_depth_v1.json`
-- `../../data/evidence/japan38_relative_event_depth_summary_v1.csv`
-- `../../data/evidence/japan38_multitrait_history_summary_v1.json` — superseded transition-localization provenance only
+- minimum changes are lower bounds, not independent-origin or convergence counts;
+- relative lineage-depth is topology-only, not event age;
+- ecological correspondence uses present taxon niche centroids, not ancestral niches;
+- raw ecological UFBoot sign rate is `not_evaluable` because those raw trees were not retained in the accepted ecological artifact bundle;
+- `not_evaluable` never means no ecological relationship;
+- present climate correspondence is not adaptation, historical event matching or causal selection.
 
 ## Programme routing
 
-- present-state covariance simulations -> Chapter 1 Supplement/thesis methods;
-- Japan-wide own RAD-seq plus same-individual phenotype/cytotype -> Chapter 3 history discrimination;
-- trait-function evidence and JPN36/JPN15 field protocols -> Chapter 3 causal layer;
-- absolute transition timing -> STOP until calibration becomes defensible.
+- species-tip colour compression → Supporting Information resolution audit;
+- present-state covariance simulations → Chapter 1 Supplement/thesis methods;
+- Japan-wide own RAD-seq plus same-individual phenotype/cytotype → Chapter 3 history discrimination;
+- orientation/phyllary/stickiness mechanism and fitness tests → Chapter 3 causal layer;
+- absolute transition timing → STOP until calibration becomes defensible.
