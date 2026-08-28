@@ -1,7 +1,9 @@
-# Chapter 2 JEB submission target v2
+# Chapter 2 JEB submission target v3
 
-Status date: 2026-08-27
-Target: **Journal of Evolutionary Biology, Research Article**
+Status date: 2026-08-28
+Primary target: **Journal of Evolutionary Biology (JEB), Research Article**
+Fallback target: **Evolutionary Journal of the Linnean Society (EJLS), Research Article**
+Stretch target: **Evolution**, only after a material increase in generality or independent validation
 
 ## Active title and question
 
@@ -9,35 +11,81 @@ Target: **Journal of Evolutionary Biology, Research Article**
 
 The general question is whether a module inferred from contemporary covariance persists when the same phenotype is projected onto phylogenetic history.
 
-## Why JEB remains the correct first target after the null failure
+## Why JEB is the correct first target
 
-JEB explicitly accepts rigorous negative results when they provide broadly informative evolutionary insight. The paper now offers a stronger methodological and biological distinction than the superseded positive-remodelling draft:
+JEB explicitly prioritizes rigorous studies that advance understanding of evolutionary process, asks for insights that can generalize beyond one taxon, and explicitly welcomes robust negative results when they provide new evolutionary insight. This manuscript now fits that contract better after the reconstruction-aware null overturned the earlier positive-remodelling interpretation.
 
-- present-day registered-module integration is detectable but differs within and among taxa;
-- continuous state structure is not robustly detected in the sparse exact-concept panel;
-- several independent state ontologies require repeated minimum changes;
-- stable recurrence counts can coexist with uncertain edge placement;
-- apparent continuous shared change is explained by common reconstruction geometry;
-- discrete shared localization is topology and branch-length sensitive.
+The contribution is not that *Cirsium* produced a null result. The paper separates evolutionary estimands that are often compressed into one claim:
 
-The contribution is not that *Cirsium* has a null result. It is that present integration, state structure, recurrence, edge identifiability and shared localization are separate evolutionary estimands and can disagree within one phenotype.
+1. present-day phenotypic integration;
+2. continuous phylogenetic state structure;
+3. minimum recurrence of independently defined discrete states;
+4. transition or change localization on branches.
 
-## Current journal contract
+These estimands disagree within the same complex phenotype. Present-day registered-module integration is detectable and scale dependent, but the available continuous and discrete histories do not support one persistent historical capitulum module.
 
-The official JEB Author Guidelines checked on 2026-08-27 require:
+This is a direct evolutionary-process question spanning morphology, phylogenetics and macroevolution, all within JEB scope.
+
+## Current scientific spine
+
+- present registered-module contrast is stronger within taxa than among taxa;
+- no continuous unit shows family-corrected phylogenetic state structure in the sparse exact-concept panel;
+- orientation, phyllary posture and stickiness each require repeated minimum changes;
+- recurrence counts can be stable even when responsible edges are weakly identifiable;
+- apparent positive coupling among reconstructed continuous changes does not exceed the reconstruction-aware tip-label null;
+- a fixed pre-outcome JPN29 exclusion gives the same FAIL decision;
+- discrete transition overlap depends on topology and branch-length treatment.
+
+The active claim ceiling is:
+
+> **Present-day capitulum integration is scale dependent, but the available continuous and discrete histories do not support one persistent historical capitulum module.**
+
+## Article type
+
+Use **Research Article**, not Short Communication.
+
+The current main text is below the 4,000-word Short Communication ceiling, but the paper contains four distinct evolutionary estimands, several claim ceilings, topology/reconstruction diagnostics and a substantial Supporting Information package. Retaining Research Article status avoids compressing the methodological distinction that makes the negative result broadly informative.
+
+## Current JEB contract
+
+The official JEB Author Guidelines checked on 2026-08-28 require or allow:
 
 - Research Article main text <=7,500 words;
 - abstract <=250 words;
 - 4–10 keywords;
-- double-anonymous main manuscript;
-- a separate title page containing authors, affiliations, correspondence, acknowledgements, funding, conflicts, data availability and ethics statements;
-- line numbering in the main manuscript and figures placed near first mention;
-- figure alternative text and publication-quality files;
-- Supporting Information supplied at submission;
-- disclosure of generative-AI assistance in the cover letter and Methods or Acknowledgements;
-- public raw-data archiving no later than revision, with analysis scripts and derived artifacts preferably public.
+- double-anonymous review;
+- separate title page with author identities and required declarations;
+- a single line-numbered main-text file with figures/tables near first mention for initial submission;
+- AI use disclosed in the cover letter and Methods or Acknowledgements;
+- Supporting Information submitted together with the manuscript;
+- raw data publicly archived by revision, with scripts and derived artefacts preferably archived as well.
 
 Official source: https://academic.oup.com/jeb/pages/author-guidelines
+
+## Submission ladder
+
+### 1. Journal of Evolutionary Biology — submit first
+
+Submit the present bounded paper as a Research Article without waiting for population genomics, field manipulation or absolute-time calibration.
+
+The cover letter should emphasize the **estimand mismatch** rather than repeat the manuscript summary: contemporary integration, state conservatism, recurrence and branch localization are empirically distinct and can disagree.
+
+### 2. Evolutionary Journal of the Linnean Society — default fallback
+
+If JEB rejects on breadth or sample-depth grounds, EJLS is the preferred next destination. Its current scope explicitly welcomes evolutionary studies using advanced statistical analyses and novel morphometric/morphological investigations across micro- to macroevolutionary scales. The current *Cirsium* paper fits that organismal-evolution and morphology remit without needing to inflate claims.
+
+Transfer strategy: preserve the same scientific claim ceiling; do not add function/adaptation language merely to reposition the paper.
+
+### 3. Evolution — stretch target only after substantive strengthening
+
+Do **not** submit the current PR #126 manuscript to *Evolution* ahead of JEB. *Evolution* seeks significant original investigations that broadly advance understanding of evolutionary phenomena. The present manuscript is conceptually relevant, but its exact continuous-history panel is sparse and the strongest coordinated-change interpretation fails the reconstruction-aware null.
+
+Reconsider *Evolution* only if at least one of the following materially strengthens generality:
+
+- an independent radiation reproduces the separation between contemporary integration and historical-module persistence;
+- additional exact-concept phenotype recovery substantially expands the continuous phylogenetic panel without relaxing identity gates;
+- a general reconstruction-aware test of historical module persistence is formalized and validated beyond this single dataset;
+- population/genomic evidence independently resolves histories for multiple repeated states and creates a broader evolutionary inference rather than a taxon-specific case.
 
 ## Go/no-go gate
 
@@ -59,9 +107,9 @@ Official source: https://academic.oup.com/jeb/pages/author-guidelines
 - [x] complete Moreyra author metadata verified against PubMed DOI metadata;
 - [ ] title-page author/funding/correspondence placeholders completed by the authors;
 - [ ] public archival identifier inserted or repository plan accepted for initial submission;
-- [x] anonymous manuscript, title-page template, Supporting Information and cover-letter template rendered and audited;
+- [x] anonymous manuscript, title-page template, Supporting Information and cover-letter template rendered and audited.
 
-## Claim ceiling
+## Claim boundary
 
 The submission may claim:
 
@@ -69,7 +117,7 @@ The submission may claim:
 
 It may not claim:
 
-- coordinated evolutionary remodeling;
+- coordinated evolutionary remodelling;
 - zero phylogenetic signal or evolutionary independence;
 - adaptive radiation or adaptive convergence;
 - independent origins from parsimony counts;
