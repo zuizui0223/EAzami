@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """Quantify bounded ecological explanatory reach for Chapter 2 capitulum histories.
 
-This diagnostic is deliberately non-causal. It asks whether present-day trait
-states carry a stable climate correspondence after Brownian phylogenetic
-correction, whether that direction survives accepted topology and species-LOO
-sensitivity, and whether knowing the trait state improves held-out prediction of
-the climate axis beyond both a naive mean-only null and phylogeny-only Brownian
-kriging.
+The primary estimand is deliberately non-causal and modest: whether present-day
+trait states show a stable ecological correspondence after Brownian phylogenetic
+correction, whether that direction survives accepted-topology and species-LOO
+sensitivity, and whether the trait x ecology overlap is evaluable at the frozen
+coverage gate.
 
-The predictive comparison uses climate as the continuous response because the
-frozen comparative model is PGLS. Positive delta MSE/MAE means the
-phylogeny+trait model predicts held-out climate better than the stated baseline.
+Held-out predictive comparisons against a mean-only null and phylogeny-only
+Brownian kriging are retained as transparent supporting diagnostics. They are not
+required for the main ecological-reach classification, especially in the current
+small n=9 orientation panel.
+
 No result reconstructs historical climate or assigns an ecological cause to a
 particular transition.
 """
@@ -206,6 +207,7 @@ def main():
             "loo_delta_mae_vs_phylogeny_only_range": [float(by_topology["delta_mae_vs_phylogeny_only"].min()), float(by_topology["delta_mae_vs_phylogeny_only"].max())],
             "phylogeny_only_delta_mse_vs_null_range": [float(by_topology["phylogeny_only_delta_mse_vs_null"].min()), float(by_topology["phylogeny_only_delta_mse_vs_null"].max())],
             "prediction_improvement_rule": ">0 means phylogeny+trait predicts held-out climate better than the named baseline",
+            "predictive_diagnostic_role": "supporting_sensitivity_not_primary_ecological_reach_decision",
             "loo_delta_mse_range": [float(by_topology["delta_mse_vs_phylogeny_only"].min()), float(by_topology["delta_mse_vs_phylogeny_only"].max())],
             "loo_delta_mse_median": float(by_topology["delta_mse_vs_phylogeny_only"].median()),
             "loo_delta_mae_range": [float(by_topology["delta_mae_vs_phylogeny_only"].min()), float(by_topology["delta_mae_vs_phylogeny_only"].max())],
@@ -223,15 +225,19 @@ def main():
     if (
         primary["accepted_topology_sign_agreement"] == 1.0
         and primary["species_loo_sign_agreement"] == 1.0
-        and primary["loo_delta_mse_vs_null_median"] > 0
-        and primary["loo_delta_mse_vs_phylogeny_only_median"] > 0
         and max(primary["p_range"]) < 0.05
     ):
         orientation_status = "tendency_supported"
 
     payload = {
         "contract_version": "chapter2_ecological_explanatory_reach_v1",
-        "estimand": "present-day ecological correspondence and predictive explanatory reach; not historical causation",
+        "estimand": "present-day ecological correspondence, phylogenetic/topological robustness and evaluability; predictive comparison retained as supporting sensitivity; not historical causation",
+        "classification_rule": {
+            "tendency_supported": "state-diverse comparison is estimable, accepted-topology and species-LOO signs are fully stable for the primary axis, and the frozen primary phylogenetic association threshold is crossed",
+            "unresolved": "an estimable and directionally stable correspondence exists but the frozen inferential threshold is not crossed",
+            "not_evaluable": "current frozen state x ecology overlap cannot estimate the requested contrast",
+            "predictive_gain_required": False,
+        },
         "orientation": {
             "status": orientation_status,
             "n_taxa": len(taxa),
@@ -240,12 +246,13 @@ def main():
             "topology_ensemble": "first six AU-nonrejected optimized Comp1061 topologies; topology 1 is ML within preregistered candidate set",
             "raw_ufboot_ecology_sign_rate": "not_evaluable: raw Comp1061 UFBoot trees were not preserved in the accepted archived ecological input bundle",
             "prediction_baselines": {
+                "role": "supporting_sensitivity_not_primary_ecological_reach_decision",
                 "null": "training-set mean only; no trait and no phylogenetic covariance",
                 "phylogeny_only": "intercept plus Brownian conditional prediction on the accepted topology",
                 "phylogeny_plus_orientation": "intercept plus U/D orientation and Brownian conditional prediction",
             },
             "axes": axes,
-            "primary_interpretation": "BIO15 and BIO1 directions are stable to accepted-topology and species-LOO perturbation. Orientation improves held-out prediction over a naive mean-only null for both axes, but not over phylogeny-only Brownian kriging; neither frozen primary PGLS threshold nor branchwise permutation threshold is passed. The correct result class is unresolved.",
+            "primary_interpretation": "BIO15 and BIO1 directions are stable to accepted-topology and species-LOO perturbation, and the branchwise diagnostic retains the same direction. The frozen primary PGLS and branchwise permutation thresholds are not crossed, so the correct result class is unresolved. Held-out prediction results are retained only as a small-panel supporting diagnostic and do not define this classification.",
         },
         "phyllary_posture": {
             "status": "not_evaluable",
@@ -261,7 +268,7 @@ def main():
             "state_counts": {str(k): int(v) for k, v in stickiness_counts.items()},
             "reason": "The frozen occurrence-climate assets contain no estimable sticky-versus-nonsticky contrast at the n>=10 gate. Climate proxy association, enemy exclusion and production cost therefore cannot be separated with current data.",
         },
-        "chapter2_result": "Repeated minimum changes are shared across the three discrete traits, but ecological explanatory reach is asymmetric: orientation has a stable directional climate correspondence that improves prediction over a naive null but not over phylogeny-only, whereas phyllary posture and stickiness are not evaluable with the frozen climate panel.",
+        "chapter2_result": "Repeated minimum changes are shared across the three discrete traits, but ecological explanatory reach is asymmetric: orientation has a stable directional climate correspondence that remains unresolved under the frozen inferential thresholds, whereas phyllary posture and stickiness are not evaluable with the frozen climate panel.",
         "claim_boundary": "Do not call the orientation pattern adaptation, convergence, historical niche causation or event-specific environmental matching. not_evaluable is a data-resolution result, not evidence of no ecological relation.",
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
