@@ -1,0 +1,859 @@
+{
+  "contract_version": "chapter2_eazami_native_continuous_history_diagnostic_v1",
+  "status_date": "2026-08-28",
+  "design_contract": "chapter2_eazami_native_continuous_history_design_v1",
+  "design_sha256": "c1223126789ca2409d978713732b2f5bcf1e58ac0f608e0328217335f0fb799f",
+  "registry_sha256": "a8f472d57040522e0fba755e0153f64b389352b0d6819ffc8b018dd00c1ddb39",
+  "au_trees_sha256": "ba18f5509766d72845557dd6a654321e1cf52dd0d45c69add650aa01ddaa0d33",
+  "taxa": [
+    "Cirsium brevicaule",
+    "Cirsium irumtiense",
+    "Cirsium japonicum var. albescens",
+    "Cirsium japonicum var. australe",
+    "Cirsium kawakamii",
+    "Cirsium pengii",
+    "Cirsium tatakaense"
+  ],
+  "traits": [
+    "measured_capitulum_length_cm",
+    "measured_capitulum_width_cm",
+    "phyllary_length_cm",
+    "phyllary_protrusion_mm"
+  ],
+  "topology_count": 6,
+  "exact_permutations_per_trait_topology": 5040,
+  "by_topology": [
+    {
+      "topology": 1,
+      "traits": [
+        {
+          "trait_id": "measured_capitulum_length_cm",
+          "n_taxa": 7,
+          "value_min": 2.64,
+          "value_max": 4.82,
+          "rho_patristic_vs_absolute_trait_difference": -0.135064935065,
+          "exact_positive_tail_p": 0.705555555556,
+          "exact_negative_tail_p": 0.298015873016,
+          "exact_two_sided_p": 0.493253968254,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": -0.192857142857,
+            "Cirsium_irumtiense": -0.0928571428571,
+            "Cirsium_japonicum_var_albescens": -0.271428571429,
+            "Cirsium_japonicum_var_australe": -0.117857142857,
+            "Cirsium_kawakamii": -0.225,
+            "Cirsium_pengii": 0.235714285714,
+            "Cirsium_tatakaense": -0.325
+          },
+          "loo_rho_min": -0.325,
+          "loo_rho_max": 0.235714285714,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 1.87663786189,
+            "median_root_to_tip_substitutions_per_site": 0.0080106044,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.776984126984
+        },
+        {
+          "trait_id": "measured_capitulum_width_cm",
+          "n_taxa": 7,
+          "value_min": 1.15,
+          "value_max": 2.17,
+          "rho_patristic_vs_absolute_trait_difference": 0.142857142857,
+          "exact_positive_tail_p": 0.234523809524,
+          "exact_negative_tail_p": 0.767857142857,
+          "exact_two_sided_p": 0.536706349206,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": 0.075,
+            "Cirsium_irumtiense": 0.0214285714286,
+            "Cirsium_japonicum_var_albescens": -0.0714285714286,
+            "Cirsium_japonicum_var_australe": 0.0464285714286,
+            "Cirsium_kawakamii": 0.05,
+            "Cirsium_pengii": 0.782142857143,
+            "Cirsium_tatakaense": 0.128571428571
+          },
+          "loo_rho_min": -0.0714285714286,
+          "loo_rho_max": 0.782142857143,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 1.99893238339,
+            "median_root_to_tip_substitutions_per_site": 0.0080106044,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.469047619048
+        },
+        {
+          "trait_id": "phyllary_length_cm",
+          "n_taxa": 7,
+          "value_min": 0.78,
+          "value_max": 1.8,
+          "rho_patristic_vs_absolute_trait_difference": -0.177922077922,
+          "exact_positive_tail_p": 0.776984126984,
+          "exact_negative_tail_p": 0.225992063492,
+          "exact_two_sided_p": 0.38253968254,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": -0.264285714286,
+            "Cirsium_irumtiense": -0.210714285714,
+            "Cirsium_japonicum_var_albescens": -0.603571428571,
+            "Cirsium_japonicum_var_australe": -0.135714285714,
+            "Cirsium_kawakamii": 0.3,
+            "Cirsium_pengii": -0.214285714286,
+            "Cirsium_tatakaense": -0.235714285714
+          },
+          "loo_rho_min": -0.603571428571,
+          "loo_rho_max": 0.3,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 2.87841687708,
+            "median_root_to_tip_substitutions_per_site": 0.0080106044,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.776984126984
+        },
+        {
+          "trait_id": "phyllary_protrusion_mm",
+          "n_taxa": 7,
+          "value_min": 0.51,
+          "value_max": 5.54,
+          "rho_patristic_vs_absolute_trait_difference": 0.363222948672,
+          "exact_positive_tail_p": 0.0672619047619,
+          "exact_negative_tail_p": 0.933531746032,
+          "exact_two_sided_p": 0.069246031746,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": 0.503571428571,
+            "Cirsium_irumtiense": 0.540251311683,
+            "Cirsium_japonicum_var_albescens": 0.282142857143,
+            "Cirsium_japonicum_var_australe": 0.546428571429,
+            "Cirsium_kawakamii": 0.118068167454,
+            "Cirsium_pengii": 0.175313339553,
+            "Cirsium_tatakaense": 0.160714285714
+          },
+          "loo_rho_min": 0.118068167454,
+          "loo_rho_max": 0.546428571429,
+          "loo_all_positive": true,
+          "pagel_lambda": {
+            "lambda_mle": 1.0,
+            "delta_loglik_vs_lambda0": 0.609806710143,
+            "delta_loglik_vs_lambda1": 0.0,
+            "median_root_to_tip_substitutions_per_site": 0.0080106044,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.269047619048
+        }
+      ]
+    },
+    {
+      "topology": 2,
+      "traits": [
+        {
+          "trait_id": "measured_capitulum_length_cm",
+          "n_taxa": 7,
+          "value_min": 2.64,
+          "value_max": 4.82,
+          "rho_patristic_vs_absolute_trait_difference": -0.135064935065,
+          "exact_positive_tail_p": 0.705555555556,
+          "exact_negative_tail_p": 0.298015873016,
+          "exact_two_sided_p": 0.493253968254,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": -0.192857142857,
+            "Cirsium_irumtiense": -0.0928571428571,
+            "Cirsium_japonicum_var_albescens": -0.271428571429,
+            "Cirsium_japonicum_var_australe": -0.117857142857,
+            "Cirsium_kawakamii": -0.225,
+            "Cirsium_pengii": 0.235714285714,
+            "Cirsium_tatakaense": -0.325
+          },
+          "loo_rho_min": -0.325,
+          "loo_rho_max": 0.235714285714,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 1.87680592652,
+            "median_root_to_tip_substitutions_per_site": 0.0080088759,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.776984126984
+        },
+        {
+          "trait_id": "measured_capitulum_width_cm",
+          "n_taxa": 7,
+          "value_min": 1.15,
+          "value_max": 2.17,
+          "rho_patristic_vs_absolute_trait_difference": 0.142857142857,
+          "exact_positive_tail_p": 0.234523809524,
+          "exact_negative_tail_p": 0.767857142857,
+          "exact_two_sided_p": 0.536706349206,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": 0.075,
+            "Cirsium_irumtiense": 0.0214285714286,
+            "Cirsium_japonicum_var_albescens": -0.0714285714286,
+            "Cirsium_japonicum_var_australe": 0.0464285714286,
+            "Cirsium_kawakamii": 0.05,
+            "Cirsium_pengii": 0.782142857143,
+            "Cirsium_tatakaense": 0.128571428571
+          },
+          "loo_rho_min": -0.0714285714286,
+          "loo_rho_max": 0.782142857143,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 1.99918069677,
+            "median_root_to_tip_substitutions_per_site": 0.0080088759,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.469047619048
+        },
+        {
+          "trait_id": "phyllary_length_cm",
+          "n_taxa": 7,
+          "value_min": 0.78,
+          "value_max": 1.8,
+          "rho_patristic_vs_absolute_trait_difference": -0.177922077922,
+          "exact_positive_tail_p": 0.776984126984,
+          "exact_negative_tail_p": 0.225992063492,
+          "exact_two_sided_p": 0.38253968254,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": -0.264285714286,
+            "Cirsium_irumtiense": -0.210714285714,
+            "Cirsium_japonicum_var_albescens": -0.603571428571,
+            "Cirsium_japonicum_var_australe": -0.135714285714,
+            "Cirsium_kawakamii": 0.3,
+            "Cirsium_pengii": -0.214285714286,
+            "Cirsium_tatakaense": -0.235714285714
+          },
+          "loo_rho_min": -0.603571428571,
+          "loo_rho_max": 0.3,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 2.87866573471,
+            "median_root_to_tip_substitutions_per_site": 0.0080088759,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.776984126984
+        },
+        {
+          "trait_id": "phyllary_protrusion_mm",
+          "n_taxa": 7,
+          "value_min": 0.51,
+          "value_max": 5.54,
+          "rho_patristic_vs_absolute_trait_difference": 0.363222948672,
+          "exact_positive_tail_p": 0.0672619047619,
+          "exact_negative_tail_p": 0.933531746032,
+          "exact_two_sided_p": 0.069246031746,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": 0.503571428571,
+            "Cirsium_irumtiense": 0.540251311683,
+            "Cirsium_japonicum_var_albescens": 0.282142857143,
+            "Cirsium_japonicum_var_australe": 0.546428571429,
+            "Cirsium_kawakamii": 0.118068167454,
+            "Cirsium_pengii": 0.175313339553,
+            "Cirsium_tatakaense": 0.160714285714
+          },
+          "loo_rho_min": 0.118068167454,
+          "loo_rho_max": 0.546428571429,
+          "loo_all_positive": true,
+          "pagel_lambda": {
+            "lambda_mle": 1.0,
+            "delta_loglik_vs_lambda0": 0.609909488621,
+            "delta_loglik_vs_lambda1": 0.0,
+            "median_root_to_tip_substitutions_per_site": 0.0080088759,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.269047619048
+        }
+      ]
+    },
+    {
+      "topology": 3,
+      "traits": [
+        {
+          "trait_id": "measured_capitulum_length_cm",
+          "n_taxa": 7,
+          "value_min": 2.64,
+          "value_max": 4.82,
+          "rho_patristic_vs_absolute_trait_difference": -0.135064935065,
+          "exact_positive_tail_p": 0.705555555556,
+          "exact_negative_tail_p": 0.298015873016,
+          "exact_two_sided_p": 0.493253968254,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": -0.192857142857,
+            "Cirsium_irumtiense": -0.0928571428571,
+            "Cirsium_japonicum_var_albescens": -0.271428571429,
+            "Cirsium_japonicum_var_australe": -0.117857142857,
+            "Cirsium_kawakamii": -0.225,
+            "Cirsium_pengii": 0.235714285714,
+            "Cirsium_tatakaense": -0.325
+          },
+          "loo_rho_min": -0.325,
+          "loo_rho_max": 0.235714285714,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 1.87682486654,
+            "median_root_to_tip_substitutions_per_site": 0.0080089245,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.776984126984
+        },
+        {
+          "trait_id": "measured_capitulum_width_cm",
+          "n_taxa": 7,
+          "value_min": 1.15,
+          "value_max": 2.17,
+          "rho_patristic_vs_absolute_trait_difference": 0.142857142857,
+          "exact_positive_tail_p": 0.234523809524,
+          "exact_negative_tail_p": 0.767857142857,
+          "exact_two_sided_p": 0.536706349206,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": 0.075,
+            "Cirsium_irumtiense": 0.0214285714286,
+            "Cirsium_japonicum_var_albescens": -0.0714285714286,
+            "Cirsium_japonicum_var_australe": 0.0464285714286,
+            "Cirsium_kawakamii": 0.05,
+            "Cirsium_pengii": 0.782142857143,
+            "Cirsium_tatakaense": 0.128571428571
+          },
+          "loo_rho_min": -0.0714285714286,
+          "loo_rho_max": 0.782142857143,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 1.99919881772,
+            "median_root_to_tip_substitutions_per_site": 0.0080089245,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.469047619048
+        },
+        {
+          "trait_id": "phyllary_length_cm",
+          "n_taxa": 7,
+          "value_min": 0.78,
+          "value_max": 1.8,
+          "rho_patristic_vs_absolute_trait_difference": -0.177922077922,
+          "exact_positive_tail_p": 0.776984126984,
+          "exact_negative_tail_p": 0.225992063492,
+          "exact_two_sided_p": 0.38253968254,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": -0.264285714286,
+            "Cirsium_irumtiense": -0.210714285714,
+            "Cirsium_japonicum_var_albescens": -0.603571428571,
+            "Cirsium_japonicum_var_australe": -0.135714285714,
+            "Cirsium_kawakamii": 0.3,
+            "Cirsium_pengii": -0.214285714286,
+            "Cirsium_tatakaense": -0.235714285714
+          },
+          "loo_rho_min": -0.603571428571,
+          "loo_rho_max": 0.3,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 2.87867320527,
+            "median_root_to_tip_substitutions_per_site": 0.0080089245,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.776984126984
+        },
+        {
+          "trait_id": "phyllary_protrusion_mm",
+          "n_taxa": 7,
+          "value_min": 0.51,
+          "value_max": 5.54,
+          "rho_patristic_vs_absolute_trait_difference": 0.363222948672,
+          "exact_positive_tail_p": 0.0672619047619,
+          "exact_negative_tail_p": 0.933531746032,
+          "exact_two_sided_p": 0.069246031746,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": 0.503571428571,
+            "Cirsium_irumtiense": 0.540251311683,
+            "Cirsium_japonicum_var_albescens": 0.282142857143,
+            "Cirsium_japonicum_var_australe": 0.546428571429,
+            "Cirsium_kawakamii": 0.118068167454,
+            "Cirsium_pengii": 0.175313339553,
+            "Cirsium_tatakaense": 0.160714285714
+          },
+          "loo_rho_min": 0.118068167454,
+          "loo_rho_max": 0.546428571429,
+          "loo_all_positive": true,
+          "pagel_lambda": {
+            "lambda_mle": 1.0,
+            "delta_loglik_vs_lambda0": 0.609898028054,
+            "delta_loglik_vs_lambda1": 0.0,
+            "median_root_to_tip_substitutions_per_site": 0.0080089245,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.269047619048
+        }
+      ]
+    },
+    {
+      "topology": 4,
+      "traits": [
+        {
+          "trait_id": "measured_capitulum_length_cm",
+          "n_taxa": 7,
+          "value_min": 2.64,
+          "value_max": 4.82,
+          "rho_patristic_vs_absolute_trait_difference": -0.149350649351,
+          "exact_positive_tail_p": 0.754365079365,
+          "exact_negative_tail_p": 0.248412698413,
+          "exact_two_sided_p": 0.425992063492,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": -0.192857142857,
+            "Cirsium_irumtiense": -0.117857142857,
+            "Cirsium_japonicum_var_albescens": -0.271428571429,
+            "Cirsium_japonicum_var_australe": -0.117857142857,
+            "Cirsium_kawakamii": -0.217857142857,
+            "Cirsium_pengii": 0.196428571429,
+            "Cirsium_tatakaense": -0.357142857143
+          },
+          "loo_rho_min": -0.357142857143,
+          "loo_rho_max": 0.196428571429,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 1.86323298721,
+            "median_root_to_tip_substitutions_per_site": 0.0079770587,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.834523809524
+        },
+        {
+          "trait_id": "measured_capitulum_width_cm",
+          "n_taxa": 7,
+          "value_min": 1.15,
+          "value_max": 2.17,
+          "rho_patristic_vs_absolute_trait_difference": 0.12987012987,
+          "exact_positive_tail_p": 0.254563492063,
+          "exact_negative_tail_p": 0.747817460317,
+          "exact_two_sided_p": 0.578373015873,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": 0.075,
+            "Cirsium_irumtiense": -0.00357142857143,
+            "Cirsium_japonicum_var_albescens": -0.0714285714286,
+            "Cirsium_japonicum_var_australe": 0.0464285714286,
+            "Cirsium_kawakamii": 0.0535714285714,
+            "Cirsium_pengii": 0.75,
+            "Cirsium_tatakaense": 0.103571428571
+          },
+          "loo_rho_min": -0.0714285714286,
+          "loo_rho_max": 0.75,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 1.98552908019,
+            "median_root_to_tip_substitutions_per_site": 0.0079770587,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.509126984127
+        },
+        {
+          "trait_id": "phyllary_length_cm",
+          "n_taxa": 7,
+          "value_min": 0.78,
+          "value_max": 1.8,
+          "rho_patristic_vs_absolute_trait_difference": -0.201298701299,
+          "exact_positive_tail_p": 0.834523809524,
+          "exact_negative_tail_p": 0.168253968254,
+          "exact_two_sided_p": 0.305555555556,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": -0.264285714286,
+            "Cirsium_irumtiense": -0.253571428571,
+            "Cirsium_japonicum_var_albescens": -0.603571428571,
+            "Cirsium_japonicum_var_australe": -0.135714285714,
+            "Cirsium_kawakamii": 0.257142857143,
+            "Cirsium_pengii": -0.217857142857,
+            "Cirsium_tatakaense": -0.285714285714
+          },
+          "loo_rho_min": -0.603571428571,
+          "loo_rho_max": 0.257142857143,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 2.86895147849,
+            "median_root_to_tip_substitutions_per_site": 0.0079770587,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.834523809524
+        },
+        {
+          "trait_id": "phyllary_protrusion_mm",
+          "n_taxa": 7,
+          "value_min": 0.51,
+          "value_max": 5.54,
+          "rho_patristic_vs_absolute_trait_difference": 0.3294347674,
+          "exact_positive_tail_p": 0.0827380952381,
+          "exact_negative_tail_p": 0.91746031746,
+          "exact_two_sided_p": 0.0962301587302,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": 0.503571428571,
+            "Cirsium_irumtiense": 0.475850493071,
+            "Cirsium_japonicum_var_albescens": 0.282142857143,
+            "Cirsium_japonicum_var_australe": 0.546428571429,
+            "Cirsium_kawakamii": 0.0787121116359,
+            "Cirsium_pengii": 0.143112930247,
+            "Cirsium_tatakaense": 0.0928571428571
+          },
+          "loo_rho_min": 0.0787121116359,
+          "loo_rho_max": 0.546428571429,
+          "loo_all_positive": true,
+          "pagel_lambda": {
+            "lambda_mle": 1.0,
+            "delta_loglik_vs_lambda0": 0.594204609261,
+            "delta_loglik_vs_lambda1": 0.0,
+            "median_root_to_tip_substitutions_per_site": 0.0079770587,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.330952380952
+        }
+      ]
+    },
+    {
+      "topology": 5,
+      "traits": [
+        {
+          "trait_id": "measured_capitulum_length_cm",
+          "n_taxa": 7,
+          "value_min": 2.64,
+          "value_max": 4.82,
+          "rho_patristic_vs_absolute_trait_difference": -0.149350649351,
+          "exact_positive_tail_p": 0.754365079365,
+          "exact_negative_tail_p": 0.248412698413,
+          "exact_two_sided_p": 0.425992063492,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": -0.192857142857,
+            "Cirsium_irumtiense": -0.117857142857,
+            "Cirsium_japonicum_var_albescens": -0.271428571429,
+            "Cirsium_japonicum_var_australe": -0.117857142857,
+            "Cirsium_kawakamii": -0.217857142857,
+            "Cirsium_pengii": 0.196428571429,
+            "Cirsium_tatakaense": -0.357142857143
+          },
+          "loo_rho_min": -0.357142857143,
+          "loo_rho_max": 0.196428571429,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 1.8635444314,
+            "median_root_to_tip_substitutions_per_site": 0.0079756955,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.834523809524
+        },
+        {
+          "trait_id": "measured_capitulum_width_cm",
+          "n_taxa": 7,
+          "value_min": 1.15,
+          "value_max": 2.17,
+          "rho_patristic_vs_absolute_trait_difference": 0.12987012987,
+          "exact_positive_tail_p": 0.254563492063,
+          "exact_negative_tail_p": 0.747817460317,
+          "exact_two_sided_p": 0.578373015873,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": 0.075,
+            "Cirsium_irumtiense": -0.00357142857143,
+            "Cirsium_japonicum_var_albescens": -0.0714285714286,
+            "Cirsium_japonicum_var_australe": 0.0464285714286,
+            "Cirsium_kawakamii": 0.0535714285714,
+            "Cirsium_pengii": 0.75,
+            "Cirsium_tatakaense": 0.103571428571
+          },
+          "loo_rho_min": -0.0714285714286,
+          "loo_rho_max": 0.75,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 1.98592852865,
+            "median_root_to_tip_substitutions_per_site": 0.0079756955,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.509126984127
+        },
+        {
+          "trait_id": "phyllary_length_cm",
+          "n_taxa": 7,
+          "value_min": 0.78,
+          "value_max": 1.8,
+          "rho_patristic_vs_absolute_trait_difference": -0.201298701299,
+          "exact_positive_tail_p": 0.834523809524,
+          "exact_negative_tail_p": 0.168253968254,
+          "exact_two_sided_p": 0.305555555556,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": -0.264285714286,
+            "Cirsium_irumtiense": -0.253571428571,
+            "Cirsium_japonicum_var_albescens": -0.603571428571,
+            "Cirsium_japonicum_var_australe": -0.135714285714,
+            "Cirsium_kawakamii": 0.257142857143,
+            "Cirsium_pengii": -0.217857142857,
+            "Cirsium_tatakaense": -0.285714285714
+          },
+          "loo_rho_min": -0.603571428571,
+          "loo_rho_max": 0.257142857143,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 2.86933488588,
+            "median_root_to_tip_substitutions_per_site": 0.0079756955,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.834523809524
+        },
+        {
+          "trait_id": "phyllary_protrusion_mm",
+          "n_taxa": 7,
+          "value_min": 0.51,
+          "value_max": 5.54,
+          "rho_patristic_vs_absolute_trait_difference": 0.3294347674,
+          "exact_positive_tail_p": 0.0827380952381,
+          "exact_negative_tail_p": 0.91746031746,
+          "exact_two_sided_p": 0.0962301587302,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": 0.503571428571,
+            "Cirsium_irumtiense": 0.475850493071,
+            "Cirsium_japonicum_var_albescens": 0.282142857143,
+            "Cirsium_japonicum_var_australe": 0.546428571429,
+            "Cirsium_kawakamii": 0.0787121116359,
+            "Cirsium_pengii": 0.143112930247,
+            "Cirsium_tatakaense": 0.0928571428571
+          },
+          "loo_rho_min": 0.0787121116359,
+          "loo_rho_max": 0.546428571429,
+          "loo_all_positive": true,
+          "pagel_lambda": {
+            "lambda_mle": 1.0,
+            "delta_loglik_vs_lambda0": 0.594414059786,
+            "delta_loglik_vs_lambda1": 0.0,
+            "median_root_to_tip_substitutions_per_site": 0.0079756955,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.330952380952
+        }
+      ]
+    },
+    {
+      "topology": 6,
+      "traits": [
+        {
+          "trait_id": "measured_capitulum_length_cm",
+          "n_taxa": 7,
+          "value_min": 2.64,
+          "value_max": 4.82,
+          "rho_patristic_vs_absolute_trait_difference": -0.149350649351,
+          "exact_positive_tail_p": 0.754365079365,
+          "exact_negative_tail_p": 0.248412698413,
+          "exact_two_sided_p": 0.425992063492,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": -0.192857142857,
+            "Cirsium_irumtiense": -0.117857142857,
+            "Cirsium_japonicum_var_albescens": -0.271428571429,
+            "Cirsium_japonicum_var_australe": -0.117857142857,
+            "Cirsium_kawakamii": -0.217857142857,
+            "Cirsium_pengii": 0.196428571429,
+            "Cirsium_tatakaense": -0.357142857143
+          },
+          "loo_rho_min": -0.357142857143,
+          "loo_rho_max": 0.196428571429,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 1.86354348918,
+            "median_root_to_tip_substitutions_per_site": 0.0079757958,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.834523809524
+        },
+        {
+          "trait_id": "measured_capitulum_width_cm",
+          "n_taxa": 7,
+          "value_min": 1.15,
+          "value_max": 2.17,
+          "rho_patristic_vs_absolute_trait_difference": 0.12987012987,
+          "exact_positive_tail_p": 0.254563492063,
+          "exact_negative_tail_p": 0.747817460317,
+          "exact_two_sided_p": 0.578373015873,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": 0.075,
+            "Cirsium_irumtiense": -0.00357142857143,
+            "Cirsium_japonicum_var_albescens": -0.0714285714286,
+            "Cirsium_japonicum_var_australe": 0.0464285714286,
+            "Cirsium_kawakamii": 0.0535714285714,
+            "Cirsium_pengii": 0.75,
+            "Cirsium_tatakaense": 0.103571428571
+          },
+          "loo_rho_min": -0.0714285714286,
+          "loo_rho_max": 0.75,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 1.98592722739,
+            "median_root_to_tip_substitutions_per_site": 0.0079757958,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.509126984127
+        },
+        {
+          "trait_id": "phyllary_length_cm",
+          "n_taxa": 7,
+          "value_min": 0.78,
+          "value_max": 1.8,
+          "rho_patristic_vs_absolute_trait_difference": -0.201298701299,
+          "exact_positive_tail_p": 0.834523809524,
+          "exact_negative_tail_p": 0.168253968254,
+          "exact_two_sided_p": 0.305555555556,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": -0.264285714286,
+            "Cirsium_irumtiense": -0.253571428571,
+            "Cirsium_japonicum_var_albescens": -0.603571428571,
+            "Cirsium_japonicum_var_australe": -0.135714285714,
+            "Cirsium_kawakamii": 0.257142857143,
+            "Cirsium_pengii": -0.217857142857,
+            "Cirsium_tatakaense": -0.285714285714
+          },
+          "loo_rho_min": -0.603571428571,
+          "loo_rho_max": 0.257142857143,
+          "loo_all_positive": false,
+          "pagel_lambda": {
+            "lambda_mle": 0.0,
+            "delta_loglik_vs_lambda0": 0.0,
+            "delta_loglik_vs_lambda1": 2.86932526718,
+            "median_root_to_tip_substitutions_per_site": 0.0079757958,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.834523809524
+        },
+        {
+          "trait_id": "phyllary_protrusion_mm",
+          "n_taxa": 7,
+          "value_min": 0.51,
+          "value_max": 5.54,
+          "rho_patristic_vs_absolute_trait_difference": 0.3294347674,
+          "exact_positive_tail_p": 0.0827380952381,
+          "exact_negative_tail_p": 0.91746031746,
+          "exact_two_sided_p": 0.0962301587302,
+          "exact_label_permutations": 5040,
+          "loo_rho_by_omitted_tip": {
+            "Cirsium_brevicaule": 0.503571428571,
+            "Cirsium_irumtiense": 0.475850493071,
+            "Cirsium_japonicum_var_albescens": 0.282142857143,
+            "Cirsium_japonicum_var_australe": 0.546428571429,
+            "Cirsium_kawakamii": 0.0787121116359,
+            "Cirsium_pengii": 0.143112930247,
+            "Cirsium_tatakaense": 0.0928571428571
+          },
+          "loo_rho_min": 0.0787121116359,
+          "loo_rho_max": 0.546428571429,
+          "loo_all_positive": true,
+          "pagel_lambda": {
+            "lambda_mle": 1.0,
+            "delta_loglik_vs_lambda0": 0.594389566195,
+            "delta_loglik_vs_lambda1": 0.0,
+            "median_root_to_tip_substitutions_per_site": 0.0079757958,
+            "interpretation": "descriptive small-n diagnostic; not an absolute evolutionary rate"
+          },
+          "positive_tail_bh_q_within_topology": 0.330952380952
+        }
+      ]
+    }
+  ],
+  "by_trait": {
+    "measured_capitulum_length_cm": {
+      "rho_min": -0.149350649351,
+      "rho_max": -0.135064935065,
+      "positive_tail_p_min": 0.705555555556,
+      "positive_tail_p_max": 0.754365079365,
+      "positive_tail_bh_q_min": 0.776984126984,
+      "positive_tail_bh_q_max": 0.834523809524,
+      "loo_rho_min_across_topologies": -0.357142857143,
+      "loo_rho_max_across_topologies": 0.235714285714,
+      "lambda_mle_min": 0.0,
+      "lambda_mle_max": 0.0,
+      "decision": "not_supported_as_topology_robust_phylogenetic_retention"
+    },
+    "measured_capitulum_width_cm": {
+      "rho_min": 0.12987012987,
+      "rho_max": 0.142857142857,
+      "positive_tail_p_min": 0.234523809524,
+      "positive_tail_p_max": 0.254563492063,
+      "positive_tail_bh_q_min": 0.469047619048,
+      "positive_tail_bh_q_max": 0.509126984127,
+      "loo_rho_min_across_topologies": -0.0714285714286,
+      "loo_rho_max_across_topologies": 0.782142857143,
+      "lambda_mle_min": 0.0,
+      "lambda_mle_max": 0.0,
+      "decision": "not_supported_as_topology_robust_phylogenetic_retention"
+    },
+    "phyllary_length_cm": {
+      "rho_min": -0.201298701299,
+      "rho_max": -0.177922077922,
+      "positive_tail_p_min": 0.776984126984,
+      "positive_tail_p_max": 0.834523809524,
+      "positive_tail_bh_q_min": 0.776984126984,
+      "positive_tail_bh_q_max": 0.834523809524,
+      "loo_rho_min_across_topologies": -0.603571428571,
+      "loo_rho_max_across_topologies": 0.3,
+      "lambda_mle_min": 0.0,
+      "lambda_mle_max": 0.0,
+      "decision": "not_supported_as_topology_robust_phylogenetic_retention"
+    },
+    "phyllary_protrusion_mm": {
+      "rho_min": 0.3294347674,
+      "rho_max": 0.363222948672,
+      "positive_tail_p_min": 0.0672619047619,
+      "positive_tail_p_max": 0.0827380952381,
+      "positive_tail_bh_q_min": 0.269047619048,
+      "positive_tail_bh_q_max": 0.330952380952,
+      "loo_rho_min_across_topologies": 0.0787121116359,
+      "loo_rho_max_across_topologies": 0.546428571429,
+      "lambda_mle_min": 1.0,
+      "lambda_mle_max": 1.0,
+      "decision": "not_supported_as_topology_robust_phylogenetic_retention"
+    }
+  },
+  "supported_traits": [],
+  "panel_decision": "not_supported_no_topology_robust_retention_detected",
+  "japan38_transfer": "PROHIBITED_ZERO_ADMITTED_SCALAR_JAPAN38_TIPS",
+  "claim_boundary": "A supported result would show topology-robust retention within this fixed panel only. A failed result would mean retention was not detected, not that a trait is evolutionarily independent or labile. Neither outcome establishes convergence, adaptation, function, absolute rate or event causation."
+}

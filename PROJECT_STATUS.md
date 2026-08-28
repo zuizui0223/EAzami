@@ -6,12 +6,14 @@ Status date: 2026-08-28
 
 Chapter 1 now supplies the conceptual **breadth** question; Chapter 2 independently estimates historical **depth**. EAzami must build its own literature/specimen/flora/public-image trait registry and cannot use Azami phenotype values or Azami significance as an admission gate.
 
-- standalone-ready now: Comp1061 scaffold; discrete orientation/phyllary/stickiness recurrence and localization; topology ensemble; GBIF + CHELSA orientation-niche analyses; bounded colonization/cytotype context;
-- reanalysis required: continuous trait history and reconstruction-aware null after an EAzami-native input registry is admitted;
+- standalone-ready now: Comp1061 scaffold; discrete orientation/phyllary/stickiness recurrence and localization; topology ensemble; GBIF + CHELSA orientation-niche analyses; an admitted 45-record EAzami-native continuous registry; a four-trait seven-taxon direct diagnostic panel; bounded colonization/cytotype context;
+- reanalysis required: Japan38 continuous trait history and reconstruction-aware null after commensurate scalar measurements cover enough Japan38 tips;
 - blocked/design only: dated event correspondence, phenotypic DTT/phylomorphospace and M0-M5 evolutionary simulations;
-- submission status: **STOP_STANDALONE_CONTINUOUS_INPUT_NOT_ADMITTED**.
+- submission status: **STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT**. The native-input provenance gate passed, but all five mapped Japan38 records are range-only and zero Japan38 tips have admitted scalar values.
 
 Canonical plan: `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md`. The previous present-integration package remains a frozen audit snapshot and its negative results are retained below.
+
+The independent n=7 direct continuous-history diagnostic is complete across all six AU-nonrejected topologies. No one of the four fixed traits met the corrected topology-robust retention rule. Phyllary protrusion was consistently positive but remained unsupported after BH correction, so it is a priority for added measurement rather than a paper conclusion.
 
 ## Dissertation mainline
 
@@ -32,11 +34,11 @@ Function is not an admission gate for Chapter 2. Chapter 1 and Chapter 2 reuse t
 
 ## Chapter 2 current answer
 
-> **Present-day capitulum integration is detectable but scale dependent. Several discrete states recur, yet recurrence count, exact transition placement and shared branch localization are distinct. Once reconstruction geometry and topology uncertainty are propagated, the current data do not support one persistent historical capitulum module.**
+> **Authority-backed capitulum states recur in trait-specific ways, but recurrence count and transition localization are distinct. The independent seven-taxon continuous panel detects no corrected topology-robust retention, and Japan38 continuous history remains not evaluable for lack of comparable scalar measurements.**
 
-This statement does not imply zero phylogenetic signal, fully independent traits, independent origins, convergence, adaptation or a shared mechanism.
+This statement does not imply zero phylogenetic signal, lability, fully independent traits, independent origins, convergence, adaptation or a shared mechanism.
 
-## Present integration inherited from Chapter 1
+## Legacy present integration audit
 
 At the frozen >=5-observation threshold:
 
@@ -44,7 +46,7 @@ At the frozen >=5-observation threshold:
 - among-taxon contrast = **0.088475** (0.024942–0.126171);
 - within/among association-matrix similarity = **0.3663**.
 
-The >=2 sensitivity preserves the ordering: 0.157688 within versus 0.083662 among. These are observational measurement modules, not genetic or historical modules.
+The >=2 sensitivity preserves the ordering: 0.157688 within versus 0.083662 among. These are observational measurement modules from the frozen Azami handoff, not EAzami primary evidence, genetic modules or historical modules.
 
 ## Nuclear history scaffold
 
@@ -58,9 +60,9 @@ The >=2 sensitivity preserves the ordering: 0.157688 within versus 0.083662 amon
 
 Published phylogenomics places 36/38 sampled concepts in the dominant Japanese Pleistocene radiation. This is context, not a rate claim.
 
-## Continuous phenotype history
+## Legacy continuous phenotype history audit
 
-Eight primary units cover orientation, colour and outline shape. Image values are global species-level proxies, not measurements of the sequenced Japanese vouchers.
+Eight primary units cover orientation, colour and outline shape. They consume an Azami-export bridge and are retained only as method/negative-result audit history. Image values are global species-level proxies, not measurements of the sequenced Japanese vouchers.
 
 ### State structure
 
@@ -98,37 +100,30 @@ Equal-branch transition-overlap medians are -0.0594 for orientation–phyllary, 
 
 Target: **Journal of Evolutionary Biology — Research Article**.
 
-Active title:
+Recommended standalone title:
 
-> **Present-day phenotypic integration does not imply a shared evolutionary history in a rapid thistle radiation**
+> **Recurrence and localization are distinct dimensions of capitulum evolution in a young thistle radiation**
 
-Completed:
+Current active state:
 
-- active manuscript v3, 227-word abstract and 3,749-word main text including legends/alt text;
-- complete Moreyra reference metadata;
-- four main and five supplementary figures in PDF and 300-dpi PNG, visually inspected;
-- complete Supporting Information with six tables, separate title-page template and cover-letter template;
-- AI-use, data, ethics and claim-boundary wording;
-- machine-readable result and claim registries;
-- four privacy-scrubbed, accessibility-audited DOCX files with continuous line numbering where required.
+- standalone diversity-depth contract and repository-wide inventory frozen;
+- EAzami-native continuous registry admitted with identity/source/rights/measurement gates;
+- exact-permutation seven-taxon diagnostic complete and `not_supported`;
+- discrete recurrence/localization and bounded niche layers independently executable;
+- submission authorization withheld at `STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT`;
+- standalone manuscript and figures not yet rebuilt.
 
-Remaining author-only metadata:
-
-- author order, affiliations, corresponding author and ORCIDs;
-- funding, acknowledgements and conflict confirmation;
-- public archive URL/DOI no later than revision;
+The former V3 manuscript, figures, Supporting Information and privacy-scrubbed DOCX files remain a reproducible audit snapshot. They must not be submitted as the current standalone paper.
 
 ## Active sources of truth
 
-- `docs/chapter2/TIME_AXIS_MAINLINE_V3.md`
-- `docs/chapter2/MANUSCRIPT_JEB_V3.md`
-- `docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V1.md`
-- `docs/chapter2/JEB_SUPPORTING_INFORMATION_V1.md`
-- `data/evidence/chapter2_jeb_main_result_table_v1.csv`
-- `data/evidence/chapter2_time_axis_compute/japan38_branch_change_reconstruction_null_v1.json`
-- `data/evidence/chapter2_provenance_sensitivity_compute/japan38_branch_change_provenance_sensitivity_v1.json`
+- `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md`
+- `data/evidence/chapter2_diversity_depth_contract_v1.json`
+- `data/evidence/chapter2_diversity_depth_inventory_v1.csv`
+- `data/evidence/chapter2_eazami_native_continuous_trait_registry_summary_v1.json`
+- `data/evidence/chapter2_eazami_native_continuous_history_diagnostic_v1.json`
 
-Versions v1/v2 of the JEB manuscript are superseded audit history, not submission text.
+JEB manuscript versions v1-v3 are audit history, not current submission text.
 
 ## Programme routing
 

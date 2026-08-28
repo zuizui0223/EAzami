@@ -329,10 +329,24 @@ def check_docx_package() -> None:
 
 def check_entry_points() -> None:
     for path, needles in {
-        ROOT / "README.md": ["P=0.3504, FAIL", "P=0.1959, FAIL", "MANUSCRIPT_JEB_V3.md"],
-        ROOT / "PROJECT_STATUS.md": ["P=0.3504, FAIL", "P=0.1959, FAIL", "MANUSCRIPT_JEB_V3.md"],
-        ROOT / "docs" / "RESEARCH_PLAN.md": ["present integration", "reconstruction-aware", "Journal of Evolutionary Biology"],
-        CH / "README.md": ["Active submission package", "0.3504", "0.1959"],
+        ROOT / "README.md": [
+            "STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT",
+            "Recurrence and localization are distinct dimensions",
+            "MANUSCRIPT_JEB_V3.md",
+            "audit snapshots",
+        ],
+        ROOT / "PROJECT_STATUS.md": [
+            "STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT",
+            "Recommended standalone title",
+            "former V3 manuscript",
+        ],
+        ROOT / "docs" / "RESEARCH_PLAN.md": [
+            "standalone",
+            "not supported",
+            "Journal of Evolutionary Biology",
+            "immutable audit snapshot",
+        ],
+        CH / "README.md": ["Frozen legacy submission package", "0.3504", "0.1959"],
         CH / "TIME_AXIS_MAINLINE_V3.md": ["phenotype × evolutionary time/history", "not_evaluable", "Diagnostic only"],
         CH / "JEB_SUBMISSION_TARGET_V1.md": ["7,500 words", "<=250 words", "double-anonymous", "generative-AI"],
     }.items():
@@ -354,7 +368,7 @@ def main() -> int:
     check_supplementary_figures()
     check_docx_package()
     check_entry_points()
-    print("chapter2_jeb_v3_package_valid=true")
+    print("chapter2_jeb_v3_audit_package_valid=true")
     print("original_reconstruction_null=FAIL_P_0.3504")
     print("jpn29_excluded_sensitivity=FAIL_P_0.1959")
     print("main_figures=4_pdf_plus_png")

@@ -1,8 +1,9 @@
-name: Validate Chapter 2 mainline v2
+name: Validate Chapter 2 legacy JEB audit package
 
 on:
   pull_request:
     paths:
+      - "README.md"
       - "PROJECT_STATUS.md"
       - "docs/chapter2/**"
       - "docs/RESEARCH_PLAN.md"
@@ -43,5 +44,5 @@ jobs:
         run: |
           python analysis/make_chapter2_jeb_figures_v1.py
           python analysis/make_chapter2_jeb_supplementary_figures_v1.py
-      - name: Validate Chapter 2 scientific mainline
+      - name: Validate frozen JEB V3 audit package and active entry-point boundary
         run: python analysis/validate_chapter2_manuscript_v1.py

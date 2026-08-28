@@ -61,9 +61,9 @@ Every layer can end in `supported`, `not_supported`, `not_evaluable` or `STOP`. 
 The 17-row machine-readable inventory is canonical. Summary:
 
 - **Directly usable:** Comp1061 scaffold; discrete orientation/phyllary/stickiness histories; topology propagation; GBIF + CHELSA extraction; Japan + Taiwan orientation-niche PGLS; sparse cytotype evidence; colonization context; trait-function evidence as bounded discussion context.
-- **Reanalysis needed:** dated anchors for a reconciled chronogram; all continuous history outputs; the continuous reconstruction-aware null; full ancestral-niche/branchwise concordance after the frozen coverage gate.
+- **Reanalysis needed:** dated anchors for a reconciled chronogram; Japan38 continuous history after scalar coverage is obtained; the Japan38 continuous reconstruction-aware null; full ancestral-niche/branchwise concordance after the frozen coverage gate.
 - **Design only:** Quaternary/fragmentation event registry; evolutionary M0–M5 simulations; dated DTT/phylomorphospace.
-- **New data needed:** no inventory item is wholly absent, but EAzami-native continuous trait records, two near-threshold Taiwan occurrence panels and voucher-linked cytotypes are required to advance their respective gates.
+- **New data needed:** comparable scalar measurements on Japan38 tips, two near-threshold Taiwan occurrence panels and voucher-linked cytotypes are required to advance their respective gates. The first EAzami-native continuous registry is now admitted, but its five Japan38 matches are source-reported ranges and remain context-only.
 
 ## 5. Analyses runnable now
 
@@ -73,7 +73,12 @@ The following form a genuinely standalone executable core:
 2. Rerun the frozen n>=10 Japan + Taiwan orientation-niche PGLS across six accepted topologies.
 3. Audit the frozen orientation-transition/niche-shift JSON as a bounded result; do not call it rerunnable until its missing producer is recovered and validated.
 4. Report colonization histories and sparse cytotypes as negative constraints, not explanations of trait recurrence.
-5. Run the standalone-input preflight in CI. It must keep the current continuous layer at STOP until an EAzami-native registry is admitted.
+5. Run the predeclared four-trait, seven-taxon direct continuous-history diagnostic across the six frozen AU-nonrejected topologies. This panel is source- and lineage-clustered and cannot establish a general East-Asian process.
+6. Run the standalone-input preflight in CI. It admits the independent registry but must keep the Japan38 continuous layer at STOP while admitted scalar Japan38 coverage is zero.
+
+The frozen native registry contains 45 records for 15 taxa: 35 comparable scalar point estimates and ten context-only ranges. Four direct traits each cover the same seven taxa: capitulum length, capitulum width, phyllary length and phyllary protrusion. Five records map to Japan38 concepts, but none is an admissible scalar. Ranges are preserved verbatim and are never converted to midpoints.
+
+The fixed seven-taxon history diagnostic enumerated all 7! label permutations for every trait on each of six AU-nonrejected topologies and applied BH correction across four traits within topology. No trait passed the predeclared all-six-topology rule. Capitulum length and phyllary length were weakly negative; capitulum width was weakly positive. Phyllary protrusion was consistently positive (rho 0.329-0.363), remained positive in every leave-one-out case and had descriptive lambda=1, but its positive-tail P=0.067-0.083 and BH q=0.269-0.331 do not support promotion. The result is `not_supported`, not evidence of lability or independence.
 
 ## 6. Missing analyses for historical trait-environment recurrence
 
@@ -83,7 +88,7 @@ The following form a genuinely standalone executable core:
 - Construct a taxon-reconciled dated topology ensemble; do not linearly rescale the whole tree from one local age.
 - Create a sourced event registry with event class, start/end interval, geographic scope, taxon/node mapping rule and uncertainty.
 - Implement an event-window statistic and an age-/branch-matched null before viewing correspondence results.
-- Build EAzami-native continuous traits before testing whether continuous trait-environment relations recur.
+- Obtain commensurate scalar measurements on predeclared Japan38 tips before testing Japan38 continuous trait-environment recurrence; the admitted seven-taxon East-Asian panel remains diagnostic only.
 
 ## 7. PR #126 disposition
 
@@ -102,7 +107,7 @@ The following form a genuinely standalone executable core:
 - “present-day phenotypic integration” as the central question;
 - the assumption that Azami-exported continuous traits are eligible EAzami primary inputs.
 
-The existing manuscript/DOCX bundle remains an immutable audit snapshot. It is **not submission-ready under the standalone contract**. Its continuous results may return only after independent EAzami measurement and an unchanged rerun.
+The existing manuscript/DOCX bundle remains an immutable audit snapshot. It is **not submission-ready under the standalone contract**. The new registry establishes independent provenance, not adequate Japan38 coverage. Legacy continuous results may return only after commensurate EAzami-native Japan38 measurement and an unchanged rerun.
 
 ## 8. Standalone title, figure sequence and claim ceiling
 
@@ -120,7 +125,9 @@ This title is supported by the independent discrete core and states the general 
 4. **Trait-environment recurrence:** six-topology present PGLS and transition-weighted BIO15/BIO1 concordance with frozen nulls and coverage gate.
 5. **Historical assembly:** discrete overlap now; independently rerun continuous reconstruction-null later. The dated event panel is added only after the chronogram and event-registry gates pass.
 
-For an immediate submission, Figures 1–4 are the core and Figure 5 is supplementary or deferred. DTT and event correspondence must not appear as current results.
+The seven-taxon continuous diagnostic belongs in Supporting Information or a coverage panel in Figure 1, not as a headline positive result. Its scientific role is to demonstrate that direct EAzami measurements have entered the pipeline while showing exactly why Japan38 coverage and broader taxon balance are still necessary.
+
+For the eventual standalone submission after the coverage gate passes, Figures 1–4 are the core and Figure 5 is supplementary or deferred. DTT and event correspondence must not appear as current results.
 
 **Claim ceiling**
 
@@ -130,4 +137,4 @@ For an immediate submission, Figures 1–4 are the core and Figure 5 is suppleme
 
 JEB remains a defensible first target because the general contribution is an estimand distinction in evolutionary morphology, and the [journal's current aims and scope](https://academic.oup.com/jeb/pages/about) explicitly accept robust negative results when they produce new evolutionary insight. The safer current article type is a Research Article only if the independent trait, niche and topology layers are reported together with their full uncertainty. If the manuscript is restricted to three discrete histories without the completed niche recurrence layer, a focused Short Communication or a later submission is more realistic.
 
-The active decision is therefore **JEB target retained; submission authorization withheld until the standalone input gate and manuscript rebuild pass**.
+The active decision is therefore **JEB target retained; submission authorization withheld until the Japan38 continuous-coverage gate and manuscript rebuild pass**. The native-input gate itself has passed; the fail-closed stop has moved one step downstream to coverage.

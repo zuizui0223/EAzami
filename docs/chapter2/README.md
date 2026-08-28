@@ -7,17 +7,20 @@ The active paper asks how deeply independently assembled capitulum diversity is 
 - canonical design: `DIVERSITY_DEPTH_STANDALONE_V1.md`;
 - machine contract: `../../data/evidence/chapter2_diversity_depth_contract_v1.json`;
 - 17-item inventory: `../../data/evidence/chapter2_diversity_depth_inventory_v1.csv`;
-- current gate: **STOP_STANDALONE_CONTINUOUS_INPUT_NOT_ADMITTED**.
+- native registry: **ADMITTED_EAZAMI_NATIVE_VALUES** (45 records; 35 scalar; 10 range-only);
+- current gate: **STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT** (zero admitted scalar Japan38 tips).
 
 The JEB V3 files below are a frozen audit package. Their reconstruction-aware FAIL results and uncertainty machinery are reusable, but the package is not the active standalone submission.
 
+The first independent continuous-history diagnostic is also frozen: four complete direct traits on seven taxa, six AU-nonrejected topologies and exact 7! label permutations. No trait passes the corrected all-topology retention rule. Phyllary protrusion is a consistent but uncorrected measurement-priority hint, not a supported result and not transferable to Japan38.
+
 ## Active conclusion
 
-> **Present-day capitulum integration is scale dependent, and the current continuous and discrete histories do not support one persistent historical capitulum module.**
+> **Authority-backed capitulum states show trait-specific recurrence and localization; the first independent continuous panel detects no corrected topology-robust retention, while Japan38 continuous history remains coverage-blocked.**
 
-The chapter distinguishes present association, continuous state structure, discrete recurrence, transition-placement identifiability and shared branch localization. A negative reconstruction-null decision is not evidence for independent evolution.
+The chapter distinguishes continuous retention, discrete recurrence, transition-placement identifiability, trait-niche concordance and shared branch localization. A negative diagnostic is not evidence for lability or independent evolution.
 
-## Active submission package (legacy validator label; frozen audit only)
+## Frozen legacy submission package (audit only)
 
 - `MANUSCRIPT_JEB_V3.md` — double-anonymous JEB Research Article draft;
 - `TIME_AXIS_MAINLINE_V3.md` — scientific source of truth;

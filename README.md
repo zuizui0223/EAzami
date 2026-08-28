@@ -4,9 +4,11 @@
 
 EAzami is a standalone evolutionary-history study. Chapter 1 and Chapter 2 are linked conceptually as **diversity breadth -> diversity depth**, but EAzami does not require Azami results, phenotype artifacts or significance-selected traits. The repositories may share only the biological system and predefined trait concepts.
 
-The current executable standalone core is the Comp1061 ancestry scaffold, authority-backed orientation/phyllary/stickiness histories, topology uncertainty and GBIF + CHELSA orientation-niche analyses. The existing eight-continuous-trait history remains preserved as an audit result, but it is not eligible as primary EAzami evidence until independently measured EAzami inputs are admitted.
+The current executable standalone core is the Comp1061 ancestry scaffold, authority-backed orientation/phyllary/stickiness histories, topology uncertainty, GBIF + CHELSA orientation-niche analyses and a source-clustered seven-taxon direct continuous panel. The EAzami-native registry is independently admitted, but its Japan38 matches are ranges rather than comparable scalar values. The existing eight-continuous-trait Japan38 history remains audit-only.
 
-Current submission state: **STOP_STANDALONE_CONTINUOUS_INPUT_NOT_ADMITTED**. See `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md` and `data/evidence/chapter2_diversity_depth_inventory_v1.csv`.
+Current submission state: **STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT**. The input-provenance gate passed; the current blocker is zero admitted scalar Japan38 tips. See `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md` and `data/evidence/chapter2_diversity_depth_inventory_v1.csv`.
+
+The fixed seven-taxon direct-history diagnostic found no topology-robust corrected phylogenetic-retention result among capitulum length, capitulum width, phyllary length and phyllary protrusion. Phyllary protrusion showed the strongest consistent positive pattern but did not pass multiplicity control; it is retained only as a sampling-priority clue.
 
 The material below describes the frozen PR #126 JEB audit snapshot. It remains reproducible but is not the active standalone submission story.
 
@@ -20,30 +22,23 @@ continuous capitulum phenotype
 
 ## Current Chapter 2 result
 
-> **Present-day capitulum integration is scale dependent, but the available continuous and discrete histories do not support one persistent historical capitulum module.**
+> **Authority-backed capitulum states show trait-specific recurrence and localization, while the first independent direct continuous panel detects no corrected topology-robust retention; adequate Japan38 continuous coverage remains unavailable.**
 
-The paper separates properties that are often conflated:
+The standalone paper separates properties that are often conflated:
 
-1. present integration within and among taxa;
-2. continuous phylogenetic state structure;
-3. minimum recurrence of independently defined discrete states;
-4. exact transition-placement identifiability;
-5. shared continuous or discrete branch localization.
+1. continuous phylogenetic retention;
+2. minimum recurrence of independently defined discrete states;
+3. exact transition-placement identifiability;
+4. present and reconstructed trait-environment concordance;
+5. shared branch localization.
 
-### Present integration
+### Independent continuous history
 
-Registered-module association is stronger within taxa than among taxa at both frozen thresholds. At >=5 observations the contrasts are 0.164502 and 0.088475, and the within/among association matrices are only partly aligned (rho=0.3663).
+The EAzami-native registry contains 45 independently sourced records: 35 comparable scalar point estimates and ten range-only context records. Four traits form the same seven-taxon panel. Across exact 7! label permutations and six AU-nonrejected topologies, no trait passes the predeclared within-topology BH and all-topology retention rule.
 
-### Continuous history
+Phyllary protrusion is the strongest pattern (rho=0.329-0.363; uncorrected positive-tail P=0.067-0.083; BH q=0.269-0.331; all leave-one-out rho values positive; descriptive lambda=1), but it remains `not_supported`. It is a measurement-priority clue, not evidence for retained history, adaptation or convergence.
 
-Eight orientation, colour and outline-shape units show no corrected two-sided state-structure result in the original family. A fixed JPN29 identity exclusion retains eight not-supported units at the primary threshold and makes the high-depth family not evaluable.
-
-Apparent positive reconstructed branch correlations do not exceed a null that independently permutes tip phenotypes and repeats ancestral reconstruction:
-
-- original panel: P=0.3504, FAIL;
-- JPN29-excluded sensitivity: P=0.1959, FAIL.
-
-The previous independent-branch P value and 1,000/1,000 positive equal-branch signs cannot rescue this result.
+Five registry taxa map to Japan38, but all mapped measurements are ranges. Japan38 continuous retention and branch-change inference therefore remain `not_evaluable`; ranges are not converted to midpoints. The earlier eight-trait Azami-export analyses remain frozen audit evidence only.
 
 ### Discrete history
 
@@ -53,24 +48,23 @@ The previous independent-branch P value and 1,000/1,000 positive equal-branch si
 
 Recurrence counts are lower bounds, not independent-origin or convergence counts. Edge identifiability differs among traits, and no trait pair shows consistently positive transition overlap across branch-length treatments.
 
-## JEB submission package
+## JEB submission direction
 
 Primary target: **Journal of Evolutionary Biology**, Research Article.
 
-Active title:
+Recommended standalone title:
 
-> **Present-day phenotypic integration does not imply a shared evolutionary history in a rapid thistle radiation**
+> **Recurrence and localization are distinct dimensions of capitulum evolution in a young thistle radiation**
 
 Start here:
 
 1. `PROJECT_STATUS.md` — current repository and submission state;
-2. `docs/chapter2/TIME_AXIS_MAINLINE_V3.md` — scientific source of truth;
-3. `docs/chapter2/MANUSCRIPT_JEB_V3.md` — active double-anonymous manuscript;
-4. `docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V1.md` — evidence and figure map;
-5. `docs/chapter2/JEB_SUPPORTING_INFORMATION_V1.md` — supplementary crosswalk;
-6. `data/evidence/chapter2_jeb_main_result_table_v1.csv` — machine-readable results.
+2. `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md` — active scientific and submission design;
+3. `data/evidence/chapter2_diversity_depth_contract_v1.json` — fail-closed machine contract;
+4. `data/evidence/chapter2_eazami_native_continuous_trait_registry_summary_v1.json` — independent-input coverage;
+5. `data/evidence/chapter2_eazami_native_continuous_history_diagnostic_v1.json` — bounded direct-history result.
 
-The four main and five supplementary figures are under `docs/chapter2/figures/` as vector PDF and 300-dpi PNG. The privacy-scrubbed DOCX package is under `docs/chapter2/submission_package/`. Manuscript v1/v2 files remain audit history only.
+Submission authorization is withheld until scalar Japan38 coverage and the standalone manuscript rebuild pass. `MANUSCRIPT_JEB_V3.md`, its four main/five supplementary figures and its DOCX package are reproducible audit snapshots, not active submission files. Manuscript v1/v2 files are older audit history.
 
 ## Evidence boundaries
 
