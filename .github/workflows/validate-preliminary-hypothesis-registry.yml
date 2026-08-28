@@ -146,12 +146,12 @@ jobs:
           for phrase in ['time-window pollination + abiotic protection','18.3%','aim2_capitulum_observation_bout_ledger_v1.csv','no all-day visitation = no orientation effect shortcut']:
               assert phrase in fieldplan, phrase
 
-          # Current dissertation ordering: history is Chapter 2; function is Chapter 3;
-          # origin/convergence gates remain downstream and retain the same sampling design.
+          # Current dissertation ordering: public history is Chapter 2; own RAD-seq,
+          # linked phenotype and function are Chapter 3; origin/convergence gates remain downstream.
           for phrase in [
               'Chapter 1 — phenotype × present-day space/environment',
               'Chapter 2 — phenotype × evolutionary time/history',
-              'Chapter 3 — phenotype × function/fitness',
+              'Chapter 3 — own RAD-seq × linked phenotype/function',
               'origin discrimination',
               'nuclear population genomics',
               'plastid haplotype',
