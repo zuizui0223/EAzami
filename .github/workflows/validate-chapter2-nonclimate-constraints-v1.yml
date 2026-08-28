@@ -1,0 +1,47 @@
+name: Validate Chapter 2 non-climate constraints v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_chapter2_nonclimate_explanatory_constraints_v1.py"
+      - "data/evidence/chapter2_nonclimate_explanatory_constraints_v1.json"
+      - "data/evidence/japan38_cytotype_trait_overlap_v1.json"
+      - "data/evidence/japan38_authority_module_combinations_v1.json"
+      - "data/evidence/east_asia_independent_nuclear_evidence_audit_v1.csv"
+      - "data/evidence/cirsium_interaction_evidence_summary_v1.json"
+      - ".github/workflows/validate-chapter2-nonclimate-constraints-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rebuild bounded non-climate constraints
+        run: |
+          python analysis/build_chapter2_nonclimate_explanatory_constraints_v1.py \
+            --cytotype data/evidence/japan38_cytotype_trait_overlap_v1.json \
+            --configurations data/evidence/japan38_authority_module_combinations_v1.json \
+            --nuclear-audit data/evidence/east_asia_independent_nuclear_evidence_audit_v1.csv \
+            --interactions data/evidence/cirsium_interaction_evidence_summary_v1.json \
+            --out /tmp/chapter2_nonclimate_explanatory_constraints_v1.json
+      - name: Compare frozen result
+        run: |
+          cmp /tmp/chapter2_nonclimate_explanatory_constraints_v1.json data/evidence/chapter2_nonclimate_explanatory_constraints_v1.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('data/evidence/chapter2_nonclimate_explanatory_constraints_v1.json').read_text())
+          f=x['factors']
+          assert f['cytotype_ploidy']['status']=='deterministic_one_to_one_model_contradicted_descriptively'
+          assert f['broad_colonization_history']['status']=='one_to_one_configuration_mapping_contradicted_descriptively'
+          assert f['population_genetic_structure']['status']=='species_tip_homogeneity_assumption_constrained'
+          assert f['pollinator_antagonist_context']['status']=='not_evaluable_as_joined_japan38_comparative_predictor'
+          print('chapter2 non-climate explanatory constraints: valid')
+          PY
