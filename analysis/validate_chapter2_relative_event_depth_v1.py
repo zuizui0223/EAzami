@@ -168,7 +168,8 @@ def validate() -> dict:
         "0.995",
         "0.707",
         "0.937–0.954",
-        "not absolute time",
+        "absolute time",
+        "not an event age",
         "exactly three completed discrete histories",
     ]
     missing = [token for token in required if token not in manuscript]
