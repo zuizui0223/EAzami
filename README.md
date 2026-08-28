@@ -4,9 +4,9 @@
 
 EAzami is a standalone evolutionary-history study. Chapter 1 and Chapter 2 are linked conceptually as **diversity breadth -> diversity depth**, but EAzami does not require Azami results, phenotype artifacts or significance-selected traits. The repositories may share only the biological system and predefined trait concepts.
 
-The current executable standalone core is the Comp1061 ancestry scaffold, authority-backed orientation/phyllary/stickiness histories, topology uncertainty, GBIF + CHELSA orientation-niche analyses and a source-clustered seven-taxon direct continuous panel. The EAzami-native registry is independently admitted, but its Japan38 matches are ranges rather than comparable scalar values. The existing eight-continuous-trait Japan38 history remains audit-only.
+The executable standalone core is the Comp1061 ancestry scaffold, authority-backed orientation/phyllary/stickiness histories and topology-sensitive recurrence/localization analyses. GBIF + CHELSA orientation-niche analyses and a source-clustered seven-taxon direct continuous panel are bounded secondary diagnostics. The existing eight-continuous-trait Japan38 history remains audit-only.
 
-Current submission state: **STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT**. The input-provenance gate passed; the current blocker is zero admitted scalar Japan38 tips. See `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md` and `data/evidence/chapter2_diversity_depth_inventory_v1.csv`.
+Scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_CORE**. Submission state: **HOLD_JEB_PACKAGE_REBUILD_ONLY**. Own Japan38 phenotype, RAD-seq, dated-tree and field results are not Chapter 2 completion gates. See `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md` and `docs/chapter2/CHAPTER2_TO_CHAPTER3_RADSEQ_BRIDGE_V1.md`.
 
 The fixed seven-taxon direct-history diagnostic found no topology-robust corrected phylogenetic-retention result among capitulum length, capitulum width, phyllary length and phyllary protrusion. Phyllary protrusion showed the strongest consistent positive pattern but did not pass multiplicity control; it is retained only as a sampling-priority clue.
 
@@ -17,12 +17,12 @@ continuous capitulum phenotype
         |
         |-- Chapter 1: present-day space/environment
         |-- Chapter 2: evolutionary time/history
-        `-- Chapter 3: function/fitness
+        `-- Chapter 3: own RAD-seq + linked phenotype/function
 ```
 
 ## Current Chapter 2 result
 
-> **Authority-backed capitulum states show trait-specific recurrence and localization, while the first independent direct continuous panel detects no corrected topology-robust retention; adequate Japan38 continuous coverage remains unavailable.**
+> **Authority-backed capitulum states require repeated but trait-specific histories; recurrence counts are more robust than exact transition locations, and no one whole-capitulum history is required by the current data.**
 
 The standalone paper separates properties that are often conflated:
 
@@ -52,9 +52,9 @@ Recurrence counts are lower bounds, not independent-origin or convergence counts
 
 Primary target: **Journal of Evolutionary Biology**, Research Article.
 
-Recommended standalone title:
+Active standalone title:
 
-> **Recurrence and localization are distinct dimensions of capitulum evolution in a young thistle radiation**
+> **Robust recurrence but uncertain localization of capitulum trait evolution in a young thistle radiation**
 
 Start here:
 
@@ -62,9 +62,10 @@ Start here:
 2. `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md` — active scientific and submission design;
 3. `data/evidence/chapter2_diversity_depth_contract_v1.json` — fail-closed machine contract;
 4. `data/evidence/chapter2_eazami_native_continuous_trait_registry_summary_v1.json` — independent-input coverage;
-5. `data/evidence/chapter2_eazami_native_continuous_history_diagnostic_v1.json` — bounded direct-history result.
+5. `docs/chapter2/MANUSCRIPT_JEB_V4.md` — active standalone manuscript draft;
+6. `data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv` — inverse-inference sampling priorities.
 
-Submission authorization is withheld until scalar Japan38 coverage and the standalone manuscript rebuild pass. `MANUSCRIPT_JEB_V3.md`, its four main/five supplementary figures and its DOCX package are reproducible audit snapshots, not active submission files. Manuscript v1/v2 files are older audit history.
+Submission authorization is withheld only until the revised figures, anonymous DOCX, reference audit and author declarations pass. `MANUSCRIPT_JEB_V3.md`, its figures and DOCX package are reproducible audit snapshots, not active submission files.
 
 ## Evidence boundaries
 
@@ -83,7 +84,7 @@ Present-state v3/v4 covariance generators test statistical formation of within/a
 
 ### Chapter 3
 
-Trait-to-function evidence, reproductive-herbivory synthesis, selection mosaic and non-destructive JPN36 phyllary pilot test candidate performance and fitness pathways. Function is kept separate from Chapter 2 historical inference.
+Chapter 3 builds an own Japan-wide RAD-seq sensitivity phylogeny/network with same-individual phenotype, voucher and cytotype linkage. JPN36 phyllary and JPN06–JPN15 stickiness are the first history-discrimination targets; field manipulations and fitness remain separate causal layers. Chapter 3 can revise Chapter 2 placements prospectively but is not required to make Chapter 2 complete.
 
 ### Later origin discrimination
 

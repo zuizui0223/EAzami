@@ -330,15 +330,15 @@ def check_docx_package() -> None:
 def check_entry_points() -> None:
     for path, needles in {
         ROOT / "README.md": [
-            "STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT",
-            "Recurrence and localization are distinct dimensions",
+            "COMPLETE_EXISTING_PUBLIC_HISTORY_CORE",
+            "Robust recurrence but uncertain localization",
             "MANUSCRIPT_JEB_V3.md",
             "audit snapshots",
         ],
         ROOT / "PROJECT_STATUS.md": [
-            "STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT",
-            "Recommended standalone title",
-            "former V3 manuscript",
+            "HOLD_JEB_PACKAGE_REBUILD_ONLY",
+            "Active standalone title",
+            "v4 is current submission text",
         ],
         ROOT / "docs" / "RESEARCH_PLAN.md": [
             "standalone",
@@ -346,8 +346,8 @@ def check_entry_points() -> None:
             "Journal of Evolutionary Biology",
             "immutable audit snapshot",
         ],
-        CH / "README.md": ["Frozen legacy submission package", "0.3504", "0.1959"],
-        CH / "TIME_AXIS_MAINLINE_V3.md": ["phenotype × evolutionary time/history", "not_evaluable", "Diagnostic only"],
+        CH / "README.md": ["MANUSCRIPT_JEB_V4.md", "Frozen legacy submission package", "0.3504", "0.1959"],
+        CH / "TIME_AXIS_MAINLINE_V3.md": ["frozen audit", "not_evaluable", "Diagnostic only"],
         CH / "JEB_SUBMISSION_TARGET_V1.md": ["7,500 words", "<=250 words", "double-anonymous", "generative-AI"],
     }.items():
         require(path.read_text(encoding="utf-8"), needles, path.name)

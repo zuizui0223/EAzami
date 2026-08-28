@@ -8,17 +8,25 @@ The active paper asks how deeply independently assembled capitulum diversity is 
 - machine contract: `../../data/evidence/chapter2_diversity_depth_contract_v1.json`;
 - 17-item inventory: `../../data/evidence/chapter2_diversity_depth_inventory_v1.csv`;
 - native registry: **ADMITTED_EAZAMI_NATIVE_VALUES** (45 records; 35 scalar; 10 range-only);
-- current gate: **STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT** (zero admitted scalar Japan38 tips).
+- scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_CORE**;
+- submission gate: **HOLD_JEB_PACKAGE_REBUILD_ONLY**;
+- Chapter 3 own RAD-seq/phenotype is a prospective falsification bridge, not a Chapter 2 completion dependency.
 
-The JEB V3 files below are a frozen audit package. Their reconstruction-aware FAIL results and uncertainty machinery are reusable, but the package is not the active standalone submission.
+The JEB V3 files below are a frozen audit package. `MANUSCRIPT_JEB_V4.md` is the active standalone submission draft.
 
 The first independent continuous-history diagnostic is also frozen: four complete direct traits on seven taxa, six AU-nonrejected topologies and exact 7! label permutations. No trait passes the corrected all-topology retention rule. Phyllary protrusion is a consistent but uncorrected measurement-priority hint, not a supported result and not transferable to Japan38.
 
 ## Active conclusion
 
-> **Authority-backed capitulum states show trait-specific recurrence and localization; the first independent continuous panel detects no corrected topology-robust retention, while Japan38 continuous history remains coverage-blocked.**
+> **Authority-backed capitulum states require repeated but trait-specific histories; recurrence lower bounds are more robust than exact transition locations, and current evidence does not require one shared whole-capitulum history.**
 
 The chapter distinguishes continuous retention, discrete recurrence, transition-placement identifiability, trait-niche concordance and shared branch localization. A negative diagnostic is not evidence for lability or independent evolution.
+
+## Active manuscript and Chapter 3 bridge
+
+- `MANUSCRIPT_JEB_V4.md` — standalone JEB Research Article draft;
+- `CHAPTER2_TO_CHAPTER3_RADSEQ_BRIDGE_V1.md` — inverse-inference design boundary;
+- `../../data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv` — five ranked prospective tests and falsifiers.
 
 ## Frozen legacy submission package (audit only)
 
@@ -89,6 +97,6 @@ Equal-branch medians are -0.0594, -0.3870 and 0.1840 for orientation–phyllary,
 ## Programme routing
 
 - present-state covariance simulations -> Chapter 1 Supplement/thesis methods;
-- trait-function evidence and JPN36 field protocol -> Chapter 3;
-- population nuclear + plastid + cytotype -> later origin discrimination;
+- Japan-wide own RAD-seq plus same-individual phenotype/cytotype -> Chapter 3 history discrimination;
+- trait-function evidence and JPN36/JPN15 field protocols -> Chapter 3 causal layer;
 - absolute transition timing -> STOP until calibration becomes defensible.

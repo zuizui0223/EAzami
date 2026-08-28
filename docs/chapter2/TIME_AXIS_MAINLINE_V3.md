@@ -1,4 +1,4 @@
-# Chapter 2 time-axis mainline v3
+# Chapter 2 time-axis mainline v3 — frozen audit
 
 ## Current answer
 
@@ -6,7 +6,7 @@ Chapter 2 asks whether present-day capitulum integration persists as shared evol
 
 > **Present-day capitulum integration is detectable but scale dependent. Orientation, phyllary posture and stickiness each recur, yet recurrence count, exact transition placement and shared branch localization are distinct estimands. Once ancestral-reconstruction geometry and topology uncertainty are propagated, the available data do not support one persistent historical capitulum module.**
 
-This is phenotype × evolutionary time/history. Function, fitness and field manipulation remain Chapter 3.
+This is the frozen audit answer for the former Azami-dependent package. The active standalone answer is in `DIVERSITY_DEPTH_STANDALONE_V1.md` and `MANUSCRIPT_JEB_V4.md`.
 
 ## Evidence order
 
@@ -69,13 +69,13 @@ The primary study deliberately used a Japanese voucher labelled *Cirsium verutum
 - v3/v4 covariance simulations describe generation of the present phenotypic field and belong with Chapter 1 or thesis methods.
 - Future population nuclear + plastid + cytotype data will discriminate retention, sorting, introgression and lineage-specific origin.
 
-## Active JEB package
+## Frozen JEB v3 audit package
 
-- `MANUSCRIPT_JEB_V3.md` — active double-anonymous main manuscript.
+- `MANUSCRIPT_JEB_V3.md` — frozen double-anonymous audit manuscript; not active submission text.
 - `JEB_QUESTION_RESULT_FIGURE_MAP_V1.md` — four-figure evidence map.
 - `JEB_SUPPORTING_INFORMATION_V1.md` — supplementary results and provenance.
 - `JEB_TITLE_PAGE_TEMPLATE_V1.md` — separate identifying metadata and required declarations.
 - `JEB_COVER_LETTER_TEMPLATE_V1.md` — bounded significance statement and AI disclosure.
 - `chapter2_jeb_main_result_table_v1.csv` — machine-readable headline values and claim ceilings.
 
-Versions v1/v2 are retained only as superseded audit history. They are not submission text.
+Versions v1/v2 and v3 are retained as audit history. `MANUSCRIPT_JEB_V4.md` is the active standalone text.
