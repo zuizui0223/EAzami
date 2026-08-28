@@ -5,6 +5,8 @@ Primary target: **Journal of Evolutionary Biology (JEB), Research Article**
 Fallback target: **Evolutionary Journal of the Linnean Society (EJLS), Research Article**
 Stretch target: **Evolution**, only after a material increase in generality or independent validation
 
+Standalone status: **submission authorization withheld**. The files below describe the frozen present-integration audit package. Under `DIVERSITY_DEPTH_STANDALONE_V1.md`, the active EAzami paper cannot use the Azami handoff as Result 1, and the continuous layer must be rerun from an admitted EAzami-native registry before submission.
+
 ## Active title and question
 
 > **Present-day phenotypic integration does not imply a shared evolutionary history in a rapid thistle radiation**
@@ -56,7 +58,7 @@ The official JEB Author Guidelines checked on 2026-08-28 require or allow:
 - double-anonymous review;
 - separate title page with author identities and required declarations;
 - a single line-numbered main-text file with figures/tables near first mention for initial submission;
-- AI use disclosed in the cover letter and Methods or Acknowledgements;
+- generative-AI/AI use disclosed in the cover letter and Methods or Acknowledgements;
 - Supporting Information submitted together with the manuscript;
 - raw data publicly archived by revision, with scripts and derived artefacts preferably archived as well.
 

@@ -1,6 +1,16 @@
-# EAzami research plan — space, evolutionary history, then function
+# EAzami research plan — diversity breadth to historical depth
 
-Status date: 2026-08-27
+Status date: 2026-08-28
+
+## Active standalone rule
+
+Chapter 1 asks how broad capitulum diversity is across present space and environment. Chapter 2 asks how deep independently assembled capitulum diversity is in phylogenetic and biogeographic history. This is a conceptual handoff, not a data handoff: EAzami cannot require Azami results, phenotype artifacts or significance-selected traits.
+
+The active Chapter 2 question is:
+
+> **How deeply is present capitulum diversity embedded in evolutionary history, and which trait histories or trait-environment relationships were repeatedly reassembled?**
+
+The full pipeline, 17-item inventory, PR #126 disposition and JEB gate are frozen in `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md`. Submission remains stopped until an EAzami-native continuous registry is admitted and the manuscript is rebuilt. The prior present integration question and reconstruction-aware negative results below are retained as audit history, not as the standalone opening estimand.
 
 ## Dissertation architecture
 

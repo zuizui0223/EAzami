@@ -1,4 +1,15 @@
-# Chapter 2 — phenotype through evolutionary time
+# Chapter 2 — standalone diversity depth
+
+## Active contract (2026-08-28)
+
+The active paper asks how deeply independently assembled capitulum diversity is embedded in history. It starts from EAzami-owned authority/literature/specimen/public-image data rather than an Azami observational handoff.
+
+- canonical design: `DIVERSITY_DEPTH_STANDALONE_V1.md`;
+- machine contract: `../../data/evidence/chapter2_diversity_depth_contract_v1.json`;
+- 17-item inventory: `../../data/evidence/chapter2_diversity_depth_inventory_v1.csv`;
+- current gate: **STOP_STANDALONE_CONTINUOUS_INPUT_NOT_ADMITTED**.
+
+The JEB V3 files below are a frozen audit package. Their reconstruction-aware FAIL results and uncertainty machinery are reusable, but the package is not the active standalone submission.
 
 ## Active conclusion
 
@@ -6,7 +17,7 @@
 
 The chapter distinguishes present association, continuous state structure, discrete recurrence, transition-placement identifiability and shared branch localization. A negative reconstruction-null decision is not evidence for independent evolution.
 
-## Active submission package
+## Active submission package (legacy validator label; frozen audit only)
 
 - `MANUSCRIPT_JEB_V3.md` — double-anonymous JEB Research Article draft;
 - `TIME_AXIS_MAINLINE_V3.md` — scientific source of truth;

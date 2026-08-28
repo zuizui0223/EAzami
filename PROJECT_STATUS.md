@@ -1,6 +1,17 @@
 # EAzami current state
 
-Status date: 2026-08-27
+Status date: 2026-08-28
+
+## Active status: standalone diversity-depth reframe
+
+Chapter 1 now supplies the conceptual **breadth** question; Chapter 2 independently estimates historical **depth**. EAzami must build its own literature/specimen/flora/public-image trait registry and cannot use Azami phenotype values or Azami significance as an admission gate.
+
+- standalone-ready now: Comp1061 scaffold; discrete orientation/phyllary/stickiness recurrence and localization; topology ensemble; GBIF + CHELSA orientation-niche analyses; bounded colonization/cytotype context;
+- reanalysis required: continuous trait history and reconstruction-aware null after an EAzami-native input registry is admitted;
+- blocked/design only: dated event correspondence, phenotypic DTT/phylomorphospace and M0-M5 evolutionary simulations;
+- submission status: **STOP_STANDALONE_CONTINUOUS_INPUT_NOT_ADMITTED**.
+
+Canonical plan: `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md`. The previous present-integration package remains a frozen audit snapshot and its negative results are retained below.
 
 ## Dissertation mainline
 

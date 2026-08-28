@@ -1,6 +1,14 @@
-# EAzami — capitulum phenotype across space, evolutionary history and function
+# EAzami — standalone evolutionary depth of capitulum diversity
 
-EAzami is the evolutionary and functional companion to the Azami phenomics programme. The repositories share one decomposed continuous capitulum phenotype ontology; each chapter changes the explanatory axis.
+## Active Chapter 2 direction (2026-08-28)
+
+EAzami is a standalone evolutionary-history study. Chapter 1 and Chapter 2 are linked conceptually as **diversity breadth -> diversity depth**, but EAzami does not require Azami results, phenotype artifacts or significance-selected traits. The repositories may share only the biological system and predefined trait concepts.
+
+The current executable standalone core is the Comp1061 ancestry scaffold, authority-backed orientation/phyllary/stickiness histories, topology uncertainty and GBIF + CHELSA orientation-niche analyses. The existing eight-continuous-trait history remains preserved as an audit result, but it is not eligible as primary EAzami evidence until independently measured EAzami inputs are admitted.
+
+Current submission state: **STOP_STANDALONE_CONTINUOUS_INPUT_NOT_ADMITTED**. See `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md` and `data/evidence/chapter2_diversity_depth_inventory_v1.csv`.
+
+The material below describes the frozen PR #126 JEB audit snapshot. It remains reproducible but is not the active standalone submission story.
 
 ```text
 continuous capitulum phenotype

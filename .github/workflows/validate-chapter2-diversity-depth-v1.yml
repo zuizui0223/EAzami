@@ -1,0 +1,33 @@
+name: Validate standalone Chapter 2 diversity depth
+
+on:
+  pull_request:
+    paths:
+      - "analysis/validate_chapter2_diversity_depth_v1.py"
+      - "tests/test_validate_chapter2_diversity_depth_v1.py"
+      - "docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md"
+      - "data/evidence/chapter2_diversity_depth_contract_v1.json"
+      - "data/evidence/chapter2_diversity_depth_inventory_v1.csv"
+      - "data/evidence/japan38_comp1061_primary_tree_acceptance_v1.json"
+      - "data/evidence/jpn24_stickiness_extension_parsimony_v1.json"
+      - "data/evidence/fdt4_eastasia_pgls_recovered_diagnostic_v1.json"
+      - "data/evidence/fdt4_branchwise_niche_transition_concordance_v1.json"
+      - ".github/workflows/validate-chapter2-diversity-depth-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate fail-closed standalone contract
+        run: |
+          python analysis/validate_chapter2_diversity_depth_v1.py
+          python tests/test_validate_chapter2_diversity_depth_v1.py -v
