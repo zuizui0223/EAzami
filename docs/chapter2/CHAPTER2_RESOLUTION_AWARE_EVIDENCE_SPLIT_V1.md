@@ -7,6 +7,8 @@ Machine ledgers:
 - `data/evidence/chapter2_resolution_classification_v1.csv`
 - `data/evidence/meta_simulation_resolution_audit_v1.csv`
 
+The audit classifies 12 meta/synthesis/programme lanes and 10 simulation lanes, including superseded and planned work so that absence from the active paper cannot be mistaken for a missing review.
+
 ## The result language
 
 Chapter 2 does not claim recurrent evolution. It estimates topology-conditioned **minimum state-change counts**. The phrase `at least` is the central scientific device because it remains valid when directions, ancestral assignments and individual event placements are unresolved.

@@ -98,8 +98,8 @@ EXPECTED_MAIN_ROLES = {
     "M05": "MAIN_BOUNDARY",
 }
 EXPECTED_RESOLUTION_IDS = [f"D{i:02d}" for i in range(1, 34)]
-EXPECTED_META_SIM_IDS = [f"M{i:02d}" for i in range(1, 11)] + [
-    f"S{i:02d}" for i in range(1, 9)
+EXPECTED_META_SIM_IDS = [f"M{i:02d}" for i in range(1, 13)] + [
+    f"S{i:02d}" for i in range(1, 11)
 ]
 
 
@@ -649,6 +649,24 @@ def validate_resolution_and_meta_sim_audit() -> tuple[list[dict[str, str]], list
         current["sample_aware_minimum_transitions"],
     ) != (4, 4, 1, 1, 2):
         raise AssertionError("M10 cross-scale identifiability drift")
+    cytotype = load_json(ROOT / "data" / "evidence" / "japan38_cytotype_trait_overlap_v1.json")
+    if (
+        cytotype["n_source_backed_cytotype_concepts"],
+        cytotype["dominant_radiation_ploidy_levels"],
+        cytotype["upward_or_ascending_observed_ploidy_levels"],
+        cytotype["diploid_observed_orientation_states"],
+    ) != (
+        9,
+        [2, 4, 6],
+        [2, 4, 6],
+        ["downward_or_nodding", "upward_or_erect"],
+    ):
+        raise AssertionError("M11 cytotype-trait context drift")
+    fdt_registry = read_rows(
+        ROOT / "data" / "evidence" / "functional_diversity_time_meta_registry_v1.csv"
+    )
+    if [row["analysis_id"] for row in fdt_registry] != [f"FDT{i}" for i in range(1, 9)]:
+        raise AssertionError("M12 FDT programme registry drift")
 
     v31 = load_json(ROOT / "data" / "evidence" / "capitulum_space_mechanism_v3_1_result_summary.json")
     if len(v31["families"]) != 5 or len(v31["seeds"]) != 4 or v31["draws_per_seed_per_family"] != 500 or v31["adequate_families"]:
@@ -674,6 +692,43 @@ def validate_resolution_and_meta_sim_audit() -> tuple[list[dict[str, str]], list
         != "blocked_until_dated_tree_and_event_inputs"
     ):
         raise AssertionError("S08 planned FDT7 model was promoted to a result")
+    orientation_sim = load_json(
+        ROOT / "data" / "evidence" / "orientation_mechanism_reduction_result_v1.json"
+    )
+    orientation_best = next(
+        family for family in orientation_sim["families"]
+        if family["family"] == "combined_time_abiotic"
+    )
+    if (
+        len(orientation_sim["families"]),
+        orientation_sim["draws_per_family"],
+        orientation_sim["best_family"],
+        orientation_best["full_core_match_rate"],
+        orientation_best["heldout_mean"],
+    ) != (5, 1500, "combined_time_abiotic", 0.183333, 1.0):
+        raise AssertionError("S09 orientation mechanism diagnostic drift")
+    macro_v1 = load_json(
+        ROOT / "data" / "evidence" / "macro_interaction_pattern_reduction_result_v1.json"
+    )
+    macro_v2 = load_json(
+        ROOT / "data" / "evidence" / "macro_interaction_pattern_reduction_result_v2.json"
+    )
+    if (
+        macro_v1["families"][0]["family"],
+        macro_v1["families"][0]["best_match_count"],
+        macro_v1["families"][0]["full_match_rate"],
+        macro_v2["best_family_by_robust_pattern_score"],
+        macro_v2["draws_per_seed_per_family"],
+        len(macro_v2["seeds"]),
+    ) != (
+        "full_tradeoff_modular_evolvability",
+        11,
+        1 / 180,
+        "full_tradeoff_modular_evolvability",
+        180,
+        4,
+    ):
+        raise AssertionError("S10 historical macro-interaction screen drift")
 
     split = RESOLUTION_SPLIT_PATH.read_text(encoding="utf-8")
     required_split = [
@@ -687,7 +742,8 @@ def validate_resolution_and_meta_sim_audit() -> tuple[list[dict[str, str]], list
     disposition = META_SIM_DISPOSITION_PATH.read_text(encoding="utf-8")
     required_disposition = [
         "pooled RR=2.674", "6/6 current HGA hypotheses", "five families x four seeds x 500 draws",
-        "0/64", "22/24", "Present-state simulations", "Evolutionary simulations",
+        "0/64", "22/24", "5 x 1,500", "11/11", "Present-state simulations",
+        "Evolutionary simulations",
     ]
     missing = [needle for needle in required_disposition if needle not in disposition]
     if missing:

@@ -53,7 +53,7 @@ class DiversityDepthContractTests(unittest.TestCase):
     def test_all_analyses_have_resolution_and_meta_simulation_dispositions(self) -> None:
         resolution, meta_sim = target.validate_resolution_and_meta_sim_audit()
         self.assertEqual(len(resolution), 33)
-        self.assertEqual(len(meta_sim), 18)
+        self.assertEqual(len(meta_sim), 22)
         lookup = {row["analysis_id"]: row for row in resolution}
         self.assertEqual(
             lookup["D04"]["epistemic_class"],
