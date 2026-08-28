@@ -31,14 +31,15 @@ jobs:
             --nuclear-audit data/evidence/east_asia_independent_nuclear_evidence_audit_v1.csv \
             --interactions data/evidence/cirsium_interaction_evidence_summary_v1.json \
             --out /tmp/chapter2_nonclimate_explanatory_constraints_v1.json
-      - name: Compare frozen result
+      - name: Compare frozen result semantically
         run: |
-          cmp /tmp/chapter2_nonclimate_explanatory_constraints_v1.json data/evidence/chapter2_nonclimate_explanatory_constraints_v1.json
           python - <<'PY'
           import json
           from pathlib import Path
-          x=json.loads(Path('data/evidence/chapter2_nonclimate_explanatory_constraints_v1.json').read_text())
-          f=x['factors']
+          got=json.loads(Path('/tmp/chapter2_nonclimate_explanatory_constraints_v1.json').read_text())
+          frozen=json.loads(Path('data/evidence/chapter2_nonclimate_explanatory_constraints_v1.json').read_text())
+          assert got == frozen, 'rebuilt non-climate constraint object differs from frozen result'
+          f=frozen['factors']
           assert f['cytotype_ploidy']['status']=='deterministic_one_to_one_model_contradicted_descriptively'
           assert f['broad_colonization_history']['status']=='one_to_one_configuration_mapping_contradicted_descriptively'
           assert f['population_genetic_structure']['status']=='species_tip_homogeneity_assumption_constrained'
