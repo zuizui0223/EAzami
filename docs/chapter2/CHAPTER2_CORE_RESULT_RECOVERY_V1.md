@@ -2,7 +2,7 @@
 
 Status date: 2026-08-29
 
-Scientific status: **COMPLETE_CONFIGURATION_DIVERSITY_MINIMUM_CHANGE_AND_BOUNDED_EXPLANATORY_REACH**
+Scientific status: **COMPLETE_CONFIGURATION_DIVERSITY_AND_MINIMUM_CHANGE_CORE** + **BOUNDED_ECOLOGICAL_EXPLANATORY_REACH**
 
 Machine-readable ledger: `data/evidence/chapter2_core_result_recovery_v1.csv`
 
@@ -10,11 +10,11 @@ Machine-readable ledger: `data/evidence/chapter2_core_result_recovery_v1.csv`
 
 Chapter 1 measures capitulum phenotype across present space. Chapter 2 asks:
 
-> **How many state changes are minimally required in constituent capitulum traits, at what relative lineage depth can those histories occur, and how far can existing data explain or constrain the observed states?**
+> **How many state changes are minimally required in the traits that form alternative capitulum configurations, at what relative lineage depth can those histories occur, and how far can existing data explain or constrain the observed states?**
 
 The operational sequence is:
 
-**minimum state-change lower bound → relative lineage-depth / named-edge resolution → ecological explanatory reach → explicit Chapter 3 boundary**.
+**minimum state-change lower bound → relative lineage-depth / named-edge event resolution → ecological explanatory reach → explicit Chapter 3 boundary**.
 
 The paper does not require every plausible driver to be modelled. It reports what current joined data can resolve and stops when data overlap is insufficient.
 
@@ -42,7 +42,7 @@ Median bootstrap relative lineage-depth envelopes are:
 
 Current forced-edge fractions include orientation JPN36=0.227, phyllary JPN36=0.728, stickiness JPN06=0.995 and JPN36=0.707. Stickiness is count-stable and depth-constrained, phyllary posture is count-stable but depth-ambiguous, and orientation remains weakly localized.
 
-Zero of three trait pairs meets the cross-treatment shared-localization rule. This constrains simple whole-capitulum common lability without proving independent modules.
+The three-coordinate **event resolution** result separates **minimum-count stability**, relative lineage-depth and named-edge localization. Zero of three trait pairs meets the cross-treatment shared-localization rule. This constrains simple whole-capitulum common lability without proving independent modules.
 
 ### 3. Ecological explanatory reach is asymmetric
 
@@ -105,7 +105,7 @@ These datasets remain separated by estimand and marker system. Heterogeneous rDN
 
 ## What belongs in the JEB main text
 
-The main text has five result groups:
+The main text has **five result groups only**:
 
 1. dominant-radiation context and observed configuration diversity;
 2. three trait-specific minimum-change distributions;
