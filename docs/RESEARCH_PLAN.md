@@ -10,7 +10,9 @@ The active Chapter 2 question is:
 
 > **How deeply is present capitulum diversity embedded in evolutionary history, and which trait histories or trait-environment relationships were repeatedly reassembled?**
 
-The full pipeline, 17-item inventory, PR #126 disposition and JEB gate are frozen in `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md`. Submission remains stopped until an EAzami-native continuous registry is admitted and the manuscript is rebuilt. The prior present integration question and reconstruction-aware negative results below are retained as audit history, not as the standalone opening estimand.
+The full pipeline, 17-item inventory, PR #126 disposition and JEB gate are frozen in `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md`. An EAzami-native continuous registry is now admitted, but submission remains stopped because it contains zero comparable scalar Japan38 tips and the manuscript has not been rebuilt. The prior present integration question and reconstruction-aware negative results below are retained as audit history, not as the standalone opening estimand.
+
+The first independent continuous-history screen is complete on the only four traits with the same seven direct-measurement taxa. No trait meets the exact-permutation, BH-corrected, all-six-topology retention rule. The consistently positive but unsupported phyllary-protrusion pattern is used only to prioritize broader measurement; it is not a retained-history claim.
 
 ## Dissertation architecture
 
@@ -62,27 +64,29 @@ The current evidence does not support either a persistent whole-capitulum module
 
 ## Chapter 2 paper claim
 
-> **Present-day phenotypic integration does not imply a shared evolutionary history in a rapid thistle radiation.**
+> **Authority-backed capitulum traits show repeated but trait-specific histories in a young thistle radiation; recurrence counts and transition localization are distinct estimands.**
 
-This means the available panel does not support one persistent historical capitulum module. It does not mean the traits have zero phylogenetic structure, evolve independently, arose independently or lack shared development or selection.
+The independent seven-taxon continuous diagnostic does not detect corrected topology-robust retention, while Japan38 continuous history is still not evaluable. This does not mean the traits have zero phylogenetic structure, are labile, evolve independently, arose independently or lack shared development or selection.
 
 ## JEB paper architecture
 
 Primary submission target: **Journal of Evolutionary Biology**, Research Article.
 
-1. Present integration is scale dependent.
-2. Robust continuous state structure is not detected in the sparse exact-concept panel.
-3. Three discrete state ontologies require repeated minimum changes.
-4. Recurrence-count robustness differs from exact edge identifiability.
-5. Continuous shared localization fails a reconstruction-aware null in both frozen panels.
-6. Discrete shared localization is topology dependent.
+1. Establish the young-radiation scaffold and fail-closed trait admission.
+2. Show that three discrete state ontologies require trait-specific repeated minimum changes.
+3. Separate recurrence-count robustness from exact edge identifiability.
+4. Report the independent n=7 continuous diagnostic as not supported and explicitly coverage-limited.
+5. Test present/reconstructed orientation-niche concordance under the frozen coverage gates.
+6. Reserve shared continuous localization, DTT and event correspondence for their unmet input gates.
 
 Main figures:
 
-- Figure 1: within/among present integration;
-- Figure 2: recurrence, forced edges and state-structure decisions;
-- Figure 3: original and JPN29-excluded reconstruction-aware nulls;
-- Figure 4: discrete overlap and claim boundary.
+- Figure 1: radiation scaffold and independent trait-admission coverage;
+- Figure 2: trait-specific recurrence and state coverage;
+- Figure 3: recurrence-count robustness versus edge identifiability;
+- Figure 4: bounded trait-niche concordance and claim boundary.
+
+The n=7 continuous diagnostic belongs in Supporting Information or the Figure 1 coverage panel, not as a headline positive result.
 
 ## What happens to existing meta-analysis
 
@@ -122,11 +126,11 @@ Repeated states still admit ancestral retention, lineage-specific origin, ancest
 
 ## Immediate actions
 
-1. Keep `MANUSCRIPT_JEB_V3.md` and the four generated figures as the active submission package.
-2. Complete author metadata, funding and conflict fields on the separate title page.
-3. Produce and inspect a line-numbered DOCX/PDF after author metadata are available.
-4. Archive the submission commit and public data/code DOI by revision at the latest.
-5. Do not reopen frozen analyses to obtain a favourable historical-coupling result.
+1. Keep `MANUSCRIPT_JEB_V3.md` and its generated files as an immutable audit snapshot, not the active submission package.
+2. Increase commensurate scalar coverage on predeclared Japan38 tips without collapsing source ranges to midpoints.
+3. Rebuild the standalone manuscript and figures only after the Japan38 coverage gate passes.
+4. Preserve the exact n=7 negative diagnostic and do not add/remove traits or taxa to obtain a favourable result.
+5. Add author metadata and archive DOI only after a scientifically eligible standalone package exists.
 
 ## Stop rules
 

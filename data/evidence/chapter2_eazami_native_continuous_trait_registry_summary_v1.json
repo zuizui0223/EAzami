@@ -1,0 +1,41 @@
+{
+  "contract_version": "chapter2_eazami_native_continuous_trait_registry_v1",
+  "registry_sha256": "a8f472d57040522e0fba755e0153f64b389352b0d6819ffc8b018dd00c1ddb39",
+  "source_seed_rows": {
+    "display": 15,
+    "phyllary": 7
+  },
+  "registry_records": 45,
+  "unique_taxa": 15,
+  "source_record_counts": {
+    "Chang and Tseng 2019 taxon treatment": 2,
+    "Chang et al. 2026 comparative morphology": 20,
+    "Flora of Taiwan 2nd ed.": 2,
+    "NMNS Japanese Cirsium database": 6,
+    "Tseng et al. 2025 comparative morphology": 15
+  },
+  "admitted_comparable_scalar_records": 35,
+  "context_only_range_records": 10,
+  "comparable_scalar_panel_taxa": {
+    "inner_outer_length_ratio": 4,
+    "measured_capitulum_length_cm": 7,
+    "measured_capitulum_width_cm": 7,
+    "phyllary_length_cm": 7,
+    "phyllary_number": 3,
+    "phyllary_protrusion_mm": 7
+  },
+  "seven_taxon_direct_panel_traits": [
+    "measured_capitulum_length_cm",
+    "measured_capitulum_width_cm",
+    "phyllary_length_cm",
+    "phyllary_protrusion_mm"
+  ],
+  "japan38_mapped_taxa": 5,
+  "japan38_admitted_scalar_records": 0,
+  "japan38_admitted_scalar_taxa": 0,
+  "registry_gate": "ADMITTED_EAZAMI_NATIVE_VALUES",
+  "japan38_history_gate": "NOT_EVALUABLE_ZERO_ADMITTED_SCALAR_JAPAN38_TIPS",
+  "east_asia_direct_panel_gate": "DIAGNOSTIC_READY_N7_SOURCE_AND_LINEAGE_CLUSTERED",
+  "analysis_route": "Eligible for a predeclared four-trait seven-taxon direct continuous-history diagnostic across the six frozen AU-nonrejected topologies; retain source and lineage clustering as a claim ceiling.",
+  "claim_boundary": "The registry proves independent source admission, not adequate Japan38 coverage. Ranges are not midpoints. The seven-taxon point-estimate panels are lineage- and source-clustered diagnostics, not evidence of adaptation, convergence, absolute rates or a general East-Asian process."
+}

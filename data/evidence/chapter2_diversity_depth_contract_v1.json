@@ -25,15 +25,29 @@
       "public occurrence and environmental data with source-name guards"
     ]
   },
-  "current_submission_status": "STOP_STANDALONE_CONTINUOUS_INPUT_NOT_ADMITTED",
+  "current_submission_status": "STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT",
   "stop_reasons": [
-    "The current eight-continuous-trait history and reconstruction-null outputs consume an Azami-export bridge.",
-    "No EAzami-native continuous-trait registry has yet passed identity, source, licensing, measurement and coverage gates.",
+    "The EAzami-native registry passes identity, source, rights and measurement gates, but has zero admitted scalar records on Japan38 tips; its five Japan38 matches are context-only ranges that cannot be collapsed to midpoints.",
+    "The current eight-continuous-trait Japan38 history and reconstruction-null outputs consume an Azami-export bridge and remain audit-only.",
     "A taxon-reconciled dated Japan38 topology ensemble is not available for event-window or disparity-through-time inference."
   ],
   "independent_continuous_input": {
     "required_path": "data/evidence/chapter2_eazami_native_continuous_trait_registry_v1.csv",
-    "exists_at_freeze": false,
+    "summary_path": "data/evidence/chapter2_eazami_native_continuous_trait_registry_summary_v1.json",
+    "exists_at_freeze": true,
+    "registry_status": "ADMITTED_EAZAMI_NATIVE_VALUES",
+    "registry_sha256": "a8f472d57040522e0fba755e0153f64b389352b0d6819ffc8b018dd00c1ddb39",
+    "registry_records": 45,
+    "admitted_comparable_scalar_records": 35,
+    "context_only_range_records": 10,
+    "japan38_admitted_scalar_taxa": 0,
+    "east_asia_direct_panel": "four fixed traits on seven source- and lineage-clustered taxa; diagnostic only",
+    "east_asia_direct_history_result": {
+      "path": "data/evidence/chapter2_eazami_native_continuous_history_diagnostic_v1.json",
+      "panel_decision": "not_supported_no_topology_robust_retention_detected",
+      "supported_traits": [],
+      "bounded_pattern": "phyllary_protrusion_mm is positive on all six topologies with positive-tail p 0.0673-0.0827 and BH q 0.2690-0.3310; this is a measurement-priority hint, not support"
+    },
     "required_fields": [
       "record_id",
       "paper_japan_member_id",
@@ -59,12 +73,13 @@
     "authority-backed orientation phyllary and stickiness recurrence plus placement uncertainty",
     "six-topology Japan plus Taiwan orientation-niche PGLS",
     "bounded audit of the frozen orientation-transition by niche-shift result; producer recovery is still required for rerun",
+    "frozen four-trait seven-taxon direct continuous-history diagnostic across six AU-nonrejected topologies; no trait meets the topology-robust corrected retention rule",
     "sparse cytotype and colonization-context negative constraints"
   ],
   "method_only_until_independent_rerun": [
-    "continuous trait history",
-    "continuous reconstruction-aware branch-change null",
-    "continuous equal-branch topology diagnostic"
+    "legacy Japan38 eight-trait continuous history",
+    "legacy Japan38 continuous reconstruction-aware branch-change null",
+    "legacy Japan38 continuous equal-branch topology diagnostic"
   ],
   "blocked_layers": {
     "event_correspondence": "requires a reconciled dated topology ensemble and a sourced event-window registry",

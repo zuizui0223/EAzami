@@ -21,11 +21,12 @@ class DiversityDepthContractTests(unittest.TestCase):
 
     def test_current_native_continuous_gate_is_fail_closed(self) -> None:
         contract = json.loads(target.CONTRACT_PATH.read_text(encoding="utf-8"))
-        self.assertEqual(target.validate_native_input(contract), "STOP_preserved")
+        self.assertEqual(target.validate_native_input(contract), "ADMITTED_coverage_insufficient")
         target.validate_independence_boundary(contract)
 
     def test_frozen_negative_results_are_not_promoted(self) -> None:
         target.validate_frozen_results()
+        target.validate_native_history_diagnostic()
 
 
 if __name__ == "__main__":

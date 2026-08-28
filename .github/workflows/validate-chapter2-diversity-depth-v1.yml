@@ -4,10 +4,25 @@ on:
   pull_request:
     paths:
       - "analysis/validate_chapter2_diversity_depth_v1.py"
+      - "analysis/build_chapter2_eazami_native_continuous_registry_v1.py"
+      - "analysis/run_chapter2_eazami_native_continuous_history_diagnostic_v1.py"
       - "tests/test_validate_chapter2_diversity_depth_v1.py"
+      - "tests/test_build_chapter2_eazami_native_continuous_registry_v1.py"
+      - "tests/test_chapter2_eazami_native_continuous_history_diagnostic_v1.py"
       - "docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md"
       - "data/evidence/chapter2_diversity_depth_contract_v1.json"
       - "data/evidence/chapter2_diversity_depth_inventory_v1.csv"
+      - "data/evidence/chapter2_eazami_native_continuous_trait_registry_v1.csv"
+      - "data/evidence/chapter2_eazami_native_continuous_trait_registry_summary_v1.json"
+      - "data/evidence/chapter2_eazami_native_continuous_history_design_v1.json"
+      - "data/evidence/chapter2_eazami_native_continuous_history_diagnostic_v1.json"
+      - "data/evidence/chapter2_eazami_native_continuous_history_diagnostic_by_topology_v1.csv"
+      - "data/evidence/comp1061_six_au_nonrejected_trees_v1.nwk"
+      - "data/evidence/comp1061_display_size_direct_seed_v1.csv"
+      - "data/evidence/comp1061_phyllary_direct_seed_v1.csv"
+      - "data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv"
+      - "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv"
+      - "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv"
       - "data/evidence/japan38_comp1061_primary_tree_acceptance_v1.json"
       - "data/evidence/jpn24_stickiness_extension_parsimony_v1.json"
       - "data/evidence/fdt4_eastasia_pgls_recovered_diagnostic_v1.json"
@@ -27,7 +42,30 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Install continuous-history dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.1.3 scipy==1.14.1 biopython==1.85
       - name: Validate fail-closed standalone contract
         run: |
+          mkdir -p .tmp/chapter2-native
+          python analysis/build_chapter2_eazami_native_continuous_registry_v1.py \
+            --display data/evidence/comp1061_display_size_direct_seed_v1.csv \
+            --phyllary data/evidence/comp1061_phyllary_direct_seed_v1.csv \
+            --membership data/evidence/moreyra2025_japan_38_membership_audit_2026-08-10.csv \
+            --orientation-crosswalk data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --nmns-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --registry-output .tmp/chapter2-native/registry.csv \
+            --summary-output .tmp/chapter2-native/summary.json
+          cmp .tmp/chapter2-native/registry.csv data/evidence/chapter2_eazami_native_continuous_trait_registry_v1.csv
+          cmp .tmp/chapter2-native/summary.json data/evidence/chapter2_eazami_native_continuous_trait_registry_summary_v1.json
+          python analysis/run_chapter2_eazami_native_continuous_history_diagnostic_v1.py \
+            --design data/evidence/chapter2_eazami_native_continuous_history_design_v1.json \
+            --registry data/evidence/chapter2_eazami_native_continuous_trait_registry_v1.csv \
+            --au-trees data/evidence/comp1061_six_au_nonrejected_trees_v1.nwk \
+            --output-json .tmp/chapter2-native/history.json \
+            --output-csv .tmp/chapter2-native/history.csv
+          cmp .tmp/chapter2-native/history.json data/evidence/chapter2_eazami_native_continuous_history_diagnostic_v1.json
+          cmp .tmp/chapter2-native/history.csv data/evidence/chapter2_eazami_native_continuous_history_diagnostic_by_topology_v1.csv
           python analysis/validate_chapter2_diversity_depth_v1.py
           python tests/test_validate_chapter2_diversity_depth_v1.py -v
+          python tests/test_build_chapter2_eazami_native_continuous_registry_v1.py -v
+          python tests/test_chapter2_eazami_native_continuous_history_diagnostic_v1.py -v

@@ -1,0 +1,63 @@
+{
+  "contract_version": "chapter2_eazami_native_continuous_history_design_v1",
+  "freeze_date": "2026-08-28",
+  "freeze_status": "ANALYSIS_SPECIFICATION_FROZEN_BEFORE_THIS_HISTORY_DIAGNOSTIC",
+  "question": "Do any of the four complete direct-measurement traits show topology-robust phylogenetic retention in the fixed seven-taxon panel?",
+  "input_registry": {
+    "path": "data/evidence/chapter2_eazami_native_continuous_trait_registry_v1.csv",
+    "sha256": "a8f472d57040522e0fba755e0153f64b389352b0d6819ffc8b018dd00c1ddb39",
+    "admission_status": "ADMITTED_EAZAMI_NATIVE_VALUES"
+  },
+  "topology_ensemble": {
+    "github_run_id": 32614839764,
+    "artifact_name": "comp1061-alt-topology-au-32614839764",
+    "artifact_id": 9486643703,
+    "au_trees_sha256": "ba18f5509766d72845557dd6a654321e1cf52dd0d45c69add650aa01ddaa0d33",
+    "use": "first six AU-nonrejected optimized Comp1061 topologies",
+    "branch_length_semantics": "substitutions/site; not absolute time"
+  },
+  "fixed_taxa": [
+    "Cirsium brevicaule",
+    "Cirsium irumtiense",
+    "Cirsium japonicum var. albescens",
+    "Cirsium japonicum var. australe",
+    "Cirsium kawakamii",
+    "Cirsium pengii",
+    "Cirsium tatakaense"
+  ],
+  "fixed_traits": [
+    "measured_capitulum_length_cm",
+    "measured_capitulum_width_cm",
+    "phyllary_length_cm",
+    "phyllary_protrusion_mm"
+  ],
+  "trait_selection_rule": "Include every admitted comparable scalar trait present for all seven taxa; do not select by an observed history result.",
+  "primary_estimand": "Spearman correlation between patristic distance and absolute trait difference. Positive values indicate phylogenetic retention in this distance diagnostic.",
+  "null": {
+    "scheme": "all 7! tip-label permutations separately on each topology and trait",
+    "exact_permutations": 5040,
+    "primary_tail": "positive",
+    "secondary_tail": "negative diagnostic only"
+  },
+  "multiplicity": "Benjamini-Hochberg across the four fixed traits separately within each topology",
+  "decision_rule": {
+    "trait_supported": "observed rho > 0 and positive-tail BH q < 0.05 on every one of the six topologies",
+    "otherwise": "not_supported_as_topology_robust_phylogenetic_retention",
+    "panel": "supported only if at least one fixed trait passes the trait rule"
+  },
+  "sensitivities": [
+    "leave-one-taxon-out rho range on every topology",
+    "Pagel lambda MLE as a descriptive small-sample diagnostic only",
+    "negative-tail exact p as an overdispersion diagnostic without a convergence claim"
+  ],
+  "stop_rules": [
+    "STOP if the registry hash differs.",
+    "STOP unless exactly the four fixed traits share exactly the seven fixed taxa.",
+    "STOP if the AU tree artifact hash differs or fewer than six trees are present.",
+    "Do not substitute ranges, calculate range midpoints, add traits or remove taxa after viewing results.",
+    "Do not run shared-branch-change or ancestral-state claims from this n=7 panel."
+  ],
+  "known_design_limit": "The seven taxa are clustered by lineage and contributing source study. All results are diagnostic and cannot establish a general East-Asian process.",
+  "preexecution_context": "An earlier direct PGLS used two of these traits for different orientation/coupling questions. The current history estimand, complete four-trait inclusion rule and exact decision rule were frozen before executing this diagnostic.",
+  "claim_boundary": "A supported result would show topology-robust retention within this fixed panel only. A failed result would mean retention was not detected, not that a trait is evolutionarily independent or labile. Neither outcome establishes convergence, adaptation, function, absolute rate or event causation."
+}
