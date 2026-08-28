@@ -1,9 +1,9 @@
-# JEB question-result-figure map v4
+# JEB question-result-figure map v5
 
-Status date: 2026-08-28
+Status date: 2026-08-29
 Status: **ACTIVE FOR MANUSCRIPT JEB V4**
 
-The paper now closes the empirical sequence as:
+The paper closes the empirical sequence as:
 
 **minimum change count → relative event depth / placement resolution → ecological explanatory reach → explicit own-data boundary**.
 
@@ -13,11 +13,12 @@ The paper now closes the empirical sequence as:
 | Q2. What minimum state-change burden is unavoidable? | unordered parsimony minimum over ML + 1,000 UFBoot | orientation 4–6; phyllary 3; stickiness 5 | Figure 2a | lower bounds, not independent origins or rates |
 | Q3. At what relative lineage depth and on which named edges can those minimum changes occur? | exact lower–upper envelope over all minimum histories + forced-edge frequency | median envelopes: orientation 0.795–0.994; phyllary 0.695–1.000; stickiness 0.937–0.954; JPN06 stickiness=0.995 | Figures 2b–3 | topology-only lineage breadth and localization, not absolute time or cause |
 | Q4. Does one transition-localization pattern span the three traits? | branch-aware and equal-branch transition-overlap diagnostics | zero of three pairs passes the cross-treatment rule | Figure 3 | boundary on simple common lability, not proof of independence |
-| Q5. How far can existing ecological data explain the trait states? | phylogenetic effect direction, accepted-topology sign stability, species LOO, branchwise concordance, held-out prediction versus null and phylogeny-only | orientation `unresolved`; phyllary `not_evaluable`; stickiness `not_evaluable` | Figure 4 | present ecological correspondence and predictive reach, not historical causation, convergence or adaptation |
+| Q5. How far can existing data explain or constrain the trait states? | climate effect direction + topology/LOO robustness + evaluability; non-climate constraints from cytotype, broad history and independent nuclear evidence | orientation climate=`unresolved`; phyllary/stickiness climate=`not_evaluable`; deterministic ploidy explanation contradicted descriptively; species-tip genomic compression remains a live boundary | Figure 4 | bounded explanatory reach, not historical causation, convergence or adaptation |
 
 ## Figure 1 — Radiation context and observed configurations
 
 - accepted Comp1061 scaffold and JPN20/JPN31 admission exceptions;
+- label the tree as the **harmonized common-locus Japan38 scaffold**, not the only nuclear evidence;
 - 36/38 dominant-radiation context;
 - coverage bars for exactly three completed discrete histories: orientation 20, phyllary posture 10 and stickiness 13;
 - at least three harmonized orientation × stickiness configurations.
@@ -39,9 +40,9 @@ Axis label: `relative lineage-depth (1 = terminal; topology only, not time)`.
 - Panel c: zero of three trait pairs meets the cross-treatment shared-localization rule;
 - provenance inset: 0.201, 0.754, 0.67 and 0.40 reproduce only on superseded run 32845725038.
 
-## Figure 4 — Ecological explanatory reach
+## Figure 4 — Ecological explanatory reach and current alternative constraints
 
-### Panel a — Direction and uncertainty
+### Panel a — Orientation climate direction and uncertainty
 
 Plot standardized D-minus-U effects across the six accepted optimized topologies:
 
@@ -59,36 +60,42 @@ Use `downward/nodding minus upward/erect` as the visible direction convention.
 
 Do not show a raw ecological UFBoot sign rate. It is `not_evaluable` because the accepted archived ecological input bundle did not retain those raw UFBoot trees.
 
-### Panel c — Predictive gain separates correspondence from explanation
+### Panel c — What non-climate existing data can already constrain
 
-Show mean held-out ΔMSE by accepted topology, with positive values meaning improvement from adding orientation to the named baseline.
+Use a compact evidence matrix rather than a new fitted multi-predictor model.
 
-| Axis | vs mean-only null | vs phylogeny-only |
+| Factor | Current evidence | Current conclusion |
 | --- | --- | --- |
-| BIO15 | +0.224 to +0.230 | −0.108 to −0.102 |
-| BIO1 | +0.364 to +0.370 | −0.199 to −0.192 |
+| cytotype/ploidy | 9 source-backed concepts; orientation known for 7 dominant-radiation concepts | one-to-one ploidy assignment is inconsistent with observed states: upward/ascending occurs at 2x, 4x, 6x and diploids include U and D |
+| broad colonization history | 36/38 concepts in dominant radiation; rare secondary-history comparators | configurations do not map one-to-one onto the broad history class |
+| population/genetic structure | 2017–2021 Japanese MIG-seq/RAD + public 2022 *C. maritimum* MIG-seq | one species tip can compress population/genetic structure; named species need not be homogeneous genomic units |
+| independent local topology | Korean rDNA + Chang 2025/2026 phylotranscriptomics | the Japan38 tree is not treated as the sole nuclear evidence; local topology/reticulation alternatives remain empirically testable |
+| pollinator/enemy context | *Cirsium* literature/meta-analysis priors | biologically plausible but not yet joined densely enough to the Japan38 trait panel for a comparable phylogeny-aware explanatory test |
 
-Interpretation printed on panel: **orientation improves over a naive null but not over phylogeny-only Brownian kriging**.
+The purpose of Panel c is **not** to claim that these factors explain the traits. It shows which simple alternatives can already be bounded and which remain unevaluable with existing joined data.
 
 ### Panel d — Trait-level evaluation
 
 | Trait | Evaluation | Why |
 | --- | --- | --- |
-| orientation | `unresolved` | stable direction, but no predictive gain beyond phylogeny-only and frozen inferential thresholds not crossed |
+| orientation | `unresolved` | BIO15/BIO1 directions are large and stable across accepted topologies and every species LOO, but frozen inferential thresholds are not crossed |
 | phyllary posture | `not_evaluable` | only two n≥10 climate taxa with unambiguous state; both ascending |
 | stickiness | `not_evaluable` | only two n≥10 climate taxa with evaluable state; both nonsticky |
 
-End the panel with the Chapter 3 boundary: phyllary wetness/enemy/access and stickiness benefit/null/cost require direct measurements; they are not climate-derived results.
+End with the explicit data boundary:
+
+- orientation: current public data support a stable climate correspondence but not a historical selective cause;
+- phyllary: broader direct trait coverage plus wetness/enemy/access data are required;
+- stickiness: sticky/nonsticky ecological and interaction coverage plus direct cost/benefit measurements are required.
 
 ## Supporting Information routing
 
-Species-tip compression moves out of the main four-figure sequence and remains in Supporting Information:
+The following remain supplementary rather than expanding the main four-figure sequence:
 
-- 4/4 audited polymorphic systems expose extant W/C multiplicity hidden by one-tip coding;
-- the only morph-linked testable system changes the minimum from 1 to 2;
-- this remains a resolution audit, not a general rate or regain result.
-
-Continuous EAzami-native, colour, cytotype and legacy reconstruction-null diagnostics also remain supplementary boundaries.
+- predictive mean-null / phylogeny-only diagnostics: transparency sensitivity, not the main ecological estimand;
+- species-tip compression: 4/4 audited polymorphic systems expose extant W/C multiplicity hidden by one-tip coding; one morph-linked system changes the minimum from 1 to 2;
+- independent nuclear-DNA audit: pre-2025 Japanese/Korean rDNA, MIG-seq/RAD, transcriptome and genome resources plus local Chang phylogenomics;
+- continuous EAzami-native, colour, cytotype and legacy reconstruction-null diagnostics.
 
 ## Display gates
 
@@ -98,4 +105,6 @@ Continuous EAzami-native, colour, cytotype and legacy reconstruction-null diagno
 - Do not label minimum changes as independent origins, convergence or adaptation.
 - Do not rewrite `not_evaluable` as zero effect or no relationship.
 - Do not call the orientation climate pattern adaptation or historical event matching.
-- For predictive gain, label the baseline explicitly; null and phylogeny-only are different comparisons.
+- Do not promote predictive model competition to the principal ecological-reach criterion.
+- Do not describe Comp1061/Moreyra as the only nuclear evidence; use `harmonized common-locus Japan38 scaffold`.
+- Do not pool rDNA, MIG-seq, transcriptome or reference-genome branch lengths into the Comp1061 tree.
