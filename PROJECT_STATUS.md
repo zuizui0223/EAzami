@@ -2,14 +2,15 @@
 
 Status date: 2026-08-28
 
-## Active status: standalone diversity-depth reframe
+## Active status: Chapter 2 public-history core complete
 
 Chapter 1 now supplies the conceptual **breadth** question; Chapter 2 independently estimates historical **depth**. EAzami must build its own literature/specimen/flora/public-image trait registry and cannot use Azami phenotype values or Azami significance as an admission gate.
 
 - standalone-ready now: Comp1061 scaffold; discrete orientation/phyllary/stickiness recurrence and localization; topology ensemble; GBIF + CHELSA orientation-niche analyses; an admitted 45-record EAzami-native continuous registry; a four-trait seven-taxon direct diagnostic panel; bounded colonization/cytotype context;
-- reanalysis required: Japan38 continuous trait history and reconstruction-aware null after commensurate scalar measurements cover enough Japan38 tips;
-- blocked/design only: dated event correspondence, phenotypic DTT/phylomorphospace and M0-M5 evolutionary simulations;
-- submission status: **STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT**. The native-input provenance gate passed, but all five mapped Japan38 records are range-only and zero Japan38 tips have admitted scalar values.
+- bounded, not completion gates: Japan38 continuous history, dated event correspondence, DTT and evolutionary simulations;
+- routed to Chapter 3: own Japan-wide RAD-seq, same-individual phenotype/cytotype, population structure and field causality;
+- scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_CORE**;
+- submission status: **HOLD_JEB_PACKAGE_REBUILD_ONLY**.
 
 Canonical plan: `docs/chapter2/DIVERSITY_DEPTH_STANDALONE_V1.md`. The previous present-integration package remains a frozen audit snapshot and its negative results are retained below.
 
@@ -24,17 +25,17 @@ shared continuous capitulum phenotype ontology
         |     within/among variation; geography; environmental alignment
         |
         |-- Chapter 2 — phenotype × evolutionary time/history
-        |     present integration; state structure; recurrence; transition localization
+        |     public trait recurrence; transition localization; topology uncertainty
         |
-        `-- Chapter 3 — phenotype × function/fitness
-              trait -> performance -> reproductive fitness
+        `-- Chapter 3 — own RAD-seq × linked phenotype/function
+              history discrimination -> mechanism -> reproductive fitness
 ```
 
 Function is not an admission gate for Chapter 2. Chapter 1 and Chapter 2 reuse the same phenotype ontology on orthogonal axes.
 
 ## Chapter 2 current answer
 
-> **Authority-backed capitulum states recur in trait-specific ways, but recurrence count and transition localization are distinct. The independent seven-taxon continuous panel detects no corrected topology-robust retention, and Japan38 continuous history remains not evaluable for lack of comparable scalar measurements.**
+> **Authority-backed capitulum states require repeated but trait-specific histories. Recurrence lower bounds are more robust than exact transition locations, and no module pair requires one common history across branch-length treatments.**
 
 This statement does not imply zero phylogenetic signal, lability, fully independent traits, independent origins, convergence, adaptation or a shared mechanism.
 
@@ -100,9 +101,9 @@ Equal-branch transition-overlap medians are -0.0594 for orientation–phyllary, 
 
 Target: **Journal of Evolutionary Biology — Research Article**.
 
-Recommended standalone title:
+Active standalone title:
 
-> **Recurrence and localization are distinct dimensions of capitulum evolution in a young thistle radiation**
+> **Robust recurrence but uncertain localization of capitulum trait evolution in a young thistle radiation**
 
 Current active state:
 
@@ -110,8 +111,8 @@ Current active state:
 - EAzami-native continuous registry admitted with identity/source/rights/measurement gates;
 - exact-permutation seven-taxon diagnostic complete and `not_supported`;
 - discrete recurrence/localization and bounded niche layers independently executable;
-- submission authorization withheld at `STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT`;
-- standalone manuscript and figures not yet rebuilt.
+- active standalone manuscript rebuilt as `docs/chapter2/MANUSCRIPT_JEB_V4.md`;
+- submission authorization held only for revised figures, anonymous DOCX, reference audit and author declarations.
 
 The former V3 manuscript, figures, Supporting Information and privacy-scrubbed DOCX files remain a reproducible audit snapshot. They must not be submitted as the current standalone paper.
 
@@ -122,13 +123,17 @@ The former V3 manuscript, figures, Supporting Information and privacy-scrubbed D
 - `data/evidence/chapter2_diversity_depth_inventory_v1.csv`
 - `data/evidence/chapter2_eazami_native_continuous_trait_registry_summary_v1.json`
 - `data/evidence/chapter2_eazami_native_continuous_history_diagnostic_v1.json`
+- `docs/chapter2/MANUSCRIPT_JEB_V4.md`
+- `data/evidence/chapter2_to_chapter3_radseq_bridge_v1.json`
+- `data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv`
 
-JEB manuscript versions v1-v3 are audit history, not current submission text.
+JEB manuscript versions v1-v3 are audit history; v4 is current submission text.
 
 ## Programme routing
 
 - Present-state v3/v4 covariance simulations: Chapter 1 Supplement or thesis methods.
-- FDT1 trait-to-function evidence, FDT8 field readiness and field pilots: Chapter 3.
+- Japan-wide own RAD-seq sensitivity plus same-individual phenotype/cytotype: Chapter 3 historical discrimination.
+- FDT1 trait-to-function evidence, FDT8 field readiness and field pilots: Chapter 3 causal layer.
 - Cirsium reproductive-herbivory RR = 2.674 is Chapter 3 functional context, not a Chapter 2 admission gate.
 - Later origin discrimination requires nuclear population genomics, plastid haplotype and cytotype evidence from linked biological individuals where possible.
 - Absolute-time transition analyses: STOP until a defensible calibration exists.

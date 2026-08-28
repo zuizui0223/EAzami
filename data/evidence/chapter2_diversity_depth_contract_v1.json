@@ -25,11 +25,17 @@
       "public occurrence and environmental data with source-name guards"
     ]
   },
-  "current_submission_status": "STOP_STANDALONE_CONTINUOUS_COVERAGE_INSUFFICIENT",
-  "stop_reasons": [
-    "The EAzami-native registry passes identity, source, rights and measurement gates, but has zero admitted scalar records on Japan38 tips; its five Japan38 matches are context-only ranges that cannot be collapsed to midpoints.",
-    "The current eight-continuous-trait Japan38 history and reconstruction-null outputs consume an Azami-export bridge and remain audit-only.",
-    "A taxon-reconciled dated Japan38 topology ensemble is not available for event-window or disparity-through-time inference."
+  "chapter2_scientific_status": "COMPLETE_EXISTING_PUBLIC_HISTORY_CORE",
+  "current_submission_status": "HOLD_JEB_PACKAGE_REBUILD_ONLY",
+  "submission_hold_reasons": [
+    "The active standalone JEB v4 Markdown manuscript exists, but the figures, Supporting Information and anonymous DOCX still belong to the legacy Azami-dependent v3 package.",
+    "The revised reference audit, data-availability statement and author declarations have not yet been frozen as a submission bundle."
+  ],
+  "not_chapter2_completion_dependencies": [
+    "EAzami-owned Japan38 continuous phenotype measurements",
+    "a Japan-wide RAD-seq phylogeny",
+    "a dated Japan38 topology ensemble",
+    "field manipulation or fitness outcomes"
   ],
   "independent_continuous_input": {
     "required_path": "data/evidence/chapter2_eazami_native_continuous_trait_registry_v1.csv",
@@ -41,6 +47,7 @@
     "admitted_comparable_scalar_records": 35,
     "context_only_range_records": 10,
     "japan38_admitted_scalar_taxa": 0,
+    "chapter2_role": "bounded independent coverage and small-panel retention diagnostic; not a completion gate",
     "east_asia_direct_panel": "four fixed traits on seven source- and lineage-clustered taxa; diagnostic only",
     "east_asia_direct_history_result": {
       "path": "data/evidence/chapter2_eazami_native_continuous_history_diagnostic_v1.json",
@@ -82,9 +89,16 @@
     "legacy Japan38 continuous equal-branch topology diagnostic"
   ],
   "blocked_layers": {
-    "event_correspondence": "requires a reconciled dated topology ensemble and a sourced event-window registry",
-    "phenotypic_DTT": "requires EAzami-native continuous traits and a reconciled dated topology ensemble",
-    "M0_M5_simulation": "requires frozen empirical summaries and implemented predictive models"
+    "event_correspondence": "routed outside the Chapter 2 completion claim; requires a reconciled dated topology ensemble and a sourced event-window registry",
+    "phenotypic_DTT": "routed outside the Chapter 2 completion claim; requires EAzami-native continuous traits and a reconciled dated topology ensemble",
+    "M0_M5_simulation": "routed outside the Chapter 2 completion claim; requires frozen empirical summaries and implemented predictive models"
+  },
+  "chapter2_to_chapter3_bridge": {
+    "contract_path": "data/evidence/chapter2_to_chapter3_radseq_bridge_v1.json",
+    "sampling_priority_path": "data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv",
+    "chapter3_role": "targeted resolution and falsification of topology-conditioned Chapter 2 histories using an own Japan-wide RAD-seq sensitivity phylogeny plus same-individual phenotype and cytotype data",
+    "own_radseq_required_for_chapter2": false,
+    "feedback_prohibition": "Chapter 3 outcomes may revise counts and placements prospectively but cannot retroactively promote Chapter 2 recurrence to adaptation, convergence or causal function"
   },
   "claim_ceiling": "Authority-backed capitulum traits show repeated but trait-specific histories in a young Japanese thistle radiation; recurrence counts, transition localization and present or reconstructed niche concordance are distinct estimands. Current evidence does not establish independent origins, adaptive convergence, a shared historical module, or ecological-event causation.",
   "prohibited_claims": [

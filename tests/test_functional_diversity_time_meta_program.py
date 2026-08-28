@@ -39,7 +39,7 @@ def test_time_axis_programme_is_supporting_not_repository_mainline():
     mainline = MAINLINE.read_text(encoding="utf-8")
     assert "Chapter 1: present-day space/environment" in readme
     assert "Chapter 2: evolutionary time/history" in readme
-    assert "Chapter 3: function/fitness" in readme
+    assert "Chapter 3: own RAD-seq + linked phenotype/function" in readme
     assert "Present-state v3/v4 covariance generators" in readme
     assert "modular evolvability" in mainline
     assert "endpoint hypothesis" in mainline

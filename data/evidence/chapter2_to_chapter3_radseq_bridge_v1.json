@@ -1,0 +1,58 @@
+{
+  "contract_version": "chapter2_to_chapter3_radseq_bridge_v1",
+  "status_date": "2026-08-28",
+  "chapter2_status": "COMPLETE_EXISTING_PUBLIC_HISTORY_CORE",
+  "chapter2_estimand": "trait-specific recurrence lower bounds and transition-placement identifiability conditional on the published Comp1061 topology ensemble and authority-backed states",
+  "chapter3_estimand": "Japan-wide own RAD-seq ancestry and topology sensitivity, linked to same-individual phenotype and cytotype, for discrimination among the Chapter 2 histories that remain admissible",
+  "dependency_direction": "chapter2_uncertainty_informs_chapter3_sampling; chapter3_is_not_required_to_make_chapter2_valid",
+  "chapter2_locked_results": {
+    "orientation": "20 resolved concepts; ML=6 steps; UFBoot=4-6 with median 5; no individually forced ML edge; JPN36 terminal forced fraction 0.201",
+    "phyllary_posture": "10 resolved concepts; exactly 3 steps across 1000 UFBoot trees; JPN36 terminal forced fraction 0.754; root posture ambiguous",
+    "stickiness": "13 resolved concepts after the JPN24 authority extension; exactly 5 steps across 1000 UFBoot trees",
+    "common_lability": "no module pair is consistently positive across branch-length-aware and equal-branch topology diagnostics",
+    "independent_continuous_panel": "four direct traits on seven taxa; zero topology-robust corrected retention results; phyllary protrusion is a weak measurement-priority hint only"
+  },
+  "chapter3_sampling_product": {
+    "name": "all-Japan same-library RAD-seq sensitivity phylogeny plus focal population-depth panels",
+    "all_japan_minimum_representation": "at least three independently collected wild individuals per admitted taxon concept, subject to identity, rights and DNA-quality gates",
+    "status_if_quality_gates_pass": "own Japan-wide RAD-seq topology/network sensitivity that can update the set of admissible trait histories",
+    "status_if_quality_gates_fail": "population-ancestry or within-cytotype result only; do not call a definitive Japan-wide species tree",
+    "species_backbone_boundary": "Comp1061 target capture remains the primary cross-species scaffold when restriction-site dropout, low shared-locus coverage, mixed ploidy, homeolog collapse or reticulation prevents a common RAD species-tree estimand"
+  },
+  "mandatory_individual_linkage": [
+    "immutable individual_id",
+    "accepted and source taxon names",
+    "population_id and deidentified locality key",
+    "voucher or voucher-linked diagnostic images",
+    "RAD-seq tissue and library ID",
+    "same-individual orientation, phyllary posture and stickiness states where scorable",
+    "flow-cytometry or explicitly missing cytotype record",
+    "rights and conservation authorization record IDs"
+  ],
+  "pre_analysis_gates": [
+    "freeze accepted-name and paper-concept reconciliation before library allocation",
+    "freeze inclusion, missingness, shared-locus and replicate-concordance thresholds before inspecting trait-history outcomes",
+    "process cytotypes separately and prohibit one diploid caller across mixed ploidy",
+    "retain population structure, admixture and network diagnostics rather than forcing one bifurcating tree",
+    "keep plastid history separate from the nuclear RAD-seq history",
+    "do not replace failed or rights-blocked focal samples after seeing trait-history consequences"
+  ],
+  "rights_and_conservation_gate": {
+    "status": "FAIL_CLOSED_NOT_AUTHORIZED_BY_THIS_CONTRACT",
+    "requirements": [
+      "current occurrence and local abundance verified without publishing sensitive coordinates",
+      "landowner or land-manager access approval",
+      "collection and protected-area permissions matched to site, taxon, tissue and sample count",
+      "conservation review and a population-level collection cap",
+      "deidentified public ledger with protected permit and locality records stored outside the repository"
+    ],
+    "failure_action": "no collection and no substitution with a convenient unregistered population"
+  },
+  "chapter2_predeclared_falsifiers": [
+    "a quality-admitted own nuclear topology ensemble changes a locked minimum-step range or removes its apparent robustness",
+    "the JPN06-JPN15 sister relationship is not retained across admitted RAD-seq or network sensitivities",
+    "the JPN36 phyllary terminal placement loses its current concentration under admitted own-data topologies",
+    "same-individual multi-trait data support topology-robust shared localization that the current authority-backed analysis did not require"
+  ],
+  "claim_boundary": "Chapter 2 establishes conditional recurrence and unequal localization under existing public evidence. Chapter 3 may refine or falsify exact histories with own data, but a topology update is not independent replication of Chapter 2 and cannot by itself establish developmental integration, convergence, adaptation, mechanism or fitness benefit."
+}

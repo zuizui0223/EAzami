@@ -1,4 +1,6 @@
-# Chapter 2 submission gates v2
+# Chapter 2 submission gates v2 — superseded audit
+
+Current gates are in `JEB_SUBMISSION_TARGET_V1.md`; this file retains the earlier function-forward framing for provenance only.
 
 ## Paper endpoint available with current evidence
 

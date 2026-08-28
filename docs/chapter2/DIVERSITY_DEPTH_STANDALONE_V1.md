@@ -2,139 +2,128 @@
 
 Status date: 2026-08-28
 
+Scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_CORE**
+
+Submission status: **HOLD_JEB_PACKAGE_REBUILD_ONLY**
+
 Machine-readable contract: `data/evidence/chapter2_diversity_depth_contract_v1.json`
 
-Inventory: `data/evidence/chapter2_diversity_depth_inventory_v1.csv`
+## 1. One-page Chapter 1–3 research structure
 
-## 1. One-page Chapter 1–2 research structure
+The dissertation proceeds as **diversity breadth -> diversity depth -> own-data discrimination and mechanism**.
 
-The dissertation should be organized as **diversity breadth -> diversity depth**, not as pattern -> cause and not merely as space -> time.
+| Chapter | Primary axis | Evidence | Main question | Claim ceiling |
+|---|---|---|---|---|
+| 1 | present geographic and environmental space | continuous phenomics | where and at what scale does diversity recur? | association, not history or cause |
+| 2 | published phylogenetic history | public Comp1061 evidence plus authority-backed states | how many changes are required and how well are they localized? | conditional history, not convergence or adaptation |
+| 3 | own Japan-wide genomic and phenotypic sampling | RAD-seq, same-individual phenotype and cytotype, later experiments | which Chapter 2 histories survive, and what mechanisms or fitness pathways are supported? | own-data topology and mechanism within predeclared gates |
 
-**Chapter 1 asks how broadly continuous capitulum diversity is distributed in the present.** It partitions phenotype within and among taxa, maps geographic recurrence and tests present environmental associations while retaining spatial dependence and observation uncertainty. Its ceiling is descriptive association: it does not infer history, function or adaptation.
+Chapter 2 is **scientifically complete with existing public evidence**. Chapter 3 is not a completion gate. Chapter 2 supplies a bounded answer and exposes the observations that would most efficiently distinguish the remaining histories; Chapter 3 prospectively tests them.
 
-**Chapter 2 asks how deeply capitulum diversity is embedded in evolutionary history.** It starts from an independently assembled EAzami trait database, projects traits onto a nuclear phylogeny, separates recurrence counts from transition placement, and asks whether trait-environment relationships and multi-trait combinations were reconstructed on multiple branches. Its ceiling is historical structure: it does not convert recurrence into convergence or event correspondence into cause.
-
-The chapters are conceptually symmetric but evidentially independent:
-
-| Dimension | Chapter 1: diversity breadth | Chapter 2: diversity depth |
-|---|---|---|
-| Data ownership | Azami continuous phenomics | EAzami literature/specimen/flora/public-image trait registry |
-| Axis | present geographic/environmental space | phylogenetic/biogeographic history |
-| Dependence | spatial and sampling structure | ancestry, reconstruction and topology uncertainty |
-| Recurrence | repeated geography/environment association | repeated states, branch changes and trait-niche concordance |
-| Main inference | where diversity occurs | how long it is retained and how often it is reassembled |
-| Claim ceiling | association, not causation | history, not adaptation or mechanism |
-
-Azami and EAzami may share the organismal system and a trait vocabulary. EAzami must not consume Azami values, select endpoints because they were significant in Azami, or use the Azami result as its first result. This keeps both chapters publishable as standalone papers.
-
-Japan is a useful natural experiment, not a calibration shortcut. The current evidence synthesis places 36 of 38 sampled Japanese concepts in one dominant Pleistocene radiation, with *Cirsium lineare* as a replicated phylogenetic exception and *C. dipsacolepis* as a single-study secondary-arrival hypothesis. The published approximately 2.4 Ma founder event and younger lineage anchors motivate contrasts, but they are not automatically node ages on the Comp1061 phylogram.
+This dependency is directional. Chapter 2 uncertainty may determine Chapter 3 sampling. A later Chapter 3 result cannot retroactively turn a Chapter 2 minimum step into an independent origin, convergence event or adaptation.
 
 ## 2. Central question and subquestions
 
 **Central question**
 
-> How deeply is present capitulum diversity embedded in evolutionary history, and which trait histories or trait-environment relationships were repeatedly reassembled during a young radiation?
+> Do orientation, phyllary posture and involucre stickiness share one evolutionary history in a young Japanese thistle radiation, or do recurrence and transition localization differ among modules?
 
 Subquestions:
 
-1. Which independently measured capitulum traits are phylogenetically retained, and which have weak or labile state structure?
-2. How many state changes are minimally required for each trait, and how well can the responsible branches be localized after topology uncertainty?
-3. Does a present trait-environment association reflect one old clade difference, or does the same directional relationship recur across branches?
-4. Do orientation, phyllary posture, stickiness and future continuous traits change together, or are present combinations assembled mosaically through distinct histories?
-5. After a dated-tree gate is passed, are changes unusually concentrated around predeclared colonization, fragmentation or niche-opening windows relative to age- and branch-matched nulls?
+1. How many unordered state changes are minimally required for each authority-defined trait?
+2. Are these recurrence lower bounds robust across 1,000 UFBoot topologies?
+3. Are the responsible branches identifiable, or do several histories remain equally admissible?
+4. Do module pairs show the same transition localization across branch-length-aware and topology-only diagnostics?
+5. Which own-data samples would most strongly distinguish the remaining histories?
+
+The general contribution is that **recurrence count and transition localization are separate properties**. A stable count can coexist with uncertain evolutionary events.
 
 ## 3. Standalone EAzami analysis pipeline
 
-1. **Independent trait admission.** Build an EAzami-owned registry from exact-concept taxonomic authorities, primary literature, vouchers/specimens and independently remeasured public images. Store rights, measurement protocol, identity status and exclusions for every record. Do not import Azami phenotype values or significance decisions.
-2. **Phylogenetic admission.** Use the frozen Comp1061 ML phylogram and 1000 UFBoot trees. Prune JPN20 when replicate tips are non-monophyletic and exclude JPN31 while its identity conflict remains unresolved. Treat branch lengths as substitutions/site.
-3. **Trait-specific depth.** For continuous traits, estimate signal/model support, conditional ancestral values and branchwise change with family-wise control. For biology-defined discrete traits, report state coverage, minimum steps, root-state ambiguity and transition-placement support.
-4. **Recurrence versus localization.** Propagate the topology ensemble. Report counts and edge support separately. Never label a minimum step as an independent origin or adaptive convergence.
-5. **Trait-environment recurrence.** Build GBIF + CHELSA tip niches under source-name, jurisdiction, coordinate-uncertainty and thinning gates. Freeze a present-day PGLS before selecting axes. Then test transition-probability-weighted branch niche shifts with a state-permutation null and reconstruction uncertainty.
-6. **Historical assembly.** Compare branch-localized changes among traits. For continuous traits rerun the existing reconstruction-aware null on EAzami-native inputs; for discrete traits retain topology-sensitive transition-overlap diagnostics. A positive topology diagnostic cannot replace its estimand-specific null.
-7. **Dated extensions.** Only after a taxon-reconciled dated topology ensemble exists, implement phenotypic disparity-through-time and event-window tests. Propagate age intervals and compare to age-/branch-matched nulls.
-8. **Model discrimination.** Only after empirical summaries are frozen, implement M0–M5 predictive simulations. Legacy present-state covariance simulations are not evolutionary-history simulations.
+1. **Phylogenetic admission.** Use the independently reconstructed Comp1061 ML phylogram and 1,000 UFBoot trees. Retain JPN20 and JPN31 exclusions exactly as frozen. Interpret branch lengths as substitutions/site, never absolute time.
+2. **Independent state admission.** Admit only exact-concept authority descriptions into the orientation, phyllary-posture and stickiness ontologies. Preserve missing and ambiguous states.
+3. **Trait-specific recurrence.** Calculate unordered parsimony minima on the ML tree and every bootstrap topology. Treat them as lower bounds, not independent-origin counts.
+4. **Placement identifiability.** Record edges forced to change across every minimum-cost assignment and their bootstrap frequencies. Report placement separately from counts.
+5. **Historical integration diagnostic.** Compare module-pair transition localization using both the substitution-length ML tree and equal-branch topology sensitivities. Require agreement before claiming a common history.
+6. **Bounded secondary layers.** Retain the seven-taxon direct continuous panel and orientation–niche analyses as negative or borderline diagnostics. Neither is required to complete the discrete historical core.
+7. **Inverse design.** Convert the unresolved histories into Chapter 3 sampling priorities with explicit falsifiers, linked individual measurements and rights/conservation gates.
 
-Every layer can end in `supported`, `not_supported`, `not_evaluable` or `STOP`. A later layer cannot rescue a failed earlier estimand by changing traits, thresholds, taxa or nulls after viewing results.
+Every layer can end in `supported`, `not_supported`, `not_evaluable` or `STOP`. Missing data are not imputed and range descriptions are not converted to midpoints.
 
 ## 4. Repository-wide inventory
 
-The 17-row machine-readable inventory is canonical. Summary:
+The 17-row inventory remains the canonical audit of available material. Its roles are now separated from Chapter 2 completion:
 
-- **Directly usable:** Comp1061 scaffold; discrete orientation/phyllary/stickiness histories; topology propagation; GBIF + CHELSA extraction; Japan + Taiwan orientation-niche PGLS; sparse cytotype evidence; colonization context; trait-function evidence as bounded discussion context.
-- **Reanalysis needed:** dated anchors for a reconciled chronogram; Japan38 continuous history after scalar coverage is obtained; the Japan38 continuous reconstruction-aware null; full ancestral-niche/branchwise concordance after the frozen coverage gate.
-- **Design only:** Quaternary/fragmentation event registry; evolutionary M0–M5 simulations; dated DTT/phylomorphospace.
-- **New data needed:** comparable scalar measurements on Japan38 tips, two near-threshold Taiwan occurrence panels and voucher-linked cytotypes are required to advance their respective gates. The first EAzami-native continuous registry is now admitted, but its five Japan38 matches are source-reported ranges and remain context-only.
+- **Primary Chapter 2 core:** Comp1061 admission; orientation, phyllary and stickiness histories; recurrence/localization separation; topology-sensitive module overlap.
+- **Supporting diagnostics:** the seven-taxon direct continuous panel; present orientation–niche PGLS; frozen branchwise niche concordance; sparse cytotype and colonization constraints.
+- **Routed to Chapter 3:** Japan-wide own RAD-seq, same-individual phenotype and cytotype, population structure, field manipulation and fitness.
+- **Routed to later work:** dated event windows, disparity-through-time and evolutionary predictive simulations.
 
-## 5. Analyses runnable now
+The absence of an EAzami-owned Japan38 scalar phenotype panel limits continuous-history generalization. It does not invalidate the independently assembled discrete-history paper.
 
-The following form a genuinely standalone executable core:
+## 5. Analyses runnable now and final Chapter 2 result
 
-1. Rebuild and validate orientation, phyllary and stickiness recurrence/localization from the EAzami NMNS authority registry on the accepted ML + UFBoot ensemble.
-2. Rerun the frozen n>=10 Japan + Taiwan orientation-niche PGLS across six accepted topologies.
-3. Audit the frozen orientation-transition/niche-shift JSON as a bounded result; do not call it rerunnable until its missing producer is recovered and validated.
-4. Report colonization histories and sparse cytotypes as negative constraints, not explanations of trait recurrence.
-5. Run the predeclared four-trait, seven-taxon direct continuous-history diagnostic across the six frozen AU-nonrejected topologies. This panel is source- and lineage-clustered and cannot establish a general East-Asian process.
-6. Run the standalone-input preflight in CI. It admits the independent registry but must keep the Japan38 continuous layer at STOP while admitted scalar Japan38 coverage is zero.
+The public-evidence core produces five bounded results:
 
-The frozen native registry contains 45 records for 15 taxa: 35 comparable scalar point estimates and ten context-only ranges. Four direct traits each cover the same seven taxa: capitulum length, capitulum width, phyllary length and phyllary protrusion. Five records map to Japan38 concepts, but none is an admissible scalar. Ranges are preserved verbatim and are never converted to midpoints.
+1. Orientation has 20 resolved concepts, requires six changes on the ML tree and four to six across UFBoot trees (median five), but no edge is individually forced on the ML tree.
+2. Phyllary posture has ten resolved concepts and requires exactly three changes on all 1,000 trees. The JPN36 terminal edge is forced in 75.4% of trees, while root posture remains ambiguous.
+3. Stickiness has 13 resolved concepts after the JPN24 authority extension and requires exactly five changes across all 1,000 trees.
+4. No module pair is consistently positive across branch-length-aware and equal-branch topology diagnostics. The simple one-history whole-capitulum common-lability model is not supported.
+5. The seven-taxon four-trait continuous diagnostic supports no topology-robust corrected retention result. Phyllary protrusion is a weak measurement-priority hint only.
 
-The fixed seven-taxon history diagnostic enumerated all 7! label permutations for every trait on each of six AU-nonrejected topologies and applied BH correction across four traits within topology. No trait passed the predeclared all-six-topology rule. Capitulum length and phyllary length were weakly negative; capitulum width was weakly positive. Phyllary protrusion was consistently positive (rho 0.329-0.363), remained positive in every leave-one-out case and had descriptive lambda=1, but its positive-tail P=0.067-0.083 and BH q=0.269-0.331 do not support promotion. The result is `not_supported`, not evidence of lability or independence.
+The corresponding conclusion is:
 
-## 6. Missing analyses for historical trait-environment recurrence
+> Robust repeated states coexist with uneven transition localization across capitulum modules. Existing evidence does not require one shared whole-capitulum history, while topology-conditioned alternatives identify high-information samples for prospective phylogenomic testing.
 
-- Recover at least one additional independent, environment-complete record for each of *C. morii* and *C. tatakaense* without lowering the frozen n>=10 threshold.
-- Recover and validate the missing producer for the existing branchwise-concordance JSON, then quantify ancestral-niche uncertainty rather than using one conditional BM estimate per topology.
-- Predeclare one primary niche axis (currently BIO15) and one secondary axis (BIO1) before the confirmatory rerun.
-- Construct a taxon-reconciled dated topology ensemble; do not linearly rescale the whole tree from one local age.
-- Create a sourced event registry with event class, start/end interval, geographic scope, taxon/node mapping rule and uncertainty.
-- Implement an event-window statistic and an age-/branch-matched null before viewing correspondence results.
-- Obtain commensurate scalar measurements on predeclared Japan38 tips before testing Japan38 continuous trait-environment recurrence; the admitted seven-taxon East-Asian panel remains diagnostic only.
+## 6. Chapter 2 to Chapter 3 inverse design
 
-## 7. PR #126 disposition
+The machine-readable bridge and priority table are:
 
-**Keep and reuse**
+- `data/evidence/chapter2_to_chapter3_radseq_bridge_v1.json`
+- `data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv`
 
-- the reconstruction-aware tip-label null and both frozen FAIL results;
-- the distinction among recurrence, localization and shared branch change;
-- the ML/UFBoot uncertainty propagation;
-- JPN20/JPN29/JPN31 admission boundaries;
-- deterministic serialization, figure/provenance validation, stop rules and negative-result language.
+The first two focal tests are:
 
-**Remove from the active standalone story**
+1. **JPN36 phyllary posture.** Test whether the 0.754 terminal-placement concentration survives an own nuclear topology ensemble and same-individual phenotype linkage.
+2. **JPN06–JPN15 stickiness.** Test whether the canonical 100/100 sister contrast survives population-aware RAD-seq/network sensitivities. The species contrast remains non-causal; within-JPN15 neutralization versus sham is the separate necessity test.
 
-- the Azami observational handoff as Result 1;
-- the exact 62-estimand adapter and present-state covariance generators;
-- “present-day phenotypic integration” as the central question;
-- the assumption that Azami-exported continuous traits are eligible EAzami primary inputs.
+Orientation requires broad topology discrimination rather than one nominated causal pair. Same-individual measurement across the Japan-wide panel tests whether current module non-synchrony persists when authority-level and sequenced-individual observations are no longer disconnected.
 
-The existing manuscript/DOCX bundle remains an immutable audit snapshot. It is **not submission-ready under the standalone contract**. The new registry establishes independent provenance, not adequate Japan38 coverage. Legacy continuous results may return only after commensurate EAzami-native Japan38 measurement and an unchanged rerun.
+The all-Japan same-library RAD-seq product is a **sensitivity phylogeny/network** unless shared-locus, replicate, ploidy and reticulation gates support a common cross-species estimand. Failure of those gates routes inference to within-cytotype population ancestry and retains Comp1061 target capture as the species backbone.
 
-## 8. Standalone title, figure sequence and claim ceiling
+## 7. PR #126 and legacy V3 disposition
 
-**Recommended title**
+**Retain**
 
-> **Recurrence and localization are distinct dimensions of capitulum evolution in a young thistle radiation**
+- topology uncertainty and exact-concept admission;
+- recurrence versus localization;
+- reconstruction-aware null logic and preserved FAIL results as method provenance;
+- deterministic outputs, stop rules and prohibited-claim checks.
 
-This title is supported by the independent discrete core and states the general evolutionary insight without claiming convergence, lability or adaptation.
+**Do not use in the active standalone paper**
 
-**JEB figure sequence**
+- Azami observational output as Result 1;
+- Azami-derived Japan38 continuous values;
+- present-day integration as the Chapter 2 starting estimand;
+- field feasibility or function as historical evidence.
 
-1. **Natural experiment and admission design:** dominant Japanese radiation, contrasting colonization histories, Comp1061 uncertainty and EAzami-owned trait coverage.
-2. **Trait-specific evolutionary depth:** state coverage, minimum-step distributions and root-state uncertainty for orientation, phyllary posture and stickiness.
-3. **Recurrence versus localization:** branch placement support across ML/UFBoot trees, emphasizing that stable counts can coexist with uncertain edges.
-4. **Trait-environment recurrence:** six-topology present PGLS and transition-weighted BIO15/BIO1 concordance with frozen nulls and coverage gate.
-5. **Historical assembly:** discrete overlap now; independently rerun continuous reconstruction-null later. The dated event panel is added only after the chronogram and event-registry gates pass.
+`MANUSCRIPT_JEB_V3.md` and its DOCX remain frozen audit history. `MANUSCRIPT_JEB_V4.md` is the active standalone draft.
 
-The seven-taxon continuous diagnostic belongs in Supporting Information or a coverage panel in Figure 1, not as a headline positive result. Its scientific role is to demonstrate that direct EAzami measurements have entered the pipeline while showing exactly why Japan38 coverage and broader taxon balance are still necessary.
+## 8. JEB positioning and submission state
 
-For the eventual standalone submission after the coverage gate passes, Figures 1–4 are the core and Figure 5 is supplementary or deferred. DTT and event correspondence must not appear as current results.
+**Title**
+
+> **Robust recurrence but uncertain localization of capitulum trait evolution in a young thistle radiation**
+
+**Figure sequence**
+
+1. public Comp1061 scaffold, taxon admission and state coverage;
+2. module-specific minimum-step distributions and forced-edge fractions;
+3. branch-length-aware versus equal-branch module overlap;
+4. Chapter 2 uncertainty mapped to Chapter 3 sampling and falsifiers.
+
+The scientific paper no longer waits for own continuous measurements, RAD-seq, a dated tree or field outcomes. Submission authorization is held only for production work: revised figures, anonymous DOCX, reference audit and author declarations.
 
 **Claim ceiling**
 
 > Authority-backed capitulum traits show repeated but trait-specific histories in a young Japanese thistle radiation; recurrence counts, transition localization and present or reconstructed niche concordance are distinct estimands. Current evidence does not establish independent origins, adaptive convergence, a shared historical module, or ecological-event causation.
-
-## JEB positioning
-
-JEB remains a defensible first target because the general contribution is an estimand distinction in evolutionary morphology, and the [journal's current aims and scope](https://academic.oup.com/jeb/pages/about) explicitly accept robust negative results when they produce new evolutionary insight. The safer current article type is a Research Article only if the independent trait, niche and topology layers are reported together with their full uncertainty. If the manuscript is restricted to three discrete histories without the completed niche recurrence layer, a focused Short Communication or a later submission is more realistic.
-
-The active decision is therefore **JEB target retained; submission authorization withheld until the Japan38 continuous-coverage gate and manuscript rebuild pass**. The native-input gate itself has passed; the fail-closed stop has moved one step downstream to coverage.
