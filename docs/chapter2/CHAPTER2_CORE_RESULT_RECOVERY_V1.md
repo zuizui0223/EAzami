@@ -2,112 +2,128 @@
 
 Status date: 2026-08-28
 
-Scientific status: **COMPLETE_CONFIGURATION_DIVERSITY_AND_MINIMUM_CHANGE_CORE**
+Scientific status: **COMPLETE_CONFIGURATION_DIVERSITY_AND_MINIMUM_CHANGE_CORE** plus **BOUNDED_ECOLOGICAL_EXPLANATORY_REACH**
 
 Machine-readable ledger: `data/evidence/chapter2_core_result_recovery_v1.csv`
 
 ## Why the Chapter 2 story needed compression
 
-The repository contains completed phylogenomic, trait-history, continuous-trait, niche, cytotype, function, simulation and field-readiness lanes. Those lanes answer different questions. Treating every completed analysis as one Chapter 2 result creates a sequence of weak or negative diagnostics and obscures the strongest biological result.
+The repository contains completed phylogenomic, trait-history, continuous-trait, niche, cytotype, function, simulation and field-readiness lanes. Those lanes answer different questions. Treating every completed analysis as one Chapter 2 result creates a sequence of weak diagnostics and obscures the strongest biological result.
 
-The active paper therefore uses only results that are complete, source-backed, reproducible and directly relevant to historical assembly. Function, present-state simulation and field protocols remain valuable but are routed to their proper chapters.
+The active paper therefore uses only complete, source-backed, reproducible results that directly answer historical assembly or the explanatory reach of existing ecology. Function, present-state simulation and field protocols remain routed to their proper chapters.
 
 ## New Chapter 2 position
 
-Chapter 1 measures the breadth of capitulum phenotype in present space. Chapter 2 asks how many state changes are minimally required in the traits that form alternative capitulum configurations and which inferred event placements are identifiable from current public evidence. Chapter 3 then resolves the remaining admissible histories with own genomic and same-individual phenotype data and tests causal function separately.
-
-The active question is:
-
-> **How many state changes are minimally required in the traits that form alternative capitulum configurations within a young Japanese thistle radiation, and which inferred event placements remain identifiable under phylogenetic and observation uncertainty?**
+Chapter 1 measures capitulum phenotype across present space. Chapter 2 asks **How many state changes are minimally required in the traits that form alternative capitulum configurations, at what relative lineage depth those histories remain admissible, and how far existing ecological data explain the present trait states after accounting for phylogeny?** Chapter 3 then resolves remaining population/history uncertainty with own genomic and same-individual phenotype data and tests causal function separately.
 
 This is not a test of whether Chapter 1 significance is repeated. It is a standalone evolutionary-morphology question using an independently assembled EAzami evidence base.
 
-## Three contributions
+The operational sequence is:
+
+**minimum state-change lower bound → relative lineage-depth / named-edge event resolution → ecological explanatory reach → explicit Chapter 3 boundary**.
+
+## Four contributions
 
 ### 1. Biological result: configuration diversity with multiple minimum changes within a dominant radiation
 
-The historical context is unusually concentrated: 36 of 38 sampled Japanese concepts, or 94.7%, occur in the dominant radiation. Within the authority-covered dominant-radiation subset, at least three harmonized orientation x stickiness configurations are observed: downward/nonsticky, upward/nonsticky and upward/sticky. The source ontology retains four named combinations because upward/ascending and upward/erect are not silently collapsed. Alternative configurations therefore occur within the main radiation rather than mapping one-to-one onto rare secondary-history comparators.
+The historical context is concentrated: 36 of 38 sampled Japanese concepts, or 94.7%, occur in the dominant radiation. Within the authority-covered dominant-radiation subset, at least three harmonized orientation × stickiness configurations are observed: downward/nonsticky, upward/nonsticky and upward/sticky.
 
-The accepted topology ensemble then requires more than one minimum change in every focal trait ontology:
+The accepted topology ensemble requires more than one minimum change in every focal trait ontology:
 
-- orientation: 20 resolved concepts; ML minimum 6; UFBoot range 4-6, median 5;
-- phyllary posture: ten resolved concepts; exactly 3 changes in all 1,000 UFBoot trees;
+- orientation: 20 resolved concepts; ML minimum 6; UFBoot range 4–6, median 5;
+- phyllary posture: 10 resolved concepts; exactly 3 changes in all 1,000 UFBoot trees;
 - stickiness: 13 resolved concepts; exactly 5 changes in all 1,000 UFBoot trees.
 
-The positive biological conclusion is that capitulum diversity in this young radiation cannot be represented only as retention of one unchanged set of trait states. Multiple state changes are required in each of three constituent traits. Because joint configuration transitions were not reconstructed, this is not yet a count of how often any complete configuration was assembled.
+The positive biological conclusion is that capitulum diversity in this young radiation cannot be represented only as retention of one unchanged set of trait states. These counts remain topology-conditioned lower bounds rather than counts of independent origins or convergence.
 
-### 2. Inferential result: minimum count, relative event depth and named-edge resolution are different properties
+### 2. Inferential result: minimum-count stability, relative lineage-depth and named-edge resolution are different properties
 
-Stable counts do not imply equally resolved histories. On the accepted run-329 ensemble with the JPN34 and JPN24 authority extensions, orientation has no individually forced maximum-likelihood edge and its most frequent focal terminal placement, JPN36, occurs in 22.7% of bootstrap topologies. The JPN36 phyllary terminal edge is forced in 72.8%. Stickiness is the strongest positive localization result: JPN06 and JPN36 terminal edges are forced in 99.5% and 70.7%, and a nine-tip internal edge in 68.1%, of bootstrap topologies.
+Stable counts do not imply equally resolved histories. Orientation has no individually forced maximum-likelihood edge and JPN36 is forced in only 0.227 of bootstrap topologies. The JPN36 phyllary terminal edge is forced in 0.728. Stickiness is more tightly localized: JPN06 and JPN36 terminal edges are forced in 0.995 and 0.707, and one nine-tip internal edge in 0.681, of bootstrap topologies.
 
-An exact envelope over all minimum histories adds a topology-only relative lineage-depth coordinate. Median bootstrap lower–upper envelopes are 0.795–0.994 for orientation, 0.695–1.000 for phyllary posture and 0.937–0.954 for stickiness; one denotes a terminal edge and lower values denote broader descendant lineages. Median envelope widths are 0.200, 0.305 and 0.017. Every stickiness topology requires both terminal and internal changes in every minimum history, whereas phyllary posture has an invariant count but broad depth ambiguity.
+Exact topology-only relative lineage-depth envelopes add a separate coordinate. Median bootstrap lower–upper envelopes are 0.795–0.994 for orientation, 0.695–1.000 for phyllary posture and 0.937–0.954 for stickiness. Median widths are 0.200, 0.305 and 0.017.
 
-The novel emphasis is not that ancestral-state reconstruction is uncertain. That is established. The contribution is an empirical two-coordinate description of each trait history:
+Thus three resolution coordinates must be kept separate:
 
-1. **minimum-count stability** — how stable the parsimony minimum is across topologies;
-2. **relative lineage-depth envelope** — how shallow or deep all equally minimal histories can place the changes without inventing absolute time;
-3. **named-edge resolution** — how strongly a particular edge is required across all equally minimal reconstructions.
+1. **minimum-count stability**;
+2. **relative lineage-depth envelope**;
+3. **named-edge event resolution**.
 
-This three-coordinate description converts a generic uncertainty warning into a trait-comparative biological result: stickiness is count-stable and depth-constrained, phyllary is count-stable but depth-ambiguous, and orientation remains weakly localized.
+Stickiness is count-stable and depth-constrained, phyllary is count-stable but depth-ambiguous, and orientation remains weakly localized.
 
-### 3. Resolution result: public evidence identifies where species-tip history is compressed
+### 3. Boundary result: one shared whole-capitulum transition history is not required
 
-In four audited colour-polymorphic systems, one-tip species coding hides extant white/coloured state multiplicity in 4/4 cases. Only one system currently has morph-linked nuclear samples; there, population-aware coding changes the minimum from one to two. This is a completed one-system demonstration, not replicated rate evidence.
+Zero of three trait pairs meets the cross-treatment shared-localization rule. Branch-aware transition-excess correlations are positive, but the equal-branch fifth percentiles are negative for all three pairs. This constrains a simple common-lability alternative without proving evolutionary independence, developmental modularity or distinct selective agents.
 
-Together with topology-dependent edge placement, this shows that event recovery is limited along two separate axes: phylogenetic resolution and phenotype-to-tip resolution. Chapter 3 sampling is justified as targeted resolution of known compression, not as an open-ended request for more data.
+### 4. Ecological result: explanatory reach is asymmetric and stops before adaptation
+
+The frozen East-Asian orientation panel contains nine taxa, U=5 and D=4, each with at least ten independent thinned environment-complete occurrences.
+
+Across the six AU-nonrejected optimized topologies:
+
+- BIO15 D−U = +1.320 to +1.330 SD, P=0.05054–0.05239;
+- BIO1 D−U = −0.975 to −0.967 SD, P=0.09604–0.09793;
+- accepted-topology sign agreement = 6/6 for both axes;
+- species LOO sign agreement = 54/54 for both axes.
+
+The branchwise diagnostic has the same directions on all six topologies, but its permutation thresholds are not crossed.
+
+Held-out prediction clarifies what the correspondence explains. Relative to a mean-only null, phylogeny+orientation improves prediction: BIO15 ΔMSE=+0.224 to +0.230 and BIO1=+0.364 to +0.370. Relative to phylogeny-only Brownian kriging, the same model is worse: BIO15 ΔMSE=−0.108 to −0.102 and BIO1=−0.199 to −0.192. Therefore orientation carries stable ecological information but does not yet add explanatory reach beyond ancestry. Its evaluation is `unresolved`.
+
+Phyllary posture and stickiness are `not_evaluable` at the same ecological gate. Each overlaps only two resolved n≥10 climate taxa, and neither overlap contains two state classes. This is not evidence of no ecological relationship.
 
 ## Hypothesis recovery
 
 | Hypothesis | Result | Status |
 | --- | --- | --- |
-| The dominant radiation contains multiple capitulum configurations | at least three harmonized combinations; four source-level named combinations | supported descriptively |
-| Each focal trait requires more than one minimum state change | orientation 4-6; phyllary 3; stickiness 5 | supported as topology-conditioned lower bounds |
-| Stable minimum-change counts imply equally stable event depth and locations | orientation ML depth 0.767–1.000 with 0 forced edges; phyllary ML depth 0.695–1.000; stickiness ML depth 0.943–0.954 with JPN06=99.5% | contradicted descriptively |
-| One branch-localization pattern is retained across all three traits | zero of three pairs meets the cross-treatment rule; all equal-branch fifth percentiles are negative | not supported; secondary boundary |
-| Species-tip coding preserves all event information | state multiplicity hidden in 4/4 systems; count 1 to 2 in 1/1 testable system | partial direct contradiction |
-| Broad climate currently explains the admitted histories | primary BIO15 P=0.0505-0.0524; branchwise P=0.094-0.124 | unresolved supporting lead |
-| Minimum changes are independent origins or adaptations | ancestry, direction, mechanism and fitness are not jointly observed | not tested |
+| The dominant radiation contains multiple capitulum configurations | at least three harmonized combinations | supported descriptively |
+| Each focal trait requires more than one minimum state change | orientation 4–6; phyllary 3; stickiness 5 | supported as topology-conditioned lower bounds |
+| Stable minimum-change counts imply equally stable event depth and locations | trait-specific depth and forced-edge profiles differ strongly | contradicted descriptively |
+| One branch-localization pattern spans all three traits | zero of three pairs meets the cross-treatment rule | not supported; boundary result |
+| Orientation has a broad climate correspondence after phylogenetic correction | BIO15 positive and BIO1 negative on 6/6 topologies and 54/54 species LOO fits | directional correspondence supported |
+| Orientation adds predictive explanation beyond ancestry | positive ΔMSE vs mean-only null but negative ΔMSE vs phylogeny-only | unresolved |
+| Phyllary and stickiness can be climate-tested with current assets | only two same-state evaluable climate taxa for each | `not_evaluable` |
+| Minimum changes are independent origins or adaptations | ancestry, direction, historical environment, mechanism and fitness are not jointly observed | not tested |
 
 ## What belongs in the JEB main text
 
-The main text has five result groups only:
+The main text has **five result groups only**:
 
-1. 36/38 concepts in the dominant radiation and at least three harmonized orientation x stickiness configurations in the authority-covered subset;
+1. 36/38 concepts in the dominant radiation and at least three harmonized orientation × stickiness configurations;
 2. three trait-specific minimum-change distributions;
-3. minimum-count stability versus relative lineage-depth and edge-identifiability contrast;
-4. the zero-of-three cross-treatment overlap boundary;
-5. population-resolution compression as a short prospective bridge.
+3. minimum-count stability versus relative lineage-depth and named-edge event resolution;
+4. the zero-of-three cross-treatment shared-localization boundary;
+5. ecological explanatory reach: orientation `unresolved`, phyllary posture `not_evaluable`, stickiness `not_evaluable`.
 
-The continuous n=7 screen, orientation-niche analysis, cytotype overlap, source-balanced colour stop and full model diagnostics belong in Supporting Information. Their role is to bound interpretation, not to create a parade of null results. Orientation rainfall/wetting, thermal and pollinator-presentation; phyllary enemy/wetness/access; and stickiness benefit/null/cost hypotheses are retained only as prospective causal alternatives for Chapter 3.
+Species-tip colour compression now belongs in Supporting Information as a resolution audit. The continuous n=7 screen, cytotype overlap, source-balanced colour stop and legacy reconstruction-null diagnostics also remain Supporting Information. Their role is to bound interpretation, not to create a parade of null results.
 
 ## Material routed out of Chapter 2
 
-- Azami present-integration and continuous reconstruction-null results: legacy method audit, not standalone EAzami evidence;
+- Azami present-integration and continuous reconstruction-null results: legacy method audit, not standalone EAzami primary evidence;
 - v3/v4 covariance simulations: Chapter 1 robustness or thesis methods;
 - reproductive-herbivory and selection-mosaic syntheses: Chapter 3 functional context;
 - JPN36 and JPN15 manipulations: Chapter 3 causal tests after rights/conservation authorization;
 - own Japan-wide RAD-seq: Chapter 3 history resolution, not a Chapter 2 completion dependency;
-- dated transition timing, DTT and ecological event matching: STOP until a defensible dated ensemble exists.
+- dated transition timing and ecological event matching: STOP until a defensible dated ensemble exists.
 
 ## JEB presentation
 
 **Recommended title**
 
-> **Capitulum configuration diversity, minimum change counts and uneven event resolution in a young thistle radiation**
+> **Capitulum configuration diversity, minimum change counts and ecological explanatory reach in a young thistle radiation**
 
 **Four-figure order**
 
 1. dominant-radiation context, trait admission and observed configuration diversity;
-2. minimum-change-count distributions for orientation, phyllary posture and stickiness;
-3. exact relative lineage-depth envelopes plus current forced-edge localization;
-4. branch-treatment overlap boundary plus species-tip compression and prospective sampling consequences.
+2. minimum-change counts and relative lineage-depth envelopes;
+3. named-edge localization and cross-trait shared-localization boundary;
+4. ecological effect direction, topology/LOO robustness, null versus phylogeny-only prediction, and trait-level `unresolved/not_evaluable` evaluation.
 
 The central sentence is:
 
-> **A dominant young radiation contains multiple capitulum configurations and each of three constituent traits requires multiple minimum changes, while stickiness, phyllary posture and orientation occupy distinct count–depth–edge resolution profiles.**
+> **A dominant young radiation contains multiple capitulum configurations and each of three constituent traits requires multiple minimum changes, but historical resolution and ecological explanatory reach are asymmetric: orientation has a stable climate direction without predictive gain beyond phylogeny, whereas phyllary posture and stickiness are not evaluable with the current ecological overlap.**
 
-This is a positive evolutionary-morphology result with an explicit resolution boundary. The zero-of-three overlap result constrains the interpretation but is not the paper's discovery claim.
+The title preserves the searchable phrase **Capitulum configuration diversity, minimum change counts** while the paper now closes with a quantitative ecological reach result.
 
 ## Claim ceiling
 
-The paper establishes topology-conditioned minimum-change lower bounds, observed configuration diversity and trait-dependent relative lineage-depth and edge resolution. Relative lineage depth is not absolute time. The paper does not jointly reconstruct configuration transitions or establish independent origins, convergence, developmental modularity, adaptation, ecological causation, absolute transition timing or evolutionary rate. Orientation, phyllary posture and stickiness are exactly three completed discrete histories; colour, display and cytotype are not silently promoted as a fourth.
+The paper establishes topology-conditioned minimum-change lower bounds, observed configuration diversity, trait-dependent relative lineage-depth and named-edge resolution, and bounded present ecological explanatory reach. Relative lineage-depth is not absolute time. Present trait–climate correspondence is not historical niche reconstruction, event-specific environmental matching, convergence, adaptation or causal selection. `not_evaluable` is a data-resolution result, not a biological negative.
