@@ -5,11 +5,12 @@ This diagnostic is deliberately non-causal. It asks whether present-day trait
 states carry a stable climate correspondence after Brownian phylogenetic
 correction, whether that direction survives accepted topology and species-LOO
 sensitivity, and whether knowing the trait state improves held-out prediction of
-the climate axis beyond phylogeny-only Brownian kriging.
+the climate axis beyond both a naive mean-only null and phylogeny-only Brownian
+kriging.
 
 The predictive comparison uses climate as the continuous response because the
 frozen comparative model is PGLS. Positive delta MSE/MAE means the
-phylogeny+trait model predicts held-out climate better than phylogeny alone.
+phylogeny+trait model predicts held-out climate better than the stated baseline.
 No result reconstructs historical climate or assigns an ecological cause to a
 particular transition.
 """
@@ -150,18 +151,28 @@ def main():
                     "p": loo_p,
                 })
                 cross_cov = cov[k, keep]
+                pred_null = float(np.mean(y[keep]))
                 X0 = np.ones((keep.sum(), 1))
                 x0 = np.ones(1)
                 X1 = np.column_stack([np.ones(keep.sum()), state[keep]])
                 x1 = np.array([1.0, state[k]])
-                pred0 = conditional_prediction(y[keep], X0, x0, cov_train, cross_cov)
-                pred1 = conditional_prediction(y[keep], X1, x1, cov_train, cross_cov)
+                pred_phylogeny = conditional_prediction(y[keep], X0, x0, cov_train, cross_cov)
+                pred_trait = conditional_prediction(y[keep], X1, x1, cov_train, cross_cov)
+                sq_null = (y[k] - pred_null) ** 2
+                sq_phylogeny = (y[k] - pred_phylogeny) ** 2
+                sq_trait = (y[k] - pred_trait) ** 2
+                abs_null = abs(y[k] - pred_null)
+                abs_phylogeny = abs(y[k] - pred_phylogeny)
+                abs_trait = abs(y[k] - pred_trait)
                 prediction_rows.append({
                     "topology_index": topology_index,
                     "axis": axis,
                     "left_out_taxon": taxon,
-                    "sq_error_improvement": (y[k] - pred0) ** 2 - (y[k] - pred1) ** 2,
-                    "abs_error_improvement": abs(y[k] - pred0) - abs(y[k] - pred1),
+                    "sq_error_improvement_vs_null": sq_null - sq_trait,
+                    "abs_error_improvement_vs_null": abs_null - abs_trait,
+                    "sq_error_improvement_vs_phylogeny_only": sq_phylogeny - sq_trait,
+                    "abs_error_improvement_vs_phylogeny_only": abs_phylogeny - abs_trait,
+                    "phylogeny_only_sq_error_improvement_vs_null": sq_null - sq_phylogeny,
                 })
 
     full = pd.DataFrame(full_rows)
@@ -173,8 +184,11 @@ def main():
         l = loo[loo["axis"] == axis]
         expected_sign = np.sign(float(f["beta_D_minus_U_sd"].median()))
         by_topology = predictions[predictions["axis"] == axis].groupby("topology_index").agg(
-            delta_mse=("sq_error_improvement", "mean"),
-            delta_mae=("abs_error_improvement", "mean"),
+            delta_mse_vs_null=("sq_error_improvement_vs_null", "mean"),
+            delta_mae_vs_null=("abs_error_improvement_vs_null", "mean"),
+            delta_mse_vs_phylogeny_only=("sq_error_improvement_vs_phylogeny_only", "mean"),
+            delta_mae_vs_phylogeny_only=("abs_error_improvement_vs_phylogeny_only", "mean"),
+            phylogeny_only_delta_mse_vs_null=("phylogeny_only_sq_error_improvement_vs_null", "mean"),
         ).reset_index()
         axes[axis] = {
             "beta_D_minus_U_sd_range": [float(f["beta_D_minus_U_sd"].min()), float(f["beta_D_minus_U_sd"].max())],
@@ -184,10 +198,17 @@ def main():
             "accepted_topology_sign_agreement": float((np.sign(f["beta_D_minus_U_sd"]) == expected_sign).mean()),
             "species_loo_sign_agreement": float((np.sign(l["beta_D_minus_U_sd"]) == expected_sign).mean()),
             "species_loo_evaluations": int(len(l)),
-            "loo_delta_mse_range": [float(by_topology["delta_mse"].min()), float(by_topology["delta_mse"].max())],
-            "loo_delta_mse_median": float(by_topology["delta_mse"].median()),
-            "loo_delta_mae_range": [float(by_topology["delta_mae"].min()), float(by_topology["delta_mae"].max())],
-            "prediction_improvement_rule": ">0 means phylogeny+trait predicts held-out climate better than phylogeny-only",
+            "loo_delta_mse_vs_null_range": [float(by_topology["delta_mse_vs_null"].min()), float(by_topology["delta_mse_vs_null"].max())],
+            "loo_delta_mse_vs_null_median": float(by_topology["delta_mse_vs_null"].median()),
+            "loo_delta_mae_vs_null_range": [float(by_topology["delta_mae_vs_null"].min()), float(by_topology["delta_mae_vs_null"].max())],
+            "loo_delta_mse_vs_phylogeny_only_range": [float(by_topology["delta_mse_vs_phylogeny_only"].min()), float(by_topology["delta_mse_vs_phylogeny_only"].max())],
+            "loo_delta_mse_vs_phylogeny_only_median": float(by_topology["delta_mse_vs_phylogeny_only"].median()),
+            "loo_delta_mae_vs_phylogeny_only_range": [float(by_topology["delta_mae_vs_phylogeny_only"].min()), float(by_topology["delta_mae_vs_phylogeny_only"].max())],
+            "phylogeny_only_delta_mse_vs_null_range": [float(by_topology["phylogeny_only_delta_mse_vs_null"].min()), float(by_topology["phylogeny_only_delta_mse_vs_null"].max())],
+            "prediction_improvement_rule": ">0 means phylogeny+trait predicts held-out climate better than the named baseline",
+            "loo_delta_mse_range": [float(by_topology["delta_mse_vs_phylogeny_only"].min()), float(by_topology["delta_mse_vs_phylogeny_only"].max())],
+            "loo_delta_mse_median": float(by_topology["delta_mse_vs_phylogeny_only"].median()),
+            "loo_delta_mae_range": [float(by_topology["delta_mae_vs_phylogeny_only"].min()), float(by_topology["delta_mae_vs_phylogeny_only"].max())],
         }
 
     seed = pd.read_csv(args.trait_seed)
@@ -202,7 +223,8 @@ def main():
     if (
         primary["accepted_topology_sign_agreement"] == 1.0
         and primary["species_loo_sign_agreement"] == 1.0
-        and primary["loo_delta_mse_median"] > 0
+        and primary["loo_delta_mse_vs_null_median"] > 0
+        and primary["loo_delta_mse_vs_phylogeny_only_median"] > 0
         and max(primary["p_range"]) < 0.05
     ):
         orientation_status = "tendency_supported"
@@ -217,8 +239,13 @@ def main():
             "n_D": int((state == 1).sum()),
             "topology_ensemble": "first six AU-nonrejected optimized Comp1061 topologies; topology 1 is ML within preregistered candidate set",
             "raw_ufboot_ecology_sign_rate": "not_evaluable: raw Comp1061 UFBoot trees were not preserved in the accepted archived ecological input bundle",
+            "prediction_baselines": {
+                "null": "training-set mean only; no trait and no phylogenetic covariance",
+                "phylogeny_only": "intercept plus Brownian conditional prediction on the accepted topology",
+                "phylogeny_plus_orientation": "intercept plus U/D orientation and Brownian conditional prediction",
+            },
             "axes": axes,
-            "primary_interpretation": "BIO15 and BIO1 directions are stable to accepted-topology and species-LOO perturbation, but neither frozen primary PGLS threshold nor held-out predictive improvement supports promotion to an ecological explanation.",
+            "primary_interpretation": "BIO15 and BIO1 directions are stable to accepted-topology and species-LOO perturbation. Orientation improves held-out prediction over a naive mean-only null for both axes, but not over phylogeny-only Brownian kriging; neither frozen primary PGLS threshold nor branchwise permutation threshold is passed. The correct result class is unresolved.",
         },
         "phyllary_posture": {
             "status": "not_evaluable",
@@ -234,7 +261,7 @@ def main():
             "state_counts": {str(k): int(v) for k, v in stickiness_counts.items()},
             "reason": "The frozen occurrence-climate assets contain no estimable sticky-versus-nonsticky contrast at the n>=10 gate. Climate proxy association, enemy exclusion and production cost therefore cannot be separated with current data.",
         },
-        "chapter2_result": "Repeated minimum changes are shared across the three discrete traits, but ecological explanatory reach is asymmetric: orientation has a stable directional climate correspondence that remains unresolved as a predictive explanation, whereas phyllary posture and stickiness are not evaluable with the frozen climate panel.",
+        "chapter2_result": "Repeated minimum changes are shared across the three discrete traits, but ecological explanatory reach is asymmetric: orientation has a stable directional climate correspondence that improves prediction over a naive null but not over phylogeny-only, whereas phyllary posture and stickiness are not evaluable with the frozen climate panel.",
         "claim_boundary": "Do not call the orientation pattern adaptation, convergence, historical niche causation or event-specific environmental matching. not_evaluable is a data-resolution result, not evidence of no ecological relation.",
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
