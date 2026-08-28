@@ -6,9 +6,9 @@
     "tree_artifact": "japan38-comp1061-frozen-tree-retry-32923076873",
     "ml_tree_sha256": "ba592d3a9f52b5481314ab20e3202048505cdf72a3fc15134d5dca261b9d9b7e",
     "ufboot_sha256": "32cb09118ed035b73e51df3faa0cc60d4ee0c77fcf53d3cf880d556c9bbfa786",
-    "concept_map_sha256": "c26729af8819aa8cb685455005d9c2b31670b03e7e6677c87106e73977273e88",
-    "base_trait_seed_sha256": "78e5e16ec0137f5ecf0877ab60f8d4a1c4e999a60b1cda1b960681875d81b584",
-    "authority_extension_sha256": "c1f647de3a92d70daf13b1430f2b4e554ebc4289f818385518214efd2dc5b5fd",
+    "concept_map_canonical_lf_sha256": "8eb2953ac1ee96587c2a60446eae2478e0925843f07e15fb2efbe5eb704914e3",
+    "base_trait_seed_canonical_lf_sha256": "f9e608af72076996a0e2ed925ecf35ccc0fc7834d5c1489507e378bcc3b0b4b5",
+    "authority_extension_canonical_lf_sha256": "3d091ea3a4d7084b1f31892cbd956f53637269617ca2c7d65e9edd0e319c1cba",
     "bootstrap_trees_total": 1000,
     "jpn20_monophyletic_trees": 0,
     "tree_diagnostic": {

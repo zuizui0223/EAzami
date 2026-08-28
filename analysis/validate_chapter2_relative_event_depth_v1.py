@@ -54,7 +54,9 @@ def validate() -> dict:
     frozen = contract["frozen_inputs"]
     for key in (
         "tree_run_id", "tree_artifact", "ml_tree_sha256", "ufboot_sha256",
-        "concept_map_sha256", "base_trait_seed_sha256", "authority_extension_sha256",
+        "concept_map_canonical_lf_sha256",
+        "base_trait_seed_canonical_lf_sha256",
+        "authority_extension_canonical_lf_sha256",
     ):
         if verified[key] != frozen[key]:
             raise AssertionError(f"frozen input drift: {key}")

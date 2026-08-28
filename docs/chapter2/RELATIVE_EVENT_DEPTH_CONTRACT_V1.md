@@ -5,7 +5,7 @@ Status: **FROZEN WITH AUDITED RUNTIME AND PROVENANCE AMENDMENT BEFORE RESULT ADM
 
 Machine-readable contract: `data/evidence/chapter2_relative_event_depth_contract_v1.json`
 
-The mathematical estimand, trait scope, expected minimum-step ranges, ecological hypothesis classes and claim ceiling were frozen before inspecting the depth outcomes. Before admitting any result, a reproducibility audit fixed Biopython at 1.85, admitted Python 3.10 and 3.11 only, and corrected a pre-existing artifact-provenance mismatch; no estimand or threshold was changed. CI uses Python 3.11 and local verification additionally establishes byte identity under Python 3.10.
+The mathematical estimand, trait scope, expected minimum-step ranges, ecological hypothesis classes and claim ceiling were frozen before inspecting the depth outcomes. Before admitting any result, a reproducibility audit fixed Biopython at 1.85, admitted Python 3.10 and 3.11 only, and corrected a pre-existing artifact-provenance mismatch; no estimand or threshold was changed. CI uses Python 3.11 and local verification additionally establishes byte identity under Python 3.10. Tree and UFBoot hashes are exact-byte hashes; the three tracked CSV inputs use explicitly declared CRLF-to-LF canonicalized SHA-256 so Windows and Linux checkouts represent the same scientific text.
 
 ## Provenance correction
 

@@ -16,11 +16,11 @@
     "ufboot_sha256": "32cb09118ed035b73e51df3faa0cc60d4ee0c77fcf53d3cf880d556c9bbfa786",
     "bootstrap_replicates": 1000,
     "concept_map": "data/evidence/japan38_comp1061_concept_map_v1.csv",
-    "concept_map_sha256": "c26729af8819aa8cb685455005d9c2b31670b03e7e6677c87106e73977273e88",
+    "concept_map_canonical_lf_sha256": "8eb2953ac1ee96587c2a60446eae2478e0925843f07e15fb2efbe5eb704914e3",
     "base_trait_seed": "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv",
-    "base_trait_seed_sha256": "78e5e16ec0137f5ecf0877ab60f8d4a1c4e999a60b1cda1b960681875d81b584",
+    "base_trait_seed_canonical_lf_sha256": "f9e608af72076996a0e2ed925ecf35ccc0fc7834d5c1489507e378bcc3b0b4b5",
     "authority_extension": "data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv",
-    "authority_extension_sha256": "c1f647de3a92d70daf13b1430f2b4e554ebc4289f818385518214efd2dc5b5fd",
+    "authority_extension_canonical_lf_sha256": "3d091ea3a4d7084b1f31892cbd956f53637269617ca2c7d65e9edd0e319c1cba",
     "required_extension_concepts": {
       "JPN_34": {
         "orientation_state": "upward_or_erect"
@@ -36,6 +36,7 @@
     "biopython_version": "1.85",
     "reason": "Pin the topology-processing dependency exactly, admit the locally available Python 3.10 and CI Python 3.11 runtimes, and verify byte-identical scientific outputs across both."
   },
+  "text_hash_semantics": "SHA-256 of UTF-8 text after CRLF-to-LF normalization for the three tracked CSV inputs; ML tree and UFBoot retain exact-byte SHA-256.",
   "legacy_provenance_boundary": {
     "superseded_tree_run_id": 32845725038,
     "superseded_ml_tree_sha256": "00f14eab3b1851ac53ab17ff447865928ebd61c0dc7bfe1edc3ace2abcada3c0",
@@ -115,7 +116,7 @@
     ]
   },
   "fail_closed_rules": [
-    "Reject an input when exact ML-tree, UFBoot, concept-map, base-seed or authority-extension SHA-256 differs from the frozen record.",
+    "Reject an input when exact ML-tree or UFBoot SHA-256 differs, or when the newline-canonicalized concept-map, base-seed or authority-extension SHA-256 differs from the frozen record.",
     "Reject execution unless Python 3.11 and Biopython 1.85 match the frozen runtime contract.",
     "Reject a trait extension unless the extension concept set and admitted state values exactly match the frozen contract.",
     "Preserve unknown and ambiguous tip states; do not impute, collapse ranges, or resolve polymorphism.",

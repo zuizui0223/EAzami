@@ -49,6 +49,11 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def canonical_text_sha256(path: Path) -> str:
+    text = path.read_text(encoding="utf-8")
+    return hashlib.sha256(text.replace("\r\n", "\n").encode("utf-8")).hexdigest()
+
+
 def read_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -424,9 +429,9 @@ def main() -> int:
     if observed_ufboot_hash != frozen_inputs["ufboot_sha256"]:
         raise ValueError("UFBoot SHA-256 differs from frozen contract")
     observed_source_hashes = {
-        "concept_map_sha256": sha256(args.concept_map),
-        "base_trait_seed_sha256": sha256(args.base_trait_seed),
-        "authority_extension_sha256": sha256(args.trait_extension),
+        "concept_map_canonical_lf_sha256": canonical_text_sha256(args.concept_map),
+        "base_trait_seed_canonical_lf_sha256": canonical_text_sha256(args.base_trait_seed),
+        "authority_extension_canonical_lf_sha256": canonical_text_sha256(args.trait_extension),
     }
     for key, observed in observed_source_hashes.items():
         if observed != frozen_inputs[key]:
