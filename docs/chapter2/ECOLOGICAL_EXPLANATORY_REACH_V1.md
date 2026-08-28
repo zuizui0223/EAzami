@@ -1,8 +1,10 @@
-# Chapter 2 ecological explanatory reach v1
+# Chapter 2 ecological explanatory reach v2
+
+Status date: 2026-08-29
 
 ## Mainline
 
-Chapter 2 now uses a three-stage evidence sequence:
+Chapter 2 uses a three-stage evidence sequence:
 
 1. **minimum state-change lower bound** — how many changes are minimally required;
 2. **relative event depth / placement resolution** — where in relative lineage depth those minimum histories can occur;
@@ -12,16 +14,22 @@ The third stage is an empirical result, not a list of Discussion hypotheses.
 
 ## Estimand and decision rule
 
-For a trait with sufficient state and climate coverage, report:
+For a trait with sufficient state and climate coverage, the primary result reports:
 
 - standardized state-associated climate effect and uncertainty;
 - sign agreement across the accepted topology ensemble;
 - species leave-one-out sign agreement;
-- branchwise direction where a compatible branchwise diagnostic exists;
-- held-out prediction improvement relative to phylogeny-only;
+- branchwise direction where a compatible diagnostic exists;
+- whether the frozen primary inferential threshold is crossed;
 - final class: `tendency_supported`, `unresolved`, or `not_evaluable`.
 
-`tendency_supported` requires a stable direction plus positive predictive gain beyond phylogeny-only under the frozen primary gate. A stable direction without predictive gain is `unresolved`. Missing state diversity or inadequate coverage is `not_evaluable`, not a negative biological result.
+The classification is intentionally modest:
+
+- `tendency_supported` = state-diverse comparison is estimable, the primary-axis sign is stable across all accepted topologies and species LOO fits, and the frozen primary phylogenetic-association threshold is crossed;
+- `unresolved` = an estimable, directionally stable correspondence exists but the frozen inferential threshold is not crossed;
+- `not_evaluable` = current frozen state × ecology overlap cannot estimate the requested contrast.
+
+**Predictive gain is not required for this classification.** A held-out comparison against mean-only and phylogeny-only baselines is retained in Supporting Information as a transparency/small-panel sensitivity only.
 
 ## Orientation
 
@@ -38,8 +46,6 @@ Downward/nodding taxa occupy higher precipitation-seasonality niches:
 - branchwise directional shift: **+0.268 to +0.269 SD**;
 - branchwise permutation P: **0.094 to 0.124**.
 
-However, adding orientation to the Brownian phylogeny-only predictor does not improve held-out BIO15 prediction: mean LOO ΔMSE (phylogeny-only minus phylogeny+orientation) is **−0.108 to −0.102** across the six topologies. The direction is therefore robust, but predictive explanatory gain is not established.
-
 ### BIO1 — annual mean temperature
 
 Downward/nodding taxa occupy colder niches:
@@ -51,15 +57,23 @@ Downward/nodding taxa occupy colder niches:
 - branchwise directional shift: **−0.1993 to −0.1992 SD**;
 - branchwise permutation P: **0.108 to 0.136**.
 
-Held-out BIO1 prediction also does not improve over phylogeny-only: LOO ΔMSE is **−0.199 to −0.192**.
-
 ### Orientation verdict
 
 **`unresolved`**.
 
-There is a reproducible ecological correspondence — higher BIO15 and lower BIO1 in the downward state — that persists after phylogenetic correction, across all accepted topologies, under species LOO, and in the independent branchwise direction diagnostic. But the frozen primary significance threshold is not crossed consistently and predictive performance is not improved over phylogeny-only. This is stronger than “candidate causes” and weaker than an ecological explanation.
+There is a reproducible ecological correspondence — higher BIO15 and lower BIO1 in the downward state — that persists after phylogenetic correction, across all accepted topologies, under species LOO, and in the independent branchwise direction diagnostic. The frozen primary PGLS threshold and branchwise permutation threshold are not crossed. This is stronger than a candidate-cause list and weaker than historical ecological explanation or adaptation.
 
 Raw Comp1061 UFBoot trees were not retained in the accepted archived ecological input bundle, so an ecology-specific raw-bootstrap sign fraction is **`not_evaluable`** rather than silently replaced by the six AU topologies. The historical minimum-change and relative-depth analyses continue to propagate 1,000 Japan38 bootstrap topologies separately.
+
+## Predictive sensitivity — Supporting Information only
+
+For transparency, the n=9 panel also compares held-out climate prediction under:
+
+1. a training-set mean-only null;
+2. phylogeny-only Brownian conditional prediction;
+3. phylogeny + orientation Brownian conditional prediction.
+
+Orientation improves over a naive mean-only baseline but not over phylogeny-only in the current small panel. This is useful for understanding the data, but **it does not define the `unresolved` verdict** because the Chapter 2 question is how far current ecology corresponds to and constrains trait states, not whether orientation is the best predictor of climate.
 
 ## Phyllary posture
 
@@ -67,24 +81,34 @@ Raw Comp1061 UFBoot trees were not retained in the accepted archived ecological 
 
 The historical state map contains 10/38 resolved concepts, but only two taxa at the frozen occurrence gate also have an unambiguous phyllary state in the available climate panel, and both are `ascending`. There is therefore no state-diverse phylogeny-aware climate contrast to estimate.
 
-Enemy exclusion, wetness protection, and pollinator-access trade-offs remain Chapter 3 mechanisms. Their absence from this result is a coverage boundary, not evidence against those mechanisms.
+Enemy exclusion, wetness protection and pollinator-access trade-offs remain Chapter 3 mechanisms. Their absence from this result is a coverage boundary, not evidence against those mechanisms.
 
 ## Stickiness
 
 **`not_evaluable`** with current frozen climate assets.
 
-The historical state map contains 13/38 resolved concepts, but only two taxa at the frozen occurrence gate also have an evaluable stickiness state, and both are nonsticky/nearly nonsticky. No sticky-versus-nonsticky climate contrast can be estimated. Current data also cannot distinguish climate association from enemy exclusion, pollinator cost, or production cost.
+The historical state map contains 13/38 resolved concepts, but only two taxa at the frozen occurrence gate also have an evaluable stickiness state, and both are nonsticky/nearly nonsticky. No sticky-versus-nonsticky climate contrast can be estimated. Current data also cannot distinguish climate association from enemy exclusion, pollinator cost or production cost.
+
+## Climate is not assumed to be the only explanatory axis
+
+A separate non-climate constraint registry (`data/evidence/chapter2_nonclimate_explanatory_constraints_v1.json`) records what current data can already bound without forcing underpowered multi-predictor models:
+
+- deterministic one-to-one **ploidy → orientation** mapping is contradicted descriptively;
+- one-to-one **broad colonization history → capitulum configuration** mapping is contradicted descriptively;
+- independent Japanese population nuclear data constrain the assumption that one species tip is one homogeneous genomic unit;
+- independent rDNA and local phylogenomic/network data show that the Comp1061 reconstruction is the harmonized full-panel scaffold, not the only nuclear evidence;
+- pollinator/antagonist context is **not evaluable as a joined Japan38 comparative predictor** with current assets.
+
+These are constraints, not causal explanations.
 
 ## Chapter 2 result
 
-The result is therefore asymmetric rather than uniformly positive or negative:
+> Multiple minimum changes are required for orientation, phyllary posture and stickiness, but existing ecological data explain those histories unequally. Orientation shows a topology- and species-LOO-stable correspondence with precipitation seasonality and annual temperature and remains `unresolved` under the frozen inferential thresholds. Phyllary posture and stickiness are `not_evaluable` with the present climate/state overlap. Existing cytotype, broad-history and independent nuclear evidence additionally constrain simple alternatives without identifying a selective cause.
 
-> Multiple minimum changes are required for orientation, phyllary posture and stickiness, but existing ecological data explain those histories unequally. Orientation shows a topology- and species-LOO-stable correspondence with precipitation seasonality and annual temperature, yet does not improve held-out prediction beyond phylogeny alone and remains unresolved. Phyllary posture and stickiness are not evaluable with the present climate/state overlap and require direct local-environment and biotic measurements.
-
-This closes the Chapter 2 sequence as:
+This closes the sequence as:
 
 **minimum change count → relative event depth → ecological explanatory reach → explicit Chapter 3 data boundary**.
 
 ## Claim ceiling
 
-Do not translate present-day taxon niche correspondence into an environmental cause for a particular reconstructed transition. These analyses do not establish ancestral climate, event age, convergence, adaptation, selective mechanism, or fitness effect. `not_evaluable` must never be rewritten as “no relationship.”
+Do not translate present-day taxon niche correspondence into an environmental cause for a particular reconstructed transition. These analyses do not establish ancestral climate, event age, convergence, adaptation, selective mechanism or fitness effect. `not_evaluable` must never be rewritten as “no relationship,” and a constrained simple model must not be confused with a complete causal explanation.
