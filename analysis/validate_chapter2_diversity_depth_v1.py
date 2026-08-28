@@ -50,6 +50,9 @@ META_SIM_DISPOSITION_PATH = (
 ANALYSIS_DISPOSITION_PATH = (
     ROOT / "data" / "evidence" / "chapter2_analysis_disposition_v1.csv"
 )
+RELATIVE_DEPTH_PATH = (
+    ROOT / "data" / "evidence" / "japan38_relative_event_depth_v1.json"
+)
 
 ALLOWED_CLASSES = {"directly_usable", "reanalysis_needed", "design_only", "new_data_needed"}
 EXPECTED_CLASSES = {
@@ -97,7 +100,7 @@ EXPECTED_MAIN_ROLES = {
     "M04": "MAIN_INFERENCE_RESULT",
     "M05": "MAIN_BOUNDARY",
 }
-EXPECTED_RESOLUTION_IDS = [f"D{i:02d}" for i in range(1, 34)]
+EXPECTED_RESOLUTION_IDS = [f"D{i:02d}" for i in range(1, 35)]
 EXPECTED_META_SIM_IDS = [f"M{i:02d}" for i in range(1, 13)] + [
     f"S{i:02d}" for i in range(1, 11)
 ]
@@ -331,10 +334,14 @@ def validate_chapter2_to_chapter3_bridge(contract: dict) -> list[dict[str, str]]
                 raise AssertionError(
                     f"{row['priority_id']} evidence missing or empty: {raw_path.strip()}"
                 )
-    if "JPN_36" not in rows[0]["focal_concepts"] or "0.754" not in rows[0]["chapter2_result"]:
-        raise AssertionError("JPN36 phyllary discrimination is not priority 1")
-    if "JPN_06" not in rows[1]["focal_concepts"] or "JPN_15" not in rows[1]["focal_concepts"]:
-        raise AssertionError("JPN06/JPN15 stickiness contrast is not priority 2")
+    if (
+        "JPN_06" not in rows[0]["focal_concepts"]
+        or "JPN_15" not in rows[0]["focal_concepts"]
+        or "0.995" not in rows[0]["chapter2_result"]
+    ):
+        raise AssertionError("JPN06/JPN15 stickiness discrimination is not priority 1")
+    if "JPN_36" not in rows[1]["focal_concepts"] or "0.728" not in rows[1]["chapter2_result"]:
+        raise AssertionError("JPN36 phyllary discrimination is not priority 2")
     return rows
 
 
@@ -418,25 +425,39 @@ def validate_core_result_recovery() -> list[dict[str, str]]:
         raise AssertionError(f"M02 harmonized configuration set drift: {harmonized}")
 
     orientation = load_json(ROOT / "data" / "evidence" / "jpn34_orientation_extension_parsimony_v1.json")
-    phyllary = load_json(ROOT / "data" / "evidence" / "japan38_multitrait_history_summary_v1.json")
+    history = load_json(RELATIVE_DEPTH_PATH)
     sticky = load_json(ROOT / "data" / "evidence" / "jpn24_stickiness_extension_parsimony_v1.json")
     if orientation["orientation"]["resolved_concepts_after"] != 20:
         raise AssertionError("M03 orientation coverage drift")
     if orientation["orientation"]["ufboot1000_steps_min"] != 4 or orientation["orientation"]["ufboot1000_steps_max"] != 6:
         raise AssertionError("M03 orientation minimum-change drift")
-    posture = phyllary["minimum_change_history"]["phyllary_posture"]
-    if {posture["ufboot1000_steps_min"], posture["ufboot1000_steps_max"]} != {3}:
+    posture = history["ufboot1000_relative_event_depth"]["phyllary"][
+        "metric_summaries"
+    ]["minimum_steps"]
+    if {posture["min"], posture["max"]} != {3.0}:
         raise AssertionError("M03 phyllary minimum-change drift")
     if {sticky["stickiness"]["ufboot1000_steps_min"], sticky["stickiness"]["ufboot1000_steps_max"]} != {5}:
         raise AssertionError("M03 stickiness minimum-change drift")
 
-    ident = phyllary["transition_identifiability"]
-    if ident["orientation"]["ml_individually_forced_change_edges"] != 0:
+    ml = history["ml_relative_event_depth"]
+    boot = history["ufboot1000_relative_event_depth"]
+    if ml["orientation"]["forced_change_edges"]:
         raise AssertionError("M04 orientation forced-edge drift")
-    if abs(ident["orientation"]["highest_terminal_forced_edge_ufboot_fraction"] - 0.201) > 1e-12:
+    def forced_fraction(trait: str, edge: str) -> float:
+        values = {
+            row["edge_id"]: row["fraction"]
+            for row in boot[trait]["forced_change_edge_frequencies"]
+        }
+        return values[edge]
+    if abs(forced_fraction("orientation", "JPN_36") - 0.227) > 1e-12:
         raise AssertionError("M04 orientation terminal fraction drift")
-    if abs(ident["phyllary_posture"]["JPN_36_ufboot_forced_fraction"] - 0.754) > 1e-12:
+    if abs(forced_fraction("phyllary", "JPN_36") - 0.728) > 1e-12:
         raise AssertionError("M04 phyllary terminal fraction drift")
+    if abs(forced_fraction("stickiness", "JPN_06") - 0.995) > 1e-12:
+        raise AssertionError("M04 stickiness terminal fraction drift")
+    stick_depth = ml["stickiness"]["mean_relative_lineage_depth_interval"]
+    if any(abs(a - b) > 1e-12 for a, b in zip(stick_depth, [0.9428571428571428, 0.9542857142857143])):
+        raise AssertionError("M04 stickiness relative lineage-depth drift")
 
     branch_overlap = load_json(
         ROOT / "data" / "evidence" / "chapter2_time_axis_compute"
@@ -503,6 +524,7 @@ def validate_core_result_recovery() -> list[dict[str, str]]:
         "How many state changes are minimally required in the traits",
         "36 of 38 sampled Japanese concepts",
         "minimum-count stability",
+        "relative lineage-depth",
         "event resolution",
         "five result groups only",
         "Capitulum configuration diversity, minimum change counts",
@@ -519,7 +541,7 @@ def validate_resolution_and_meta_sim_audit() -> tuple[list[dict[str, str]], list
     resolution_ids = [row["analysis_id"] for row in resolution]
     if disposition_ids != EXPECTED_RESOLUTION_IDS or resolution_ids != disposition_ids:
         raise AssertionError(
-            "resolution classification must match ordered D01-D33 disposition membership exactly"
+            "resolution classification must match ordered D01-D34 disposition membership exactly"
         )
     required_resolution_fields = {
         "analysis_id", "epistemic_class", "negative_status", "chapter_destination",
@@ -548,6 +570,10 @@ def validate_resolution_and_meta_sim_audit() -> tuple[list[dict[str, str]], list
             raise AssertionError(f"{analysis_id} minimum-change certainty class drift")
         if classified[analysis_id]["negative_status"] != "NOT_NEGATIVE":
             raise AssertionError(f"{analysis_id} was mislabeled as a negative result")
+    if classified["D34"]["epistemic_class"] != "CERTAIN_TOPOLOGY_CONDITIONAL_DEPTH_ENVELOPE":
+        raise AssertionError("D34 relative lineage-depth class drift")
+    if classified["D34"]["negative_status"] != "NOT_NEGATIVE":
+        raise AssertionError("D34 was mislabeled as a negative result")
     for analysis_id in ("D07", "D31", "D32", "D33"):
         if classified[analysis_id]["negative_status"] != "NOT_A_BIOLOGICAL_NEGATIVE":
             raise AssertionError(f"{analysis_id} was promoted to a biological negative")
@@ -765,7 +791,7 @@ def validate_design_document(contract: dict) -> None:
         "Analyses runnable now",
         "final Chapter 2 result",
         "PR #126 and legacy V3 disposition",
-        "minimum-count stability and transition localization are separate properties",
+        "minimum-count stability, relative lineage-depth and named-edge localization are separate properties",
         "configuration diversity with multiple minimum changes within a dominant radiation",
         "scientifically complete with existing public evidence",
         "Chapter 3 is not a completion gate",
@@ -791,7 +817,11 @@ def validate_active_manuscript() -> None:
         "four to six unordered changes",
         "phyllary posture exactly three",
         "stickiness exactly five",
-        "75.4%",
+        "relative lineage-depth",
+        "0.227",
+        "0.728",
+        "0.995",
+        "0.707",
         "36 of 38 sampled Japanese concepts",
         "at least three harmonized orientation × stickiness configurations",
         "All four audited colour-polymorphic systems",
@@ -827,7 +857,7 @@ def main() -> int:
         CONTRACT_PATH, INVENTORY_PATH, DESIGN_PATH, MANUSCRIPT_PATH,
         CORE_RECOVERY_PATH, CORE_POSITION_PATH, RESOLUTION_CLASS_PATH,
         META_SIM_AUDIT_PATH, RESOLUTION_SPLIT_PATH, META_SIM_DISPOSITION_PATH,
-        ANALYSIS_DISPOSITION_PATH,
+        ANALYSIS_DISPOSITION_PATH, RELATIVE_DEPTH_PATH,
     ):
         if not path.exists() or path.stat().st_size == 0:
             raise AssertionError(f"missing or empty standalone Chapter 2 file: {path.relative_to(ROOT)}")

@@ -14,7 +14,7 @@ Submission status: **HOLD_JEB_PACKAGE_REBUILD_ONLY**
 
 > **Capitulum configuration diversity, minimum change counts and uneven event resolution in a young thistle radiation**
 
-The paper asks how many state changes are minimally required in traits forming configurations within the dominant Japanese radiation and which inferred placements can be resolved. Its biological result is configuration diversity with multiple minimum changes; its general inferential result is that minimum counts can remain stable while exact event localization differs strongly among traits.
+The paper asks how many state changes are minimally required in traits forming configurations within the dominant Japanese radiation, at what topology-only relative lineage depth those minimum histories remain admissible, and which named placements can be resolved. Its biological result is configuration diversity with multiple minimum changes; its general inferential result is that minimum count, relative depth and named-edge localization are distinct coordinates.
 
 ## Why JEB is the first target
 
@@ -22,7 +22,7 @@ The contribution is an evolutionary-inference distinction rather than a species 
 
 1. 36/38 sampled Japanese concepts belong to the dominant radiation, whose authority-covered subset already contains at least three harmonized configurations;
 2. three constituent traits each require multiple minimum changes;
-3. minimum-change counts and event placement are different estimands;
+3. minimum-change counts, relative lineage-depth and named-edge placement are different estimands;
 4. topology propagation can preserve counts while destabilizing event identity;
 5. species-tip compression independently hides extant states and at least one additional minimum change;
 6. remaining histories can prospectively determine own-data sampling without making future data a prerequisite for the current paper.
@@ -32,9 +32,9 @@ The paper retains negative and non-evaluable results and does not promote them t
 ## Current scientific spine
 
 - dominant-radiation context: 36/38 sampled concepts and at least three harmonized orientation x stickiness configurations in the authority-covered subset;
-- orientation: 20 resolved concepts; ML=6; UFBoot=4–6; no individually forced ML edge;
-- phyllary posture: ten resolved; exactly three changes; JPN36 terminal fraction 0.754; root posture ambiguous;
-- stickiness: 13 resolved; exactly five changes after the JPN24 authority extension;
+- orientation: 20 resolved concepts; ML=6; UFBoot=4–6; ML depth 0.767–1.000; no individually forced ML edge; JPN36=0.227;
+- phyllary posture: ten resolved; exactly three changes; ML depth 0.695–1.000; JPN36=0.728; root posture ambiguous;
+- stickiness: 13 resolved; exactly five changes after the JPN24 authority extension; ML depth 0.943–0.954; JPN06=0.995 and JPN36=0.707;
 - no module pair is consistently positive across branch-length-aware and equal-branch overlap diagnostics;
 - one-tip coding hides extant colour-state multiplicity in 4/4 audited systems and changes the minimum from one to two in the only morph-linked testable system;
 - continuous, niche and cytotype results remain Supporting Information boundaries;
@@ -59,9 +59,11 @@ Official source: https://academic.oup.com/jeb/pages/author-guidelines
 ## Active figure order
 
 1. Dominant-radiation context, exclusions, trait coverage and observed configurations.
-2. Trait-specific minimum-change-count distributions.
-3. Minimum-count stability versus forced-edge localization.
+2. Trait-specific minimum-change-count distributions and relative lineage-depth envelopes.
+3. Current run-329 forced-edge localization with the run-328 provenance correction.
 4. Overlap boundary, species-tip compression and Chapter 3 sampling consequences.
+
+Active question-result map: `docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V3.md`.
 
 The seven-taxon continuous and niche diagnostics belong in Supporting Information unless a compact limitations panel improves reviewer comprehension.
 

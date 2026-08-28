@@ -7,7 +7,7 @@ Machine ledgers:
 - `data/evidence/chapter2_resolution_classification_v1.csv`
 - `data/evidence/meta_simulation_resolution_audit_v1.csv`
 
-The audit classifies 12 meta/synthesis/programme lanes and 10 simulation lanes, including superseded and planned work so that absence from the active paper cannot be mistaken for a missing review.
+The audit classifies 34 repository analysis lanes, including the current relative lineage-depth result, plus 12 meta/synthesis/programme lanes and 10 simulation lanes. Superseded and planned work remains visible so that absence from the active paper cannot be mistaken for a missing review.
 
 ## The result language
 
@@ -22,7 +22,7 @@ The active time-axis conclusion is:
 1. Published phylogenomics places 36 of 38 sampled Japanese concepts in the dominant radiation.
 2. The authority-covered dominant-radiation subset contains at least three harmonized orientation x stickiness configurations.
 3. Every admitted topology requires at least four orientation changes, at least three phyllary-posture changes and at least five stickiness changes.
-4. Minimum-count stability does not guarantee event-placement identifiability. Orientation has zero individually forced maximum-likelihood edges, whereas the JPN36 phyllary terminal placement is concentrated in 75.4% of bootstrap topologies.
+4. Minimum-count stability does not guarantee equal event-depth or placement resolution. Median bootstrap depth envelopes are orientation 0.795–0.994, phyllary 0.695–1.000 and stickiness 0.937–0.954. Current run-329 JPN36 fractions are 22.7% for orientation and 72.8% for phyllary, whereas JPN06 stickiness is 99.5% after the frozen JPN24 extension.
 5. Species-tip coding loses extant state information in four of four audited polymorphic systems; the only morph-linked testable system changes from one to two minimum changes.
 
 Items 1-3 are the positive Chapter 2 biological result. Items 4-5 define the resolution boundary and the next sampling problem.
@@ -69,8 +69,8 @@ The generic meta-analysis ceiling has been reached for the current six HGA hypot
 
 Chapter 3 receives only material that can discriminate histories or causal paths:
 
-1. JPN36 population replication plus same-individual phyllary state and cytotype to test the 75.4% terminal-placement concentration;
-2. JPN06-JPN15 population-aware nuclear/network sampling plus same-individual stickiness to test the current 100/100 sister contrast;
+1. JPN06-JPN15 population-aware nuclear/network sampling plus same-individual stickiness to test the current JPN06 99.5% terminal-placement concentration and 100/100 sister contrast;
+2. JPN36 population replication plus same-individual phyllary state and cytotype to test the current 72.8% terminal-placement concentration;
 3. taxon-balanced all-Japan sampling for orientation because no single public edge is identifiable;
 4. same-individual orientation, phyllary posture and stickiness throughout the genomic panel to remove authority-to-sequence unlinkage;
 5. morph-linked phenotype, DNA and cytotype for polymorphic systems to remove species-tip compression;
@@ -80,4 +80,4 @@ Present-state covariance simulations remain with Chapter 1. Generic functional m
 
 ## Claim ceiling
 
-Chapter 2 establishes observed configuration diversity, topology-conditioned minimum-change lower bounds and unequal event-placement resolution. It does not establish independent origins, repeated gains, convergence, a shared or independent developmental module, adaptation, absolute timing or causal ecological drivers.
+Chapter 2 establishes observed configuration diversity, topology-conditioned minimum-change lower bounds and unequal topology-only relative lineage-depth and event-placement resolution. Exactly three authority-backed discrete histories are complete. It does not establish independent origins, repeated gains, convergence, a shared or independent developmental module, adaptation, absolute timing or causal ecological drivers.

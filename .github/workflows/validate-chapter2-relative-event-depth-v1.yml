@@ -1,0 +1,105 @@
+name: Validate Chapter 2 relative lineage depth v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/summarize_japan38_relative_event_depth_v1.py"
+      - "analysis/validate_chapter2_relative_event_depth_v1.py"
+      - "analysis/summarize_japan38_transition_identifiability_v1.py"
+      - "tests/test_summarize_japan38_relative_event_depth_v1.py"
+      - "data/evidence/chapter2_relative_event_depth_contract_v1.json"
+      - "data/evidence/japan38_relative_event_depth_v1.json"
+      - "data/evidence/japan38_relative_event_depth_summary_v1.csv"
+      - "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv"
+      - "data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv"
+      - "data/evidence/japan38_comp1061_concept_map_v1.csv"
+      - "docs/chapter2/RELATIVE_EVENT_DEPTH_CONTRACT_V1.md"
+      - "docs/chapter2/MANUSCRIPT_JEB_V4.md"
+      - ".github/workflows/validate-chapter2-relative-event-depth-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: chapter2-relative-event-depth-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CURRENT_TREE_RUN_ID: "32923076873"
+  CURRENT_TREE_ARTIFACT: "japan38-comp1061-frozen-tree-retry-32923076873"
+  SUPERSEDED_TREE_RUN_ID: "32845725038"
+  SUPERSEDED_TREE_ARTIFACT: "japan38-comp1061-frozen-tree-retry-32845725038"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen topology runtime
+        run: python -m pip install --disable-pip-version-check biopython==1.85
+      - name: Compile and unit test
+        run: |
+          python -m py_compile \
+            analysis/summarize_japan38_relative_event_depth_v1.py \
+            analysis/validate_chapter2_relative_event_depth_v1.py
+          python tests/test_summarize_japan38_relative_event_depth_v1.py -v
+      - name: Download current accepted tree ensemble
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.CURRENT_TREE_ARTIFACT }}
+          path: frozen_current
+          run-id: ${{ env.CURRENT_TREE_RUN_ID }}
+          github-token: ${{ github.token }}
+      - name: Download superseded tree ensemble for provenance audit
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.SUPERSEDED_TREE_ARTIFACT }}
+          path: frozen_superseded
+          run-id: ${{ env.SUPERSEDED_TREE_RUN_ID }}
+          github-token: ${{ github.token }}
+      - name: Recompute current frozen relative lineage-depth result
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/chapter2-relative-depth
+          python analysis/summarize_japan38_relative_event_depth_v1.py \
+            --contract data/evidence/chapter2_relative_event_depth_contract_v1.json \
+            --tree frozen_current/tree_result/japan38_comp1061.treefile \
+            --bootstrap-trees frozen_current/tree_result/japan38_comp1061.ufboot \
+            --concept-map data/evidence/japan38_comp1061_concept_map_v1.csv \
+            --base-trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --trait-extension data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv \
+            --output-json .tmp/chapter2-relative-depth/result.json \
+            --output-csv .tmp/chapter2-relative-depth/summary.csv \
+            >/dev/null
+          cmp .tmp/chapter2-relative-depth/result.json data/evidence/japan38_relative_event_depth_v1.json
+          cmp .tmp/chapter2-relative-depth/summary.csv data/evidence/japan38_relative_event_depth_summary_v1.csv
+      - name: Reproduce the superseded localization fractions on their actual artifact
+        run: |
+          set -euo pipefail
+          python analysis/summarize_japan38_transition_identifiability_v1.py \
+            --tree frozen_superseded/tree_result/japan38_comp1061.treefile \
+            --bootstrap-trees frozen_superseded/tree_result/japan38_comp1061.ufboot \
+            --concept-map data/evidence/japan38_comp1061_concept_map_v1.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --output .tmp/chapter2-relative-depth/superseded.json \
+            >/dev/null
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('.tmp/chapter2-relative-depth/superseded.json').read_text())
+          def fraction(trait, edge):
+              rows=x['bootstrap_identifiability'][trait]['top_forced_edge_frequencies']
+              return {r['edge_id']:r['fraction'] for r in rows}[edge]
+          assert fraction('orientation','JPN_36') == 0.201
+          assert fraction('phyllary','JPN_36') == 0.754
+          assert fraction('stickiness','JPN_06') == 0.67
+          assert fraction('stickiness','JPN_36') == 0.4
+          PY
+      - name: Validate scientific and manuscript boundaries
+        run: python analysis/validate_chapter2_relative_event_depth_v1.py

@@ -22,15 +22,16 @@ continuous capitulum phenotype
 
 ## Current Chapter 2 result
 
-> **A dominant young radiation contains multiple capitulum configurations and each of three constituent traits requires multiple minimum changes, but public evidence resolves minimum counts more reliably than individual event placements.**
+> **A dominant young radiation contains multiple capitulum configurations and each of exactly three completed discrete traits requires multiple minimum changes, while orientation, phyllary posture and stickiness have distinct count-depth-edge resolution profiles.**
 
 The standalone paper separates properties that are often conflated:
 
 1. continuous phylogenetic retention;
 2. minimum-change counts for independently defined discrete states;
-3. exact transition-placement identifiability;
-4. present and reconstructed trait-environment concordance;
-5. shared branch localization.
+3. exact topology-only relative lineage-depth envelopes;
+4. exact transition-placement identifiability;
+5. present and reconstructed trait-environment concordance;
+6. shared branch localization.
 
 ### Independent continuous history
 
@@ -46,7 +47,7 @@ Five registry taxa map to Japan38, but all mapped measurements are ranges. Japan
 - phyllary posture requires exactly three;
 - stickiness requires exactly five.
 
-Minimum-change counts are lower bounds, not independent-origin or convergence counts. Edge identifiability differs among traits, and no trait pair shows consistently positive transition overlap across branch-length treatments.
+Minimum-change counts are lower bounds, not independent-origin or convergence counts. Median UFBoot relative lineage-depth envelopes are 0.795–0.994, 0.695–1.000 and 0.937–0.954 for orientation, phyllary posture and stickiness. Current run-329 forced-edge fractions include orientation JPN36=0.227, phyllary JPN36=0.728, stickiness JPN06=0.995 and stickiness JPN36=0.707. Relative lineage-depth is not absolute time, and no trait pair shows consistently positive transition overlap across branch-length treatments.
 
 ## JEB submission direction
 
@@ -63,11 +64,13 @@ Start here:
 3. `data/evidence/chapter2_diversity_depth_contract_v1.json` — fail-closed machine contract;
 4. `data/evidence/chapter2_eazami_native_continuous_trait_registry_summary_v1.json` — independent-input coverage;
 5. `docs/chapter2/MANUSCRIPT_JEB_V4.md` — active standalone manuscript draft;
-6. `docs/chapter2/CHAPTER2_CORE_RESULT_RECOVERY_V1.md` — compressed positioning and hypothesis recovery;
-7. `data/evidence/chapter2_core_result_recovery_v1.csv` — machine-readable result selection;
-8. `data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv` — inverse-inference sampling priorities.
-9. `docs/chapter2/CHAPTER2_RESOLUTION_AWARE_EVIDENCE_SPLIT_V1.md` — certain lower bounds versus unresolved and restricted-negative results.
-10. `data/evidence/meta_simulation_resolution_audit_v1.csv` — complete meta-analysis and simulation disposition with exact numbers.
+6. `data/evidence/japan38_relative_event_depth_v1.json` — frozen exact depth envelopes and current localization;
+7. `docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V3.md` — active JEB display contract;
+8. `docs/chapter2/CHAPTER2_CORE_RESULT_RECOVERY_V1.md` — compressed positioning and hypothesis recovery;
+9. `data/evidence/chapter2_core_result_recovery_v1.csv` — machine-readable result selection;
+10. `data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv` — inverse-inference sampling priorities;
+11. `docs/chapter2/CHAPTER2_RESOLUTION_AWARE_EVIDENCE_SPLIT_V1.md` — certain lower bounds versus unresolved and restricted-negative results;
+12. `data/evidence/meta_simulation_resolution_audit_v1.csv` — complete meta-analysis and simulation disposition with exact numbers.
 
 Submission authorization is withheld only until the revised figures, anonymous DOCX, reference audit and author declarations pass. `MANUSCRIPT_JEB_V3.md`, its figures and DOCX package are reproducible audit snapshots, not active submission files.
 
@@ -88,7 +91,7 @@ Present-state v3/v4 covariance generators test statistical formation of within/a
 
 ### Chapter 3
 
-Chapter 3 builds an own Japan-wide RAD-seq sensitivity phylogeny/network with same-individual phenotype, voucher and cytotype linkage. JPN36 phyllary and JPN06–JPN15 stickiness are the first history-discrimination targets; field manipulations and fitness remain separate causal layers. Chapter 3 can revise Chapter 2 placements prospectively but is not required to make Chapter 2 complete.
+Chapter 3 builds an own Japan-wide RAD-seq sensitivity phylogeny/network with same-individual phenotype, voucher and cytotype linkage. JPN06–JPN15 stickiness is first for history/topology leverage, followed by JPN36 phyllary; JPN36 remains the more feasible first non-destructive field pilot. Field manipulations and fitness remain separate causal layers. Chapter 3 can revise Chapter 2 placements prospectively but is not required to make Chapter 2 complete.
 
 ### Later origin discrimination
 
@@ -105,4 +108,4 @@ similar tip states
     -> functional/adaptive convergence
 ```
 
-The current Chapter 2 reaches minimum-change counts and bounded historical localization only.
+The current Chapter 2 reaches minimum-change counts, topology-only relative lineage-depth envelopes and bounded historical localization only.

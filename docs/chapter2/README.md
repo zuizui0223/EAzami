@@ -2,12 +2,13 @@
 
 ## Active contract (2026-08-28)
 
-The active paper asks how many state changes are minimally required in traits forming configurations within the dominant young radiation and which inferred placements remain identifiable. It starts from EAzami-owned authority/literature/specimen/public-image data rather than an Azami observational handoff.
+The active paper asks how many state changes are minimally required in traits forming configurations within the dominant young radiation, what topology-only relative lineage depths remain admissible, and which named placements are identifiable. It starts from EAzami-owned authority/literature/specimen/public-image data rather than an Azami observational handoff.
 
 - canonical design: `DIVERSITY_DEPTH_STANDALONE_V1.md`;
 - compressed result recovery: `CHAPTER2_CORE_RESULT_RECOVERY_V1.md`;
 - machine contract: `../../data/evidence/chapter2_diversity_depth_contract_v1.json`;
 - machine result ledger: `../../data/evidence/chapter2_core_result_recovery_v1.csv`;
+- relative lineage-depth contract/result: `RELATIVE_EVENT_DEPTH_CONTRACT_V1.md` and `../../data/evidence/japan38_relative_event_depth_v1.json`;
 - certainty/unknown/negative split: `CHAPTER2_RESOLUTION_AWARE_EVIDENCE_SPLIT_V1.md` and `../../data/evidence/chapter2_resolution_classification_v1.csv`;
 - complete meta-analysis/simulation audit: `META_SIM_DISPOSITION_V1.md` and `../../data/evidence/meta_simulation_resolution_audit_v1.csv`;
 - 17-item inventory: `../../data/evidence/chapter2_diversity_depth_inventory_v1.csv`;
@@ -22,20 +23,21 @@ Completed continuous, niche and cytotype diagnostics remain frozen as Supporting
 
 ## Active conclusion
 
-> **A dominant young radiation contains multiple capitulum configurations and each of three constituent traits requires multiple minimum changes, but public evidence resolves minimum counts more reliably than individual event placements.**
+> **A dominant young radiation contains multiple capitulum configurations and each of exactly three completed discrete traits requires multiple minimum changes, while orientation, phyllary posture and stickiness have distinct count-depth-edge resolution profiles.**
 
 The main text now contains five result groups only: radiation/configuration context, three-trait minimum-change counts, event resolution, the shared-localization boundary and species-tip compression. Continuous retention, trait-niche concordance and cytotype results are Supporting Information. A negative diagnostic is not evidence for lability or independent evolution.
 
 ## Active manuscript and Chapter 3 bridge
 
 - `MANUSCRIPT_JEB_V4.md` — standalone JEB Research Article draft;
+- `JEB_QUESTION_RESULT_FIGURE_MAP_V3.md` — active question/result/display contract;
 - `CHAPTER2_TO_CHAPTER3_RADSEQ_BRIDGE_V1.md` — inverse-inference design boundary;
 - `../../data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv` — five ranked prospective tests and falsifiers.
 
 ## Frozen legacy submission package (audit only)
 
 - `MANUSCRIPT_JEB_V3.md` — double-anonymous JEB Research Article draft;
-- `TIME_AXIS_MAINLINE_V3.md` — scientific source of truth;
+- `TIME_AXIS_MAINLINE_V3.md` — legacy time-axis synthesis retained for audit;
 - `JEB_SUBMISSION_TARGET_V1.md` — current format and go/no-go contract;
 - `JEB_QUESTION_RESULT_FIGURE_MAP_V1.md` — question/result/display map;
 - `JEB_FIGURE_CHART_CONTRACT_V1.md` — static-figure construction and QA rules;
@@ -66,7 +68,7 @@ The main text now contains five result groups only: radiation/configuration cont
 - phyllary posture: exactly 3;
 - stickiness: exactly 5.
 
-The JPN36 terminal edge is forced in 0.201 of orientation histories but 0.754 of phyllary histories, showing that minimum-count stability and exact placement differ.
+The accepted run-329 ensemble gives JPN36 forced-edge fractions of 0.227 for orientation and 0.728 for phyllary posture. After the frozen JPN24 extension, stickiness is more strongly resolved: JPN06=0.995 and JPN36=0.707. Exact relative lineage-depth envelopes further separate a tightly constrained stickiness history from broader orientation and phyllary alternatives. The older 0.201/0.754/0.67/0.40 fractions reproduce only on superseded run 328 and remain audit history.
 
 ### Reconstruction-aware continuous null
 
@@ -98,7 +100,10 @@ Equal-branch medians are -0.0594, -0.3870 and 0.1840 for orientation–phyllary,
 - `../../data/evidence/chapter2_time_axis_compute/japan38_branch_change_reconstruction_null_v1.json`
 - `../../data/evidence/chapter2_provenance_sensitivity_compute/japan38_branch_change_provenance_sensitivity_v1.json`
 - `../../data/evidence/jpn24_stickiness_extension_parsimony_v1.json`
-- `../../data/evidence/japan38_multitrait_history_summary_v1.json`
+- `../../data/evidence/chapter2_relative_event_depth_contract_v1.json`
+- `../../data/evidence/japan38_relative_event_depth_v1.json`
+- `../../data/evidence/japan38_relative_event_depth_summary_v1.csv`
+- `../../data/evidence/japan38_multitrait_history_summary_v1.json` — superseded transition-localization provenance only
 
 ## Programme routing
 

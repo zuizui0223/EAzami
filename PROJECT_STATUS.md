@@ -92,9 +92,11 @@ The earlier positive equal-branch result across 1,000/1,000 topologies is retain
 
 These are topology-conditioned minimum-change lower bounds. Placement identifiability differs:
 
-- orientation has no individually forced ML edge; JPN36 terminal fraction 0.201;
-- phyllary JPN36 terminal fraction 0.754, with root posture ambiguous;
-- stickiness placements remain partial.
+- orientation has no individually forced ML edge; current run-329 JPN36 terminal fraction 0.227;
+- phyllary JPN36 terminal fraction 0.728, with root posture ambiguous;
+- stickiness requires exactly five changes after the JPN24 authority extension; JPN06=0.995 and JPN36=0.707;
+- median UFBoot relative lineage-depth envelopes are 0.795–0.994, 0.695–1.000 and 0.937–0.954 for orientation, phyllary and stickiness; these are topology-only, not absolute time;
+- stickiness has the strongest current localization, but no bootstrap fraction is an event probability or causal result.
 
 Equal-branch transition-overlap medians are -0.0594 for orientation–phyllary, -0.3870 for orientation–stickiness and 0.1840 for phyllary–stickiness. No pair is consistently positive across branch-length treatments.
 

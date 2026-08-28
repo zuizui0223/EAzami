@@ -1,0 +1,134 @@
+{
+  "contract_version": "chapter2_relative_event_depth_contract_v1",
+  "status_date": "2026-08-28",
+  "status": "frozen_with_audited_runtime_and_provenance_amendment_before_result_admission",
+  "freeze_history": {
+    "initial_freeze": "The trait scope, topology-only depth formula, exact-envelope rule, expected minimum-step ranges, ecological hypothesis classes and claim ceiling were frozen before relative-depth outcomes were inspected.",
+    "audited_amendment": "Before any result was admitted to the manuscript, the runtime was pinned and the legacy transition-localization provenance was corrected. Neither the estimand nor any threshold was changed.",
+    "reason": "The published v1 summary labels run 32923076873 but its localization fractions reproduce only with the superseded run 32845725038 artifact."
+  },
+  "purpose": "Add a topology-only relative lineage-depth layer to the completed minimum-change histories without inventing absolute time, probabilities for equally parsimonious histories, or ecological causation.",
+  "frozen_inputs": {
+    "tree_run_id": 32923076873,
+    "tree_artifact": "japan38-comp1061-frozen-tree-retry-32923076873",
+    "tree_artifact_digest": "sha256:4f7d85bed338e0cc899b3ac77da7a6abae326befd014d3a256b038a75d9bf37e",
+    "ml_tree_sha256": "ba592d3a9f52b5481314ab20e3202048505cdf72a3fc15134d5dca261b9d9b7e",
+    "ufboot_sha256": "32cb09118ed035b73e51df3faa0cc60d4ee0c77fcf53d3cf880d556c9bbfa786",
+    "bootstrap_replicates": 1000,
+    "concept_map": "data/evidence/japan38_comp1061_concept_map_v1.csv",
+    "concept_map_sha256": "c26729af8819aa8cb685455005d9c2b31670b03e7e6677c87106e73977273e88",
+    "base_trait_seed": "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv",
+    "base_trait_seed_sha256": "78e5e16ec0137f5ecf0877ab60f8d4a1c4e999a60b1cda1b960681875d81b584",
+    "authority_extension": "data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv",
+    "authority_extension_sha256": "c1f647de3a92d70daf13b1430f2b4e554ebc4289f818385518214efd2dc5b5fd",
+    "required_extension_concepts": {
+      "JPN_34": {
+        "orientation_state": "upward_or_erect"
+      },
+      "JPN_24": {
+        "stickiness_state": "sticky"
+      }
+    }
+  },
+  "runtime_contract": {
+    "accepted_python_major_minor": ["3.10", "3.11"],
+    "ci_python_major_minor": "3.11",
+    "biopython_version": "1.85",
+    "reason": "Pin the topology-processing dependency exactly, admit the locally available Python 3.10 and CI Python 3.11 runtimes, and verify byte-identical scientific outputs across both."
+  },
+  "legacy_provenance_boundary": {
+    "superseded_tree_run_id": 32845725038,
+    "superseded_ml_tree_sha256": "00f14eab3b1851ac53ab17ff447865928ebd61c0dc7bfe1edc3ace2abcada3c0",
+    "superseded_ufboot_sha256": "06f6422c46252534b0b007fa3a7211055bc6592fb17816364f8e5e7ccf3c6ba2",
+    "fractions_reproduced_only_on_superseded_artifact": {
+      "orientation_JPN_36": 0.201,
+      "phyllary_JPN_36": 0.754,
+      "stickiness_JPN_06_pre_JPN24_extension": 0.67,
+      "stickiness_JPN_36_pre_JPN24_extension": 0.4
+    },
+    "admission_rule": "Do not attach these four fractions to run 32923076873 or to the post-JPN24 trait matrix. Preserve them only as a superseded provenance audit."
+  },
+  "admitted_discrete_traits": {
+    "orientation": {
+      "resolved_concepts": 20,
+      "minimum_steps_expected": {
+        "ml": 6,
+        "ufboot_min": 4,
+        "ufboot_max": 6
+      }
+    },
+    "phyllary": {
+      "resolved_concepts": 10,
+      "minimum_steps_expected": {
+        "ml": 3,
+        "ufboot_min": 3,
+        "ufboot_max": 3
+      }
+    },
+    "stickiness": {
+      "resolved_concepts": 13,
+      "minimum_steps_expected": {
+        "ml": 5,
+        "ufboot_min": 5,
+        "ufboot_max": 5
+      }
+    }
+  },
+  "trait_scope_boundary": {
+    "completed_discrete_histories": [
+      "orientation",
+      "phyllary posture",
+      "stickiness"
+    ],
+    "not_a_fourth_discrete_history": {
+      "flower_colour": "No frozen Japan38 W/C/P state ontology with sequenced-individual morph linkage; do not collapse polymorphic taxa or threshold continuous colour.",
+      "display": "Only five of 38 exact Japan38 concepts share one directly comparable size metric; do not discretize sparse continuous size or qualitative head-number descriptions.",
+      "cytotype": "A sparse explanatory covariate, not a capitulum trait module."
+    }
+  },
+  "estimand": {
+    "history_family": "all globally minimum-cost unordered Sankoff reconstructions",
+    "relative_lineage_depth_formula": "(N - descendant_tip_count) / (N - 1)",
+    "relative_lineage_depth_interpretation": {
+      "one": "terminal edge",
+      "toward_zero": "edge subtending a broader and therefore relatively deeper descendant lineage",
+      "not_allowed": [
+        "calendar time",
+        "rate per million years",
+        "posterior probability",
+        "equal weighting of equally parsimonious histories"
+      ]
+    },
+    "per_trait_per_tree_outputs": [
+      "minimum_steps",
+      "mean_relative_lineage_depth_min_over_all_minimum_histories",
+      "mean_relative_lineage_depth_max_over_all_minimum_histories",
+      "terminal_change_count_min_over_all_minimum_histories",
+      "terminal_change_count_max_over_all_minimum_histories",
+      "internal_change_count_min_over_all_minimum_histories",
+      "internal_change_count_max_over_all_minimum_histories"
+    ],
+    "ensemble_outputs": [
+      "nearest-rank min q05 median q95 max summaries of every bound",
+      "fraction of UFBoot trees requiring at least one terminal change in every minimum reconstruction",
+      "fraction of UFBoot trees requiring at least one internal change in every minimum reconstruction"
+    ]
+  },
+  "fail_closed_rules": [
+    "Reject an input when exact ML-tree, UFBoot, concept-map, base-seed or authority-extension SHA-256 differs from the frozen record.",
+    "Reject execution unless Python 3.11 and Biopython 1.85 match the frozen runtime contract.",
+    "Reject a trait extension unless the extension concept set and admitted state values exactly match the frozen contract.",
+    "Preserve unknown and ambiguous tip states; do not impute, collapse ranges, or resolve polymorphism.",
+    "Reject a result when the minimum-step distributions differ from the frozen orientation, phyllary, or post-JPN24 stickiness expectations.",
+    "Do not assign frequencies to equally parsimonious histories; report deterministic lower and upper envelopes only.",
+    "Do not convert raw UFBoot topologies to time or substitutions per site by inventing branch lengths.",
+    "Do not align relative-depth results to colonization, glacial, fragmentation, niche, or fitness events in this analysis."
+  ],
+  "ecological_hypothesis_layer": {
+    "status": "bounded_predictions_not_historical_results",
+    "orientation": "rainfall/wetting, thermal and pollinator-presentation hypotheses; only BIO15/BIO1 have a topology-stable but threshold-unresolved public niche lead",
+    "phyllary": "enemy exclusion, wetness protection and pollinator-access trade-off; no climatic cause established",
+    "stickiness": "enemy benefit, null and pollinator or production-cost models compete; no climatic cause established"
+  },
+  "claim_ceiling": "The analysis may compare the deterministic relative lineage-depth envelopes of minimum-change histories for three authority-backed traits. It cannot identify absolute event ages, evolutionary rates, independent origins, convergence, adaptation, causal ecological drivers, or a general history of all capitulum traits."
+}

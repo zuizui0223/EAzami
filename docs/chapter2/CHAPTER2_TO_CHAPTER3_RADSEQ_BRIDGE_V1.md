@@ -25,8 +25,8 @@ The arrow does not run backwards. Chapter 3 is not required for Chapter 2 validi
 
 | Rank | Historical ambiguity | Focal sampling | Prospective falsifier |
 |---:|---|---|---|
-| 1 | JPN36 phyllary change is concentrated on a terminal edge in 0.754 of public UFBoot trees | JPN36 population replication, same-individual phyllary state and cytotype | admitted own topologies disperse or relocate the transition |
-| 2 | sticky JPN15 and nonsticky JPN06 form a canonical 100/100 sister contrast | both taxa across authorized populations, with network and admixture diagnostics | sister relation fails across admitted own-data sensitivities |
+| 1 | JPN06 stickiness is forced on its terminal edge in 0.995 of current UFBoot trees and sticky JPN15 plus nonsticky JPN06 form a canonical 100/100 sister contrast | both taxa across authorized populations, with network and admixture diagnostics | the terminal concentration or sister relation fails across admitted own-data sensitivities |
+| 2 | JPN36 phyllary change is concentrated on a terminal edge in 0.728 of current UFBoot trees | JPN36 population replication, same-individual phyllary state and cytotype | admitted own topologies disperse or relocate the transition |
 | 3 | orientation requires 4–6 changes but no ML edge is forced | taxon-balanced all-Japan representation | own topology narrows or changes the step range or localizes a stable edge |
 | 4 | no current module pair has a consistently positive shared history | same-individual orientation, phyllary and stickiness across the genomic panel | predeclared shared-localization test becomes topology-robustly positive |
 | 5 | phyllary protrusion has a weak seven-taxon retention hint | independent taxon-balanced calibrated measurements | corrected direction is absent or reverses |
