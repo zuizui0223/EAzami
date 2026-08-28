@@ -2,10 +2,14 @@
 
 ## Active contract (2026-08-28)
 
-The active paper asks how deeply independently assembled capitulum diversity is embedded in history. It starts from EAzami-owned authority/literature/specimen/public-image data rather than an Azami observational handoff.
+The active paper asks how many state changes are minimally required in traits forming configurations within the dominant young radiation and which inferred placements remain identifiable. It starts from EAzami-owned authority/literature/specimen/public-image data rather than an Azami observational handoff.
 
 - canonical design: `DIVERSITY_DEPTH_STANDALONE_V1.md`;
+- compressed result recovery: `CHAPTER2_CORE_RESULT_RECOVERY_V1.md`;
 - machine contract: `../../data/evidence/chapter2_diversity_depth_contract_v1.json`;
+- machine result ledger: `../../data/evidence/chapter2_core_result_recovery_v1.csv`;
+- certainty/unknown/negative split: `CHAPTER2_RESOLUTION_AWARE_EVIDENCE_SPLIT_V1.md` and `../../data/evidence/chapter2_resolution_classification_v1.csv`;
+- complete meta-analysis/simulation audit: `META_SIM_DISPOSITION_V1.md` and `../../data/evidence/meta_simulation_resolution_audit_v1.csv`;
 - 17-item inventory: `../../data/evidence/chapter2_diversity_depth_inventory_v1.csv`;
 - native registry: **ADMITTED_EAZAMI_NATIVE_VALUES** (45 records; 35 scalar; 10 range-only);
 - scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_CORE**;
@@ -14,13 +18,13 @@ The active paper asks how deeply independently assembled capitulum diversity is 
 
 The JEB V3 files below are a frozen audit package. `MANUSCRIPT_JEB_V4.md` is the active standalone submission draft.
 
-The first independent continuous-history diagnostic is also frozen: four complete direct traits on seven taxa, six AU-nonrejected topologies and exact 7! label permutations. No trait passes the corrected all-topology retention rule. Phyllary protrusion is a consistent but uncorrected measurement-priority hint, not a supported result and not transferable to Japan38.
+Completed continuous, niche and cytotype diagnostics remain frozen as Supporting Information boundaries. They are not additional main-text questions and cannot replace the five-group result selection.
 
 ## Active conclusion
 
-> **Authority-backed capitulum states require repeated but trait-specific histories; recurrence lower bounds are more robust than exact transition locations, and current evidence does not require one shared whole-capitulum history.**
+> **A dominant young radiation contains multiple capitulum configurations and each of three constituent traits requires multiple minimum changes, but public evidence resolves minimum counts more reliably than individual event placements.**
 
-The chapter distinguishes continuous retention, discrete recurrence, transition-placement identifiability, trait-niche concordance and shared branch localization. A negative diagnostic is not evidence for lability or independent evolution.
+The main text now contains five result groups only: radiation/configuration context, three-trait minimum-change counts, event resolution, the shared-localization boundary and species-tip compression. Continuous retention, trait-niche concordance and cytotype results are Supporting Information. A negative diagnostic is not evidence for lability or independent evolution.
 
 ## Active manuscript and Chapter 3 bridge
 
@@ -42,7 +46,7 @@ The chapter distinguishes continuous retention, discrete recurrence, transition-
 
 `MANUSCRIPT_JEB_V1.md` and `MANUSCRIPT_JEB_V2.md` are superseded audit history. They contain the pre-reconstruction-null interpretation and are not submission text.
 
-## Headline evidence
+## Legacy audit evidence retained outside the active mainline
 
 ### Present integration
 
@@ -56,13 +60,13 @@ The chapter distinguishes continuous retention, discrete recurrence, transition-
 - JPN29 excluded: eight not-supported units at >=2;
 - JPN29 excluded high depth: `not_evaluable` because only five concepts remain.
 
-### Discrete recurrence
+### Discrete minimum-change counts
 
 - orientation: 4–6 minimum changes;
 - phyllary posture: exactly 3;
 - stickiness: exactly 5.
 
-The JPN36 terminal edge is forced in 0.201 of orientation histories but 0.754 of phyllary histories, showing that recurrence count and exact placement differ.
+The JPN36 terminal edge is forced in 0.201 of orientation histories but 0.754 of phyllary histories, showing that minimum-count stability and exact placement differ.
 
 ### Reconstruction-aware continuous null
 
@@ -81,7 +85,7 @@ Equal-branch medians are -0.0594, -0.3870 and 0.1840 for orientation–phyllary,
 - continuous images are global species proxies, not sequenced-voucher phenotypes;
 - JPN29 remains identity unresolved for a Japanese trait join;
 - JPN20 is not forcibly collapsed;
-- parsimony counts are recurrence lower bounds, not convergence counts;
+- parsimony counts are minimum-change lower bounds, not convergence counts;
 - candidate continuous involucre/armature endpoints remain coverage-only.
 
 ## Machine-readable sources
@@ -89,6 +93,8 @@ Equal-branch medians are -0.0594, -0.3870 and 0.1840 for orientation–phyllary,
 - `../../data/evidence/chapter2_jeb_main_result_table_v1.csv`
 - `../../data/evidence/chapter2_claim_registry_v1.csv`
 - `../../data/evidence/chapter2_analysis_disposition_v1.csv`
+- `../../data/evidence/chapter2_resolution_classification_v1.csv`
+- `../../data/evidence/meta_simulation_resolution_audit_v1.csv`
 - `../../data/evidence/chapter2_time_axis_compute/japan38_branch_change_reconstruction_null_v1.json`
 - `../../data/evidence/chapter2_provenance_sensitivity_compute/japan38_branch_change_provenance_sensitivity_v1.json`
 - `../../data/evidence/jpn24_stickiness_extension_parsimony_v1.json`

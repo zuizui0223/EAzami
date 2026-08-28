@@ -1,119 +1,66 @@
 # Meta-analysis and simulation disposition v1
 
-Purpose: preserve existing EAzami work without letting material that answers a different question obscure the Chapter 2 phenotype × time estimand.
+Status date: 2026-08-28
 
-Canonical routing table: `data/evidence/chapter2_analysis_disposition_v1.csv`.
+Purpose: preserve every completed EAzami analysis while keeping the Chapter 2 time-axis estimand identifiable.
 
-## 1. Chapter 2 main paper: keep only evidence that directly locates phenotype in evolutionary history
+Canonical machine audit: `data/evidence/meta_simulation_resolution_audit_v1.csv`.
 
-Main-text material:
+## Active routing rule
 
-- accepted Japan38 nuclear tree and topology uncertainty;
-- Japanese origin/radiation context;
-- large phenotype disparity within the dominant radiation;
-- orientation repeated history;
-- phyllary-posture repeated history;
-- stickiness repeated history;
-- updated cross-trait historical-overlap diagnostic;
-- continuous-colour phylogenetic analysis and the source-balanced negative replication;
-- new all-18 continuous-trait phylogenetic structure/history analysis.
+Chapter 2 retains only results that establish phylogenetic context, observed configuration diversity, topology-conditioned minimum change counts, event-placement resolution or a direct resolution boundary. A result is not admitted merely because it is complete, quantitative or biologically interesting.
 
-The core Chapter 2 question is not whether a phenotype is functional. It is whether the same continuous phenotype dimensions defined in Chapter 1 show different degrees of phylogenetic conservatism, recurrence and historical coupling.
+## Meta-analysis
 
-## 2. Chapter 2 Supplement
+The completed functional syntheses answer `phenotype x function/fitness`, not `phenotype x evolutionary time`:
 
-### Japanese colonization evidence ledger
+- reproductive herbivory: four independent study clusters; pooled RR=2.674 with 95% CI 2.388-2.993;
+- selection mosaic: five strict factorial programmes; antagonist 2, mixed 2 and pollinator 1; at least two categories remain after every leave-one-program-out analysis;
+- selection leverage: 38 gradients from six articles; no significant paired functional-class contrast; exact paired P values 0.5-1.0;
+- demographic transmission: consistent 4, context dependent 1 and blocked 1; demographic gate 3/4; broad abiotic moderator 0/5;
+- pollinator assurance: six studies, five with high dependence, but only one exact numeric contrast; no pooled effect is authorized;
+- orientation fitness: k=2, random-effects RR=2.102 [0.773, 5.716], I2=93.6%; feasibility diagnostic only;
+- broad functional calibration: 26 rows; endpoint and sham registry only, with no cross-angiosperm pooled effect;
+- cross-scale identifiability: species-tip compression in 4/4 systems, but direct morph-genotype linkage in only 1/4.
 
-The origin meta-analysis is valuable but should not dominate the main results. Main text needs the conclusion — one dominant Pleistocene radiation with rare exceptions — while accession-level evidence, independent-data-generation accounting and alternative origin models belong in Supplement.
+Disposition: bounded priors and experimental-design constraints for Chapter 3. These results do not explain the Chapter 2 minimum counts and cannot identify focal Cirsium function or adaptation.
 
-### Absolute-time calibration audit
+The generic meta-analysis ceiling is reached for 6/6 current HGA hypotheses. This is a stop rule for more heterogeneous literature accumulation, not a claim that focal biological mechanisms are resolved.
 
-The failed/blocked chronogram work from PR #92 is useful as a transparent limitation. It shows why the current Comp1061 branch lengths remain substitutions/site and why absolute Ma transition timing is not forced. This belongs in Supplement rather than being silently omitted.
+## Present-state simulations
 
-### FDT3 cross-plant repeated-evolution synthesis
+The v1-v4 simulation programme tests the formation of present within/among phenotype covariance. It contains no branch-indexed empirical history and therefore belongs to Chapter 1 Supplement or thesis methods.
 
-If completed with a defensible event-level dataset, FDT3 can serve as an external benchmark for whether recurrence observed in Cirsium is unusual or typical. It is not required for the core Cirsium history paper and must not delay it.
+- v1 historical screen: `FULL_MODULAR` accepted 2/500 draws; four other families 0/500. These frequencies are design-compositional, not ecological prevalence.
+- v2 historical screen: `FULL_MODULAR_HET` had the lowest declared distance. This is relative ranking only.
+- v3.1 frozen screen: five families x four seeds x 500 draws; zero families met absolute adequacy. Common-lability versus modular-evolvability remained unresolved.
+- frozen scalar screen: `NULL_COUPLED` was the unique relative winner among 14 families for 62 targets and ranked first in 16/16 paired draws. It is not a true null or causal model.
+- held-out falsification: primary 8-cell pattern 0/64, exact 20-cell vector 0/64 and median 14/20 matching cells. This falsifies the frozen generator on that held-out contract only.
+- post-heldout diagnostic: best family reached median 6/8 cells and improved over `NULL_COUPLED` in 22/24 paired draws, but zero families met adequacy. This is hypothesis generation, not confirmatory selection.
+- v4.1: a frozen contract exists, but no canonical independently validated outcome is admitted here.
 
-## 3. Route current covariance simulations back toward Chapter 1 Supplement / thesis methods
+These simulation negatives apply only to the declared generators, priors, targets and gates. They are not negative evidence for ecology, genetic modularity, adaptation or historical trait coupling.
 
-The existing v3/v4 programme — including v3.1, `NULL_COUPLED`, held-out 0/64 failure, among-only process diagnostics and provisional v4.1 scale-specific covariance — does **not** use evolutionary branches or transition history.
+## Evolutionary simulations
 
-It asks:
+FDT7 is a distinct future programme because it would compare branch-indexed histories. It remains planned. It may run only after empirical histories and any dated-tree input are independently frozen, and it cannot be used to manufacture those histories.
 
-> Which statistical covariance architecture can reproduce the observed present-day within/among phenotype field?
-
-That question is a structural robustness extension of Chapter 1, not the primary estimand of Chapter 2.
-
-Disposition:
-
-- v3.1 mechanism-family gap → Chapter 1 Supplement;
-- PR #119 scalar `NULL_COUPLED` winner → Chapter 1 Supplement;
-- PR #120 held-out 0/64 falsification → Chapter 1 Supplement;
-- PR #123 among-only process improvement but inadequacy → Chapter 1 Supplement;
-- draft PR #122 v4.1 scale-specific covariance → retain as provisional; only use in Supplement or thesis synthesis after independent held-out validation.
-
-This preserves the important non-identifiability result without relabelling present-state covariance generation as evolutionary history.
-
-## 4. Move functional meta-analysis to the next function/fitness chapter
-
-The following are scientifically strong but answer `phenotype × function/fitness`, not `phenotype × time`:
-
-- direct Cirsium reproductive-herbivory meta-analysis, RR 2.674;
-- pollinator × antagonist selection-mosaic synthesis;
-- selection-leverage meta-analysis;
-- demographic transmission gate;
-- display trade-off evidence;
-- orientation functional calibration;
-- stickiness benefit/null/cost comparison;
-- phyllary/protective-envelope analog evidence.
-
-These should become the empirical/literature foundation of the next chapter asking **why particular phenotypes matter**, rather than being reduced to a large Chapter 2 supplement.
-
-Chapter 2 Discussion may briefly use them to motivate candidate explanations, but no functional meta result is required to establish the historical pattern.
-
-## 5. Separate phenotypic disparity-through-time from functional disparity-through-time
-
-The existing FDT5 design is explicitly **functional** disparity through time and depends on a literature-derived trait → function matrix.
-
-For the revised Chapter 2, first implement:
-
-> continuous phenotype → phylogeny → phenotypic disparity through relative evolutionary history.
-
-This uses the measured Azami phenotype directly and remains independent of functional assumptions.
-
-Functional DTT can then move to the next function chapter or a later synthesis after function loadings are validated.
-
-## 6. Distinguish two kinds of simulation
-
-### Existing v3/v4 covariance simulations
-
-Present-state statistical architecture only → Chapter 1 Supplement / synthesis.
-
-### Planned FDT7 evolutionary simulations
-
-Potentially true historical model discrimination because they would use an empirical tree, trait histories, niche histories and transition/event summaries.
-
-These can become Chapter 2 Supplement or thesis synthesis **only after** the empirical continuous-trait histories are frozen. They must not be used to manufacture the historical pattern they are meant to explain.
-
-## 7. Downstream chapter flow
-
-A clean dissertation progression is now:
+## Dissertation routing
 
 ```text
-Chapter 1 — phenotype × space/environment
-    continuous phenomics, within/among variation, geography, environment
+Chapter 1 — present phenotype x space/environment
+    current covariance simulations and their frozen model failures
 
-Chapter 2 — phenotype × evolutionary time/history
-    phylogenetic signal, ancestral/branch change, recurrence, historical coupling, phenotypic DTT
+Chapter 2 — phenotype x public evolutionary history
+    configuration diversity; minimum change counts; event resolution
 
-Next chapter — phenotype × function/fitness
-    meta-analysis, manipulation, selection mosaic, antagonist/pollinator/abiotic pathways
+Chapter 3 — own RAD-seq x linked phenotype/function
+    history discrimination; meta-bounded experiments; reproductive fitness
 
-Later empirical/history extension
-    nuclear population ancestry + plastid + cytotype → origin of repeated states
-
-Synthesis
-    niche/event correspondence, evolutionary simulation, functional/adaptive convergence
+Later synthesis
+    dated event correspondence and branch-indexed evolutionary simulation
 ```
 
-This arrangement keeps every major EAzami result but restores one question per chapter.
+## Claim ceiling
+
+Meta-analysis supplies general functional priors and falsifies only strict universal agent-dominance models. Present-state simulations falsify only frozen generator contracts. Neither evidence class establishes the origin, function, adaptation or causal history of the Chapter 2 trait states.

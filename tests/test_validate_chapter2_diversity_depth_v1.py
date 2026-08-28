@@ -40,8 +40,29 @@ class DiversityDepthContractTests(unittest.TestCase):
         target.validate_frozen_results()
         target.validate_native_history_diagnostic()
 
-    def test_active_jeb_v4_is_standalone_and_bounded(self) -> None:
+    def test_repo_wide_recovery_has_five_main_result_groups(self) -> None:
+        rows = target.validate_core_result_recovery()
+        main = [row for row in rows if row["result_id"].startswith("M")]
+        self.assertEqual([row["result_id"] for row in main], ["M01", "M02", "M03", "M04", "M05"])
+        self.assertEqual(main[1]["paper_role"], "MAIN_BIOLOGICAL_RESULT")
+        self.assertIn("at least three harmonized", main[1]["headline_result"])
+
+    def test_active_jeb_v4_is_minimum_change_framed_and_bounded(self) -> None:
         target.validate_active_manuscript()
+
+    def test_all_analyses_have_resolution_and_meta_simulation_dispositions(self) -> None:
+        resolution, meta_sim = target.validate_resolution_and_meta_sim_audit()
+        self.assertEqual(len(resolution), 33)
+        self.assertEqual(len(meta_sim), 18)
+        lookup = {row["analysis_id"]: row for row in resolution}
+        self.assertEqual(
+            lookup["D04"]["epistemic_class"],
+            "CERTAIN_TOPOLOGY_CONDITIONAL_MINIMUM",
+        )
+        self.assertEqual(
+            lookup["D31"]["negative_status"],
+            "NOT_A_BIOLOGICAL_NEGATIVE",
+        )
 
 
 if __name__ == "__main__":

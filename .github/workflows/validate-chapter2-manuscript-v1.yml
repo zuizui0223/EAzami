@@ -11,6 +11,7 @@ on:
       - "data/evidence/chapter2_claim_registry_v1.csv"
       - "data/evidence/chapter2_result_role_map_v2.csv"
       - "data/evidence/chapter2_jeb_main_result_table_v1.csv"
+      - "data/evidence/chapter2_core_result_recovery_v1.csv"
       - "data/evidence/chapter2_jeb_reframe_contract_v1.json"
       - "data/evidence/chapter2_time_axis_compute/japan38_branch_change_reconstruction_null_v1.json"
       - "data/evidence/chapter2_provenance_sensitivity_compute/**"

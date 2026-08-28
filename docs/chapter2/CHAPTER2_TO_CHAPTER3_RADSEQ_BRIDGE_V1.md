@@ -8,7 +8,7 @@ Chapter 2 is a complete public-evidence paper. Chapter 3 is the own-data test of
 published Comp1061 ensemble + authority states
                   |
                   v
-  Chapter 2 recurrence and placement uncertainty
+  Chapter 2 minimum counts and placement uncertainty
                   |
           inverse sample selection
                   |
@@ -59,4 +59,4 @@ JPN36 field-manipulation authorization and DNA-collection authorization are sepa
 
 ## Claim boundary
 
-Chapter 2 estimates conditional historical recurrence and placement. Chapter 3 estimates own-data topology, ancestry and linked phenotype within its quality gates. Neither a sister contrast nor a revised transition placement establishes mechanism, fitness benefit, convergence or adaptation; those require separately controlled experiments and claim contracts.
+Chapter 2 estimates conditional historical minimum-change counts and placement. Chapter 3 estimates own-data topology, ancestry and linked phenotype within its quality gates. Neither a sister contrast nor a revised transition placement establishes mechanism, fitness benefit, convergence or adaptation; those require separately controlled experiments and claim contracts.

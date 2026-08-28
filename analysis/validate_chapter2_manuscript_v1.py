@@ -23,6 +23,7 @@ REQUIRED = [
     ROOT / "PROJECT_STATUS.md",
     ROOT / "docs" / "RESEARCH_PLAN.md",
     CH / "README.md",
+    CH / "CHAPTER2_CORE_RESULT_RECOVERY_V1.md",
     CH / "TIME_AXIS_MAINLINE_V3.md",
     CH / "MANUSCRIPT_JEB_V3.md",
     CH / "JEB_SUBMISSION_TARGET_V1.md",
@@ -38,6 +39,7 @@ REQUIRED = [
     ROOT / "data" / "evidence" / "chapter2_claim_registry_v1.csv",
     ROOT / "data" / "evidence" / "chapter2_result_role_map_v2.csv",
     ROOT / "data" / "evidence" / "chapter2_jeb_main_result_table_v1.csv",
+    ROOT / "data" / "evidence" / "chapter2_core_result_recovery_v1.csv",
     ROOT / "data" / "evidence" / "source" / "azami_capitulum_space_eazami_targets_run33035785120.csv",
     TIME / "continuous_primary_phylogenetic_structure_v1.csv",
     TIME / "japan38_branch_change_reconstruction_null_v1.json",
@@ -205,7 +207,7 @@ def check_discrete_history() -> None:
     if sticky["stickiness"]["resolved_concepts_after"] != 13:
         raise AssertionError("stickiness coverage drift")
     if sticky["stickiness"]["ufboot1000_steps_min"] != 5 or sticky["stickiness"]["ufboot1000_steps_max"] != 5:
-        raise AssertionError("stickiness recurrence drift")
+        raise AssertionError("stickiness minimum-change drift")
     dtop = load_json(TIME / "japan38_latest_module_overlap_topology_sensitivity_v2.json")
     if dtop["bootstrap_topology_sensitivity"]["bootstrap_trees_total"] != 1000:
         raise AssertionError("discrete topology ensemble incomplete")
@@ -331,7 +333,7 @@ def check_entry_points() -> None:
     for path, needles in {
         ROOT / "README.md": [
             "COMPLETE_EXISTING_PUBLIC_HISTORY_CORE",
-            "Robust recurrence but uncertain localization",
+            "Capitulum configuration diversity, minimum change counts",
             "MANUSCRIPT_JEB_V3.md",
             "audit snapshots",
         ],
@@ -339,14 +341,15 @@ def check_entry_points() -> None:
             "HOLD_JEB_PACKAGE_REBUILD_ONLY",
             "Active standalone title",
             "v4 is current submission text",
+            "CHAPTER2_CORE_RESULT_RECOVERY_V1.md",
         ],
         ROOT / "docs" / "RESEARCH_PLAN.md": [
             "standalone",
-            "not supported",
+            "configuration diversity plus multiple minimum changes",
             "Journal of Evolutionary Biology",
             "immutable audit snapshot",
         ],
-        CH / "README.md": ["MANUSCRIPT_JEB_V4.md", "Frozen legacy submission package", "0.3504", "0.1959"],
+        CH / "README.md": ["MANUSCRIPT_JEB_V4.md", "Frozen legacy submission package", "0.3504", "0.1959", "CHAPTER2_CORE_RESULT_RECOVERY_V1.md"],
         CH / "TIME_AXIS_MAINLINE_V3.md": ["frozen audit", "not_evaluable", "Diagnostic only"],
         CH / "JEB_SUBMISSION_TARGET_V1.md": ["7,500 words", "<=250 words", "double-anonymous", "generative-AI"],
     }.items():
