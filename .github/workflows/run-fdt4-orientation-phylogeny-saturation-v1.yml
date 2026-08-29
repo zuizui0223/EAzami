@@ -1,0 +1,163 @@
+name: Run FDT4 orientation phylogeny saturation v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_fdt4_orientation_phylogeny_saturation_v1.py"
+      - "data/evidence/chang2026_orientation_overlap_pruned_topology_v1.nwk"
+      - ".github/workflows/run-fdt4-orientation-phylogeny-saturation-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  saturation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-saff-root-primary-tree-32575064385
+          path: inputs/full20_primary
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32575064385
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-topology-concordance-32614242600
+          path: inputs/concordance
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614242600
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-alt-topology-au-32614839764
+          path: inputs/au
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614839764
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-japan-orientation-niche-v1
+          path: inputs/japan_occ
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32716015605
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-taiwan-orientation-niche-v1
+          path: inputs/taiwan_occ
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33225237163
+
+      - uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-name: topology-saturation
+          create-args: >-
+            python=3.12
+            iqtree=2.4.0
+            numpy
+            pandas
+            scipy
+            biopython
+          condarc: |
+            channels:
+              - conda-forge
+              - bioconda
+            channel_priority: strict
+          init-shell: none
+          generate-run-shell: true
+          cache-environment: true
+          cache-downloads: true
+          post-cleanup: all
+
+      - name: Validate public input contracts
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          python -m py_compile analysis/run_fdt4_orientation_phylogeny_saturation_v1.py
+          test -s inputs/full20_primary/tree/concat/concat.fasta
+          test -s inputs/concordance/sensitivity/loci.treefile
+          test $(wc -l < inputs/concordance/sensitivity/loci.treefile) -eq 153
+          test -s inputs/au/au.trees
+          test $(wc -l < inputs/au/au.trees) -eq 9
+          test -s inputs/japan_occ/focal_occurrences_environment_complete.csv
+          test -s inputs/taiwan_occ/focal_occurrences_environment_complete.csv
+          test -s inputs/taiwan_occ/multisource_sensitivity/tbn_native_additions_environment_complete.csv
+          test -s inputs/taiwan_occ/multisource_sensitivity/tbn_non_gbif_additions_environment_complete.csv
+
+      - name: Reconstruct full20 concatenated 1000-UFBoot ensemble
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          mkdir -p output/full20_bootstrap
+          IQTREE_BIN="$(command -v iqtree2)"
+          "$IQTREE_BIN" \
+            -s inputs/full20_primary/tree/concat/concat.fasta \
+            -m MFP \
+            -B 1000 \
+            --alrt 1000 \
+            -wbt \
+            -T AUTO \
+            -seed 20260829 \
+            -o OUTGROUP_saff \
+            --prefix output/full20_bootstrap/full20_comp1061
+          test -s output/full20_bootstrap/full20_comp1061.treefile
+          test -s output/full20_bootstrap/full20_comp1061.ufboot
+          test $(wc -l < output/full20_bootstrap/full20_comp1061.ufboot) -eq 1000
+
+      - name: Run candidate, UFBoot, locus-tree and independent-topology saturation
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          python analysis/run_fdt4_orientation_phylogeny_saturation_v1.py \
+            --japan-occ inputs/japan_occ/focal_occurrences_environment_complete.csv \
+            --taiwan-gbif inputs/taiwan_occ/focal_occurrences_environment_complete.csv \
+            --tbn-native inputs/taiwan_occ/multisource_sensitivity/tbn_native_additions_environment_complete.csv \
+            --tbn-broad inputs/taiwan_occ/multisource_sensitivity/tbn_non_gbif_additions_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --au-trees inputs/au/au.trees \
+            --accepted-count 6 \
+            --ufboot-trees output/full20_bootstrap/full20_comp1061.ufboot \
+            --gene-trees inputs/concordance/sensitivity/loci.treefile \
+            --independent-tree data/evidence/chang2026_orientation_overlap_pruned_topology_v1.nwk \
+            --independent-label chang2026_astral_pruned_topology \
+            --min-n 10 \
+            --out-dir output/saturation
+
+      - name: Fail closed on topology saturation structure
+        shell: micromamba-shell {0}
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('output/saturation/fdt4_orientation_phylogeny_saturation_v1.json').read_text())
+          assert p['ensemble_sizes']['au_candidates']==9
+          assert p['ensemble_sizes']['au_nonrejected']==6
+          assert p['ensemble_sizes']['concatenated_ufboot']==1000
+          assert p['ensemble_sizes']['public_locus_trees']==153
+          assert p['panels']['gbif']['n_taxa']==9
+          assert p['panels']['native_tbn']['n_taxa']==11
+          assert p['panels']['broad_non_gbif_tbn']['n_taxa']==11
+          # This validator freezes only the design, not desired biological outcomes.
+          for panel in ('gbif','native_tbn','broad_non_gbif_tbn'):
+              assert p['locus_tree_coverage'][panel]['complete_panel_gene_trees'] >= 100
+          print('FDT4 phylogeny saturation structural contract PASS')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fdt4-orientation-phylogeny-saturation-v1
+          path: output
+          if-no-files-found: error
+          retention-days: 90
