@@ -1,7 +1,20 @@
 {
   "contract_version": "fdt4_taiwan_orientation_niche_config_v1",
-  "status_date": "2026-08-24",
+  "status_date": "2026-08-29",
   "purpose": "Extend the existing source-name-guarded GBIF plus CHELSA niche pipeline to the seven resolved Taiwan members of the 20-tip orientation panel, without mixing mainland-China occurrence ranges into nuclear tips represented by Taiwan taxon concepts.",
+  "refresh_contract": {
+    "reason": "Outcome-blind refresh of public Taiwan occurrence coverage after the frozen primary analysis. Cirsium morii and Cirsium tatakaense previously had nine independent thinned environment-complete records each, one below the frozen primary n>=10 gate.",
+    "frozen_primary_min_n": 10,
+    "priority_taxa": ["Cirsium morii", "Cirsium tatakaense"],
+    "filters_unchanged": true,
+    "prohibited_changes": [
+      "lower the n>=10 primary gate",
+      "relax the source-name guard",
+      "relax the 10000 m coordinate-uncertainty gate",
+      "reduce the 0.05 degree spatial thinning distance",
+      "add mainland-China occurrences to Taiwan nuclear-tip concepts"
+    ]
+  },
   "gbif": {
     "country": "TW",
     "has_coordinate": true,
