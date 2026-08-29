@@ -152,8 +152,6 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p tools output/astral153
-          # Pin the official ASTRAL repository state whose master HEAD was
-          # 068a4b2497f61c866c4727bfbfd78b4361ba27c8 on 2026-08-29.
           curl -L --fail --retry 3 \
             -o tools/Astral.5.7.8.zip \
             https://raw.githubusercontent.com/smirarab/ASTRAL/068a4b2497f61c866c4727bfbfd78b4361ba27c8/Astral.5.7.8.zip
@@ -201,9 +199,8 @@ jobs:
           from pathlib import Path
           import pandas as pd
 
-          g=pd.read_csv('inputs/concordance/sensitivity/gcf.cf.stat', sep='\t')
-          s=pd.read_csv('inputs/concordance/sensitivity/scf.cf.stat', sep='\t')
-          # IQ-TREE stat headers can vary in exact case; identify percentage columns.
+          g=pd.read_csv('inputs/concordance/sensitivity/gcf.cf.stat', sep='\t', comment='#')
+          s=pd.read_csv('inputs/concordance/sensitivity/scf.cf.stat', sep='\t', comment='#')
           gcol=next(c for c in g.columns if c.lower()=='gcf')
           scol=next(c for c in s.columns if c.lower()=='scf')
           payload={
