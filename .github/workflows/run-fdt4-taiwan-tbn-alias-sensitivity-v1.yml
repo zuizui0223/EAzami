@@ -1,0 +1,185 @@
+name: Run FDT4 Taiwan TBN alias sensitivity v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/fdt4_taiwan_tbn_alias_contract_v1.json"
+      - "analysis/audit_fdt4_taiwan_tbn_alias_occurrences_v1.py"
+      - "analysis/build_fdt4_taiwan_alias_sensitivity_v1.py"
+      - ".github/workflows/run-fdt4-taiwan-tbn-alias-sensitivity-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  alias_sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas requests scikit-learn rasterio scipy biopython
+          python -m pip check
+
+      - name: Validate frozen alias contract
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            analysis/audit_fdt4_taiwan_tbn_alias_occurrences_v1.py \
+            analysis/build_fdt4_taiwan_alias_sensitivity_v1.py \
+            analysis/run_fdt4_orientation_niche_pgls_v1.py \
+            analysis/summarize_chapter2_ecological_explanatory_reach_v1.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('data/evidence/fdt4_taiwan_tbn_alias_contract_v1.json').read_text())
+          assert p['contract_version']=='fdt4_taiwan_tbn_alias_contract_v1'
+          assert len(p['rules'])==7
+          by={x['analysis_taxon']:x for x in p['rules']}
+          assert by['Cirsium japonicum var. albescens']['lookup_uuids']==['4ee2a291-92a0-4d53-a35b-847fc13be52a']
+          assert by['Cirsium japonicum var. fukienense']['lookup_mode']=='original_name_under_parent_taxon'
+          assert by['Cirsium pengii']['lookup_mode']=='direct_search_fail_closed'
+          g=p['global_filters']
+          assert g['minimum_environment_complete_cells']==10
+          assert g['max_coordinate_uncertainty_m']==10000
+          assert g['spatial_thin_degrees']==0.05
+          print('Alias contract PASS')
+          PY
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-taiwan-orientation-niche-v1
+          path: inputs/taiwan
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33225237163
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-japan-orientation-niche-v1
+          path: inputs/japan
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32716015605
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-alt-topology-au-32614839764
+          path: inputs/au
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614839764
+
+      - name: Audit TBN through frozen taxonomic aliases
+        run: |
+          set -euo pipefail
+          mkdir -p output/alias_audit
+          python analysis/audit_fdt4_taiwan_tbn_alias_occurrences_v1.py \
+            --contract data/evidence/fdt4_taiwan_tbn_alias_contract_v1.json \
+            --gbif-occurrences inputs/taiwan/focal_occurrences_environment_complete.csv \
+            --out-dir output/alias_audit
+
+      - name: Build alias additions beyond frozen direct-TBN cells
+        env:
+          GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+          CPL_VSIL_CURL_ALLOWED_EXTENSIONS: .tif,.tiff
+          GDAL_HTTP_TIMEOUT: "120"
+          GDAL_HTTP_MAX_RETRY: "4"
+          GDAL_HTTP_RETRY_DELAY: "3"
+        run: |
+          set -euo pipefail
+          mkdir -p output/alias_sensitivity
+          python analysis/build_fdt4_taiwan_alias_sensitivity_v1.py \
+            --niche-config data/evidence/fdt4_taiwan_orientation_niche_config_v1.json \
+            --alias-contract data/evidence/fdt4_taiwan_tbn_alias_contract_v1.json \
+            --gbif-occurrences inputs/taiwan/focal_occurrences_environment_complete.csv \
+            --direct-native inputs/taiwan/multisource_sensitivity/tbn_native_additions_environment_complete.csv \
+            --direct-broad inputs/taiwan/multisource_sensitivity/tbn_non_gbif_additions_environment_complete.csv \
+            --alias-audit output/alias_audit/tbn_alias_occurrence_cells_source_guarded.csv \
+            --out-dir output/alias_sensitivity
+
+      - name: Run native alias-expanded East-Asia PGLS
+        run: |
+          mkdir -p output/pgls_native
+          python analysis/run_fdt4_orientation_niche_pgls_v1.py \
+            --occurrences \
+              inputs/japan/focal_occurrences_environment_complete.csv \
+              inputs/taiwan/focal_occurrences_environment_complete.csv \
+              inputs/taiwan/multisource_sensitivity/tbn_native_additions_environment_complete.csv \
+              output/alias_sensitivity/alias_native_additions_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --au-trees inputs/au/au.trees --nonrejected-count 6 --min-n 10 \
+            --out-dir output/pgls_native
+
+      - name: Run broad alias-expanded East-Asia PGLS
+        run: |
+          mkdir -p output/pgls_broad
+          python analysis/run_fdt4_orientation_niche_pgls_v1.py \
+            --occurrences \
+              inputs/japan/focal_occurrences_environment_complete.csv \
+              inputs/taiwan/focal_occurrences_environment_complete.csv \
+              inputs/taiwan/multisource_sensitivity/tbn_non_gbif_additions_environment_complete.csv \
+              output/alias_sensitivity/alias_broad_additions_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --au-trees inputs/au/au.trees --nonrejected-count 6 --min-n 10 \
+            --out-dir output/pgls_broad
+
+      - name: Apply frozen Chapter 2 classification rule
+        run: |
+          python analysis/summarize_chapter2_ecological_explanatory_reach_v1.py \
+            --occurrences \
+              inputs/japan/focal_occurrences_environment_complete.csv \
+              inputs/taiwan/focal_occurrences_environment_complete.csv \
+              inputs/taiwan/multisource_sensitivity/tbn_native_additions_environment_complete.csv \
+              output/alias_sensitivity/alias_native_additions_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --au-trees inputs/au/au.trees --min-n 10 --topologies 6 \
+            --out output/chapter2_ecological_reach_alias_native.json
+          python analysis/summarize_chapter2_ecological_explanatory_reach_v1.py \
+            --occurrences \
+              inputs/japan/focal_occurrences_environment_complete.csv \
+              inputs/taiwan/focal_occurrences_environment_complete.csv \
+              inputs/taiwan/multisource_sensitivity/tbn_non_gbif_additions_environment_complete.csv \
+              output/alias_sensitivity/alias_broad_additions_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --au-trees inputs/au/au.trees --min-n 10 --topologies 6 \
+            --out output/chapter2_ecological_reach_alias_broad.json
+
+      - name: Fail closed on result structure
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+          a=json.loads(Path('output/alias_audit/tbn_alias_occurrence_audit_v1.json').read_text())
+          s=json.loads(Path('output/alias_sensitivity/fdt4_taiwan_alias_sensitivity_manifest_v1.json').read_text())
+          assert len(a['summary'])==7
+          assert set(s['tiers'])=={'native','broad'}
+          for tier in ('native','broad'):
+              assert len(s['tiers'][tier]['coverage'])==7
+          rows=pd.read_csv('output/alias_audit/tbn_alias_occurrence_cells_source_guarded.csv')
+          if len(rows):
+              f=rows[rows['query_taxon']=='Cirsium japonicum var. fukienense']
+              if len(f):
+                  assert f['matched_source_name'].str.casefold().str.contains('fukienense', regex=False).all()
+          print('Alias sensitivity structural contract PASS')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fdt4-taiwan-tbn-alias-sensitivity-v1
+          path: output
+          if-no-files-found: error
+          retention-days: 90
