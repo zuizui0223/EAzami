@@ -19,6 +19,11 @@
       "lookup_taxon_names": ["Cirsium albescens"],
       "allowed_occurrence_names": ["Cirsium albescens", "Cirsium japonicum var. albescens", "Cirsium japonicum albescens"],
       "lookup_mode": "accepted_name_equivalence",
+      "geographic_guard": {
+        "allowed_counties": ["屏東縣", "Pingtung County"],
+        "fallback_bbox": {"lat_min": 21.7, "lat_max": 22.5, "lon_min": 120.6, "lon_max": 121.1},
+        "basis": "Chang et al. 2026 restricts var. albescens to the Hengchun Peninsula; exact TBN-name records outside Pingtung/Hengchun are not admitted to the alias sensitivity."
+      },
       "equivalence_basis": "Chang et al. 2026 taxonomic revision treats Cirsium albescens Kitam. as the basionym/synonym corresponding to Cirsium japonicum var. albescens; TBN currently accepts Cirsium albescens.",
       "evidence_urls": ["https://pmc.ncbi.nlm.nih.gov/articles/PMC13020037/", "https://www.tbn.org.tw/taxa/4ee2a291-92a0-4d53-a35b-847fc13be52a"]
     },
@@ -39,6 +44,10 @@
       "lookup_taxon_names": ["Cirsium japonicum"],
       "allowed_occurrence_names": ["Cirsium japonicum var. fukienense", "Cirsium japonicum fukienense", "Cirsium japonicum f. fukienense"],
       "lookup_mode": "original_name_under_parent_taxon",
+      "geographic_guard": {
+        "additional_allowed_counties_outside_global_bbox": ["金門縣", "連江縣", "Kinmen County", "Lienchiang County"],
+        "basis": "Chang & Tseng 2019 and Chang et al. 2026 place Taiwanese var. fukienense in Yangmingshan, Penghu, Kinmen and Matsu; Kinmen/Matsu may fall outside the frozen Taiwan rectangle and are admitted only by explicit county."
+      },
       "equivalence_basis": "Chang et al. 2026 retains var. fukienense; TBN currently exposes Cirsium japonicum as the accepted parent, so only records whose occurrence-level original/scientific name explicitly contains the fukienense concept are admissible.",
       "evidence_urls": ["https://pmc.ncbi.nlm.nih.gov/articles/PMC13020037/", "https://www.tbn.org.tw/taxa/f9c26696-f721-4523-bf07-79b6f84d45d1"]
     },
@@ -89,6 +98,7 @@
     "reduce the 0.05 degree thinning distance",
     "admit a parent-taxon occurrence unless an occurrence-level name explicitly matches the focal infraspecific concept",
     "map Cirsium pengii to a surrogate taxon",
+    "admit an albescens occurrence outside its published Hengchun-Peninsula range",
     "use mainland-China occurrences for the Taiwan nuclear-tip concepts",
     "replace the frozen primary ecological classification solely because this sensitivity adds records"
   ]
