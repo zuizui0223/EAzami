@@ -1,0 +1,24 @@
+name: Validate FDT4 Taiwan multi-source sensitivity v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/fdt4_taiwan_multisource_orientation_sensitivity_v1.json"
+      - "data/evidence/chapter2_ecological_explanatory_reach_v1.json"
+      - "analysis/validate_fdt4_taiwan_multisource_orientation_sensitivity_v1.py"
+      - ".github/workflows/validate-fdt4-taiwan-multisource-sensitivity-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate source-sensitive support class and frozen primary boundary
+        run: python analysis/validate_fdt4_taiwan_multisource_orientation_sensitivity_v1.py
