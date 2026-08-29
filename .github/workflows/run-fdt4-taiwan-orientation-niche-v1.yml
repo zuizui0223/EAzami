@@ -6,6 +6,7 @@ on:
       - "data/evidence/fdt4_taiwan_orientation_niche_config_v1.json"
       - ".github/workflows/run-fdt4-taiwan-orientation-niche-v1.yml"
       - "analysis/run_fdt4_orientation_niche_pgls_v1.py"
+      - "analysis/audit_fdt4_taiwan_tbn_occurrence_expansion_v1.py"
       - "tests/test_fdt4_orientation_niche_pgls_v1.py"
   workflow_dispatch:
 
@@ -33,11 +34,16 @@ jobs:
           b=cfg['gbif']['japan_bounds']
           assert 21 <= b['lat_min'] < b['lat_max'] <= 26
           assert 118 <= b['lon_min'] < b['lon_max'] <= 123
+          refresh=cfg.get('refresh_contract',{})
+          if refresh:
+              assert refresh['frozen_primary_min_n']==10
+              assert refresh['filters_unchanged'] is True
           print('Taiwan FDT4 contract PASS')
           PY
-      - name: Validate PGLS consumer
+      - name: Validate PGLS consumer and TBN audit syntax
         run: |
-          python -m pip install --disable-pip-version-check numpy pandas scipy biopython pytest
+          python -m pip install --disable-pip-version-check numpy pandas scipy biopython requests pytest
+          python -m py_compile analysis/audit_fdt4_taiwan_tbn_occurrence_expansion_v1.py
           python -m pytest -q tests/test_fdt4_orientation_niche_pgls_v1.py
 
   live_niche:
@@ -83,6 +89,12 @@ jobs:
           (out/'fdt4_taiwan_orientation_niche_live_summary_v1.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n')
           print(json.dumps(result,indent=2,ensure_ascii=False))
           PY
+      - name: Audit independent TBN v2.6 occurrence coverage
+        run: |
+          python analysis/audit_fdt4_taiwan_tbn_occurrence_expansion_v1.py \
+            --config data/evidence/fdt4_taiwan_orientation_niche_config_v1.json \
+            --gbif-occurrences fdt4_taiwan_orientation_niche_live/focal_occurrences_environment_complete.csv \
+            --out-dir fdt4_taiwan_orientation_niche_live/tbn_expansion
       - name: Download pinned Japan FDT4 extraction artifact
         uses: actions/download-artifact@v4
         with:
