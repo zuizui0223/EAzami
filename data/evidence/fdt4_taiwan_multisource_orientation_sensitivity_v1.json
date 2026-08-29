@@ -1,0 +1,168 @@
+{
+  "contract_version": "fdt4_taiwan_multisource_orientation_sensitivity_v1",
+  "status_date": "2026-08-29",
+  "status": "SOURCE_SENSITIVE_SUPPORT_CLASS_PRIMARY_UNCHANGED",
+  "question": "Does the orientation-climate result remain at the same support class when public Taiwan occurrence coverage is expanded without lowering the frozen n>=10 gate or changing phylogenetic topologies?",
+  "frozen_primary": {
+    "source_scope": "source-name-guarded GBIF, Taiwan country scope, <=10 km primary coordinate uncertainty, 0.05 degree spatial thinning",
+    "n_taxa": 9,
+    "n_U": 5,
+    "n_D": 4,
+    "status": "unresolved",
+    "bio01": {
+      "beta_D_minus_U_sd_range": [-0.9754556, -0.9670456],
+      "p_range": [0.096037, 0.097934],
+      "accepted_topology_sign_agreement": 1.0,
+      "species_loo_sign_agreement": 1.0,
+      "species_loo_evaluations": 54
+    },
+    "bio15": {
+      "beta_D_minus_U_sd_range": [1.3199975, 1.3302026],
+      "p_range": [0.050537, 0.052393],
+      "accepted_topology_sign_agreement": 1.0,
+      "species_loo_sign_agreement": 1.0,
+      "species_loo_evaluations": 54
+    }
+  },
+  "refresh_design": {
+    "taxa_queried_uniformly": [
+      "Cirsium japonicum var. albescens",
+      "Cirsium japonicum var. australe",
+      "Cirsium japonicum var. fukienense",
+      "Cirsium kawakamii",
+      "Cirsium morii",
+      "Cirsium pengii",
+      "Cirsium tatakaense"
+    ],
+    "frozen_min_n": 10,
+    "coordinate_uncertainty_m_max": 10000,
+    "spatial_thin_degrees": 0.05,
+    "taiwan_only": true,
+    "source_name_guard": true,
+    "filters_relaxed": false,
+    "gbif_refresh_result": "Cirsium morii and Cirsium tatakaense remained at nine environment-complete thinned GBIF records each; the frozen primary therefore did not change from the GBIF refresh alone.",
+    "independent_source": "Taiwan Biodiversity Network API v2.6"
+  },
+  "native_tbn_tier": {
+    "definition": "Direct TBN Plant records only: external_id starts tbn.dp.plant.; source is a direct plant.tbn.org.tw occurrence URL; CC BY; <=10 km uncertainty; new 0.05 degree cell relative to GBIF; one record per taxon-cell.",
+    "selected_new_cells_total": 3,
+    "selected_records": [
+      {
+        "taxon": "Cirsium kawakamii",
+        "occurrence_id": "9502fae2-faeb-4870-8e8a-981ae65a8257",
+        "latitude": 24.04866,
+        "longitude": 121.22092,
+        "coordinate_uncertainty_m": 5000,
+        "gbif_cells": 14,
+        "union_cells": 15
+      },
+      {
+        "taxon": "Cirsium morii",
+        "occurrence_id": "c0333c64-8c9c-48f2-bdac-b1f1a7f87b62",
+        "latitude": 24.48435,
+        "longitude": 121.44086,
+        "coordinate_uncertainty_m": 100,
+        "gbif_cells": 9,
+        "union_cells": 10
+      },
+      {
+        "taxon": "Cirsium tatakaense",
+        "occurrence_id": "957e2b3b-e876-4c62-8dba-7128f5563221",
+        "latitude": 23.43927,
+        "longitude": 120.78514,
+        "coordinate_uncertainty_m": 30,
+        "gbif_cells": 9,
+        "union_cells": 10
+      }
+    ],
+    "n_taxa": 11,
+    "n_U": 6,
+    "n_D": 5,
+    "usable_taxa": [
+      "Cirsium alpicola",
+      "Cirsium brevicaule",
+      "Cirsium irumtiense",
+      "Cirsium japonicum var. australe",
+      "Cirsium japonicum var. japonicum",
+      "Cirsium kamtschaticum",
+      "Cirsium kawakamii",
+      "Cirsium morii",
+      "Cirsium suffultum",
+      "Cirsium tatakaense",
+      "Cirsium yezoense"
+    ],
+    "frozen_rule_status": "tendency_supported",
+    "bio01": {
+      "beta_D_minus_U_sd_range": [-1.000777533308253, -0.9935351037151886],
+      "p_range": [0.04819178037905981, 0.049038211869516804],
+      "accepted_topology_sign_agreement": 1.0,
+      "species_loo_sign_agreement": 1.0,
+      "species_loo_evaluations": 66
+    },
+    "bio15": {
+      "beta_D_minus_U_sd_range": [1.135552273054555, 1.142632619504463],
+      "p_range": [0.03789048591069089, 0.03979717409623129],
+      "accepted_topology_sign_agreement": 1.0,
+      "species_loo_sign_agreement": 1.0,
+      "species_loo_evaluations": 66
+    }
+  },
+  "non_gbif_tbn_tier": {
+    "definition": "All source-name-guarded strict TBN records not explicitly marked as GBIF mirrors, <=10 km uncertainty, new 0.05 degree cells relative to GBIF, one record per taxon-cell.",
+    "selected_new_cells_total": 35,
+    "coverage_examples": {
+      "Cirsium kawakamii": {"gbif_cells": 14, "added_tbn_cells": 29, "union_cells": 43},
+      "Cirsium morii": {"gbif_cells": 9, "added_tbn_cells": 4, "union_cells": 13},
+      "Cirsium tatakaense": {"gbif_cells": 9, "added_tbn_cells": 2, "union_cells": 11}
+    },
+    "n_taxa": 11,
+    "n_U": 6,
+    "n_D": 5,
+    "usable_taxa": [
+      "Cirsium alpicola",
+      "Cirsium brevicaule",
+      "Cirsium irumtiense",
+      "Cirsium japonicum var. australe",
+      "Cirsium japonicum var. japonicum",
+      "Cirsium kamtschaticum",
+      "Cirsium kawakamii",
+      "Cirsium morii",
+      "Cirsium suffultum",
+      "Cirsium tatakaense",
+      "Cirsium yezoense"
+    ],
+    "frozen_rule_status": "unresolved",
+    "bio01": {
+      "beta_D_minus_U_sd_range": [-0.9150138298039913, -0.9093522479209839],
+      "p_range": [0.06525106934148288, 0.06597998428513473],
+      "accepted_topology_sign_agreement": 1.0,
+      "species_loo_sign_agreement": 1.0,
+      "species_loo_evaluations": 66
+    },
+    "bio15": {
+      "beta_D_minus_U_sd_range": [1.07752450380026, 1.0842466179861467],
+      "p_range": [0.04874252633405536, 0.051102736637007345],
+      "accepted_topology_sign_agreement": 1.0,
+      "species_loo_sign_agreement": 1.0,
+      "species_loo_evaluations": 66
+    }
+  },
+  "decision": {
+    "primary_status_change": false,
+    "primary_status": "unresolved",
+    "new_result": "The orientation-climate effect direction is robust to accepted topology, species leave-one-out and occurrence-source expansion, but threshold-based support class is sensitive to the occurrence-source definition used to estimate present-day niche centroids.",
+    "interpretation": "The remaining uncertainty is not driven by sign instability across phylogenies or by a single taxon. A conservative direct-TBN expansion crosses the frozen threshold, whereas a broader non-GBIF TBN expansion does not. The current primary GBIF-only result should therefore remain unresolved until an occurrence-source harmonization rule is frozen independently of outcome.",
+    "prohibited_promotion": "Do not promote only the direct-TBN tier as the new primary because it is the tier that crosses P<0.05; do not treat the broader tier as evidence of no ecological relationship because the effect direction remains fully stable."
+  },
+  "provenance": {
+    "pull_request": 132,
+    "head_commit": "fa1ccf209a168465a9d15ba4b2b87735248234cc",
+    "workflow_run_id": 33225237163,
+    "artifact_id": 9706631737,
+    "artifact_sha256": "ee59391e1d55654ccc7bd5e429d03c71c72532d90097aacbbd66f1a7fad07e3a",
+    "japan_occurrence_run_id": 32716015605,
+    "au_topology_run_id": 32614839764,
+    "topologies_propagated": 6
+  },
+  "claim_boundary": "Present-day niche centroid sensitivity only. This result does not reconstruct ancestral climate, identify a historical environmental cause, establish adaptation or convergence, or supersede the frozen GBIF-only primary without a predeclared occurrence-source harmonization contract."
+}
