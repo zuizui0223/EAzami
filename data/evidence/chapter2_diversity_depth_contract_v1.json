@@ -1,7 +1,7 @@
 {
   "contract_version": "chapter2_diversity_depth_contract_v1",
   "status_date": "2026-08-28",
-  "active_question": "How many state changes are minimally required in the traits that form alternative capitulum configurations within a young Japanese thistle radiation, and which inferred event placements remain identifiable under phylogenetic and observation uncertainty?",
+  "active_question": "How many state changes are minimally required in the traits that form alternative capitulum configurations within a young Japanese thistle radiation, at what topology-only relative lineage depth can those changes occur, and which named placements remain identifiable?",
   "chapter_relation": {
     "chapter_1": "diversity breadth in present geographic and environmental space",
     "chapter_2": "diversity depth in phylogenetic and biogeographic history",
@@ -26,12 +26,12 @@
     ]
   },
   "chapter2_scientific_status": "COMPLETE_EXISTING_PUBLIC_HISTORY_CORE",
-  "chapter2_core_result_name": "CONFIGURATION_DIVERSITY_WITH_MULTIPLE_MINIMUM_STATE_CHANGES_AND_UNEVEN_EVENT_RESOLUTION",
+  "chapter2_core_result_name": "CONFIGURATION_DIVERSITY_WITH_MULTIPLE_MINIMUM_STATE_CHANGES_AND_TRAIT_SPECIFIC_COUNT_DEPTH_EDGE_RESOLUTION",
   "core_result_recovery_path": "data/evidence/chapter2_core_result_recovery_v1.csv",
   "current_submission_status": "HOLD_JEB_PACKAGE_REBUILD_ONLY",
   "frozen_text_hash_semantics": "SHA-256 of UTF-8 text after CRLF-to-LF normalization; binary artifacts retain exact-byte SHA-256",
   "submission_hold_reasons": [
-    "The active standalone JEB v4 Markdown manuscript exists, but the figures, Supporting Information and anonymous DOCX still belong to the legacy Azami-dependent v3 package.",
+    "The active standalone JEB v4 Markdown manuscript and Supporting Information text are updated, but the figure bundle and anonymous DOCX still belong to the legacy Azami-dependent v3 package.",
     "The revised reference audit, data-availability statement and author declarations have not yet been frozen as a submission bundle."
   ],
   "not_chapter2_completion_dependencies": [
@@ -80,7 +80,7 @@
   },
   "runnable_now": [
     "Comp1061 topology and concept-admission audit",
-    "authority-backed orientation phyllary and stickiness minimum-change counts plus placement uncertainty",
+    "authority-backed orientation phyllary and stickiness minimum-change counts plus exact relative lineage-depth envelopes and current run-329 placement uncertainty",
     "six-topology Japan plus Taiwan orientation-niche PGLS",
     "bounded audit of the frozen orientation-transition by niche-shift result; producer recovery is still required for rerun",
     "frozen four-trait seven-taxon direct continuous-history diagnostic across six AU-nonrejected topologies; no trait meets the topology-robust corrected retention rule",
@@ -103,13 +103,14 @@
     "own_radseq_required_for_chapter2": false,
     "feedback_prohibition": "Chapter 3 outcomes may revise counts and placements prospectively but cannot retroactively promote Chapter 2 minimum-change counts to adaptation, convergence or causal function"
   },
-  "claim_ceiling": "Alternative capitulum configurations occur within the dominant young Japanese radiation and each of three authority-backed traits requires multiple minimum state changes. Minimum-change counts are resolved more strongly than individual event locations. Current evidence does not establish independent origins, adaptive convergence, developmental modularity, absolute timing or ecological-event causation.",
+  "claim_ceiling": "Alternative capitulum configurations occur within the dominant young Japanese radiation and each of exactly three completed authority-backed discrete traits requires multiple minimum state changes. Their topology-only relative lineage-depth and named-edge resolution differ strongly. Current evidence does not establish independent origins, adaptive convergence, developmental modularity, absolute timing or ecological-event causation.",
   "prohibited_claims": [
     "Azami findings are replicated by EAzami without independent measurement",
     "minimum parsimony steps equal independent origins or convergence events",
     "a non-significant result proves zero phylogenetic signal or evolutionary independence",
     "tip niche centroids are historical ranges",
     "substitutions per site are absolute time",
+    "relative lineage-depth is an event age or evolutionary rate",
     "trait-function plausibility makes a reconstructed transition adaptive"
   ],
   "legacy_pr126_package": {

@@ -1,0 +1,525 @@
+{
+  "contract_version": "japan38_relative_event_depth_v1",
+  "source_contract": "data/evidence/chapter2_relative_event_depth_contract_v1.json",
+  "input_verification": {
+    "tree_run_id": 32923076873,
+    "tree_artifact": "japan38-comp1061-frozen-tree-retry-32923076873",
+    "ml_tree_sha256": "ba592d3a9f52b5481314ab20e3202048505cdf72a3fc15134d5dca261b9d9b7e",
+    "ufboot_sha256": "32cb09118ed035b73e51df3faa0cc60d4ee0c77fcf53d3cf880d556c9bbfa786",
+    "concept_map_canonical_lf_sha256": "8eb2953ac1ee96587c2a60446eae2478e0925843f07e15fb2efbe5eb704914e3",
+    "base_trait_seed_canonical_lf_sha256": "f9e608af72076996a0e2ed925ecf35ccc0fc7834d5c1489507e378bcc3b0b4b5",
+    "authority_extension_canonical_lf_sha256": "3d091ea3a4d7084b1f31892cbd956f53637269617ca2c7d65e9edd0e319c1cba",
+    "bootstrap_trees_total": 1000,
+    "jpn20_monophyletic_trees": 0,
+    "tree_diagnostic": {
+      "replicate_monophyly": false,
+      "replicate_resolved_for_any_trait": false,
+      "trait_asr_ready": true,
+      "replicate_mode": "pruned_fully_unresolved_replicated_concept",
+      "replicate_mrca_descendants": [
+        "J38S002",
+        "J38S003",
+        "J38S005",
+        "J38S007",
+        "J38S020",
+        "J38S021",
+        "J38S022",
+        "J38S023",
+        "J38S026",
+        "J38S034",
+        "J38S036",
+        "J38S038"
+      ],
+      "excluded_concepts": [
+        "JPN_20",
+        "JPN_31"
+      ],
+      "concept_tips": 36
+    },
+    "runtime": {
+      "accepted_python_major_minor": [
+        "3.10",
+        "3.11"
+      ],
+      "ci_python_major_minor": "3.11",
+      "biopython_version": "1.85"
+    }
+  },
+  "trait_scope": {
+    "completed_discrete_histories": [
+      "orientation",
+      "phyllary",
+      "stickiness"
+    ],
+    "resolved_concepts": {
+      "orientation": 20,
+      "phyllary": 10,
+      "stickiness": 13
+    },
+    "excluded_from_discrete_history": {
+      "flower_colour": "No frozen Japan38 W/C/P state ontology with sequenced-individual morph linkage; do not collapse polymorphic taxa or threshold continuous colour.",
+      "display": "Only five of 38 exact Japan38 concepts share one directly comparable size metric; do not discretize sparse continuous size or qualitative head-number descriptions.",
+      "cytotype": "A sparse explanatory covariate, not a capitulum trait module."
+    }
+  },
+  "estimand": {
+    "history_family": "all globally minimum-cost unordered Sankoff reconstructions",
+    "relative_lineage_depth_formula": "(N - descendant_tip_count) / (N - 1)",
+    "relative_lineage_depth_interpretation": {
+      "one": "terminal edge",
+      "toward_zero": "edge subtending a broader and therefore relatively deeper descendant lineage",
+      "not_allowed": [
+        "calendar time",
+        "rate per million years",
+        "posterior probability",
+        "equal weighting of equally parsimonious histories"
+      ]
+    },
+    "per_trait_per_tree_outputs": [
+      "minimum_steps",
+      "mean_relative_lineage_depth_min_over_all_minimum_histories",
+      "mean_relative_lineage_depth_max_over_all_minimum_histories",
+      "terminal_change_count_min_over_all_minimum_histories",
+      "terminal_change_count_max_over_all_minimum_histories",
+      "internal_change_count_min_over_all_minimum_histories",
+      "internal_change_count_max_over_all_minimum_histories"
+    ],
+    "ensemble_outputs": [
+      "nearest-rank min q05 median q95 max summaries of every bound",
+      "fraction of UFBoot trees requiring at least one terminal change in every minimum reconstruction",
+      "fraction of UFBoot trees requiring at least one internal change in every minimum reconstruction"
+    ]
+  },
+  "ml_relative_event_depth": {
+    "orientation": {
+      "admitted_tip_count": 36,
+      "minimum_steps": 6,
+      "mean_relative_lineage_depth_interval": [
+        0.7666666666666666,
+        1.0
+      ],
+      "mean_relative_lineage_depth_envelope_width": 0.2333333333333334,
+      "terminal_change_count_interval": [
+        0,
+        6
+      ],
+      "internal_change_count_interval": [
+        0,
+        6
+      ],
+      "forced_change_edges": []
+    },
+    "phyllary": {
+      "admitted_tip_count": 36,
+      "minimum_steps": 3,
+      "mean_relative_lineage_depth_interval": [
+        0.6952380952380953,
+        1.0
+      ],
+      "mean_relative_lineage_depth_envelope_width": 0.3047619047619047,
+      "terminal_change_count_interval": [
+        1,
+        3
+      ],
+      "internal_change_count_interval": [
+        0,
+        2
+      ],
+      "forced_change_edges": [
+        {
+          "edge_id": "JPN_36",
+          "descendant_tip_count": 1,
+          "edge_class": "terminal",
+          "relative_lineage_depth": 1.0
+        }
+      ]
+    },
+    "stickiness": {
+      "admitted_tip_count": 36,
+      "minimum_steps": 5,
+      "mean_relative_lineage_depth_interval": [
+        0.9428571428571428,
+        0.9542857142857143
+      ],
+      "mean_relative_lineage_depth_envelope_width": 0.011428571428571455,
+      "terminal_change_count_interval": [
+        3,
+        4
+      ],
+      "internal_change_count_interval": [
+        1,
+        2
+      ],
+      "forced_change_edges": [
+        {
+          "edge_id": "JPN_04|JPN_08|JPN_11|JPN_12|JPN_14|JPN_17|JPN_23|JPN_26|JPN_38",
+          "descendant_tip_count": 9,
+          "edge_class": "internal",
+          "relative_lineage_depth": 0.7714285714285715
+        },
+        {
+          "edge_id": "JPN_36",
+          "descendant_tip_count": 1,
+          "edge_class": "terminal",
+          "relative_lineage_depth": 1.0
+        },
+        {
+          "edge_id": "JPN_30",
+          "descendant_tip_count": 1,
+          "edge_class": "terminal",
+          "relative_lineage_depth": 1.0
+        },
+        {
+          "edge_id": "JPN_06",
+          "descendant_tip_count": 1,
+          "edge_class": "terminal",
+          "relative_lineage_depth": 1.0
+        }
+      ]
+    }
+  },
+  "ufboot1000_relative_event_depth": {
+    "orientation": {
+      "metric_summaries": {
+        "minimum_steps": {
+          "n": 1000,
+          "min": 4.0,
+          "q05": 5.0,
+          "median": 5.0,
+          "q95": 6.0,
+          "max": 6.0
+        },
+        "mean_relative_lineage_depth_lower_bound": {
+          "n": 1000,
+          "min": 0.6628571428571428,
+          "q05": 0.737142857142857,
+          "median": 0.7952380952380952,
+          "q95": 0.9428571428571428,
+          "max": 0.9828571428571429
+        },
+        "mean_relative_lineage_depth_upper_bound": {
+          "n": 1000,
+          "min": 0.7428571428571429,
+          "q05": 0.9485714285714286,
+          "median": 0.9942857142857143,
+          "q95": 1.0,
+          "max": 1.0
+        },
+        "mean_relative_lineage_depth_envelope_width": {
+          "n": 1000,
+          "min": 0.0071428571428572285,
+          "q05": 0.02857142857142858,
+          "median": 0.19999999999999984,
+          "q95": 0.25714285714285734,
+          "max": 0.3314285714285715
+        },
+        "terminal_change_count_lower_bound": {
+          "n": 1000,
+          "min": 0.0,
+          "q05": 0.0,
+          "median": 0.0,
+          "q95": 1.0,
+          "max": 2.0
+        },
+        "terminal_change_count_upper_bound": {
+          "n": 1000,
+          "min": 1.0,
+          "q05": 3.0,
+          "median": 4.0,
+          "q95": 6.0,
+          "max": 6.0
+        },
+        "internal_change_count_lower_bound": {
+          "n": 1000,
+          "min": 0.0,
+          "q05": 0.0,
+          "median": 1.0,
+          "q95": 2.0,
+          "max": 4.0
+        },
+        "internal_change_count_upper_bound": {
+          "n": 1000,
+          "min": 2.0,
+          "q05": 4.0,
+          "median": 5.0,
+          "q95": 6.0,
+          "max": 6.0
+        }
+      },
+      "fraction_trees_requiring_terminal_change_in_every_minimum_history": 0.307,
+      "fraction_trees_requiring_internal_change_in_every_minimum_history": 0.628,
+      "fraction_trees_permitting_an_all_terminal_minimum_history": 0.372,
+      "fraction_trees_permitting_an_all_internal_minimum_history": 0.693,
+      "forced_change_edge_frequencies": [
+        {
+          "edge_id": "JPN_36",
+          "count": 227,
+          "fraction": 0.227
+        },
+        {
+          "edge_id": "JPN_13|JPN_28|JPN_36",
+          "count": 80,
+          "fraction": 0.08
+        },
+        {
+          "edge_id": "JPN_02|JPN_07|JPN_35",
+          "count": 66,
+          "fraction": 0.066
+        },
+        {
+          "edge_id": "JPN_01|JPN_02|JPN_03|JPN_05|JPN_07|JPN_09|JPN_10|JPN_13|JPN_16|JPN_21|JPN_22|JPN_24|JPN_25|JPN_27|JPN_28|JPN_30|JPN_33|JPN_34|JPN_35|JPN_36|JPN_37",
+          "count": 40,
+          "fraction": 0.04
+        },
+        {
+          "edge_id": "JPN_01|JPN_09|JPN_16|JPN_27|JPN_34",
+          "count": 33,
+          "fraction": 0.033
+        },
+        {
+          "edge_id": "JPN_21|JPN_22|JPN_37",
+          "count": 30,
+          "fraction": 0.03
+        },
+        {
+          "edge_id": "JPN_10|JPN_24|JPN_30|JPN_36",
+          "count": 25,
+          "fraction": 0.025
+        },
+        {
+          "edge_id": "JPN_13|JPN_21|JPN_22|JPN_37",
+          "count": 25,
+          "fraction": 0.025
+        },
+        {
+          "edge_id": "JPN_13|JPN_22",
+          "count": 25,
+          "fraction": 0.025
+        },
+        {
+          "edge_id": "JPN_30",
+          "count": 14,
+          "fraction": 0.014
+        },
+        {
+          "edge_id": "JPN_01|JPN_02|JPN_03|JPN_05|JPN_07|JPN_09|JPN_16|JPN_21|JPN_22|JPN_25|JPN_27|JPN_33|JPN_34|JPN_35|JPN_37",
+          "count": 6,
+          "fraction": 0.006
+        },
+        {
+          "edge_id": "JPN_22",
+          "count": 5,
+          "fraction": 0.005
+        },
+        {
+          "edge_id": "JPN_02|JPN_07|JPN_13|JPN_21|JPN_22|JPN_33|JPN_35|JPN_37",
+          "count": 2,
+          "fraction": 0.002
+        },
+        {
+          "edge_id": "JPN_01|JPN_02|JPN_03|JPN_05|JPN_07|JPN_09|JPN_16|JPN_21|JPN_22|JPN_24|JPN_25|JPN_27|JPN_33|JPN_34|JPN_35|JPN_37",
+          "count": 1,
+          "fraction": 0.001
+        }
+      ]
+    },
+    "phyllary": {
+      "metric_summaries": {
+        "minimum_steps": {
+          "n": 1000,
+          "min": 3.0,
+          "q05": 3.0,
+          "median": 3.0,
+          "q95": 3.0,
+          "max": 3.0
+        },
+        "mean_relative_lineage_depth_lower_bound": {
+          "n": 1000,
+          "min": 0.19047619047619047,
+          "q05": 0.4380952380952381,
+          "median": 0.6952380952380953,
+          "q95": 0.6952380952380953,
+          "max": 0.7047619047619048
+        },
+        "mean_relative_lineage_depth_upper_bound": {
+          "n": 1000,
+          "min": 1.0,
+          "q05": 1.0,
+          "median": 1.0,
+          "q95": 1.0,
+          "max": 1.0
+        },
+        "mean_relative_lineage_depth_envelope_width": {
+          "n": 1000,
+          "min": 0.2952380952380952,
+          "q05": 0.3047619047619047,
+          "median": 0.3047619047619047,
+          "q95": 0.5619047619047619,
+          "max": 0.8095238095238095
+        },
+        "terminal_change_count_lower_bound": {
+          "n": 1000,
+          "min": 0.0,
+          "q05": 0.0,
+          "median": 1.0,
+          "q95": 1.0,
+          "max": 2.0
+        },
+        "terminal_change_count_upper_bound": {
+          "n": 1000,
+          "min": 3.0,
+          "q05": 3.0,
+          "median": 3.0,
+          "q95": 3.0,
+          "max": 3.0
+        },
+        "internal_change_count_lower_bound": {
+          "n": 1000,
+          "min": 0.0,
+          "q05": 0.0,
+          "median": 0.0,
+          "q95": 0.0,
+          "max": 0.0
+        },
+        "internal_change_count_upper_bound": {
+          "n": 1000,
+          "min": 1.0,
+          "q05": 2.0,
+          "median": 2.0,
+          "q95": 3.0,
+          "max": 3.0
+        }
+      },
+      "fraction_trees_requiring_terminal_change_in_every_minimum_history": 0.734,
+      "fraction_trees_requiring_internal_change_in_every_minimum_history": 0.0,
+      "fraction_trees_permitting_an_all_terminal_minimum_history": 1.0,
+      "fraction_trees_permitting_an_all_internal_minimum_history": 0.266,
+      "forced_change_edge_frequencies": [
+        {
+          "edge_id": "JPN_36",
+          "count": 728,
+          "fraction": 0.728
+        },
+        {
+          "edge_id": "JPN_13",
+          "count": 33,
+          "fraction": 0.033
+        }
+      ]
+    },
+    "stickiness": {
+      "metric_summaries": {
+        "minimum_steps": {
+          "n": 1000,
+          "min": 5.0,
+          "q05": 5.0,
+          "median": 5.0,
+          "q95": 5.0,
+          "max": 5.0
+        },
+        "mean_relative_lineage_depth_lower_bound": {
+          "n": 1000,
+          "min": 0.7085714285714285,
+          "q05": 0.7542857142857142,
+          "median": 0.937142857142857,
+          "q95": 0.9428571428571428,
+          "max": 0.9485714285714286
+        },
+        "mean_relative_lineage_depth_upper_bound": {
+          "n": 1000,
+          "min": 0.9542857142857143,
+          "q05": 0.9542857142857143,
+          "median": 0.9542857142857143,
+          "q95": 0.9771428571428572,
+          "max": 0.9771428571428572
+        },
+        "mean_relative_lineage_depth_envelope_width": {
+          "n": 1000,
+          "min": 0.005714285714285672,
+          "q05": 0.011428571428571455,
+          "median": 0.017142857142857237,
+          "q95": 0.20000000000000007,
+          "max": 0.25714285714285734
+        },
+        "terminal_change_count_lower_bound": {
+          "n": 1000,
+          "min": 1.0,
+          "q05": 1.0,
+          "median": 2.0,
+          "q95": 3.0,
+          "max": 3.0
+        },
+        "terminal_change_count_upper_bound": {
+          "n": 1000,
+          "min": 4.0,
+          "q05": 4.0,
+          "median": 4.0,
+          "q95": 4.0,
+          "max": 4.0
+        },
+        "internal_change_count_lower_bound": {
+          "n": 1000,
+          "min": 1.0,
+          "q05": 1.0,
+          "median": 1.0,
+          "q95": 1.0,
+          "max": 1.0
+        },
+        "internal_change_count_upper_bound": {
+          "n": 1000,
+          "min": 2.0,
+          "q05": 2.0,
+          "median": 3.0,
+          "q95": 4.0,
+          "max": 4.0
+        }
+      },
+      "fraction_trees_requiring_terminal_change_in_every_minimum_history": 1.0,
+      "fraction_trees_requiring_internal_change_in_every_minimum_history": 1.0,
+      "fraction_trees_permitting_an_all_terminal_minimum_history": 0.0,
+      "fraction_trees_permitting_an_all_internal_minimum_history": 0.0,
+      "forced_change_edge_frequencies": [
+        {
+          "edge_id": "JPN_06",
+          "count": 995,
+          "fraction": 0.995
+        },
+        {
+          "edge_id": "JPN_36",
+          "count": 707,
+          "fraction": 0.707
+        },
+        {
+          "edge_id": "JPN_04|JPN_08|JPN_11|JPN_12|JPN_14|JPN_17|JPN_23|JPN_26|JPN_38",
+          "count": 681,
+          "fraction": 0.681
+        },
+        {
+          "edge_id": "JPN_30",
+          "count": 545,
+          "fraction": 0.545
+        }
+      ]
+    }
+  },
+  "ecological_hypothesis_layer": {
+    "status": "bounded_predictions_not_historical_results",
+    "orientation": "rainfall/wetting, thermal and pollinator-presentation hypotheses; only BIO15/BIO1 have a topology-stable but threshold-unresolved public niche lead",
+    "phyllary": "enemy exclusion, wetness protection and pollinator-access trade-off; no climatic cause established",
+    "stickiness": "enemy benefit, null and pollinator or production-cost models compete; no climatic cause established"
+  },
+  "legacy_provenance_boundary": {
+    "superseded_tree_run_id": 32845725038,
+    "superseded_ml_tree_sha256": "00f14eab3b1851ac53ab17ff447865928ebd61c0dc7bfe1edc3ace2abcada3c0",
+    "superseded_ufboot_sha256": "06f6422c46252534b0b007fa3a7211055bc6592fb17816364f8e5e7ccf3c6ba2",
+    "fractions_reproduced_only_on_superseded_artifact": {
+      "orientation_JPN_36": 0.201,
+      "phyllary_JPN_36": 0.754,
+      "stickiness_JPN_06_pre_JPN24_extension": 0.67,
+      "stickiness_JPN_36_pre_JPN24_extension": 0.4
+    },
+    "admission_rule": "Do not attach these four fractions to run 32923076873 or to the post-JPN24 trait matrix. Preserve them only as a superseded provenance audit."
+  },
+  "interpretation": "Relative lineage-depth envelopes describe where globally minimum-cost histories can or must place changes on the admitted topologies. They are deterministic bounds, not event probabilities, calendar ages, rates, independent-origin counts, convergence, adaptation, or ecological causation.",
+  "claim_ceiling": "The analysis may compare the deterministic relative lineage-depth envelopes of minimum-change histories for three authority-backed traits. It cannot identify absolute event ages, evolutionary rates, independent origins, convergence, adaptation, causal ecological drivers, or a general history of all capitulum traits."
+}

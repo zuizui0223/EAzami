@@ -30,8 +30,9 @@ class DiversityDepthContractTests(unittest.TestCase):
         contract = json.loads(target.CONTRACT_PATH.read_text(encoding="utf-8"))
         rows = target.validate_chapter2_to_chapter3_bridge(contract)
         self.assertEqual(len(rows), 5)
-        self.assertIn("JPN_36", rows[0]["focal_concepts"])
-        self.assertIn("JPN_06", rows[1]["focal_concepts"])
+        self.assertIn("JPN_06", rows[0]["focal_concepts"])
+        self.assertIn("JPN_15", rows[0]["focal_concepts"])
+        self.assertIn("JPN_36", rows[1]["focal_concepts"])
         self.assertFalse(
             contract["chapter2_to_chapter3_bridge"]["own_radseq_required_for_chapter2"]
         )
@@ -52,7 +53,7 @@ class DiversityDepthContractTests(unittest.TestCase):
 
     def test_all_analyses_have_resolution_and_meta_simulation_dispositions(self) -> None:
         resolution, meta_sim = target.validate_resolution_and_meta_sim_audit()
-        self.assertEqual(len(resolution), 33)
+        self.assertEqual(len(resolution), 34)
         self.assertEqual(len(meta_sim), 22)
         lookup = {row["analysis_id"]: row for row in resolution}
         self.assertEqual(
@@ -62,6 +63,10 @@ class DiversityDepthContractTests(unittest.TestCase):
         self.assertEqual(
             lookup["D31"]["negative_status"],
             "NOT_A_BIOLOGICAL_NEGATIVE",
+        )
+        self.assertEqual(
+            lookup["D34"]["epistemic_class"],
+            "CERTAIN_TOPOLOGY_CONDITIONAL_DEPTH_ENVELOPE",
         )
 
 

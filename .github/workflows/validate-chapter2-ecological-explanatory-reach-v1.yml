@@ -1,0 +1,86 @@
+name: Validate Chapter 2 ecological explanatory reach v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/summarize_chapter2_ecological_explanatory_reach_v1.py"
+      - "data/evidence/chapter2_ecological_explanatory_reach_v1.json"
+      - "data/evidence/chapter2_core_result_recovery_v1.csv"
+      - "docs/chapter2/MANUSCRIPT_JEB_V4.md"
+      - "docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V4.md"
+      - "docs/chapter2/JEB_SUPPORTING_INFORMATION_V2.md"
+      - ".github/workflows/validate-chapter2-ecological-explanatory-reach-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install analysis dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas scipy biopython
+          python -m pip check
+      - name: Recover frozen niche and topology artifacts
+        run: |
+          mkdir -p recovered/japan recovered/taiwan recovered/au
+          gh run download 32716015605 --name fdt4-japan-orientation-niche-v1 --dir recovered/japan
+          gh run download 32725842871 --name fdt4-taiwan-orientation-niche-v1 --dir recovered/taiwan
+          gh run download 32614839764 --name comp1061-alt-topology-au-32614839764 --dir recovered/au
+      - name: Recompute ecological explanatory reach
+        run: |
+          python analysis/summarize_chapter2_ecological_explanatory_reach_v1.py \
+            --occurrences recovered/japan/focal_occurrences_environment_complete.csv recovered/taiwan/focal_occurrences_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --au-trees recovered/au/au.trees \
+            --out recovered/chapter2_ecological_explanatory_reach_v1.json
+      - name: Check frozen result contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          got=json.loads(Path('recovered/chapter2_ecological_explanatory_reach_v1.json').read_text())
+          frozen=json.loads(Path('data/evidence/chapter2_ecological_explanatory_reach_v1.json').read_text())
+
+          assert got['orientation']['status']==frozen['orientation']['status']=='unresolved'
+          assert got['orientation']['n_taxa']==9
+          assert got['phyllary_posture']['status']==frozen['phyllary_posture']['status']=='not_evaluable'
+          assert got['stickiness']['status']==frozen['stickiness']['status']=='not_evaluable'
+          assert frozen['classification_rule']['predictive_gain_required'] is False
+          assert got['classification_rule']['predictive_gain_required'] is False
+
+          for axis in ['chelsa_bio15','chelsa_bio01']:
+              ga=got['orientation']['axes'][axis]
+              fa=frozen['orientation'][axis]
+              for generated_key,frozen_key in [
+                  ('beta_D_minus_U_sd_range','beta_D_minus_U_sd_range'),
+                  ('p_range','p_range'),
+                  ('loo_delta_mse_vs_null_range','loo_delta_mse_vs_null_range'),
+                  ('loo_delta_mse_vs_phylogeny_only_range','loo_delta_mse_vs_phylogeny_only_range'),
+              ]:
+                  gv=ga[generated_key]; fv=fa[frozen_key]
+                  assert len(gv)==len(fv)
+                  assert all(abs(a-b)<1e-10 for a,b in zip(gv,fv)), (axis,generated_key,gv,fv)
+              assert ga['accepted_topology_sign_agreement']==1.0
+              assert ga['species_loo_sign_agreement']==1.0
+              assert ga['species_loo_evaluations']==54
+              assert ga['predictive_diagnostic_role']=='supporting_sensitivity_not_primary_ecological_reach_decision'
+
+          # Predictive values are reproducibility checks only. They cannot change the
+          # main unresolved/not_evaluable classification in this small panel.
+          assert got['orientation']['axes']['chelsa_bio15']['loo_delta_mse_vs_phylogeny_only_median'] < 0
+          assert got['orientation']['axes']['chelsa_bio01']['loo_delta_mse_vs_phylogeny_only_median'] < 0
+          print('chapter2 ecological explanatory reach: valid')
+          PY

@@ -26,28 +26,30 @@ This dependency is directional. Chapter 2 uncertainty may determine Chapter 3 sa
 
 **Central question**
 
-> How many state changes are minimally required in the traits that form alternative capitulum configurations within a young Japanese thistle radiation, and which inferred event placements remain identifiable under phylogenetic and observation uncertainty?
+> How many state changes are minimally required in the traits that form alternative capitulum configurations within a young Japanese thistle radiation, at what topology-only relative lineage depth can those changes occur, and which named placements remain identifiable?
 
 Subquestions:
 
 1. How many unordered state changes are minimally required for each authority-defined trait?
 2. Are these minimum-change lower bounds stable across 1,000 UFBoot topologies?
-3. Are the responsible branches identifiable, or do several histories remain equally admissible?
-4. Do observed trait configurations map onto one shared transition-localization pattern?
-5. Does species-tip compression hide state multiplicity or minimum changes?
-6. Which own-data samples would most strongly distinguish the remaining histories?
+3. How shallow or deep can the equally minimal changes lie in topology-only relative lineage depth?
+4. Are named change-bearing branches forced across all minimum histories?
+5. Do observed trait configurations map onto one shared transition-localization pattern?
+6. Does species-tip compression hide state multiplicity or minimum changes?
+7. Which own-data samples would most strongly distinguish the remaining histories?
 
-The biological contribution is **configuration diversity with multiple minimum changes within a dominant radiation**. The inferential contribution is that **minimum-count stability and transition localization are separate properties**. A stable count can coexist with uncertain evolutionary events.
+The biological contribution is **configuration diversity with multiple minimum changes within a dominant radiation**. The inferential contribution is that **minimum-count stability, relative lineage-depth and named-edge localization are separate properties**. A stable count can coexist with uncertain evolutionary events.
 
 ## 3. Standalone EAzami analysis pipeline
 
 1. **Phylogenetic admission.** Use the independently reconstructed Comp1061 ML phylogram and 1,000 UFBoot trees. Retain JPN20 and JPN31 exclusions exactly as frozen. Interpret branch lengths as substitutions/site, never absolute time.
 2. **Independent state admission.** Admit only exact-concept authority descriptions into the orientation, phyllary-posture and stickiness ontologies. Preserve missing and ambiguous states.
 3. **Trait-specific minimum changes.** Calculate unordered parsimony minima on the ML tree and every bootstrap topology. Treat them as lower bounds, not independent-origin counts.
-4. **Placement identifiability.** Record edges forced to change across every minimum-cost assignment and their bootstrap frequencies. Report placement separately from counts.
-5. **Historical integration diagnostic.** Compare module-pair transition localization using both the substitution-length ML tree and equal-branch topology sensitivities. Require agreement before claiming a common history.
-6. **Bounded secondary layers.** Retain the seven-taxon direct continuous panel and orientation–niche analyses as negative or borderline diagnostics. Neither is required to complete the discrete historical core.
-7. **Inverse design.** Convert the unresolved histories into Chapter 3 sampling priorities with explicit falsifiers, linked individual measurements and rights/conservation gates.
+4. **Relative lineage-depth.** Bound the mean topology-only depth and terminal/internal count across all minimum histories; do not weight equally parsimonious histories or interpret the metric as time.
+5. **Placement identifiability.** Record edges forced to change across every minimum-cost assignment and their bootstrap frequencies. Report placement separately from counts and depth.
+6. **Historical integration diagnostic.** Compare module-pair transition localization using both the substitution-length ML tree and equal-branch topology sensitivities. Require agreement before claiming a common history.
+7. **Bounded secondary layers.** Retain the seven-taxon direct continuous panel and orientation–niche analyses as negative or borderline diagnostics. Neither is required to complete the discrete historical core.
+8. **Inverse design.** Convert the unresolved histories into Chapter 3 sampling priorities with explicit falsifiers, linked individual measurements and rights/conservation gates.
 
 Every layer can end in `supported`, `not_supported`, `not_evaluable` or `STOP`. Missing data are not imputed and range descriptions are not converted to midpoints.
 
@@ -68,13 +70,13 @@ The public-evidence core produces five bounded result groups:
 
 1. **Radiation and configurations.** Published evidence places 36/38 sampled Japanese concepts in the dominant radiation. The authority-covered dominant-radiation subset contains at least three harmonized orientation x stickiness configurations; the source ontology retains four named combinations.
 2. **Multiple minimum changes.** Orientation requires four to six changes, phyllary posture exactly three and stickiness exactly five across the admitted topology ensemble.
-3. **Uneven event resolution.** Orientation has no individually forced ML edge and the JPN36 orientation terminal fraction is 0.201; the JPN36 phyllary terminal fraction is 0.754 despite an ambiguous root.
+3. **Uneven event depth and localization.** Median bootstrap depth envelopes are 0.795–0.994 for orientation, 0.695–1.000 for phyllary posture and 0.937–0.954 for stickiness. Current run-329 forced-edge fractions are orientation JPN36=0.227, phyllary JPN36=0.728, stickiness JPN06=0.995 and stickiness JPN36=0.707.
 4. **Shared-history boundary.** Zero of three module pairs is consistently positive across branch-length-aware and equal-branch treatments.
 5. **Observation-resolution bridge.** Species-tip coding hides white/coloured state multiplicity in 4/4 audited polymorphic systems; in the only morph-linked testable system the minimum changes from one to two.
 
 The corresponding conclusion is:
 
-> A dominant young radiation contains multiple capitulum configurations and each of three constituent traits requires multiple minimum changes, but public evidence resolves minimum counts more reliably than individual event placements.
+> A dominant young radiation contains multiple capitulum configurations and each of three constituent traits requires multiple minimum changes, while the traits differ sharply in relative event-depth and named-edge resolution.
 
 ## 6. Chapter 2 to Chapter 3 inverse design
 
@@ -85,8 +87,8 @@ The machine-readable bridge and priority table are:
 
 The first two focal tests are:
 
-1. **JPN36 phyllary posture.** Test whether the 0.754 terminal-placement concentration survives an own nuclear topology ensemble and same-individual phenotype linkage.
-2. **JPN06–JPN15 stickiness.** Test whether the canonical 100/100 sister contrast survives population-aware RAD-seq/network sensitivities. The species contrast remains non-causal; within-JPN15 neutralization versus sham is the separate necessity test.
+1. **JPN06–JPN15 stickiness.** Test whether the current JPN06 terminal fraction of 0.995 and canonical 100/100 sister contrast survive population-aware RAD-seq/network sensitivities. The species contrast remains non-causal; within-JPN15 neutralization versus sham is the separate necessity test.
+2. **JPN36 phyllary posture.** Test whether the current 0.728 terminal-placement concentration survives an own nuclear topology ensemble and same-individual phenotype linkage. Its field feasibility does not override the history-information ranking.
 
 Orientation requires broad topology discrimination rather than one nominated causal pair. Same-individual measurement across the Japan-wide panel tests whether current module non-synchrony persists when authority-level and sequenced-individual observations are no longer disconnected.
 
@@ -127,4 +129,4 @@ The scientific paper no longer waits for own continuous measurements, RAD-seq, a
 
 **Claim ceiling**
 
-> Alternative capitulum configurations occur within the dominant young Japanese radiation and each of three authority-backed traits requires multiple minimum state changes. Minimum-change counts are resolved more strongly than individual event locations. Current evidence does not establish independent origins, adaptive convergence, developmental modularity, absolute timing or ecological-event causation.
+> Alternative capitulum configurations occur within the dominant young Japanese radiation and each of exactly three completed authority-backed discrete traits requires multiple minimum state changes. Their topology-only relative lineage-depth and named-edge resolution differ strongly. Current evidence does not establish independent origins, adaptive convergence, developmental modularity, absolute timing or ecological-event causation.

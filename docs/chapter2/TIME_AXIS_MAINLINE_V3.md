@@ -4,7 +4,7 @@
 
 Chapter 2 asks whether present-day capitulum integration persists as shared evolutionary history. The current answer is bounded:
 
-> **Present-day capitulum integration is detectable but scale dependent. Orientation, phyllary posture and stickiness each recur, yet recurrence count, exact transition placement and shared branch localization are distinct estimands. Once ancestral-reconstruction geometry and topology uncertainty are propagated, the available data do not support one persistent historical capitulum module.**
+> **The dominant Japanese radiation contains multiple capitulum configurations. Orientation, phyllary posture and stickiness each require multiple minimum changes, yet minimum count, topology-only relative lineage-depth, named-edge placement and shared branch localization are distinct estimands.**
 
 This is the frozen audit answer for the former Azami-dependent package. The active standalone answer is in `DIVERSITY_DEPTH_STANDALONE_V1.md` and `MANUSCRIPT_JEB_V4.md`.
 
@@ -13,9 +13,10 @@ This is the frozen audit answer for the former Azami-dependent package. The acti
 1. **Present integration.** At nobs>=5 the registered-module contrast is 0.164502 within taxa and 0.088475 among taxa; intervals are 0.130693–0.179475 and 0.024942–0.126171. The nobs>=2 ordering is the same. Within/among association-matrix similarity is rho=0.3663.
 2. **Continuous state structure.** The original eight-unit family has 0/8 corrected two-sided results at both thresholds. After the fixed JPN29 exclusion, all eight nobs>=2 units remain `two_sided_not_supported`; the nobs>=5 family is `not_evaluable` because fewer than six concepts remain.
 3. **Discrete recurrence.** Orientation requires 4–6 minimum changes across 1,000 bootstrap topologies, phyllary posture exactly three, and stickiness exactly five.
-4. **Transition identifiability.** Orientation has no individually forced maximum-likelihood edge; the JPN36 orientation terminal edge is forced in 0.201 of bootstrap topologies. The JPN36 phyllary terminal edge is forced in 0.754. Stable counts do not identify all events.
-5. **Continuous shared localization.** The original observed mean branch-change rho=0.408006 does not exceed the reconstruction-aware null (P=0.3504). The fixed JPN29-excluded sensitivity has rho=0.472278 and P=0.1959, also FAIL.
-6. **Discrete shared localization.** Pairwise transition overlap is not consistently positive across substitution-length and equal-branch topology layers.
+4. **Relative lineage-depth.** ML envelopes are 0.767–1.000, 0.695–1.000 and 0.943–0.954; median UFBoot envelopes are 0.795–0.994, 0.695–1.000 and 0.937–0.954 for orientation, phyllary and stickiness. These topology-only values are not time.
+5. **Transition identifiability.** Orientation has no individually forced maximum-likelihood edge; current run-329 fractions include orientation JPN36=0.227, phyllary JPN36=0.728, stickiness JPN06=0.995 and stickiness JPN36=0.707.
+6. **Continuous shared localization.** The original observed mean branch-change rho=0.408006 does not exceed the reconstruction-aware null (P=0.3504). The fixed JPN29-excluded sensitivity has rho=0.472278 and P=0.1959, also FAIL.
+7. **Discrete shared localization.** Pairwise transition overlap is not consistently positive across substitution-length and equal-branch topology layers.
 
 ## Scientific decision table
 
@@ -23,8 +24,9 @@ This is the frozen audit answer for the former Azami-dependent package. The acti
 | --- | --- | --- | --- |
 | Present integration | Supported and scale dependent | registered modules are stronger within than among taxa | genetic module; persistent historical module |
 | Continuous state structure | No robust signal detected in sparse panel | `two_sided_not_supported`; high-depth exclusion family `not_evaluable` | zero signal; lost conservation; evolutionary independence |
-| Discrete recurrence | Supported lower bounds | repeated minimum changes are required | independent origins; transition rate; adaptive convergence |
-| Exact edge placement | Trait dependent | phyllary JPN36 more identifiable than orientation edges | every minimum step is a known event |
+| Discrete minimum counts | Supported lower bounds | multiple minimum changes are required in exactly three completed ontologies | independent origins; transition rate; adaptive convergence |
+| Relative lineage-depth | Supported exact envelopes | stickiness is much more depth-constrained than orientation or phyllary | event age; absolute time; ecological cause |
+| Exact edge placement | Trait dependent | stickiness JPN06 is most concentrated; phyllary JPN36 exceeds orientation JPN36 | every minimum step is a known event |
 | Continuous shared localization | Reconstruction-aware FAIL | observed correlations are descriptive | coordinated evolutionary remodeling |
 | Equal-branch topology signs | Diagnostic only | estimator sign is stable to topology treatment | evidence overriding the reconstruction-aware null |
 | Discrete transition overlap | Not consistently positive | no one shared three-trait transition history is supported | fully independent histories; developmental modularity |

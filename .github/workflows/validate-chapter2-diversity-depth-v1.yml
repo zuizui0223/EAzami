@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - "analysis/validate_chapter2_diversity_depth_v1.py"
+      - "analysis/validate_chapter2_relative_event_depth_v1.py"
+      - "analysis/summarize_japan38_relative_event_depth_v1.py"
       - "analysis/build_chapter2_eazami_native_continuous_registry_v1.py"
       - "analysis/run_chapter2_eazami_native_continuous_history_diagnostic_v1.py"
       - "tests/test_validate_chapter2_diversity_depth_v1.py"
@@ -15,7 +17,11 @@ on:
       - "docs/chapter2/META_SIM_DISPOSITION_V1.md"
       - "docs/chapter2/CHAPTER2_TO_CHAPTER3_RADSEQ_BRIDGE_V1.md"
       - "docs/chapter2/MANUSCRIPT_JEB_V4.md"
+      - "docs/chapter2/RELATIVE_EVENT_DEPTH_CONTRACT_V1.md"
       - "data/evidence/chapter2_diversity_depth_contract_v1.json"
+      - "data/evidence/chapter2_relative_event_depth_contract_v1.json"
+      - "data/evidence/japan38_relative_event_depth_v1.json"
+      - "data/evidence/japan38_relative_event_depth_summary_v1.csv"
       - "data/evidence/chapter2_diversity_depth_inventory_v1.csv"
       - "data/evidence/chapter2_core_result_recovery_v1.csv"
       - "data/evidence/chapter2_analysis_disposition_v1.csv"
@@ -112,6 +118,8 @@ jobs:
           cmp .tmp/chapter2-native/history.json data/evidence/chapter2_eazami_native_continuous_history_diagnostic_v1.json
           cmp .tmp/chapter2-native/history.csv data/evidence/chapter2_eazami_native_continuous_history_diagnostic_by_topology_v1.csv
           python analysis/validate_chapter2_diversity_depth_v1.py
+          python analysis/validate_chapter2_relative_event_depth_v1.py
+          python tests/test_summarize_japan38_relative_event_depth_v1.py -v
           python tests/test_validate_chapter2_diversity_depth_v1.py -v
           python tests/test_build_chapter2_eazami_native_continuous_registry_v1.py -v
           python tests/test_chapter2_eazami_native_continuous_history_diagnostic_v1.py -v

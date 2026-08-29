@@ -2,7 +2,7 @@
 
 ## Article
 
-**Present-day phenotypic integration does not imply a shared evolutionary history in a rapid thistle radiation**
+**Capitulum configuration diversity, minimum change counts and uneven event resolution in a young thistle radiation**
 
 This Supporting Information reports the admission decisions, complete sensitivity families and negative controls underlying the main article. It preserves scientific `FAIL`, `not_evaluable`, identity warnings and the distinction between substitutions per site and absolute time.
 
@@ -58,13 +58,15 @@ This Supporting Information reports the admission decisions, complete sensitivit
 
 The sensitivity cannot replace the original analysis or be treated as a confirmatory rescue.
 
-**Table S4. Discrete recurrence, roots and placement.** Counts are unordered-parsimony lower bounds, not counts of independent origins.
+**Table S4. Discrete minimum counts, relative lineage-depth and placement.** Counts are unordered-parsimony lower bounds, not counts of independent origins. Relative lineage-depth equals one on a terminal edge and decreases for edges subtending broader descendant lineages; it is not absolute time. These are exactly three completed discrete histories. Colour and display lack an admitted Japan38 discrete ontology at the required linkage or coverage, and cytotype is an explanatory covariate.
 
-| Trait | Resolved concepts | ML minimum | UFBoot range | Root boundary | Placement example |
-| --- | ---: | ---: | ---: | --- | --- |
-| Orientation | 20 | 6 | 4–6 | ML root upward/erect | No individually forced ML edge; JPN36 terminal fraction 0.201 |
-| Phyllary posture | 10 | 3 | 3–3 | Root posture ambiguous | JPN36 terminal fraction 0.754 |
-| Stickiness | 13 | 5 | 5–5 | ML root sticky | Placement remains partial; JPN06 0.67 and JPN36 0.40 in the placement audit |
+| Trait | Resolved concepts | ML / UFBoot minimum | ML depth envelope | Median UFBoot depth envelope | Current forced-edge examples |
+| --- | ---: | --- | ---: | ---: | --- |
+| Orientation | 20 | 6 / 4–6 | 0.767–1.000 | 0.795–0.994 | No individually forced ML edge; JPN36=0.227 |
+| Phyllary posture | 10 | 3 / 3–3 | 0.695–1.000 | 0.695–1.000 | JPN36=0.728; root posture ambiguous |
+| Stickiness | 13 | 5 / 5–5 | 0.943–0.954 | 0.937–0.954 | JPN06=0.995; JPN36=0.707; nine-tip internal edge=0.681 |
+
+The median depth-envelope widths are 0.200, 0.305 and 0.017, respectively. Every bootstrap topology requires at least one terminal and one internal stickiness change in every minimum history. A provenance audit showed that the previously quoted 0.201, 0.754, 0.67 and 0.40 fractions reproduce on superseded tree run 32845725038 rather than accepted run 32923076873; they are retained only as historical audit values.
 
 **Table S5. Discrete transition-overlap sensitivity.** Correlations compare branchwise transition burdens on equal-branch trees.
 
@@ -83,6 +85,8 @@ No pair supplies a topology-robust, consistently positive shared-transition hist
 | Analysis or evidence layer | Frozen decision | Boundary retained in this submission |
 | --- | --- | --- |
 | Absolute-time analysis | `STOP_NOT_IDENTIFIABLE` | No defensible multi-anchor calibration; tree remains a substitutions/site phylogram |
+| Relative lineage-depth | Topology-only exact envelopes | Descendant-lineage breadth cannot be reported as calendar age, rate or ecological event correspondence |
+| Legacy transition-localization fractions | Reproduced only on superseded run 32845725038 | Do not attach 0.201, 0.754, 0.67 or 0.40 to accepted run 329 or the post-JPN24 trait matrix |
 | Candidate continuous involucre/armature endpoints | Coverage only | Two eligible concepts cannot support continuous-history inference |
 | Original reconstruction-aware shared-change null | `FAIL`, P=0.3504 | No coordinated continuous remodeling claim |
 | Fixed JPN29-excluded sensitivity | `FAIL`, P=0.1959 | No sensitivity rescue or clean original tip interpretation |
@@ -95,6 +99,9 @@ No pair supplies a topology-robust, consistently positive shared-transition hist
 - `data/evidence/chapter2_time_axis_compute/japan38_branch_change_reconstruction_null_v1.json`
 - `data/evidence/chapter2_time_axis_compute/japan38_continuous_branch_change_topology_sensitivity_v1.json`
 - `data/evidence/chapter2_time_axis_compute/japan38_latest_module_overlap_topology_sensitivity_v2.json`
+- `data/evidence/chapter2_relative_event_depth_contract_v1.json`
+- `data/evidence/japan38_relative_event_depth_v1.json`
+- `data/evidence/japan38_relative_event_depth_summary_v1.csv`
 - `data/evidence/chapter2_provenance_sensitivity_compute/continuous_primary_phylogenetic_structure_v1.csv`
 - `data/evidence/chapter2_provenance_sensitivity_compute/japan38_all_continuous_history_summary_v1.json`
 - `data/evidence/chapter2_provenance_sensitivity_compute/japan38_branch_change_provenance_sensitivity_v1.json`

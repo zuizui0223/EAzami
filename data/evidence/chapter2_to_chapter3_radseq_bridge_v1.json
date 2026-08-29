@@ -6,9 +6,9 @@
   "chapter3_estimand": "Japan-wide own RAD-seq ancestry and topology sensitivity, linked to same-individual phenotype and cytotype, for discrimination among the Chapter 2 histories that remain admissible",
   "dependency_direction": "chapter2_uncertainty_informs_chapter3_sampling; chapter3_is_not_required_to_make_chapter2_valid",
   "chapter2_locked_results": {
-    "orientation": "20 resolved concepts; ML=6 steps; UFBoot=4-6 with median 5; no individually forced ML edge; JPN36 terminal forced fraction 0.201",
-    "phyllary_posture": "10 resolved concepts; exactly 3 steps across 1000 UFBoot trees; JPN36 terminal forced fraction 0.754; root posture ambiguous",
-    "stickiness": "13 resolved concepts after the JPN24 authority extension; exactly 5 steps across 1000 UFBoot trees",
+    "orientation": "20 resolved concepts; ML=6 steps; UFBoot=4-6 with median 5; ML relative lineage-depth 0.767-1.000; no individually forced ML edge; current JPN36 terminal forced fraction 0.227",
+    "phyllary_posture": "10 resolved concepts; exactly 3 steps across 1000 UFBoot trees; ML relative lineage-depth 0.695-1.000; current JPN36 terminal forced fraction 0.728; root posture ambiguous",
+    "stickiness": "13 resolved concepts after the JPN24 authority extension; exactly 5 steps across 1000 UFBoot trees; ML relative lineage-depth 0.943-0.954; current terminal forced fractions JPN06=0.995 and JPN36=0.707; one nine-tip internal edge=0.681",
     "common_lability": "no module pair is consistently positive across branch-length-aware and equal-branch topology diagnostics",
     "independent_continuous_panel": "four direct traits on seven taxa; zero topology-robust corrected retention results; phyllary protrusion is a weak measurement-priority hint only"
   },
@@ -51,6 +51,7 @@
   "chapter2_predeclared_falsifiers": [
     "a quality-admitted own nuclear topology ensemble changes a locked minimum-step range or removes its apparent robustness",
     "the JPN06-JPN15 sister relationship is not retained across admitted RAD-seq or network sensitivities",
+    "the JPN06 stickiness terminal placement or JPN06-JPN15 sister relation loses its current concentration under admitted own-data topologies",
     "the JPN36 phyllary terminal placement loses its current concentration under admitted own-data topologies",
     "same-individual multi-trait data support topology-robust shared localization that the current authority-backed analysis did not require"
   ],

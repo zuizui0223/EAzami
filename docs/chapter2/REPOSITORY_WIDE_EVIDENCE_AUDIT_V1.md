@@ -9,7 +9,7 @@ Purpose: identify every EAzami result that can strengthen the Chapter 2 JEB pape
 1. **Scale-dependent present-day integration.** The frozen Azami handoff gives a within-taxon registered-module contrast of 0.164502 (95% interval 0.130693–0.179475) and an among-taxon contrast of 0.088475 (0.024942–0.126171) at the >=5 threshold. The >=2 sensitivity preserves the ordering. This defines present-day integration; it is not a historical or genetic module claim.
 2. **A strongly asymmetric radiation as context.** Thirty-six of 38 sampled Japanese concepts belong to the dominant radiation under the accepted synthesis. The 36:1:1 occupancy is descriptive, not a diversification-rate estimate.
 3. **Repeated discrete-state lower bounds.** Orientation requires 4–6 changes, phyllary posture exactly 3 and stickiness exactly 5 across the frozen topology ensemble.
-4. **Recurrence is not transition localization.** Orientation has no individually forced ML edge; the JPN_36 phyllary terminal change is forced in 0.754 of UFBoot trees; stickiness placements remain partial. Stable counts can coexist with uncertain branch identity.
+4. **Minimum count, relative lineage-depth and transition localization differ.** Orientation has no individually forced ML edge and JPN36=0.227; JPN36 phyllary=0.728; post-JPN24 stickiness has JPN06=0.995, JPN36=0.707 and a nine-tip internal edge=0.681. Median depth-envelope widths are 0.200, 0.305 and 0.017 for orientation, phyllary and stickiness. Stable counts can coexist with very different historical resolution.
 5. **No excess continuous shared branch localization.** The observed ML mean pairwise branch-change rho of 0.408006 has reconstruction-aware P=0.3504. Common tree/reconstruction geometry is sufficient for the apparent broad coupling.
 6. **No stable historical module.** The within-minus-between continuous module contrast is unsupported, and discrete pairwise overlap changes sign or includes zero across topology-only sensitivities.
 
@@ -42,4 +42,4 @@ Purpose: identify every EAzami result that can strengthen the Chapter 2 JEB pape
 
 ## Recommended JEB spine
 
-> Present-day capitulum integration is detectable but scale dependent. Several discrete states recur, yet recurrence counts, exact transition placement and shared branch localization are distinct. Once common reconstruction geometry and topology uncertainty are propagated, the data do not support one persistent historical capitulum module.
+> The dominant radiation contains several observed capitulum configurations and each of three authority-backed traits requires multiple minimum changes. Minimum count, topology-only relative lineage-depth and named-edge localization differ strongly among traits; the data do not require one persistent whole-capitulum transition history.

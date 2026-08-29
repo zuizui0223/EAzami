@@ -19,6 +19,7 @@ Thumbs.db
 .nextflow/
 work/
 tmp/
+.tmp/
 temp/
 
 # Generated local knowledge graph
