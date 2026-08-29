@@ -46,7 +46,8 @@ jobs:
           python -m pip install --disable-pip-version-check numpy pandas scipy biopython requests pytest
           python -m py_compile \
             analysis/audit_fdt4_taiwan_tbn_occurrence_expansion_v1.py \
-            analysis/build_fdt4_taiwan_multisource_sensitivity_v1.py
+            analysis/build_fdt4_taiwan_multisource_sensitivity_v1.py \
+            analysis/summarize_chapter2_ecological_explanatory_reach_v1.py
           python -m pytest -q tests/test_fdt4_orientation_niche_pgls_v1.py
 
   live_niche:
@@ -157,6 +158,28 @@ jobs:
             --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
             --au-trees pinned_au/au.trees --nonrejected-count 6 --min-n 10 \
             --out-dir fdt4_taiwan_orientation_niche_live/eastasia_pgls_non_gbif_tbn
+      - name: Apply frozen Chapter 2 LOO classification rule to native-TBN sensitivity
+        run: |
+          python analysis/summarize_chapter2_ecological_explanatory_reach_v1.py \
+            --occurrences \
+              pinned_japan_fdt4/focal_occurrences_environment_complete.csv \
+              fdt4_taiwan_orientation_niche_live/focal_occurrences_environment_complete.csv \
+              fdt4_taiwan_orientation_niche_live/multisource_sensitivity/tbn_native_additions_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --au-trees pinned_au/au.trees --min-n 10 --topologies 6 \
+            --out fdt4_taiwan_orientation_niche_live/multisource_sensitivity/chapter2_ecological_reach_native_tbn.json
+      - name: Apply frozen Chapter 2 LOO classification rule to non-GBIF-TBN sensitivity
+        run: |
+          python analysis/summarize_chapter2_ecological_explanatory_reach_v1.py \
+            --occurrences \
+              pinned_japan_fdt4/focal_occurrences_environment_complete.csv \
+              fdt4_taiwan_orientation_niche_live/focal_occurrences_environment_complete.csv \
+              fdt4_taiwan_orientation_niche_live/multisource_sensitivity/tbn_non_gbif_additions_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --au-trees pinned_au/au.trees --min-n 10 --topologies 6 \
+            --out fdt4_taiwan_orientation_niche_live/multisource_sensitivity/chapter2_ecological_reach_non_gbif_tbn.json
       - name: Upload Taiwan FDT4 artifact
         if: always()
         uses: actions/upload-artifact@v4
