@@ -4,8 +4,11 @@ on:
   pull_request:
     paths:
       - "data/evidence/fdt4_taiwan_tbn_alias_contract_v1.json"
+      - "data/evidence/chang2026_orientation_alias_overlap_pruned_topology_v1.nwk"
       - "analysis/audit_fdt4_taiwan_tbn_alias_occurrences_v1.py"
       - "analysis/build_fdt4_taiwan_alias_sensitivity_v1.py"
+      - "analysis/run_fdt4_orientation_phylogeny_saturation_v1.py"
+      - "analysis/summarize_chapter2_ecological_explanatory_reach_v1.py"
       - ".github/workflows/run-fdt4-taiwan-tbn-alias-sensitivity-v1.yml"
   workflow_dispatch:
 
@@ -37,6 +40,7 @@ jobs:
             analysis/audit_fdt4_taiwan_tbn_alias_occurrences_v1.py \
             analysis/build_fdt4_taiwan_alias_sensitivity_v1.py \
             analysis/run_fdt4_orientation_niche_pgls_v1.py \
+            analysis/run_fdt4_orientation_phylogeny_saturation_v1.py \
             analysis/summarize_chapter2_ecological_explanatory_reach_v1.py
           python - <<'PY'
           import json
@@ -46,6 +50,7 @@ jobs:
           assert len(p['rules'])==7
           by={x['analysis_taxon']:x for x in p['rules']}
           assert by['Cirsium japonicum var. albescens']['lookup_uuids']==['4ee2a291-92a0-4d53-a35b-847fc13be52a']
+          assert by['Cirsium japonicum var. albescens']['geographic_guard']['basis'].startswith('Chang et al. 2026')
           assert by['Cirsium japonicum var. fukienense']['lookup_mode']=='original_name_under_parent_taxon'
           assert by['Cirsium pengii']['lookup_mode']=='direct_search_fail_closed'
           g=p['global_filters']
@@ -78,6 +83,22 @@ jobs:
           github-token: ${{ github.token }}
           repository: zuizui0223/EAzami
           run-id: 32614839764
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-orientation-phylogeny-saturation-v1
+          path: inputs/public_saturation
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33245270887
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-topology-concordance-32614242600
+          path: inputs/concordance
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614242600
 
       - name: Audit TBN through frozen taxonomic aliases
         run: |
@@ -156,24 +177,76 @@ jobs:
             --au-trees inputs/au/au.trees --min-n 10 --topologies 6 \
             --out output/chapter2_ecological_reach_alias_broad.json
 
-      - name: Fail closed on result structure
+      - name: Build broad alias union for panel-matched topology saturation
+        run: |
+          python - <<'PY'
+          import pandas as pd
+          paths=[
+            'inputs/taiwan/multisource_sensitivity/tbn_non_gbif_additions_environment_complete.csv',
+            'output/alias_sensitivity/alias_broad_additions_environment_complete.csv',
+          ]
+          frames=[pd.read_csv(p) for p in paths]
+          pd.concat(frames, ignore_index=True).to_csv('output/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv', index=False)
+          PY
+
+      - name: Saturate broad alias panel across public phylogenies
+        run: |
+          mkdir -p output/topology_saturation_alias_broad
+          python analysis/run_fdt4_orientation_phylogeny_saturation_v1.py \
+            --japan-occ inputs/japan/focal_occurrences_environment_complete.csv \
+            --taiwan-gbif inputs/taiwan/focal_occurrences_environment_complete.csv \
+            --tbn-native inputs/taiwan/multisource_sensitivity/tbn_native_additions_environment_complete.csv \
+            --tbn-broad output/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --au-trees inputs/au/au.trees --accepted-count 6 \
+            --ufboot-trees inputs/public_saturation/full20_bootstrap/full20_comp1061.ufboot \
+            --gene-trees inputs/concordance/sensitivity/loci.treefile \
+            --extra-tree astral153_from_public_loci inputs/public_saturation/astral153/astral153.tre \
+            --extra-tree chang2026_astral_alias_overlap data/evidence/chang2026_orientation_alias_overlap_pruned_topology_v1.nwk \
+            --min-n 10 \
+            --out-dir output/topology_saturation_alias_broad
+
+      - name: Fail closed on result structure and taxonomic guards
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
           import pandas as pd
+
           a=json.loads(Path('output/alias_audit/tbn_alias_occurrence_audit_v1.json').read_text())
           s=json.loads(Path('output/alias_sensitivity/fdt4_taiwan_alias_sensitivity_manifest_v1.json').read_text())
+          e=json.loads(Path('output/chapter2_ecological_reach_alias_broad.json').read_text())
+          t=json.loads(Path('output/topology_saturation_alias_broad/fdt4_orientation_phylogeny_saturation_v1.json').read_text())
           assert len(a['summary'])==7
           assert set(s['tiers'])=={'native','broad'}
           for tier in ('native','broad'):
               assert len(s['tiers'][tier]['coverage'])==7
+
+          resolution=pd.read_csv('output/alias_audit/tbn_alias_taxon_resolution_audit.csv').fillna('')
+          frow=resolution[resolution.analysis_taxon=='Cirsium japonicum var. fukienense'].iloc[0]
+          assert len([x for x in str(frow.resolved_uuids).split(' | ') if x])==1
+
           rows=pd.read_csv('output/alias_audit/tbn_alias_occurrence_cells_source_guarded.csv')
           if len(rows):
               f=rows[rows['query_taxon']=='Cirsium japonicum var. fukienense']
               if len(f):
                   assert f['matched_source_name'].str.casefold().str.contains('fukienense', regex=False).all()
-          print('Alias sensitivity structural contract PASS')
+              alb=rows[rows['query_taxon']=='Cirsium japonicum var. albescens']
+              if len(alb):
+                  assert (alb['decimal_latitude'] <= 22.5).all()
+                  assert (alb['decimal_latitude'] >= 21.7).all()
+
+          assert t['ensemble_sizes']['au_candidates']==9
+          assert t['ensemble_sizes']['concatenated_ufboot']==1000
+          assert t['ensemble_sizes']['public_locus_trees']==153
+          bp=t['panels']['broad_non_gbif_tbn']
+          assert bp['n_taxa']==e['orientation']['n_taxa']
+          assert bp['n_U']==e['orientation']['n_U']
+          assert bp['n_D']==e['orientation']['n_D']
+          assert t['locus_tree_coverage']['broad_non_gbif_tbn']['complete_panel_gene_trees'] >= 100
+          print('Alias sensitivity + panel-matched topology saturation structural contract PASS')
+          print('broad_panel', bp)
+          print('frozen_rule_status', e['orientation']['status'])
           PY
 
       - uses: actions/upload-artifact@v4
