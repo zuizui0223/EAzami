@@ -6,6 +6,11 @@ when a source/original/resolved scientific name matches a predeclared focal name
 coordinates pass the same <=10 km uncertainty and geographic guards, and the
 record is not an obvious GBIF or TBN mirror. Existing GBIF/TBN 0.05-degree cells
 are excluded before any ecological analysis.
+
+TBIA may return HTTP 404 both for an invalid route and for some empty searches.
+We therefore fail closed: before treating taxon-level 404 as zero records, the
+script must first find a production endpoint form that returns JSON for the
+published documentation control query ``name=小白鷺``.
 """
 from __future__ import annotations
 
@@ -80,12 +85,43 @@ def next_url(payload:dict)->str:
     return ''
 
 
-def get_all(session:requests.Session,query:str,timeout:float)->list[dict]:
-    url=API_ROOT; params={'name':query,'limit':1000}; out=[]; seen=set()
+def discover_api(session:requests.Session, timeout:float)->tuple[str,dict[str,Any],list[dict[str,Any]]]:
+    """Resolve a functioning production URL form using a documented positive control."""
+    probes=[]
+    candidates=[
+        (API_ROOT, {}),
+        (API_ROOT, {'from_example':1}),
+        (API_ROOT+'/', {}),
+        (API_ROOT+'/', {'from_example':1}),
+    ]
+    for url,extra in candidates:
+        params={**extra,'name':'小白鷺','limit':1}
+        try:
+            r=session.get(url,params=params,timeout=timeout)
+            rec={'url':url,'extra_params':extra,'status_code':r.status_code,'content_type':r.headers.get('content-type',''),'final_url':r.url}
+            if r.status_code==200:
+                try:
+                    payload=r.json()
+                except Exception as e:
+                    rec['json_error']=repr(e); probes.append(rec); continue
+                rec['payload_type']=type(payload).__name__
+                rec['row_count']=len(rows(payload)) if isinstance(payload,dict) else None
+                probes.append(rec)
+                if isinstance(payload,dict):
+                    return url,extra,probes
+            else:
+                probes.append(rec)
+        except Exception as e:
+            probes.append({'url':url,'extra_params':extra,'error':repr(e)})
+    raise RuntimeError('TBIA production occurrence API positive-control probe failed: '+json.dumps(probes,ensure_ascii=False))
+
+
+def get_all(session:requests.Session, api_root:str, base_params:dict[str,Any], query:str, timeout:float)->list[dict]:
+    url=api_root; params={**base_params,'name':query,'limit':1000}; out=[]; seen=set()
     for _ in range(100):
         r=session.get(url,params=params,timeout=timeout)
-        # TBIA currently returns HTTP 404 for a valid query with zero matches.
-        # Treat that as an empty page rather than aborting the all-taxon audit.
+        # Route validity has already been established by discover_api(), so a
+        # taxon-level 404 is now admissible as an empty search result.
         if r.status_code==404:
             return out
         r.raise_for_status(); p=r.json()
@@ -132,6 +168,7 @@ def main():
             if lat is not None and lon is not None: existing_cells[t].add(cell(lat,lon,thin))
 
     ses=requests.Session(); ses.headers.update({'User-Agent':'EAzami-TBIA-public-occurrence-audit/1.0'})
+    api_root,base_params,api_probes=discover_api(ses,a.timeout)
     audit=[]; accepted=[]; summary=[]
     for rule in contract['rules']:
         taxon=rule['analysis_taxon']; allowed=list(rule['allowed_occurrence_names'])
@@ -140,7 +177,7 @@ def main():
             if q and q not in queries and not (taxon.endswith('fukienense') and canon(q)==canon('Cirsium japonicum')): queries.append(q)
         raw={}
         for q in queries:
-            for r in get_all(ses,q,a.timeout):
+            for r in get_all(ses,api_root,base_params,q,a.timeout):
                 key=text(r.get('id') or r.get('occurrenceID') or '') or json.dumps(r,sort_keys=True,ensure_ascii=False)
                 raw.setdefault(key,r)
         counts={'raw':len(raw),'name_match':0,'coordinate':0,'strict':0,'independent':0,'new_cell':0,'open_license':0}
@@ -187,11 +224,13 @@ def main():
     holders=[]
     if not acc.empty:
         holders=(acc.groupby(['query_taxon','rights_holder','dataset_name']).size().reset_index(name='records').sort_values(['query_taxon','records'],ascending=[True,False]).to_dict('records'))
-    payload={'contract_version':'fdt4_tbia_occurrence_expansion_v1','api':API_ROOT,'source_contract':contract['contract_version'],
+    payload={'contract_version':'fdt4_tbia_occurrence_expansion_v1','api':api_root,'api_base_params':base_params,'api_positive_control_probes':api_probes,
+             'source_contract':contract['contract_version'],
              'filters':{'max_coordinate_uncertainty_m':max_unc,'spatial_thin_degrees':thin,'gbif_tbn_mirrors_excluded':True,'existing_cells_excluded':True},
              'summary':sm.to_dict('records'),'independent_source_breakdown':holders,
              'claim_boundary':'TBIA is an aggregator. Only source-name-guarded records not identified as GBIF/TBN mirrors and occupying cells absent from the frozen GBIF/TBN layers are candidates for ecological sensitivity; license and source composition remain explicit.'}
     (a.out_dir/'fdt4_tbia_occurrence_expansion_v1.json').write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n')
+    print(json.dumps({'api':api_root,'base_params':base_params,'probes':api_probes},ensure_ascii=False,indent=2))
     print(sm.to_string(index=False))
 
 if __name__=='__main__': main()
