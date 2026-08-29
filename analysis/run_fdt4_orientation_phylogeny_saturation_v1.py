@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-"""Exhaust public phylogeny/topology sensitivity for FDT4 orientation-climate correspondence.
+"""Exhaust reusable public phylogeny sensitivity for orientation-climate correspondence.
 
-Layers are kept distinct:
-1) all optimized candidate topologies, with AU-nonrejected candidates flagged;
-2) concatenated-data ultrafast-bootstrap trees;
-3) individual public Comp1061 locus trees (complete-panel primary and varying-panel exploratory);
-4) an optional independently published topology encoded with equal branch lengths.
+The analysis deliberately separates uncertainty layers instead of pooling them:
+1) all optimized candidate species-tree topologies, with AU status retained;
+2) concatenated-data ultrafast-bootstrap topology resamples;
+3) individual public Comp1061 locus trees;
+4) coalescent or independently published external topologies.
 
-P<0.05 fractions across bootstrap/gene trees are descriptive only. They are never
-interpreted as independent replications. Equal-branch analyses isolate topology from
-branch-length geometry. Branch-length-aware locus-tree analyses are explicitly a
-single-locus covariance stress test, not a preferred species-level Brownian model.
+Equal-branch analyses isolate topology. Single-locus fitted branch lengths are retained
+only as a covariance-geometry stress test. Raw IQ-TREE ``.ufboot`` trees lack branch
+lengths and therefore are topology-only by construction; branch-aware PGLS is never
+computed for them. External ASTRAL topologies are likewise compared with equalized
+branches so coalescent-unit/support annotations are not misused as substitutions/site.
 """
 from __future__ import annotations
 
@@ -18,6 +19,7 @@ import argparse
 import json
 import math
 import re
+from collections import Counter, defaultdict
 from io import StringIO
 from pathlib import Path
 
@@ -41,8 +43,14 @@ def parse_args():
     p.add_argument("--accepted-count", type=int, default=6)
     p.add_argument("--ufboot-trees", type=Path, required=True)
     p.add_argument("--gene-trees", type=Path, required=True)
-    p.add_argument("--independent-tree", type=Path)
-    p.add_argument("--independent-label", default="independent_equal_branch_topology")
+    p.add_argument(
+        "--extra-tree",
+        nargs=2,
+        action="append",
+        metavar=("LABEL", "PATH"),
+        default=[],
+        help="Additional topology; evaluated with equal branches only.",
+    )
     p.add_argument("--min-n", type=int, default=10)
     p.add_argument("--out-dir", type=Path, required=True)
     return p.parse_args()
@@ -112,9 +120,16 @@ def equalize(tr):
     return tr
 
 
+def branch_lengths_present(tr) -> bool:
+    values = [cl.branch_length for cl in tr.find_clades() if cl is not tr.root]
+    return bool(values) and all(v is not None and math.isfinite(float(v)) for v in values)
+
+
 def covariance(tr, taxa, equal=False):
     if equal:
         tr = equalize(tr)
+    elif not branch_lengths_present(tr):
+        raise ValueError("branch-length-aware covariance requested for a topology without complete branch lengths")
     terms = {x.name: x for x in tr.get_terminals()}
     missing = [t for t in taxa if norm(t) not in terms]
     if missing:
@@ -181,6 +196,27 @@ def qsummary(q):
     }
 
 
+def induced_topology_signature(tr, taxa):
+    clone = Phylo.read(StringIO(tr.format("newick")), "newick")
+    keep = {norm(t) for t in taxa}
+    for terminal in list(clone.get_terminals()):
+        if terminal.name not in keep:
+            try:
+                clone.prune(terminal)
+            except ValueError:
+                pass
+    present = {x.name for x in clone.get_terminals()}
+    splits = []
+    for clade in clone.get_nonterminals(order="preorder"):
+        side = frozenset(x.name for x in clade.get_terminals())
+        if len(side) <= 1 or len(side) >= len(present) - 1:
+            continue
+        other = frozenset(present - side)
+        a, b = tuple(sorted(side)), tuple(sorted(other))
+        splits.append(min(a, b))
+    return json.dumps(sorted(splits), separators=(",", ":"))
+
+
 def main():
     args = parse_args()
     args.out_dir.mkdir(parents=True, exist_ok=True)
@@ -191,8 +227,9 @@ def main():
     genes = read_trees(args.gene_trees)
     rows = []
     coverage_rows = []
+    signatures = defaultdict(lambda: defaultdict(list))
 
-    def run_ensemble(label, trees, complete_required=True, accepted_boundary=None):
+    def run_ensemble(label, trees, complete_required=True, accepted_boundary=None, modes=("branch", "equal")):
         for tree_i, tr in enumerate(trees, 1):
             names = {x.name for x in tr.get_terminals()}
             for panel, pdata in panels.items():
@@ -201,6 +238,9 @@ def main():
                 complete = len(present) == len(full)
                 present_states = [states[t] for t in present]
                 estimable = len(present) >= 6 and len(set(present_states)) >= 2
+                signature = induced_topology_signature(tr, present) if estimable else ""
+                if signature:
+                    signatures[label][panel].append(signature)
                 coverage_rows.append({
                     "ensemble": label,
                     "tree_index": tree_i,
@@ -209,12 +249,14 @@ def main():
                     "n_full": len(full),
                     "complete": complete,
                     "estimable": estimable,
+                    "branch_lengths_complete": branch_lengths_present(tr),
+                    "topology_signature": signature,
                 })
                 if not estimable or (complete_required and not complete):
                     continue
                 centroids = pdata["centroids"].loc[present]
                 state = np.array([0.0 if states[t] == "U" else 1.0 for t in present])
-                for mode in ("branch", "equal"):
+                for mode in modes:
                     try:
                         fitted = fit_tree(tr, present, centroids, state, mode)
                     except Exception:
@@ -237,12 +279,16 @@ def main():
                         })
 
     run_ensemble("au_candidates", au, complete_required=True, accepted_boundary=args.accepted_count)
-    run_ensemble("concatenated_ufboot", boots, complete_required=True)
+    # IQ-TREE .ufboot lines are topology resamples and do not retain fitted branch lengths.
+    run_ensemble("concatenated_ufboot", boots, complete_required=True, modes=("equal",))
     run_ensemble("locus_tree_complete", genes, complete_required=True)
     run_ensemble("locus_tree_estimable", genes, complete_required=False)
 
-    if args.independent_tree and args.independent_tree.exists():
-        run_ensemble(args.independent_label, read_trees(args.independent_tree), complete_required=False)
+    for label, raw_path in args.extra_tree:
+        path = Path(raw_path)
+        if not path.exists():
+            raise FileNotFoundError(path)
+        run_ensemble(label, read_trees(path), complete_required=False, modes=("equal",))
 
     results = pd.DataFrame(rows)
     coverage = pd.DataFrame(coverage_rows)
@@ -262,14 +308,19 @@ def main():
             "au_nonrejected": args.accepted_count,
             "concatenated_ufboot": len(boots),
             "public_locus_trees": len(genes),
+            "extra_topologies": [label for label, _ in args.extra_tree],
         },
+        "ufboot_branch_length_status": "absent_in_raw_iqtree_ufboot; topology-only equal-branch sensitivity is admissible; branch-aware UFBoot PGLS prohibited",
         "layers": {},
+        "topology_diversity": {},
         "claim_boundaries": [
             "AU-rejected candidates are adversarial stress tests, not equal-weight accepted trees.",
             "Ultrafast-bootstrap trees are resamples of one concatenated matrix, not independent phylogenetic datasets.",
+            "Raw IQ-TREE .ufboot trees do not carry fitted substitutions/site branch lengths; only topology-only sensitivity is evaluated for that ensemble.",
             "Locus-tree P-value fractions are descriptive and not independent replications.",
             "Equal-branch locus-tree analysis isolates topology; branch-length-aware locus-tree analysis is a covariance-geometry stress test because single-locus branch lengths are noisy species-level distance estimators.",
-            "Independent published topologies are used only at their overlapping taxa and do not justify grafting heterogeneous marker systems into one tree.",
+            "ASTRAL coalescent branch lengths/support annotations and independently published topologies are evaluated after equalizing branches and only at their overlapping taxa.",
+            "Independent marker systems are not grafted into one composite branch-length tree.",
             "No layer establishes adaptation, historical niche causation, convergence or fitness effects.",
         ],
     }
@@ -292,6 +343,16 @@ def main():
                     payload["layers"][ensemble][panel][mode]["rejected3"] = {
                         axis: qsummary(z[(z.axis == axis) & (z.accepted == False)].copy()) for axis in AXES
                     }
+
+    for ensemble, by_panel in signatures.items():
+        payload["topology_diversity"][ensemble] = {}
+        for panel, vals in by_panel.items():
+            c = Counter(vals)
+            payload["topology_diversity"][ensemble][panel] = {
+                "trees_with_estimable_signature": len(vals),
+                "unique_induced_topologies": len(c),
+                "largest_topology_frequency": max(c.values()) if c else 0,
+            }
 
     payload["locus_tree_coverage"] = {}
     locus_cov = coverage[coverage.ensemble == "locus_tree_complete"]
