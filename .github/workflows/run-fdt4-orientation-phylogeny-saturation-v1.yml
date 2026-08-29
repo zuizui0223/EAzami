@@ -65,6 +65,7 @@ jobs:
           create-args: >-
             python=3.12
             iqtree=2.4.0
+            openjdk=17
             numpy
             pandas
             scipy
@@ -88,6 +89,7 @@ jobs:
           test -s inputs/full20_primary/tree/concat/concat.fasta
           test -s inputs/concordance/sensitivity/loci.treefile
           test $(wc -l < inputs/concordance/sensitivity/loci.treefile) -eq 153
+          test -s inputs/concordance/sensitivity/scf.treefile
           test -s inputs/au/au.trees
           test $(wc -l < inputs/au/au.trees) -eq 9
           test -s inputs/japan_occ/focal_occurrences_environment_complete.csv
@@ -115,7 +117,64 @@ jobs:
           test -s output/full20_bootstrap/full20_comp1061.ufboot
           test $(wc -l < output/full20_bootstrap/full20_comp1061.ufboot) -eq 1000
 
-      - name: Run candidate, UFBoot, locus-tree and independent-topology saturation
+      - name: Validate regenerated ML topology and raw UFBoot representation
+        shell: micromamba-shell {0}
+        run: |
+          python - <<'PY'
+          from Bio import Phylo
+          from pathlib import Path
+
+          def splits(path):
+              tr=Phylo.read(path,'newick')
+              taxa={x.name for x in tr.get_terminals()}
+              out=set()
+              for cl in tr.get_nonterminals():
+                  s=frozenset(x.name for x in cl.get_terminals())
+                  if len(s)<=1 or len(s)>=len(taxa)-1:
+                      continue
+                  c=frozenset(taxa-s)
+                  a,b=tuple(sorted(s)),tuple(sorted(c))
+                  out.add(min(a,b))
+              return out
+
+          old=splits('inputs/concordance/sensitivity/scf.treefile')
+          new=splits('output/full20_bootstrap/full20_comp1061.treefile')
+          assert old == new, f'regenerated ML topology differs: old-only={old-new}, new-only={new-old}'
+
+          lines=[x.strip() for x in Path('output/full20_bootstrap/full20_comp1061.ufboot').read_text().splitlines() if x.strip()]
+          assert len(lines)==1000
+          assert all(':' not in x for x in lines), 'raw .ufboot unexpectedly contains branch lengths; revisit representation contract'
+          print('Regenerated ML split set matches accepted full20 primary; raw UFBoot is topology-only')
+          PY
+
+      - name: Build ASTRAL-III species tree from all 153 public locus trees
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+          mkdir -p tools output/astral153
+          # Pin the official ASTRAL repository state whose master HEAD was
+          # 068a4b2497f61c866c4727bfbfd78b4361ba27c8 on 2026-08-29.
+          curl -L --fail --retry 3 \
+            -o tools/Astral.5.7.8.zip \
+            https://raw.githubusercontent.com/smirarab/ASTRAL/068a4b2497f61c866c4727bfbfd78b4361ba27c8/Astral.5.7.8.zip
+          sha256sum tools/Astral.5.7.8.zip | tee output/astral153/astral_5_7_8_zip_sha256.txt
+          unzip -q tools/Astral.5.7.8.zip -d tools/astral
+          ASTRAL_JAR=$(find tools/astral -name 'astral.5.7.8.jar' -print -quit)
+          test -n "$ASTRAL_JAR"
+          GENE_TREES=$(realpath inputs/concordance/sensitivity/loci.treefile)
+          OUT_TREE=$(realpath output/astral153)/astral153.tre
+          OUT_LOG=$(realpath output/astral153)/astral153.log
+          ASTRAL_DIR=$(dirname "$ASTRAL_JAR")
+          ASTRAL_NAME=$(basename "$ASTRAL_JAR")
+          (
+            cd "$ASTRAL_DIR"
+            java -Xmx4G -jar "$ASTRAL_NAME" -i "$GENE_TREES" -o "$OUT_TREE" 2>"$OUT_LOG"
+          )
+          test -s output/astral153/astral153.tre
+          grep -q 'Cirsium_brevicaule' output/astral153/astral153.tre
+          grep -q 'OUTGROUP_saff' output/astral153/astral153.tre
+
+      - name: Run candidate, UFBoot, locus-tree and coalescent/external topology saturation
         shell: micromamba-shell {0}
         run: |
           set -euo pipefail
@@ -129,10 +188,42 @@ jobs:
             --accepted-count 6 \
             --ufboot-trees output/full20_bootstrap/full20_comp1061.ufboot \
             --gene-trees inputs/concordance/sensitivity/loci.treefile \
-            --independent-tree data/evidence/chang2026_orientation_overlap_pruned_topology_v1.nwk \
-            --independent-label chang2026_astral_pruned_topology \
+            --extra-tree astral153_from_public_loci output/astral153/astral153.tre \
+            --extra-tree chang2026_astral_pruned_topology data/evidence/chang2026_orientation_overlap_pruned_topology_v1.nwk \
             --min-n 10 \
             --out-dir output/saturation
+
+      - name: Freeze concordance context
+        shell: micromamba-shell {0}
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+
+          g=pd.read_csv('inputs/concordance/sensitivity/gcf.cf.stat', sep='\t')
+          s=pd.read_csv('inputs/concordance/sensitivity/scf.cf.stat', sep='\t')
+          # IQ-TREE stat headers can vary in exact case; identify percentage columns.
+          gcol=next(c for c in g.columns if c.lower()=='gcf')
+          scol=next(c for c in s.columns if c.lower()=='scf')
+          payload={
+            'contract_version':'full20_comp1061_concordance_context_v1',
+            'gene_trees':153,
+            'internal_branches_gcf':int(len(g)),
+            'gcf_median':float(g[gcol].median()),
+            'gcf_mean':float(g[gcol].mean()),
+            'gcf_min':float(g[gcol].min()),
+            'gcf_max':float(g[gcol].max()),
+            'internal_branches_scf':int(len(s)),
+            'scf_median':float(s[scol].median()),
+            'scf_mean':float(s[scol].mean()),
+            'scf_min':float(s[scol].min()),
+            'scf_max':float(s[scol].max()),
+            'interpretation':'Low concordance demonstrates strong public gene-tree discordance; it does not make gene trees independent ecological replicates.'
+          }
+          Path('output/saturation/full20_comp1061_concordance_context_v1.json').write_text(json.dumps(payload,indent=2)+'\n')
+          print(json.dumps(payload,indent=2))
+          PY
 
       - name: Fail closed on topology saturation structure
         shell: micromamba-shell {0}
@@ -145,10 +236,12 @@ jobs:
           assert p['ensemble_sizes']['au_nonrejected']==6
           assert p['ensemble_sizes']['concatenated_ufboot']==1000
           assert p['ensemble_sizes']['public_locus_trees']==153
+          assert set(p['ensemble_sizes']['extra_topologies']) == {'astral153_from_public_loci','chang2026_astral_pruned_topology'}
           assert p['panels']['gbif']['n_taxa']==9
           assert p['panels']['native_tbn']['n_taxa']==11
           assert p['panels']['broad_non_gbif_tbn']['n_taxa']==11
-          # This validator freezes only the design, not desired biological outcomes.
+          assert 'branch' not in p['layers']['concatenated_ufboot']['gbif']
+          assert p['ufboot_branch_length_status'].startswith('absent_in_raw_iqtree_ufboot')
           for panel in ('gbif','native_tbn','broad_non_gbif_tbn'):
               assert p['locus_tree_coverage'][panel]['complete_panel_gene_trees'] >= 100
           print('FDT4 phylogeny saturation structural contract PASS')
