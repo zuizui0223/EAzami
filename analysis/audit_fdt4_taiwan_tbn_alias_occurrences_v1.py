@@ -4,7 +4,8 @@
 This sensitivity does not mutate the frozen exact-name TBN audit. Each of the seven
 Taiwan orientation concepts is passed through the same contract machinery. Parent-
 taxon lookup is allowed only when an occurrence-level name explicitly matches the
-focal infraspecific concept.
+focal infraspecific concept. Configured UUIDs are authoritative; search results are
+then audit context rather than an implicit expansion of the lookup set.
 """
 from __future__ import annotations
 
@@ -127,6 +128,42 @@ def occurrence_name_match(row: dict[str, Any], allowed: list[str]) -> tuple[bool
     return False, "", ""
 
 
+def in_bbox(lat: float, lon: float, bbox: dict[str, Any]) -> bool:
+    return (
+        float(bbox["lat_min"]) <= lat <= float(bbox["lat_max"])
+        and float(bbox["lon_min"]) <= lon <= float(bbox["lon_max"])
+    )
+
+
+def geographic_admitted(rule: dict[str, Any], row: dict[str, Any], lat: float, lon: float, global_filters: dict[str, Any]) -> tuple[bool, str]:
+    global_ok = in_bbox(lat, lon, global_filters)
+    guard = rule.get("geographic_guard") or {}
+    county = text(row.get("county"))
+
+    # A restrictive range guard (currently albescens) must be satisfied even when
+    # the coordinate is inside the broad Taiwan rectangle.
+    allowed_counties = {text(x).casefold() for x in guard.get("allowed_counties", [])}
+    fallback_bbox = guard.get("fallback_bbox")
+    if allowed_counties or fallback_bbox:
+        county_ok = bool(county) and county.casefold() in allowed_counties
+        bbox_ok = bool(fallback_bbox) and in_bbox(lat, lon, fallback_bbox)
+        if not (county_ok or bbox_ok):
+            return False, "rejected_by_restrictive_taxon_range_guard"
+        if not global_ok:
+            return False, "rejected_outside_global_bbox"
+        return True, "taxon_range_guard"
+
+    # Some explicitly documented Taiwanese offshore counties fall outside the
+    # primary rectangle. They are admitted only by exact county, not by widening
+    # the whole rectangle toward mainland China.
+    extra = {text(x).casefold() for x in guard.get("additional_allowed_counties_outside_global_bbox", [])}
+    if global_ok:
+        return True, "global_bbox"
+    if county and county.casefold() in extra:
+        return True, "explicit_offshore_county"
+    return False, "rejected_outside_geographic_contract"
+
+
 def main() -> int:
     args = parse_args()
     args.out_dir.mkdir(parents=True, exist_ok=True)
@@ -148,7 +185,7 @@ def main() -> int:
             gbif_cells[taxon].add(thin_cell(lat, lon, thin))
 
     session = requests.Session()
-    session.headers.update({"User-Agent": "EAzami-TBN-alias-audit/1.0"})
+    session.headers.update({"User-Agent": "EAzami-TBN-alias-audit/1.1"})
     resolution_rows: list[dict[str, Any]] = []
     occurrence_rows: list[dict[str, Any]] = []
     summary_rows: list[dict[str, Any]] = []
@@ -157,8 +194,10 @@ def main() -> int:
         taxon = rule["analysis_taxon"]
         lookup_names = list(rule.get("lookup_taxon_names", []))
         allowed = list(rule["allowed_occurrence_names"])
-        uuids = set(text(x) for x in rule.get("lookup_uuids", []) if text(x))
+        configured_uuids = {text(x) for x in rule.get("lookup_uuids", []) if text(x)}
+        uuids = set(configured_uuids)
         searched: list[dict[str, Any]] = []
+        matched_search_uuids: set[str] = set()
         for query in rule.get("lookup_queries", []):
             for row in search_taxa(session, query, args.timeout):
                 searched.append(row)
@@ -166,11 +205,19 @@ def main() -> int:
                 if name_prefix_matches(candidate, lookup_names):
                     u = text(row.get("taxonUUID"))
                     if u:
-                        uuids.add(u)
+                        matched_search_uuids.add(u)
+        # If a UUID has been explicitly frozen in the contract, search cannot
+        # silently widen it. Search resolution is used only for taxa with no
+        # configured UUID, notably the fail-closed C. pengii check.
+        if not configured_uuids:
+            uuids.update(matched_search_uuids)
+
         resolution_rows.append({
             "analysis_taxon": taxon,
             "lookup_mode": rule["lookup_mode"],
+            "configured_uuids": " | ".join(sorted(configured_uuids)),
             "resolved_uuids": " | ".join(sorted(uuids)),
+            "search_match_uuids_not_implicitly_added": " | ".join(sorted(matched_search_uuids - uuids)),
             "search_rows": len(searched),
             "matched_search_names": " | ".join(sorted({strip_html(r.get('simplifiedScientificName') or r.get('scientificName') or r.get('taxonName')) for r in searched if name_prefix_matches(r.get('simplifiedScientificName') or r.get('scientificName') or r.get('taxonName'), lookup_names)})),
             "equivalence_basis": rule["equivalence_basis"],
@@ -186,6 +233,7 @@ def main() -> int:
 
         source_matches = 0
         valid_rows = 0
+        geographic_rejections = 0
         valid_cells: set[tuple[int, int]] = set()
         strict_cells: set[tuple[int, int]] = set()
         new_cells: set[tuple[int, int]] = set()
@@ -199,7 +247,9 @@ def main() -> int:
             lon = as_float(row.get("decimalLongitude"))
             if lat is None or lon is None:
                 continue
-            if not (float(filt["lat_min"]) <= lat <= float(filt["lat_max"]) and float(filt["lon_min"]) <= lon <= float(filt["lon_max"])):
+            geo_ok, geo_rule = geographic_admitted(rule, row, lat, lon, filt)
+            if not geo_ok:
+                geographic_rejections += 1
                 continue
             valid_rows += 1
             unc = as_float(row.get("coordinateUncertaintyInMeters"))
@@ -218,12 +268,15 @@ def main() -> int:
                 "lookup_mode": rule["lookup_mode"],
                 "matched_name_field": matched_field,
                 "matched_source_name": matched_name,
+                "geographic_admission_rule": geo_rule,
                 "taxon_uuid": text(row.get("taxonUUID")),
                 "occurrence_id": text(row.get("occurrenceID") or row.get("UUID")),
                 "external_id": text(row.get("externalID")),
                 "scientific_name": strip_html(row.get("simplifiedScientificName") or row.get("scientificName")),
                 "decimal_latitude": lat,
                 "decimal_longitude": lon,
+                "county": text(row.get("county")),
+                "municipality": text(row.get("municipality")),
                 "coordinate_uncertainty_m": unc if unc is not None else "",
                 "strict_le_10km": strict,
                 "thin_lat": cell[0],
@@ -242,6 +295,7 @@ def main() -> int:
             "resolved_uuid_count": len(uuids),
             "tbn_raw_unique_records": len(raw_by_key),
             "occurrence_name_matches": source_matches,
+            "geographic_rejections": geographic_rejections,
             "valid_coordinate_rows": valid_rows,
             "valid_thin_cells": len(valid_cells),
             "strict_le_10km_thin_cells": len(strict_cells),
@@ -261,7 +315,7 @@ def main() -> int:
         "source_contract": contract["contract_version"],
         "tbn_api": API_ROOT,
         "summary": summary.to_dict(orient="records"),
-        "claim_boundary": "Only predeclared accepted-name/rank-token/original-name mappings are admitted. Parent-taxon records require an occurrence-level focal name match. No threshold or spatial filter is relaxed.",
+        "claim_boundary": "Only predeclared accepted-name/rank-token/original-name mappings are admitted. Configured UUIDs cannot be widened by search. Parent-taxon records require an occurrence-level focal name match, and taxon-specific published range guards are enforced without relaxing the n, uncertainty or thinning gates.",
     }
     (args.out_dir / "tbn_alias_occurrence_audit_v1.json").write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(summary.to_string(index=False))
