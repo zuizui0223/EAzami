@@ -17,6 +17,14 @@ import requests
 
 API_ROOT = "https://tbiadata.tw/api/v1/occurrence"
 NAME_FIELDS = ("sourceScientificName", "originalScientificName", "scientificName")
+AUDIT_COLUMNS = [
+    'query_taxon','matched_name_field','matched_source_name','tbia_id','occurrence_id',
+    'scientific_name','source_scientific_name','original_scientific_name','latitude','longitude',
+    'coordinate_uncertainty_m','data_generalizations','thin_lat','thin_lon','new_vs_existing_cell',
+    'rights_holder','dataset_name','tbia_dataset_id','source_dataset_id','gbif_dataset_id','references',
+    'license','basis_of_record','event_date','county','municipality','obvious_gbif_mirror',
+    'obvious_tbn_mirror','independent_source','open_license'
+]
 
 
 def args():
@@ -75,7 +83,12 @@ def next_url(payload:dict)->str:
 def get_all(session:requests.Session,query:str,timeout:float)->list[dict]:
     url=API_ROOT; params={'name':query,'limit':1000}; out=[]; seen=set()
     for _ in range(100):
-        r=session.get(url,params=params,timeout=timeout); r.raise_for_status(); p=r.json()
+        r=session.get(url,params=params,timeout=timeout)
+        # TBIA currently returns HTTP 404 for a valid query with zero matches.
+        # Treat that as an empty page rather than aborting the all-taxon audit.
+        if r.status_code==404:
+            return out
+        r.raise_for_status(); p=r.json()
         if not isinstance(p,dict): raise RuntimeError(f'non-object TBIA payload for {query}')
         out.extend(rows(p)); n=next_url(p)
         if not n or n in seen: break
@@ -167,7 +180,7 @@ def main():
             if independent and new: accepted.append(row)
         summary.append({'taxon':taxon,**counts,'existing_cells':len(existing_cells[taxon]),'queries':' | '.join(queries)})
 
-    audit_df=pd.DataFrame(audit); acc=pd.DataFrame(accepted); sm=pd.DataFrame(summary)
+    audit_df=pd.DataFrame(audit,columns=AUDIT_COLUMNS); acc=pd.DataFrame(accepted,columns=AUDIT_COLUMNS); sm=pd.DataFrame(summary)
     audit_df.to_csv(a.out_dir/'tbia_occurrence_audit_all_strict.csv',index=False)
     acc.to_csv(a.out_dir/'tbia_independent_new_cells_candidates.csv',index=False)
     sm.to_csv(a.out_dir/'tbia_occurrence_coverage_summary.csv',index=False)
