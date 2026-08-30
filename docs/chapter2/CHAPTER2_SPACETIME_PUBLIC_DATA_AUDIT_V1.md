@@ -1,7 +1,7 @@
 # Chapter 2 space × time public-data audit v1
 
 - Azami SHA: `03ed29f1f476ca0d0a1ea8e14e75cb0050a213ef`
-- EAzami SHA: `cb8373b7328032c87759764659a0811f92127d24`
+- EAzami SHA: `17eada0333a024f990c9d41ae8d2dea5cd1eefcf`
 
 ## Purpose
 

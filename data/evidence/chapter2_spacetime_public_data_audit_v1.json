@@ -8,7 +8,7 @@
     },
     "eazami": {
       "root": ".",
-      "sha": "cb8373b7328032c87759764659a0811f92127d24"
+      "sha": "17eada0333a024f990c9d41ae8d2dea5cd1eefcf"
     }
   },
   "questions": {
@@ -701,7 +701,7 @@
       "repository": "eazami",
       "term_group": "precipitation_amount",
       "path_role": "analysis_code",
-      "n_contexts": 27
+      "n_contexts": 30
     },
     {
       "repository": "eazami",
@@ -731,7 +731,7 @@
       "repository": "eazami",
       "term_group": "precipitation_seasonality",
       "path_role": "analysis_code",
-      "n_contexts": 36
+      "n_contexts": 39
     },
     {
       "repository": "eazami",
@@ -761,7 +761,7 @@
       "repository": "eazami",
       "term_group": "solar_radiation",
       "path_role": "analysis_code",
-      "n_contexts": 27
+      "n_contexts": 30
     },
     {
       "repository": "eazami",
@@ -818,7 +818,7 @@
       "n_contexts": 58
     }
   ],
-  "n_text_contexts": 5195,
+  "n_text_contexts": 5204,
   "n_table_schemas": 308,
   "n_json_values": 2285,
   "admission_decision": "Strict machine-readable candidates exist for both questions. Freeze exact paths and checksums in the next model contract before fitting joint spatial/phylogenetic models.",
