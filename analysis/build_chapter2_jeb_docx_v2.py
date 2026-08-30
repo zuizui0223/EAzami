@@ -70,6 +70,13 @@ def build_cover_letter(output_dir: Path) -> Path:
     return path
 
 
+def display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
 def main() -> int:
     args = parse_args()
     outputs = [
@@ -79,7 +86,7 @@ def main() -> int:
         build_cover_letter(args.output_dir),
     ]
     for path in outputs:
-        print(path.relative_to(ROOT))
+        print(display_path(path))
     return 0
 
 
