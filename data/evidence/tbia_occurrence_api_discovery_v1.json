@@ -277,8 +277,8 @@
       "status": 200,
       "content_type": "text/html",
       "bytes_read": 18334,
-      "etag": "W/\"6a6c3a24-479e\"",
-      "last_modified": "Fri, 31 Jul 2026 06:01:08 GMT",
+      "etag": "W/\"6a6c3a11-479e\"",
+      "last_modified": "Fri, 31 Jul 2026 06:00:49 GMT",
       "title": "TBIA Documentations 公開文件"
     },
     {
@@ -357,8 +357,8 @@
       "status": 200,
       "content_type": "text/html",
       "bytes_read": 78688,
-      "etag": "W/\"6a6c3a24-13360\"",
-      "last_modified": "Fri, 31 Jul 2026 06:01:08 GMT",
+      "etag": "W/\"6a6c3a11-13360\"",
+      "last_modified": "Fri, 31 Jul 2026 06:00:49 GMT",
       "title": "生物多樣性領域資料標準 - TBIA Documentations 公開文件"
     }
   ],
