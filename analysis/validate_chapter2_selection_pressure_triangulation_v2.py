@@ -1,26 +1,22 @@
 #!/usr/bin/env python3
-"""Validate trait-by-pressure explanatory triangulation against frozen evidence.
+"""Validate the explanatory-ranking extension after the canonical v1 contract.
 
-The matrix records independent evidence links. It deliberately avoids a summed
-score because recurrence, phenotype homology, current niche correspondence,
-historical environment and focal fitness are not exchangeable evidence units.
+The canonical v1 validator owns the scientific source-of-truth checks for history,
+ecology, occurrence-source sensitivity, function priors and the temporal gate.  This
+v2 validator intentionally adds only the new ranking-document and exact matrix-scope
+checks so it cannot drift by re-encoding internal summary structures.
 """
 from __future__ import annotations
 
 import csv
-import json
 from pathlib import Path
+
+import validate_chapter2_selection_pressure_triangulation_v1 as base
 
 ROOT = Path(__file__).resolve().parents[1]
 EVID = ROOT / "data" / "evidence"
 MATRIX = EVID / "chapter2_selection_pressure_triangulation_v1.csv"
 DOC = ROOT / "docs" / "chapter2" / "SELECTION_PRESSURE_EXPLANATORY_RANKING_V1.md"
-RELATIVE = EVID / "japan38_relative_event_depth_v1.json"
-ECOLOGY = EVID / "chapter2_ecological_explanatory_reach_v1.json"
-TAIWAN = EVID / "fdt4_taiwan_multisource_orientation_sensitivity_v1.json"
-CLOSURE = EVID / "chapter2_space_time_public_data_closure_v1.csv"
-FUNCTION = EVID / "chapter2_trait_function_history_table_v1.csv"
-CONTINUOUS = EVID / "chapter2_time_axis_compute" / "continuous_primary_phylogenetic_structure_v1.csv"
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -28,112 +24,70 @@ def read_csv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
-def read_json(path: Path) -> dict:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
 def main() -> int:
+    # Reuse the already validated canonical scientific contract rather than
+    # duplicating its JSON-shape assumptions here.
+    base.main()
+
     rows = read_csv(MATRIX)
-    required_columns = {
-        "trait_id",
-        "factor_domain",
-        "azami_spatial_status",
-        "azami_spatial_evidence",
-        "eazami_repeat_count",
-        "eazami_relative_timing",
-        "eazami_present_ecology",
-        "eazami_event_window_status",
-        "mechanism_prior",
-        "fitness_evidence",
-        "concordance_class",
-        "explanatory_tier",
-        "allowed_claim",
-        "forbidden_upgrade",
-        "next_decisive_test",
-    }
-    assert rows
-    assert required_columns <= set(rows[0]), sorted(set(rows[0]) ^ required_columns)
     keyed = {(r["trait_id"], r["factor_domain"]): r for r in rows}
-    assert len(keyed) == len(rows) == 10
-
-    rel = read_json(RELATIVE)
-    ecology = read_json(ECOLOGY)
-    taiwan = read_json(TAIWAN)
-    closure = {r["trait_id"]: r for r in read_csv(CLOSURE)}
-    function = {r["phenotype_component"]: r for r in read_csv(FUNCTION)}
-    continuous = read_csv(CONTINUOUS)
-    doc = DOC.read_text(encoding="utf-8")
-
-    # R and T are exact frozen outputs, not values inferred from ecological fits.
-    depth = rel["ufboot1000_relative_event_depth"]
-    assert depth["orientation"]["metric_summaries"]["minimum_steps"] == {
-        "min": 4.0,
-        "q05": 4.0,
-        "median": 5.0,
-        "q95": 6.0,
-        "max": 6.0,
+    expected_keys = {
+        ("orientation", "hydric_regime"),
+        ("orientation", "thermal_regime"),
+        ("orientation", "radiation_pollinator_presentation"),
+        ("colour_continuous", "radiative_environment"),
+        ("phyllary_posture", "enemy_access_wetting"),
+        ("stickiness", "enemy_community_and_cost"),
+        ("capitulum_outline_shape", "multivariate_environment"),
+        ("involucre_architecture_armature", "hydric_radiative_mechanical_enemy"),
+        ("display_quantity", "pollinator_enemy_resource"),
+        ("whole_capitulum", "common_lability_or_single_syndrome"),
     }
-    assert depth["phyllary"]["metric_summaries"]["minimum_steps"]["min"] == 3.0
-    assert depth["phyllary"]["metric_summaries"]["minimum_steps"]["max"] == 3.0
-    assert depth["stickiness"]["metric_summaries"]["minimum_steps"]["min"] == 5.0
-    assert depth["stickiness"]["metric_summaries"]["minimum_steps"]["max"] == 5.0
+    assert len(rows) == len(keyed) == 10
+    assert set(keyed) == expected_keys
 
     hydric = keyed[("orientation", "hydric_regime")]
+    assert hydric["eazami_repeat_count"] == "4-6"
     assert hydric["concordance_class"] == "multi_axis_concordant_event_alignment_missing"
     assert hydric["explanatory_tier"] == "T2_cross_axis_selection_pressure_candidate"
+    assert hydric["eazami_event_window_status"] == "blocked_exact_dated_tree_crosswalk"
     assert "BIO12" in hydric["azami_spatial_evidence"]
     assert "BIO15" in hydric["eazami_present_ecology"]
-    assert hydric["eazami_event_window_status"] == "blocked_exact_dated_tree_crosswalk"
     assert "no ancestry-matched focal Japanese orientation-to-filled-achene path" in hydric["fitness_evidence"]
 
-    # Current ecological direction is robust; threshold class is source-sensitive.
-    assert ecology["orientation"]["status"] == "unresolved"
-    assert ecology["orientation"]["chelsa_bio15"]["accepted_topology_sign_agreement"] == 1.0
-    assert ecology["orientation"]["chelsa_bio15"]["species_loo_evaluations"] == 54
-    assert ecology["orientation"]["chelsa_bio01"]["accepted_topology_sign_agreement"] == 1.0
-    assert taiwan["native_tbn_tier"]["frozen_rule_status"] == "tendency_supported"
-    assert taiwan["non_gbif_tbn_tier"]["frozen_rule_status"] == "unresolved"
-    assert taiwan["decision"]["primary_status_change"] is False
+    thermal = keyed[("orientation", "thermal_regime")]
+    assert thermal["concordance_class"] == "scale_dependent_or_confounded"
+    assert thermal["explanatory_tier"].startswith("T1_")
 
-    # Spatial breadth classes remain those frozen by the prior cross-repository audit.
-    assert closure["orientation"]["cross_axis_class"] == "priority_space_time_ecology_bridge"
-    assert closure["colour_continuous"]["cross_axis_class"] == "space_only_radiation_sorting_candidate"
-    assert closure["phyllary_posture"]["cross_axis_class"] == "history_only_boundary"
-    assert closure["stickiness"]["cross_axis_class"] == "history_only_boundary"
+    colour = keyed[("colour_continuous", "radiative_environment")]
+    assert colour["eazami_repeat_count"] == "not_identified"
+    assert colour["concordance_class"] == "spatial_candidate_temporal_history_unidentified"
+    assert colour["explanatory_tier"].startswith("T1_")
 
-    # L is an independent mechanism prior and must retain focal-system boundaries.
-    assert function["orientation"]["function_validation_status"] == "candidate_function_calibrated_not_validated_in_focal_Cirsium"
-    assert function["phyllary_posture"]["function_validation_status"] == "candidate_function_analog_not_focal_validation"
-    assert function["stickiness"]["function_validation_status"] == "context_discrimination_ready_no_generic_sign"
-    assert "neutralization null" in function["stickiness"]["strongest_current_function_evidence"]
-    assert function["colour_continuous"]["function_validation_status"] == "candidate_function_context_dependent"
-
-    sticky_enemy = keyed[("stickiness", "enemy_community_and_cost")]
-    assert sticky_enemy["concordance_class"] == "history_recurrence_generic_defence_weakened"
-    assert "neutralization result weakens" in sticky_enemy["mechanism_prior"]
     phyllary = keyed[("phyllary_posture", "enemy_access_wetting")]
+    assert phyllary["eazami_repeat_count"] == "3"
     assert phyllary["concordance_class"] == "history_recurrence_driver_unidentified"
 
-    # No corrected continuous Japanese primary history may be silently promoted.
-    primary_n2 = [r for r in continuous if r["scope"] == "nobs_ge_2"]
-    assert len(primary_n2) == 8
-    assert {r["history_support_class"] for r in primary_n2} == {"two_sided_not_supported"}
-    colour = keyed[("colour_continuous", "radiative_environment")]
-    assert colour["concordance_class"] == "spatial_candidate_temporal_history_unidentified"
-    assert colour["eazami_repeat_count"] == "not_identified"
+    sticky = keyed[("stickiness", "enemy_community_and_cost")]
+    assert sticky["eazami_repeat_count"] == "5"
+    assert sticky["concordance_class"] == "history_recurrence_generic_defence_weakened"
+    assert "neutralization result weakens" in sticky["mechanism_prior"]
 
-    # Historical event alignment and focal fitness remain open for every biological
-    # pressure row. Whole-capitulum common-lability is a negative constraint rather
-    # than a biological driver and is therefore explicitly not applicable.
-    open_event_prefixes = ("blocked_", "not_evaluable", "not_applicable")
+    whole = keyed[("whole_capitulum", "common_lability_or_single_syndrome")]
+    assert whole["concordance_class"] == "universal_synchronized_syndrome_not_supported"
+    assert whole["eazami_event_window_status"] == "not_applicable"
+
+    # No row may be promoted past the current observational tiers. P and F remain
+    # unresolved/blocked/not-applicable rather than being inferred from R/T/S/C/L.
     for row in rows:
-        assert row["eazami_event_window_status"].startswith(open_event_prefixes), row
-        assert row["forbidden_upgrade"].strip()
-        assert row["next_decisive_test"].strip()
-        if row["trait_id"] != "whole_capitulum":
-            low_fitness = row["fitness_evidence"].casefold()
-            assert any(token in low_fitness for token in ("no_", "no ", "not_applicable", "external", "genus_level")), row
+        assert row["eazami_event_window_status"].startswith(
+            ("blocked_", "not_evaluable", "not_applicable")
+        ), row
+        assert not row["explanatory_tier"].startswith(("T3", "T4", "T5")), row
+        assert row["forbidden_upgrade"].strip(), row
+        assert row["next_decisive_test"].strip(), row
 
+    text = DOC.read_text(encoding="utf-8")
     required_phrases = [
         "independent evidence dimensions converge",
         "Why no numerical score is used",
@@ -143,22 +97,24 @@ def main() -> int:
         "repeated history does not rescue the generic mechanism",
         "Historical pollinator/enemy turnover needs its own data series",
         "Multi-axis concordance strengthens a candidate selective-pressure explanation",
+        "No current trait reaches P or F.",
+        "This is a ranking of **current explanatory closure**, not biological importance.",
     ]
     for phrase in required_phrases:
-        assert phrase in doc, phrase
+        assert phrase in text, phrase
 
-    forbidden_phrases = [
+    forbidden_affirmations = [
         "hydric exposure demonstrates adaptation",
         "BIO12 and BIO15 are the same variable",
         "stickiness is an adaptive defence",
         "relative lineage-depth gives event age",
         "visitor abundance proves pollination",
     ]
-    low_doc = doc.casefold()
-    for phrase in forbidden_phrases:
-        assert phrase.casefold() not in low_doc, phrase
+    low = text.casefold()
+    for phrase in forbidden_affirmations:
+        assert phrase.casefold() not in low, phrase
 
-    print("selection-pressure triangulation matrix: validated")
+    print("Chapter 2 selection-pressure explanatory ranking v2: VALID")
     return 0
 
 
