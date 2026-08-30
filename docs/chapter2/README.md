@@ -34,13 +34,16 @@ The paired synthesis does not require every trait to produce the same positive r
 - non-climate constraints: `../../data/evidence/chapter2_nonclimate_explanatory_constraints_v1.json`;
 - independent nuclear audit: `EAST_ASIA_INDEPENDENT_NUCLEAR_EVIDENCE_AUDIT_V1.md` and `../../data/evidence/east_asia_independent_nuclear_evidence_audit_v1.csv`;
 - active manuscript: `MANUSCRIPT_JEB_V4.md`;
-- active figure map: `JEB_QUESTION_RESULT_FIGURE_MAP_V4.md` (content version v5);
+- required production patch: `JEB_V4_PACKAGE_SPACE_TIME_PATCH_V1.md`;
+- active figure map: `JEB_QUESTION_RESULT_FIGURE_MAP_V4.md` (content version v6);
 - active Supporting Information: `JEB_SUPPORTING_INFORMATION_V2.md` (content version v3);
 - Chapter 3 bridge: `CHAPTER2_TO_CHAPTER3_RADSEQ_BRIDGE_V1.md` and `../../data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv`.
 
 Scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_AND_BOUNDED_ECOLOGICAL_REACH_WITH_SPACE_TIME_SYNTHESIS**.
 
 Submission status: **HOLD_JEB_PACKAGE_REBUILD_ONLY**.
+
+The next production rebuild must apply `JEB_V4_PACKAGE_SPACE_TIME_PATCH_V1.md`; no new discovery screen is authorized by the package hold.
 
 ## Active conclusion
 
@@ -56,7 +59,7 @@ Across the paired Azami–EAzami programme, orientation is the current priority 
 4. zero-of-three cross-treatment shared-localization boundary;
 5. ecological explanatory reach plus a bounded non-climate constraint paragraph.
 
-Species-tip compression, full independent-nuclear evidence detail, continuous EAzami-native, colour, predictive diagnostics and occurrence-source sensitivity remain Supporting Information layers unless the manuscript is explicitly revised. The paired space-time synthesis is the programme-level interpretation that the next package rebuild must preserve; it does not create a new discovery family.
+Species-tip compression, full independent-nuclear evidence detail, continuous EAzami-native, colour and predictive diagnostics remain Supporting Information layers. The Taiwan occurrence-source sensitivity is now required in the next main-package rebuild as a compact source-sensitivity summary because it changes the interpretation from generic `unresolved` to **stable direction with source-sensitive threshold class**. The paired space-time synthesis is the programme-level interpretation; it does not create a new discovery family.
 
 ## Ecological result
 
@@ -151,9 +154,10 @@ The old JEB V3 audit package remains reproducible history rather than active evi
 ## Programme routing
 
 - paired Azami breadth × EAzami depth synthesis → active programme interpretation and package rebuild;
+- JEB V4 package synchronization → apply `JEB_V4_PACKAGE_SPACE_TIME_PATCH_V1.md` and figure-map v6, then rebuild manuscript/figures/SI;
 - species-tip colour/genomic compression → Supporting Information resolution audit and Chapter 3 design;
 - present-state covariance simulations → Chapter 1 Supplement/thesis methods;
-- Taiwan multi-source occurrence sensitivity → Supporting Information; primary replacement only after an outcome-independent harmonization contract;
+- Taiwan multi-source occurrence sensitivity → compact main-package sensitivity plus full Supporting Information provenance; primary replacement only after an outcome-independent harmonization contract;
 - Japan-wide own RAD-seq plus same-individual phenotype/cytotype → Chapter 3 history discrimination;
 - orientation/phyllary/stickiness mechanism and fitness tests → Chapter 3 causal layer;
 - calibrated visible/UV colour and pigment chemistry → Chapter 3 colour mechanism layer;
