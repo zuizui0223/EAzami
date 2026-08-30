@@ -1,0 +1,32 @@
+name: Validate Chapter 2 temporal selection-pressure concordance v1
+
+on:
+  pull_request:
+    paths:
+      - "docs/chapter2/TEMPORAL_SELECTION_PRESSURE_TRIANGULATION_V1.md"
+      - "data/evidence/chapter2_temporal_selection_pressure_contract_v1.json"
+      - "data/evidence/chapter2_temporal_selection_pressure_concordance_v1.csv"
+      - "data/evidence/chapter2_space_time_public_data_closure_v1.csv"
+      - "data/evidence/japan38_relative_event_depth_v1.json"
+      - "data/evidence/chapter2_ecological_explanatory_reach_v1.json"
+      - "data/evidence/fdt4_taiwan_multisource_orientation_sensitivity_v1.json"
+      - "data/evidence/chapter2_time_axis_compute/continuous_primary_phylogenetic_structure_v1.csv"
+      - "analysis/validate_chapter2_temporal_selection_pressure_concordance_v1.py"
+      - ".github/workflows/validate-chapter2-temporal-selection-pressure-concordance-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validator
+        run: python -m py_compile analysis/validate_chapter2_temporal_selection_pressure_concordance_v1.py
+      - name: Validate recurrence, timing, ecological-domain and claim-boundary synthesis
+        run: python analysis/validate_chapter2_temporal_selection_pressure_concordance_v1.py

@@ -1,0 +1,94 @@
+{
+  "contract_version": "chapter2_temporal_selection_pressure_contract_v1",
+  "status_date": "2026-08-30",
+  "purpose": "Evaluate whether present-day spatial gradients, repeated trait history, relative event placement and ecological correspondence converge on the same candidate selective-pressure domain for each capitulum component.",
+  "core_distinction": {
+    "azami": "present-day phenotype sorting along environmental gradients across space",
+    "eazami_current_ecology": "present-day state-associated niche differences within the East-Asian comparison",
+    "eazami_historical_environment": "environmental change or variability associated with dated transition windows; not yet identifiable without an admitted dated event map"
+  },
+  "evidence_dimensions": [
+    {
+      "id": "R",
+      "label": "repeated_history",
+      "question": "How many changes are minimally required across the accepted topology ensemble?"
+    },
+    {
+      "id": "T",
+      "label": "event_placement",
+      "question": "Are minimum histories relatively deep, shallow or broadly unresolved?",
+      "boundary": "Relative lineage-depth is topology-only and is not calendar time."
+    },
+    {
+      "id": "S",
+      "label": "spatial_gradient",
+      "question": "Which present-day environmental gradient is associated with the homologous phenotype in Azami?"
+    },
+    {
+      "id": "C",
+      "label": "current_ecological_correspondence",
+      "question": "Do present trait states occupy different present-day niches after phylogenetic correction?",
+      "boundary": "Current niche centroids are not ancestral environments."
+    },
+    {
+      "id": "P",
+      "label": "historical_environmental_correspondence",
+      "question": "Do dated transition windows align with independently specified environmental changes or high-variability intervals?",
+      "current_status": "not_evaluable_no_admitted_dated_transition_map"
+    },
+    {
+      "id": "F",
+      "label": "function_and_fitness",
+      "question": "Does manipulating the trait alter the nominated mechanism and reproductive fitness?",
+      "current_status": "chapter3_required"
+    }
+  ],
+  "interpretation_classes": {
+    "spatial_adaptive_pattern_candidate": "S is supported under Azami controls; no historical or functional promotion follows.",
+    "space_time_selection_pressure_candidate": "R is supported and S plus C converge on a common ecological domain, while P and F remain unresolved.",
+    "historical_environment_candidate": "A space-time selection-pressure candidate whose dated transition windows also show prespecified P correspondence against an admissible null.",
+    "adaptive_explanation": "Historical-environment correspondence is joined to a replicated trait-to-mechanism-to-fitness path; no current public-data trait reaches this class.",
+    "unidentified": "Comparison is blocked by missing homologous trait ontology, inadequate overlap or missing dated environmental linkage; it is not discordance."
+  },
+  "concordance_rule": {
+    "same_variable_not_required": true,
+    "same_ecological_domain_required_for_domain_concordance": true,
+    "direction_must_be_biologically_interpretable_under_declared_trait_coding": true,
+    "mean_environment_and_environmental_variability_must_remain_distinct": true,
+    "absence_of_support_is_not_discordance_when_power_or_ontology_is_inadequate": true,
+    "no_cross_trait_composite_p_value": "Only two Azami traits pass the robust among-taxon candidate gate and temporal estimands differ among traits."
+  },
+  "current_decision": {
+    "orientation": "space_time_selection_pressure_candidate",
+    "colour_continuous": "spatial_adaptive_pattern_candidate_temporal_depth_unresolved",
+    "phyllary_posture": "repeated_history_driver_unidentified",
+    "stickiness": "repeated_shallow_history_driver_unidentified",
+    "capitulum_outline_shape": "spatial_phenotype_temporal_depth_unresolved",
+    "involucre_architecture_armature": "ontology_and_measurement_bridge_missing"
+  },
+  "absolute_time_gate": {
+    "status": "not_evaluable",
+    "reason": "The active Japan38 history scaffold has substitutions-per-site branch lengths and the admitted relative lineage-depth coordinate does not supply calendar ages.",
+    "required_input": "An accession- or node-audited dated chronogram that can carry the Japan38 trait states across topology uncertainty.",
+    "prohibited_shortcut": "Do not linearly convert relative lineage-depth to Ma or scale all events from a single published radiation age."
+  },
+  "historical_environment_gate": {
+    "status": "not_evaluable",
+    "required_before_testing": [
+      "dated transition windows propagated across the accepted topology ensemble",
+      "prespecified public paleoclimate or connectivity series with temporal uncertainty",
+      "factor-specific hypotheses fixed before event overlap is inspected",
+      "a null conditional on branch duration, topology and trait coverage"
+    ]
+  },
+  "factor_difference_explanations": [
+    "global versus East-Asian geographic scale",
+    "environmental mean versus seasonality or variability",
+    "present niche occupancy versus historical environmental exposure",
+    "non-homologous image proxy versus authority-coded botanical state",
+    "climate proxy versus unmeasured biotic interaction turnover",
+    "unequal state and phenotype coverage",
+    "trait-specific evolutionary depth and localization uncertainty"
+  ],
+  "claim_boundary": "Convergence of R, S and C strengthens a candidate selective-pressure explanation but does not establish event-specific historical causation, adaptation, independent origins, convergence or fitness benefit."
+}
