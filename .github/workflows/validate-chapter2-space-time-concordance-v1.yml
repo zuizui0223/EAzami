@@ -1,0 +1,26 @@
+name: Validate Chapter 2 space-time concordance v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/validate_chapter2_space_time_concordance_v1.py"
+      - "data/evidence/chapter2_space_time_concordance_v1.csv"
+      - "docs/chapter2/SPACE_TIME_CONCORDANCE_AUDIT_V1.md"
+      - ".github/workflows/validate-chapter2-space-time-concordance-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validator
+        run: python -m py_compile analysis/validate_chapter2_space_time_concordance_v1.py
+      - name: Validate concordance ledger and claim ceilings
+        run: python analysis/validate_chapter2_space_time_concordance_v1.py
