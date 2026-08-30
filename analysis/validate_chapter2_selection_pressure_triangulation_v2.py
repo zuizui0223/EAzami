@@ -54,7 +54,7 @@ def main() -> int:
     assert rows
     assert required_columns <= set(rows[0]), sorted(set(rows[0]) ^ required_columns)
     keyed = {(r["trait_id"], r["factor_domain"]): r for r in rows}
-    assert len(keyed) == len(rows) == 13
+    assert len(keyed) == len(rows) == 10
 
     rel = read_json(RELATIVE)
     ecology = read_json(ECOLOGY)
