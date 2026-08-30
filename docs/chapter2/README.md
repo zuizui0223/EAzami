@@ -1,6 +1,6 @@
 # Chapter 2 — diversity depth and bounded explanatory reach
 
-## Active contract (2026-08-29)
+## Active contract (2026-08-30)
 
 The active paper asks three linked empirical questions:
 
@@ -12,8 +12,19 @@ The sequence is:
 
 **minimum change count → relative event depth / placement resolution → ecological explanatory reach → explicit Chapter 3 data boundary**.
 
+## Paired public-data architecture
+
+The doctoral public-data block is now read as one paired argument:
+
+- **Azami = diversity breadth** across present-day space and environment;
+- **EAzami = diversity depth** through the East-Asian evolutionary history and its bounded ecological explanatory reach.
+
+The paired synthesis does not require every trait to produce the same positive result. Orientation currently bridges spatial breadth, repeated history and present ecological correspondence. Visible colour is a strong spatial radiation-sorting candidate but its Japanese time-axis history remains unresolved. Phyllary posture and stickiness have strong repeated-history results but their current ecology is `not_evaluable`. These asymmetries are retained as results rather than removed by trait selection.
+
 ### Canonical active files
 
+- paired space-time synthesis: `SPACE_TIME_PUBLIC_DATA_SYNTHESIS_V1.md`;
+- trait-level closure ledger: `../../data/evidence/chapter2_space_time_public_data_closure_v1.csv`;
 - design: `DIVERSITY_DEPTH_STANDALONE_V1.md`;
 - compressed result recovery: `CHAPTER2_CORE_RESULT_RECOVERY_V1.md`;
 - machine result ledger: `../../data/evidence/chapter2_core_result_recovery_v1.csv`;
@@ -27,13 +38,15 @@ The sequence is:
 - active Supporting Information: `JEB_SUPPORTING_INFORMATION_V2.md` (content version v3);
 - Chapter 3 bridge: `CHAPTER2_TO_CHAPTER3_RADSEQ_BRIDGE_V1.md` and `../../data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv`.
 
-Scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_AND_BOUNDED_ECOLOGICAL_REACH**.
+Scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_AND_BOUNDED_ECOLOGICAL_REACH_WITH_SPACE_TIME_SYNTHESIS**.
 
 Submission status: **HOLD_JEB_PACKAGE_REBUILD_ONLY**.
 
 ## Active conclusion
 
 > **A dominant young radiation contains multiple capitulum configurations and each of three constituent traits requires multiple minimum changes. Historical resolution and existing explanatory reach are asymmetric. Orientation has a large climate direction that is stable across accepted Comp1061 topologies, species leave-one-out tests and independent Taiwan occurrence-source definitions; the GBIF-only primary remains `unresolved`, while the threshold-based support class changes under alternative admissible occurrence-source definitions. Phyllary posture and stickiness remain `not_evaluable` with the current climate/state overlap. Existing cytotype, biogeographic and independent nuclear evidence further constrain simple alternatives without identifying a causal selective agent.**
+
+Across the paired Azami–EAzami programme, orientation is the current priority bridge: Azami aligns a larger signed image-axis angle with higher annual precipitation, while EAzami aligns the downward state with higher precipitation seasonality. These are distinct hydric dimensions, so the result is described as **cross-scale hydric correspondence**, not replication of one coefficient or demonstrated rain adaptation. The negative Azami corolla-chroma–shortwave-radiation result remains a spatial candidate only and is not promoted to anthocyanin mediation or repeated colour evolution.
 
 ## Main-text result groups
 
@@ -43,7 +56,7 @@ Submission status: **HOLD_JEB_PACKAGE_REBUILD_ONLY**.
 4. zero-of-three cross-treatment shared-localization boundary;
 5. ecological explanatory reach plus a bounded non-climate constraint paragraph.
 
-Species-tip compression, full independent-nuclear evidence detail, continuous EAzami-native, colour, predictive diagnostics and occurrence-source sensitivity remain Supporting Information layers unless the manuscript is explicitly revised.
+Species-tip compression, full independent-nuclear evidence detail, continuous EAzami-native, colour, predictive diagnostics and occurrence-source sensitivity remain Supporting Information layers unless the manuscript is explicitly revised. The paired space-time synthesis is the programme-level interpretation that the next package rebuild must preserve; it does not create a new discovery family.
 
 ## Ecological result
 
@@ -137,9 +150,11 @@ The old JEB V3 audit package remains reproducible history rather than active evi
 
 ## Programme routing
 
+- paired Azami breadth × EAzami depth synthesis → active programme interpretation and package rebuild;
 - species-tip colour/genomic compression → Supporting Information resolution audit and Chapter 3 design;
 - present-state covariance simulations → Chapter 1 Supplement/thesis methods;
 - Taiwan multi-source occurrence sensitivity → Supporting Information; primary replacement only after an outcome-independent harmonization contract;
 - Japan-wide own RAD-seq plus same-individual phenotype/cytotype → Chapter 3 history discrimination;
 - orientation/phyllary/stickiness mechanism and fitness tests → Chapter 3 causal layer;
+- calibrated visible/UV colour and pigment chemistry → Chapter 3 colour mechanism layer;
 - absolute transition timing → STOP until calibration becomes defensible.
