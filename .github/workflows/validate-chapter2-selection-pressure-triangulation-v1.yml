@@ -1,0 +1,36 @@
+name: Validate Chapter 2 selection-pressure triangulation v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/validate_chapter2_selection_pressure_triangulation_v1.py"
+      - "data/evidence/chapter2_selection_pressure_triangulation_v1.csv"
+      - "data/evidence/chapter2_temporal_environment_alignment_contract_v1.json"
+      - "data/evidence/chapter2_dated_tree_paleoclimate_asset_audit_v1.csv"
+      - "data/evidence/japan38_relative_event_depth_v1.json"
+      - "data/evidence/chapter2_ecological_explanatory_reach_v1.json"
+      - "data/evidence/fdt4_taiwan_multisource_orientation_sensitivity_v1.json"
+      - "data/evidence/chapter2_trait_function_history_table_v1.csv"
+      - "docs/chapter2/SELECTION_PRESSURE_TRIANGULATION_V1.md"
+      - ".github/workflows/validate-chapter2-selection-pressure-triangulation-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: chapter2-selection-pressure-triangulation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile triangulation validator
+        run: python -m py_compile analysis/validate_chapter2_selection_pressure_triangulation_v1.py
+      - name: Validate space-time cause evidence and claim ceilings
+        run: python analysis/validate_chapter2_selection_pressure_triangulation_v1.py

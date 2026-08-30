@@ -1,0 +1,139 @@
+{
+  "contract_version": "chapter2_temporal_environment_alignment_v1",
+  "status_date": "2026-08-30",
+  "scientific_question": "Do repeated capitulum-trait changes occur during environmental regimes or changes that are independently consistent with the present spatial gradients recovered by Azami, and does that multi-layer agreement strengthen a specified selection-pressure hypothesis?",
+  "current_status": "BLOCKED_EXACT_DATED_TREE_CROSSWALK",
+  "programme_axes": {
+    "azami_space": "present-day phenotype sorting along geographic environmental gradients, estimated separately within and among taxa",
+    "eazami_time": "repeated trait history, relative placement, bounded event-age windows and environmental level/change/variability through those windows",
+    "mechanism_fitness": "independent trait-to-function mediator and reproductive-fitness evidence required for an adaptive explanation"
+  },
+  "calendar_context": {
+    "published_japanese_radiation_context_ma": 2.4,
+    "published_interval_ma": [1.7, 3.6],
+    "role": "broad Pleistocene calendar context only",
+    "source": "Moreyra et al. 2025, Molecular Phylogenetics and Evolution 204:108285, DOI 10.1016/j.ympev.2025.108285",
+    "prohibition": "Do not assign a Japanese trait transition to 2.4 Ma or scale relative lineage-depth by 2.4 Ma."
+  },
+  "current_history_inputs": {
+    "tree": "harmonized common-locus Japan38 phylogram",
+    "branch_length_semantics": "substitutions per site",
+    "topology_ensemble": "accepted ML plus 1000 UFBoot histories for minimum-change and relative-depth analyses",
+    "relative_lineage_depth_formula": "(N - descendant_tip_count) / (N - 1)",
+    "relative_lineage_depth_semantics": "one is terminal; lower values subtend broader descendant lineages; topology only",
+    "completed_discrete_histories": {
+      "orientation": {
+        "minimum_changes": "4-6",
+        "relative_timing": "mixed internal-to-terminal; UFBoot median lower-upper mean-depth envelope 0.7952-0.9943"
+      },
+      "phyllary_posture": {
+        "minimum_changes": "3 exactly",
+        "relative_timing": "broad/deeper placements remain admissible; median envelope 0.6952-1.0000"
+      },
+      "stickiness": {
+        "minimum_changes": "5 exactly",
+        "relative_timing": "tightly shallow/terminal-biased; median envelope approximately 0.937-0.954"
+      }
+    }
+  },
+  "required_missing_inputs": {
+    "exact_dated_tree": {
+      "requirement": "machine-readable dated tree or posterior with exact tip/node crosswalk to admitted Japan38 concepts",
+      "current_state": "not identified in the accepted repository bundle",
+      "stop_rule": "No exact event-age analysis from a published figure or article-level node summary."
+    },
+    "paleolocation": {
+      "requirement": "predeclared ancestral-area or alternative-location scenarios for each change-bearing lineage",
+      "current_state": "not frozen",
+      "stop_rule": "Do not extract one modern tip coordinate as the location of an ancestral branch."
+    }
+  },
+  "primary_paleoclimate_asset": {
+    "name": "PALEO-PGEM-Series",
+    "coverage": "global last 5 million years",
+    "temporal_resolution": "1 kyr",
+    "spatial_resolution": "1 degree",
+    "focal_variables": [
+      "BIO1 annual mean temperature",
+      "BIO12 annual precipitation",
+      "BIO15 precipitation seasonality"
+    ],
+    "uncertainty_rule": "Use both the emulator mean and supplied uncertainty; retain precipitation/downscaling and fixed-land-sea-mask limitations.",
+    "sources": [
+      "Barreto et al. 2023, Global Ecology and Biogeography, DOI 10.1111/geb.13683",
+      "Holden et al. 2019, Geoscientific Model Development, DOI 10.5194/gmd-12-5137-2019"
+    ]
+  },
+  "event_window_definition": {
+    "per_change_edge": "calendar interval from the dated parent node to dated child node",
+    "history_uncertainty": "For each topology, propagate all globally minimum-cost histories as lower and upper event-exposure envelopes rather than assigning equal probability to histories.",
+    "age_uncertainty": "Propagate dated-tree posterior or reported node-age uncertainty jointly with topology uncertainty.",
+    "no_point_date_rule": "A transition is not assigned to a midpoint or a single calendar age unless an independent event model identifies it."
+  },
+  "predeclared_temporal_environment_estimands": {
+    "environment_level": "mean climate within the admissible event window and paleolocation scenario",
+    "environment_change": "net and absolute climate change across the parent-child interval, normalized by window duration only when dated uncertainty permits",
+    "environment_variability": "within-window temporal variance and upper-tail exposure using the 1-kyr series",
+    "regime_extremeness": "event-window metric relative to the same lineage/location background distribution",
+    "matched_non_event_null": "Randomize the same number of event windows among eligible branches while preserving branch duration, topology opportunity and paleolocation scenario; repeat over topology/age uncertainty",
+    "multiple_testing": "One frozen family per trait x predeclared environmental domain; no all-BIOCLIM fishing screen"
+  },
+  "trait_specific_primary_tests": {
+    "orientation": {
+      "primary_domain": "hydric regime",
+      "primary_variables": ["BIO12", "BIO15"],
+      "secondary_variable": "BIO1",
+      "reason": "Azami identifies an among-taxon BIO12 gradient; EAzami identifies a stable BIO15 direction and a scale-dependent BIO1 direction.",
+      "decision_if_positive": "Promote hydric exposure from T2 cross-axis candidate to T3 historical-environment alignment; still not adaptation.",
+      "decision_if_negative": "Retain present spatial/current-niche correspondence but reject the claim that known transition windows preferentially coincide with the tested paleohydric regimes.",
+      "decision_if_unresolved": "Report temporal alignment as not identifiable because event windows, paleolocation or paleoclimate uncertainty are too broad."
+    },
+    "phyllary_posture": {
+      "primary_domain": "not frozen",
+      "reason": "A homologous Azami spatial axis and state-diverse ecology are absent; enemy and access histories lack a deep-time predictor.",
+      "decision": "No paleoclimate event test until direct posture measurement and a predeclared driver exist."
+    },
+    "stickiness": {
+      "primary_domain": "not frozen",
+      "reason": "The shallow repeated history suggests a local biotic/cost hypothesis, but no historical enemy series or homologous Azami axis exists and a direct Cirsium result weakens universal defence.",
+      "decision": "Do not use coarse climate variables as a post hoc proxy for enemy pressure."
+    },
+    "colour": {
+      "primary_domain": "radiative environment",
+      "reason": "Azami RSDS-chroma sorting is robust, but a repeated colour-event history and defensible deep-time surface-radiation series are absent.",
+      "decision": "Resolve calibrated population-matched colour history before any temporal radiation test."
+    }
+  },
+  "explanatory_evidence_tiers": {
+    "T0": "trait measured or mechanism proposed, without matched space-time evidence",
+    "T1": "one independent axis supports a pattern: spatial gradient, repeated history or mechanism prior",
+    "T2": "the same trait has repeated history plus an independently concordant present spatial/current-niche environmental domain",
+    "T3": "dated transition-window analysis independently aligns repeated events with the predeclared environmental level, change or variability",
+    "T4": "direct manipulation or mediator analysis validates trait-to-function under the relevant environment",
+    "T5": "the trait-to-function path reaches reproductive fitness in ancestry-resolved repeated lineages; adaptive explanation becomes supportable within the tested scope"
+  },
+  "current_tier_decisions": {
+    "orientation_hydric": "T2",
+    "orientation_thermal": "T1 scale-dependent/mismatched direction",
+    "colour_radiative": "T1 spatial only",
+    "phyllary_enemy_access": "T1 repeated history only",
+    "stickiness_enemy_cost": "T1 repeated history with generic-defence model weakened",
+    "whole_capitulum_common_lability": "negative constraint: universal synchronized history not supported"
+  },
+  "interpretation_rules": [
+    "Concordance is domain-specific and trait-specific; it is not a vote count across heterogeneous tests.",
+    "BIO12 and BIO15 are distinct hydric dimensions and must not be described as the same coefficient reproducing.",
+    "A mismatch may reflect biological scale, mean versus variability, ontology mismatch, current niche versus ancestral environment, reticulation, sampling or a genuinely different selection pressure.",
+    "Missing comparable data are not classified as ecological discordance.",
+    "T3 historical alignment remains observational and cannot establish selection without T4 mechanism and T5 fitness evidence."
+  ],
+  "forbidden_claims": [
+    "calendar dates derived from relative lineage-depth",
+    "ancestral climate inferred from present taxon centroids",
+    "rain adaptation demonstrated",
+    "anthocyanin mediation demonstrated",
+    "generic stickiness defence demonstrated",
+    "independent origins or convergence demonstrated",
+    "adaptive radiation demonstrated from repeated states and climate alignment alone"
+  ]
+}
