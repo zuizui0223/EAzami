@@ -1,0 +1,61 @@
+{
+  "contract_version": "chapter2_spacetime_public_data_contract_v1",
+  "status_date": "2026-08-30",
+  "programme_definition": {
+    "azami_role": "diversity breadth: spatially extensive public-image and occurrence patterns",
+    "eazami_role": "diversity depth: topology-conditioned histories, relative event depth and phylogeny-aware ecological correspondence",
+    "chapter2_goal": "complete the reusable public-data layer by joining spatial and historical estimands without treating either as causal fitness evidence"
+  },
+  "primary_cross_scale_questions": [
+    {
+      "id": "Q_ORIENTATION_RAIN",
+      "trait": "capitulum orientation",
+      "spatial_axes": ["annual precipitation amount / BIO12", "precipitation seasonality / BIO15"],
+      "historical_axes": ["phylogeny-corrected present-state correspondence", "branchwise niche-shift diagnostic"],
+      "required_comparison": "estimate BIO12 and BIO15 under the same taxon, occurrence-source and phylogenetic universe, then fit univariate and joint models so amount and seasonality are not conflated"
+    },
+    {
+      "id": "Q_COLOUR_RADIATION",
+      "trait": "flower colour / image-derived pigment-lightness-chroma",
+      "spatial_axes": ["surface downwelling shortwave radiation / solar radiation", "temperature", "water balance"],
+      "historical_axes": ["phylogenetic signal or state history only where exact taxon-concept coverage is adequate"],
+      "required_comparison": "test solar-radiation correspondence in the broad Azami image panel first; do not manufacture a Japan38 colour history from sparse or unmatched taxon/voucher data"
+    }
+  ],
+  "harmonization_rules": {
+    "effect_scale": "standardized effects with uncertainty",
+    "orientation_contrast": "downward_or_nodding minus upward_or_erect",
+    "precipitation_amount": "CHELSA BIO12 or an explicitly documented equivalent",
+    "precipitation_seasonality": "CHELSA BIO15 coefficient of variation",
+    "solar_radiation": "a pinned public climatology with units, baseline period and spatial resolution recorded",
+    "occurrence_quality": "source-name guarded, coordinates quality-filtered, spatially thinned and deduplicated across sources",
+    "phylogeny": "independent topology layers remain separate; incompatible marker systems are not pooled into one branch-length tree",
+    "model_sequence": [
+      "descriptive spatial association",
+      "within-versus-among taxon decomposition where repeated observations permit it",
+      "phylogeny-aware among-taxon association",
+      "topology and species-LOO sensitivity",
+      "event-level correspondence only when transition placement and ancestral environment are estimable"
+    ]
+  },
+  "decision_classes": [
+    "cross_scale_direction_supported",
+    "scale_specific_correspondence",
+    "source_or_model_sensitive",
+    "unresolved",
+    "not_evaluable"
+  ],
+  "claim_boundaries": [
+    "Cross-scale agreement strengthens an adaptive hypothesis but does not establish adaptation or fitness benefit.",
+    "BIO12 and BIO15 are distinct ecological dimensions; agreement is not required and apparent disagreement must be tested in a joint model.",
+    "Present-day taxon niche centroids are not ancestral environments.",
+    "A spatial image association is not a historical transition test.",
+    "A phylogeny-aware association is not an event-specific causal mechanism.",
+    "Colour history is not inferred when exact concept-level colour coverage is inadequate.",
+    "No significant source tier is selected post hoc as the sole primary result."
+  ],
+  "source_repositories": {
+    "azami": "https://github.com/zuizui0223/azami",
+    "eazami": "https://github.com/zuizui0223/EAzami"
+  }
+}
