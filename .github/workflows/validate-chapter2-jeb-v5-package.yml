@@ -1,0 +1,66 @@
+name: Validate Chapter 2 JEB V5 package
+
+on:
+  pull_request:
+    paths:
+      - "analysis/apply_chapter2_space_time_package_patch_v1.py"
+      - "analysis/build_chapter2_jeb_docx_v3.py"
+      - "analysis/build_chapter2_jeb_docx_v1.py"
+      - "docs/chapter2/MANUSCRIPT_JEB_V4.md"
+      - "docs/chapter2/JEB_SUPPORTING_INFORMATION_V2.md"
+      - "docs/chapter2/JEB_V4_PACKAGE_SPACE_TIME_PATCH_V1.md"
+      - ".github/workflows/validate-chapter2-jeb-v5-package.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package dependency
+        run: python -m pip install 'python-docx>=1.1,<2'
+      - name: Compile patch and builders
+        run: python -m py_compile analysis/apply_chapter2_space_time_package_patch_v1.py analysis/build_chapter2_jeb_docx_v1.py analysis/build_chapter2_jeb_docx_v3.py
+      - name: Materialize patched Markdown
+        run: |
+          rm -rf /tmp/ch2_patch /tmp/ch2_package
+          mkdir -p /tmp/ch2_patch
+          python analysis/apply_chapter2_space_time_package_patch_v1.py \
+            --manuscript-out /tmp/ch2_patch/MANUSCRIPT_JEB_V5.md \
+            --si-out /tmp/ch2_patch/JEB_SUPPORTING_INFORMATION_V3.md
+      - name: Assert required science routing
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          m=Path('/tmp/ch2_patch/MANUSCRIPT_JEB_V5.md').read_text()
+          s=Path('/tmp/ch2_patch/JEB_SUPPORTING_INFORMATION_V3.md').read_text()
+          required_m=[
+            'Coordinate-bearing public photographs make it possible to examine a decomposed capitulum phenotype along two orthogonal axes.',
+            '## Occurrence-source sensitivity',
+            '## Orientation direction is robust but threshold support is occurrence-source sensitive',
+            'cross-scale hydric correspondence',
+            'The direct-TBN tier was not promoted to the primary after observing its P values.',
+          ]
+          required_s=['## Table S4b — Taiwan occurrence-source sensitivity','direct TBN-native','broader non-GBIF-mirror TBN']
+          for x in required_m:
+              assert x in m, x
+          for x in required_s:
+              assert x in s, x
+          # The patch must keep the key claim ceilings explicit.
+          assert '`not_evaluable`' in m
+          assert '`unresolved`' in m
+          PY
+      - name: Build active V5/V3 package
+        run: python analysis/build_chapter2_jeb_docx_v3.py --output-dir /tmp/ch2_package
+      - name: Assert outputs
+        run: |
+          test -s /tmp/ch2_package/Chapter2_JEB_Anonymous_Manuscript_V5.docx
+          test -s /tmp/ch2_package/Chapter2_JEB_Supporting_Information_V3.docx
+          test -s /tmp/ch2_package/Chapter2_JEB_Title_Page_TEMPLATE_V1.docx
+          test -s /tmp/ch2_package/Chapter2_JEB_Cover_Letter_TEMPLATE_V1.docx
