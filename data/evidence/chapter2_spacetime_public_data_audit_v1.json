@@ -8,7 +8,7 @@
     },
     "eazami": {
       "root": ".",
-      "sha": "4b00195b4ed5b900b39aa04c022a15a1a401df8d"
+      "sha": "e0055494817a797ce72120d53ed2ee06f23a93f6"
     }
   },
   "questions": {
@@ -611,7 +611,7 @@
       "repository": "eazami",
       "term_group": "flower_colour",
       "path_role": "analysis_code",
-      "n_contexts": 363
+      "n_contexts": 366
     },
     {
       "repository": "eazami",
@@ -623,13 +623,13 @@
       "repository": "eazami",
       "term_group": "flower_colour",
       "path_role": "machine_or_frozen_result",
-      "n_contexts": 334
+      "n_contexts": 337
     },
     {
       "repository": "eazami",
       "term_group": "flower_colour",
       "path_role": "narrative_or_contract",
-      "n_contexts": 327
+      "n_contexts": 330
     },
     {
       "repository": "eazami",
@@ -641,7 +641,7 @@
       "repository": "eazami",
       "term_group": "orientation",
       "path_role": "analysis_code",
-      "n_contexts": 198
+      "n_contexts": 199
     },
     {
       "repository": "eazami",
@@ -653,13 +653,13 @@
       "repository": "eazami",
       "term_group": "orientation",
       "path_role": "machine_or_frozen_result",
-      "n_contexts": 283
+      "n_contexts": 289
     },
     {
       "repository": "eazami",
       "term_group": "orientation",
       "path_role": "narrative_or_contract",
-      "n_contexts": 230
+      "n_contexts": 233
     },
     {
       "repository": "eazami",
@@ -683,13 +683,13 @@
       "repository": "eazami",
       "term_group": "phylogeny",
       "path_role": "machine_or_frozen_result",
-      "n_contexts": 456
+      "n_contexts": 468
     },
     {
       "repository": "eazami",
       "term_group": "phylogeny",
       "path_role": "narrative_or_contract",
-      "n_contexts": 360
+      "n_contexts": 363
     },
     {
       "repository": "eazami",
@@ -701,7 +701,7 @@
       "repository": "eazami",
       "term_group": "precipitation_amount",
       "path_role": "analysis_code",
-      "n_contexts": 25
+      "n_contexts": 26
     },
     {
       "repository": "eazami",
@@ -713,13 +713,13 @@
       "repository": "eazami",
       "term_group": "precipitation_amount",
       "path_role": "machine_or_frozen_result",
-      "n_contexts": 29
+      "n_contexts": 41
     },
     {
       "repository": "eazami",
       "term_group": "precipitation_amount",
       "path_role": "narrative_or_contract",
-      "n_contexts": 38
+      "n_contexts": 41
     },
     {
       "repository": "eazami",
@@ -731,7 +731,7 @@
       "repository": "eazami",
       "term_group": "precipitation_seasonality",
       "path_role": "analysis_code",
-      "n_contexts": 34
+      "n_contexts": 35
     },
     {
       "repository": "eazami",
@@ -743,13 +743,13 @@
       "repository": "eazami",
       "term_group": "precipitation_seasonality",
       "path_role": "machine_or_frozen_result",
-      "n_contexts": 55
+      "n_contexts": 68
     },
     {
       "repository": "eazami",
       "term_group": "precipitation_seasonality",
       "path_role": "narrative_or_contract",
-      "n_contexts": 45
+      "n_contexts": 48
     },
     {
       "repository": "eazami",
@@ -761,7 +761,7 @@
       "repository": "eazami",
       "term_group": "solar_radiation",
       "path_role": "analysis_code",
-      "n_contexts": 23
+      "n_contexts": 25
     },
     {
       "repository": "eazami",
@@ -773,7 +773,7 @@
       "repository": "eazami",
       "term_group": "solar_radiation",
       "path_role": "machine_or_frozen_result",
-      "n_contexts": 52
+      "n_contexts": 55
     },
     {
       "repository": "eazami",
@@ -791,7 +791,7 @@
       "repository": "eazami",
       "term_group": "spatial_model",
       "path_role": "analysis_code",
-      "n_contexts": 148
+      "n_contexts": 149
     },
     {
       "repository": "eazami",
@@ -803,13 +803,13 @@
       "repository": "eazami",
       "term_group": "spatial_model",
       "path_role": "machine_or_frozen_result",
-      "n_contexts": 173
+      "n_contexts": 176
     },
     {
       "repository": "eazami",
       "term_group": "spatial_model",
       "path_role": "narrative_or_contract",
-      "n_contexts": 169
+      "n_contexts": 170
     },
     {
       "repository": "eazami",
@@ -818,9 +818,9 @@
       "n_contexts": 58
     }
   ],
-  "n_text_contexts": 5100,
+  "n_text_contexts": 5177,
   "n_table_schemas": 308,
-  "n_json_values": 1951,
+  "n_json_values": 2285,
   "admission_decision": "Strict machine-readable candidates exist for both questions. Freeze exact paths and checksums in the next model contract before fitting joint spatial/phylogenetic models.",
   "claim_boundary": "Discovery audit only. Narrative co-occurrence of terms is not a quantitative association; cross-scale agreement can strengthen an adaptive hypothesis but cannot establish fitness or historical causation."
 }
