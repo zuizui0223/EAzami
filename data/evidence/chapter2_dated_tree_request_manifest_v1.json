@@ -1,0 +1,151 @@
+{
+  "contract_version": "chapter2_dated_tree_request_manifest_v1",
+  "status_date": "2026-08-30",
+  "target_publication": {
+    "citation": "Moreyra et al. 2025. A thorny tale: The origin and diversification of Cirsium (Compositae). Molecular Phylogenetics and Evolution 204:108285.",
+    "doi": "10.1016/j.ympev.2025.108285",
+    "bioProject": "PRJNA957074"
+  },
+  "recovery_status": "PUBLIC_DATED_TREE_NOT_RECOVERED_IN_AUDIT",
+  "primary_goal": "Map each admissible Japan38 capitulum-transition edge to a defensible parent-child calendar-age interval and an ancestral-area uncertainty set without deriving dates from relative lineage-depth or figure digitization.",
+  "preferred_author_source_bundle": {
+    "minimum_required": [
+      {
+        "asset": "best concatenated maximum-likelihood tree used as RelTime input",
+        "accepted_formats": ["Newick", "Nexus", "MEGA tree session/export"],
+        "required_metadata": "exact sample/tip labels and branch-length units"
+      },
+      {
+        "asset": "RelTime time-calibrated tree",
+        "accepted_formats": ["dated Newick", "dated Nexus", "MEGA time-tree session/export"],
+        "required_metadata": "node ages and units"
+      },
+      {
+        "asset": "node-age uncertainty table",
+        "accepted_formats": ["CSV", "TSV", "MEGA export"],
+        "required_metadata": "lower and upper 95% confidence limits keyed to machine-readable nodes"
+      },
+      {
+        "asset": "calibration configuration",
+        "accepted_formats": ["MEGA session", "MAO file", "plain-text node-constraint table"],
+        "required_metadata": "CP1, CP2 and CP3 descendant-tip definitions, distribution/bound semantics and source"
+      },
+      {
+        "asset": "sample-accession-voucher crosswalk",
+        "accepted_formats": ["CSV", "TSV", "Supplementary Table S1 export"],
+        "required_metadata": "paper sample label, taxon, BioSample/SRA accession, voucher and geographic area"
+      }
+    ],
+    "strongly_preferred": [
+      "350-locus concatenated supermatrix and partition file",
+      "per-locus post-orthology alignments used in the final concatenation",
+      "IQ-TREE best tree and model/partition outputs",
+      "ASTRAL species tree and gene-tree bundle",
+      "BioGeoBEARS input geography table and fitted-object or node-state probability export",
+      "Biogeographic stochastic-map summaries keyed to the dated tree",
+      "source data for Figures S1-S3",
+      "software/version/settings file, checksums and reuse licence"
+    ],
+    "why_required": "A figure image and article-level node summaries cannot identify all internal parent-child age windows or exact calibration-node placement for Japan38 transition histories."
+  },
+  "published_dating_contract": {
+    "method": "RelTime implemented in MEGA X",
+    "input_tree": "best maximum-likelihood tree from the 350-locus concatenated analysis",
+    "calibrations": [
+      {
+        "id": "CP1",
+        "constraint": "root mean 17.7 Ma with normal distribution and soft lower bound 14 Ma",
+        "node_identity_status": "requires descendant-tip set or MEGA session"
+      },
+      {
+        "id": "CP2",
+        "constraint": "minimum age 14 Ma based on a fossil cirsioid achene",
+        "node_identity_status": "requires descendant-tip set or MEGA session"
+      },
+      {
+        "id": "CP3",
+        "constraint": "maximum age 5.6 Ma for the MRCA of sampled Cirsium latifolium populations based on Madeira geological age",
+        "node_identity_status": "requires exact duplicate-tip set or MEGA session"
+      }
+    ],
+    "published_temporal_landmarks": [
+      {
+        "landmark": "main Japanese radiation jump-dispersal node 13",
+        "mean_ma": 2.4,
+        "ci95_ma": [1.7, 3.6]
+      },
+      {
+        "landmark": "separate Cirsium dipsacolepis arrival in Japan",
+        "mean_ma": 1.0,
+        "ci95_ma": [0.4, 2.2]
+      },
+      {
+        "landmark": "Cirsium lineare ancestor expansion from East Asia to Japan",
+        "mean_ma": 1.4,
+        "ci95_ma": [0.7, 2.7]
+      },
+      {
+        "landmark": "Cirsium crown",
+        "mean_ma": 9.5,
+        "ci95_ma": [7.2, 12.2]
+      }
+    ],
+    "validation_rule": "An author-source bundle is preferred. An independent reconstruction must reproduce the topology/crosswalk sufficiently for the admitted Japanese concepts and place the published temporal landmarks within declared tolerance or uncertainty before it can support event-window analysis."
+  },
+  "independent_rebuild_fallback": {
+    "status": "DEFERRED_HEAVY_ANALYSIS_READY_FOR_CONTRACT_NOT_ROUTINE_PR_CI",
+    "available_inputs": {
+      "EAzami_global_public_panel": "294 biological samples, 295 run accessions, 270 source-preserving taxon labels, including 256 Moreyra samples and 38 Chang samples",
+      "raw_sequence_archive": "PRJNA957074 target-capture SRA",
+      "Japan38_trait_scaffold": "exact concept/trait crosswalk plus undated ML and 1000 UFBoot trees"
+    },
+    "required_steps": [
+      "Freeze exact sample admission and duplicate-tip rules against Supplementary Table S1.",
+      "Recover Compositae1061 targets from raw reads with source-compatible HybPiper settings.",
+      "Reproduce or explicitly replace the paper's manual orthology/paralogy adjudication without hiding disagreements.",
+      "Build the final locus set under the paper's missing-data/species-presence rules and audit whether 350 loci are recovered.",
+      "Infer the partitioned concatenated maximum-likelihood tree and retain topology/model uncertainty.",
+      "Apply the published CP1-CP3 constraints with RelTime/MEGA-compatible settings using exact node definitions.",
+      "Validate the reconstructed temporal landmarks and Japanese topology against the publication and independent East-Asian evidence.",
+      "Map admitted Japan38 concept descendant sets to dated branches; do not force nonmonophyletic duplicated concepts into one tip.",
+      "Freeze ancestral-area/paleolocation scenarios before extracting palaeoclimate.",
+      "Only then run the predeclared PALEO-PGEM event-window analysis."
+    ],
+    "non_equivalence_warning": "The current 236-locus Japan38 phylogram is not the paper's 350-locus global RelTime input. Multiplying its branch lengths or relative lineage-depth by 2.4 Ma is prohibited.",
+    "result_role": "Independent reconstruction/sensitivity if author outputs remain unavailable; not advertised as an exact reproduction unless topology, locus set, calibrations and temporal landmarks meet the frozen validation contract."
+  },
+  "paleolocation_bundle": {
+    "minimum_required": [
+      "ancestral-area probabilities keyed to dated nodes or a declared alternative-area scenario set",
+      "geographic polygon definitions for the publication's 13 areas",
+      "rule for propagating uncertainty across possible areas and 1-degree PALEO-PGEM cells",
+      "land/sea-mask sensitivity for the Japanese archipelago"
+    ],
+    "prohibition": "Do not assign an ancestral branch to one modern descendant coordinate or extract palaeoclimate from a single modern range centroid."
+  },
+  "promotion_gate": {
+    "T2_current": "orientation x hydric regime: recurrent history plus present Azami BIO12 and EAzami BIO15 domain correspondence",
+    "T3_requires": [
+      "exact dated parent-child event windows",
+      "predeclared paleolocation uncertainty",
+      "PALEO-PGEM BIO12/BIO15 level, change and variability with model uncertainty",
+      "matched non-event branch/window null",
+      "topology, minimum-history and age uncertainty propagation"
+    ],
+    "T3_does_not_establish": [
+      "natural selection",
+      "rain adaptation",
+      "independent origins",
+      "convergence",
+      "fitness benefit"
+    ]
+  },
+  "stop_rules": [
+    "No calendar dates from relative lineage-depth.",
+    "No internal event dates from the published Japanese crown age alone.",
+    "No tree extraction by visually digitizing Figure 3 or Figure S3 as the primary analysis.",
+    "No substitution of current descendant niche centroids for ancestral climate.",
+    "No outcome-selected calibration or palaeoclimate variable.",
+    "No T3 promotion until the dated-tree and paleolocation gates both pass."
+  ]
+}
