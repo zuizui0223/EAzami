@@ -8,7 +8,7 @@
     },
     "eazami": {
       "root": ".",
-      "sha": "e0055494817a797ce72120d53ed2ee06f23a93f6"
+      "sha": "15f721abf66b9310827d6ed54f786d8284d568d2"
     }
   },
   "questions": {
@@ -611,7 +611,7 @@
       "repository": "eazami",
       "term_group": "flower_colour",
       "path_role": "analysis_code",
-      "n_contexts": 366
+      "n_contexts": 369
     },
     {
       "repository": "eazami",
@@ -641,13 +641,13 @@
       "repository": "eazami",
       "term_group": "orientation",
       "path_role": "analysis_code",
-      "n_contexts": 199
+      "n_contexts": 202
     },
     {
       "repository": "eazami",
       "term_group": "orientation",
       "path_role": "configuration",
-      "n_contexts": 69
+      "n_contexts": 72
     },
     {
       "repository": "eazami",
@@ -677,7 +677,7 @@
       "repository": "eazami",
       "term_group": "phylogeny",
       "path_role": "configuration",
-      "n_contexts": 122
+      "n_contexts": 123
     },
     {
       "repository": "eazami",
@@ -701,7 +701,7 @@
       "repository": "eazami",
       "term_group": "precipitation_amount",
       "path_role": "analysis_code",
-      "n_contexts": 26
+      "n_contexts": 27
     },
     {
       "repository": "eazami",
@@ -731,7 +731,7 @@
       "repository": "eazami",
       "term_group": "precipitation_seasonality",
       "path_role": "analysis_code",
-      "n_contexts": 35
+      "n_contexts": 36
     },
     {
       "repository": "eazami",
@@ -761,7 +761,7 @@
       "repository": "eazami",
       "term_group": "solar_radiation",
       "path_role": "analysis_code",
-      "n_contexts": 25
+      "n_contexts": 26
     },
     {
       "repository": "eazami",
@@ -818,7 +818,7 @@
       "n_contexts": 58
     }
   ],
-  "n_text_contexts": 5177,
+  "n_text_contexts": 5190,
   "n_table_schemas": 308,
   "n_json_values": 2285,
   "admission_decision": "Strict machine-readable candidates exist for both questions. Freeze exact paths and checksums in the next model contract before fitting joint spatial/phylogenetic models.",
