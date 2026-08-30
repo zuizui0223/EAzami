@@ -1,0 +1,826 @@
+{
+  "contract_version": "chapter2_spacetime_public_data_audit_v1",
+  "status": "BOTH_QUESTIONS_HAVE_STRICT_TABLE_CANDIDATES_CONTRACT_FREEZE_REQUIRED",
+  "repositories": {
+    "azami": {
+      "root": "external/azami",
+      "sha": "03ed29f1f476ca0d0a1ea8e14e75cb0050a213ef"
+    },
+    "eazami": {
+      "root": ".",
+      "sha": "4b00195b4ed5b900b39aa04c022a15a1a401df8d"
+    }
+  },
+  "questions": {
+    "orientation_precipitation": "Compare BIO12 amount and BIO15 seasonality under the same admitted panel, including joint/partial effects and cross-scale direction.",
+    "colour_solar": "Test image-derived flower colour against a pinned solar-radiation climatology; add a historical layer only if exact concept coverage permits it."
+  },
+  "candidate_tables": {
+    "orientation_precipitation": [
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan_radiation_pre_tree_trait_environment_snapshot_v1.csv",
+        "rows_read": 9,
+        "detected": "{\"bio12\": \"env_chelsa_bio12_species_median\", \"bio15\": \"env_chelsa_bio15_species_median\", \"colour\": \"corolla_lab_lightness_median_taxon_median\", \"orientation\": \"orientation_angle_degrees_median_taxon_median\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "87b8535bf8940cddf0959e7fd992c931f86ba13ea9d71ade327b294452ea162c"
+      }
+    ],
+    "colour_solar": [
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_global_lightness_worldclim_summary_v1.csv",
+        "rows_read": 6,
+        "detected": "{\"colour\": \"corolla_lab_lightness_median_species_median\", \"solar\": \"worldclim_srad_annual_mean_kj_m2_day_species_median\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "cc4bf9f966292dde6b79e97509e34c3f05671db31b37c32f6559754c4bef3207"
+      }
+    ],
+    "orientation_trait_table": [
+      {
+        "repository": "azami",
+        "path": "manuscript/figures/v2_submission/source/Figure_1_real_photo_measurement_provenance.csv",
+        "rows_read": 3,
+        "detected": "{\"colour\": \"corolla_lab_lightness\", \"orientation\": \"orientation_status\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "f69be11eb4496cddfe7720f6371ff19dca85fac4356b43c2b0dcaac26e5e7c22"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_azami_exhaustive_detection_to_strict_coverage_v1.csv",
+        "rows_read": 36,
+        "detected": "{\"orientation\": \"strict_orientation_n\", \"taxon\": \"n_japan38_paper_concepts\"}",
+        "file_sha256": "0f39ee8fea4a4f0e8b9290649a2bcbeac05961e22b9c9f68a4b95b8065f35b9c"
+      },
+      {
+        "repository": "eazami",
+        "path": "sampling/JAPAN_WIDE_PHYLOGENY_ORIENTATION_ADDITION_PANEL_V1.csv",
+        "rows_read": 33,
+        "detected": "{\"orientation\": \"nmns_orientation\", \"taxon\": \"taxon\"}",
+        "file_sha256": "a5e85b500d8de5338933ea395ad195a14890430b1bf3f9b850d7a43cccb36ae7"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv",
+        "rows_read": 22,
+        "detected": "{\"orientation\": \"orientation_state\", \"taxon\": \"paper_taxon_concept\"}",
+        "file_sha256": "f9e608af72076996a0e2ed925ecf35ccc0fc7834d5c1489507e378bcc3b0b4b5"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/fdt4_existing_material_join_audit_v1.csv",
+        "rows_read": 20,
+        "detected": "{\"orientation\": \"orientation_state\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "42f1226b68005e105b6b5ce1a99094a3343c0c7590c7f6dc2cc7c1dfad8fc3e3"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/comp1061_display_size_direct_seed_v1.csv",
+        "rows_read": 15,
+        "detected": "{\"orientation\": \"orientation\", \"taxon\": \"taxon\"}",
+        "file_sha256": "68b85677d1c224a3ff64908e6d1210bace05c1b9992e6a4c2f1d98227f4aa1ec"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_azami_exhaustive_primary_trait_coverage_v1.csv",
+        "rows_read": 15,
+        "detected": "{\"orientation\": \"n_orientation\", \"taxon\": \"azami_taxon_name\"}",
+        "file_sha256": "3636512aab50376b77dfb675080225e903c54dfca11ddf4582a766259774e1b8"
+      },
+      {
+        "repository": "eazami",
+        "path": "sampling/doctoral_field_tranche1_population_manifest_v1.csv",
+        "rows_read": 14,
+        "detected": "{\"latitude\": \"latitude\", \"longitude\": \"longitude\", \"orientation\": \"aim2_orientation_candidate\", \"taxon\": \"taxon\"}",
+        "file_sha256": "5db1d93cd13ff0df9cb8d66c71a1cb612d05daf54bd199c08185c3b9655815b4"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan_radiation_pre_tree_trait_environment_snapshot_v1.csv",
+        "rows_read": 9,
+        "detected": "{\"bio12\": \"env_chelsa_bio12_species_median\", \"bio15\": \"env_chelsa_bio15_species_median\", \"colour\": \"corolla_lab_lightness_median_taxon_median\", \"orientation\": \"orientation_angle_degrees_median_taxon_median\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "87b8535bf8940cddf0959e7fd992c931f86ba13ea9d71ade327b294452ea162c"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_image_authority_orientation_validation_v1.csv",
+        "rows_read": 8,
+        "detected": "{\"orientation\": \"image_orientation_median_degrees\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "62c9ef7bcb6a5e319604bd3b37c8ac06397c87ce0093ec897fbcc8c706d7c394"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/fdt4_eastasia_orientation_niche_phase2_queue_v1.csv",
+        "rows_read": 7,
+        "detected": "{\"orientation\": \"orientation_state\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "d54b87446cc7487b9ada784ca552ce84889a2706bc28c24ad84aaa4bbb870fad"
+      },
+      {
+        "repository": "eazami",
+        "path": "external/azami/manuscript/figures/v2_submission/source/Figure_1_real_photo_measurement_provenance.csv",
+        "rows_read": 3,
+        "detected": "{\"colour\": \"corolla_lab_lightness\", \"orientation\": \"orientation_status\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "f69be11eb4496cddfe7720f6371ff19dca85fac4356b43c2b0dcaac26e5e7c22"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv",
+        "rows_read": 2,
+        "detected": "{\"orientation\": \"orientation_state\", \"taxon\": \"paper_taxon_concept\"}",
+        "file_sha256": "3d091ea3a4d7084b1f31892cbd956f53637269617ca2c7d65e9edd0e319c1cba"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan_radiation_priority_taxon_trait_recovery_v1.csv",
+        "rows_read": 2,
+        "detected": "{\"orientation\": \"head_orientation\", \"taxon\": \"taxon\"}",
+        "file_sha256": "c80e409bf7b380ff0cd599098e5750132a17ad3182437e00fa1520d7fb524b2e"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_nmns_capitulum_trait_seed_extension_v1.csv",
+        "rows_read": 1,
+        "detected": "{\"orientation\": \"orientation_state\", \"taxon\": \"paper_taxon_concept\"}",
+        "file_sha256": "f2b5e3a96a23755d4090d924a972685d708c9305f730d4e3ae8a171c178bd8e5"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/schema/capitulum_trait_records.csv",
+        "rows_read": 0,
+        "detected": "{\"latitude\": \"latitude\", \"longitude\": \"longitude\", \"orientation\": \"orientation_class\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "9bfcdfe518284d112f3e81eeadc5002c4fa6ced25cca39fd6948ac3f9cffaf85"
+      },
+      {
+        "repository": "eazami",
+        "path": "sampling/aim13_individual_sample_ledger_v1.csv",
+        "rows_read": 0,
+        "detected": "{\"colour\": \"pigment_sample_id\", \"latitude\": \"latitude\", \"longitude\": \"longitude\", \"orientation\": \"natural_orientation_deg\", \"taxon\": \"taxon\"}",
+        "file_sha256": "2f4ce7c1ab867b84e704d32d2aab95c91c5736c1c5c8f8901d62b2036724983a"
+      },
+      {
+        "repository": "eazami",
+        "path": "sampling/aim2_capitulum_field_ledger_v1.csv",
+        "rows_read": 0,
+        "detected": "{\"colour\": \"pigment_sample_id\", \"latitude\": \"latitude\", \"longitude\": \"longitude\", \"orientation\": \"natural_orientation_deg\", \"taxon\": \"taxon\"}",
+        "file_sha256": "e3efdc63193cc805a9b4b646ebae81645c9e7186e52465764993e0b4bccb880e"
+      },
+      {
+        "repository": "eazami",
+        "path": "sampling/jpn36_phyllary_access_eligible_heads_v1.csv",
+        "rows_read": 0,
+        "detected": "{\"orientation\": \"natural_head_orientation_deg\", \"taxon\": \"taxon_identity_confirmed\"}",
+        "file_sha256": "353d737c359b25d785c654140eff9a58d661f74719da41fde627d8acb5cd831b"
+      }
+    ],
+    "colour_trait_table": [
+      {
+        "repository": "azami",
+        "path": "manuscript/figures/v2_submission/source/Figure_1_real_photo_measurement_provenance.csv",
+        "rows_read": 3,
+        "detected": "{\"colour\": \"corolla_lab_lightness\", \"orientation\": \"orientation_status\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "f69be11eb4496cddfe7720f6371ff19dca85fac4356b43c2b0dcaac26e5e7c22"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_global_colour_observation_coordinates_v1.csv",
+        "rows_read": 187,
+        "detected": "{\"colour\": \"corolla_lab_lightness_median\", \"latitude\": \"latitude\", \"longitude\": \"longitude\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "1eadba060f7fa57a87f06c53caaadd04dc5fb8604c4a4a7d3a990d9de49cb27b"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/east_asia_nuclear_coverage_v1_2026-08-10.csv",
+        "rows_read": 33,
+        "detected": "{\"colour\": \"flower_colour_state\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "976b5f031f2dc0fa4d92913c60f4872abddb003d2cb11229b7c69916a0f6b4db"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/regional_master_taxa_seed.csv",
+        "rows_read": 33,
+        "detected": "{\"colour\": \"flower_colour_state\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "7ab155ae48ba2673212ec63c526f1a724967143e0c1455b6d9040a391e57debc"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/cirsium_flower_colour_atlas_v0_2.csv",
+        "rows_read": 25,
+        "detected": "{\"colour\": \"anthocyanin_visible\", \"latitude\": \"latitude\", \"longitude\": \"longitude\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "7b315a7d632d0a214298bb53b8c90db9824b2978b0c7b6faec82c2c8f6ea57e1"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv",
+        "rows_read": 20,
+        "detected": "{\"colour\": \"state_label\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "1878073146094c814501e72e5fd5a2f21a5ff58c6cf39e6f35dc5ade877ef95a"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/cirsium_flower_colour_atlas_v0_1.csv",
+        "rows_read": 19,
+        "detected": "{\"colour\": \"anthocyanin_visible\", \"latitude\": \"latitude\", \"longitude\": \"longitude\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "0e17b22ef221e58c53956a98c64b7e11bdc13788f57a5d22208d0adb9a2bf59a"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/cnipponicum_flavonoid_family_reference_panel_v1.csv",
+        "rows_read": 18,
+        "detected": "{\"colour\": \"function_label\", \"taxon\": \"reference_taxon\"}",
+        "file_sha256": "8bf87bc2a60331724cb31b918815abb07269b8fc484ac6b5ff48f7ffc312d1b2"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/eazami_direct_colour_crop_per_head_v1.csv",
+        "rows_read": 18,
+        "detected": "{\"colour\": \"median_lab_lightness\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "8e0cc231177dd552760fef62ca6857197551783075ba397bee7c1d33c2d22748"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/published_nuclear_phylogeny_coverage_seed.csv",
+        "rows_read": 15,
+        "detected": "{\"colour\": \"flower_colour_state\", \"taxon\": \"taxon\"}",
+        "file_sha256": "4fd5c376499873027be1e554f9770c3bd6f81c1b0cc496ea6c7b3e979de8d11d"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_colour_continuous_bridge_v1.csv",
+        "rows_read": 14,
+        "detected": "{\"colour\": \"corolla_lab_lightness_species_median\", \"taxon\": \"paper_taxon_concept\"}",
+        "file_sha256": "9697f372424a5cee5c16180fc7eb44962180a419ad2aee82c6affe73a13156ef"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/eazami_direct_colour_crop_per_image_v1.csv",
+        "rows_read": 13,
+        "detected": "{\"colour\": \"image_lightness_median\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "e8522694d4d4acede2a30809253814963a67efc0513c093178d138ce7a7dab52"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/schema/phylogeny_gap_audit.csv",
+        "rows_read": 12,
+        "detected": "{\"colour\": \"flower_colour_state\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "5496e917234adccfb0d5c997f86556afef7a5bae24f0122345e67f77c776a9fa"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_open_candidate_colour_measurement_per_image_v1.csv",
+        "rows_read": 10,
+        "detected": "{\"colour\": \"median_lab_lightness\", \"latitude\": \"latitude\", \"longitude\": \"longitude\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "741754d6f99622ac7bc130b83b3bcd66037a3202c11b5a7bee580151542aa3b0"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan7_sparse_observation_lightness_v1.csv",
+        "rows_read": 10,
+        "detected": "{\"colour\": \"corolla_lab_lightness_median\", \"latitude\": \"latitude\", \"longitude\": \"longitude\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "1de03ee18cba92f20f003b3142d1296ac2916ad7ede7619cfd22ee27f11d93c8"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/moreyra_japan_backbone_audit.csv",
+        "rows_read": 10,
+        "detected": "{\"colour\": \"flower_colour_status\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "37cf94864e6086597e25f22f33b531850fc71368e72c0f487501376255755a3e"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan_radiation_pre_tree_trait_environment_snapshot_v1.csv",
+        "rows_read": 9,
+        "detected": "{\"bio12\": \"env_chelsa_bio12_species_median\", \"bio15\": \"env_chelsa_bio15_species_median\", \"colour\": \"corolla_lab_lightness_median_taxon_median\", \"orientation\": \"orientation_angle_degrees_median_taxon_median\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "87b8535bf8940cddf0959e7fd992c931f86ba13ea9d71ade327b294452ea162c"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/korea_cirsium_audit_2026-08-10.csv",
+        "rows_read": 9,
+        "detected": "{\"colour\": \"flower_colour_evidence\", \"taxon\": \"taxon\"}",
+        "file_sha256": "c6fffd7bc3ac1953aed2e8e340d0bbb9c6aca6e8d76f6f005ccb80e3dbff8d9d"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan7_source_balanced_lightness_input_v1.csv",
+        "rows_read": 7,
+        "detected": "{\"colour\": \"local_lightness\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "7c95368bb1da2c4c6967278b95f23b216424e7127bb01e12d1e96d5d26936f60"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/korea_neasia_phylogeny_gap_matrix_2026-08-10.csv",
+        "rows_read": 7,
+        "detected": "{\"colour\": \"flower_colour_role\", \"taxon\": \"taxon\"}",
+        "file_sha256": "cd3bb9539c8e65ac2a2bc90f602ff9aff1e54e869aa61895ec87a240634c38d6"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/chang2026_takaoense_figure1_morph_assignments_2026-08-11.csv",
+        "rows_read": 6,
+        "detected": "{\"colour\": \"figure1_panel_b_label\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "15b185b70f063bfb963b384ca746d3f8e09cfc7c55d9563ba28f7a9e5ef68ced"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/chang2026_takaoense_morph_linked_public_samples_v1.csv",
+        "rows_read": 6,
+        "detected": "{\"colour\": \"published_figure_label\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "146344d807d122cf69e7f345621e9031288c8b6ce65b9c691eebc9e4f8e63854"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/chang2026_takaoense_ncbi_voucher_morph_audit_2026-08-11.csv",
+        "rows_read": 6,
+        "detected": "{\"colour\": \"direct_ncbi_colour_label\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "5f588029cb03214f4d38833b7d61fa1e1a28551e35c7c927ed601545a5e8c057"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/chang2026_takaoense_voucher_morph_evidence_2026-08-10.csv",
+        "rows_read": 6,
+        "detected": "{\"colour\": \"direct_sample_morph_label\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "d6419ad210256c3f419d0573502db29a2a2ec0e8aaad47cc0181a96d7dce424e"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_colour_geographic_provenance_summary_v1.csv",
+        "rows_read": 6,
+        "detected": "{\"colour\": \"global_lightness_median\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "141feb786857ce310f7897ddd1dd3ff3d336e389ec62477e091de85b4d141a53"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_global_lightness_worldclim_summary_v1.csv",
+        "rows_read": 6,
+        "detected": "{\"colour\": \"corolla_lab_lightness_median_species_median\", \"solar\": \"worldclim_srad_annual_mean_kj_m2_day_species_median\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "cc4bf9f966292dde6b79e97509e34c3f05671db31b37c32f6559754c4bef3207"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_lightness_paired_environment_summary_v1.csv",
+        "rows_read": 6,
+        "detected": "{\"bio12\": \"n_chelsa_bio12\", \"bio15\": \"n_chelsa_bio15\", \"colour\": \"corolla_lab_lightness_species_median\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "362f330bba6a55c91e3f6c5f9631825b3c382d78116e88626f80302a6a1a304b"
+      },
+      {
+        "repository": "eazami",
+        "path": "sampling/FIXED_WHITE_A1_SAMPLE_INTAKE_V0_1.csv",
+        "rows_read": 6,
+        "detected": "{\"colour\": \"flower_colour_link_status\", \"taxon\": \"taxon\"}",
+        "file_sha256": "41f9e3612ff363ffebfa49582dfdec2c8e5026fe08551d8545cba544eccefd49"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan5_population_matched_lightness_input_v1.csv",
+        "rows_read": 5,
+        "detected": "{\"colour\": \"local_lightness\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "c48a18a58861c68b59b9ce92ec520198518150db3ff42303310fc7b70c3e3873"
+      },
+      {
+        "repository": "eazami",
+        "path": "sampling/FIXED_WHITE_TARGET_CAPTURE_PANEL_V0_1.csv",
+        "rows_read": 5,
+        "detected": "{\"colour\": \"flower_colour_link_required\", \"taxon\": \"taxon\"}",
+        "file_sha256": "4eb8984f1d838e920a9a4c81a9d2ef161b51574511ae41017ad55d754456c309"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_jpn30_public_colour_recovery_per_image_v1.csv",
+        "rows_read": 3,
+        "detected": "{\"colour\": \"median_lab_lightness\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "9757219a5348dd90eccb74f9a065acb22df9bec729915dd6369bad0b56ccf914"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/evidence/japan38_jpn38_public_colour_recovery_per_image_v1.csv",
+        "rows_read": 3,
+        "detected": "{\"colour\": \"median_lab_lightness\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "6b76cb20ef008aa58e176bea1c6af1798ed1dd2cdd9ad06b4d9a6a5e6b0a571f"
+      },
+      {
+        "repository": "eazami",
+        "path": "external/azami/manuscript/figures/v2_submission/source/Figure_1_real_photo_measurement_provenance.csv",
+        "rows_read": 3,
+        "detected": "{\"colour\": \"corolla_lab_lightness\", \"orientation\": \"orientation_status\", \"taxon\": \"taxon_name\"}",
+        "file_sha256": "f69be11eb4496cddfe7720f6371ff19dca85fac4356b43c2b0dcaac26e5e7c22"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/schema/flower_colour_records.csv",
+        "rows_read": 0,
+        "detected": "{\"colour\": \"anthocyanin_visible\", \"latitude\": \"latitude\", \"longitude\": \"longitude\", \"taxon\": \"accepted_taxon\"}",
+        "file_sha256": "922f3e7f4fb37f18e7faac70f207e7c941fc5fceaaa94d98dadb5ac3780f176f"
+      },
+      {
+        "repository": "eazami",
+        "path": "data/schema/moreyra2025_name_reconciliation.csv",
+        "rows_read": 0,
+        "detected": "{\"colour\": \"flower_colour_join_action\", \"taxon\": \"ncbi_scientific_name\"}",
+        "file_sha256": "9252216e0883d6a803de79903d193445edf07201d78f16f3e82fae2b78c3699c"
+      },
+      {
+        "repository": "eazami",
+        "path": "sampling/aim13_individual_sample_ledger_v1.csv",
+        "rows_read": 0,
+        "detected": "{\"colour\": \"pigment_sample_id\", \"latitude\": \"latitude\", \"longitude\": \"longitude\", \"orientation\": \"natural_orientation_deg\", \"taxon\": \"taxon\"}",
+        "file_sha256": "2f4ce7c1ab867b84e704d32d2aab95c91c5736c1c5c8f8901d62b2036724983a"
+      },
+      {
+        "repository": "eazami",
+        "path": "sampling/aim2_capitulum_field_ledger_v1.csv",
+        "rows_read": 0,
+        "detected": "{\"colour\": \"pigment_sample_id\", \"latitude\": \"latitude\", \"longitude\": \"longitude\", \"orientation\": \"natural_orientation_deg\", \"taxon\": \"taxon\"}",
+        "file_sha256": "e3efdc63193cc805a9b4b646ebae81645c9e7186e52465764993e0b4bccb880e"
+      }
+    ],
+    "georeferenced_environment": []
+  },
+  "evidence_context_counts": [
+    {
+      "repository": "azami",
+      "term_group": "flower_colour",
+      "path_role": "analysis_code",
+      "n_contexts": 95
+    },
+    {
+      "repository": "azami",
+      "term_group": "flower_colour",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 23
+    },
+    {
+      "repository": "azami",
+      "term_group": "flower_colour",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 51
+    },
+    {
+      "repository": "azami",
+      "term_group": "flower_colour",
+      "path_role": "other",
+      "n_contexts": 15
+    },
+    {
+      "repository": "azami",
+      "term_group": "orientation",
+      "path_role": "analysis_code",
+      "n_contexts": 48
+    },
+    {
+      "repository": "azami",
+      "term_group": "orientation",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 23
+    },
+    {
+      "repository": "azami",
+      "term_group": "orientation",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 49
+    },
+    {
+      "repository": "azami",
+      "term_group": "orientation",
+      "path_role": "other",
+      "n_contexts": 23
+    },
+    {
+      "repository": "azami",
+      "term_group": "phylogeny",
+      "path_role": "analysis_code",
+      "n_contexts": 33
+    },
+    {
+      "repository": "azami",
+      "term_group": "phylogeny",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 7
+    },
+    {
+      "repository": "azami",
+      "term_group": "phylogeny",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 13
+    },
+    {
+      "repository": "azami",
+      "term_group": "phylogeny",
+      "path_role": "other",
+      "n_contexts": 10
+    },
+    {
+      "repository": "azami",
+      "term_group": "precipitation_amount",
+      "path_role": "analysis_code",
+      "n_contexts": 13
+    },
+    {
+      "repository": "azami",
+      "term_group": "precipitation_amount",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 8
+    },
+    {
+      "repository": "azami",
+      "term_group": "precipitation_amount",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 22
+    },
+    {
+      "repository": "azami",
+      "term_group": "precipitation_amount",
+      "path_role": "other",
+      "n_contexts": 5
+    },
+    {
+      "repository": "azami",
+      "term_group": "precipitation_seasonality",
+      "path_role": "analysis_code",
+      "n_contexts": 9
+    },
+    {
+      "repository": "azami",
+      "term_group": "precipitation_seasonality",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 7
+    },
+    {
+      "repository": "azami",
+      "term_group": "precipitation_seasonality",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 9
+    },
+    {
+      "repository": "azami",
+      "term_group": "precipitation_seasonality",
+      "path_role": "other",
+      "n_contexts": 3
+    },
+    {
+      "repository": "azami",
+      "term_group": "solar_radiation",
+      "path_role": "analysis_code",
+      "n_contexts": 7
+    },
+    {
+      "repository": "azami",
+      "term_group": "solar_radiation",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 6
+    },
+    {
+      "repository": "azami",
+      "term_group": "solar_radiation",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 30
+    },
+    {
+      "repository": "azami",
+      "term_group": "solar_radiation",
+      "path_role": "other",
+      "n_contexts": 1
+    },
+    {
+      "repository": "azami",
+      "term_group": "spatial_model",
+      "path_role": "analysis_code",
+      "n_contexts": 74
+    },
+    {
+      "repository": "azami",
+      "term_group": "spatial_model",
+      "path_role": "configuration",
+      "n_contexts": 1
+    },
+    {
+      "repository": "azami",
+      "term_group": "spatial_model",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 11
+    },
+    {
+      "repository": "azami",
+      "term_group": "spatial_model",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 49
+    },
+    {
+      "repository": "azami",
+      "term_group": "spatial_model",
+      "path_role": "other",
+      "n_contexts": 28
+    },
+    {
+      "repository": "eazami",
+      "term_group": "flower_colour",
+      "path_role": "analysis_code",
+      "n_contexts": 363
+    },
+    {
+      "repository": "eazami",
+      "term_group": "flower_colour",
+      "path_role": "configuration",
+      "n_contexts": 57
+    },
+    {
+      "repository": "eazami",
+      "term_group": "flower_colour",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 334
+    },
+    {
+      "repository": "eazami",
+      "term_group": "flower_colour",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 327
+    },
+    {
+      "repository": "eazami",
+      "term_group": "flower_colour",
+      "path_role": "other",
+      "n_contexts": 49
+    },
+    {
+      "repository": "eazami",
+      "term_group": "orientation",
+      "path_role": "analysis_code",
+      "n_contexts": 198
+    },
+    {
+      "repository": "eazami",
+      "term_group": "orientation",
+      "path_role": "configuration",
+      "n_contexts": 69
+    },
+    {
+      "repository": "eazami",
+      "term_group": "orientation",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 283
+    },
+    {
+      "repository": "eazami",
+      "term_group": "orientation",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 230
+    },
+    {
+      "repository": "eazami",
+      "term_group": "orientation",
+      "path_role": "other",
+      "n_contexts": 42
+    },
+    {
+      "repository": "eazami",
+      "term_group": "phylogeny",
+      "path_role": "analysis_code",
+      "n_contexts": 549
+    },
+    {
+      "repository": "eazami",
+      "term_group": "phylogeny",
+      "path_role": "configuration",
+      "n_contexts": 122
+    },
+    {
+      "repository": "eazami",
+      "term_group": "phylogeny",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 456
+    },
+    {
+      "repository": "eazami",
+      "term_group": "phylogeny",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 360
+    },
+    {
+      "repository": "eazami",
+      "term_group": "phylogeny",
+      "path_role": "other",
+      "n_contexts": 40
+    },
+    {
+      "repository": "eazami",
+      "term_group": "precipitation_amount",
+      "path_role": "analysis_code",
+      "n_contexts": 25
+    },
+    {
+      "repository": "eazami",
+      "term_group": "precipitation_amount",
+      "path_role": "configuration",
+      "n_contexts": 4
+    },
+    {
+      "repository": "eazami",
+      "term_group": "precipitation_amount",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 29
+    },
+    {
+      "repository": "eazami",
+      "term_group": "precipitation_amount",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 38
+    },
+    {
+      "repository": "eazami",
+      "term_group": "precipitation_amount",
+      "path_role": "other",
+      "n_contexts": 5
+    },
+    {
+      "repository": "eazami",
+      "term_group": "precipitation_seasonality",
+      "path_role": "analysis_code",
+      "n_contexts": 34
+    },
+    {
+      "repository": "eazami",
+      "term_group": "precipitation_seasonality",
+      "path_role": "configuration",
+      "n_contexts": 4
+    },
+    {
+      "repository": "eazami",
+      "term_group": "precipitation_seasonality",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 55
+    },
+    {
+      "repository": "eazami",
+      "term_group": "precipitation_seasonality",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 45
+    },
+    {
+      "repository": "eazami",
+      "term_group": "precipitation_seasonality",
+      "path_role": "other",
+      "n_contexts": 3
+    },
+    {
+      "repository": "eazami",
+      "term_group": "solar_radiation",
+      "path_role": "analysis_code",
+      "n_contexts": 23
+    },
+    {
+      "repository": "eazami",
+      "term_group": "solar_radiation",
+      "path_role": "configuration",
+      "n_contexts": 9
+    },
+    {
+      "repository": "eazami",
+      "term_group": "solar_radiation",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 52
+    },
+    {
+      "repository": "eazami",
+      "term_group": "solar_radiation",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 61
+    },
+    {
+      "repository": "eazami",
+      "term_group": "solar_radiation",
+      "path_role": "other",
+      "n_contexts": 4
+    },
+    {
+      "repository": "eazami",
+      "term_group": "spatial_model",
+      "path_role": "analysis_code",
+      "n_contexts": 148
+    },
+    {
+      "repository": "eazami",
+      "term_group": "spatial_model",
+      "path_role": "configuration",
+      "n_contexts": 9
+    },
+    {
+      "repository": "eazami",
+      "term_group": "spatial_model",
+      "path_role": "machine_or_frozen_result",
+      "n_contexts": 173
+    },
+    {
+      "repository": "eazami",
+      "term_group": "spatial_model",
+      "path_role": "narrative_or_contract",
+      "n_contexts": 169
+    },
+    {
+      "repository": "eazami",
+      "term_group": "spatial_model",
+      "path_role": "other",
+      "n_contexts": 58
+    }
+  ],
+  "n_text_contexts": 5100,
+  "n_table_schemas": 308,
+  "n_json_values": 1951,
+  "admission_decision": "Strict machine-readable candidates exist for both questions. Freeze exact paths and checksums in the next model contract before fitting joint spatial/phylogenetic models.",
+  "claim_boundary": "Discovery audit only. Narrative co-occurrence of terms is not a quantitative association; cross-scale agreement can strengthen an adaptive hypothesis but cannot establish fitness or historical causation."
+}
