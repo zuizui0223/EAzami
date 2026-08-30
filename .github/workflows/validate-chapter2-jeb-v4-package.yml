@@ -1,0 +1,44 @@
+name: Validate Chapter 2 active JEB V4 package
+
+on:
+  pull_request:
+    paths:
+      - "docs/chapter2/MANUSCRIPT_JEB_V4.md"
+      - "docs/chapter2/JEB_SUPPORTING_INFORMATION_V2.md"
+      - "docs/chapter2/JEB_TITLE_PAGE_TEMPLATE_V1.md"
+      - "docs/chapter2/JEB_COVER_LETTER_TEMPLATE_V1.md"
+      - "docs/chapter2/JEB_V4_PACKAGE_SPACE_TIME_PATCH_V1.md"
+      - "docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V4.md"
+      - "analysis/build_chapter2_jeb_docx_v1.py"
+      - "analysis/build_chapter2_jeb_docx_v2.py"
+      - ".github/workflows/validate-chapter2-jeb-v4-package.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package dependency
+        run: python -m pip install 'python-docx>=1.1,<2'
+      - name: Compile active and legacy builders
+        run: python -m py_compile analysis/build_chapter2_jeb_docx_v1.py analysis/build_chapter2_jeb_docx_v2.py
+      - name: Build active V4/V2 package in temporary directory
+        run: |
+          rm -rf /tmp/ch2_jeb_active
+          python analysis/build_chapter2_jeb_docx_v2.py --output-dir /tmp/ch2_jeb_active
+      - name: Assert active source routing and outputs
+        run: |
+          test -s /tmp/ch2_jeb_active/Chapter2_JEB_Anonymous_Manuscript_V4.docx
+          test -s /tmp/ch2_jeb_active/Chapter2_JEB_Supporting_Information_V2.docx
+          test -s /tmp/ch2_jeb_active/Chapter2_JEB_Title_Page_TEMPLATE_V1.docx
+          test -s /tmp/ch2_jeb_active/Chapter2_JEB_Cover_Letter_TEMPLATE_V1.docx
+          grep -q 'MANUSCRIPT_JEB_V4.md' analysis/build_chapter2_jeb_docx_v2.py
+          grep -q 'JEB_SUPPORTING_INFORMATION_V2.md' analysis/build_chapter2_jeb_docx_v2.py
+          ! grep -q 'MANUSCRIPT_JEB_V3.md' analysis/build_chapter2_jeb_docx_v2.py
