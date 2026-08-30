@@ -1,0 +1,33 @@
+name: Validate Chapter 2 selection-pressure triangulation v2
+
+on:
+  pull_request:
+    paths:
+      - "analysis/validate_chapter2_selection_pressure_triangulation_v2.py"
+      - "docs/chapter2/SELECTION_PRESSURE_EXPLANATORY_RANKING_V1.md"
+      - "data/evidence/chapter2_selection_pressure_triangulation_v1.csv"
+      - "data/evidence/japan38_relative_event_depth_v1.json"
+      - "data/evidence/chapter2_ecological_explanatory_reach_v1.json"
+      - "data/evidence/fdt4_taiwan_multisource_orientation_sensitivity_v1.json"
+      - "data/evidence/chapter2_space_time_public_data_closure_v1.csv"
+      - "data/evidence/chapter2_trait_function_history_table_v1.csv"
+      - "data/evidence/chapter2_time_axis_compute/continuous_primary_phylogenetic_structure_v1.csv"
+      - ".github/workflows/validate-chapter2-selection-pressure-triangulation-v2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile and validate independent evidence matrix
+        run: |
+          set -euo pipefail
+          python -m py_compile analysis/validate_chapter2_selection_pressure_triangulation_v2.py
+          python analysis/validate_chapter2_selection_pressure_triangulation_v2.py
