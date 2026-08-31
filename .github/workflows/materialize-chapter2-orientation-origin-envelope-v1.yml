@@ -1,0 +1,206 @@
+name: Materialize Chapter 2 orientation origin envelope v1
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/materialize-chapter2-orientation-origin-envelope-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ch2-origin-envelope-materialize-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas xarray netCDF4
+          python -m py_compile analysis/run_chapter2_orientation_origin_envelope_v1.py
+      - name: Download checksum-locked public PALEO-PGEM fields
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/paleo
+          base="https://zenodo.org/records/21327244/files"
+          for f in \
+            PALEO-PGEM-Series_bio1_mean.nc \
+            PALEO-PGEM-Series_bio4_mean.nc \
+            PALEO-PGEM-Series_bio12_mean.nc \
+            PALEO-PGEM-Series_bio15_mean.nc; do
+            curl --fail --location --retry 5 --retry-delay 5 "${base}/${f}?download=1" -o "/tmp/paleo/${f}"
+          done
+          echo '570e4b746e0b9c0cf82a2a5f85a6cff9  /tmp/paleo/PALEO-PGEM-Series_bio1_mean.nc' | md5sum -c -
+          echo 'b6f90b330e4161b983d735b7f9f7a01f  /tmp/paleo/PALEO-PGEM-Series_bio4_mean.nc' | md5sum -c -
+          echo 'b029ef3f40d666e3d96ec1d9f42bef54  /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc' | md5sum -c -
+          echo 'f4c8d91815816f42959b90d512ac8b8e  /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc' | md5sum -c -
+      - name: Run and render result package
+        run: |
+          set -euo pipefail
+          python analysis/run_chapter2_orientation_origin_envelope_v1.py \
+            --contract data/evidence/chapter2_orientation_origin_envelope_contract_v1.json \
+            --bio1 /tmp/paleo/PALEO-PGEM-Series_bio1_mean.nc \
+            --bio4 /tmp/paleo/PALEO-PGEM-Series_bio4_mean.nc \
+            --bio12 /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc \
+            --bio15 /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc \
+            --out data/evidence/chapter2_orientation_origin_envelope_result_v1.json \
+            > /tmp/origin-envelope.log
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          source = Path('data/evidence/chapter2_orientation_origin_envelope_result_v1.json')
+          x = json.loads(source.read_text(encoding='utf-8'))
+          cross = x['cross_scenario_summary']
+          labels = {
+              'robust_state_trajectory_concordance_under_scenario_envelope': 'robust concordance',
+              'robust_state_trajectory_discordance_under_scenario_envelope': 'robust discordance',
+              'origin_trajectory_unresolved_under_public_chronology_and_paleolocation_uncertainty': 'unresolved under public chronology and paleolocation uncertainty',
+          }
+
+          csv_path = Path('data/evidence/chapter2_orientation_origin_envelope_region_summary_v1.csv')
+          cols = [
+              'region','n_grid_cells','n_chronology_scenarios',
+              'cosine_min','cosine_q05','cosine_median','cosine_q95','cosine_max',
+              'fraction_cosine_positive','fraction_cosine_negative',
+              'null_percentile_q05','null_percentile_median','null_percentile_q95',
+              'fraction_null_percentile_ge_0_95','fraction_null_percentile_le_0_05',
+              'BIO1_raw_direction_fraction','BIO4_raw_direction_fraction',
+              'BIO12_raw_direction_fraction','BIO15_raw_direction_fraction'
+          ]
+          rows=[]
+          for region,s in x['region_summaries'].items():
+              row={
+                  'region': region,
+                  'n_grid_cells': s['n_grid_cells'],
+                  'n_chronology_scenarios': s['n_chronology_scenarios'],
+                  **{f"cosine_{k}":v for k,v in s['cosine_similarity'].items()},
+                  'fraction_cosine_positive': s['fraction_cosine_positive'],
+                  'fraction_cosine_negative': s['fraction_cosine_negative'],
+                  'null_percentile_q05': s['cosine_null_percentile']['q05'],
+                  'null_percentile_median': s['cosine_null_percentile']['median'],
+                  'null_percentile_q95': s['cosine_null_percentile']['q95'],
+                  'fraction_null_percentile_ge_0_95': s['fraction_null_percentile_ge_0_95'],
+                  'fraction_null_percentile_le_0_05': s['fraction_null_percentile_le_0_05'],
+              }
+              for v in ('BIO1','BIO4','BIO12','BIO15'):
+                  row[f'{v}_raw_direction_fraction']=s['variable_direction_agreement'][v]['raw_direction_fraction']
+              rows.append(row)
+          with csv_path.open('w', newline='', encoding='utf-8') as f:
+              w=csv.DictWriter(f, fieldnames=cols)
+              w.writeheader(); w.writerows(rows)
+
+          c = cross['cosine_similarity']
+          p = cross['cosine_null_percentile']
+          classification = cross['classification']
+          if classification == 'robust_state_trajectory_concordance_under_scenario_envelope':
+              interpretation = (
+                  'The historical environmental trajectory is directionally concordant with the frozen Azami present-space '
+                  'orientation vector across the complete chronology and paleolocation envelope. This strengthens a persistent-driver '
+                  'candidate but does not establish selection or adaptation.'
+              )
+          elif classification == 'robust_state_trajectory_discordance_under_scenario_envelope':
+              interpretation = (
+                  'The historical environmental trajectory is directionally opposite to the frozen Azami present-space orientation '
+                  'vector across the complete scenario envelope. This weakens a simple persistent-driver model and prioritizes '
+                  'origin-maintenance decoupling or driver switching.'
+              )
+          else:
+              interpretation = (
+                  'The sign or tail status of historical state-trajectory concordance changes across admissible chronology and '
+                  'paleolocation scenarios. Public data resolve repeated orientation history but do not identify a unique environmental '
+                  'trajectory for the origin event.'
+              )
+
+          lines = [
+              '# Orientation origin chronology × paleolocation envelope result v1',
+              '',
+              'Status: public-data result generated by checksum-locked CI.',
+              '',
+              '## Decision',
+              '',
+              f"**{labels.get(classification, classification)}**",
+              '',
+              interpretation,
+              '',
+              '## Cross-scenario summary',
+              '',
+              f"- valid chronology pairs: {x['chronology']['n_valid_age_pairs']}",
+              f"- region × chronology scenarios: {cross['n_region_by_chronology_scenarios']}",
+              f"- cosine similarity: q05={c['q05']:.6f}, median={c['median']:.6f}, q95={c['q95']:.6f}",
+              f"- fraction cosine positive: {cross['fraction_cosine_positive']:.6f}",
+              f"- fraction cosine negative: {cross['fraction_cosine_negative']:.6f}",
+              f"- null percentile: q05={p['q05']:.6f}, median={p['median']:.6f}, q95={p['q95']:.6f}",
+              f"- fraction null percentile >=0.95: {cross['fraction_null_percentile_ge_0_95']:.6f}",
+              f"- fraction null percentile <=0.05: {cross['fraction_null_percentile_le_0_05']:.6f}",
+              '',
+              '## Region summaries',
+              '',
+              '| region | cosine q05 | median | q95 | positive fraction | null percentile median |',
+              '|---|---:|---:|---:|---:|---:|',
+          ]
+          for region,s in x['region_summaries'].items():
+              lines.append(
+                  f"| {region} | {s['cosine_similarity']['q05']:.6f} | {s['cosine_similarity']['median']:.6f} | "
+                  f"{s['cosine_similarity']['q95']:.6f} | {s['fraction_cosine_positive']:.6f} | "
+                  f"{s['cosine_null_percentile']['median']:.6f} |"
+              )
+          lines += [
+              '',
+              '## Biological interpretation',
+              '',
+              '- Recurrent orientation history (4–6 changes) remains resolved independently of this result.',
+              '- Present Azami orientation–BIO12 sorting remains a strong current-space association.',
+              '- This analysis asks a different question: whether the environmental trajectory surrounding the best public origin envelope points in the same multivariate direction.',
+              '- Range reorganization remains an exposure opportunity rather than a selective agent.',
+              '',
+              '## Claim ceiling',
+              '',
+              '- Marginal ages from separate studies are scenario bounds, not a joint posterior.',
+              '- Regional boxes are paleolocation scenarios, not ancestral-area probabilities.',
+              '- Branch endpoint change does not identify the exact transition instant.',
+              '- Concordance or discordance does not establish natural selection, adaptation, convergence or reproductive fitness.',
+              '',
+              'Machine-readable full scenario rows are retained in `data/evidence/chapter2_orientation_origin_envelope_result_v1.json`.',
+          ]
+          out = Path('docs/chapter2/ORIENTATION_ORIGIN_ENVELOPE_RESULT_V1.md')
+          out.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          print(json.dumps({
+              'classification': classification,
+              'n_pairs': x['chronology']['n_valid_age_pairs'],
+              'n_scenarios': cross['n_region_by_chronology_scenarios'],
+              'cosine_median': c['median'],
+              'null_percentile_median': p['median'],
+          }, indent=2))
+          PY
+          test -s data/evidence/chapter2_orientation_origin_envelope_result_v1.json
+          test -s data/evidence/chapter2_orientation_origin_envelope_region_summary_v1.csv
+          test -s docs/chapter2/ORIENTATION_ORIGIN_ENVELOPE_RESULT_V1.md
+      - name: Commit generated public-data result
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            data/evidence/chapter2_orientation_origin_envelope_result_v1.json \
+            data/evidence/chapter2_orientation_origin_envelope_region_summary_v1.csv \
+            docs/chapter2/ORIENTATION_ORIGIN_ENVELOPE_RESULT_V1.md
+          if git diff --cached --quiet; then
+            echo 'Generated result is unchanged.'
+          else
+            git commit -m 'Materialize orientation origin-envelope result v1'
+            git push origin HEAD:${{ github.event.pull_request.head.ref || github.ref_name }}
+          fi
