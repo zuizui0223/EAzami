@@ -1,0 +1,57 @@
+{
+  "contract_version": "chapter2_four_taxon_public_image_bridge_contract_v1",
+  "status_date": "2026-08-31",
+  "purpose": "Audit whether the two dated white-coloured sister systems can be remeasured from current public image metadata after the frozen Azami observation-level inputs were excluded from the submission-facing repository tree.",
+  "systems": [
+    {
+      "system_id": "ARENICOLA_BREVICAULE_IRUMTIENSE",
+      "white_taxon": "Cirsium brevicaule",
+      "coloured_taxon": "Cirsium irumtiense"
+    },
+    {
+      "system_id": "TAIWAN_KAWAKAMII_TATAKAENSE",
+      "white_taxon": "Cirsium kawakamii",
+      "coloured_taxon": "Cirsium tatakaense"
+    }
+  ],
+  "sources": {
+    "iNaturalist": {
+      "taxon_resolution": "active exact scientific-name match at species rank",
+      "observation_filters": {
+        "quality_grade": "research",
+        "photos": true,
+        "captive": false
+      },
+      "strict_environment_filter": "geo=true plus record-level rejection of obscured/private coordinates",
+      "flower_annotation": "controlled term 12 value 13, reported as an auxiliary count only"
+    },
+    "GBIF": {
+      "taxon_resolution": "species/match accepted usage key",
+      "occurrence_filters": {
+        "media_type": "StillImage",
+        "has_coordinate": true,
+        "occurrence_status": "PRESENT"
+      },
+      "deduplication_rule": "identify iNaturalist-republished GBIF records from occurrenceID/references/institution metadata; do not add them as independent images"
+    }
+  },
+  "predeclared_coverage_classes": {
+    "ready_for_pairwise_image_pilot": "at least 10 strict georeferenced iNaturalist research-grade photo observations or at least 10 non-iNaturalist GBIF image occurrences",
+    "limited_pilot": "3-9 eligible records in either nonduplicated source",
+    "not_evaluable": "fewer than 3 eligible records or unresolved exact taxon"
+  },
+  "outputs": [
+    "taxon-level source counts and taxonomy resolution",
+    "sampled observation/photo metadata with licences and coordinate usability",
+    "iNaturalist-versus-GBIF duplicate accounting",
+    "pair-level bottleneck classification"
+  ],
+  "next_gate": "Only systems in which both sister taxa reach at least limited_pilot proceed to image-trait measurement. Primary pairwise replication requires both taxa to reach ready_for_pairwise_image_pilot under the same source and filter contract.",
+  "claim_boundary": [
+    "Metadata coverage is not phenotype evidence.",
+    "A photo count is not an independent biological sample count.",
+    "GBIF and iNaturalist records are not independent when GBIF republishes iNaturalist observations.",
+    "Public image availability is taxonomically and geographically biased.",
+    "No white-lineage architecture, environmental response, adaptation or syndrome claim is made from this audit."
+  ]
+}
