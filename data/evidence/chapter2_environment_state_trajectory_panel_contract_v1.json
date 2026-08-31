@@ -1,0 +1,72 @@
+{
+  "contract_version": "chapter2_environment_state_trajectory_panel_v1",
+  "status_date": "2026-08-31",
+  "purpose": "Compare Azami present environmental state-space sorting with EAzami environmental trajectory dynamics through dated trait-transition windows without an all-BIOCLIM fishing screen.",
+  "conceptual_novelty": {
+    "azami": "environmental state space: where continuous capitulum phenotypes are sorted along present-day environmental gradients",
+    "eazami": "environmental trajectory space: how environmental states move, fluctuate and reach extremes through admissible evolutionary transition windows",
+    "cross_axis_test": "ask whether the multivariate direction of historical environmental movement during a trait transition aligns with the present Azami trait-environment sorting vector"
+  },
+  "data_resolution": {
+    "paleo_pgem_temporal": "1 kyr",
+    "paleo_pgem_spatial": "1 degree",
+    "paleo_pgem_coverage": "last 5 Myr",
+    "local_event_window": "0.79-0.47 Ma Taiwan Nipponocirsium stem; 320 kyr",
+    "paleolocation": "all available PALEO-PGEM cells within 21.5-25.6 N, 119.0-122.5 E; no single modern descendant coordinate",
+    "resolution_rule": "report cellwise direction agreement and the ratio of regional spatial IQR to within-window temporal SD; do not promote a time signal when paleolocation uncertainty dominates"
+  },
+  "environment_panel": {
+    "shared_space_time_core": {
+      "variables": ["BIO1", "BIO4", "BIO12", "BIO15"],
+      "reason": "These are directly shared between the frozen Azami nine-predictor atlas and PALEO-PGEM-Series and therefore support a commensurate state-versus-trajectory comparison.",
+      "selection_rule": "retain all four variables in the cross-axis vector regardless of their individual Azami P values; do not select dimensions after observing the historical trajectory"
+    },
+    "orientation_wetting_mechanism": {
+      "wet_side_variables": ["BIO13", "BIO16"],
+      "wet_side_meaning": "precipitation of wettest month and wettest quarter; closer to episodic reproductive wetting exposure than annual precipitation",
+      "dry_side_control_variables": ["BIO14", "BIO17"],
+      "dry_side_meaning": "precipitation of driest month and driest quarter; negative-control contrast for a wet-exposure-specific explanation",
+      "decision_logic": "a rain/wetting mechanism is more specifically supported if the transition window is more exceptional on wet-side exposure than on dry-side precipitation under the same duration-matched null"
+    },
+    "secondary_not_primary": {
+      "thermal_extremes": ["BIO5", "BIO6", "BIO7", "BIO10", "BIO11"],
+      "season_linked_precipitation": ["BIO18", "BIO19"],
+      "reason": "These can be informative later, but they are not direct Azami shared axes; BIO18/BIO19 must not be called flowering-season precipitation without taxon-specific phenology."
+    },
+    "not_directly_commensurate_with_paleo_pgem": {
+      "RSDS": "Azami surface shortwave radiation has no direct PALEO-PGEM counterpart; orbital/astronomical forcing would be a separate model layer and is not equivalent to surface RSDS.",
+      "VPD": "PALEO-PGEM-Series does not provide the humidity information required for a directly comparable VPD history.",
+      "sfcWind": "no directly comparable wind series in the frozen PALEO-PGEM asset.",
+      "GSP": "could be derived only under an additional generic growing-season definition and is not taxon-specific flowering-season precipitation.",
+      "NPP": "requires an additional vegetation/productivity model and is not a direct PALEO-PGEM climatic state variable."
+    }
+  },
+  "predeclared_estimands": {
+    "state_level": "event-window mean",
+    "trajectory_direction": "young endpoint minus old endpoint",
+    "trajectory_magnitude": "absolute net endpoint change",
+    "trajectory_volatility": ["within-window temporal SD", "range", "mean absolute 1-kyr change", "maximum absolute 1-kyr change"],
+    "paleolocation_sensitivity": ["cellwise endpoint-change sign agreement", "regional spatial IQR / temporal SD"],
+    "shared_vector_concordance": "cosine similarity between the Azami standardized among-taxon orientation beta vector for BIO1/BIO4/BIO12/BIO15 and the background-standardized historical change vector across the U-to-D event branch",
+    "wetting_specificity": "wet-side BIO13/BIO16 historical change/volatility relative to dry-side BIO14/BIO17 controls"
+  },
+  "nulls": {
+    "time_window_null": "all same-duration 320-kyr windows stepped every 10 kyr across the available 5-Myr series",
+    "trajectory_vector_null": "cosine similarity computed for every same-duration background window using the same frozen Azami vector and variable standardization",
+    "wetting_specificity_null": "wet-minus-dry contrast computed for every same-duration background window",
+    "current_limit": "local climate-window null, not a full branch-opportunity/topology/age-posterior null"
+  },
+  "multiplicity_and_claim_gate": {
+    "primary_families": ["shared_space_time_core", "orientation_wetting_mechanism"],
+    "no_all_bioclim_screen": true,
+    "promotion_rule": "historical alignment requires a predeclared tail result plus robustness to Taiwan cellwise paleolocation uncertainty; one local event cannot promote all Japan38 orientation history",
+    "negative_result_value": "discordance between present spatial sorting and historical trajectory is retained as evidence that current ecological sorting need not identify the original transition driver"
+  },
+  "claim_boundary": [
+    "No historical adaptation from state-trajectory concordance alone.",
+    "No equivalence between current niche centroid and ancestral environment.",
+    "No interpretation of BIO13/BIO16 as actual flower wetting without flowering-season exposure data.",
+    "No interpretation of 1-degree palaeoclimate as mountain microclimate.",
+    "No post hoc promotion of whichever PALEO-PGEM variable is most extreme."
+  ]
+}
