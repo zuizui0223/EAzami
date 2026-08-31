@@ -3,6 +3,7 @@ name: Run Chapter 2 Taiwan orientation environment trajectory v1
 on:
   pull_request:
     paths:
+      - "analysis/build_chapter2_public_dated_event_registry_v1.py"
       - "analysis/run_chapter2_taiwan_orientation_paleohydric_window_v1.py"
       - "analysis/run_chapter2_taiwan_orientation_directional_sensitivity_v1.py"
       - "analysis/run_chapter2_taiwan_orientation_environment_state_trajectory_v1.py"
@@ -31,9 +32,26 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install numpy pandas xarray netCDF4
           python -m py_compile \
+            analysis/build_chapter2_public_dated_event_registry_v1.py \
             analysis/run_chapter2_taiwan_orientation_paleohydric_window_v1.py \
             analysis/run_chapter2_taiwan_orientation_directional_sensitivity_v1.py \
             analysis/run_chapter2_taiwan_orientation_environment_state_trajectory_v1.py
+      - name: Build public dated event-by-process registry
+        run: |
+          mkdir -p /tmp/result
+          python analysis/build_chapter2_public_dated_event_registry_v1.py \
+            --out /tmp/result/chapter2_public_dated_event_registry_v1.json \
+            | tee /tmp/result/dated_event_registry.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/result/chapter2_public_dated_event_registry_v1.json').read_text())
+          ev={e['event_id']:e for e in x['event_registry']}
+          assert ev['ORI_TAIWAN_TRIO_STEM']['combined_admissible_window_ma']==[0.47,0.79]
+          assert ev['COL_BREVICAULE_TERMINAL']['combined_admissible_window_ma']==[0.0,0.93]
+          assert ev['COL_KAWAKAMII_TERMINAL']['combined_admissible_window_ma']==[0.0,0.47]
+          assert all(e['forced_across_all_topologies_and_min_histories'] for e in ev.values())
+          PY
       - name: Download public PALEO-PGEM preregistered panel and Azami state-space table
         run: |
           set -euo pipefail
@@ -64,7 +82,6 @@ jobs:
           test -s /tmp/azami/Table_S5_v2_complete_among_taxon_environment_atlas.csv
       - name: Run Taiwan dated environment trajectory sensitivities
         run: |
-          mkdir -p /tmp/result
           python analysis/run_chapter2_taiwan_orientation_paleohydric_window_v1.py \
             --bio12-mean /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc \
             --bio15-mean /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc \
