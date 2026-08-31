@@ -1,0 +1,31 @@
+name: Validate Chapter 2 public event-process registry v2
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/chapter2_public_event_process_registry_v2.csv"
+      - "analysis/build_chapter2_public_event_process_registry_v2.py"
+      - "analysis/validate_chapter2_public_event_process_registry_v2.py"
+      - ".github/workflows/validate-chapter2-public-event-process-registry-v2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile and validate registry
+        run: |
+          python -m py_compile \
+            analysis/build_chapter2_public_event_process_registry_v2.py \
+            analysis/validate_chapter2_public_event_process_registry_v2.py
+          python analysis/validate_chapter2_public_event_process_registry_v2.py
+          python analysis/build_chapter2_public_event_process_registry_v2.py \
+            --out /tmp/chapter2_public_event_process_registry_v2.json
+          test -s /tmp/chapter2_public_event_process_registry_v2.json
