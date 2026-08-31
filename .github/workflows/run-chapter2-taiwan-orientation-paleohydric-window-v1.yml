@@ -1,0 +1,70 @@
+name: Run Chapter 2 Taiwan orientation paleohydric window v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_chapter2_taiwan_orientation_paleohydric_window_v1.py"
+      - ".github/workflows/run-chapter2-taiwan-orientation-paleohydric-window-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  run-local-public-t3-sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install analysis dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas xarray netCDF4
+          python -m py_compile analysis/run_chapter2_taiwan_orientation_paleohydric_window_v1.py
+      - name: Download public PALEO-PGEM BIO12/BIO15 mean and emulator SD
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/paleo
+          base="https://zenodo.org/records/21327244/files"
+          for f in \
+            PALEO-PGEM-Series_bio12_mean.nc \
+            PALEO-PGEM-Series_bio12_sd.nc \
+            PALEO-PGEM-Series_bio15_mean.nc \
+            PALEO-PGEM-Series_bio15_sd.nc; do
+            curl --fail --location --retry 5 --retry-delay 5 "${base}/${f}?download=1" -o "/tmp/paleo/${f}"
+          done
+          echo 'b029ef3f40d666e3d96ec1d9f42bef54  /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc' | md5sum -c -
+          echo '14c34bb27d5e59e1f3d200a5b544fb7a  /tmp/paleo/PALEO-PGEM-Series_bio12_sd.nc' | md5sum -c -
+          echo 'f4c8d91815816f42959b90d512ac8b8e  /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc' | md5sum -c -
+          echo '5c85c19997032b409f38431609f13e8b  /tmp/paleo/PALEO-PGEM-Series_bio15_sd.nc' | md5sum -c -
+      - name: Run Taiwan dated paleohydric window sensitivity
+        run: |
+          mkdir -p /tmp/result
+          python analysis/run_chapter2_taiwan_orientation_paleohydric_window_v1.py \
+            --bio12-mean /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc \
+            --bio12-sd /tmp/paleo/PALEO-PGEM-Series_bio12_sd.nc \
+            --bio15-mean /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc \
+            --bio15-sd /tmp/paleo/PALEO-PGEM-Series_bio15_sd.nc \
+            --out /tmp/result/chapter2_taiwan_orientation_paleohydric_window_v1.json \
+            | tee /tmp/result/run.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/result/chapter2_taiwan_orientation_paleohydric_window_v1.json')
+          d=json.loads(p.read_text())
+          assert d['dated_scaffold']['minimum_orientation_transition_window_ma']==[0.47,0.79]
+          assert d['BIO12']['n_matched_windows'] > 100
+          assert d['BIO15']['n_matched_windows'] > 100
+          for v in ('BIO12','BIO15'):
+              for x in d[v]['duration_matched_5myr_percentiles'].values():
+                  assert 0 < x <= 1
+          print(json.dumps({v:d[v]['duration_matched_5myr_percentiles'] for v in ('BIO12','BIO15')},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-taiwan-orientation-paleohydric-window-${{ github.run_id }}
+          path: /tmp/result
+          if-no-files-found: error
