@@ -1,0 +1,27 @@
+name: Validate Chapter 2 public trait-event recovery audit v2
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/chapter2_public_trait_event_recovery_audit_v2.csv"
+      - "data/evidence/chapter2_white_lineage_sister_contrast_v1.csv"
+      - "docs/chapter2/PUBLIC_TRAIT_EVENT_RECOVERY_AUDIT_V2.md"
+      - "analysis/validate_chapter2_public_trait_event_recovery_audit_v2.py"
+      - ".github/workflows/validate-chapter2-public-trait-event-recovery-audit-v2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate dated trait-event classes and white-lineage contrasts
+        run: |
+          python -m py_compile analysis/validate_chapter2_public_trait_event_recovery_audit_v2.py
+          python analysis/validate_chapter2_public_trait_event_recovery_audit_v2.py
