@@ -1,0 +1,119 @@
+name: Run Chapter 2 four-taxon Azami measurement pilot v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/prepare_chapter2_four_taxon_public_image_measurement_pilot_v1.py"
+      - "analysis/summarize_chapter2_four_taxon_azami_measurement_pilot_v1.py"
+      - "analysis/audit_chapter2_four_taxon_public_image_bridge_v1.py"
+      - ".github/workflows/run-chapter2-four-taxon-azami-measurement-pilot-v1.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: ch2-four-taxon-azami-measurement-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas requests opencv-python-headless
+          python -m py_compile \
+            analysis/audit_chapter2_four_taxon_public_image_bridge_v1.py \
+            analysis/prepare_chapter2_four_taxon_public_image_measurement_pilot_v1.py \
+            analysis/summarize_chapter2_four_taxon_azami_measurement_pilot_v1.py
+      - name: Regenerate current public metadata coverage
+        run: |
+          mkdir -p /tmp/audit
+          python analysis/audit_chapter2_four_taxon_public_image_bridge_v1.py \
+            --out-dir /tmp/audit \
+            --max-records-per-source-taxon 1000
+          test -s /tmp/audit/chapter2_four_taxon_public_image_sample_manifest_v1.csv
+      - name: Prepare deterministic iNaturalist image candidate pool
+        run: |
+          mkdir -p /tmp/pilot
+          python analysis/prepare_chapter2_four_taxon_public_image_measurement_pilot_v1.py \
+            --source-manifest /tmp/audit/chapter2_four_taxon_public_image_sample_manifest_v1.csv \
+            --out-dir /tmp/pilot \
+            --max-observations-per-taxon 50 \
+            --max-photos-per-observation 3
+          test -s /tmp/pilot/chapter2_four_taxon_measurement_candidate_manifest_v1.csv
+      - name: Fetch pinned Azami measurement implementations
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/azami-code
+          base='https://raw.githubusercontent.com/zuizui0223/azami/03ed29f1f476ca0d0a1ea8e14e75cb0050a213ef/ch1_global/v2'
+          curl --fail --location --retry 5 "${base}/52_measure_primary_traits_continuous.py" \
+            -o /tmp/azami-code/52_measure_primary_traits_continuous.py
+          curl --fail --location --retry 5 "${base}/89_measure_extended_continuous_traits.py" \
+            -o /tmp/azami-code/89_measure_extended_continuous_traits.py
+          python -m py_compile /tmp/azami-code/52_measure_primary_traits_continuous.py /tmp/azami-code/89_measure_extended_continuous_traits.py
+      - name: Measure Azami-compatible primary and extended traits
+        run: |
+          mkdir -p /tmp/primary /tmp/extended
+          python /tmp/azami-code/52_measure_primary_traits_continuous.py \
+            --packet-manifest /tmp/pilot/chapter2_four_taxon_measurement_candidate_manifest_v1.csv \
+            --packet-root /tmp/pilot/images \
+            --out-dir /tmp/primary
+          python /tmp/azami-code/89_measure_extended_continuous_traits.py \
+            --manifest /tmp/pilot/chapter2_four_taxon_measurement_candidate_manifest_v1.csv \
+            --image-root /tmp/pilot/images \
+            --out-dir /tmp/extended
+      - name: Balance by trait-neutral image quality and summarize sister contrasts
+        run: |
+          mkdir -p /tmp/result
+          python analysis/summarize_chapter2_four_taxon_azami_measurement_pilot_v1.py \
+            --manifest /tmp/pilot/chapter2_four_taxon_measurement_candidate_manifest_v1.csv \
+            --primary /tmp/primary/primary_trait_continuous_head_measurements.csv \
+            --extended /tmp/extended/extended_continuous_head_level.csv \
+            --out-dir /tmp/result \
+            --max-balanced-observations-per-taxon 16 \
+            | tee /tmp/result/measurement_pilot.log
+          python - <<'PY'
+          import json
+          import pandas as pd
+          from pathlib import Path
+          root=Path('/tmp/result')
+          x=json.loads((root/'chapter2_four_taxon_azami_measurement_pilot_v1.json').read_text())
+          c=pd.read_csv(root/'chapter2_four_taxon_pairwise_image_contrasts_v1.csv')
+          assert x['balanced_observations_per_taxon'] >= 1
+          assert set(c['system_id']) == {'ARENICOLA_BREVICAULE_IRUMTIENSE','TAIWAN_KAWAKAMII_TATAKAENSE'}
+          assert set(c.loc[c.metric.eq('corolla_lab_chroma'),'system_id']) == set(c['system_id'])
+          print(json.dumps({
+            'balanced_n': x['balanced_observations_per_taxon'],
+            'colour_assay_gate': x['colour_assay_gate'],
+            'architecture_repeated': x['architecture_or_outline_repeated_direction_metrics_after_assay_gate']
+          }, indent=2))
+          PY
+      - name: Upload measurements without redistributing raw images
+        uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-four-taxon-azami-measurement-${{ github.run_id }}
+          path: |
+            /tmp/audit/chapter2_four_taxon_public_image_coverage_v1.csv
+            /tmp/audit/chapter2_four_taxon_public_image_bridge_audit_v1.json
+            /tmp/pilot/chapter2_four_taxon_measurement_candidate_manifest_v1.csv
+            /tmp/pilot/chapter2_four_taxon_measurement_download_failures_v1.csv
+            /tmp/pilot/chapter2_four_taxon_measurement_preparation_v1.json
+            /tmp/primary/primary_trait_continuous_head_measurements.csv
+            /tmp/primary/primary_trait_continuous_quality_summary.csv
+            /tmp/primary/primary_trait_continuous_provenance.json
+            /tmp/extended/extended_continuous_head_level.csv
+            /tmp/extended/extended_continuous_provenance.json
+            /tmp/result/chapter2_four_taxon_balanced_image_measurements_v1.csv
+            /tmp/result/chapter2_four_taxon_pairwise_image_contrasts_v1.csv
+            /tmp/result/chapter2_four_taxon_azami_measurement_pilot_v1.json
+            /tmp/result/measurement_pilot.log
+          if-no-files-found: error
+          retention-days: 90
