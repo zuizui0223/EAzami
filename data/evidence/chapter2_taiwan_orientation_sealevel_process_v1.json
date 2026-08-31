@@ -1,0 +1,43 @@
+{
+  "contract_version": "chapter2_taiwan_orientation_sealevel_process_v1",
+  "source_workflow_run": 33357784206,
+  "source_artifact_id": 9745679197,
+  "event_window_ma": [0.47, 0.79],
+  "source": {
+    "dataset": "Spratt and Lisiecki 2016 global sea-level stack",
+    "dataset_doi": "10.25921/rd66-5820",
+    "publication_doi": "10.5194/cp-12-1079-2016",
+    "series": "SeaLev_longPC1",
+    "coverage_ka": [0, 798]
+  },
+  "event_window": {
+    "n_points": 321,
+    "mean_m": -47.524579439252335,
+    "sd_m": 26.556448402896443,
+    "range_m": 108.32000000000001,
+    "minimum_m": -114.62,
+    "maximum_m": -6.3,
+    "mean_abs_1k_change_m": 3.1268437500000004,
+    "max_abs_1k_change_m": 22.0,
+    "endpoint_abs_change_m": 28.090000000000003
+  },
+  "duration_matched_percentiles": {
+    "sd_m": 0.013541666666666667,
+    "range_m": 0.090625,
+    "mean_abs_1k_change_m": 0.15104166666666666,
+    "max_abs_1k_change_m": 0.4864583333333333,
+    "endpoint_abs_change_m": 0.35104166666666664
+  },
+  "n_matched_windows": 479,
+  "decision": {
+    "global_sealevel_dynamism": "not_elevated",
+    "interpretation": "The 0.79-0.47 Ma orientation branch is not embedded in an unusually volatile global sea-level interval relative to same-duration windows in the 0-798 ka stack. This weakens a simple high-sea-level-volatility trigger for this local event, while leaving local connectivity scenarios unresolved because no bathymetric/geological threshold is imposed.",
+    "role": "range-reorganization exposure context only; not a selective-pressure test"
+  },
+  "claim_boundary": [
+    "global sea level is not a local Ryukyu/Taiwan connectivity model",
+    "sea-level variability is an exposure-opportunity context, not a selective agent",
+    "overlapping duration-matched windows are a descriptive temporal reference, not independent replicates",
+    "one dated orientation branch cannot identify a general distribution-trigger mechanism"
+  ]
+}
