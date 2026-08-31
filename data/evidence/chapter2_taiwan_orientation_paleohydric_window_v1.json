@@ -1,20 +1,18 @@
 {
   "contract_version": "chapter2_taiwan_orientation_paleohydric_window_v1",
-  "scope": "public-data local dated sensitivity; not full Japan38 T3",
+  "scope": "public-data restricted-six-taxon descendant-lineage sensitivity; not primary event-origin T3 after Japanese-core chronology refinement",
   "source_workflow_run": 33352170324,
   "source_artifact_id": 9744020796,
   "source_artifact_sha256": "1b8a623d2f35b1ca828d96211cf730109e83b407e7f36814a83b47bf9e96608a",
   "trait_state_basis": {
     "Arenicola": {"Cirsium brevicaule": "U", "Cirsium irumtiense": "U"},
-    "Nipponocirsium": {"Cirsium morii": "U", "Cirsium pengii": "D", "Cirsium kawakamii": "D", "Cirsium tatakaense": "D"}
+    "restricted_Nipponocirsium": {"Cirsium morii": "U", "Cirsium pengii": "D", "Cirsium kawakamii": "D", "Cirsium tatakaense": "D"}
   },
   "dated_scaffold": {
-    "arenicola_nipponocirsium_root_ma": 1.02,
-    "arenicola_pair_ma": 0.93,
-    "nipponocirsium_parent_morii_split_ma": 0.79,
-    "taiwan_trio_crown_ma": 0.47,
-    "terminal_pair_ma": 0.35,
-    "minimum_orientation_transition_window_ma": [0.47, 0.79]
+    "restricted_six_taxon_window_ma": [0.47, 0.79],
+    "status": "conditional_on_omitting_public_Japanese_core_Nipponocirsium",
+    "chronology_refinement": "Public Japanese core Nipponocirsium are nodding and split from the Taiwan core at ~0.74 Ma. Cross-study reconciliation therefore moves the parsimonious U->D transition deeper, after the ~0.79 Ma C. morii split and before the ~0.74 Ma Japanese-Taiwan core split. Because these node ages come from separate dated analyses with overlapping marginal intervals, 0.74-0.79 Ma is a central-age sensitivity, not a joint posterior branch interval.",
+    "consequence": "Taiwan 0.79-0.47 Ma palaeoclimate is retained as a descendant-lineage/restricted-tree sensitivity and must not be described as the unique environment of orientation origin."
   },
   "paleolocation": {"region": "Taiwan regional grid uncertainty", "lat_min": 21.5, "lat_max": 25.6, "lon_min": 119.0, "lon_max": 122.5},
   "BIO12": {
@@ -28,11 +26,11 @@
     "n_matched_windows":469
   },
   "decision": {
-    "BIO12_historical_variability": "not_unusually_high",
-    "BIO15_historical_variability": "not_unusually_high",
+    "BIO12_historical_variability": "not_unusually_high_in_restricted_Taiwan_sensitivity",
+    "BIO15_historical_variability": "not_unusually_high_in_restricted_Taiwan_sensitivity",
     "BIO15_net_change": "upper_tail_but_below_predeclared_0.95_gate",
-    "interpretation": "The local U-to-D orientation event is not embedded in an exceptionally variable annual-precipitation or precipitation-seasonality window under the duration-matched 5-Myr climate-window comparison. BIO15 absolute net change is comparatively large (92.66th percentile), motivating a predeclared directional-change test rather than promotion to historical hydric alignment.",
-    "tier": "T2_retained_local_T3_not_passed"
+    "interpretation": "Within the restricted Taiwan descendant-lineage sensitivity, no exceptional annual-precipitation or precipitation-seasonality variability is detected. This result cannot be promoted to the actual orientation-origin environment after public Japanese core Nipponocirsium shift the parsimonious transition deeper and render the transition paleolocation unresolved.",
+    "tier": "restricted_sensitivity_only_primary_T3_not_evaluable"
   },
-  "claim_boundary": "This single public dated sensitivity does not generalize to all 4-6 Japan38 orientation changes and does not establish historical rainfall causation, adaptation or convergence."
+  "claim_boundary": "Do not generalize this restricted-tree result to the actual U->D origin, all 4-6 Japan38 changes, historical rainfall causation, adaptation or convergence."
 }
