@@ -1,0 +1,67 @@
+{
+  "contract_version": "chapter2_orientation_origin_envelope_v1",
+  "status_date": "2026-08-31",
+  "purpose": "Propagate the public cross-study age and paleolocation uncertainty surrounding the core-Nipponocirsium erect-to-nodding transition instead of treating the restricted Taiwan 0.79-0.47 Ma descendant branch as the unique origin event.",
+  "trait_event": {
+    "trait": "capitulum_orientation",
+    "ancestral_state": "erect_or_upward",
+    "descendant_state": "nodding_or_downward",
+    "topological_constraint": "after the erect Cirsium morii split and before the Japanese-core versus Taiwan-core Nipponocirsium split",
+    "source_logic": "Public cross-study reconciliation places the minimum transition on the core-Nipponocirsium stem; the two node ages come from separate analyses and are not a joint posterior."
+  },
+  "chronology_scenarios": {
+    "parent_node": {
+      "label": "Cirsium morii versus core Nipponocirsium split",
+      "central_ma": 0.79,
+      "lower_ma": 0.43,
+      "upper_ma": 1.18,
+      "interval_type": "published marginal 95 percent HPD"
+    },
+    "child_node": {
+      "label": "Japanese-core versus Taiwan-core Nipponocirsium split",
+      "central_ma": 0.74,
+      "lower_ma": 0.60,
+      "upper_ma": 0.87,
+      "interval_type": "published marginal 95 percent confidence interval"
+    },
+    "enumeration": "Use a deterministic rectangular age grid over both marginal intervals, retain only parent_age > child_age and duration >= 10 kyr, and add the central pair exactly.",
+    "interpretation": "The retained grid is an uncertainty/scenario envelope, not posterior samples and not a probability distribution."
+  },
+  "paleolocation_scenarios": {
+    "taiwan": {"lat_min": 21.5, "lat_max": 25.6, "lon_min": 119.0, "lon_max": 122.5},
+    "ryukyu_corridor": {"lat_min": 24.0, "lat_max": 31.5, "lon_min": 122.5, "lon_max": 131.5},
+    "southern_japan": {"lat_min": 29.5, "lat_max": 35.5, "lon_min": 128.0, "lon_max": 136.5},
+    "east_asia_core_corridor": {"lat_min": 21.5, "lat_max": 35.5, "lon_min": 119.0, "lon_max": 136.5}
+  },
+  "environment": {
+    "source": "PALEO-PGEM-Series public mean fields",
+    "variables": ["BIO1", "BIO4", "BIO12", "BIO15"],
+    "reason": "Exact shared environmental dimensions with the frozen Azami orientation state-space vector.",
+    "azami_standardized_orientation_vector": {
+      "BIO1": -0.0302378798369909,
+      "BIO4": -0.1177993887302003,
+      "BIO12": 0.3043592858977514,
+      "BIO15": 0.0670043446773373
+    },
+    "azami_source": "zuizui0223/azami@03ed29f1f476ca0d0a1ea8e14e75cb0050a213ef manuscript/tables/v2_submission/Table_S5_v2_complete_among_taxon_environment_atlas.csv"
+  },
+  "estimands": {
+    "branch_trajectory": "young-node regional median minus old-node regional median for every valid chronology and paleolocation scenario",
+    "background_standardization": "z score relative to all same-duration windows stepped every 10 kyr within the same region and environmental variable",
+    "state_trajectory_concordance": "cosine similarity between the frozen Azami beta vector and the four-variable background-standardized branch trajectory",
+    "direction_agreement": "fraction of scenario trajectories whose environmental direction agrees with the corresponding Azami beta sign",
+    "robustness": "summaries across all chronology pairs and all predeclared paleolocation scenarios"
+  },
+  "decision_rules": {
+    "robust_concordance": "all paleolocation scenarios have cosine 5th percentile above zero and at least half of scenario-specific null percentiles are >= 0.95",
+    "robust_discordance": "all paleolocation scenarios have cosine 95th percentile below zero and at least half of scenario-specific null percentiles are <= 0.05",
+    "otherwise": "origin trajectory unresolved under public chronology and paleolocation uncertainty"
+  },
+  "claim_boundary": [
+    "The chronology grid is not a joint posterior and its rows are not independent replicates.",
+    "The regional boxes are paleolocation scenarios, not reconstructed ancestral-area probabilities.",
+    "A branch-endpoint trajectory does not identify the exact environmental state at the unknown transition instant.",
+    "Concordance does not establish selection, adaptation or convergence.",
+    "Discordance does not prove the present environmental association is non-adaptive; it can reflect origin-maintenance decoupling, range sorting, or unresolved ancestry."
+  ]
+}
