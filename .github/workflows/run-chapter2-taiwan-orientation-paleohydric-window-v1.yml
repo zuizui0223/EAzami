@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "analysis/run_chapter2_taiwan_orientation_paleohydric_window_v1.py"
+      - "analysis/run_chapter2_taiwan_orientation_directional_sensitivity_v1.py"
       - ".github/workflows/run-chapter2-taiwan-orientation-paleohydric-window-v1.yml"
   workflow_dispatch:
 
@@ -27,19 +28,21 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install numpy pandas xarray netCDF4
-          python -m py_compile analysis/run_chapter2_taiwan_orientation_paleohydric_window_v1.py
-      - name: Download public PALEO-PGEM BIO12/BIO15 mean fields
+          python -m py_compile analysis/run_chapter2_taiwan_orientation_paleohydric_window_v1.py analysis/run_chapter2_taiwan_orientation_directional_sensitivity_v1.py
+      - name: Download public PALEO-PGEM BIO12/BIO15/BIO1 mean fields
         run: |
           set -euo pipefail
           mkdir -p /tmp/paleo
           base="https://zenodo.org/records/21327244/files"
           for f in \
             PALEO-PGEM-Series_bio12_mean.nc \
-            PALEO-PGEM-Series_bio15_mean.nc; do
+            PALEO-PGEM-Series_bio15_mean.nc \
+            PALEO-PGEM-Series_bio1_mean.nc; do
             curl --fail --location --retry 5 --retry-delay 5 "${base}/${f}?download=1" -o "/tmp/paleo/${f}"
           done
           echo 'b029ef3f40d666e3d96ec1d9f42bef54  /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc' | md5sum -c -
           echo 'f4c8d91815816f42959b90d512ac8b8e  /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc' | md5sum -c -
+          echo '570e4b746e0b9c0cf82a2a5f85a6cff9  /tmp/paleo/PALEO-PGEM-Series_bio1_mean.nc' | md5sum -c -
       - name: Run Taiwan dated paleohydric window sensitivity
         run: |
           mkdir -p /tmp/result
@@ -47,19 +50,25 @@ jobs:
             --bio12-mean /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc \
             --bio15-mean /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc \
             --out /tmp/result/chapter2_taiwan_orientation_paleohydric_window_v1.json \
-            | tee /tmp/result/run.log
+            | tee /tmp/result/paleohydric.log
+          python analysis/run_chapter2_taiwan_orientation_directional_sensitivity_v1.py \
+            --bio12 /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc \
+            --bio15 /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc \
+            --bio1 /tmp/paleo/PALEO-PGEM-Series_bio1_mean.nc \
+            --out /tmp/result/chapter2_taiwan_orientation_directional_sensitivity_v1.json \
+            | tee /tmp/result/directional.log
           python - <<'PY'
           import json
           from pathlib import Path
-          p=Path('/tmp/result/chapter2_taiwan_orientation_paleohydric_window_v1.json')
-          d=json.loads(p.read_text())
-          assert d['dated_scaffold']['minimum_orientation_transition_window_ma']==[0.47,0.79]
-          assert d['BIO12']['n_matched_windows'] > 100
-          assert d['BIO15']['n_matched_windows'] > 100
-          for v in ('BIO12','BIO15'):
-              for x in d[v]['duration_matched_5myr_percentiles'].values():
-                  assert 0 < x <= 1
-          print(json.dumps({v:d[v]['duration_matched_5myr_percentiles'] for v in ('BIO12','BIO15')},indent=2))
+          h=json.loads(Path('/tmp/result/chapter2_taiwan_orientation_paleohydric_window_v1.json').read_text())
+          d=json.loads(Path('/tmp/result/chapter2_taiwan_orientation_directional_sensitivity_v1.json').read_text())
+          assert h['dated_scaffold']['minimum_orientation_transition_window_ma']==[0.47,0.79]
+          assert h['BIO12']['n_matched_windows'] > 100 and h['BIO15']['n_matched_windows'] > 100
+          assert d['event_window_ma']==[0.47,0.79]
+          for v in ('BIO12','BIO15','BIO1'):
+              assert d[v]['n_matched_windows'] > 100
+              assert 0 < d[v]['signed_percentile'] <= 1
+          print(json.dumps({'hydric_percentiles':{v:h[v]['duration_matched_5myr_percentiles'] for v in ('BIO12','BIO15')},'directional':{v:d[v] for v in ('BIO12','BIO15','BIO1')}},indent=2))
           PY
       - uses: actions/upload-artifact@v4
         with:
