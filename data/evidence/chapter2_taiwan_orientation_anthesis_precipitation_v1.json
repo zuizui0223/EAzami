@@ -1,0 +1,109 @@
+{
+  "contract_version": "chapter2_taiwan_orientation_anthesis_precipitation_v1",
+  "source_workflow_run": 33358152401,
+  "source_artifact_id": 9745882201,
+  "source_artifact_sha256": "73b8e787a026dbc5a49b0e6a66da5e15696eb22cde2a1d3ba841d39dd792a7ce",
+  "scope": "public descendant-clade phenology sensitivity for the 0.79-0.47 Ma U->D branch",
+  "phenology_basis": {
+    "Cirsium pengii": "Aug-Nov",
+    "Cirsium kawakamii": "Sep-Oct",
+    "Cirsium tatakaense": "Aug-Oct",
+    "shared_intersection": "Sep-Oct",
+    "union_envelope": "Aug-Nov",
+    "ancestral_phenology_status": "not reconstructed"
+  },
+  "expected_if_rain_exposure_concordant": "positive young-minus-old precipitation is directionally compatible with the present Azami higher-BIO12 -> downward orientation association; extremeness and paleolocation robustness are evaluated separately",
+  "shared_sep_oct": {
+    "label": "shared descendant D-clade Sep-Oct precipitation",
+    "months": [9, 10],
+    "event_window": {
+      "young_ka": 470.0,
+      "old_ka": 790.0,
+      "n_kyr": 320,
+      "mean": 409.67406339645385,
+      "sd_time": 31.180009175584406,
+      "range_time": 144.4000244140625,
+      "net_change_abs": 59.89996337890625,
+      "mean_abs_1k_change": 10.775861686299962,
+      "max_abs_1k_change": 47.399993896484375,
+      "median_spatial_iqr": 412.40000915527344
+    },
+    "directional_change_young_minus_old": 32.5999755859375,
+    "directional_background": {
+      "mean": 0.08528869238489473,
+      "sd": 51.035489129336234,
+      "z": 0.6370995448118965,
+      "signed_percentile": 0.7287234042553191,
+      "n_windows": 469
+    },
+    "duration_matched_percentiles": {
+      "sd_time": 0.42872340425531913,
+      "range_time": 0.1351063829787234,
+      "net_change_abs": 0.7457446808510638,
+      "mean_abs_1k_change": 0.4478723404255319,
+      "max_abs_1k_change": 0.7968085106382978
+    },
+    "cellwise_endpoint_delta": {
+      "n_cells": 15,
+      "median": 28.500030517578125,
+      "q05": 14.210002136230468,
+      "q95": 32.69000244140625,
+      "fraction_positive": 1.0,
+      "fraction_negative": 0.0,
+      "fraction_zero": 0.0
+    },
+    "regional_spatial_iqr_over_temporal_sd": 13.226423598303635
+  },
+  "envelope_aug_nov": {
+    "label": "descendant D-clade Aug-Nov phenology envelope precipitation",
+    "months": [8, 9, 10, 11],
+    "event_window": {
+      "young_ka": 470.0,
+      "old_ka": 790.0,
+      "n_kyr": 320,
+      "mean": 822.2040615081787,
+      "sd_time": 55.044293015241216,
+      "range_time": 253.70001220703125,
+      "net_change_abs": 60.30010986328125,
+      "mean_abs_1k_change": 16.21097404456064,
+      "max_abs_1k_change": 58.5999755859375,
+      "median_spatial_iqr": 647.3999862670898
+    },
+    "directional_change_young_minus_old": 37.5,
+    "directional_background": {
+      "mean": 0.42643715018656714,
+      "sd": 91.47242540299838,
+      "z": 0.40529769147892514,
+      "signed_percentile": 0.6648936170212766,
+      "n_windows": 469
+    },
+    "duration_matched_percentiles": {
+      "sd_time": 0.4563829787234043,
+      "range_time": 0.3776595744680851,
+      "net_change_abs": 0.4648936170212766,
+      "mean_abs_1k_change": 0.4797872340425532,
+      "max_abs_1k_change": 0.31382978723404253
+    },
+    "cellwise_endpoint_delta": {
+      "n_cells": 15,
+      "median": 37.50000762939453,
+      "q05": 19.569995498657228,
+      "q95": 42.21999282836914,
+      "fraction_positive": 1.0,
+      "fraction_negative": 0.0,
+      "fraction_zero": 0.0
+    },
+    "regional_spatial_iqr_over_temporal_sd": 11.761437031952273
+  },
+  "decision": {
+    "direction": "positive in all 15 Taiwan cells for both descendant flowering-season definitions",
+    "extremeness": "neither directional change nor temporal variability passes a predeclared 0.95 tail criterion",
+    "interpretation": "compatible with present rain-exposure sorting, but not evidence that the restricted branch experienced an exceptional flowering-season precipitation trajectory"
+  },
+  "claim_boundary": [
+    "current descendant phenology is not ancestral phenology",
+    "monthly palaeoprecipitation is a climatic exposure proxy, not measured rain-on-capitula",
+    "one local event cannot establish historical rain selection or adaptation",
+    "cross-study chronology refinement means this restricted Taiwan branch is not the unique orientation-origin branch"
+  ]
+}

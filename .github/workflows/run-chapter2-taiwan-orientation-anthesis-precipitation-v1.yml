@@ -1,0 +1,67 @@
+name: Run Chapter 2 Taiwan orientation anthesis precipitation v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_chapter2_taiwan_orientation_anthesis_precipitation_v1.py"
+      - "data/evidence/chapter2_public_phenology_registry_v1.csv"
+      - ".github/workflows/run-chapter2-taiwan-orientation-anthesis-precipitation-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  anthesis-precipitation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas xarray netCDF4
+          python -m py_compile analysis/run_chapter2_taiwan_orientation_anthesis_precipitation_v1.py
+      - name: Download public PALEO-PGEM monthly precipitation
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/paleo
+          base="https://zenodo.org/records/21327244/files"
+          for m in 08 09 10 11; do
+            f="PALEO-PGEM-Series_monthly_precipitation${m}_mean.nc"
+            curl --fail --location --retry 5 --retry-delay 5 "${base}/${f}?download=1" -o "/tmp/paleo/${f}"
+          done
+          echo 'd3ea96e842e12870e377c614de3a6a6b  /tmp/paleo/PALEO-PGEM-Series_monthly_precipitation08_mean.nc' | md5sum -c -
+          echo 'bd1403a761ccd3543311e5c32d7f14df  /tmp/paleo/PALEO-PGEM-Series_monthly_precipitation09_mean.nc' | md5sum -c -
+          echo 'c890f7112c26c58c01eb71ef8e8baeb6  /tmp/paleo/PALEO-PGEM-Series_monthly_precipitation10_mean.nc' | md5sum -c -
+          echo 'f44e4283a45abcd518e9e10057b8022d  /tmp/paleo/PALEO-PGEM-Series_monthly_precipitation11_mean.nc' | md5sum -c -
+      - name: Run anthesis-window test
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/result
+          python analysis/run_chapter2_taiwan_orientation_anthesis_precipitation_v1.py \
+            --m8 /tmp/paleo/PALEO-PGEM-Series_monthly_precipitation08_mean.nc \
+            --m9 /tmp/paleo/PALEO-PGEM-Series_monthly_precipitation09_mean.nc \
+            --m10 /tmp/paleo/PALEO-PGEM-Series_monthly_precipitation10_mean.nc \
+            --m11 /tmp/paleo/PALEO-PGEM-Series_monthly_precipitation11_mean.nc \
+            --out /tmp/result/chapter2_taiwan_orientation_anthesis_precipitation_v1.json \
+            | tee /tmp/result/anthesis_precipitation.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/result/chapter2_taiwan_orientation_anthesis_precipitation_v1.json').read_text())
+          assert x['phenology_basis']['shared_intersection']=='Sep-Oct'
+          assert x['phenology_basis']['union_envelope']=='Aug-Nov'
+          for k in ('shared_sep_oct','envelope_aug_nov'):
+              assert x[k]['directional_background']['n_windows'] > 100
+              assert x[k]['cellwise_endpoint_delta']['n_cells'] > 0
+              assert 0 < x[k]['directional_background']['signed_percentile'] <= 1
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-taiwan-orientation-anthesis-precipitation-${{ github.run_id }}
+          path: /tmp/result
+          if-no-files-found: error

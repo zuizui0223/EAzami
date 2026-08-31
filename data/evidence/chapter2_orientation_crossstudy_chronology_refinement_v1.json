@@ -1,0 +1,50 @@
+{
+  "contract_version": "chapter2_orientation_crossstudy_chronology_refinement_v1",
+  "status_date": "2026-08-31",
+  "question": "Does adding the public Japanese core Nipponocirsium sample change the placement of the orientation transition inferred on the restricted six-taxon East-Asian scaffold?",
+  "source_observations": {
+    "Cirsium_morii_orientation": "erect",
+    "Cirsium_morii_phylogenetic_position": "early-diverging member of subsect. Nipponocirsium in Chang et al. 2026",
+    "Cirsium_morii_split_central_ma": 0.79,
+    "Cirsium_morii_split_marginal_95_hpd_ma": [0.43, 1.18],
+    "Japanese_core_Nipponocirsium_taxa": [
+      "Cirsium kujuense",
+      "Cirsium suffultum",
+      "Cirsium nipponicum var. incomptum"
+    ],
+    "Japanese_core_orientation": "nodding by subsection diagnostic morphology",
+    "Taiwan_core_taxa": ["Cirsium pengii", "Cirsium kawakamii", "Cirsium tatakaense"],
+    "Taiwan_core_orientation": "nodding",
+    "Japanese_Taiwan_core_split_central_ma": 0.74,
+    "Japanese_Taiwan_core_split_marginal_95_ci_ma": [0.60, 0.87]
+  },
+  "restricted_six_taxon_inference": {
+    "window_ma": [0.47, 0.79],
+    "status": "conditional_only",
+    "reason": "With Japanese core Nipponocirsium omitted, C. morii is the erect sister to the three nodding Taiwan tips, so minimum change is placed on the Taiwan-trio stem."
+  },
+  "crossstudy_refined_inference": {
+    "synthetic_topology": "C. morii(U) sister to core Nipponocirsium, with Japanese core(D) sister to Taiwan core(D)",
+    "minimum_transition_placement": "stem of core Nipponocirsium after the C. morii split and before the Japanese-Taiwan core split",
+    "central_estimate_window_ma": [0.74, 0.79],
+    "status": "chronology_refinement_only",
+    "uncertainty": "The 0.79 and 0.74 Ma estimates come from separate dated analyses. Their marginal uncertainty intervals overlap and cannot be combined as a joint posterior branch interval."
+  },
+  "environmental_consequence": {
+    "actual_transition_paleolocation": "unresolved before Japanese-Taiwan core divergence",
+    "Taiwan_0_79_0_47_paleoclimate_runs": "retain as restricted-tree descendant-lineage sensitivities, not as the unique historical transition environment",
+    "primary_T3_status": "not_evaluable until a joint chronology/paleolocation scenario can be defended from public data",
+    "biological_value": "The taxon-sampling shift itself demonstrates why present geographic descendants cannot be assumed to identify the geographic setting of trait origin."
+  },
+  "sources": [
+    "Chang et al. 2026, BMC Plant Biology, DOI 10.1186/s12870-026-08097-6",
+    "Chang et al. 2025, Botanical Studies, DOI 10.1186/s40529-025-00454-2",
+    "Flora of Taiwan treatment of Cirsium morii"
+  ],
+  "claim_boundary": [
+    "The synthetic cross-study topology is a reconciliation sensitivity, not a single published dated tree.",
+    "Do not treat 0.74-0.79 Ma as a posterior event-age credible interval.",
+    "Do not assign Taiwan palaeoclimate to the transition after public Japanese core taxa are included.",
+    "Do not call independent origin, convergence, selection or adaptation from this refinement."
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "contract_version": "chapter2_public_explanatory_depth_summary_v1",
+  "status_date": "2026-08-31",
+  "scope": "Public-data-only explanatory-depth summary before Chapter 3; restricted Taiwan palaeoclimate is a descendant-lineage sensitivity after cross-study chronology refinement.",
+  "provenance": {
+    "environment_workflow_run": 33358152394,
+    "environment_artifact_id": 9745976648,
+    "environment_artifact_sha256": "64fe06b51e548f8ddcb64fa83a207d42dd20141fdbcd58da40e082501e85403a",
+    "anthesis_workflow_run": 33358152401,
+    "anthesis_artifact_id": 9745882201,
+    "anthesis_artifact_sha256": "73b8e787a026dbc5a49b0e6a66da5e15696eb22cde2a1d3ba841d39dd792a7ce",
+    "sea_level_workflow_run": 33357784206,
+    "sea_level_artifact_id": 9745679197
+  },
+  "evolutionary_depth": {
+    "orientation": {
+      "minimum_changes": "4-6 across Japan38 UFBoot",
+      "relative_depth": "mixed internal-to-terminal",
+      "calendar_constraint": "cross-study core-Nipponocirsium stem after C. morii and before Japanese-Taiwan core split; central estimates 0.79-0.74 Ma are not a joint interval",
+      "paleolocation": "unresolved"
+    },
+    "phyllary_posture": {
+      "minimum_changes": 3,
+      "timing": "relative only",
+      "driver": "unidentified"
+    },
+    "stickiness": {
+      "minimum_changes": 5,
+      "timing": "strongly shallow/terminal-biased relative history",
+      "driver": "unresolved, potentially biotic/local"
+    },
+    "flower_colour": {
+      "dated_local_events": [
+        "C. brevicaule C->W, 0-0.93 Ma terminal envelope",
+        "C. kawakamii C->W, 0-0.47 Ma topology-union terminal envelope"
+      ],
+      "global_space_bridge": "Azami RSDS-chroma negative",
+      "historical_driver_status": "not directly evaluable because no commensurate surface-RSDS history and population colour is not lineage-fixed"
+    }
+  },
+  "restricted_taiwan_orientation_sensitivity": {
+    "window_ma": [
+      0.47,
+      0.79
+    ],
+    "status": "not the unique origin-event environment after Japanese-core taxon addition",
+    "state_trajectory": {
+      "cosine_similarity": 0.059383853324142886,
+      "null_percentile": 0.5180851063829788,
+      "wet_minus_dry_signed_percentile": 0.5968085106382979,
+      "wet_minus_dry_absolute_percentile": 0.6074468085106383
+    },
+    "directional_results": {
+      "BIO12": {
+        "young_minus_old": 60.300048828125,
+        "signed_percentile": 0.6117021276595744,
+        "interpretation": "positive and compatible with Azami direction, but typical"
+      },
+      "BIO15": {
+        "young_minus_old": -6.657001495361328,
+        "signed_percentile": 0.05,
+        "interpretation": "decrease, opposite present D-high niche; paleolocation signs mixed"
+      },
+      "BIO1": {
+        "young_minus_old": 0.3419990539550781,
+        "signed_percentile": 0.6797872340425531,
+        "interpretation": "warming, opposite present D-cooler niche"
+      }
+    },
+    "anthesis_precipitation": {
+      "phenology_basis": {
+        "Cirsium pengii": "Aug-Nov",
+        "Cirsium kawakamii": "Sep-Oct",
+        "Cirsium tatakaense": "Aug-Oct",
+        "shared_intersection": "Sep-Oct",
+        "union_envelope": "Aug-Nov",
+        "ancestral_phenology_status": "not reconstructed"
+      },
+      "Sep_Oct": {
+        "young_minus_old": 32.5999755859375,
+        "signed_percentile": 0.7287234042553191,
+        "net_change_percentile": 0.7457446808510638,
+        "cellwise_fraction_positive": 1.0,
+        "spatial_iqr_over_temporal_sd": 13.226423598303635
+      },
+      "Aug_Nov": {
+        "young_minus_old": 37.5,
+        "signed_percentile": 0.6648936170212766,
+        "net_change_percentile": 0.4648936170212766,
+        "cellwise_fraction_positive": 1.0,
+        "spatial_iqr_over_temporal_sd": 11.761437031952273
+      },
+      "decision": "directionally compatible rainfall increase across all Taiwan cells, but not exceptional versus same-duration windows; current descendant flowering months are not ancestral phenology"
+    },
+    "sea_level": {
+      "window_sd_percentile": 0.013541666666666667,
+      "window_range_percentile": 0.090625,
+      "decision": "not an unusually volatile global sea-level interval; no local land-bridge claim"
+    }
+  },
+  "process_model_status": {
+    "ST1_persistent_driver": "not supported by the restricted Taiwan test and not evaluable for the refined origin branch because paleolocation is unresolved",
+    "ST2_origin_maintenance_decoupling": "plausible but not demonstrated",
+    "ST3_driver_switching_selection_mosaic": "plausible but requires multiple dated, located events"
+  },
+  "public_data_ceiling": "Public data resolve recurrence and relative depth broadly, local calendar constraints for selected events, and present-space ecological correspondence. They do not yet jointly identify the exact origin location, event-specific selective pressure, mechanism, or fitness effect.",
+  "chapter3_handoff": "Use ancestry-linked population samples to calibrate phenotype, actual flowering-season exposure, mechanism/mediator and reproductive fitness; prioritize orientation-hydric and colour-radiation hypotheses while explicitly testing origin-maintenance decoupling."
+}

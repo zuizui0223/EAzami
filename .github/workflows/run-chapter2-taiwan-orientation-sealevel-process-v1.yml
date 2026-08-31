@@ -1,0 +1,54 @@
+name: Run Chapter 2 Taiwan orientation sea-level process v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_chapter2_taiwan_orientation_sealevel_process_v1.py"
+      - ".github/workflows/run-chapter2-taiwan-orientation-sealevel-process-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sea-level-process:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas
+          python -m py_compile analysis/run_chapter2_taiwan_orientation_sealevel_process_v1.py
+      - name: Download NOAA Spratt-Lisiecki sea-level stack
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/public /tmp/result
+          curl --fail --location --retry 5 \
+            'https://www.ncei.noaa.gov/pub/data/paleo/contributions_by_author/spratt2016/spratt2016-noaa.txt' \
+            -o /tmp/public/spratt2016-noaa.txt
+          grep -q 'SeaLev_longPC1' /tmp/public/spratt2016-noaa.txt
+      - name: Run range-process sensitivity
+        run: |
+          python analysis/run_chapter2_taiwan_orientation_sealevel_process_v1.py \
+            --noaa /tmp/public/spratt2016-noaa.txt \
+            --out /tmp/result/chapter2_taiwan_orientation_sealevel_process_v1.json \
+            | tee /tmp/result/sealevel_process.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/result/chapter2_taiwan_orientation_sealevel_process_v1.json').read_text())
+          assert x['event_window_ma']==[0.47,0.79]
+          assert x['n_matched_windows'] > 100
+          assert x['source']['series']=='SeaLev_longPC1'
+          for v in x['duration_matched_percentiles'].values():
+              assert 0 < v <= 1
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-taiwan-orientation-sealevel-process-${{ github.run_id }}
+          path: /tmp/result
+          if-no-files-found: error
