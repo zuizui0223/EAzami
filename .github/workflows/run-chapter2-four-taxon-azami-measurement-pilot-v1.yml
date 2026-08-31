@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "analysis/prepare_chapter2_four_taxon_public_image_measurement_pilot_v1.py"
+      - "analysis/build_chapter2_trait_neutral_head_crops_v1.py"
       - "analysis/summarize_chapter2_four_taxon_azami_measurement_pilot_v1.py"
       - "analysis/audit_chapter2_four_taxon_public_image_bridge_v1.py"
       - ".github/workflows/run-chapter2-four-taxon-azami-measurement-pilot-v1.yml"
@@ -32,6 +33,7 @@ jobs:
           python -m py_compile \
             analysis/audit_chapter2_four_taxon_public_image_bridge_v1.py \
             analysis/prepare_chapter2_four_taxon_public_image_measurement_pilot_v1.py \
+            analysis/build_chapter2_trait_neutral_head_crops_v1.py \
             analysis/summarize_chapter2_four_taxon_azami_measurement_pilot_v1.py
       - name: Regenerate current public metadata coverage
         run: |
@@ -59,22 +61,32 @@ jobs:
           curl --fail --location --retry 5 "${base}/89_measure_extended_continuous_traits.py" \
             -o /tmp/azami-code/89_measure_extended_continuous_traits.py
           python -m py_compile /tmp/azami-code/52_measure_primary_traits_continuous.py /tmp/azami-code/89_measure_extended_continuous_traits.py
+      - name: Build trait-neutral head crops
+        run: |
+          mkdir -p /tmp/crop
+          python analysis/build_chapter2_trait_neutral_head_crops_v1.py \
+            --manifest /tmp/pilot/chapter2_four_taxon_measurement_candidate_manifest_v1.csv \
+            --image-root /tmp/pilot/images \
+            --azami-primary-script /tmp/azami-code/52_measure_primary_traits_continuous.py \
+            --out-dir /tmp/crop \
+            --min-crop-dimension 300
+          test -s /tmp/crop/chapter2_four_taxon_trait_neutral_crop_manifest_v1.csv
       - name: Measure Azami-compatible primary and extended traits
         run: |
           mkdir -p /tmp/primary /tmp/extended
           python /tmp/azami-code/52_measure_primary_traits_continuous.py \
-            --packet-manifest /tmp/pilot/chapter2_four_taxon_measurement_candidate_manifest_v1.csv \
-            --packet-root /tmp/pilot/images \
+            --packet-manifest /tmp/crop/chapter2_four_taxon_trait_neutral_crop_manifest_v1.csv \
+            --packet-root /tmp/crop/images \
             --out-dir /tmp/primary
           python /tmp/azami-code/89_measure_extended_continuous_traits.py \
-            --manifest /tmp/pilot/chapter2_four_taxon_measurement_candidate_manifest_v1.csv \
-            --image-root /tmp/pilot/images \
+            --manifest /tmp/crop/chapter2_four_taxon_trait_neutral_crop_manifest_v1.csv \
+            --image-root /tmp/crop/images \
             --out-dir /tmp/extended
       - name: Balance by trait-neutral image quality and summarize sister contrasts
         run: |
           mkdir -p /tmp/result
           python analysis/summarize_chapter2_four_taxon_azami_measurement_pilot_v1.py \
-            --manifest /tmp/pilot/chapter2_four_taxon_measurement_candidate_manifest_v1.csv \
+            --manifest /tmp/crop/chapter2_four_taxon_trait_neutral_crop_manifest_v1.csv \
             --primary /tmp/primary/primary_trait_continuous_head_measurements.csv \
             --extended /tmp/extended/extended_continuous_head_level.csv \
             --out-dir /tmp/result \
@@ -106,6 +118,9 @@ jobs:
             /tmp/pilot/chapter2_four_taxon_measurement_candidate_manifest_v1.csv
             /tmp/pilot/chapter2_four_taxon_measurement_download_failures_v1.csv
             /tmp/pilot/chapter2_four_taxon_measurement_preparation_v1.json
+            /tmp/crop/chapter2_four_taxon_trait_neutral_crop_manifest_v1.csv
+            /tmp/crop/chapter2_four_taxon_trait_neutral_crop_diagnostics_v1.csv
+            /tmp/crop/chapter2_four_taxon_trait_neutral_crop_report_v1.json
             /tmp/primary/primary_trait_continuous_head_measurements.csv
             /tmp/primary/primary_trait_continuous_quality_summary.csv
             /tmp/primary/primary_trait_continuous_provenance.json
