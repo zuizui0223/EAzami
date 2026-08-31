@@ -14,21 +14,21 @@ Chapter 1 (Azami) establishes **breadth across present environmental state space
 
 The ordered evidence chain is:
 
-1. **How many times?** Reconstruct minimum repeated trait changes and propagate topology uncertainty.
-2. **When?** Convert only those transitions with public dated anchors to bounded parent–child calendar windows; retain relative-depth summaries for the full Japan38 history.
+1. **How many times?** Reconstruct minimum repeated trait changes and propagate topology/taxon-sampling uncertainty.
+2. **When?** Convert only transitions with public dated anchors to bounded calendar constraints; retain relative-depth summaries for the full Japan38 history.
 3. **Where/how did lineages move?** Reconstruct or bound dispersal/colonization/fragmentation context and paleolocation uncertainty rather than assigning modern descendant coordinates to ancestral branches.
-4. **What environmental trajectory accompanied the transition?** Measure environmental level, direction, volatility and extremes through each admissible window and compare with duration-/opportunity-matched non-event windows.
-5. **Does the historical trajectory agree with Azami?** Compare the EAzami transition trajectory with the frozen Azami present-day trait–environment vector/domain.
-6. **How strong is the cause candidate?** Promote only drivers that converge across independent evidence layers; retain discordance as evidence for origin–maintenance decoupling or driver switching.
+4. **What environmental trajectory accompanied the transition?** Measure environmental level, direction, volatility and extremes through admissible windows and compare with duration-/opportunity-matched backgrounds.
+5. **Does the historical trajectory agree with Azami?** Compare transition trajectory with the frozen Azami present-day trait–environment vector/domain only when chronology and location refer to the same event.
+6. **How strong is the cause candidate?** Promote only drivers that converge across independent evidence layers; retain discordance and non-identifiability as biological results.
 
 ## What is already resolved
 
 ### Repeated history
 
-- orientation: ML minimum 6; UFBoot minimum 4–6; mixed internal-to-terminal placement.
+- orientation: ML minimum 6; UFBoot minimum 4–6; mixed internal-to-terminal placement on Japan38.
 - phyllary posture: exactly 3 minimum changes across all 1000 UFBoot trees; deeper placements remain admissible.
 - stickiness: exactly 5 minimum changes across all 1000 UFBoot trees; strongly shallow/terminal-biased.
-- continuous colour/outline: no corrected primary phylogenetic-structure support at current Japan coverage; this is unresolved rather than proof of no history.
+- continuous colour/outline: no corrected primary phylogenetic-structure support at current Japan coverage; unresolved rather than proof of no history.
 
 ### Present-space bridge from Azami
 
@@ -39,37 +39,54 @@ Azami uses nine frozen environmental predictors grouped as thermal (BIO1/BIO4), 
 
 ### Present EAzami ecology
 
-For orientation, downward/nodding states occupy higher BIO15 and lower BIO1 present niches with sign stability across accepted topologies and species LOO, while threshold support is source-sensitive. Phyllary and stickiness remain not evaluable with the frozen climate overlap.
+For orientation, downward/nodding states occupy higher BIO15 and lower BIO1 present niches with sign stability across accepted topologies and species LOO, while threshold support is source-sensitive. Present niche is not assumed to reconstruct the environment of trait origin.
 
 ## Public-data chronology strategy
 
-The full Japan38 machine-readable chronogram is not currently public. Therefore the chapter uses a two-level chronology rather than inventing dates.
+The full Japan38 machine-readable chronogram is not public. Chapter 2 therefore combines relative full-history depth with public local/cross-study chronology constraints.
 
 ### Level A — full history, relative time
 
 Use the Japan38 substitutions/site topology ensemble for minimum-change recurrence and topology-derived relative event depth. Do not convert relative depth to Ma.
 
-### Level B — local exact public dated sensitivities
+### Level B1 — restricted six-taxon dated sensitivity
 
-Use published node-age scaffolds only where taxon/clade reconciliation is explicit. A deterministic minimum-history enumerator now identifies three public branch-bounded trait events on the six-taxon East-Asian scaffold:
+The six-taxon East-Asian scaffold contains erect C. morii and three nodding Taiwan core Nipponocirsium. Conditional on that restricted taxon set, one U→D minimum change is forced on the 0.79–0.47 Ma Taiwan-trio stem. This was useful for testing the analysis machinery and descendant-lineage Taiwan palaeoclimate, but it is **not robust to adding the public Japanese core Nipponocirsium taxa**.
 
-1. **ORI_TAIWAN_TRIO_STEM** — orientation U→D forced on the 0.79–0.47 Ma Nipponocirsium lineage in all three frozen topology variants and all minimum histories.
-2. **COL_BREVICAULE_TERMINAL** — coloured→white forced on the C. brevicaule terminal lineage; admissible branch window 0–0.93 Ma.
-3. **COL_KAWAKAMII_TERMINAL** — coloured→white forced on the C. kawakamii terminal lineage; topology-union branch window 0–0.47 Ma.
+### Level B2 — cross-study chronology refinement
 
-These are conditional on the six-taxon public state coding and minimum-change criterion. They do not replace the unresolved Japan38 colour history and they do not identify exact transition instants.
+Chang et al. 2026 places erect C. morii at the base of subsect. Nipponocirsium with a central split age of ~0.79 Ma (95% HPD 0.43–1.18). Chang et al. 2025 shows Japanese core Nipponocirsium and Taiwan core Nipponocirsium as nodding and dates their split to ~0.74 Ma (95% CI 0.60–0.87). Reconciliation therefore moves the parsimonious U→D transition deeper, onto the core-Nipponocirsium stem after C. morii and before the Japanese–Taiwan core split.
+
+Central estimates suggest 0.79–0.74 Ma, but these ages come from separate analyses and their marginal uncertainty intervals overlap. **0.74–0.79 Ma is therefore a cross-study central-age sensitivity, not a joint posterior event interval.** The ancestral geographic setting before the Japanese–Taiwan split is unresolved, so a direct event-level palaeoclimate cause test is currently not evaluable from public data.
+
+This refinement is scientifically important: adding public taxa changes the inferred geographic setting of origin. It demonstrates why current descendant geography cannot safely be substituted for transition geography.
+
+## Public dated colour events
+
+A deterministic minimum-history enumerator on the six-taxon dated scaffold identifies two conditional local coloured→white events:
+
+1. C. brevicaule terminal lineage: 0–0.93 Ma branch envelope.
+2. C. kawakamii terminal lineage: topology-union 0–0.47 Ma branch envelope.
+
+These are branch-bounded minimum-history events, not exact transition dates and not a replacement for the unresolved Japan38 colour history.
+
+In the Taiwanese C. japonicum complex, public phylotranscriptomic data show within-lineage white/bluish-purple polymorphism and reticulation. Species-tip colour coding would erase real population variation. Thus public data themselves define the Chapter 3 sampling requirement: link individual/population colour state to ancestry and environment.
 
 ## Event-by-process registry
 
-`data/evidence/chapter2_public_event_process_registry_v1.csv` separates **trait events** from **biogeographic exposure opportunities**. In addition to the three dated trait events, the registry retains:
+`data/evidence/chapter2_public_event_process_registry_v1.csv` separates trait events from geographic exposure opportunities. It contains:
 
-- the dominant Japanese founder radiation (~2.4 Ma; 1.7–3.6 Ma) as a radiation/exposure context;
-- the separate C. dipsacolepis jump to Japan (~1.0 Ma; 0.4–2.2 Ma) as a process natural experiment on a lineage with a terminal relative stickiness change, without equating jump time and trait-change time;
-- the C. lineare East-Asia→Japan expansion (~1.4 Ma; 0.7–2.7 Ma) as the sticky comparator process context;
-- the Sinocirsium Japan–Taiwan split (~0.44 Ma; 0.31–0.66 Ma) as a distribution-history event for which species-tip colour transitions are explicitly not identifiable;
-- the late-Pleistocene/Holocene var. takaoense demographic contraction–expansion as a published range-history process, not a colour-origin event.
+- restricted-tree and cross-study orientation chronology rows;
+- two local dated colour-history rows;
+- the dominant Japanese founder radiation (~2.4 Ma; 1.7–3.6 Ma) as an exposure/radiation context;
+- C. dipsacolepis separate arrival (~1.0 Ma; 0.4–2.2 Ma) and C. lineare East-Asia→Japan expansion as process contrasts for stickiness, without assigning those range dates to trait changes;
+- Sinocirsium Japan–Taiwan divergence and var. takaoense late-Pleistocene/Holocene demographic history as distribution processes without manufactured colour-origin events.
 
-This prevents the common error `range event = selective cause = trait transition`.
+The intended process model is:
+
+`range reorganization → altered environmental/biotic exposure → trait transition`,
+
+not `range change = selective pressure`.
 
 ## Environmental trajectory design
 
@@ -77,168 +94,116 @@ Do not perform an all-BIOCLIM fishing screen. Use mechanism- and cross-axis-defi
 
 ### Shared Azami × EAzami state–trajectory core
 
-Use BIO1, BIO4, BIO12 and BIO15 because these variables are directly shared by the frozen Azami atlas and PALEO-PGEM. For each dated event window estimate:
+BIO1, BIO4, BIO12 and BIO15 are directly shared by the frozen Azami atlas and PALEO-PGEM. For a defensibly located dated event estimate:
 
-- event-window mean;
-- young-minus-old directional change;
-- absolute net change;
-- temporal SD and range;
-- mean/max absolute 1-kyr change;
-- cellwise sign agreement across the paleolocation uncertainty set;
-- regional spatial IQR / temporal SD;
-- percentile relative to all same-duration background windows.
+- state level;
+- directional change;
+- absolute change;
+- temporal SD/range;
+- mean/max 1-kyr change;
+- paleolocation cellwise sign agreement;
+- regional spatial uncertainty / temporal variation;
+- duration-matched percentile.
 
-Then compare the frozen Azami standardized slope vector β_space with the background-standardized historical environmental change vector ΔE_time using cosine similarity. This is the primary state–trajectory concordance statistic.
+The multivariate summary is cosine similarity between frozen Azami β_space and background-standardized ΔE_time.
 
-### Orientation wetting-mechanism refinement
+### What the restricted Taiwan analysis actually showed
 
-Use BIO13/BIO16 (wettest month/quarter precipitation) as wet-side proxies and BIO14/BIO17 as dry-side controls. A rain/wetting interpretation becomes more specific only if wet-side dynamics are more exceptional than dry-side dynamics under the same null and are robust across plausible Taiwan cells.
+On the restricted 0.79–0.47 Ma Taiwan-trio placement:
 
-### Distribution-process environment layer
+- BIO12 increased but its change/variability was not exceptional;
+- BIO15 absolute change was relatively large (~92.7th percentile) but moved toward lower seasonality, opposite the present D-high BIO15 niche direction, with mixed cellwise signs;
+- BIO1 moved toward warming, opposite the present D-cooler niche direction;
+- the BIO1/BIO4/BIO12/BIO15 state–trajectory cosine was ~0.059 with null percentile ~0.518;
+- wet-side BIO13/BIO16 did not outperform dry-side BIO14/BIO17 controls (~0.60 null percentile).
 
-Treat geographic reorganization separately from climatic selection. Public process data include stochastic biogeographic reconstructions for Japan, published historical SDMs/EBSP for Taiwanese Sinocirsium, and independent Quaternary land/sea-connectivity evidence. These layers can test whether a lineage entered or fragmented across a new exposure regime, but cannot by themselves identify the selective agent.
+These results remain valid **for the restricted-tree Taiwan descendant-lineage sensitivity**, but after the Japanese-core chronology audit they cannot be promoted as the environment of the actual orientation origin.
 
-### Secondary climate analyses
+### Anthesis-window sensitivity
 
-BIO5/6/7 and BIO8–11 may describe thermal extremes/seasonal regimes after the primary families. BIO18/19 are not flowering-season rainfall without a phenology layer.
+Public current phenology for the three Taiwan nodding descendants gives C. pengii Aug–Nov, C. kawakamii Sep–Oct and C. tatakaense Aug–Oct. Sep–Oct is the shared descendant window and Aug–Nov the union envelope. Monthly PALEO-PGEM precipitation is used as a mechanism-oriented sensitivity, not ancestral phenology reconstruction. Because the actual transition is likely deeper than the Taiwan-trio stem, this analysis evaluates whether the descendant lineage's reproductive-season climate is compatible with the present rain-exposure mechanism, not the origin event itself.
 
-### Do not force false equivalents
+### Sea-level process sensitivity
 
-RSDS, VPD, wind, GSP and NPP have no directly commensurate PALEO-PGEM time series. They require separate historical models and must not be presented as direct Azami–EAzami replication.
+The NOAA Spratt–Lisiecki 0–798 ka global sea-level stack provides a separate range-reorganization context. In the restricted 0.79–0.47 Ma window, sea-level temporal SD was only ~1.35th percentile and range ~9.1th percentile among same-duration windows. Thus this interval was not unusually volatile in global sea level. This weakens a simple 'exceptionally strong sea-level oscillation triggered this local transition' story, while local connectivity remains unresolved without a geological/bathymetric threshold.
 
-## Current local orientation result and what it means
+### Do not force false historical equivalents
 
-The public Taiwan 0.79–0.47 Ma U→D sensitivity already rejects a simple assumption that present sorting identifies the transition driver:
-
-- BIO12 increases through the branch, but its change/variability is not exceptional among same-duration 5-Myr windows;
-- BIO15 absolute net change is relatively large (~92.7th percentile) but the regional median changes toward **lower** seasonality, opposite the present D-high BIO15 niche direction, and cellwise signs are mixed;
-- BIO1 moves toward warming, opposite the present D-cooler niche direction, although the cellwise warming sign is robust;
-- the four-dimensional Azami-state vs historical-trajectory cosine is ~0.059 with a ~0.518 null percentile, i.e. no unusual multivariate directional concordance;
-- wet-side BIO13/BIO16 do not outperform dry-side BIO14/BIO17 controls (wet-minus-dry contrast ~0.60 null percentile).
-
-Therefore this local event currently supports **no simple persistent-driver historical hydric alignment**. This does not erase the strong present orientation–hydric correspondence. It motivates the distinction between transition origin and present sorting/maintenance.
-
-## Colour becomes a two-level result, not a missing-data footnote
-
-Public data now support two distinct statements that must remain separate:
-
-1. On the six-taxon dated scaffold, minimum-history reconstruction permits two topology-robust branch-bounded coloured→white events (C. brevicaule and C. kawakamii).
-2. In the Taiwanese C. japonicum complex, published phylotranscriptomic work shows white/bluish-purple polymorphism within var. takaoense and colour variation in var. fukienense, with reticulate signal; therefore species-tip colour coding would erase real within-lineage variation.
-
-This explains why the strong Azami RSDS–chroma spatial pattern cannot simply be translated into a species-level deep-time colour transition test. The public-data ceiling itself predicts the Chapter 3 sampling unit: population/individual-level colour state linked to ancestry and environment.
+RSDS, VPD, wind, GSP and NPP have no directly commensurate PALEO-PGEM time series. Historical orbital/solar forcing or vegetation models may be added only as explicitly separate model layers; they cannot be called replication of Azami surface RSDS/NPP.
 
 ## Three competing process models
 
 ### ST1 — persistent driver
 
-The same environmental domain drives transition and present sorting. Prediction: transition windows move along the Azami-predicted environmental direction more strongly than matched non-event windows and show consistent paleolocation signs.
+The same environmental domain contributes to historical transition and present sorting. Requires defensible event chronology, paleolocation and same-direction historical exposure beyond matched backgrounds.
 
 ### ST2 — origin–maintenance decoupling
 
-Current environment sorts/maintains the phenotype, but the historical transition occurred under a different or nondirectional environmental trajectory. Prediction: strong present association plus typical/opposite transition trajectories.
+Current environment sorts/maintains the phenotype, but historical origin is associated with a different, typical or opposite trajectory.
 
 ### ST3 — driver switching / selection mosaic
 
-Different transitions arrive at similar phenotypes through different environmental or biotic routes. Prediction: different dated events align with different environmental domains; no universal synchronized capitulum history is required.
+Different transitions arrive at similar phenotypes through different environmental or biotic routes.
 
-## Distribution-history process layer
-
-To answer “what happened during range history?”, integrate public biogeographic evidence before environmental interpretation:
-
-1. classify each usable dated event by biogeographic context: dominant Japanese radiation, secondary arrival, Taiwan/East-Asian within-region diversification, island/continental fragmentation where explicitly supported;
-2. retain ancestral-area probability/scenario sets when available; otherwise use bounded regional scenario sets rather than point paleolocations;
-3. test whether transitions cluster around colonization/fragmentation opportunities only when event and lineage dates are independently bounded;
-4. separate **dispersal/fragmentation opportunity** from **environmental selective trajectory**. Range change can create the exposure opportunity without being the selective agent itself.
-
-This makes “distribution change triggered trait change” a testable two-step model:
-
-`range reorganization → new environmental/biotic exposure → trait transition`,
-
-rather than equating dispersal timing with causation.
+At present, the public orientation record is **not yet sufficient to choose ST1 vs ST2/ST3**, because the chronology can be refined but the actual pre-Japan/Taiwan transition paleolocation is unresolved. The restricted Taiwan result is evidence against a naive present-niche-equals-origin assumption, not proof of ST2.
 
 ## Trait-by-trait public-data ceiling
 
 ### Orientation
 
-Highest-priority public-data trait. Full recurrence (4–6), one current public dated event window, present Azami BIO12 sorting, present EAzami BIO15/BIO1 ecology, PALEO-PGEM trajectory tests, and mechanism literature all exist. Continue dated-event recovery and phenology refinement.
+Strongest trait for evolutionary depth: 4–6 repeats on Japan38; erect C. morii plus nodding core Nipponocirsium narrows the likely transition placement in a cross-study reconciliation; Azami BIO12 and EAzami current BIO15/BIO1 provide a strong present hydric bridge. Public data now reveal that **taxon sampling and paleolocation, not climate-series availability, are the main barriers to historical causal attribution**.
 
 ### Colour
 
-Azami spatial evidence is strong for RSDS–chroma. The dated six-taxon scaffold now supplies two local branch-bounded coloured→white minimum-history events, but their terminal windows are broad and no directly equivalent historical surface-RSDS series is available. More importantly, the public Sinocirsium data show lineage-level colour polymorphism/reticulation, so a single species-tip W/C ontology is biologically inadequate for that complex. Public data can therefore establish local repeated colour history plus a population-level identifiability boundary, but not a general historical solar-selection test.
+Azami RSDS–chroma is strong. Public dated scaffold gives two conditional local C→W events, but no directly equivalent historical surface-RSDS series and terminal windows are broad. Sinocirsium colour polymorphism/reticulation shows why population-level ancestry-linked sampling is necessary.
 
 ### Phyllary posture
 
-History is strong (3 repeated changes), but Azami image geometry is not homologous to authority-coded posture and present ecology is not evaluable. Priority is public botanical calibration/homologous posture coverage and range-history context. Driver remains unidentified rather than discordant.
+History is strong (3 repeated changes), but Azami image geometry is not homologous to authority-coded posture and comparable ecology is insufficient. Driver remains unidentified.
 
 ### Stickiness
 
-History is strong and shallow (5 changes), while public generic-defence evidence is mixed/null and no historical enemy series exists. The C. dipsacolepis and C. lineare biogeographic histories provide a useful process contrast, but dispersal ages cannot be assigned as stickiness-transition ages. Use climate only as a negative/alternative explanation, not as a proxy for enemy pressure. The public-data ceiling may be “rapid lineage-specific reassembly with unresolved/possibly biotic driver.”
+History is strong and shallow (5 changes), generic defence evidence is mixed/null, and no historical enemy series exists. C. dipsacolepis/C. lineare range histories are useful process contrasts but cannot date the stickiness transition.
 
 ### Outline/architecture
 
-Present breadth is measurable, but matched time-axis coverage and functional mapping are insufficient. Keep as diversity-depth boundaries rather than manufacture BM/OU results from sparse data.
+Present breadth is measurable, but matched time-axis coverage and functional mapping are insufficient. Keep as a public-data boundary rather than manufacture BM/OU conclusions.
 
 ## Model hierarchy
 
-BM/OU are secondary baselines, not the chapter question.
+BM/OU are secondary baselines, not the chapter question. Use continuous evolutionary models only when adequate matched continuous trait coverage exists. For discrete traits, event/transition models are more aligned with the question. Environment-dependent transition hazard becomes appropriate only after multiple dated and geographically resolved events are available.
 
-- continuous traits: use BM/OU/environment-dependent continuous models only after adequate matched coverage and a valid continuous history estimand exist;
-- discrete traits: prefer event/transition analyses because the question is whether environmental trajectory changes the opportunity/risk of state transition;
-- for multiple dated events, compare constant transition opportunity against environment-dependent transition hazard or matched-event case-control models while propagating branch duration, topology, age and paleolocation uncertainty.
+## Remaining public-data execution before Chapter 3
 
-No model is promoted simply because it has lower AIC; the biological interpretation must remain tied to the space–time evidence ladder.
-
-## Public-data analyses still worth completing before Chapter 3
-
-### P1 — Exhaust dated-event recovery
-
-Continue searching public literature/supplements/raw sequence panels for additional exactly reconciled dated orientation/phyllary/stickiness/colour subclades. The first implementation now yields one orientation and two colour branch-bounded events.
-
-### P2 — Build event-by-process registry
-
-Implemented in `data/evidence/chapter2_public_event_process_registry_v1.csv`; continue adding only source-reconciled rows. Every row separates trait-event certainty from range-process certainty.
-
-### P3 — Run state–trajectory tests across all dated events
-
-Orientation is implemented. Colour can receive climate/control trajectory summaries but cannot receive a direct RSDS replication unless a defensible historical radiative layer is added and clearly labelled non-equivalent to surface RSDS.
-
-### P4 — Test origin–maintenance concordance across events
-
-Ask whether Azami-predicted environmental direction is enriched among transition trajectories. A consistent positive pattern supports ST1; heterogeneous directions support ST3; systematic current-vs-history discordance supports ST2.
-
-### P5 — Add public phenology where defensible
-
-Recover taxon-level flowering months from authoritative/public floras. Where event lineage phenology can be bounded, derive monthly/anthesis-window palaeoclimate rather than relying only on annual BIOCLIM. This is especially valuable for orientation because rain-on-reproductive-structures is season-specific.
-
-### P6 — Distribution-trigger analysis
-
-Use public biogeographic reconstructions, historical SDMs/demography and sea-level/land-connectivity histories to classify whether trait events followed colonization, fragmentation or within-region diversification. Test “range change opens a new selective environment” rather than treating range change itself as selection.
-
-### P7 — Negative-control and falsification analyses
-
-Retain dry-side controls for wetting, thermal alternatives for hydric models, non-event matched windows, alternative paleolocation cells/scenarios and topology/minimum-history envelopes. A cause candidate is strong only when it survives these alternatives.
+1. **P1 dated-event audit:** continue only source-reconciled additions; record when adding taxa changes event placement.
+2. **P2 event-by-process registry:** implemented and now distinguishes restricted-tree, cross-study refinement and range-process rows.
+3. **P3 environmental trajectory:** retain Taiwan restricted sensitivity; do not promote it to origin-level T3 after chronology refinement.
+4. **P4 state–trajectory concordance:** run only on events with commensurate chronology+paleolocation; otherwise classify not evaluable.
+5. **P5 phenology:** use public flowering months to improve mechanism exposure, explicitly as descendant/current phenology sensitivity.
+6. **P6 distribution trigger:** use sea-level/biogeographic evidence as exposure opportunity, requiring local geological thresholds before connectivity claims.
+7. **P7 falsification:** preserve negative controls, taxon-addition sensitivity, paleolocation scenarios and topology/age uncertainty.
 
 ## Final Chapter 2 result classes
 
-Each trait × driver ends in one of five classes:
+Each trait × driver ends as one of:
 
-1. **multi-layer concordant candidate** — recurrence + dated event + historical trajectory + present Azami/Eazami direction converge;
-2. **present sorting / historical origin decoupled** — current ecological pattern is strong but transition trajectory does not match;
-3. **driver switching / heterogeneous events** — different events support different domains;
-4. **history resolved, cause unidentified** — recurrence/timing are known but comparable driver data are absent;
-5. **not evaluable at public-data resolution** — chronology, phenotype homology, paleolocation or environmental resolution is insufficient.
+1. multi-layer concordant candidate;
+2. present sorting / historical origin decoupled;
+3. driver switching / heterogeneous events;
+4. history resolved, cause unidentified;
+5. not evaluable at public-data resolution.
 
-These are explanatory outcomes, not success/failure filters.
+Taxon-sampling-sensitive event placement is itself reported as a sixth diagnostic flag rather than hidden.
 
 ## Chapter 2 endpoint and Chapter 3 handoff
 
-Chapter 2 should end with a ranked causal-candidate map, not a causal claim. For each trait it states:
+Chapter 2 ends with a ranked causal-candidate map and an identifiability map. For each trait it states:
 
-- how many changes are required;
-- how deep/when they occurred at the strongest public resolution;
-- which range-history context surrounded them;
-- which environmental trajectory dimensions were compatible, incompatible or unresolved;
-- whether the same driver appears in Azami present-space sorting;
-- what exact mechanism/fitness test remains.
+- recurrence/depth;
+- strongest defensible timing;
+- range-history context;
+- what environmental trajectory is actually identifiable;
+- whether Azami present-space evidence is concordant, discordant or not yet comparable;
+- which missing measurement prevents stronger inference.
 
-Chapter 3 then uses own samples to test the missing causal links: calibrated phenotype → environmental exposure → mediator/function → reproductive fitness, prioritizing the public-data candidates that achieved the strongest multi-layer convergence and the discordances that most sharply separate competing mechanisms.
+Chapter 3 then targets the missing causal links with own data: calibrated phenotype → actual environmental exposure → mediator/function → reproductive fitness, with ancestry and population sampling designed explicitly around the identifiability failures exposed by Chapter 2.
