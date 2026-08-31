@@ -1,0 +1,63 @@
+name: Audit Chapter 2 four-taxon public image bridge v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_chapter2_four_taxon_public_image_bridge_v1.py"
+      - "data/evidence/chapter2_four_taxon_public_image_bridge_contract_v1.json"
+      - ".github/workflows/audit-chapter2-four-taxon-public-image-bridge-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-public-coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile metadata audit
+        run: python -m py_compile analysis/audit_chapter2_four_taxon_public_image_bridge_v1.py
+      - name: Query iNaturalist and GBIF public metadata
+        run: |
+          mkdir -p /tmp/result
+          python analysis/audit_chapter2_four_taxon_public_image_bridge_v1.py \
+            --out-dir /tmp/result \
+            --max-records-per-source-taxon 1000 \
+            | tee /tmp/result/audit.log
+      - name: Validate audit structure
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root=Path('/tmp/result')
+          summary=json.loads((root/'chapter2_four_taxon_public_image_bridge_audit_v1.json').read_text())
+          with (root/'chapter2_four_taxon_public_image_coverage_v1.csv').open(newline='', encoding='utf-8-sig') as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==4
+          assert {r['taxon'] for r in rows}=={
+              'Cirsium brevicaule','Cirsium irumtiense','Cirsium kawakamii','Cirsium tatakaense'
+          }
+          assert set(summary['systems'])=={
+              'ARENICOLA_BREVICAULE_IRUMTIENSE','TAIWAN_KAWAKAMII_TATAKAENSE'
+          }
+          allowed={'ready_for_pairwise_image_pilot','limited_pilot','not_evaluable'}
+          assert all(r['coverage_class'] in allowed for r in rows)
+          assert all('metadata coverage only' in r['claim_boundary'] for r in rows)
+          assert summary['n_manifest_rows'] >= 0
+          print(json.dumps({
+              'coverage':{r['taxon']:r['coverage_class'] for r in rows},
+              'systems':summary['systems'],
+              'n_manifest_rows':summary['n_manifest_rows']
+          }, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-four-taxon-public-image-bridge-${{ github.run_id }}
+          path: /tmp/result
+          if-no-files-found: error
+          retention-days: 90
