@@ -1,0 +1,26 @@
+name: Validate Chapter 2 public event-process registry v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_chapter2_public_dated_event_registry_v1.py"
+      - "analysis/validate_chapter2_public_event_process_registry_v1.py"
+      - "data/evidence/chapter2_public_event_process_registry_v1.csv"
+      - ".github/workflows/validate-chapter2-public-event-process-registry-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate registry and minimum-history event bounds
+        run: |
+          python -m py_compile analysis/build_chapter2_public_dated_event_registry_v1.py analysis/validate_chapter2_public_event_process_registry_v1.py
+          python analysis/validate_chapter2_public_event_process_registry_v1.py
