@@ -1,15 +1,17 @@
-name: Run Chapter 2 Taiwan orientation paleohydric window v1
+name: Run Chapter 2 Taiwan orientation environment trajectory v1
 
 on:
   pull_request:
     paths:
       - "analysis/run_chapter2_taiwan_orientation_paleohydric_window_v1.py"
       - "analysis/run_chapter2_taiwan_orientation_directional_sensitivity_v1.py"
+      - "analysis/run_chapter2_taiwan_orientation_environment_state_trajectory_v1.py"
+      - "data/evidence/chapter2_environment_state_trajectory_panel_contract_v1.json"
       - ".github/workflows/run-chapter2-taiwan-orientation-paleohydric-window-v1.yml"
   workflow_dispatch:
 
 concurrency:
-  group: ch2-taiwan-paleohydric-${{ github.event.pull_request.number || github.ref }}
+  group: ch2-taiwan-environment-trajectory-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -18,7 +20,7 @@ permissions:
 jobs:
   run-local-public-t3-sensitivity:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -28,22 +30,39 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install numpy pandas xarray netCDF4
-          python -m py_compile analysis/run_chapter2_taiwan_orientation_paleohydric_window_v1.py analysis/run_chapter2_taiwan_orientation_directional_sensitivity_v1.py
-      - name: Download public PALEO-PGEM BIO12/BIO15/BIO1 mean fields
+          python -m py_compile \
+            analysis/run_chapter2_taiwan_orientation_paleohydric_window_v1.py \
+            analysis/run_chapter2_taiwan_orientation_directional_sensitivity_v1.py \
+            analysis/run_chapter2_taiwan_orientation_environment_state_trajectory_v1.py
+      - name: Download public PALEO-PGEM preregistered panel and Azami state-space table
         run: |
           set -euo pipefail
-          mkdir -p /tmp/paleo
+          mkdir -p /tmp/paleo /tmp/azami
           base="https://zenodo.org/records/21327244/files"
           for f in \
+            PALEO-PGEM-Series_bio1_mean.nc \
+            PALEO-PGEM-Series_bio4_mean.nc \
             PALEO-PGEM-Series_bio12_mean.nc \
+            PALEO-PGEM-Series_bio13_mean.nc \
+            PALEO-PGEM-Series_bio14_mean.nc \
             PALEO-PGEM-Series_bio15_mean.nc \
-            PALEO-PGEM-Series_bio1_mean.nc; do
+            PALEO-PGEM-Series_bio16_mean.nc \
+            PALEO-PGEM-Series_bio17_mean.nc; do
             curl --fail --location --retry 5 --retry-delay 5 "${base}/${f}?download=1" -o "/tmp/paleo/${f}"
           done
-          echo 'b029ef3f40d666e3d96ec1d9f42bef54  /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc' | md5sum -c -
-          echo 'f4c8d91815816f42959b90d512ac8b8e  /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc' | md5sum -c -
           echo '570e4b746e0b9c0cf82a2a5f85a6cff9  /tmp/paleo/PALEO-PGEM-Series_bio1_mean.nc' | md5sum -c -
-      - name: Run Taiwan dated paleohydric window sensitivity
+          echo 'b6f90b330e4161b983d735b7f9f7a01f  /tmp/paleo/PALEO-PGEM-Series_bio4_mean.nc' | md5sum -c -
+          echo 'b029ef3f40d666e3d96ec1d9f42bef54  /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc' | md5sum -c -
+          echo '93ac729f11e953a3b15946cf0ffe66ff  /tmp/paleo/PALEO-PGEM-Series_bio13_mean.nc' | md5sum -c -
+          echo '8f5b5b2a2668086d11dfe547c2ed9332  /tmp/paleo/PALEO-PGEM-Series_bio14_mean.nc' | md5sum -c -
+          echo 'f4c8d91815816f42959b90d512ac8b8e  /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc' | md5sum -c -
+          echo '67b15bf2325a615a3d30fc4ca84aa9c2  /tmp/paleo/PALEO-PGEM-Series_bio16_mean.nc' | md5sum -c -
+          echo '898c4d6564e09164f20082fe59618b55  /tmp/paleo/PALEO-PGEM-Series_bio17_mean.nc' | md5sum -c -
+          curl --fail --location --retry 5 \
+            'https://raw.githubusercontent.com/zuizui0223/azami/03ed29f1f476ca0d0a1ea8e14e75cb0050a213ef/manuscript/tables/v2_submission/Table_S5_v2_complete_among_taxon_environment_atlas.csv' \
+            -o /tmp/azami/Table_S5_v2_complete_among_taxon_environment_atlas.csv
+          test -s /tmp/azami/Table_S5_v2_complete_among_taxon_environment_atlas.csv
+      - name: Run Taiwan dated environment trajectory sensitivities
         run: |
           mkdir -p /tmp/result
           python analysis/run_chapter2_taiwan_orientation_paleohydric_window_v1.py \
@@ -57,21 +76,42 @@ jobs:
             --bio1 /tmp/paleo/PALEO-PGEM-Series_bio1_mean.nc \
             --out /tmp/result/chapter2_taiwan_orientation_directional_sensitivity_v1.json \
             | tee /tmp/result/directional.log
+          python analysis/run_chapter2_taiwan_orientation_environment_state_trajectory_v1.py \
+            --azami-table /tmp/azami/Table_S5_v2_complete_among_taxon_environment_atlas.csv \
+            --bio1 /tmp/paleo/PALEO-PGEM-Series_bio1_mean.nc \
+            --bio4 /tmp/paleo/PALEO-PGEM-Series_bio4_mean.nc \
+            --bio12 /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc \
+            --bio13 /tmp/paleo/PALEO-PGEM-Series_bio13_mean.nc \
+            --bio14 /tmp/paleo/PALEO-PGEM-Series_bio14_mean.nc \
+            --bio15 /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc \
+            --bio16 /tmp/paleo/PALEO-PGEM-Series_bio16_mean.nc \
+            --bio17 /tmp/paleo/PALEO-PGEM-Series_bio17_mean.nc \
+            --out /tmp/result/chapter2_taiwan_orientation_environment_state_trajectory_v1.json \
+            | tee /tmp/result/state_trajectory.log
           python - <<'PY'
           import json
           from pathlib import Path
           h=json.loads(Path('/tmp/result/chapter2_taiwan_orientation_paleohydric_window_v1.json').read_text())
           d=json.loads(Path('/tmp/result/chapter2_taiwan_orientation_directional_sensitivity_v1.json').read_text())
+          s=json.loads(Path('/tmp/result/chapter2_taiwan_orientation_environment_state_trajectory_v1.json').read_text())
           assert h['dated_scaffold']['minimum_orientation_transition_window_ma']==[0.47,0.79]
-          assert h['BIO12']['n_matched_windows'] > 100 and h['BIO15']['n_matched_windows'] > 100
           assert d['event_window_ma']==[0.47,0.79]
-          for v in ('BIO12','BIO15','BIO1'):
-              assert d[v]['n_matched_windows'] > 100
-              assert 0 < d[v]['signed_percentile'] <= 1
-          print(json.dumps({'hydric_percentiles':{v:h[v]['duration_matched_5myr_percentiles'] for v in ('BIO12','BIO15')},'directional':{v:d[v] for v in ('BIO12','BIO15','BIO1')}},indent=2))
+          assert s['event_window_ma']==[0.47,0.79]
+          assert set(s['variables']) == {'BIO1','BIO4','BIO12','BIO13','BIO14','BIO15','BIO16','BIO17'}
+          assert s['shared_state_trajectory_vector_test']['variables']==['BIO1','BIO4','BIO12','BIO15']
+          assert s['wetting_specificity_test']['wet_variables']==['BIO13','BIO16']
+          assert s['wetting_specificity_test']['dry_control_variables']==['BIO14','BIO17']
+          for v in s['variables'].values():
+              assert v['directional_background']['n_windows'] > 100
+              assert v['paleolocation_resolution']['cellwise_endpoint_delta']['n_cells'] > 0
+          print(json.dumps({
+            'shared_vector': s['shared_state_trajectory_vector_test'],
+            'wetting_specificity': s['wetting_specificity_test'],
+            'resolution': {k:v['paleolocation_resolution'] for k,v in s['variables'].items()}
+          }, indent=2))
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: chapter2-taiwan-orientation-paleohydric-window-${{ github.run_id }}
+          name: chapter2-taiwan-orientation-environment-trajectory-${{ github.run_id }}
           path: /tmp/result
           if-no-files-found: error
