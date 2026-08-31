@@ -40,7 +40,6 @@ def _data_var(ds: xr.Dataset) -> str:
     vars_ = list(ds.data_vars)
     if len(vars_) == 1:
         return vars_[0]
-    # Prefer a variable carrying the largest dimensional payload.
     return max(vars_, key=lambda v: ds[v].size)
 
 
@@ -48,20 +47,30 @@ def _time_ka(da: xr.DataArray, time_name: str) -> np.ndarray:
     vals = np.asarray(da[time_name].values)
     if np.issubdtype(vals.dtype, np.number):
         vals = vals.astype(float)
+        mn = float(np.nanmin(vals))
         mx = float(np.nanmax(vals))
-        # PALEO-PGEM nc releases may encode years BP or kyr BP.
-        if mx > 10000:
+        # PALEO-PGEM currently stores time as numeric "years since 1970", which
+        # is not a CF-decodable calendar unit. Preserve the raw values and map
+        # negative millions-of-years coordinates to positive ka before present.
+        if mn <= -1_000_000 and mx <= 100_000:
+            return np.abs(vals) / 1000.0
+        if mx >= 1_000_000:
             return vals / 1000.0
-        if 4500 <= mx <= 5500:
+        if 4500 <= mx <= 5500 and mn >= 0:
             return vals
     n = da.sizes[time_name]
     if n in (5001, 5002, 5003):
         return np.linspace(5000.0, 0.0, n)
-    raise ValueError(f"cannot infer PALEO-PGEM time coordinate: dtype={vals.dtype}, n={len(vals)}")
+    raise ValueError(
+        f"cannot infer PALEO-PGEM time coordinate: dtype={vals.dtype}, "
+        f"min={np.nanmin(vals)}, max={np.nanmax(vals)}, n={len(vals)}"
+    )
 
 
 def regional_series(path: Path) -> pd.DataFrame:
-    ds = xr.open_dataset(path)
+    # decode_times=False is required because PALEO-PGEM uses the nonstandard
+    # unit string "years since 1970" for a palaeotime coordinate.
+    ds = xr.open_dataset(path, decode_times=False)
     var = _data_var(ds)
     da = ds[var]
     lat = _coord_name(ds, ("lat", "latitude", "y"))
@@ -73,9 +82,7 @@ def regional_series(path: Path) -> pd.DataFrame:
         lon_min, lon_max = TAIWAN["lon_min"] % 360, TAIWAN["lon_max"] % 360
     else:
         lon_min, lon_max = TAIWAN["lon_min"], TAIWAN["lon_max"]
-    latvals = np.asarray(da[lat].values, dtype=float)
 
-    # Boolean index is robust to ascending/descending coordinates.
     sub = da.where(
         (da[lat] >= TAIWAN["lat_min"]) & (da[lat] <= TAIWAN["lat_max"]) &
         (da[lon] >= lon_min) & (da[lon] <= lon_max),
@@ -98,7 +105,6 @@ def window_stats(df: pd.DataFrame, young: float, old: float) -> dict[str, float]
     if len(w) < 50:
         raise ValueError(f"window {young}-{old} ka has only {len(w)} observations")
     y = w["median"].to_numpy(float)
-    # Sort young->old; net difference is older minus younger, absolute change is direction-free.
     return {
         "young_ka": float(young),
         "old_ka": float(old),
