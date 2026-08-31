@@ -1,0 +1,7 @@
+taxon,orientation_state,flowering_months,phenology_status,source_ref,use_in_chapter2,claim_boundary
+Cirsium pengii,D,8-11,authority_published,10.1186/s40529-025-00454-2,Taiwan_D_clade_anthesis_envelope,"Current taxon phenology; not ancestral phenology"
+Cirsium kawakamii,D,9-10,authority_published,10.3897/phytokeys.117.29380,Taiwan_D_clade_shared_anthesis_window,"Current taxon phenology; not ancestral phenology"
+Cirsium tatakaense,D,8-10,authority_published,10.3897/phytokeys.117.29380,Taiwan_D_clade_anthesis_envelope,"Current taxon phenology; not ancestral phenology"
+Cirsium morii,U,,not_recovered_as_explicit_range,Flora_of_Taiwan_efloras,excluded_from_ancestral_phenology,"Specimen dates are not silently converted into a flowering range"
+Cirsium brevicaule,U,12-4,authority_database,Kahaku_Japan_Cirsium_database,local_Arenicola_context_only,"Database notes almost year-round flowering; not used to reconstruct ancestral Taiwan phenology"
+Cirsium irumtiense,U,,not_recovered_from_primary_authority_in_current_audit,Kahaku_Ryukyu_database,excluded_from_primary_phenology,"Do not use secondary web estimates as frozen primary phenology"
