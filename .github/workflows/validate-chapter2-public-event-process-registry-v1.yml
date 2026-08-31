@@ -6,6 +6,8 @@ on:
       - "analysis/build_chapter2_public_dated_event_registry_v1.py"
       - "analysis/validate_chapter2_public_event_process_registry_v1.py"
       - "data/evidence/chapter2_public_event_process_registry_v1.csv"
+      - "data/evidence/chapter2_public_explanatory_depth_summary_v1.json"
+      - "data/evidence/chapter2_taiwan_orientation_anthesis_precipitation_v1.json"
       - ".github/workflows/validate-chapter2-public-event-process-registry-v1.yml"
   workflow_dispatch:
 
@@ -20,7 +22,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Validate registry and minimum-history event bounds
+      - name: Validate registry and frozen explanatory-depth outputs
         run: |
           python -m py_compile analysis/build_chapter2_public_dated_event_registry_v1.py analysis/validate_chapter2_public_event_process_registry_v1.py
           python analysis/validate_chapter2_public_event_process_registry_v1.py
