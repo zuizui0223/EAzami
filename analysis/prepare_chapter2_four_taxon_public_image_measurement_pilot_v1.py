@@ -79,6 +79,12 @@ def main() -> int:
         & source["focal_taxon"].isin(TAXA)
         & source["photo_url"].astype(str).str.startswith("http")
     ].copy()
+    # The audit manifest can contain the same iNaturalist photo more than once through
+    # source bookkeeping. A photo is one image measurement unit, so remove exact
+    # taxon/observation/photo duplicates before any candidate selection or download.
+    work = work.drop_duplicates(
+        ["focal_taxon", "source_observation_id", "source_photo_id"], keep="first"
+    ).copy()
     if set(work["focal_taxon"]) != set(TAXA):
         raise ValueError("all four focal taxa must resolve in iNaturalist rows")
 
@@ -151,6 +157,9 @@ def main() -> int:
     manifest = pd.DataFrame(rows)
     if manifest.empty:
         raise RuntimeError("no public images downloaded")
+    manifest = manifest.drop_duplicates("annotation_unit_id", keep="first")
+    if manifest["annotation_unit_id"].duplicated().any():
+        raise RuntimeError("annotation_unit_id remains duplicated after exact photo deduplication")
     manifest = manifest.sort_values(["taxon_name", "obs_id", "photo_id"]).reset_index(drop=True)
     manifest.to_csv(out / "chapter2_four_taxon_measurement_candidate_manifest_v1.csv", index=False, encoding="utf-8-sig")
     pd.DataFrame(failures).to_csv(out / "chapter2_four_taxon_measurement_download_failures_v1.csv", index=False, encoding="utf-8-sig")
@@ -163,6 +172,7 @@ def main() -> int:
             "max_photos_per_observation": args.max_photos_per_observation,
             "observation_order": "deterministic ascending source observation id",
             "photo_order": "deterministic ascending source photo id",
+            "exact_photo_deduplication": "focal_taxon + source_observation_id + source_photo_id before selection",
             "trait_values_used_for_selection": False,
         },
         "pool_summary": pool_summary,
