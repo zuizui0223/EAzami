@@ -153,7 +153,7 @@ def main() -> int:
         "contract_version": "chapter2_exploratory_trait_environment_atlas_pilot_v1",
         "status_date": "2026-09-01",
         "scope": "retrospective exploratory EAzami-only species-median pilot; independent of Azami result selection",
-        "source_snapshot": str(args.snapshot.relative_to(ROOT)),
+        "source_snapshot": str(args.snapshot.resolve().relative_to(ROOT)),
         "minimum_balanced_environment_observations": args.minimum_environment_observations,
         "included_taxa": included["taxon_name"].tolist(),
         "excluded_for_environment_depth": frame.loc[
