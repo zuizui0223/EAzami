@@ -1,0 +1,84 @@
+{
+  "contract_version": "chapter2_historical_differentiation_trigger_v1",
+  "status_date": "2026-09-01",
+  "status": "active_differentiation_axis_contract",
+  "scientific_question": "When a capitulum trait differentiation event can be bounded independently in evolutionary time and geography, what environmental state or change accompanied that event, and is any direction repeated across independently bounded events of the same homologous trait transition?",
+  "chapter_role": {
+    "chapter1_conceptual_role": "present-day environmental sorting and maintenance is a later cross-chapter synthesis question and is not an input to this analysis",
+    "chapter2_primary_role": "historical differentiation: recurrence, relative depth, calendar-bounded event windows where possible, and environmental state/change through those windows",
+    "chapter3_boundary": "selection, mechanism and reproductive fitness are not inferred here"
+  },
+  "event_admission": {
+    "required_for_environmental_event_analysis": [
+      "trait state or phenotype contrast independently identified",
+      "a branch or lineage interval bounded by public chronology without converting relative lineage depth to calendar time",
+      "a predeclared paleolocation scenario or explicit geographic uncertainty envelope",
+      "a historical environmental series covering the full event interval"
+    ],
+    "conditional_transition_allowed": "A conditional ancestral-to-derived direction may be retained only with its condition explicit; it cannot be counted as a resolved repeated transition.",
+    "sister_contrast_only": "A dated sister phenotype contrast is retained in the event ledger but is not a reconstructed trait transition.",
+    "range_event_only": "A dated dispersal/range event is retained but cannot be assigned as the age of a trait transition unless the trait-changing branch is independently reconciled."
+  },
+  "primary_orientation_source": {
+    "event_id": "ORI_CORE_NIPPONO_STEM",
+    "source_workflow_run_id": 33403515236,
+    "source_artifact_id": 9762830184,
+    "source_artifact_digest": "sha256:65ff0756f9682efce2640ea7269d7e43c632b87a16714e71e804d81ca4c71570",
+    "source_result_file": "chapter2_orientation_origin_envelope_v1.json",
+    "event": "erect_or_upward -> nodding_or_downward on the core-Nipponocirsium stem",
+    "chronology": "94 deterministic admissible parent-child age pairs spanning the separately published node-age marginals; not posterior samples",
+    "paleolocation_scenarios": [
+      "taiwan",
+      "ryukyu_corridor",
+      "southern_japan",
+      "east_asia_core_corridor"
+    ],
+    "historical_variables": ["BIO1", "BIO4", "BIO12", "BIO15"],
+    "important_reanalysis_rule": "Use only raw branch-endpoint delta and same-duration matched-window background_z from scenario_rows. Ignore every Azami-vector direction_agreement and cosine field in the source artifact."
+  },
+  "event_environment_estimands": {
+    "delta": "regional median at the younger branch endpoint minus regional median at the older branch endpoint",
+    "background_z": "event delta standardized against all same-duration windows stepped every 10 kyr in the same paleolocation region and variable",
+    "per_region_summary": [
+      "min",
+      "q05",
+      "median",
+      "q95",
+      "max",
+      "fraction_positive",
+      "fraction_negative"
+    ],
+    "cross_region_direction_rule": "robust_increase only when q05(delta) > 0 in every predeclared paleolocation region; robust_decrease only when q95(delta) < 0 in every region; otherwise direction_unresolved",
+    "cross_region_background_rule": "consistently_above_matched_windows only when q05(background_z) > 0 in every region; consistently_below_matched_windows only when q95(background_z) < 0 in every region; otherwise matched_window_position_unresolved",
+    "interpretation": "q05/q95 summarize the deterministic chronology scenario grid and are not probability or credible intervals."
+  },
+  "repeated_trigger_rule": {
+    "minimum_independent_events": 2,
+    "same_trait_requirement": "events must represent the same homologous trait axis and compatible ancestral-to-derived direction",
+    "classification": {
+      "repeated_direction_candidate": "at least two independently bounded events have the same robust environmental direction for the same historical variable",
+      "direction_not_repeated": "at least two independently bounded events are evaluable but robust directions conflict",
+      "not_evaluable": "fewer than two independently bounded homologous transition events have historical environment results"
+    },
+    "causal_ceiling": "A repeated direction is a historical differentiation-trigger candidate, not evidence that the environmental variable was a selective agent."
+  },
+  "event_ledger_sources": [
+    "data/evidence/chapter2_public_trait_event_recovery_audit_v2.csv",
+    "data/evidence/japan38_relative_event_depth_v1.json",
+    "data/evidence/chapter2_orientation_origin_envelope_result_v1.json"
+  ],
+  "current_expected_identifiability": {
+    "orientation": "one calendar-and-paleolocation-bounded transition envelope; environmental direction can be evaluated but repeated-trigger recurrence is not evaluable from one event",
+    "flower_colour": "two conditional terminal branch envelopes exist, but exact transition timing/direction and a directly relevant historical radiative series remain insufficient for a resolved repeated trigger test",
+    "phyllary_posture": "dated sister phenotype contrasts exist but are not reconstructed posture transitions",
+    "stickiness": "relative repeated history is resolved but published range-event ages are not the trait-transition ages"
+  },
+  "claim_boundary": [
+    "Do not use Chapter 1 or Azami effect signs to classify historical environmental change.",
+    "Do not interpret chronology-grid q05/q95 as posterior credible intervals.",
+    "Do not assign an event to one paleolocation scenario when several remain admissible.",
+    "Do not convert lineage split ages, range events or relative lineage depth into exact trait-transition dates.",
+    "A robust event-associated environmental direction is a historical alignment or trigger candidate only, not natural selection or adaptation.",
+    "A single evaluable event cannot establish repeated environmental triggering."
+  ]
+}
