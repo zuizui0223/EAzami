@@ -94,9 +94,33 @@ def main() -> int:
         "Public-image natural experiments for flower colour and head geometry",
         "Focal current RSDS concordance in the two colour systems",
         "Integrated whole-capitulum synthesis",
+        "Transparency, Supporting Information and generative-AI assistance",
     ]
     for phrase in required_methods:
         assert phrase in text, phrase
+
+    # Submission transparency must be explicit in the anonymous main text.
+    transparency = [
+        "Generative AI assisted with code and prose development",
+        "AI tools did not determine botanical states",
+        "did not generate or alter the underlying observational data",
+        "Supporting Information (Figs. S1–S9; Tables S2.1–S12)",
+    ]
+    for phrase in transparency:
+        assert phrase in text, phrase
+
+    # Every active main figure and its corresponding SI family must be called from the text.
+    for i in range(1, 6):
+        assert f"(Fig. {i}" in text, f"missing main-text Figure {i} call"
+    for si_call in [
+        "Supporting Information Figs. S1–S2",
+        "Supporting Information Fig. S2",
+        "Supporting Information Figs. S3–S5",
+        "Supporting Information Figs. S6–S7",
+        "Supporting Information Fig. S8",
+        "Supporting Information Fig. S9 and Tables S10–S12",
+    ]:
+        assert si_call in text, si_call
 
     required_refs = [
         "Barreto, E., Holden, P. B., Edwards, N. R., & Rangel, T. F. (2023)",
@@ -142,6 +166,9 @@ def main() -> int:
         "orientation_origin": origin["cross_scenario_summary"]["classification"],
         "colour_rsds": rsds["chapter_summary"]["classification"],
         "chapter_model": final["chapter_model"],
+        "figure_calls": 5,
+        "ai_disclosure": True,
+        "supporting_information_cited": True,
     }, indent=2))
     return 0
 
