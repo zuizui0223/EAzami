@@ -1,164 +1,160 @@
-# Chapter 2 — diversity depth and bounded explanatory reach
+# Chapter 2 — evolutionary depth, environmental trajectories and public-data limits
 
-## Active contract (2026-08-30)
+## Active contract — 2026-09-01
 
-The active paper asks three linked empirical questions:
+Chapter 2 is the final public-data chapter before own-sample causal work. It asks:
 
-1. how many state changes are minimally required in constituent capitulum traits;
-2. at what topology-only relative lineage depth and on which named edges those minimum histories remain admissible;
-3. how far existing ecological and supporting non-climate data can explain or constrain the present trait states.
+1. **How often and how deeply did capitulum traits change?**
+2. **Did different capitulum modules share the same transition history?**
+3. **What present environmental gradients correspond to those traits?**
+4. **Where public chronology permits it, did the historical environment move in the same direction?**
+5. **When a similar phenotype occurs in multiple lineages, is the same environmental explanation repeated?**
+6. **Which links remain non-identifiable without Chapter 3 samples, mechanism and reproductive fitness?**
 
-The sequence is:
+The evidence sequence is:
 
-**minimum change count → relative event depth / placement resolution → ecological explanatory reach → explicit Chapter 3 data boundary**.
+```text
+repeated history
+→ temporal geometry
+→ geographic/range exposure opportunity
+→ present environmental state correspondence
+→ historical environmental trajectory
+→ lineage/scale concordance or discordance
+→ public-data ceiling
+→ Chapter 3 mechanism + fitness
+```
 
-## Paired public-data architecture
+## Active answer
 
-The doctoral public-data block is now read as one paired argument:
+> **Capitulum components have asymmetric evolutionary depth, and similar extant phenotypes do not necessarily share one environmental history. The best current public-data description is modular and hierarchically scale dependent, with partial coordinated remodelling nested inside trait-specific histories.**
 
-- **Azami = diversity breadth** across present-day space and environment;
-- **EAzami = diversity depth** through the East-Asian evolutionary history and its bounded ecological explanatory reach.
+This conclusion lies between two unsupported extremes:
 
-The paired synthesis does not require every trait to produce the same positive result. Orientation currently bridges spatial breadth, repeated history and present ecological correspondence. Visible colour is a strong spatial radiation-sorting candidate but its Japanese time-axis history remains unresolved. Phyllary posture and stickiness have strong repeated-history results but their current ecology is `not_evaluable`. These asymmetries are retained as results rather than removed by trait selection.
+- not one universal synchronized capitulum syndrome;
+- not complete independence among all modules.
 
-### Canonical active files
+### Orientation
 
-- paired space-time synthesis: `SPACE_TIME_PUBLIC_DATA_SYNTHESIS_V1.md`;
-- trait-level closure ledger: `../../data/evidence/chapter2_space_time_public_data_closure_v1.csv`;
-- design: `DIVERSITY_DEPTH_STANDALONE_V1.md`;
-- compressed result recovery: `CHAPTER2_CORE_RESULT_RECOVERY_V1.md`;
-- machine result ledger: `../../data/evidence/chapter2_core_result_recovery_v1.csv`;
-- relative lineage-depth: `RELATIVE_EVENT_DEPTH_CONTRACT_V1.md` and `../../data/evidence/japan38_relative_event_depth_v1.json`;
-- ecological reach: `ECOLOGICAL_EXPLANATORY_REACH_V1.md` and `../../data/evidence/chapter2_ecological_explanatory_reach_v1.json`;
-- Taiwan occurrence-source sensitivity: `FDT4_TAIWAN_MULTISOURCE_SENSITIVITY_V1.md` and `../../data/evidence/fdt4_taiwan_multisource_orientation_sensitivity_v1.json`;
-- non-climate constraints: `../../data/evidence/chapter2_nonclimate_explanatory_constraints_v1.json`;
-- independent nuclear audit: `EAST_ASIA_INDEPENDENT_NUCLEAR_EVIDENCE_AUDIT_V1.md` and `../../data/evidence/east_asia_independent_nuclear_evidence_audit_v1.csv`;
-- active manuscript: `MANUSCRIPT_JEB_V4.md`;
-- required production patch: `JEB_V4_PACKAGE_SPACE_TIME_PATCH_V1.md`;
-- active figure map: `JEB_QUESTION_RESULT_FIGURE_MAP_V4.md` (content version v6);
-- active Supporting Information: `JEB_SUPPORTING_INFORMATION_V2.md` (content version v3);
-- Chapter 3 bridge: `CHAPTER2_TO_CHAPTER3_RADSEQ_BRIDGE_V1.md` and `../../data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv`.
+- minimum changes: 4–6;
+- present hydric bridge: global BIO12 plus East-Asian BIO15/BIO1 directional correspondence;
+- origin analysis: 94 age scenarios × 4 palaeolocation regions = 376 historical trajectories;
+- origin cosine q05/median/q95 = −0.799 / −0.065 / +0.609;
+- decision: repeated history and current hydric correspondence are stronger than identification of the ancestral origin environment.
 
-Scientific status: **COMPLETE_EXISTING_PUBLIC_HISTORY_AND_BOUNDED_ECOLOGICAL_REACH_WITH_SPACE_TIME_SYNTHESIS**.
+### Flower colour
 
-Submission status: **HOLD_JEB_PACKAGE_REBUILD_ONLY**.
+Two publicly dated sister systems reproduce the white-state phenotype:
 
-The next production rebuild must apply `JEB_V4_PACKAGE_SPACE_TIME_PATCH_V1.md`; no new discovery screen is authorized by the package hold.
+- Arenicola chroma white−coloured = −2.95;
+- Taiwan = −6.16;
+- white lineages are also lighter in both comparisons.
 
-## Active conclusion
+But current RSDS is lineage dependent:
 
-> **A dominant young radiation contains multiple capitulum configurations and each of three constituent traits requires multiple minimum changes. Historical resolution and existing explanatory reach are asymmetric. Orientation has a large climate direction that is stable across accepted Comp1061 topologies, species leave-one-out tests and independent Taiwan occurrence-source definitions; the GBIF-only primary remains `unresolved`, while the threshold-based support class changes under alternative admissible occurrence-source definitions. Phyllary posture and stickiness remain `not_evaluable` with the current climate/state overlap. Existing cytotype, biogeographic and independent nuclear evidence further constrain simple alternatives without identifying a causal selective agent.**
+- Arenicola white−coloured RSDS = +1814, Azami-direction concordant;
+- Taiwan = −686.5 and −1703 after locality aggregation, pair-level reversed;
+- primary current pair concordance = 1/2;
+- pooled within-taxon secondary slope remains negative (beta=−0.4065).
 
-Across the paired Azami–EAzami programme, orientation is the current priority bridge: Azami aligns a larger signed image-axis angle with higher annual precipitation, while EAzami aligns the downward state with higher precipitation seasonality. These are distinct hydric dimensions, so the result is described as **cross-scale hydric correspondence**, not replication of one coefficient or demonstrated rain adaptation. The negative Azami corolla-chroma–shortwave-radiation result remains a spatial candidate only and is not promoted to anthocyanin mediation or repeated colour evolution.
+The result weakens a universal persistent-RSDS explanation and prioritizes origin–maintenance decoupling, driver switching and scale dependence as Chapter 3 alternatives.
 
-## Main-text result groups
+### Phyllary posture and stickiness
 
-1. 36/38 sampled concepts in the dominant radiation and at least three harmonized orientation × stickiness configurations;
-2. orientation 4–6, phyllary posture 3 and stickiness 5 minimum changes;
-3. trait-specific relative lineage-depth and named-edge resolution;
-4. zero-of-three cross-treatment shared-localization boundary;
-5. ecological explanatory reach plus a bounded non-climate constraint paragraph.
+- phyllary posture: exactly 3 changes; historical depth resolved better than driver identity;
+- stickiness: exactly 5 relatively shallow changes; simple universal defence interpretation is weakened and the biotic/cost driver remains unidentified.
 
-Species-tip compression, full independent-nuclear evidence detail, continuous EAzami-native, colour and predictive diagnostics remain Supporting Information layers. The Taiwan occurrence-source sensitivity is now required in the next main-package rebuild as a compact source-sensitivity summary because it changes the interpretation from generic `unresolved` to **stable direction with source-sensitive threshold class**. The paired space-time synthesis is the programme-level interpretation; it does not create a new discovery family.
+### Whole capitulum
 
-## Ecological result
+- zero of three discrete trait pairs passes robust shared-transition localization;
+- present 18-D within-versus-among association-matrix similarity: rho=0.3663;
+- two white sister systems share circularity↑, solidity↑ and visible-floret fraction↓;
+- detailed geometry remains heterogeneous or low-information.
 
-### Frozen GBIF-only primary
+Final process model:
 
-Orientation primary East-Asian panel: n=9, U=5/D=4, each taxon with at least ten independent thinned environment-complete occurrence records.
+`modular_hierarchical_selection_mosaic_with_partial_coordinated_remodelling`
 
-- BIO15 D−U: +1.320 to +1.330 SD; P=0.05054–0.05239;
-- BIO1 D−U: −0.975 to −0.967 SD; P=0.09604–0.09793;
-- accepted-topology sign agreement: 6/6 for both axes;
-- species LOO sign agreement: 54/54 for both axes;
-- branchwise direction agrees on all six accepted topologies, but permutation thresholds are not crossed.
+This is a hypothesis-level process model, not demonstrated natural selection.
 
-Decision: **orientation=`unresolved`**.
+## Canonical active files
 
-A live 2026-08-29 GBIF refresh left *Cirsium morii* and *C. tatakaense* at nine independent thinned environment-complete cells each, so this primary result does not change merely through database refresh.
+### Manuscript and displays
 
-### Taiwan multi-source occurrence sensitivity
+- `MANUSCRIPT_JEB_V5.md` — active manuscript;
+- `JEB_QUESTION_RESULT_FIGURE_MAP_V5.md` — active five-figure contract;
+- `../../analysis/validate_chapter2_manuscript_v5.py` — manuscript/evidence guard.
 
-All seven Taiwan orientation taxa were audited against TBN v2.6 with the same source-name, Taiwan-scope, coordinate-quality and 0.05-degree thinning rules.
+### Final synthesis
 
-A conservative direct-TBN-native tier added one new environment-complete cell each for *C. kawakamii*, *C. morii* and *C. tatakaense*. The panel therefore becomes n=11, U=6/D=5 without lowering the n≥10 gate.
+- `PUBLIC_DATA_FINAL_CHAPTER2_STORY_AND_ANALYSIS_PLAN_V3.md`;
+- `../../data/evidence/chapter2_final_integrated_evidence_v3.json`;
+- `../../data/evidence/chapter2_final_integrated_evidence_v3.csv`.
 
-- BIO15 D−U: +1.136 to +1.143 SD; P=0.03789–0.03980;
-- BIO1 D−U: −1.001 to −0.994 SD; P=0.04819–0.04904;
-- accepted-topology sign agreement: 6/6 for both axes;
-- species LOO sign agreement: 66/66 for both axes;
-- frozen-rule classification: **`tendency_supported`**.
+### Orientation history and environment
 
-A broader TBN tier excluding explicit GBIF mirrors retained the same n=11 U=6/D=5 taxon panel but changed the taxon niche centroids:
+- `../../data/evidence/japan38_relative_event_depth_v1.json`;
+- `ECOLOGICAL_EXPLANATORY_REACH_V1.md`;
+- `../../data/evidence/chapter2_ecological_explanatory_reach_v1.json`;
+- `FDT4_TAIWAN_MULTISOURCE_SENSITIVITY_V1.md`;
+- `../../data/evidence/fdt4_taiwan_multisource_orientation_sensitivity_v1.json`;
+- `ORIENTATION_ORIGIN_ENVELOPE_RESULT_V1.md`;
+- `../../data/evidence/chapter2_orientation_origin_envelope_result_v1.json`.
 
-- BIO15 D−U: +1.078 to +1.084 SD; P=0.04874–0.05110;
-- BIO1 D−U: −0.915 to −0.909 SD; P=0.06525–0.06598;
-- accepted-topology sign agreement: 6/6 for both axes;
-- species LOO sign agreement: 66/66 for both axes;
-- frozen-rule classification: **`unresolved`**.
+### Colour and coarse remodelling
 
-The ecological result is therefore more specific than the original generic label:
+- `FOUR_TAXON_AZAMI_IMAGE_PILOT_RESULT_V1.md`;
+- `../../data/evidence/chapter2_four_taxon_azami_measurement_result_v1.json`;
+- `COLOUR_RSDS_FOCAL_CONCORDANCE_RESULT_V1.md`;
+- `../../data/evidence/chapter2_colour_rsds_focal_concordance_result_v1.json`.
 
-> **The BIO15/BIO1 direction is robust to topology, single-species deletion and occurrence-source expansion, whereas threshold-level support is sensitive to the admissible occurrence-source definition used to estimate present-day niche centroids.**
+## Active JEB result order
 
-The GBIF-only primary is not promoted by selecting the direct-TBN tier after observing its P values. A future primary replacement would require an outcome-independent multi-source harmonization contract defined before the corresponding analysis.
+1. **Evolutionary depth:** orientation 4–6, phyllary 3, stickiness 5, with unequal relative-depth envelopes.
+2. **Shared-history boundary:** 0/3 discrete trait pairs retain robust common transition localization.
+3. **Orientation state–trajectory test:** present hydric correspondence, historical origin environment unresolved under chronology × palaeolocation uncertainty.
+4. **Colour natural experiment:** white phenotype repeated in two dated sister systems, current RSDS concordant in one and reversed in the other.
+5. **Whole-capitulum synthesis:** partial coarse coordinated remodelling inside modular and lineage-dependent histories.
 
-Phyllary posture and stickiness are **`not_evaluable`** at the same climate gate because each overlaps only two resolved taxa and neither overlap is state-diverse.
+## Production status
 
-Held-out prediction versus mean-only / phylogeny-only remains reproducible Supporting Information sensitivity. **Predictive gain is not required for the main ecological classification.**
+Scientific status: **COMPLETE_PUBLIC_DATA_V3_SYNTHESIS**.
 
-## Non-climate constraints already available
+Submission status: **V5_TEXT_VALIDATED — FIVE_FIGURE_AND_DOCUMENT_PACKAGE_REBUILD_PENDING**.
 
-- **Cytotype/ploidy:** nine source-backed concepts; upward/ascending orientation occurs at 2x, 4x and 6x; diploids include both upward and downward states. A deterministic one-to-one ploidy model is inconsistent with the observed panel.
-- **Broad history:** multiple capitulum configurations occur inside the same dominant radiation, so configuration does not map one-to-one onto the broad colonization class.
-- **Population/genetic structure:** Japanese pre-2025 MIG-seq/RAD work and the public 2022 *C. maritimum* MIG-seq dataset demonstrate below-species-tip genomic structure relevant to the species-tip resolution boundary.
-- **Independent nuclear topology/resources:** 2012/2015 Korean nrDNA, 2019 Cardueae Hyb-Seq, 2018/2020 transcriptomes, the 2024 *C. nipponicum* genome and 2025/2026 local phylotranscriptomics are retained by evidence scale.
-- **Pollinator/enemy context:** biologically plausible and well motivated by *Cirsium* literature, but no dense harmonized Japan38 trait × interaction matrix currently supports a parallel comparative analysis.
+The V5 manuscript validator passes:
 
-## Nuclear-scaffold wording
+- abstract 220 words;
+- main text before references 4,846 words;
+- final V3 values, evidence classes and forbidden-claim guards consistent.
 
-Use:
+No new discovery screen is required. Remaining work is:
 
-> **harmonized common-locus Japan38 scaffold**
+1. build five figures from frozen evidence only;
+2. rebuild Supporting Information around the new Figure 3/4/5 analyses;
+3. rebuild anonymous manuscript/title page/cover letter from V5;
+4. complete reference, data-availability, declaration and claim audits.
 
-for the accepted Comp1061 reconstruction.
+## Chapter 3 handoff
 
-Do **not** say that Moreyra 2025 or Comp1061 is the only nuclear evidence. Heterogeneous rDNA, MIG-seq, transcriptome and reference-genome data are not pooled into one branch-length tree.
+The highest-value own-data contrasts are now generated by both positive and discordant public evidence:
 
-## Frozen historical results
+- **orientation × hydric exposure:** direct wetting → pollen/effective contact → viable-seed chain;
+- **Arenicola versus Taiwan colour:** same white-state phenotype under opposite current pair-level RSDS contrast; test shared versus switched pigment/developmental mechanism and selective environment;
+- **coarse head remodelling:** determine whether repeated circularity/solidity/floret-exposure changes reflect shared development, correlated selection or geometry-only covariance;
+- **phyllary/stickiness:** test enemy, wetting, access and cost pathways directly rather than borrowing climate proxies.
 
-- orientation: 20 resolved; ML=6; UFBoot=4–6; median depth envelope 0.795–0.994; JPN36=0.227;
-- phyllary posture: 10 resolved; exactly 3 changes; median depth envelope 0.695–1.000; JPN36=0.728;
-- stickiness: 13 resolved; exactly 5 changes; median depth envelope 0.937–0.954; JPN06=0.995; JPN36=0.707; nine-tip internal edge=0.681;
-- no trait pair has a cross-treatment-robust common transition-localization pattern.
+## Claim boundaries
 
-The old 0.201/0.754/0.67/0.40 fractions reproduce only on superseded run 32845725038 and remain audit history.
+- minimum changes ≠ independent origins, convergence or rates;
+- relative lineage-depth ≠ absolute time;
+- dated lineage split ≠ exact trait-transition date;
+- regional palaeolocation scenario ≠ ancestral-area probability;
+- BIO12 ≠ BIO15;
+- current environmental correspondence ≠ historical causation;
+- current RSDS ≠ historical solar exposure;
+- repeated visible chroma ≠ demonstrated pigment/UV pathway;
+- partial repeated head geometry ≠ universal white-flower syndrome;
+- `not_evaluable` ≠ no relationship;
+- the final mosaic model ≠ demonstrated selection or adaptation.
 
-## Data boundaries
-
-- branch lengths are substitutions/site, not absolute time;
-- minimum changes are lower bounds, not independent-origin/convergence counts;
-- relative lineage-depth is topology-only, not event age;
-- climate correspondence uses present taxon niche centroids, not ancestral niches;
-- ecology-specific raw UFBoot sign rate is `not_evaluable` because those raw trees were not retained in the ecological artifact bundle;
-- `not_evaluable` never means no ecological relationship;
-- stable climate correspondence is not adaptation, historical event matching or causal selection;
-- orientation support-class sensitivity to occurrence-source definition must not be rewritten as sign instability;
-- the direct-TBN `tendency_supported` tier must not be selected as the primary merely because it crosses P<0.05;
-- population-level nuclear evidence cannot be substituted for the common-locus species scaffold without an explicit model.
-
-## Frozen legacy submission package
-
-The old JEB V3 audit package remains reproducible history rather than active evidence. Its reconstruction-aware continuous shared-change null gave **P=0.3504**, and the fixed JPN29-excluded provenance sensitivity gave **P=0.1959**; both were `FAIL`. These values are retained so the active ecological/nuclear reframe does not erase earlier negative diagnostics, but neither enters the current five-result scientific spine.
-
-## Programme routing
-
-- paired Azami breadth × EAzami depth synthesis → active programme interpretation and package rebuild;
-- JEB V4 package synchronization → apply `JEB_V4_PACKAGE_SPACE_TIME_PATCH_V1.md` and figure-map v6, then rebuild manuscript/figures/SI;
-- species-tip colour/genomic compression → Supporting Information resolution audit and Chapter 3 design;
-- present-state covariance simulations → Chapter 1 Supplement/thesis methods;
-- Taiwan multi-source occurrence sensitivity → compact main-package sensitivity plus full Supporting Information provenance; primary replacement only after an outcome-independent harmonization contract;
-- Japan-wide own RAD-seq plus same-individual phenotype/cytotype → Chapter 3 history discrimination;
-- orientation/phyllary/stickiness mechanism and fitness tests → Chapter 3 causal layer;
-- calibrated visible/UV colour and pigment chemistry → Chapter 3 colour mechanism layer;
-- absolute transition timing → STOP until calibration becomes defensible.
+Older V1–V4 manuscripts, figure maps and package files remain audit history and are not active submission sources.
