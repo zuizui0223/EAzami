@@ -1,0 +1,83 @@
+name: Build Chapter 2 Azami-EAzami concordance v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_chapter2_azami_eazami_concordance_v1.py"
+      - "data/evidence/chapter2_azami_eazami_concordance_contract_v1.json"
+      - ".github/workflows/build-chapter2-azami-eazami-concordance-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas scipy
+          python -m py_compile analysis/build_chapter2_azami_eazami_concordance_v1.py
+      - name: Recover frozen EAzami topology result
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/ch2_concordance/eazami /tmp/ch2_concordance/azami /tmp/ch2_concordance/out
+          curl -L --fail-with-body \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/actions/artifacts/9788834579/zip \
+            -o /tmp/ch2_concordance/eazami.zip
+          unzip -q /tmp/ch2_concordance/eazami.zip -d /tmp/ch2_concordance/eazami
+          test -s /tmp/ch2_concordance/eazami/chapter2_exploratory_trait_environment_topology_gate_v1.json
+      - name: Download pinned Azami full-atlas among and within tables
+        run: |
+          set -euo pipefail
+          base="https://raw.githubusercontent.com/zuizui0223/azami/03ed29f1f476ca0d0a1ea8e14e75cb0050a213ef/analysis_outputs/v2_full27_environment_atlas_2026-08-27"
+          curl -L --fail-with-body "$base/v2_full27_environment_among.csv" -o /tmp/ch2_concordance/azami/among.csv
+          curl -L --fail-with-body "$base/v2_full27_environment_within.csv" -o /tmp/ch2_concordance/azami/within.csv
+          test -s /tmp/ch2_concordance/azami/among.csv
+          test -s /tmp/ch2_concordance/azami/within.csv
+      - name: Compare all 63 commensurate rows
+        run: |
+          python analysis/build_chapter2_azami_eazami_concordance_v1.py \
+            --contract data/evidence/chapter2_azami_eazami_concordance_contract_v1.json \
+            --topology-json /tmp/ch2_concordance/eazami/chapter2_exploratory_trait_environment_topology_gate_v1.json \
+            --azami-among /tmp/ch2_concordance/azami/among.csv \
+            --azami-within /tmp/ch2_concordance/azami/within.csv \
+            --out-json /tmp/ch2_concordance/out/chapter2_azami_eazami_concordance_v1.json \
+            --out-csv /tmp/ch2_concordance/out/chapter2_azami_eazami_concordance_v1.csv \
+            | tee /tmp/ch2_concordance/out/run_summary.log
+      - name: Fail closed on comparison contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/ch2_concordance/out/chapter2_azami_eazami_concordance_v1.json').read_text())
+          assert len(x['rows'])==63
+          s=x['summary']
+          assert s['matched_rows']==63
+          assert s['primary_comparable_rows']==63
+          assert s['primary_concordant_rows'] + s['primary_discordant_rows']==63
+          assert s['eazami_raw_bh_supported_rows']==0
+          assert s['eazami_ml_bh_supported_rows']==0
+          assert s['eazami_topology_stable_rows']==46
+          assert len(s['eazami_raw_p_le_0_05_rows'])==4
+          assert all(r['primary_tree_vs_azami_among_direction'] in {'concordant_direction','discordant_direction'} for r in x['rows'])
+          print(json.dumps(s,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-azami-eazami-concordance-${{ github.run_id }}
+          path: /tmp/ch2_concordance/out/
+          if-no-files-found: error
+          retention-days: 90
