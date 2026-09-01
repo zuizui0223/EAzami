@@ -29,7 +29,15 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install numpy pandas requests opencv-python-headless
+          # The frozen Azami Chapter 1 implementation was executed against the
+          # OpenCV 4 HoughLinesP array contract. Keep that runtime contract
+          # rather than changing the frozen measurement algorithm for this pilot.
+          python -m pip install numpy pandas requests 'opencv-python-headless<5'
+          python - <<'PY'
+          import cv2
+          assert int(cv2.__version__.split('.')[0]) == 4, cv2.__version__
+          print('opencv', cv2.__version__)
+          PY
           python -m py_compile \
             analysis/audit_chapter2_four_taxon_public_image_bridge_v1.py \
             analysis/prepare_chapter2_four_taxon_public_image_measurement_pilot_v1.py \
