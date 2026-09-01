@@ -62,6 +62,16 @@ def panel(ax, label: str) -> None:
     ax.text(-0.10, 1.06, label, transform=ax.transAxes, fontweight="bold", fontsize=11, va="top")
 
 
+def yerr_from_records(records: list[dict], value_key: str = "difference", ci_key: str = "bootstrap_95") -> np.ndarray:
+    values = [float(r[value_key]) for r in records]
+    lo = [float(r[ci_key][0]) for r in records]
+    hi = [float(r[ci_key][1]) for r in records]
+    return np.array([
+        [v - l for v, l in zip(values, lo)],
+        [h - v for v, h in zip(values, hi)],
+    ])
+
+
 def save(fig, out: Path, stem: str) -> list[Path]:
     out.mkdir(parents=True, exist_ok=True)
     fig.tight_layout()
@@ -243,43 +253,59 @@ def figure4(out: Path) -> list[Path]:
     fig, axes = plt.subplots(2, 2, figsize=(9.2, 6.7))
     systems = ["ARENICOLA_BREVICAULE_IRUMTIENSE", "TAIWAN_KAWAKAMII_TATAKAENSE"]
     pretty = ["Arenicola", "Taiwan"]
-    cols = [BLUE, GOLD]
 
     ax = axes[0, 0]
     ax.axis("off")
-    for x, name, white, coloured, age in [
+    for x0, name, white, coloured, age in [
         (0.28, "Arenicola", "C. brevicaule\nwhite", "C. irumtiense\ncoloured", "~0.93 Ma"),
         (0.72, "Taiwan", "C. kawakamii\nwhite", "C. tatakaense\ncoloured", "~0.35 Ma"),
     ]:
-        ax.plot([x-0.12, x+0.12], [0.58, 0.58], color=DARK, lw=1.6, transform=ax.transAxes)
-        ax.plot(x, 0.58, "o", color=MID, transform=ax.transAxes)
-        ax.text(x-0.12, 0.70, white, ha="center", transform=ax.transAxes, fontsize=8)
-        ax.text(x+0.12, 0.70, coloured, ha="center", transform=ax.transAxes, fontsize=8)
-        ax.text(x, 0.37, f"{name}\nsplit context {age}", ha="center", transform=ax.transAxes, fontsize=8)
+        ax.plot([x0-0.12, x0+0.12], [0.58, 0.58], color=DARK, lw=1.6, transform=ax.transAxes)
+        ax.plot(x0, 0.58, "o", color=MID, transform=ax.transAxes)
+        ax.text(x0-0.12, 0.70, white, ha="center", transform=ax.transAxes, fontsize=8)
+        ax.text(x0+0.12, 0.70, coloured, ha="center", transform=ax.transAxes, fontsize=8)
+        ax.text(x0, 0.37, f"{name}\nsplit context {age}", ha="center", transform=ax.transAxes, fontsize=8)
     ax.text(0.5, 0.10, "Lineage split ≠ exact colour-transition date", transform=ax.transAxes, ha="center", color=MID, fontsize=7.5)
     ax.set_title("Dated sister-system natural experiments")
     panel(ax, "a")
 
     ax = axes[0, 1]
     x = np.arange(2)
-    chroma = [image["systems"][s]["contrasts_white_minus_coloured"]["corolla_lab_chroma"]["difference"] for s in systems]
-    lightness = [image["systems"][s]["contrasts_white_minus_coloured"]["corolla_lab_lightness"]["difference"] for s in systems]
+    chroma_rec = [image["systems"][s]["contrasts_white_minus_coloured"]["corolla_lab_chroma"] for s in systems]
+    light_rec = [image["systems"][s]["contrasts_white_minus_coloured"]["corolla_lab_lightness"] for s in systems]
+    chroma = [r["difference"] for r in chroma_rec]
+    lightness = [r["difference"] for r in light_rec]
     w = 0.32
     ax.axhline(0, color=DARK, lw=0.8)
     ax.bar(x-w/2, chroma, width=w, color=BLUE, label="Chroma")
     ax.bar(x+w/2, lightness, width=w, color=GOLD, label="Lightness")
-    ax.set_xticks(x, pretty)
+    ax.errorbar(x-w/2, chroma, yerr=yerr_from_records(chroma_rec), fmt="none", ecolor=DARK, elinewidth=0.9, capsize=2.5, zorder=3)
+    ax.errorbar(x+w/2, lightness, yerr=yerr_from_records(light_rec), fmt="none", ecolor=DARK, elinewidth=0.9, capsize=2.5, zorder=3)
+    ax.set_xticks(x, ["Arenicola\nn=7/8", "Taiwan\nn=3/3"])
     ax.set_ylabel("White − coloured")
     ax.set_title("Repeated white-state phenotype direction")
     ax.legend(frameon=False)
+    ax.text(0.98, 0.03, "95% bootstrap intervals; n=white/coloured usable", transform=ax.transAxes, ha="right", fontsize=6.6, color=MID)
     panel(ax, "b")
 
     ax = axes[1, 0]
-    obs = [rsds["systems"][s]["observation_level"]["delta_rsds_white_minus_coloured_raw"] for s in systems]
-    cells = [rsds["systems"][s]["spatial_0_05_degree_cell_sensitivity"]["delta_rsds_white_minus_coloured_raw"] for s in systems]
+    obs_rec = [rsds["systems"][s]["observation_level"] for s in systems]
+    cell_rec = [rsds["systems"][s]["spatial_0_05_degree_cell_sensitivity"] for s in systems]
+    obs = [r["delta_rsds_white_minus_coloured_raw"] for r in obs_rec]
+    cells = [r["delta_rsds_white_minus_coloured_raw"] for r in cell_rec]
+    obs_yerr = np.array([
+        [v - r["delta_rsds_bootstrap_95_raw"][0] for v, r in zip(obs, obs_rec)],
+        [r["delta_rsds_bootstrap_95_raw"][1] - v for v, r in zip(obs, obs_rec)],
+    ])
+    cell_yerr = np.array([
+        [v - r["delta_rsds_bootstrap_95_raw"][0] for v, r in zip(cells, cell_rec)],
+        [r["delta_rsds_bootstrap_95_raw"][1] - v for v, r in zip(cells, cell_rec)],
+    ])
     ax.axhline(0, color=DARK, lw=0.8)
     ax.bar(x-w/2, obs, width=w, color=BLUE, label="Observation median")
     ax.bar(x+w/2, cells, width=w, color=TEAL, label="0.05° cells")
+    ax.errorbar(x-w/2, obs, yerr=obs_yerr, fmt="none", ecolor=DARK, elinewidth=0.9, capsize=2.5, zorder=3)
+    ax.errorbar(x+w/2, cells, yerr=cell_yerr, fmt="none", ecolor=DARK, elinewidth=0.9, capsize=2.5, zorder=3)
     ax.set_xticks(x, pretty)
     ax.set_ylabel("RSDS white − coloured\n(stored raster units)")
     ax.set_title("Pair-level current radiation context")
@@ -316,12 +342,16 @@ def figure5(out: Path) -> list[Path]:
     ax = axes[0, 0]
     ax.axhline(0, color=DARK, lw=0.8)
     for j, (s, name, c) in enumerate(zip(systems, pretty, [BLUE, GOLD])):
-        vals = [image["systems"][s]["contrasts_white_minus_coloured"][m]["difference"] for m in metrics]
-        ax.bar(x + (j-0.5)*w, vals, width=w, color=c, label=name)
+        recs = [image["systems"][s]["contrasts_white_minus_coloured"][m] for m in metrics]
+        vals = [r["difference"] for r in recs]
+        xpos = x + (j-0.5)*w
+        ax.bar(xpos, vals, width=w, color=c, label=name)
+        ax.errorbar(xpos, vals, yerr=yerr_from_records(recs), fmt="none", ecolor=DARK, elinewidth=0.9, capsize=2.5, zorder=3)
     ax.set_xticks(x, mpretty)
     ax.set_ylabel("White − coloured")
     ax.set_title("Coarse directions repeated in both white lineages")
     ax.legend(frameon=False)
+    ax.text(0.98, 0.03, "95% bootstrap intervals", transform=ax.transAxes, ha="right", fontsize=6.8, color=MID)
     panel(ax, "a")
 
     ax = axes[0, 1]
