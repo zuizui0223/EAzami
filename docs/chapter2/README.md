@@ -119,20 +119,33 @@ This is a hypothesis-level process model, not demonstrated natural selection.
 
 Scientific status: **COMPLETE_PUBLIC_DATA_V3_SYNTHESIS**.
 
-Submission status: **V5_TEXT_VALIDATED — FIVE_FIGURE_AND_DOCUMENT_PACKAGE_REBUILD_PENDING**.
+Submission status: **V5_TEXT_FIGURES_AND_EMBEDDED_DOCX_VALIDATED — AUTHOR_FIELDS_AND_ARCHIVE_METADATA_PENDING**.
 
 The V5 manuscript validator passes:
 
 - abstract 220 words;
-- main text before references 4,846 words;
-- final V3 values, evidence classes and forbidden-claim guards consistent.
+- main text before references 4,980 words;
+- final V3 values, evidence classes and forbidden-claim guards consistent;
+- five main figures generated from frozen evidence and embedded into the anonymous manuscript;
+- generative-AI disclosure and Supporting Information citations validated;
+- anonymous DOCX render, a11y and metadata checks passed.
 
-No new discovery screen is required. Remaining work is:
+No new discovery screen is required. Remaining submission-only work is author-completed title-page/declaration fields and final repository/archive identifiers.
 
-1. build five figures from frozen evidence only;
-2. rebuild Supporting Information around the new Figure 3/4/5 analyses;
-3. rebuild anonymous manuscript/title page/cover letter from V5;
-4. complete reference, data-availability, declaration and claim audits.
+## Frozen legacy submission package
+
+The V5 package supersedes the former history-only JEB route, but the old package remains a reproducible audit snapshot rather than being deleted.
+
+- `MANUSCRIPT_JEB_V4.md` — final pre-V5 manuscript snapshot;
+- `CHAPTER2_CORE_RESULT_RECOVERY_V1.md` — compressed history-only result recovery;
+- `MANUSCRIPT_JEB_V3.md` and its associated figure/DOCX package — older frozen audit snapshot.
+
+Two reconstruction-aware continuous-change diagnostics from that frozen package remain explicit negative results:
+
+- original panel reconstruction-aware null: P=0.3504;
+- fixed JPN29-excluded provenance sensitivity: P=0.1959.
+
+These values remain scientific FAIL/audit-history results and are not promoted into the V5 headline sequence.
 
 ## Chapter 3 handoff
 
