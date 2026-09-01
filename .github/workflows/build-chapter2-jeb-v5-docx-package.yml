@@ -1,0 +1,138 @@
+name: Build Chapter 2 JEB V5 DOCX package
+
+on:
+  pull_request:
+    paths:
+      - "docs/chapter2/MANUSCRIPT_JEB_V5.md"
+      - "docs/chapter2/JEB_TITLE_PAGE_TEMPLATE_V2.md"
+      - "docs/chapter2/JEB_SUPPORTING_INFORMATION_V3.md"
+      - "docs/chapter2/JEB_COVER_LETTER_TEMPLATE_V2.md"
+      - "analysis/build_chapter2_jeb_docx_v1.py"
+      - "analysis/build_chapter2_jeb_docx_v3.py"
+      - "analysis/make_chapter2_jeb_figures_v5.py"
+      - "data/evidence/chapter2_orientation_origin_envelope_result_v1.json"
+      - "data/evidence/chapter2_four_taxon_azami_measurement_result_v1.json"
+      - "data/evidence/chapter2_colour_rsds_focal_concordance_result_v1.json"
+      - "data/evidence/chapter2_final_integrated_evidence_v3.json"
+      - ".github/workflows/build-chapter2-jeb-v5-docx-package.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install production dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install python-docx pillow 'matplotlib>=3.8,<4' 'numpy>=1.26,<3'
+          python -m py_compile \
+            analysis/build_chapter2_jeb_docx_v1.py \
+            analysis/build_chapter2_jeb_docx_v3.py \
+            analysis/make_chapter2_jeb_figures_v5.py
+      - name: Generate frozen V5 main figures for embedding
+        env:
+          MPLCONFIGDIR: /tmp/mplconfig
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/jeb_v5_figures
+          mkdir -p /tmp/jeb_v5_figures
+          python analysis/make_chapter2_jeb_figures_v5.py --output-dir /tmp/jeb_v5_figures | tee /tmp/jeb_v5_figures.log
+          test "$(find /tmp/jeb_v5_figures -maxdepth 1 -name 'figure*.png' | wc -l)" -eq 5
+          test "$(find /tmp/jeb_v5_figures -maxdepth 1 -name 'figure*.pdf' | wc -l)" -eq 5
+      - name: Build V5 document package with embedded figures
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/jeb_v5
+          python analysis/build_chapter2_jeb_docx_v3.py \
+            --output-dir /tmp/jeb_v5 \
+            --figure-dir /tmp/jeb_v5_figures \
+            | tee /tmp/jeb_v5_build.log
+          test -s /tmp/jeb_v5/Chapter2_JEB_Anonymous_Manuscript_V5.docx
+          test -s /tmp/jeb_v5/Chapter2_JEB_Title_Page_TEMPLATE_V2.docx
+          test -s /tmp/jeb_v5/Chapter2_JEB_Supporting_Information_V3.docx
+          test -s /tmp/jeb_v5/Chapter2_JEB_Cover_Letter_TEMPLATE_V2.docx
+      - name: Inspect DOCX routing, figure embedding, accessibility and anonymity boundary
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import re
+
+          root=Path('/tmp/jeb_v5')
+          files={
+            'main':root/'Chapter2_JEB_Anonymous_Manuscript_V5.docx',
+            'title':root/'Chapter2_JEB_Title_Page_TEMPLATE_V2.docx',
+            'si':root/'Chapter2_JEB_Supporting_Information_V3.docx',
+            'cover':root/'Chapter2_JEB_Cover_Letter_TEMPLATE_V2.docx',
+          }
+
+          def read_part(path, part):
+              with ZipFile(path) as z:
+                  return z.read(part).decode('utf-8')
+
+          def xml_text(path):
+              return re.sub(r'<[^>]+>', ' ', read_part(path, 'word/document.xml'))
+
+          text={k:xml_text(v) for k,v in files.items()}
+          active='Modular evolutionary depth and lineage-dependent environmental correspondence'
+          assert active in text['main']
+          assert active in text['title']
+          assert active in text['cover']
+          assert 'JEB submission V5' in text['si']
+          assert 'Generative AI assisted with code and prose development' in text['main']
+          assert 'Supporting Information' in text['main']
+
+          low=text['main'].casefold()
+          for forbidden in ['zuizui0223', 'rachelzhang', 'zhang ruiqi', '@gmail.com']:
+              assert forbidden not in low, forbidden
+
+          with ZipFile(files['main']) as z:
+              names=z.namelist()
+              media=[n for n in names if n.startswith('word/media/')]
+              document=z.read('word/document.xml').decode('utf-8')
+              core=z.read('docProps/core.xml').decode('utf-8')
+
+          assert len(media) >= 5, media
+          for i in range(1,6):
+              assert f'Figure {i}.' in text['main'], i
+          assert document.count('descr="') >= 5, 'missing figure alt text'
+          for phrase in [
+              'Three-panel figure comparing orientation',
+              'zero of three trait pairs passes',
+              'Historical state-trajectory cosine values',
+              'RSDS white-minus-coloured is positive in Arenicola',
+              'partial coordinated remodelling between rejected extremes',
+          ]:
+              assert phrase in document, phrase
+
+          core_low=core.casefold()
+          for forbidden in ['zuizui0223', 'rachelzhang', 'zhang ruiqi', '@gmail.com']:
+              assert forbidden not in core_low, forbidden
+
+          for path in files.values():
+              assert path.stat().st_size > 5000, (path, path.stat().st_size)
+
+          print({
+              'file_sizes':{k:v.stat().st_size for k,v in files.items()},
+              'main_embedded_media':len(media),
+              'main_alt_text_count':document.count('descr="'),
+              'main_figure_captions':sum(f'Figure {i}.' in text['main'] for i in range(1,6)),
+              'anonymous_core_metadata':True,
+          })
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-jeb-v5-docx-package-${{ github.run_id }}
+          path: |
+            /tmp/jeb_v5/*.docx
+            /tmp/jeb_v5_build.log
+            /tmp/jeb_v5_figures.log
+          if-no-files-found: error
+          retention-days: 90

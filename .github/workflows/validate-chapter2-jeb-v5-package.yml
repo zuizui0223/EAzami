@@ -1,0 +1,31 @@
+name: Validate Chapter 2 JEB V5 package
+
+on:
+  pull_request:
+    paths:
+      - "docs/chapter2/MANUSCRIPT_JEB_V5.md"
+      - "docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V5.md"
+      - "analysis/validate_chapter2_manuscript_v5.py"
+      - "data/evidence/chapter2_final_integrated_evidence_v3.json"
+      - "data/evidence/chapter2_orientation_origin_envelope_result_v1.json"
+      - "data/evidence/chapter2_four_taxon_azami_measurement_result_v1.json"
+      - "data/evidence/chapter2_colour_rsds_focal_concordance_result_v1.json"
+      - ".github/workflows/validate-chapter2-jeb-v5-package.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate V5 manuscript and figure contract
+        run: |
+          set -euo pipefail
+          python -m py_compile analysis/validate_chapter2_manuscript_v5.py
+          python analysis/validate_chapter2_manuscript_v5.py

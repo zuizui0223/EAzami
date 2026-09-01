@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Validate the Chapter 2 space-time public-data synthesis and closure ledger."""
+"""Validate the Chapter 2 space-time public-data synthesis and closure ledger.
+
+The v1 ledger remains a frozen historical synthesis. The active Chapter 2
+entrypoint may route either to that original synthesis or to the later V3 final
+integrated evidence that explicitly supersedes it.
+"""
 
 from __future__ import annotations
 
@@ -10,6 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 LEDGER = ROOT / "data/evidence/chapter2_space_time_public_data_closure_v1.csv"
 SYNTHESIS = ROOT / "docs/chapter2/SPACE_TIME_PUBLIC_DATA_SYNTHESIS_V1.md"
 README = ROOT / "docs/chapter2/README.md"
+FINAL_V3 = ROOT / "data/evidence/chapter2_final_integrated_evidence_v3.json"
+FINAL_STORY_V3 = ROOT / "docs/chapter2/PUBLIC_DATA_FINAL_CHAPTER2_STORY_AND_ANALYSIS_PLAN_V3.md"
 
 REQUIRED_COLUMNS = {
     "trait_id",
@@ -93,9 +100,12 @@ def validate() -> int:
         raise AssertionError("orientation rain-adaptation claim ceiling was lost")
     checks += 3
 
+    # This is intentionally the frozen v1 colour row. Later V3 evidence adds two
+    # dated sister-system phenotype replications and a 1/2 current RSDS result;
+    # it does not rewrite this historical ledger in place.
     colour = by_trait["colour_continuous"]
     if colour["cross_axis_class"] != "space_only_radiation_sorting_candidate":
-        raise AssertionError("colour must remain a spatial radiation candidate, not a repeated-history claim")
+        raise AssertionError("frozen v1 colour ledger changed unexpectedly")
     if "beta=-0.345372" not in colour["azami_space_result"]:
         raise AssertionError("colour ledger lost the frozen negative RSDS-chroma direction")
     if "anthocyanin mediation" not in colour["forbidden_upgrade"]:
@@ -129,11 +139,28 @@ def validate() -> int:
     if not README.exists():
         raise AssertionError(f"missing Chapter 2 README: {README}")
     readme_text = README.read_text(encoding="utf-8")
-    if "SPACE_TIME_PUBLIC_DATA_SYNTHESIS_V1.md" not in readme_text:
-        raise AssertionError("Chapter 2 README does not route to the space-time synthesis")
-    if "chapter2_space_time_public_data_closure_v1.csv" not in readme_text:
-        raise AssertionError("Chapter 2 README does not route to the closure ledger")
-    checks += 2
+    legacy_route = (
+        "SPACE_TIME_PUBLIC_DATA_SYNTHESIS_V1.md" in readme_text
+        and "chapter2_space_time_public_data_closure_v1.csv" in readme_text
+    )
+    v3_route = (
+        "PUBLIC_DATA_FINAL_CHAPTER2_STORY_AND_ANALYSIS_PLAN_V3.md" in readme_text
+        and "chapter2_final_integrated_evidence_v3.json" in readme_text
+    )
+    if not (legacy_route or v3_route):
+        raise AssertionError("Chapter 2 README routes to neither frozen v1 closure nor superseding V3 synthesis")
+    if v3_route:
+        if not FINAL_V3.exists() or not FINAL_STORY_V3.exists():
+            raise AssertionError("README routes to V3 but V3 final synthesis assets are missing")
+        final_text = FINAL_STORY_V3.read_text(encoding="utf-8")
+        for phrase in (
+            "hierarchical scale dependence",
+            "modular hierarchical selection-mosaic model",
+            "does **not** establish adaptation",
+        ):
+            if phrase not in final_text:
+                raise AssertionError(f"V3 final story lost required boundary: {phrase}")
+    checks += 3
 
     missing_inputs = [str(path.relative_to(ROOT)) for path in CANONICAL_INPUTS if not path.exists()]
     if missing_inputs:
