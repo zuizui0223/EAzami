@@ -100,7 +100,7 @@ These exact labels are historical aliases used by downstream validators and are 
 
 ## Frozen legacy submission package
 
-The former package remains reproducible audit history. Historical entry points include `docs/chapter2/MANUSCRIPT_JEB_V4.md`, `docs/chapter2/CHAPTER2_CORE_RESULT_RECOVERY_V1.md`, and `MANUSCRIPT_JEB_V3.md`.
+The former package remains reproducible **audit snapshots** / audit history. Historical entry points include `docs/chapter2/MANUSCRIPT_JEB_V4.md`, `docs/chapter2/CHAPTER2_CORE_RESULT_RECOVERY_V1.md`, and `MANUSCRIPT_JEB_V3.md`.
 
 Two frozen negative reconstruction-aware diagnostics remain part of the audit trail:
 
