@@ -1,0 +1,114 @@
+{
+  "analysis_id": "chapter2_eazami_exploratory_trait_environment_atlas_v1",
+  "version": "2026-09-01",
+  "status": "retrospective_exploratory_reframe_after_v5_azami_anchoring_was_identified_as_too_restrictive",
+  "purpose": "Make Chapter 2 start from an EAzami-only exploratory capitulum-trait x environment atlas, then add phylogenetic/history layers, and only after those results are frozen compare them with Azami Chapter 1 for concordance, discordance, or EAzami-specific drivers.",
+  "independence_from_azami_selection": {
+    "rule": "No Chapter 2 trait-environment row enters or leaves the primary exploratory atlas because it was significant, robust, or highlighted in Azami Chapter 1.",
+    "azami_role": "Azami is an external comparison layer after the EAzami atlas is frozen, not the predictor-selection rule for Chapter 2.",
+    "existing_orientation_bio12_and_chroma_rsds": "Retain as already-known cross-chapter comparisons, but do not privilege them during EAzami atlas construction."
+  },
+  "trait_universe": {
+    "current_continuous_core": [
+      "orientation_angle_degrees",
+      "corolla_lab_lightness",
+      "corolla_lab_chroma",
+      "shape_aspect_ratio",
+      "shape_circularity",
+      "shape_solidity",
+      "shape_width_cv"
+    ],
+    "expansion_rule": "Add every Azami-compatible continuous endpoint that can be measured reproducibly on the EAzami focal public-image cohort; retain explicit not_evaluable/unexecuted rows when coverage fails rather than selecting only successful traits.",
+    "authority_discrete_modules": [
+      "orientation_state",
+      "phyllary_posture",
+      "involucre_stickiness"
+    ],
+    "discrete_rule": "Analyse authority-coded modules in a separate state-based lane because their ontology and sampling unit differ from image-continuous endpoints; do not convert image proxies into botanical states to increase n."
+  },
+  "environment_universe": {
+    "phase1_current_available": ["BIO1", "BIO4", "BIO12", "BIO15"],
+    "phase2_common_with_azami": [
+      "BIO1",
+      "BIO4",
+      "BIO12",
+      "BIO15",
+      "RSDS",
+      "VPD",
+      "sfcWind",
+      "GSP",
+      "NPP"
+    ],
+    "blocks": {
+      "thermal": ["BIO1", "BIO4"],
+      "hydric": ["BIO12", "BIO15"],
+      "radiative_atmospheric": ["RSDS", "VPD"],
+      "mechanical": ["sfcWind"],
+      "growing_season_water_input": ["GSP"],
+      "resource_productivity": ["NPP"]
+    },
+    "selection_rule": "Every available predictor in the frozen universe is tested; no predictor is added or removed based on Azami direction or EAzami outcome inspection.",
+    "boundary": "These are correlated observational gradients. A univariate association does not identify an independent selective agent."
+  },
+  "analysis_layers": [
+    {
+      "layer": "E1_current_exploratory_atlas",
+      "question": "Which EAzami capitulum endpoints align with which current environmental axes before using Azami as a prior?",
+      "primary_output": "complete endpoint x environment table with effect, raw P, BH q, coverage and leave-one-taxon-out direction",
+      "selection": "none; retain all rows"
+    },
+    {
+      "layer": "E2_phylogenetic_and_topology_gate",
+      "question": "Which EAzami current associations survive the admitted nuclear-history uncertainty?",
+      "primary_output": "topology-aware effect/sign envelope and not_evaluable labels",
+      "selection": "candidate hierarchy may be reported only after E1 multiplicity is visible"
+    },
+    {
+      "layer": "E3_evolutionary_depth_and_event_history",
+      "question": "For traits with repeated histories, how many changes, at what relative/datable depths, and under what range-history opportunities did they occur?",
+      "primary_output": "minimum-change/depth/event registry independent of current environment"
+    },
+    {
+      "layer": "E4_historical_environment",
+      "question": "Where dated events and commensurate palaeoenvironmental variables exist, what historical environmental trajectories accompany them?",
+      "primary_output": "event-window trajectories against matched non-event windows; unresolved retained"
+    },
+    {
+      "layer": "E5_azami_concordance",
+      "question": "After EAzami results are frozen, which trait/environment relationships agree with Azami Chapter 1, disagree, or have no homologous comparison?",
+      "primary_output": "concordant / discordant / EAzami-only / Azami-only / not-comparable matrix",
+      "selection": "comparison only; cannot retroactively alter E1-E4 tests"
+    }
+  ],
+  "multiplicity": {
+    "method": "Benjamini-Hochberg",
+    "primary_family": "all successful continuous endpoint x predictor tests within the same EAzami current-atlas scope",
+    "retain_raw_p": true,
+    "retain_all_rows": true,
+    "raw_p_le_0_05_without_bh": "exploratory lead only"
+  },
+  "current_phase1_gate": {
+    "source": "data/evidence/japan_radiation_pre_tree_trait_environment_snapshot_v1.csv",
+    "minimum_balanced_environment_observations_per_taxon": 10,
+    "expected_taxa_after_gate": 8,
+    "expected_traits": 7,
+    "expected_environment_axes": 4,
+    "expected_tests": 28,
+    "statistic": "Spearman rho on taxon medians with exact taxon-label permutation and leave-one-taxon-out sign envelope",
+    "role": "small-n EAzami-only pilot; not the final nine-environment phylogenetic atlas"
+  },
+  "chapter_story_order": [
+    "EAzami exploratory current trait-environment atlas",
+    "trait-specific phylogenetic/evolutionary depth",
+    "dated/range-history and historical-environment layers where evaluable",
+    "Azami-EAzami concordance/discordance as synthesis rather than prior",
+    "public-data identifiability ceiling and Chapter 3 mechanism/fitness handoff"
+  ],
+  "claim_boundary": [
+    "Chapter 2 is exploratory and comparative, not a confirmatory test of Azami's two strongest Chapter 1 candidates.",
+    "An EAzami-only association does not establish adaptation, selection, mechanism, or historical causation.",
+    "Agreement with Azami strengthens cross-scale recurrence but does not prove a shared cause.",
+    "Disagreement with Azami is a biological result and must not be removed by predictor re-selection.",
+    "Missing or low-coverage rows remain not_evaluable rather than biological zero."
+  ]
+}
