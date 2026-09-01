@@ -1,16 +1,10 @@
 #!/usr/bin/env python3
 """Build the EAzami-first 7-trait x 9-environment exploratory atlas.
 
-Inputs
-------
-1. The frozen source-name-guarded, 0.1-degree-thinned Japan occurrence cohort
-   from the historical FDT4 artifact. BIO1/BIO4/BIO12/BIO15 are already attached.
-2. The frozen nine-environment source contract. Five additional CHELSA v2.1
-   BIOCLIM+ layers are sampled at the exact same occurrence coordinates.
-3. The existing nine-taxon continuous-trait snapshot.
-
-The analysis does NOT select predictors from Azami outcomes. Azami only supplies
-an intentionally common measurement universe for later concordance analysis.
+The input occurrence cohort must belong to the same focal taxon universe as the
+continuous-trait snapshot. Environmental variables may already be attached by a
+trait-blind live occurrence workflow; missing common-nine layers are sampled from
+the frozen CHELSA source contract. Azami outcomes are never used to select rows.
 """
 from __future__ import annotations
 
@@ -103,7 +97,6 @@ def sample_remote_raster(frame: pd.DataFrame, url: str) -> tuple[np.ndarray, dic
             nodata = src.nodata
             if nodata is not None:
                 raw[np.isclose(raw, float(nodata))] = np.nan
-            # Preserve the pinned sampler convention: apply raster scale/offset when supplied.
             scale = float(src.scales[0]) if src.scales else 1.0
             offset = float(src.offsets[0]) if src.offsets else 0.0
             values = raw * scale + offset
@@ -115,6 +108,7 @@ def sample_remote_raster(frame: pd.DataFrame, url: str) -> tuple[np.ndarray, dic
                 "nodata": None if nodata is None else float(nodata),
                 "width": int(src.width),
                 "height": int(src.height),
+                "source_mode": "sampled_by_common9_runner",
             }
     return values, meta
 
@@ -128,11 +122,9 @@ def main() -> int:
     contract = json.loads(args.environment_contract.read_text(encoding="utf-8"))
     occurrence = pd.read_csv(args.occurrences)
     traits = pd.read_csv(args.trait_snapshot)
+    n_rows_read = int(len(occurrence))
 
-    required_occ = {
-        "scientific_name_query", "scientificName", "latitude", "longitude",
-        *EXISTING_ENV.values(),
-    }
+    required_occ = {"scientific_name_query", "scientificName", "latitude", "longitude"}
     missing = sorted(required_occ.difference(occurrence.columns))
     if missing:
         raise ValueError(f"Occurrence asset missing columns: {missing}")
@@ -153,36 +145,82 @@ def main() -> int:
         raise RuntimeError("No source-name-matched coordinate records remain")
 
     predictor_contract = {row["id"]: row for row in contract["predictors"]}
+    env_columns = {row["id"]: row["column"] for row in contract["predictors"]}
     raster_meta: dict[str, dict] = {}
-    for pid, col in EXISTING_ENV.items():
-        occurrence[col] = pd.to_numeric(occurrence[col], errors="coerce")
-    for pid in ["RSDS", "VPD", "SFCWIND", "GSP", "NPP"]:
-        row = predictor_contract[pid]
-        values, meta = sample_remote_raster(occurrence, row["url"])
-        occurrence[row["column"]] = values
+
+    for pid, row in predictor_contract.items():
+        col = row["column"]
+        if col in occurrence.columns:
+            existing = pd.to_numeric(occurrence[col], errors="coerce")
+            if existing.notna().any():
+                occurrence[col] = existing
+                raster_meta[pid] = {
+                    "source_mode": "preattached_by_occurrence_workflow",
+                    "n_finite": int(existing.notna().sum()),
+                    "n_total": int(len(existing)),
+                }
+                continue
+        url = row.get("url")
+        if not url:
+            raise RuntimeError(f"Predictor {pid} missing both attached values and source URL")
+        values, meta = sample_remote_raster(occurrence, url)
+        occurrence[col] = values
         raster_meta[pid] = meta
 
-    env_columns = {row["id"]: row["column"] for row in contract["predictors"]}
     for col in env_columns.values():
         occurrence[col] = pd.to_numeric(occurrence[col], errors="coerce")
 
-    occurrence["common9_complete"] = occurrence[list(env_columns.values())].notna().all(axis=1)
-    complete = occurrence.loc[occurrence["common9_complete"]].copy()
+    predictor_nonmissing_rows = {
+        pid: int(occurrence[col].notna().sum()) for pid, col in env_columns.items()
+    }
+    predictor_taxa_with_10 = {
+        pid: int(
+            (occurrence.loc[occurrence[col].notna()].groupby("scientific_name_query").size() >= args.minimum_environment_records).sum()
+        )
+        for pid, col in env_columns.items()
+    }
 
-    count_series = complete.groupby("scientific_name_query").size().sort_index()
+    occurrence["common9_complete"] = occurrence[list(env_columns.values())].notna().all(axis=1)
+    complete_all = occurrence.loc[occurrence["common9_complete"]].copy()
+    count_series = complete_all.groupby("scientific_name_query").size().sort_index()
     eligible_taxa = count_series.loc[count_series >= args.minimum_environment_records].index.tolist()
-    complete = complete.loc[complete["scientific_name_query"].isin(eligible_taxa)].copy()
+    complete = complete_all.loc[complete_all["scientific_name_query"].isin(eligible_taxa)].copy()
 
     agg = {col: "median" for col in env_columns.values()}
     medians = complete.groupby("scientific_name_query", as_index=False).agg(agg)
-    medians["n_common9_environment_records"] = medians["scientific_name_query"].map(count_series).astype(int)
+    if not medians.empty:
+        medians["n_common9_environment_records"] = medians["scientific_name_query"].map(count_series).astype(int)
+    else:
+        medians["n_common9_environment_records"] = pd.Series(dtype=int)
     medians = medians.rename(columns={"scientific_name_query": "taxon_name"})
 
     joined = traits[["taxon_name", *TRAIT_COLUMNS]].merge(medians, on="taxon_name", how="inner")
     joined = joined.dropna(subset=[*TRAIT_COLUMNS, *env_columns.values()]).copy()
     joined = joined.sort_values("taxon_name").reset_index(drop=True)
     n_taxa = len(joined)
+
+    coverage_diagnostic = {
+        "input_taxa": sorted(occurrence["scientific_name_query"].dropna().astype(str).unique().tolist()),
+        "trait_snapshot_taxa": traits["taxon_name"].astype(str).tolist(),
+        "predictor_nonmissing_rows": predictor_nonmissing_rows,
+        "predictor_taxa_with_minimum_records": predictor_taxa_with_10,
+        "common9_complete_records_by_taxon": {str(k): int(v) for k, v in count_series.items()},
+        "eligible_common9_taxa": eligible_taxa,
+        "joined_taxa": joined["taxon_name"].tolist(),
+    }
+
     if n_taxa < 5:
+        args.out_json.parent.mkdir(parents=True, exist_ok=True)
+        diagnostic = {
+            "contract_version": "chapter2_exploratory_trait_environment_atlas_common9_v1",
+            "status_date": "2026-09-01",
+            "status": "not_evaluable_too_few_common9_taxa",
+            "n_taxa": n_taxa,
+            "coverage_diagnostic": coverage_diagnostic,
+            "raster_metadata_extension": raster_meta,
+            "claim_boundary": "Coverage failure is retained as not_evaluable and must not be repaired by outcome-dependent taxon or predictor substitution."
+        }
+        args.out_json.write_text(json.dumps(diagnostic, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         raise RuntimeError(f"Too few taxa for common-nine atlas: {n_taxa}")
     if n_taxa > 9:
         raise RuntimeError("Exact permutation implementation is capped at 9 taxa")
@@ -238,17 +276,17 @@ def main() -> int:
     result = {
         "contract_version": "chapter2_exploratory_trait_environment_atlas_common9_v1",
         "status_date": "2026-09-01",
+        "status": "executed",
         "scope": "EAzami-first retrospective exploratory current atlas; seven frozen continuous traits x nine frozen common environmental predictors; Azami outcomes not used for selection",
-        "source_occurrence_artifact": {
-            "run_id": 32716015605,
-            "artifact_id": 9516784077,
-            "table": args.occurrences.name,
-            "n_rows_read": int(len(pd.read_csv(args.occurrences, usecols=["scientific_name_query"]))),
+        "source_occurrence_input": {
+            "table": str(args.occurrences),
+            "n_rows_read": n_rows_read,
             "n_rows_after_source_and_coordinate_recheck": int(len(occurrence)),
-            "n_rows_common9_complete": int(len(complete)),
+            "n_rows_common9_complete_before_taxon_gate": int(len(complete_all)),
+            "n_rows_after_common9_taxon_gate": int(len(complete)),
         },
         "minimum_environment_records_per_taxon": args.minimum_environment_records,
-        "taxon_counts_before_gate": {str(k): int(v) for k, v in count_series.items()},
+        "coverage_diagnostic": coverage_diagnostic,
         "included_taxa": joined["taxon_name"].tolist(),
         "n_taxa": n_taxa,
         "trait_axes": [clean_trait(x) for x in TRAIT_COLUMNS],
