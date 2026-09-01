@@ -1,0 +1,78 @@
+name: Build Chapter 2 JEB V5 DOCX package
+
+on:
+  pull_request:
+    paths:
+      - "docs/chapter2/MANUSCRIPT_JEB_V5.md"
+      - "docs/chapter2/JEB_TITLE_PAGE_TEMPLATE_V2.md"
+      - "docs/chapter2/JEB_SUPPORTING_INFORMATION_V3.md"
+      - "docs/chapter2/JEB_COVER_LETTER_TEMPLATE_V2.md"
+      - "analysis/build_chapter2_jeb_docx_v1.py"
+      - "analysis/build_chapter2_jeb_docx_v3.py"
+      - ".github/workflows/build-chapter2-jeb-v5-docx-package.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install document dependency
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install python-docx
+          python -m py_compile analysis/build_chapter2_jeb_docx_v1.py analysis/build_chapter2_jeb_docx_v3.py
+      - name: Build V5 document package
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/jeb_v5
+          python analysis/build_chapter2_jeb_docx_v3.py --output-dir /tmp/jeb_v5 | tee /tmp/jeb_v5_build.log
+          test -s /tmp/jeb_v5/Chapter2_JEB_Anonymous_Manuscript_V5.docx
+          test -s /tmp/jeb_v5/Chapter2_JEB_Title_Page_TEMPLATE_V2.docx
+          test -s /tmp/jeb_v5/Chapter2_JEB_Supporting_Information_V3.docx
+          test -s /tmp/jeb_v5/Chapter2_JEB_Cover_Letter_TEMPLATE_V2.docx
+      - name: Inspect DOCX routing and anonymity boundary
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import re
+
+          root=Path('/tmp/jeb_v5')
+          files={
+            'main':root/'Chapter2_JEB_Anonymous_Manuscript_V5.docx',
+            'title':root/'Chapter2_JEB_Title_Page_TEMPLATE_V2.docx',
+            'si':root/'Chapter2_JEB_Supporting_Information_V3.docx',
+            'cover':root/'Chapter2_JEB_Cover_Letter_TEMPLATE_V2.docx',
+          }
+          def xml_text(path):
+              with ZipFile(path) as z:
+                  xml=z.read('word/document.xml').decode('utf-8')
+              return re.sub(r'<[^>]+>', ' ', xml)
+          text={k:xml_text(v) for k,v in files.items()}
+          active='Modular evolutionary depth and lineage-dependent environmental correspondence'
+          assert active in text['main']
+          assert active in text['title']
+          assert active in text['cover']
+          assert 'JEB submission V5' in text['si']
+          low=text['main'].casefold()
+          for forbidden in ['zuizui0223', 'rachelzhang', 'zhang ruiqi', '@gmail.com']:
+              assert forbidden not in low, forbidden
+          for path in files.values():
+              assert path.stat().st_size > 5000, (path, path.stat().st_size)
+          print({k:v.stat().st_size for k,v in files.items()})
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-jeb-v5-docx-package-${{ github.run_id }}
+          path: |
+            /tmp/jeb_v5/*.docx
+            /tmp/jeb_v5_build.log
+          if-no-files-found: error
+          retention-days: 90
