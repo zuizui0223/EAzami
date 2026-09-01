@@ -17,7 +17,7 @@ Active title:
 
 > **Modular evolutionary depth and lineage-dependent environmental correspondence of capitulum traits in a young thistle radiation**
 
-V5 validation passes at 220 abstract words and 4,846 main-text words before references. The five-figure package and the anonymous-manuscript/title-page/SI/cover-letter DOCX package also build successfully in CI.
+V5 validation passes at 220 abstract words and 4,980 main-text words before references. The five-figure package and the anonymous-manuscript/title-page/SI/cover-letter DOCX package also build successfully in CI.
 
 ## Dissertation mainline
 
@@ -174,6 +174,15 @@ The sampling and mechanism programme predates the V5 public-data manuscript and 
 - `FDT1 trait-to-function evidence` remains a supporting mechanism-prior layer;
 - `Cirsium reproductive-herbivory RR = 2.674` remains a supporting interaction prior rather than a Chapter 2 causal result;
 - these mechanism and interaction resources are routed to the `Chapter 3 causal layer`.
+
+## Legacy JEB V3/V4 audit aliases retained for validator compatibility
+
+The following exact phrases describe the former frozen package and are retained only so that its audit validator can still reproduce its historical entry-point checks. They are **not** current submission claims:
+
+- `HOLD_JEB_PACKAGE_REBUILD_ONLY` was the former package-hold status;
+- `Active standalone title` was the former status heading;
+- the historical sentence fragment `v4 is current submission text` records the state before V5 replaced it;
+- `CHAPTER2_CORE_RESULT_RECOVERY_V1.md` remains a reproducible compressed recovery artifact for the earlier history-only package.
 
 ## Active sources of truth
 
