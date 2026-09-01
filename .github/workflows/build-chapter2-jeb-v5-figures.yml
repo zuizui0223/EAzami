@@ -1,0 +1,77 @@
+name: Build Chapter 2 JEB V5 figures
+
+on:
+  pull_request:
+    paths:
+      - "analysis/make_chapter2_jeb_figures_v5.py"
+      - "docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V5.md"
+      - "data/evidence/chapter2_final_integrated_evidence_v3.json"
+      - "data/evidence/chapter2_orientation_origin_envelope_result_v1.json"
+      - "data/evidence/chapter2_four_taxon_azami_measurement_result_v1.json"
+      - "data/evidence/chapter2_colour_rsds_focal_concordance_result_v1.json"
+      - ".github/workflows/build-chapter2-jeb-v5-figures.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install figure dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'matplotlib>=3.8,<4' 'numpy>=1.26,<3'
+          python -m py_compile analysis/make_chapter2_jeb_figures_v5.py
+      - name: Generate five main figures
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/jeb_v5_figures
+          python analysis/make_chapter2_jeb_figures_v5.py --output-dir /tmp/jeb_v5_figures | tee /tmp/jeb_v5_figures.log
+      - name: Validate figure package and evidence decisions
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+
+          root=Path('/tmp/jeb_v5_figures')
+          expected=[
+              'figure1_evolutionary_depth',
+              'figure2_shared_history_boundary',
+              'figure3_orientation_state_trajectory',
+              'figure4_colour_rsds_natural_experiment',
+              'figure5_whole_capitulum_synthesis',
+          ]
+          for stem in expected:
+              for ext in ('png','pdf'):
+                  p=root/f'{stem}.{ext}'
+                  assert p.is_file() and p.stat().st_size > 5000, (p, p.stat().st_size if p.exists() else None)
+          origin=json.loads(Path('data/evidence/chapter2_orientation_origin_envelope_result_v1.json').read_text())
+          image=json.loads(Path('data/evidence/chapter2_four_taxon_azami_measurement_result_v1.json').read_text())
+          rsds=json.loads(Path('data/evidence/chapter2_colour_rsds_focal_concordance_result_v1.json').read_text())
+          final=json.loads(Path('data/evidence/chapter2_final_integrated_evidence_v3.json').read_text())
+          assert origin['chronology']['n_valid_age_pairs']==94
+          assert origin['cross_scenario_summary']['n_region_by_chronology_scenarios']==376
+          assert rsds['chapter_summary']['primary_concordant_systems']==1
+          assert rsds['systems']['ARENICOLA_BREVICAULE_IRUMTIENSE']['observation_level']['azami_direction_concordant'] is True
+          assert rsds['systems']['TAIWAN_KAWAKAMII_TATAKAENSE']['observation_level']['azami_direction_concordant'] is False
+          assert image['repeated_same_direction_across_two_sister_systems']['shape_circularity']=='white_higher'
+          assert image['repeated_same_direction_across_two_sister_systems']['shape_solidity']=='white_higher'
+          assert image['repeated_same_direction_across_two_sister_systems']['visible_floret_fraction_extended']=='white_lower'
+          assert final['chapter_model']=='modular_hierarchical_selection_mosaic_with_partial_coordinated_remodelling'
+          print({'status':'VALID','files':10})
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-jeb-v5-main-figures-${{ github.run_id }}
+          path: |
+            /tmp/jeb_v5_figures/*.png
+            /tmp/jeb_v5_figures/*.pdf
+            /tmp/jeb_v5_figures.log
+          if-no-files-found: error
+          retention-days: 90
