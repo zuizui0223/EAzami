@@ -1,0 +1,96 @@
+{
+  "materialization_version": "chapter2_orientation_origin_envelope_materialized_summary_v1",
+  "materialization_scope": "decision_summary_only_full_376_scenario_rows_retained_in_source_artifact",
+  "source_workflow_run_id": 33403515236,
+  "source_artifact_id": 9762830184,
+  "source_artifact_sha256": "65ff0756f9682efce2640ea7269d7e43c632b87a16714e71e804d81ca4c71570",
+  "source_head_sha": "4575df287cbb0721b8d3332c98378139d929fd91",
+  "public_data_contract": "checksum-locked PALEO-PGEM BIO1/BIO4/BIO12/BIO15 with analysis/run_chapter2_orientation_origin_envelope_v1.py",
+  "contract_version": "chapter2_orientation_origin_envelope_v1",
+  "analysis_scope": "cross-study scenario envelope; not a joint chronology posterior",
+  "chronology": {
+    "n_valid_age_pairs": 94,
+    "duration_ka": {
+      "min": 10.000000000000009,
+      "q05": 30.00000000000003,
+      "median": 235.00000000000006,
+      "q95": 493.4999999999999,
+      "max": 580.0
+    },
+    "central_pair_ma": [0.74, 0.79],
+    "broad_marginal_envelope_ma": [0.6, 1.18]
+  },
+  "azami_beta_vector": {
+    "BIO1": -0.0302378798369909,
+    "BIO4": -0.1177993887302003,
+    "BIO12": 0.3043592858977514,
+    "BIO15": 0.0670043446773373
+  },
+  "region_summaries": {
+    "taiwan": {
+      "n_grid_cells": 20,
+      "n_chronology_scenarios": 94,
+      "cosine_similarity": {"q05": -0.7912451044970455, "median": -0.12188679469945418, "q95": 0.5921083956790492},
+      "cosine_null_percentile": {"q05": 0.07610783890465031, "median": 0.45206301491872636, "q95": 0.814937883617279},
+      "fraction_cosine_positive": 0.3829787234042553,
+      "fraction_null_percentile_ge_0_95": 0.0,
+      "fraction_null_percentile_le_0_05": 0.031914893617021274
+    },
+    "ryukyu_corridor": {
+      "n_grid_cells": 80,
+      "n_chronology_scenarios": 94,
+      "cosine_similarity": {"q05": -0.8594886593545632, "median": -0.08395431108524735, "q95": 0.6407792925977046},
+      "cosine_null_percentile": {"q05": 0.0740962115962116, "median": 0.4676048314049519, "q95": 0.81122595729473},
+      "fraction_cosine_positive": 0.4148936170212766,
+      "fraction_null_percentile_ge_0_95": 0.0,
+      "fraction_null_percentile_le_0_05": 0.02127659574468085
+    },
+    "southern_japan": {
+      "n_grid_cells": 63,
+      "n_chronology_scenarios": 94,
+      "cosine_similarity": {"q05": -0.6946230287594598, "median": 0.05417341856401893, "q95": 0.6427885142679864},
+      "cosine_null_percentile": {"q05": 0.08483207003309491, "median": 0.5389668822504643, "q95": 0.9005917066397373},
+      "fraction_cosine_positive": 0.5531914893617021,
+      "fraction_null_percentile_ge_0_95": 0.031914893617021274,
+      "fraction_null_percentile_le_0_05": 0.02127659574468085
+    },
+    "east_asia_core_corridor": {
+      "n_grid_cells": 270,
+      "n_chronology_scenarios": 94,
+      "cosine_similarity": {"q05": -0.8102879949417746, "median": -0.07805897349938386, "q95": 0.5775212057833247},
+      "cosine_null_percentile": {"q05": 0.04251188803631255, "median": 0.4714311906816221, "q95": 0.8300761768121883},
+      "fraction_cosine_positive": 0.44680851063829785,
+      "fraction_null_percentile_ge_0_95": 0.02127659574468085,
+      "fraction_null_percentile_le_0_05": 0.07446808510638298
+    }
+  },
+  "cross_scenario_summary": {
+    "n_region_by_chronology_scenarios": 376,
+    "cosine_similarity": {
+      "min": -0.9968514173234555,
+      "q05": -0.799077884385244,
+      "median": -0.06470734050181678,
+      "q95": 0.6086612695908453,
+      "max": 0.8925726551710511
+    },
+    "cosine_null_percentile": {
+      "min": 0.0010438413361169101,
+      "q05": 0.059693307133298325,
+      "median": 0.4704672395273899,
+      "q95": 0.8427242558326629,
+      "max": 0.990909090909091
+    },
+    "fraction_cosine_positive": 0.449468085106383,
+    "fraction_cosine_negative": 0.550531914893617,
+    "fraction_null_percentile_ge_0_95": 0.013297872340425532,
+    "fraction_null_percentile_le_0_05": 0.03723404255319149,
+    "classification": "origin_trajectory_unresolved_under_public_chronology_and_paleolocation_uncertainty"
+  },
+  "claim_boundary": [
+    "The chronology grid is not a joint posterior and its rows are not independent replicates.",
+    "The regional boxes are paleolocation scenarios, not reconstructed ancestral-area probabilities.",
+    "A branch-endpoint trajectory does not identify the exact environmental state at the unknown transition instant.",
+    "Concordance does not establish selection, adaptation or convergence.",
+    "Discordance does not prove the present environmental association is non-adaptive; it can reflect origin-maintenance decoupling, range sorting, or unresolved ancestry."
+  ]
+}

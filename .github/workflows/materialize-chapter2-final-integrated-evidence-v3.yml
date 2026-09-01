@@ -1,0 +1,166 @@
+name: Materialize Chapter 2 final integrated evidence v3
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_chapter2_final_integrated_evidence_v3.py"
+      - ".github/workflows/materialize-chapter2-final-integrated-evidence-v3.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ch2-final-integrated-v3-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies and compile
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas xarray netCDF4
+          python -m py_compile \
+            analysis/run_chapter2_orientation_origin_envelope_v1.py \
+            analysis/build_chapter2_final_integrated_evidence_v3.py
+      - name: Download checksum-locked PALEO-PGEM shared panel
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/paleo
+          base="https://zenodo.org/records/21327244/files"
+          for f in \
+            PALEO-PGEM-Series_bio1_mean.nc \
+            PALEO-PGEM-Series_bio4_mean.nc \
+            PALEO-PGEM-Series_bio12_mean.nc \
+            PALEO-PGEM-Series_bio15_mean.nc; do
+            curl --fail --location --retry 5 --retry-delay 5 "${base}/${f}?download=1" -o "/tmp/paleo/${f}"
+          done
+          echo '570e4b746e0b9c0cf82a2a5f85a6cff9  /tmp/paleo/PALEO-PGEM-Series_bio1_mean.nc' | md5sum -c -
+          echo 'b6f90b330e4161b983d735b7f9f7a01f  /tmp/paleo/PALEO-PGEM-Series_bio4_mean.nc' | md5sum -c -
+          echo 'b029ef3f40d666e3d96ec1d9f42bef54  /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc' | md5sum -c -
+          echo 'f4c8d91815816f42959b90d512ac8b8e  /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc' | md5sum -c -
+      - name: Recompute orientation chronology x paleolocation envelope
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/origin
+          python analysis/run_chapter2_orientation_origin_envelope_v1.py \
+            --contract data/evidence/chapter2_orientation_origin_envelope_contract_v1.json \
+            --bio1 /tmp/paleo/PALEO-PGEM-Series_bio1_mean.nc \
+            --bio4 /tmp/paleo/PALEO-PGEM-Series_bio4_mean.nc \
+            --bio12 /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc \
+            --bio15 /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc \
+            --out /tmp/origin/chapter2_orientation_origin_envelope_result_v1.json \
+            | tee /tmp/origin/run.log
+      - name: Render orientation result package
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          src=Path('/tmp/origin/chapter2_orientation_origin_envelope_result_v1.json')
+          x=json.loads(src.read_text())
+          assert x['chronology']['n_valid_age_pairs'] >= 50
+          assert set(x['region_summaries']) == {'taiwan','ryukyu_corridor','southern_japan','east_asia_core_corridor'}
+          cls=x['cross_scenario_summary']['classification']
+          assert cls in {
+            'robust_state_trajectory_concordance_under_scenario_envelope',
+            'robust_state_trajectory_discordance_under_scenario_envelope',
+            'origin_trajectory_unresolved_under_public_chronology_and_paleolocation_uncertainty'
+          }
+          Path('data/evidence/chapter2_orientation_origin_envelope_result_v1.json').write_text(
+              json.dumps(x, indent=2)+'\n', encoding='utf-8')
+          rows=[]
+          for region,s in x['region_summaries'].items():
+              rows.append({
+                'region':region,
+                'n_grid_cells':s['n_grid_cells'],
+                'n_chronology_scenarios':s['n_chronology_scenarios'],
+                'cosine_q05':s['cosine_similarity']['q05'],
+                'cosine_median':s['cosine_similarity']['median'],
+                'cosine_q95':s['cosine_similarity']['q95'],
+                'fraction_cosine_positive':s['fraction_cosine_positive'],
+                'null_percentile_median':s['cosine_null_percentile']['median'],
+                'fraction_null_ge_0_95':s['fraction_null_percentile_ge_0_95'],
+                'fraction_null_le_0_05':s['fraction_null_percentile_le_0_05'],
+              })
+          out=Path('data/evidence/chapter2_orientation_origin_envelope_region_summary_v1.csv')
+          with out.open('w', newline='', encoding='utf-8') as f:
+              w=csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
+          c=x['cross_scenario_summary']
+          md=f'''# Orientation origin chronology × paleolocation envelope v1\n\nStatus: materialized from public PALEO-PGEM in CI.\n\n## Decision\n\n`{cls}`\n\n- valid chronology pairs: {x['chronology']['n_valid_age_pairs']}\n- region × chronology scenarios: {c['n_region_by_chronology_scenarios']}\n- cosine q05 / median / q95: {c['cosine_similarity']['q05']:.4f} / {c['cosine_similarity']['median']:.4f} / {c['cosine_similarity']['q95']:.4f}\n- null-percentile median: {c['cosine_null_percentile']['median']:.4f}\n\n## Interpretation boundary\n\nThis is a deterministic cross-study chronology × paleolocation scenario envelope, not a joint chronology posterior or ancestral-area posterior. It tests whether historical environmental trajectory direction is robust to those public-data uncertainties. It does not establish selection, adaptation, convergence or an exact transition date.\n'''
+          Path('docs/chapter2/ORIENTATION_ORIGIN_ENVELOPE_RESULT_V1.md').write_text(md, encoding='utf-8')
+          print(json.dumps({'classification':cls,'n':c['n_region_by_chronology_scenarios']}, indent=2))
+          PY
+      - name: Build final integrated Chapter 2 matrix and story
+        run: |
+          set -euo pipefail
+          python analysis/build_chapter2_final_integrated_evidence_v3.py \
+            --orientation-origin data/evidence/chapter2_orientation_origin_envelope_result_v1.json \
+            --out-csv data/evidence/chapter2_final_integrated_evidence_v3.csv \
+            --out-json data/evidence/chapter2_final_integrated_evidence_v3.json \
+            --out-story docs/chapter2/PUBLIC_DATA_FINAL_CHAPTER2_STORY_AND_ANALYSIS_PLAN_V3.md
+      - name: Validate final synthesis against frozen source results
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          final=json.loads(Path('data/evidence/chapter2_final_integrated_evidence_v3.json').read_text())
+          image=json.loads(Path('data/evidence/chapter2_four_taxon_azami_measurement_result_v1.json').read_text())
+          rsds=json.loads(Path('data/evidence/chapter2_colour_rsds_focal_concordance_result_v1.json').read_text())
+          origin=json.loads(Path('data/evidence/chapter2_orientation_origin_envelope_result_v1.json').read_text())
+          assert final['n_rows']==7
+          assert final['colour_public_image_assay_gate'] is True
+          assert final['colour_current_rsds_classification']=='partial_current_rsds_chroma_directional_concordance'
+          assert final['orientation_origin_classification']==origin['cross_scenario_summary']['classification']
+          assert final['chapter_model']=='modular_hierarchical_selection_mosaic_with_partial_coordinated_remodelling'
+          rows={r['trait_driver']:r for r in final['rows']}
+          colour=rows['flower colour × radiative environment']
+          assert '1/2' in colour['key_quantitative_result']
+          assert 'universal_ST1_persistent_RSDS_driver_weakened' in colour['process_model']
+          assert image['repeated_same_direction_across_two_sister_systems']['shape_circularity']=='white_higher'
+          assert image['repeated_same_direction_across_two_sister_systems']['shape_solidity']=='white_higher'
+          assert image['repeated_same_direction_across_two_sister_systems']['visible_floret_fraction_extended']=='white_lower'
+          assert rsds['systems']['ARENICOLA_BREVICAULE_IRUMTIENSE']['observation_level']['azami_direction_concordant'] is True
+          assert rsds['systems']['TAIWAN_KAWAKAMII_TATAKAENSE']['observation_level']['azami_direction_concordant'] is False
+          whole=rows['whole capitulum × common syndrome versus modular mosaic']
+          assert whole['final_class']=='partial_module_covariation_universal_synchronized_syndrome_not_supported'
+          assert all(r['causal_claim_allowed']=='no' for r in final['rows'])
+          story=Path('docs/chapter2/PUBLIC_DATA_FINAL_CHAPTER2_STORY_AND_ANALYSIS_PLAN_V3.md').read_text()
+          for phrase in [
+            'hierarchical scale dependence',
+            'modular hierarchical selection-mosaic model',
+            'Arenicola versus Taiwan colour natural experiment',
+            'not complete independence',
+            'does **not** establish adaptation'
+          ]:
+              assert phrase in story, phrase
+          print(json.dumps({'status':'VALID','classes':{k:v['final_class'] for k,v in rows.items()}}, indent=2))
+          PY
+      - name: Commit materialized final package
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            data/evidence/chapter2_orientation_origin_envelope_result_v1.json \
+            data/evidence/chapter2_orientation_origin_envelope_region_summary_v1.csv \
+            docs/chapter2/ORIENTATION_ORIGIN_ENVELOPE_RESULT_V1.md \
+            data/evidence/chapter2_final_integrated_evidence_v3.csv \
+            data/evidence/chapter2_final_integrated_evidence_v3.json \
+            docs/chapter2/PUBLIC_DATA_FINAL_CHAPTER2_STORY_AND_ANALYSIS_PLAN_V3.md
+          if git diff --cached --quiet; then
+            echo 'Final Chapter 2 package unchanged.'
+          else
+            git commit -m 'Materialize Chapter 2 final integrated evidence v3'
+            git push origin HEAD:${{ github.event.pull_request.head.ref || github.ref_name }}
+          fi
