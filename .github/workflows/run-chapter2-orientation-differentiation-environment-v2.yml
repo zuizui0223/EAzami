@@ -1,0 +1,92 @@
+name: Run Chapter 2 orientation differentiation environment v2
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_chapter2_orientation_differentiation_environment_v2.py"
+      - "analysis/run_chapter2_orientation_origin_envelope_v1.py"
+      - "data/evidence/chapter2_orientation_origin_envelope_contract_v1.json"
+      - "data/evidence/chapter2_historical_differentiation_trigger_contract_v1.json"
+      - ".github/workflows/run-chapter2-orientation-differentiation-environment-v2.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: ch2-orientation-differentiation-environment-v2-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  differentiation-environment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas xarray netCDF4
+          python -m py_compile analysis/run_chapter2_orientation_origin_envelope_v1.py analysis/run_chapter2_orientation_differentiation_environment_v2.py
+      - name: Download frozen public PALEO-PGEM panel
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/paleo
+          base="https://zenodo.org/records/21327244/files"
+          for f in \
+            PALEO-PGEM-Series_bio1_mean.nc \
+            PALEO-PGEM-Series_bio4_mean.nc \
+            PALEO-PGEM-Series_bio12_mean.nc \
+            PALEO-PGEM-Series_bio15_mean.nc; do
+            curl --fail --location --retry 5 --retry-delay 5 "${base}/${f}?download=1" -o "/tmp/paleo/${f}"
+          done
+          echo '570e4b746e0b9c0cf82a2a5f85a6cff9  /tmp/paleo/PALEO-PGEM-Series_bio1_mean.nc' | md5sum -c -
+          echo 'b6f90b330e4161b983d735b7f9f7a01f  /tmp/paleo/PALEO-PGEM-Series_bio4_mean.nc' | md5sum -c -
+          echo 'b029ef3f40d666e3d96ec1d9f42bef54  /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc' | md5sum -c -
+          echo 'f4c8d91815816f42959b90d512ac8b8e  /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc' | md5sum -c -
+      - name: Run historical level-change-variability analysis
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/result
+          python analysis/run_chapter2_orientation_differentiation_environment_v2.py \
+            --orientation-contract data/evidence/chapter2_orientation_origin_envelope_contract_v1.json \
+            --trigger-contract data/evidence/chapter2_historical_differentiation_trigger_contract_v1.json \
+            --bio1 /tmp/paleo/PALEO-PGEM-Series_bio1_mean.nc \
+            --bio4 /tmp/paleo/PALEO-PGEM-Series_bio4_mean.nc \
+            --bio12 /tmp/paleo/PALEO-PGEM-Series_bio12_mean.nc \
+            --bio15 /tmp/paleo/PALEO-PGEM-Series_bio15_mean.nc \
+            --out /tmp/result/chapter2_orientation_differentiation_environment_v2.json \
+            | tee /tmp/result/run_summary.log
+      - name: Validate differentiation-only output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/result/chapter2_orientation_differentiation_environment_v2.json')
+          x=json.loads(p.read_text())
+          assert x['event_id']=='ORI_CORE_NIPPONO_STEM'
+          assert x['chronology']['n_valid_age_pairs']==94
+          assert x['chronology']['n_region_by_chronology_scenarios']==376
+          assert set(x['variables'])=={'BIO1','BIO4','BIO12','BIO15'}
+          assert len(x['scenario_rows'])==1504
+          for var,r in x['variables'].items():
+              assert set(r['per_region'])=={'taiwan','ryukyu_corridor','southern_japan','east_asia_core_corridor'}
+              assert r['signed_change_direction'] in {'robust_increase','robust_decrease','direction_unresolved'}
+              assert r['level_class'].startswith('level_mean_')
+              assert r['absolute_change_class'].startswith('absolute_delta_')
+              assert r['variability_class'].startswith('temporal_sd_')
+          assert x['cross_variable_summary']['repeated_trigger_status']=='not_evaluable_single_dated_transition_event'
+          text=p.read_text().lower()
+          assert 'cosine' not in text
+          assert 'azami' not in text
+          print(json.dumps(x['cross_variable_summary'],indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-orientation-differentiation-environment-v2-${{ github.run_id }}
+          path: /tmp/result
+          if-no-files-found: error
+          retention-days: 90
