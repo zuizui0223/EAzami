@@ -1,0 +1,91 @@
+name: Audit existing occurrence artifact for Chapter 2 full environment atlas
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/audit-chapter2-existing-occurrence-artifact-for-full-environment-atlas.yml"
+      - "data/evidence/chapter2_exploratory_trait_environment_atlas_contract_v1.json"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download frozen Japan occurrence-niche artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/old_artifact /tmp/unpacked
+          curl -L --fail-with-body \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/actions/artifacts/9516784077/zip \
+            -o /tmp/old_artifact/fdt4-japan-orientation-niche-v1.zip
+          unzip -q /tmp/old_artifact/fdt4-japan-orientation-niche-v1.zip -d /tmp/unpacked
+      - name: Audit coordinate-bearing reusable assets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import csv, json
+
+          root=Path('/tmp/unpacked')
+          rows=[]
+          for p in sorted(root.rglob('*')):
+              if not p.is_file():
+                  continue
+              rec={
+                  'path':str(p.relative_to(root)),
+                  'bytes':p.stat().st_size,
+                  'suffix':p.suffix.lower(),
+                  'columns':[],
+                  'coordinate_columns':[],
+                  'environment_columns':[],
+                  'n_rows':None,
+                  'reusable_coordinate_asset':False,
+              }
+              if p.suffix.lower() in {'.csv','.tsv'} and p.stat().st_size>0:
+                  delim='\t' if p.suffix.lower()=='.tsv' else ','
+                  try:
+                      with p.open(encoding='utf-8',newline='') as fh:
+                          reader=csv.reader(fh,delimiter=delim)
+                          header=next(reader,[])
+                          rec['columns']=header
+                          rec['n_rows']=sum(1 for _ in reader)
+                      coord_names={'decimalLatitude','decimalLongitude','latitude','longitude','lat','lon'}
+                      rec['coordinate_columns']=[c for c in header if c in coord_names]
+                      rec['environment_columns']=[c for c in header if ('bio' in c.lower() or 'chelsa' in c.lower() or c.lower() in {'rsds','vpd','gsp','npp','sfcwind'})]
+                      has_lat=any(c in header for c in ['decimalLatitude','latitude','lat'])
+                      has_lon=any(c in header for c in ['decimalLongitude','longitude','lon'])
+                      rec['reusable_coordinate_asset']=has_lat and has_lon and (rec['n_rows'] or 0)>0
+                  except Exception as exc:
+                      rec['read_error']=repr(exc)
+              rows.append(rec)
+
+          reusable=[r for r in rows if r['reusable_coordinate_asset']]
+          report={
+              'source_run_id':32716015605,
+              'source_artifact_id':9516784077,
+              'source_artifact_name':'fdt4-japan-orientation-niche-v1',
+              'files':rows,
+              'reusable_coordinate_assets':reusable,
+              'n_reusable_coordinate_assets':len(reusable),
+              'decision':'reusable' if reusable else 'not_reusable_as_coordinate_source',
+              'boundary':'Artifact was created by a failed late-stage guard run; only nonempty coordinate-bearing tables are eligible for reuse, and all downstream extraction must revalidate source-name and occurrence-quality gates.'
+          }
+          out=Path('/tmp/chapter2_existing_occurrence_artifact_audit.json')
+          out.write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+          print(json.dumps(report,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-existing-occurrence-artifact-audit-${{ github.run_id }}
+          path: /tmp/chapter2_existing_occurrence_artifact_audit.json
+          if-no-files-found: error
+          retention-days: 90
