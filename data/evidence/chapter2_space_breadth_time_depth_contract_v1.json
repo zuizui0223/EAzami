@@ -1,83 +1,39 @@
 {
   "contract_version": "chapter2_space_breadth_time_depth_v1",
   "status_date": "2026-09-01",
-  "status": "active_scientific_framework",
-  "central_question": "How is capitulum diversity distributed across present geographic space, and how deeply and repeatedly is that diversity assembled through evolutionary time?",
-  "axes": {
-    "space_breadth": {
-      "role": "primary current-state axis",
-      "definition": "The geographic extent and characteristic spatial scale over which a capitulum trait or trait state is expressed or structured in the focal East-Asian radiation.",
-      "primary_estimands": [
-        "usable coordinate-bearing coverage and occupied spatial cells",
-        "robust geographic extent such as central 90-percent great-circle separation rather than raw convex hull alone",
-        "spatial structure or distance-decay scale where observation density permits",
-        "for discrete states, spatial dispersion and repeated occurrence of the same state across separated regions",
-        "for continuous traits, spatial turnover of phenotype without forcing categorical thresholds"
-      ],
-      "secondary_diagnostics": [
-        "environmental breadth of occupied localities",
-        "trait-environment exploratory screens",
-        "regional or environmental clustering"
-      ],
-      "boundary": "Environmental predictors do not define the spatial axis and no environmental association is required to appear in the manuscript Results."
-    },
-    "time_depth": {
-      "role": "primary evolutionary-history axis",
-      "definition": "The depth, recurrence and branch distribution of trait change through the focal phylogeny.",
-      "primary_estimands": [
-        "minimum number of changes as a lower bound",
-        "relative lineage-depth envelopes across all minimum histories",
-        "terminal versus internal change-count envelopes",
-        "bootstrap-topology uncertainty",
-        "dated event windows only where public chronology supports them"
-      ],
-      "boundary": "Relative lineage depth is topology-based and is not calendar age or evolutionary rate."
-    }
-  },
-  "cross_axis_synthesis": {
-    "question": "Do traits that are spatially broad, spatially localized, or repeatedly disjunct also differ in evolutionary depth and recurrence?",
-    "allowed_descriptive_classes": [
-      "spatially_broad_and_temporally_deep",
-      "spatially_broad_and_temporally_shallow_or_recurrent",
-      "spatially_local_or_structured_and_temporally_deep",
-      "spatially_local_or_structured_and_temporally_shallow",
-      "not_evaluable"
+  "status": "supporting_diagnostic_superseded_as_chapter_organizer_by_chapter2_differentiation_time_axis_v1",
+  "original_question": "How is capitulum diversity distributed across present geographic space, and how deeply and repeatedly is that diversity assembled through evolutionary time?",
+  "current_role": "Retain environment-free spatial breadth and the space x time feasibility pilot as supporting diagnostics. The active Chapter 2 biological question is historical differentiation through evolutionary time, defined in data/evidence/chapter2_differentiation_time_axis_contract_v1.json.",
+  "space_breadth": {
+    "definition": "The geographic extent and characteristic spatial scale over which a capitulum trait or state is presently expressed.",
+    "retained_estimands": [
+      "coordinate-bearing coverage and occupied cells",
+      "robust geographic extent",
+      "spatial dispersion of discrete states",
+      "continuous phenotype turnover where coverage permits"
     ],
-    "no_forced_composite_score": true,
-    "reason": "Space and time have different observation processes and uncertainty. Preserve the component estimands rather than manufacture one arbitrary breadth-depth index."
+    "manuscript_required": false,
+    "interpretation": "Useful for coverage and current-distribution context, but not the primary differentiation estimand."
+  },
+  "time_depth": {
+    "definition": "The topology-based recurrence and relative depth of trait change.",
+    "retained_estimands": [
+      "minimum-change lower bounds",
+      "relative lineage-depth envelopes",
+      "terminal/internal change burden",
+      "bootstrap topology uncertainty"
+    ],
+    "current_role": "Feeds the active differentiation-time analysis before calendar event and historical environment layers."
   },
   "exploratory_environment_role": {
     "status": "internal_supporting_diagnostic",
-    "current_assets": [
-      "7-trait x 4-climate pilot",
-      "7-trait x 9-environment live diagnostic",
-      "all-row topology sensitivity"
-    ],
-    "use": "Generate and falsify possible process explanations after the spatial pattern is described.",
     "not_required_for_final_results": true,
-    "not_a_trait_selection_rule": true,
-    "not_a_spatial_axis_definition": true
+    "not_a_trait_selection_rule": true
   },
-  "historical_process_role": {
-    "status": "supporting_case_studies_only_when_evaluable",
-    "examples": [
-      "orientation chronology x palaeolocation envelope",
-      "dated sister-system colour contexts"
-    ],
-    "rule": "A process case enters because chronology, geography and a commensurate historical variable are independently evaluable, not because a present-day environmental screen highlighted the same variable."
-  },
-  "manuscript_priority": [
-    "present spatial breadth/structure of capitulum traits",
-    "trait-specific evolutionary depth and recurrence",
-    "space x time synthesis across traits",
-    "selected historical-process examples where independently identifiable",
-    "whole-capitulum modularity and partial coordination"
-  ],
   "claim_boundary": [
-    "No cross-project comparison is part of the Chapter 2 inferential design.",
     "Spatial breadth is not evidence of adaptation.",
-    "Repeated changes are not proof of convergence or common selective cause.",
-    "Trait-environment exploratory screens are diagnostics and may remain absent from the final manuscript Results.",
-    "Missing spatial or temporal evidence remains not_evaluable rather than biological absence."
+    "Relative lineage depth is not calendar time.",
+    "The space x time pilot does not identify the environment that generated a trait difference.",
+    "The active historical differentiation analysis supersedes this contract as the Chapter 2 organizing logic."
   ]
 }
