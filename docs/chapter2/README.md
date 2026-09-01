@@ -1,173 +1,168 @@
-# Chapter 2 — evolutionary depth, environmental trajectories and public-data limits
+# Chapter 2 — capitulum differentiation through evolutionary time
 
 ## Active contract — 2026-09-01
 
-Chapter 2 is the final public-data chapter before own-sample causal work. It asks:
+Chapter 2 is the historical-differentiation chapter. Its primary question is:
 
-1. **How often and how deeply did capitulum traits change?**
-2. **Did different capitulum modules share the same transition history?**
-3. **What present environmental gradients correspond to those traits?**
-4. **Where public chronology permits it, did the historical environment move in the same direction?**
-5. **When a similar phenotype occurs in multiple lineages, is the same environmental explanation repeated?**
-6. **Which links remain non-identifiable without Chapter 3 samples, mechanism and reproductive fitness?**
+> **How repeatedly and how deeply were capitulum traits differentiated, when can those changes be bounded in calendar time, and did particular environmental states, changes or instabilities repeatedly accompany the bounded differentiation events?**
 
-The evidence sequence is:
+The biological sequence is:
 
 ```text
-repeated history
-→ temporal geometry
-→ geographic/range exposure opportunity
-→ present environmental state correspondence
-→ historical environmental trajectory
-→ lineage/scale concordance or discordance
-→ public-data ceiling
-→ Chapter 3 mechanism + fitness
+repeated trait history
+→ relative evolutionary depth
+→ calendar event identifiability
+→ paleogeographic uncertainty
+→ historical environmental level / change / variability
+→ repeated historical trigger candidate where >=2 homologous events are independently bounded
+→ Chapter 3 mechanism + reproductive fitness
 ```
 
-## Active answer
+Present-day trait × environment analyses are supporting diagnostics only. They do not select the historical variables, transition events or manuscript results.
 
-> **Capitulum components have asymmetric evolutionary depth, and similar extant phenotypes do not necessarily share one environmental history. The best current public-data description is modular and hierarchically scale dependent, with partial coordinated remodelling nested inside trait-specific histories.**
+## Dissertation-level interpretation
 
-This conclusion lies between two unsupported extremes:
+- **Chapter 1:** present environmental gradients after spatial control → current maintenance / ecological sorting candidates;
+- **Chapter 2:** environmental context of trait differentiation through time → origin / historical trigger candidates;
+- **Chapter 3:** environment → trait function → reproductive fitness → adaptive explanation if supported.
 
-- not one universal synchronized capitulum syndrome;
-- not complete independence among all modules.
+Whether historical differentiation and present maintenance point in the same, different or reversed directions is evaluated only after both chapters are independently frozen.
+
+## Current recurrence and depth
 
 ### Orientation
 
-- minimum changes: 4–6;
-- present hydric bridge: global BIO12 plus East-Asian BIO15/BIO1 directional correspondence;
-- origin analysis: 94 age scenarios × 4 palaeolocation regions = 376 historical trajectories;
-- origin cosine q05/median/q95 = −0.799 / −0.065 / +0.609;
-- decision: repeated history and current hydric correspondence are stronger than identification of the ancestral origin environment.
+- 20 resolved concepts;
+- ML minimum = 6 changes;
+- UFBoot minimum = 4–6;
+- median relative lineage-depth envelope = 0.795–0.994;
+- admissible histories span internal-to-terminal placements.
 
-### Flower colour
+### Phyllary posture
 
-Two publicly dated sister systems reproduce the white-state phenotype:
+- 10 resolved concepts;
+- exactly 3 changes across ML and all 1,000 UFBoot trees;
+- median relative-depth envelope = 0.695–1.000.
 
-- Arenicola chroma white−coloured = −2.95;
-- Taiwan = −6.16;
-- white lineages are also lighter in both comparisons.
+### Stickiness
 
-But current RSDS is lineage dependent:
+- 13 resolved concepts;
+- exactly 5 changes across ML and all 1,000 UFBoot trees;
+- median relative-depth envelope = 0.937–0.954;
+- strongly shallow/terminal-biased relative history.
 
-- Arenicola white−coloured RSDS = +1814, Azami-direction concordant;
-- Taiwan = −686.5 and −1703 after locality aggregation, pair-level reversed;
-- primary current pair concordance = 1/2;
-- pooled within-taxon secondary slope remains negative (beta=−0.4065).
+Zero of three discrete trait pairs passes robust shared-transition localization.
 
-The result weakens a universal persistent-RSDS explanation and prioritizes origin–maintenance decoupling, driver switching and scale dependence as Chapter 3 alternatives.
+Minimum changes are lower bounds. Relative lineage depth is topology-only and is not calendar time or rate.
 
-### Phyllary posture and stickiness
+## Event-time identifiability
 
-- phyllary posture: exactly 3 changes; historical depth resolved better than driver identity;
-- stickiness: exactly 5 relatively shallow changes; simple universal defence interpretation is weakened and the biotic/cost driver remains unidentified.
+The public event ledger currently separates four evidence levels:
 
-### Whole capitulum
+1. **calendar + paleolocation + historical environment evaluable transition envelope** — one orientation event on the core-Nipponocirsium stem;
+2. **conditional dated transition branch envelopes** — white *C. kawakamii* and white *C. brevicaule* lineages, plus the broader Taiwan topology union;
+3. **dated extant sister phenotype contrasts, not reconstructed transitions** — phyllary architecture and floral-display differences in the Taiwan and Arenicola sister systems;
+4. **dated range process, trait age unlinked** — *C. dipsacolepis* and *C. lineare* distribution events relative to stickiness.
 
-- zero of three discrete trait pairs passes robust shared-transition localization;
-- present 18-D within-versus-among association-matrix similarity: rho=0.3663;
-- two white sister systems share circularity↑, solidity↑ and visible-floret fraction↓;
-- detailed geometry remains heterogeneous or low-information.
+A published split or dispersal date is never assigned directly to a parsimony change.
 
-Final process model:
+## Validated orientation differentiation-time result
 
-`modular_hierarchical_selection_mosaic_with_partial_coordinated_remodelling`
+Workflow `33482748258`, artifact `9790559360` re-summarizes the frozen 94 chronology × 4 paleolocation scenarios using only historical branch change and matched-window background.
 
-This is a hypothesis-level process model, not demonstrated natural selection.
+At the central 0.79 → 0.74 Ma pair:
 
-## Canonical active files
+- BIO1 decreases in 4/4 regions;
+- BIO4 decreases in 4/4;
+- BIO15 decreases in 4/4;
+- BIO12 increases in 3/4.
 
-### Manuscript and displays
+But every variable's regional q05–q95 signed-change range crosses zero after the full chronology uncertainty is propagated.
 
-- `MANUSCRIPT_JEB_V5.md` — active manuscript;
-- `JEB_QUESTION_RESULT_FIGURE_MAP_V5.md` — active five-figure contract;
-- `../../analysis/validate_chapter2_manuscript_v5.py` — manuscript/evidence guard.
+Decision:
 
-### Final synthesis
+`no_tested_climate_direction_survives_full_chronology_paleolocation_envelope`
 
-- `PUBLIC_DATA_FINAL_CHAPTER2_STORY_AND_ANALYSIS_PLAN_V3.md`;
-- `../../data/evidence/chapter2_final_integrated_evidence_v3.json`;
-- `../../data/evidence/chapter2_final_integrated_evidence_v3.csv`.
+Matched-window standardized direction is also unresolved.
 
-### Orientation history and environment
+Repeated-trigger status:
+
+`not_evaluable_single_dated_transition_event`
+
+Thus the public evidence identifies repeated orientation history and one bounded stem differentiation event more strongly than it identifies one common environmental direction that generated orientation differences.
+
+Detailed result:
+
+- `HISTORICAL_DIFFERENTIATION_TRIGGER_RESULT_V1.md`;
+- `../../data/evidence/chapter2_historical_differentiation_trigger_contract_v1.json`.
+
+## Extended trigger test
+
+The active V2 analysis asks whether the event is unusual despite unstable signed direction by testing:
+
+- environmental level in the event window;
+- absolute endpoint change;
+- temporal variability;
+- same-duration background windows within each paleolocation region.
+
+This is the direct test of a broader **climate-transition regime as a possible differentiation trigger**.
+
+## Active sources of truth
+
+### Scientific framing
+
+- `../../data/evidence/chapter2_differentiation_time_axis_contract_v1.json`;
+- `MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md`;
+- `HISTORICAL_DIFFERENTIATION_TRIGGER_RESULT_V1.md`.
+
+### Recurrence and depth
 
 - `../../data/evidence/japan38_relative_event_depth_v1.json`;
-- `ECOLOGICAL_EXPLANATORY_REACH_V1.md`;
-- `../../data/evidence/chapter2_ecological_explanatory_reach_v1.json`;
-- `FDT4_TAIWAN_MULTISOURCE_SENSITIVITY_V1.md`;
-- `../../data/evidence/fdt4_taiwan_multisource_orientation_sensitivity_v1.json`;
-- `ORIENTATION_ORIGIN_ENVELOPE_RESULT_V1.md`;
+- `../../data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv`;
+- `../../data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv`.
+
+### Dated-event audit
+
+- `../../data/evidence/chapter2_public_trait_event_recovery_audit_v2.csv`;
+- `../../data/evidence/chapter2_dated_tree_paleoclimate_asset_audit_v1.csv`;
 - `../../data/evidence/chapter2_orientation_origin_envelope_result_v1.json`.
 
-### Colour and coarse remodelling
+### Supporting diagnostics only
 
-- `FOUR_TAXON_AZAMI_IMAGE_PILOT_RESULT_V1.md`;
-- `../../data/evidence/chapter2_four_taxon_azami_measurement_result_v1.json`;
-- `COLOUR_RSDS_FOCAL_CONCORDANCE_RESULT_V1.md`;
-- `../../data/evidence/chapter2_colour_rsds_focal_concordance_result_v1.json`.
+- `../../data/evidence/chapter2_space_breadth_time_depth_contract_v1.json`;
+- `SPACE_BREADTH_TIME_DEPTH_PILOT_RESULT_V1.md`;
+- 7×4 / 7×9 current trait × environment screens and their topology sensitivity.
 
-## Active JEB result order
+These are not required headline Results.
 
-1. **Evolutionary depth:** orientation 4–6, phyllary 3, stickiness 5, with unequal relative-depth envelopes.
-2. **Shared-history boundary:** 0/3 discrete trait pairs retain robust common transition localization.
-3. **Orientation state–trajectory test:** present hydric correspondence, historical origin environment unresolved under chronology × palaeolocation uncertainty.
-4. **Colour natural experiment:** white phenotype repeated in two dated sister systems, current RSDS concordant in one and reversed in the other.
-5. **Whole-capitulum synthesis:** partial coarse coordinated remodelling inside modular and lineage-dependent histories.
+## V5 production snapshot
 
-## Production status
+`MANUSCRIPT_JEB_V5.md` and its figure/DOCX package retain their completed QA, but V5 is a pre-reframe snapshot and is not the active submission text.
 
-Scientific status: **COMPLETE_PUBLIC_DATA_V3_SYNTHESIS**.
+Working V6 title direction:
 
-Submission status: **V5_TEXT_FIGURES_AND_EMBEDDED_DOCX_VALIDATED — AUTHOR_FIELDS_AND_ARCHIVE_METADATA_PENDING**.
+> **Evolutionary depth and historical environmental context of capitulum differentiation in a young East-Asian thistle radiation**
 
-The V5 manuscript validator passes:
+## Claim boundaries
 
-- abstract 220 words;
-- main text before references 4,980 words;
-- final V3 values, evidence classes and forbidden-claim guards consistent;
-- five main figures generated from frozen evidence and embedded into the anonymous manuscript;
-- generative-AI disclosure and Supporting Information citations validated;
-- anonymous DOCX render, a11y and metadata checks passed.
-
-No new discovery screen is required. Remaining submission-only work is author-completed title-page/declaration fields and final repository/archive identifiers.
+- minimum changes ≠ independent origins or convergence;
+- relative lineage depth ≠ calendar time;
+- dated lineage split ≠ exact trait-transition date;
+- regional paleolocation scenario ≠ ancestral-area probability;
+- event-window climate ≠ exact exposure at the unknown transition instant;
+- repeated historical alignment ≠ natural selection;
+- adaptation requires Chapter 3 mechanism and reproductive fitness;
+- `not_evaluable` ≠ no biological relationship.
 
 ## Frozen legacy submission package
 
-The V5 package supersedes the former history-only JEB route, but the old package remains a reproducible audit snapshot rather than being deleted.
+The earlier JEB packages remain reproducible audit history and are explicitly not the active scientific route.
 
 - `MANUSCRIPT_JEB_V4.md` — final pre-V5 manuscript snapshot;
 - `CHAPTER2_CORE_RESULT_RECOVERY_V1.md` — compressed history-only result recovery;
 - `MANUSCRIPT_JEB_V3.md` and its associated figure/DOCX package — older frozen audit snapshot.
 
-Two reconstruction-aware continuous-change diagnostics from that frozen package remain explicit negative results:
+Two reconstruction-aware diagnostics remain frozen negative audit results:
 
-- original panel reconstruction-aware null: P=0.3504;
-- fixed JPN29-excluded provenance sensitivity: P=0.1959.
-
-These values remain scientific FAIL/audit-history results and are not promoted into the V5 headline sequence.
-
-## Chapter 3 handoff
-
-The highest-value own-data contrasts are now generated by both positive and discordant public evidence:
-
-- **orientation × hydric exposure:** direct wetting → pollen/effective contact → viable-seed chain;
-- **Arenicola versus Taiwan colour:** same white-state phenotype under opposite current pair-level RSDS contrast; test shared versus switched pigment/developmental mechanism and selective environment;
-- **coarse head remodelling:** determine whether repeated circularity/solidity/floret-exposure changes reflect shared development, correlated selection or geometry-only covariance;
-- **phyllary/stickiness:** test enemy, wetting, access and cost pathways directly rather than borrowing climate proxies.
-
-## Claim boundaries
-
-- minimum changes ≠ independent origins, convergence or rates;
-- relative lineage-depth ≠ absolute time;
-- dated lineage split ≠ exact trait-transition date;
-- regional palaeolocation scenario ≠ ancestral-area probability;
-- BIO12 ≠ BIO15;
-- current environmental correspondence ≠ historical causation;
-- current RSDS ≠ historical solar exposure;
-- repeated visible chroma ≠ demonstrated pigment/UV pathway;
-- partial repeated head geometry ≠ universal white-flower syndrome;
-- `not_evaluable` ≠ no relationship;
-- the final mosaic model ≠ demonstrated selection or adaptation.
-
-Older V1–V4 manuscripts, figure maps and package files remain audit history and are not active submission sources.
+- original panel P=0.3504;
+- fixed JPN29-excluded sensitivity P=0.1959.
