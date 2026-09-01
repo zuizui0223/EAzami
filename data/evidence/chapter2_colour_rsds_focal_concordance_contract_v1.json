@@ -37,11 +37,12 @@
     "reason": "Matches the among-taxon grain of the frozen Azami colour-RSDS candidate and avoids treating public within-taxon photographs as macroevolutionary replicates."
   },
   "secondary_estimands": [
+    "0.05-degree taxon-by-cell median sensitivity before sister-system contrast, to reduce repeated-locality leverage",
     "within-taxon demeaned chroma~RSDS slope pooled across all four taxa with predictor permutation restricted within taxon",
     "within-taxon demeaned slope separately inside each sister system",
     "bootstrap intervals for taxon-median RSDS and chroma differences"
   ],
-  "multiplicity": "No environment-variable screen: RSDS and chroma are the single frozen predictor-endpoint pair. Secondary slopes are diagnostics, not additional discovery tests.",
+  "multiplicity": "No environment-variable screen: RSDS and chroma are the single frozen predictor-endpoint pair. Secondary slopes and cell aggregation are diagnostics, not additional discovery tests.",
   "classification": {
     "two_system": "two_system_current_rsds_chroma_directional_concordance",
     "one_system": "partial_current_rsds_chroma_directional_concordance",
@@ -51,6 +52,7 @@
     "This tests present-state spatial concordance with Azami, not the historical environmental cause of colour transition.",
     "Current RSDS is a correlated observational gradient and does not isolate direct solar selection.",
     "Taxon RSDS contrasts can also reflect geography, elevation, ancestry and other correlated environmental differences.",
+    "Public observations can cluster spatially; the 0.05-degree cell sensitivity is required before interpreting locality-robust direction.",
     "Two sister systems do not establish a general macroevolutionary law, convergence, selection or adaptation.",
     "Do not treat CHELSA current surface RSDS as a historical surface-radiation reconstruction."
   ]
