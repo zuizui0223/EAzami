@@ -95,8 +95,7 @@ def figure1(out: Path) -> list[Path]:
     ax.set_yticks(y, traits)
     ax.set_xlim(0, 22)
     ax.set_xlabel("Resolved paper concepts")
-    ax.set_title("Trait-state coverage")
-    ax.text(0.02, 0.08, "36/38 sampled concepts\nin dominant Japanese radiation", transform=ax.transAxes, color=MID, fontsize=7.5, va="bottom")
+    ax.set_title("Trait-state coverage\n(36/38 sampled concepts in dominant radiation)")
     for yy, n in zip(y, coverage):
         ax.text(n + 0.3, yy, str(n), va="center")
     panel(ax, "a")
@@ -115,7 +114,7 @@ def figure1(out: Path) -> list[Path]:
     ax.grid(axis="x", color=LIGHT, lw=0.6)
     ax.plot([], [], "D", color=DARK, label="ML")
     ax.plot([], [], "o", mfc="white", mec=BLUE, label="UFBoot range midpoint")
-    ax.legend(frameon=False, fontsize=6.8, loc="lower right")
+    ax.legend(frameon=False, fontsize=6.8, loc="upper left")
     panel(ax, "b")
 
     ax = axes[2]
@@ -203,7 +202,6 @@ def figure3(out: Path) -> list[Path]:
     ax.set_yticks(y, labels)
     ax.set_xlabel("Standardized effect (different estimands)")
     ax.set_title("Present environmental correspondence")
-    ax.text(0.02, 0.02, "BIO12 amount ≠ BIO15 seasonality", transform=ax.transAxes, fontsize=7, color=MID)
     panel(ax, "a")
 
     ax = axes[0, 1]
