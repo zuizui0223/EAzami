@@ -1,90 +1,129 @@
-# EAzami — spatial breadth and evolutionary depth of capitulum diversity
+# EAzami — differentiation of capitulum diversity through evolutionary time
 
 ## Active state — 2026-09-01
 
-Chapter 2 is being rebuilt around two independent axes:
+Chapter 2 is being rebuilt around **trait differentiation through time**, not around replication of present-day environmental associations.
+
+The dissertation-level symmetry is:
 
 ```text
-SPACE
-present geographic breadth / spatial structure of capitulum traits
+Chapter 1
+present phenotype ~ present environmental gradient after spatial control
+→ maintenance / present ecological sorting candidates
 
-TIME
-evolutionary depth / recurrence / branch distribution of trait change
+Chapter 2
+repeated trait differentiation through evolutionary time
++ historical environmental level / change / variability at bounded event windows
+→ origin / differentiation-trigger candidates
+
+Chapter 3
+candidate environment → trait function → reproductive fitness
+→ adaptive explanation only after causal validation
 ```
 
-The active scientific frame is **not** an environment-first or cross-project comparison design.
+Chapter 1 and Chapter 2 are kept analytically independent. Whether a historical differentiation direction is retained, lost, reversed or replaced in present maintenance is a later thesis-synthesis question, not a Chapter 2 row-selection rule.
 
-Trait × environment analyses remain reproducible internal diagnostics, but they do not define the spatial axis, do not select the manuscript traits, and may remain absent from the final Results.
+## Active Chapter 2 question
 
-## Active question
+> **How repeatedly and how deeply were capitulum traits differentiated through the radiation, when can those changes be bounded in calendar time, and did particular environmental states, changes or instabilities repeatedly accompany the bounded differentiation events?**
 
-> **How broadly is capitulum diversity distributed across present geographic space, how deeply and repeatedly was that diversity assembled through evolutionary time, and how do those two dimensions differ among capitulum modules?**
+This means Chapter 2 asks more than how many changes occurred. For each trait it separates:
 
-## Current two-axis evidence
+1. minimum recurrence;
+2. relative evolutionary depth;
+3. calendar identifiability;
+4. paleogeographic identifiability;
+5. historical environmental level, signed change, absolute change and variability;
+6. whether the same historical environmental direction recurs across at least two independently bounded homologous transitions.
 
-### SPACE — environment-free pilot
-
-The first spatial-breadth pilot uses the same authority-backed discrete trait ontologies as the frozen temporal-depth analysis, with source-name-guarded GBIF geography and no environmental predictors.
-
-- workflow `33480007180`;
-- artifact `9789577849`;
-- orientation: 17 singleton-state taxa; U and D states each span roughly 1000 km or more at the taxon-centroid scale; no supported state segregation (P=0.370);
-- stickiness: 12 singleton-state taxa; sticky and nonsticky states each span roughly 800–1000 km; weak unsupported segregation tendency (P=0.131);
-- phyllary posture: only four singleton-state taxa with usable spatial support, so the primary spatial inference remains coverage-limited.
-
-These are internal feasibility results and need not appear in the final manuscript.
-
-### TIME — frozen discrete histories
+## Current history result
 
 - orientation: ML minimum 6; UFBoot minimum 4–6; median relative-depth envelope 0.795–0.994;
 - phyllary posture: exactly 3 changes; median relative-depth envelope 0.695–1.000;
 - stickiness: exactly 5 changes; shallow median relative-depth envelope 0.937–0.954;
 - zero of three discrete trait pairs passes the robust shared-transition-localization rule.
 
-Minimum changes are lower bounds. Relative lineage-depth is topology-only, not event age or rate.
+Minimum changes are lower bounds. Relative lineage depth is topology-only, not event age or rate.
 
-### SPACE × TIME feasibility
+## Current differentiation-event identifiability
 
-The joined pilot (`workflow 33480348070`) shows that the two dimensions are empirically separable:
+The public event ledger currently distinguishes:
 
-- orientation and stickiness are both geographically broad under the current taxon-level state geography;
-- their temporal-depth structures differ, with orientation permitting a broader deep–shallow history and stickiness concentrated toward shallower lineage depth;
-- phyllary retains strong temporal information but insufficient singleton-state spatial coverage for a balanced space-axis interpretation.
+- **1** calendar + paleolocation + historical-environment evaluable transition envelope: erect/upward → nodding/downward on the core-Nipponocirsium stem;
+- **3** conditional flower-colour terminal branch envelopes whose transition timing/direction or historical driver remains conditional;
+- **4** dated sister phenotype contrasts that are not reconstructed trait transitions;
+- **2** dated range processes whose ages are not the ages of stickiness changes.
 
-No cross-trait regression is fitted with only three modules and no composite breadth-depth score is constructed.
+Published lineage splits and range events are never substituted for exact trait-transition dates.
+
+## First validated historical differentiation test — orientation
+
+Workflow `33482748258` re-summarizes the frozen orientation chronology × paleolocation artifact without reading any present-day direction, comparison vector or cosine field.
+
+The bounded stem event contains:
+
+- 94 admissible chronology pairs;
+- 4 paleolocation scenarios;
+- 376 region × chronology scenarios;
+- PALEO-PGEM BIO1, BIO4, BIO12 and BIO15 branch-endpoint change.
+
+At the single central 0.79 → 0.74 Ma pair, BIO1/BIO4/BIO15 decrease in all four regions and BIO12 increases in three of four. However, after propagating the full chronology × paleolocation envelope, every variable's q05–q95 change range crosses zero in every region.
+
+Decision:
+
+`no_tested_climate_direction_survives_full_chronology_paleolocation_envelope`
+
+The event's change relative to same-duration regional background windows is also unresolved.
+
+Therefore a central-age trajectory can suggest a narrative, but no BIO1/BIO4/BIO12/BIO15 signed change is robust to the full public uncertainty envelope.
+
+Repeated-trigger status:
+
+`not_evaluable_single_dated_transition_event`
+
+Orientation is recurrent in the phylogeny, but only one orientation transition is currently bounded strongly enough for this historical-environment test. Repeated change is not automatically repeated environmental triggering.
+
+## Next differentiation test now running
+
+A second orientation analysis tests whether the bounded event window is unusual even when signed direction is unstable:
+
+- environmental level within the event window;
+- absolute endpoint change magnitude;
+- temporal variability within the window;
+- each compared with same-duration windows in the same paleolocation region.
+
+This directly tests whether a **climate-transition regime itself** is a plausible historical trigger candidate without assuming which direction should matter.
 
 ## Active Chapter 2 sources of truth
 
 Start here:
 
-1. `data/evidence/chapter2_space_breadth_time_depth_contract_v1.json` — active two-axis scientific contract;
-2. `docs/chapter2/MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md` — active V6 manuscript architecture;
-3. `docs/chapter2/SPACE_BREADTH_TIME_DEPTH_PILOT_RESULT_V1.md` — environment-free two-axis feasibility result;
-4. `data/evidence/japan38_relative_event_depth_v1.json` — frozen temporal-depth result;
-5. `data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv` plus extension v2 — authority-backed state layer.
+1. `data/evidence/chapter2_differentiation_time_axis_contract_v1.json` — active Chapter 2 scientific contract;
+2. `data/evidence/chapter2_historical_differentiation_trigger_contract_v1.json` — event-level historical environment and repeated-trigger rules;
+3. `docs/chapter2/MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md` — active V6 manuscript architecture;
+4. `docs/chapter2/HISTORICAL_DIFFERENTIATION_TRIGGER_RESULT_V1.md` — first validated differentiation-time environmental result;
+5. `data/evidence/japan38_relative_event_depth_v1.json` — frozen recurrence and relative-depth result;
+6. `data/evidence/chapter2_public_trait_event_recovery_audit_v2.csv` — dated-transition / dated-contrast / range-process identifiability ledger.
 
-Internal exploratory diagnostics retained but not required for the manuscript:
+Supporting diagnostics that do not organize the manuscript:
 
-- `data/evidence/chapter2_exploratory_trait_environment_atlas_contract_v1.json`;
-- `data/evidence/chapter2_common9_environment_source_contract_v1.json`;
-- 7×4 and 7×9 trait × environment screens;
-- all-row topology sensitivity for those screens.
+- `data/evidence/chapter2_space_breadth_time_depth_contract_v1.json` and its spatial-breadth pilot;
+- 7×4 and 7×9 current trait × environment screens;
+- current ecology/topology sensitivity screens.
+
+These may remain absent from the final Results.
 
 ## V5 status
 
-`docs/chapter2/MANUSCRIPT_JEB_V5.md` and its production package remain a reproducible **pre-reframe audit snapshot**. Their document-production QA remains valid, but V5 is no longer the active scientific framing and should not be submitted without the V6 rebuild.
+`docs/chapter2/MANUSCRIPT_JEB_V5.md` and its production package remain a reproducible **pre-reframe audit snapshot**. Their document-production QA is retained, but V5 is no longer the active scientific framing.
 
 The current working title direction is:
 
-> **Spatial breadth and evolutionary depth of capitulum diversity in an East-Asian thistle radiation**
-
-## Historical process layer
-
-Historical environment/range analyses are now supporting case studies only when independently identifiable. The existing orientation chronology × palaeolocation envelope and dated sister-system phenotype contexts remain usable evidence, but neither defines the chapter's primary axes.
+> **Evolutionary depth and historical environmental context of capitulum differentiation in a young East-Asian thistle radiation**
 
 ## Claim boundary
 
-Chapter 2 does not establish adaptation, natural selection, independent origins, adaptive convergence, exact transition ages, historical range from current occurrences, or common environmental cause from repeated states. Missing or ambiguous evidence remains `not_evaluable`.
+Chapter 2 does not establish adaptation, natural selection, independent origins, adaptive convergence, exact transition ages, ancestral-area probabilities or common environmental cause from repeated states. A historical differentiation-trigger candidate remains observational until Chapter 3 tests mechanism and reproductive fitness. Missing or ambiguous evidence remains `not_evaluable`.
 
 ## Legacy programme-routing labels retained for audit compatibility
 
