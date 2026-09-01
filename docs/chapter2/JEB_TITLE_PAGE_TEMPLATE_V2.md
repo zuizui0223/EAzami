@@ -5,7 +5,7 @@
 **Article type:** Research Article  
 **Title:** Modular evolutionary depth and lineage-dependent environmental correspondence of capitulum traits in a young thistle radiation  
 **Running title:** Modular capitulum depth and environment  
-**Main-text word count:** 4,846 words before references using the V5 CI validator count  
+**Main-text word count:** 4,980 words before references using the V5 CI validator count  
 **Abstract word count:** 220  
 **Keywords:** *Cirsium*; capitulum; environmental correspondence; evolutionary depth; mosaic evolution; palaeoclimate; phylogenetic uncertainty; trait evolution
 
