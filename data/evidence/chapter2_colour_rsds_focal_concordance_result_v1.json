@@ -1,0 +1,126 @@
+{
+  "contract_version": "chapter2_colour_rsds_focal_concordance_result_v1",
+  "status_date": "2026-09-01",
+  "source_workflow_run_id": 33464866918,
+  "source_workflow_job_id": 99722520349,
+  "source_artifact_id": 9784483997,
+  "source_artifact_sha256": "d0a5c1f146393e9ee3848556979356967e704e1cec5c217508f8d3337eb6363f",
+  "source_contract_version": "chapter2_colour_rsds_focal_concordance_contract_v1",
+  "azami_reference": {
+    "commit": "03ed29f1f476ca0d0a1ea8e14e75cb0050a213ef",
+    "endpoint": "corolla_lab_chroma",
+    "predictor": "chelsa_rsds_mean",
+    "among_taxon_beta_std": -0.3453720171,
+    "q_fdr": 0.006,
+    "expected_direction": "higher_rsds_lower_chroma"
+  },
+  "rsds_source": {
+    "url": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_rsds_1981-2010_mean_V.2.1.tif",
+    "coverage": 1.0,
+    "stored_dtype": "uint16",
+    "raster_scale_metadata": 0.001,
+    "analysis_values": "raw stored raster values returned by the pinned Azami sampler; multiplying by the source scale does not affect signs or standardized slopes",
+    "note": "Do not assign a physical unit here without a separate CHELSA unit audit."
+  },
+  "systems": {
+    "ARENICOLA_BREVICAULE_IRUMTIENSE": {
+      "white_taxon": "Cirsium brevicaule",
+      "coloured_taxon": "Cirsium irumtiense",
+      "observation_level": {
+        "rsds_n_white": 14,
+        "rsds_n_coloured": 14,
+        "rsds_median_white_raw": 17595.0,
+        "rsds_median_coloured_raw": 15781.0,
+        "delta_rsds_white_minus_coloured_raw": 1814.0,
+        "delta_rsds_bootstrap_95_raw": [663.1, 1957.0],
+        "chroma_n_white": 7,
+        "chroma_n_coloured": 8,
+        "chroma_median_white": 30.08321762084961,
+        "chroma_median_coloured": 33.03468894958496,
+        "delta_chroma_white_minus_coloured": -2.9514713287353516,
+        "delta_chroma_bootstrap_95": [-22.331764221191406, 4.714032173156738],
+        "azami_direction_concordant": true
+      },
+      "spatial_0_05_degree_cell_sensitivity": {
+        "rsds_n_white_cells": 9,
+        "rsds_n_coloured_cells": 12,
+        "delta_rsds_white_minus_coloured_raw": 1712.0,
+        "delta_rsds_bootstrap_95_raw": [6.5, 1930.0],
+        "chroma_n_white_cells": 6,
+        "chroma_n_coloured_cells": 7,
+        "delta_chroma_white_minus_coloured": -2.7088327407836914,
+        "delta_chroma_bootstrap_95": [-22.158169507980347, 4.079671859741211],
+        "azami_direction_concordant": true
+      },
+      "within_taxon_secondary": {
+        "n_observations": 15,
+        "n_taxa": 2,
+        "beta_std": -0.3813359675905283,
+        "permutation_p_two_sided": 0.1815,
+        "permutation_p_expected_negative": 0.0672
+      }
+    },
+    "TAIWAN_KAWAKAMII_TATAKAENSE": {
+      "white_taxon": "Cirsium kawakamii",
+      "coloured_taxon": "Cirsium tatakaense",
+      "observation_level": {
+        "rsds_n_white": 14,
+        "rsds_n_coloured": 14,
+        "rsds_median_white_raw": 14926.5,
+        "rsds_median_coloured_raw": 15613.0,
+        "delta_rsds_white_minus_coloured_raw": -686.5,
+        "delta_rsds_bootstrap_95_raw": [-1513.0, -172.0],
+        "chroma_n_white": 3,
+        "chroma_n_coloured": 3,
+        "chroma_median_white": 17.69180679321289,
+        "chroma_median_coloured": 23.853721618652344,
+        "delta_chroma_white_minus_coloured": -6.161914825439453,
+        "delta_chroma_bootstrap_95": [-19.479343414306648, 3.460695266723633],
+        "azami_direction_concordant": false
+      },
+      "spatial_0_05_degree_cell_sensitivity": {
+        "rsds_n_white_cells": 6,
+        "rsds_n_coloured_cells": 3,
+        "delta_rsds_white_minus_coloured_raw": -1703.0,
+        "delta_rsds_bootstrap_95_raw": [-2607.0, -368.0],
+        "chroma_n_white_cells": 1,
+        "chroma_n_coloured_cells": 1,
+        "delta_chroma_white_minus_coloured": -6.161914825439453,
+        "delta_chroma_bootstrap_95": [-6.161914825439453, -6.161914825439453],
+        "azami_direction_concordant": false,
+        "chroma_cell_sensitivity_note": "Only one usable chroma cell per taxon; the RSDS reversal is well defined but the cell-level chroma uncertainty is not estimable."
+      },
+      "within_taxon_secondary": {
+        "n_observations": 6,
+        "n_taxa": 2,
+        "beta_std": -0.7690654319172273,
+        "permutation_p_two_sided": 0.6629,
+        "permutation_p_expected_negative": 0.3345
+      }
+    }
+  },
+  "chapter_summary": {
+    "primary_concordant_systems": 1,
+    "spatial_cell_concordant_systems": 1,
+    "classification": "partial_current_rsds_chroma_directional_concordance",
+    "locality_robust_two_system_direction": false,
+    "pooled_within_taxon_secondary": {
+      "n_observations": 21,
+      "n_taxa": 4,
+      "beta_std": -0.4065488348458948,
+      "permutation_p_two_sided": 0.1141,
+      "permutation_p_expected_negative": 0.0361
+    }
+  },
+  "interpretation": "The frozen Azami current colour-RSDS direction replicates at the taxon-pair level in Arenicola but reverses in the Taiwan sister system. The reversal survives 0.05-degree locality aggregation. In contrast, the pooled within-taxon secondary slope remains negative. This is scale- and lineage-dependent present-state structure, not a universal current-RSDS explanation for repeated white states.",
+  "process_implication": "The result weakens a universal persistent-driver model for colour. It is compatible with lineage-specific environmental covariance, origin-maintenance decoupling, or driver switching/selection mosaics, but cannot distinguish among them and does not identify the historical colour-transition driver.",
+  "claim_boundary": [
+    "This tests present-state spatial concordance with Azami, not the historical environmental cause of colour transition.",
+    "Current RSDS is a correlated observational gradient and does not isolate direct solar selection.",
+    "Taxon RSDS contrasts can reflect geography, elevation, ancestry and other correlated environmental differences.",
+    "The pooled within-taxon one-sided expected-direction permutation result is secondary and small-sample; do not promote it over the prespecified taxon-pair primary result.",
+    "The Taiwan cell-level chroma sensitivity has one usable cell per role and is low-information even though the RSDS direction reversal is stable.",
+    "Two sister systems do not establish a general macroevolutionary law, convergence, selection or adaptation.",
+    "Do not treat CHELSA current surface RSDS as a historical surface-radiation reconstruction."
+  ]
+}
