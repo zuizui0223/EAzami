@@ -7,6 +7,7 @@ on:
       - "data/evidence/japan_radiation_pre_tree_trait_environment_snapshot_v1.csv"
       - "data/evidence/chapter2_exploratory_trait_environment_atlas_contract_v1.json"
       - "data/evidence/chapter2_exploratory_trait_environment_atlas_pilot_v1.json"
+      - "data/evidence/chapter2_space_breadth_time_depth_contract_v1.json"
       - "docs/chapter2/EXPLORATORY_TRAIT_ENVIRONMENT_ATLAS_REFRAME_V1.md"
       - ".github/workflows/validate-chapter2-exploratory-trait-environment-atlas-pilot-v1.yml"
   workflow_dispatch:
@@ -27,7 +28,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install numpy pandas scipy
           python -m py_compile analysis/run_chapter2_exploratory_trait_environment_atlas_pilot_v1.py
-      - name: Re-run complete 7 x 4 EAzami-only pilot
+      - name: Re-run complete 7 x 4 internal pilot
         run: |
           rm -rf /tmp/ch2_exploratory_pilot
           mkdir -p /tmp/ch2_exploratory_pilot
@@ -36,7 +37,7 @@ jobs:
             --minimum-environment-observations 10 \
             --out-json /tmp/ch2_exploratory_pilot/result.json \
             --out-csv /tmp/ch2_exploratory_pilot/result.csv
-      - name: Validate frozen result and reframe boundary
+      - name: Validate frozen result and diagnostic boundary
         run: |
           python - <<'PY'
           import json, math
@@ -45,6 +46,7 @@ jobs:
           frozen=json.loads(Path('data/evidence/chapter2_exploratory_trait_environment_atlas_pilot_v1.json').read_text())
           rerun=json.loads(Path('/tmp/ch2_exploratory_pilot/result.json').read_text())
           contract=json.loads(Path('data/evidence/chapter2_exploratory_trait_environment_atlas_contract_v1.json').read_text())
+          parent=json.loads(Path('data/evidence/chapter2_space_breadth_time_depth_contract_v1.json').read_text())
           doc=Path('docs/chapter2/EXPLORATORY_TRAIT_ENVIRONMENT_ATLAS_REFRAME_V1.md').read_text()
 
           assert frozen['n_taxa']==rerun['n_taxa']==8
@@ -70,15 +72,12 @@ jobs:
               assert fr[k]['status']==rr[k]['status']
               assert fr[k]['loo_direction']==rr[k]['loo_direction']
 
-          ori_bio12=rr[('orientation_angle_degrees','BIO12')]
-          assert abs(ori_bio12['spearman_rho'])<0.03
-          assert ori_bio12['loo_direction']=='mixed'
-
-          assert contract['independence_from_azami_selection']['azami_role'].startswith('Azami is an external comparison layer')
-          assert 'EAzami current exploratory trait × environment atlas' in doc
-          assert 'Azami ↔ EAzami concordance' in doc
-          assert 'should not be treated as the final scientific framing' in doc
-          print('chapter2_exploratory_atlas_pilot_v1=VALID')
+          assert contract['status']=='internal_exploratory_diagnostic_under_space_time_framework'
+          assert contract['manuscript_role'].startswith('optional')
+          assert parent['exploratory_environment_role']['not_required_for_final_results'] is True
+          assert 'SUPERSEDED BEFORE MERGE' in doc
+          assert 'spatial breadth / spatial structure' in doc
+          print('chapter2_exploratory_atlas_pilot_v1=VALID_INTERNAL_DIAGNOSTIC')
           PY
       - uses: actions/upload-artifact@v4
         with:
