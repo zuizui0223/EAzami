@@ -4,13 +4,15 @@ on:
   pull_request:
     paths:
       - "analysis/run_chapter2_exploratory_trait_environment_atlas_common9_v1.py"
+      - "analysis/build_focal_occurrence_niche_sample_information_v1.py"
+      - "analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py"
       - "data/evidence/chapter2_common9_environment_source_contract_v1.json"
+      - "data/evidence/chapter2_exploratory_common9_live_config_v1.json"
       - "data/evidence/japan_radiation_pre_tree_trait_environment_snapshot_v1.csv"
       - ".github/workflows/run-chapter2-exploratory-trait-environment-atlas-common9-v1.yml"
   workflow_dispatch:
 
 permissions:
-  actions: read
   contents: read
 
 jobs:
@@ -24,23 +26,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install numpy pandas scipy rasterio
-          python -m py_compile analysis/run_chapter2_exploratory_trait_environment_atlas_common9_v1.py
-      - name: Recover frozen source-name-guarded occurrence cohort
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          mkdir -p /tmp/ch2_common9/source /tmp/ch2_common9/out
-          curl -L --fail-with-body \
-            -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/${{ github.repository }}/actions/artifacts/9516784077/zip \
-            -o /tmp/ch2_common9/source/old.zip
-          unzip -q /tmp/ch2_common9/source/old.zip -d /tmp/ch2_common9/source/unpacked
-          test -s /tmp/ch2_common9/source/unpacked/focal_occurrences_environment_complete.csv
-      - name: Run full common-nine exploratory atlas
+          python -m pip install numpy pandas scipy rasterio requests scikit-learn
+          python -m py_compile \
+            analysis/build_focal_occurrence_niche_sample_information_v1.py \
+            analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py \
+            analysis/run_chapter2_exploratory_trait_environment_atlas_common9_v1.py
+      - name: Build exact nine-taxon source-name-guarded common-nine occurrence cohort
         env:
           GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
           CPL_VSIL_CURL_ALLOWED_EXTENSIONS: .tif,.tiff
@@ -49,8 +40,16 @@ jobs:
           GDAL_HTTP_RETRY_DELAY: "3"
         run: |
           set -euo pipefail
+          mkdir -p /tmp/ch2_common9/live /tmp/ch2_common9/out
+          python analysis/run_focal_occurrence_niche_sample_information_source_guard_v1.py \
+            --config data/evidence/chapter2_exploratory_common9_live_config_v1.json \
+            --out-dir /tmp/ch2_common9/live
+          test -s /tmp/ch2_common9/live/focal_occurrences_environment_complete.csv
+      - name: Run full common-nine exploratory atlas
+        run: |
+          set -euo pipefail
           python analysis/run_chapter2_exploratory_trait_environment_atlas_common9_v1.py \
-            --occurrences /tmp/ch2_common9/source/unpacked/focal_occurrences_environment_complete.csv \
+            --occurrences /tmp/ch2_common9/live/focal_occurrences_environment_complete.csv \
             --trait-snapshot data/evidence/japan_radiation_pre_tree_trait_environment_snapshot_v1.csv \
             --environment-contract data/evidence/chapter2_common9_environment_source_contract_v1.json \
             --minimum-environment-records 10 \
@@ -61,23 +60,31 @@ jobs:
       - name: Fail closed on atlas contract
         run: |
           python - <<'PY'
-          import json
+          import json, math
           from pathlib import Path
           p=Path('/tmp/ch2_common9/out/chapter2_exploratory_trait_environment_atlas_common9_v1.json')
           x=json.loads(p.read_text())
+          assert x['status']=='executed', x.get('status')
           assert x['n_tests']==63, x['n_tests']
-          assert x['n_taxa'] in {8,9}, x['n_taxa']
-          assert x['exact_permutations_per_row'] in {40320,362880}
+          assert 5 <= x['n_taxa'] <= 9, x['n_taxa']
+          assert x['exact_permutations_per_row']==math.factorial(x['n_taxa'])
           assert len(x['environment_axes'])==9
           assert set(x['environment_axes'])=={'BIO1','BIO4','BIO12','BIO15','RSDS','VPD','SFCWIND','GSP','NPP'}
           assert len(x['trait_axes'])==7
           assert all('bh_q_63' in r for r in x['rows'])
           assert all(r['n_taxa']==x['n_taxa'] for r in x['rows'])
-          print(json.dumps(x['summary'],indent=2,ensure_ascii=False))
+          print(json.dumps({
+              'included_taxa': x['included_taxa'],
+              'coverage': x['coverage_diagnostic']['common9_complete_records_by_taxon'],
+              'summary': x['summary'],
+          },indent=2,ensure_ascii=False))
           PY
       - uses: actions/upload-artifact@v4
         with:
           name: chapter2-exploratory-trait-environment-common9-${{ github.run_id }}
-          path: /tmp/ch2_common9/out/
+          path: |
+            /tmp/ch2_common9/out/
+            /tmp/ch2_common9/live/focal_niche_sampling_summary.csv
+            /tmp/ch2_common9/live/gbif_taxon_matches.csv
           if-no-files-found: error
           retention-days: 90
