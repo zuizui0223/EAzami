@@ -1,0 +1,152 @@
+{
+  "contract_version": "chapter2_four_taxon_azami_measurement_result_v1",
+  "status_date": "2026-09-01",
+  "source_workflow_run_id": 33463726473,
+  "source_artifact_id": 9784215744,
+  "source_artifact_sha256": "be81333571f3125d8a3446065c231c425f82054ecb5bd3ce4aa817185fcb7a73",
+  "azami_measurement_commit": "03ed29f1f476ca0d0a1ea8e14e75cb0050a213ef",
+  "azami_primary_script": "ch1_global/v2/52_measure_primary_traits_continuous.py",
+  "azami_extended_script": "ch1_global/v2/89_measure_extended_continuous_traits.py",
+  "opencv_runtime": "4.14.0.94",
+  "runtime_note": "OpenCV major version is pinned to 4 because the frozen Azami orientation implementation was written against the OpenCV-4 HoughLinesP array contract; the frozen measurement algorithm itself is unchanged.",
+  "sampling": {
+    "source": "iNaturalist only",
+    "candidate_selection_uses_trait_values": false,
+    "crop_selection_uses_trait_values": false,
+    "balanced_observations_per_taxon": 14,
+    "neutral_passing_observations_before_balancing": {
+      "Cirsium brevicaule": 50,
+      "Cirsium irumtiense": 14,
+      "Cirsium kawakamii": 44,
+      "Cirsium tatakaense": 45
+    }
+  },
+  "colour_assay_gate": {
+    "criterion": "white lineage has lower Azami-compatible corolla Lab chroma in both dated sister systems with >=3 usable observations per role",
+    "passed": true,
+    "note": "The gate is directional and assessability-based; it is not a significance threshold."
+  },
+  "systems": {
+    "ARENICOLA_BREVICAULE_IRUMTIENSE": {
+      "white_taxon": "Cirsium brevicaule",
+      "coloured_taxon": "Cirsium irumtiense",
+      "dated_split_context_ma": 0.93,
+      "contrasts_white_minus_coloured": {
+        "corolla_lab_chroma": {
+          "n_white": 7,
+          "n_coloured": 8,
+          "difference": -2.9514713287353516,
+          "bootstrap_95": [-21.915748596191406, 4.714032173156738],
+          "cliffs_delta": -0.2857142857142857,
+          "direction": "white_lower"
+        },
+        "corolla_lab_lightness": {
+          "n_white": 7,
+          "n_coloured": 8,
+          "difference": 6.8627471923828125,
+          "bootstrap_95": [-5.882347106933594, 15.294118881225586],
+          "cliffs_delta": 0.4642857142857143,
+          "direction": "white_higher"
+        },
+        "shape_circularity": {
+          "n_white": 8,
+          "n_coloured": 9,
+          "difference": 0.23783428410331864,
+          "bootstrap_95": [0.045892486889040546, 0.34313214046989904],
+          "cliffs_delta": 0.6666666666666666,
+          "direction": "white_higher"
+        },
+        "shape_solidity": {
+          "n_white": 8,
+          "n_coloured": 9,
+          "difference": 0.09173250737384353,
+          "bootstrap_95": [0.023487932218455576, 0.14177145717457296],
+          "cliffs_delta": 0.6666666666666666,
+          "direction": "white_higher"
+        },
+        "visible_floret_fraction_extended": {
+          "n_white": 14,
+          "n_coloured": 14,
+          "difference": -0.3045127791178991,
+          "bootstrap_95": [-0.5038743886087508, 0.03903031073941345],
+          "cliffs_delta": -0.4489795918367347,
+          "direction": "white_lower"
+        }
+      }
+    },
+    "TAIWAN_KAWAKAMII_TATAKAENSE": {
+      "white_taxon": "Cirsium kawakamii",
+      "coloured_taxon": "Cirsium tatakaense",
+      "dated_split_context_ma": 0.35,
+      "contrasts_white_minus_coloured": {
+        "corolla_lab_chroma": {
+          "n_white": 3,
+          "n_coloured": 3,
+          "difference": -6.161914825439453,
+          "bootstrap_95": [-19.479343414306648, 3.460695266723633],
+          "cliffs_delta": -0.5555555555555556,
+          "direction": "white_lower"
+        },
+        "corolla_lab_lightness": {
+          "n_white": 3,
+          "n_coloured": 3,
+          "difference": 8.235294342041016,
+          "bootstrap_95": [-10.196075439453125, 16.862743377685547],
+          "cliffs_delta": 0.3333333333333333,
+          "direction": "white_higher"
+        },
+        "shape_circularity": {
+          "n_white": 6,
+          "n_coloured": 5,
+          "difference": 0.15915753431031424,
+          "bootstrap_95": [-0.40440647651741246, 0.39848165544746483],
+          "cliffs_delta": 0.4,
+          "direction": "white_higher"
+        },
+        "shape_solidity": {
+          "n_white": 6,
+          "n_coloured": 5,
+          "difference": 0.09902120528898606,
+          "bootstrap_95": [-0.15491395077886583, 0.19502571698322868],
+          "cliffs_delta": 0.06666666666666667,
+          "direction": "white_higher"
+        },
+        "visible_floret_fraction_extended": {
+          "n_white": 14,
+          "n_coloured": 14,
+          "difference": -0.02763553667601573,
+          "bootstrap_95": [-0.11255181561496476, 0.2554965823240535],
+          "cliffs_delta": 0.12244897959183673,
+          "direction": "white_lower"
+        }
+      }
+    }
+  },
+  "repeated_same_direction_across_two_sister_systems": {
+    "corolla_lab_chroma": "white_lower",
+    "corolla_lab_lightness": "white_higher",
+    "shape_circularity": "white_higher",
+    "shape_solidity": "white_higher",
+    "visible_floret_fraction_extended": "white_lower"
+  },
+  "heterogeneous_or_low_information": [
+    "shape_aspect_ratio",
+    "shape_width_cv",
+    "involucre_length_width_ratio",
+    "involucre_apical_taper_ratio",
+    "involucre_basal_taper_ratio",
+    "involucre_projection_roughness",
+    "involucre_projection_p95",
+    "involucre_spread_fraction",
+    "bract_projection_peak_density"
+  ],
+  "interpretation": "Two independently dated white-coloured sister systems recover the expected lower-chroma white state and share coarse image-level directions toward higher circularity, higher solidity and lower visible floret fraction. This is a hypothesis-generating repeated extant contrast, not a reconstructed simultaneous transition or a white-flower syndrome.",
+  "claim_boundary": [
+    "observations within taxa are not independent macroevolutionary transitions",
+    "the two sister comparisons are independent systems at the lineage-comparison level but do not prove independent origins of every measured endpoint",
+    "image-derived outline and architecture proxies are not botanical phyllary measurements",
+    "only the Arenicola circularity and solidity bootstrap intervals exclude zero in this pilot; same-direction replication is not equivalent to strong support in both systems",
+    "public-image sampling and photography can induce residual bias despite balancing and trait-neutral image-quality selection",
+    "do not infer correlated evolution, developmental coupling, selection, convergence or adaptation from these extant sister contrasts"
+  ]
+}

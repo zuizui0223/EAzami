@@ -1,0 +1,26 @@
+name: Validate Chapter 2 four-taxon Azami image pilot result v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/validate_chapter2_four_taxon_azami_measurement_result_v1.py"
+      - "data/evidence/chapter2_four_taxon_azami_measurement_result_v1.json"
+      - "docs/chapter2/FOUR_TAXON_AZAMI_IMAGE_PILOT_RESULT_V1.md"
+      - ".github/workflows/validate-chapter2-four-taxon-azami-measurement-result-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate frozen result ledger
+        run: |
+          python -m py_compile analysis/validate_chapter2_four_taxon_azami_measurement_result_v1.py
+          python analysis/validate_chapter2_four_taxon_azami_measurement_result_v1.py
