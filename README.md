@@ -111,9 +111,10 @@ Active title:
 V5 manuscript validation passes:
 
 - abstract: 220 words;
-- main text before references: 4,846 words;
+- main text before references: 4,980 words;
 - final V3 evidence values and prohibited-claim guards: valid;
-- active display plan: five figures.
+- active display plan: five figures;
+- generative-AI disclosure and Supporting Information citations: validated.
 
 The five-figure generator and the V5 anonymous-manuscript/title-page/SI/cover-letter DOCX builder both execute successfully in CI and upload inspectable artifacts.
 
