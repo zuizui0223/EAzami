@@ -7,7 +7,7 @@ Status date: 2026-09-01
 Chapter 2 now asks not only how many times capitulum traits changed, but whether similar phenotypes share the same environmental explanation across evolutionary time, lineages and biological scales.
 
 Scientific status: **COMPLETE_PUBLIC_DATA_V3_SYNTHESIS**.  
-Submission status: **V5_TEXT_VALIDATED — FIVE_FIGURE_AND_DOCUMENT_PACKAGE_REBUILD_PENDING**.
+Submission status: **V5_TEXT_FIGURES_AND_DOCX_BUILD_VALIDATED — FINAL_QA_PENDING**.
 
 The active manuscript is:
 
@@ -17,7 +17,7 @@ Active title:
 
 > **Modular evolutionary depth and lineage-dependent environmental correspondence of capitulum traits in a young thistle radiation**
 
-V5 validation passes at 220 abstract words and 4,846 main-text words before references.
+V5 validation passes at 220 abstract words and 4,846 main-text words before references. The five-figure package and the anonymous-manuscript/title-page/SI/cover-letter DOCX package also build successfully in CI.
 
 ## Dissertation mainline
 
@@ -163,13 +163,30 @@ The independent present 18-D synthesis retains within-versus-among association-m
 
 All rows retain `causal_claim_allowed=no`.
 
+## Legacy downstream doctoral routing labels retained for compatibility
+
+The sampling and mechanism programme predates the V5 public-data manuscript and several validators still key on its historical labels. These labels remain valid downstream routing commitments and do not supersede the V5 Chapter 2 story:
+
+- `Chapter 1 — phenotype × present-day space/environment`;
+- `Chapter 2 — phenotype × evolutionary time/history`;
+- `Chapter 3 — own RAD-seq × linked phenotype/function`;
+- `origin discrimination` remains a Chapter 3 objective using `nuclear population genomics`, `plastid haplotype` and `cytotype` on ancestry-linked material;
+- `FDT1 trait-to-function evidence` remains a supporting mechanism-prior layer;
+- `Cirsium reproductive-herbivory RR = 2.674` remains a supporting interaction prior rather than a Chapter 2 causal result;
+- these mechanism and interaction resources are routed to the `Chapter 3 causal layer`.
+
 ## Active sources of truth
 
 ### Manuscript/package
 
 - `docs/chapter2/MANUSCRIPT_JEB_V5.md`;
 - `docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V5.md`;
-- `analysis/validate_chapter2_manuscript_v5.py`.
+- `docs/chapter2/JEB_SUPPORTING_INFORMATION_V3.md`;
+- `docs/chapter2/JEB_TITLE_PAGE_TEMPLATE_V2.md`;
+- `docs/chapter2/JEB_COVER_LETTER_TEMPLATE_V2.md`;
+- `analysis/validate_chapter2_manuscript_v5.py`;
+- `analysis/make_chapter2_jeb_figures_v5.py`;
+- `analysis/build_chapter2_jeb_docx_v3.py`.
 
 ### Final synthesis
 
@@ -190,10 +207,18 @@ V1–V4 manuscript and figure/package files are frozen audit history, not active
 
 ## Current production tasks
 
-1. Generate the V5 five-figure package from frozen evidence.
-2. Rebuild Supporting Information so the full origin scenarios, restricted Taiwan sensitivity, public-image diagnostics, source sensitivity and fine-geometry negatives are routed correctly.
-3. Build anonymous line-numbered DOCX, separate title page and cover letter from V5 sources.
-4. Run reference, data-availability, author-declaration and prohibited-claim audits.
+Completed in CI:
+
+- V5 manuscript evidence/word-count validation;
+- five main figures generated in PNG and PDF from frozen evidence;
+- anonymous V5 manuscript, separate title page, SI V3 and cover-letter template generated as DOCX and checked for active-title routing and basic anonymity.
+
+Remaining QA:
+
+1. inspect visual legibility and finalize figure legends/alternative text;
+2. complete primary-source reference and DOI audit;
+3. complete data-availability, author declaration and repository-archive fields;
+4. perform final prohibited-claim and anonymous-file metadata review.
 
 No new discovery analysis is authorized merely to improve the submission story. New public data are incorporated only when they address a preregistered identifiability gap.
 
