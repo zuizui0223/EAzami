@@ -31,17 +31,38 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install numpy pandas xarray netCDF4
           python -m py_compile analysis/run_chapter2_orientation_origin_envelope_v1.py analysis/run_chapter2_orientation_differentiation_environment_v2.py
-      - name: Download frozen public PALEO-PGEM panel
+      - name: Download frozen public PALEO-PGEM panel with resume
         run: |
           set -euo pipefail
           mkdir -p /tmp/paleo
           base="https://zenodo.org/records/21327244/files"
+          download_resume() {
+            f="$1"
+            url="${base}/${f}?download=1"
+            out="/tmp/paleo/${f}"
+            ok=0
+            for attempt in $(seq 1 12); do
+              echo "download ${f}: attempt ${attempt}, existing_bytes=$(stat -c%s "$out" 2>/dev/null || echo 0)"
+              if curl --fail --location \
+                --retry 3 --retry-delay 3 --retry-all-errors \
+                --connect-timeout 30 --speed-time 120 --speed-limit 1024 \
+                --continue-at - "$url" -o "$out"; then
+                ok=1
+                break
+              fi
+              sleep 5
+            done
+            if [ "$ok" -ne 1 ]; then
+              echo "failed to complete ${f} after resume attempts" >&2
+              exit 1
+            fi
+          }
           for f in \
             PALEO-PGEM-Series_bio1_mean.nc \
             PALEO-PGEM-Series_bio4_mean.nc \
             PALEO-PGEM-Series_bio12_mean.nc \
             PALEO-PGEM-Series_bio15_mean.nc; do
-            curl --fail --location --retry 5 --retry-delay 5 "${base}/${f}?download=1" -o "/tmp/paleo/${f}"
+            download_resume "$f"
           done
           echo '570e4b746e0b9c0cf82a2a5f85a6cff9  /tmp/paleo/PALEO-PGEM-Series_bio1_mean.nc' | md5sum -c -
           echo 'b6f90b330e4161b983d735b7f9f7a01f  /tmp/paleo/PALEO-PGEM-Series_bio4_mean.nc' | md5sum -c -
