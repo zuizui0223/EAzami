@@ -1,149 +1,224 @@
-# JEB V6 reframe outline — spatial breadth × temporal depth
+# JEB V6 reframe outline — differentiation through evolutionary time
 
 Status date: 2026-09-01  
 Status: **ACTIVE SCIENTIFIC OUTLINE; NOT YET A SUBMISSION DRAFT**
 
-The merged V5 manuscript remains a reproducible production snapshot, but its ecological narrative is superseded. Chapter 2 is no longer organized around any external trait–environment result or around replication/comparison with another project.
+The merged V5 manuscript remains a reproducible production snapshot, but its ecological framing is superseded. Chapter 2 is not organized as a confirmation of present-day environmental associations and is not a cross-project comparison paper.
 
 ## Working title direction
 
-> **Spatial breadth and evolutionary depth of capitulum diversity in an East-Asian thistle radiation**
+> **Evolutionary depth and historical environmental context of capitulum differentiation in a young East-Asian thistle radiation**
 
 Exact wording remains provisional.
 
-## Central question
+## Biological division across the dissertation
 
-> **How broadly is capitulum diversity distributed across present geographic space, how deeply and repeatedly was that diversity assembled through evolutionary time, and what combinations of spatial breadth and temporal depth characterize different capitulum modules?**
-
-The chapter is therefore organized by two independent axes:
+The important distinction is not simply geographic space versus phylogenetic time. It is **maintenance versus differentiation**.
 
 ```text
-SPACE — current geographic breadth / spatial structure
-TIME  — evolutionary depth / recurrence / branch distribution
+Chapter 1
+present phenotype ~ present environmental gradient after spatial control
+→ maintenance / current ecological sorting candidates
+
+Chapter 2
+trait differentiation through evolutionary time
++ bounded historical environmental level / change / variability
+→ origin / differentiation-trigger candidates
+
+Chapter 3
+candidate environment → trait function → reproductive fitness
+→ adaptive explanation only if the causal path is supported
 ```
 
-Environmental variables are possible process descriptors inside the spatial axis, not the definition of that axis and not mandatory manuscript results.
+Chapter 1 and Chapter 2 are kept independent while their primary analyses are built. Whether a differentiation-time environmental direction is retained, lost, reversed or replaced in present maintenance is a later thesis-synthesis question, not a Chapter 2 selection rule.
 
-## Question 1 — How broad is the present spatial expression of each trait?
+## Central Chapter 2 question
 
-Describe the current spatial structure of each usable capitulum trait without choosing traits from an environmental result.
+> **How repeatedly and how deeply were capitulum traits differentiated through the radiation, when can those differentiation events be bounded in calendar time, and did particular environmental states, changes or instabilities repeatedly accompany the bounded trait transitions?**
 
-Primary spatial estimands should include, where data permit:
+The chapter therefore asks more than “how many changes?” For every trait it attempts to separate:
 
-- coordinate-bearing coverage and occupied cells;
-- robust geographic extent rather than a raw convex hull alone;
-- spatial distance-decay / autocorrelation scale;
-- spatial dispersion of discrete states across separated regions;
-- continuous phenotype turnover without forcing arbitrary categorical thresholds.
+1. recurrence;
+2. relative evolutionary depth;
+3. calendar identifiability;
+4. paleogeographic identifiability;
+5. historical environmental level/change/variability;
+6. recurrence of the same environmental direction across independently bounded homologous events.
 
-Environmental breadth and trait × environment screens may be retained as exploratory diagnostics, but a trait does not need an environmental association to enter the paper.
+## Question 1 — How often and how deeply did each trait change?
 
-## Question 2 — How deep and recurrent is the evolutionary history of each trait?
+Retain the existing discrete-history results independently of any environmental model:
 
-Retain the existing history results independently of the spatial analysis:
-
-- orientation: 4–6 minimum changes across the bootstrap ensemble;
-- phyllary posture: 3 minimum changes;
-- involucre stickiness: 5 minimum changes;
+- orientation: ML minimum 6; UFBoot minimum 4–6;
+- phyllary posture: exactly 3 minimum changes;
+- involucre stickiness: exactly 5 minimum changes;
 - 0/3 discrete trait pairs pass the robust shared-transition-localization rule.
 
-Report relative lineage-depth envelopes and terminal/internal change burdens without translating topology depth into calendar age.
+Relative lineage depth is reported separately:
 
-Continuous-trait history enters only where taxon/morph homology and public coverage support it.
+- orientation admits internal-to-terminal histories;
+- phyllary posture reaches relatively deeper placements;
+- stickiness is concentrated toward shallower/terminal lineages.
 
-## Question 3 — How do spatial breadth and temporal depth combine?
+Minimum changes are lower bounds. Relative lineage depth is a topology coordinate, not calendar age, rate or probability of an event.
 
-This is the main synthesis question.
+## Question 2 — Which differentiation events can actually be placed in calendar time?
 
-Do traits fall into different combinations such as:
+Build an explicit event ledger rather than attaching dates to every parsimony change.
 
-- broad in current space and deep in evolutionary history;
-- broad in space but repeatedly assembled on shallow branches;
-- spatially localized/structured but evolutionarily deep;
-- spatially localized/structured and shallow/labile?
+Current public-data classes are:
 
-Do not force one composite score if the component uncertainties are not commensurate. A two-axis evidence matrix or plot can retain the spatial and temporal estimands separately.
+### Calendar + paleolocation + historical environment evaluable
 
-## Question 4 — Which historical process cases are independently identifiable?
+- **Orientation / core-Nipponocirsium stem:** erect/upward → nodding/downward is bounded after the erect *C. morii* split and before the Japanese-core/Taiwan-core split. The two node ages come from separate public analyses and are propagated as a deterministic chronology envelope, not a joint posterior.
 
-Historical environment/range analyses are supporting case studies, not the organizing logic of the chapter.
+### Conditional dated transition branch envelopes
 
-The orientation chronology × palaeolocation result remains valid because chronology and historical geography are independently evaluable:
+- *C. kawakamii* white lineage: terminal branch bounded by the Taiwan sister/trio chronology, but ancestral colour and exact transition instant remain conditional;
+- *C. brevicaule* white lineage: terminal branch bounded by the Arenicola split, again conditional on ancestral colour and transition direction.
 
-- 94 admissible age pairs × 4 palaeolocation regions = 376 scenarios;
-- historical environmental direction remains unresolved.
+### Dated contrasts but not reconstructed transitions
 
-Dated white–coloured sister systems remain useful temporal contexts for phenotype remodelling.
+- Taiwan and Arenicola phyllary-architecture contrasts;
+- Taiwan and Arenicola floral-display contrasts.
 
-Additional process analyses enter only when the historical variable, time window and palaeogeographic context are independently defensible. They are not selected because a current environmental screen happens to be strong.
+### Dated range process but trait age unlinked
 
-## Question 5 — Is whole-capitulum diversity synchronized or modular across space and time?
+- *C. dipsacolepis* and *C. lineare* range events cannot be used as dates of stickiness changes.
 
-Integrate:
+This ledger is a primary result because it separates what “time of differentiation” is actually identifiable from what is only a dated descendant contrast.
 
-- spatial breadth/structure of individual traits;
-- unequal evolutionary depths;
-- the 0/3 shared discrete-history result;
-- repeated coarse remodelling in the two dated white-lineage systems;
-- any independently identified historical process cases.
+## Question 3 — What environmental change accompanied an independently bounded differentiation event?
 
-The expected outcome may be partial coordination across modules, but modularity is a result to infer after the space and time evidence is shown, not a premise used to select analyses.
+For each admitted event, historical environment is evaluated without using any present-day environmental coefficient as a prior.
 
-## Role of the exploratory trait × environment work
+Primary event-level quantities are:
 
-The existing 7 × 4 pilot, 7 × 9 live screen and topology sensitivity are retained as **internal exploratory diagnostics**.
+- environmental level within the bounded branch window;
+- signed endpoint change, younger minus older endpoint;
+- absolute change magnitude;
+- temporal variability within the event window;
+- matched same-duration background windows in the same paleolocation scenario.
 
-They can be used to:
+The event instant can occur anywhere along its branch. Therefore these are branch-window environmental contexts, not direct measurements of exposure at the unknown transition instant.
 
-- discover possible environmental interpretations of an observed spatial pattern;
-- identify weak or unstable explanations that should not be promoted;
-- decide whether a historical process variable is worth auditing when independent historical data exist.
+### Orientation: first validated differentiation-time result
 
-They do **not** have to appear in the final Results, figures or abstract. Their null/unstable outcomes remain useful project diagnostics rather than a reason to redesign the headline.
+The core-Nipponocirsium orientation event contains 94 admissible chronology pairs × 4 paleolocation regions = 376 scenarios.
+
+At the single central pair, 0.79 → 0.74 Ma:
+
+- BIO1 decreases in 4/4 regions;
+- BIO4 decreases in 4/4;
+- BIO15 decreases in 4/4;
+- BIO12 increases in 3/4.
+
+However, this apparent central-age pattern does **not** survive the full chronology × paleolocation envelope. For BIO1, BIO4, BIO12 and BIO15, the q05–q95 range of signed change crosses zero in every region. The same-duration background-standardized change is also directionally unresolved.
+
+Validated decision:
+
+`no_tested_climate_direction_survives_full_chronology_paleolocation_envelope`
+
+This is more informative than choosing one central age pair: public data identify the branch and broad Pleistocene timing more strongly than they identify one directional climate trigger.
+
+A second frozen analysis evaluates whether the event window is unusual in **environmental level, absolute change magnitude or temporal variability**, even when signed direction is unstable.
+
+## Question 4 — Is there a repeated historical trigger?
+
+A common differentiation-trigger candidate requires at least two independently bounded events of the same homologous trait transition with compatible direction.
+
+For a historical variable to be called a repeated-direction candidate:
+
+1. each event must be independently admitted before its environment is inspected;
+2. its chronology and paleolocation uncertainty must be propagated;
+3. the environmental direction must survive that event's own uncertainty envelope;
+4. at least two events must show the same robust direction.
+
+Current orientation status:
+
+`not_evaluable_single_dated_transition_event`
+
+Orientation is recurrent in the undated Japan38 history, but only one orientation transition is currently bounded well enough for the historical-environment test. Repeated history therefore does not automatically become repeated environmental triggering.
+
+Flower colour provides two conditional dated terminal-lineage cases and is the next possible route to a repeated differentiation comparison, but a historical radiative driver remains non-identifiable without a commensurate radiation series and better ancestral-colour resolution.
+
+## Question 5 — What kinds of differentiation are represented across capitulum modules?
+
+Integrate, without forcing a single numerical score:
+
+- repeated-change burden;
+- relative depth;
+- calendar/event identifiability;
+- historical environmental identifiability;
+- repeated-direction trigger status;
+- shared-transition-localization boundary.
+
+Possible outcomes include:
+
+- recurrent trait with a shared historical environmental trigger candidate;
+- recurrent trait whose dated events have heterogeneous environmental contexts;
+- recurrent trait whose environmental trigger remains unidentified because event dates are unresolved;
+- deep differentiation with sparse later change;
+- shallow repeated reassembly under unresolved or potentially local/biotic drivers.
+
+The current data already distinguish these categories: stickiness is repeatedly shallow but not dateable as a trait event, while orientation spans broader relative depth and has one dateable stem event whose climate direction remains unresolved.
+
+## Role of present spatial breadth and trait × environment screens
+
+The environment-free spatial-breadth pilot and the 7×4 / 7×9 current trait–environment screens are retained as **internal diagnostics**, not as the Chapter 2 organizing results.
+
+They can:
+
+- reveal coverage limitations;
+- describe whether current states are geographically broad or localized;
+- generate possible variables for historical audit when an independent historical series exists.
+
+They do not have to appear in the final Results, figures or abstract, and no current association determines which differentiation-time result is considered primary.
 
 ## Proposed main figures
 
-### Figure 1 — Present spatial breadth of capitulum traits
+### Figure 1 — Repeated differentiation and evolutionary depth
 
-Maps and/or comparable spatial-scale summaries for the focal traits. Show coverage explicitly.
+Phylogeny plus minimum-change burden and relative lineage-depth envelopes for orientation, phyllary posture and stickiness.
 
-### Figure 2 — Trait-specific evolutionary depth
+### Figure 2 — Differentiation-event identifiability ledger
 
-Minimum-change burden, relative lineage-depth envelopes and terminal/internal uncertainty.
+For each trait, show which events are: relative-depth only, dated range context, dated sister contrast, conditional transition branch, or calendar+paleolocation+environment evaluable.
 
-### Figure 3 — Space × time synthesis
+### Figure 3 — Historical environment of the bounded orientation event
 
-Place trait modules in a two-axis evidence space: present spatial breadth/structure versus evolutionary depth/recurrence. Retain uncertainty and `not_evaluable` states.
+Show the 94 chronology × 4 paleolocation scenario envelope for BIO1/BIO4/BIO12/BIO15. Contrast the visually coherent central age pair with the full uncertainty envelope. Include level/change/variability matched-window diagnostics if the extended analysis passes.
 
-### Figure 4 — Historical process case studies
+### Figure 4 — Dated sister-lineage differentiation cases
 
-Only independently identifiable examples such as the orientation chronology × palaeolocation envelope and dated sister-system phenotype contexts.
+Taiwan and Arenicola colour/head-remodelling contrasts, explicitly labelled as conditional transition branches or dated extant contrasts rather than exact transition dates.
 
-### Figure 5 — Whole-capitulum assembly
+### Figure 5 — Differentiation-through-time synthesis
 
-Synthesize shared-history failures, partial coordinated remodelling and the space–time heterogeneity of modules.
+Trait × evidence matrix: recurrence → relative depth → calendar time → paleolocation → historical environment → repeated trigger → Chapter 3 causal test.
 
 ## What is retained from V5
 
-Retain as empirical evidence, but reposition within the two-axis architecture:
+Retain as empirical evidence but reposition:
 
 - discrete minimum-change and relative-depth results;
 - shared-history boundary;
-- orientation chronology × palaeolocation uncertainty;
-- two dated white–coloured sister-system phenotype contrasts;
-- repeated circularity/solidity/visible-floret directions;
-- claim boundaries and provenance/QA work.
+- chronology and paleolocation work;
+- two dated white–coloured sister systems;
+- repeated coarse head-remodelling directions;
+- all provenance, uncertainty and claim-boundary work.
 
-Current environment associations from V5 are no longer mandatory headline results.
+Present-day environmental associations from V5 are not required headline results.
 
 ## Submission gate for V6
 
-Do not rebuild the final submission package until:
+Do not rebuild the final JEB package until:
 
-1. the spatial-breadth estimands and usable trait coverage are frozen;
-2. the primary spatial analysis is run without environmental-result-based trait selection;
-3. the existing temporal-depth results are joined to the same trait/module registry;
-4. the space × time synthesis is generated with explicit uncertainty and `not_evaluable` states;
-5. supporting historical process cases are clearly separated from the two primary axes.
+1. the differentiation-time contract and event ledger are frozen;
+2. recurrence and relative-depth results are linked to the same trait registry;
+3. every claimed dated trait event is distinguished from dated sister/range context;
+4. orientation historical level/change/variability analysis is complete;
+5. repeated-trigger claims are made only where at least two independent homologous events are evaluable;
+6. the final manuscript separates historical environmental alignment from natural selection and adaptation.
 
-Until then, V5 is a reproducible pre-reframe snapshot rather than the final scientific framing.
+Until then, V5 remains a reproducible pre-reframe snapshot rather than the final scientific framing.
