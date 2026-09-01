@@ -123,21 +123,24 @@ Active title:
 
 > **Modular evolutionary depth and lineage-dependent environmental correspondence of capitulum traits in a young thistle radiation**
 
-V5 manuscript validation passes:
+The V5 public-data submission package has passed repository and rendered-document QA:
 
 - abstract: 220 words;
 - main text before references: 4,980 words;
 - final V3 evidence values and prohibited-claim guards: valid;
-- active display plan: five figures;
-- generative-AI disclosure and Supporting Information citations: validated.
+- five main figures generated from frozen evidence and embedded near first mention;
+- bootstrap uncertainty retained in the focal colour/head-remodelling figures;
+- generative-AI disclosure and Supporting Information citations: validated;
+- anonymous manuscript: 26/26 rendered pages visually reviewed with no clipping, overlap or missing figure;
+- accessibility audit: high/medium/low findings = 0/0/0;
+- anonymous DOCX: no identifying creator/last-modified metadata, comments or tracked changes; five figures carry title/description alternative text;
+- V5, production and legacy-audit workflows pass together.
 
-The five-figure generator and the V5 anonymous-manuscript/title-page/SI/cover-letter DOCX builder both execute successfully in CI and upload inspectable artifacts.
+Scientific and production QA is complete. Remaining submission inputs require author-supplied information rather than new analysis:
 
-Remaining work is production QA, not discovery:
-
-1. audit visual legibility and final figure captions/alternative text;
-2. complete primary-source reference and data-availability audits;
-3. complete author declarations and final anonymous-file metadata checks.
+1. final author list, affiliations and ORCIDs;
+2. funding, conflicts, acknowledgements and any required permission/ethics confirmations;
+3. archival repository URL, exact submission commit and persistent DOI/accession.
 
 No new field, RAD-seq, dated-tree, phenotype or fitness result is required to complete the public-data manuscript.
 
