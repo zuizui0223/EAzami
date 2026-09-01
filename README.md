@@ -15,7 +15,7 @@ Chapter 3
 own samples: ancestry-linked phenotype → actual exposure → mechanism → reproductive fitness
 ```
 
-Chapter 2 is now **public-data complete at the current identifiability ceiling**. The active scientific synthesis was frozen in PR #151 and the active JEB text is being rebuilt as V5.
+Chapter 2 is now **public-data complete at the current identifiability ceiling**. The active scientific synthesis was frozen in PR #151 and the active JEB text is V5.
 
 ## Current scientific answer
 
@@ -72,6 +72,15 @@ Fine outline/involucre geometry is heterogeneous or low-information. The support
 
 `selection mosaic` is a process hypothesis shorthand, not demonstrated natural selection or adaptation.
 
+## Legacy programme-routing labels retained for audit compatibility
+
+The following labels are historical programme-routing aliases used by downstream validators. They do **not** replace the V5 active scientific story:
+
+- `Chapter 1: present-day space/environment`;
+- `Chapter 2: evolutionary time/history`;
+- `Chapter 3: own RAD-seq + linked phenotype/function`;
+- `Present-state v3/v4 covariance generators` remain Chapter 1/thesis-methods diagnostics rather than the Chapter 2 evolutionary-transition model.
+
 ## Active Chapter 2 sources of truth
 
 Start here:
@@ -97,18 +106,20 @@ Active title:
 
 > **Modular evolutionary depth and lineage-dependent environmental correspondence of capitulum traits in a young thistle radiation**
 
-V5 manuscript validation currently passes:
+V5 manuscript validation passes:
 
 - abstract: 220 words;
 - main text before references: 4,846 words;
 - final V3 evidence values and prohibited-claim guards: valid;
 - active display plan: five figures.
 
-Remaining work is production, not discovery:
+The five-figure generator and the V5 anonymous-manuscript/title-page/SI/cover-letter DOCX builder both execute successfully in CI and upload inspectable artifacts.
 
-1. generate and validate the V5 five-figure package from frozen evidence;
-2. rebuild the anonymous line-numbered manuscript, title page, Supporting Information and cover letter from V5 sources;
-3. complete reference/data-availability/declaration/prohibited-claim audits.
+Remaining work is production QA, not discovery:
+
+1. audit visual legibility and final figure captions/alternative text;
+2. complete primary-source reference and data-availability audits;
+3. complete author declarations and final anonymous-file metadata checks.
 
 No new field, RAD-seq, dated-tree, phenotype or fitness result is required to complete the public-data manuscript.
 
