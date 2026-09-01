@@ -1,0 +1,59 @@
+{
+  "contract_version": "chapter2_colour_rsds_focal_concordance_contract_v1",
+  "status_date": "2026-09-01",
+  "question": "Do the two publicly dated white-coloured sister systems reproduce the frozen Azami present-day direction higher surface shortwave radiation -> lower visible corolla Lab chroma?",
+  "input_cohort": {
+    "path": "data/evidence/chapter2_four_taxon_balanced_colour_environment_cohort_v1.csv",
+    "n_observations": 56,
+    "n_per_taxon": 14,
+    "provenance": "Derived without environmental outcome selection from the successful PR149 public-image measurement run 33463726473; raw images are not redistributed."
+  },
+  "azami_reference": {
+    "commit": "03ed29f1f476ca0d0a1ea8e14e75cb0050a213ef",
+    "endpoint": "corolla_lab_chroma",
+    "predictor": "chelsa_rsds_mean",
+    "among_taxon_beta_std": -0.3453720171,
+    "q_fdr": 0.006,
+    "expected_direction": "higher_rsds_lower_chroma",
+    "role": "frozen_external_direction_not_refit_or_selected_in_EAzami"
+  },
+  "environment_source": {
+    "source_contract": "current CHELSA v2.1 climatology, exactly matching the Azami process-environment source registry",
+    "minimum_coverage": 0.98,
+    "sources": [
+      {
+        "column": "chelsa_rsds_mean",
+        "url": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_rsds_1981-2010_mean_V.2.1.tif",
+        "construct": "surface downwelling shortwave radiation"
+      }
+    ]
+  },
+  "primary_estimand": {
+    "grain": "dated sister system, taxon-median present state",
+    "environment_difference": "median_RSDS_white_taxon - median_RSDS_coloured_taxon using all 14 balanced coordinates per taxon",
+    "phenotype_difference": "median_chroma_white_taxon - median_chroma_coloured_taxon using only colour_status=usable observations",
+    "concordant_sign": "delta_RSDS > 0 and delta_chroma < 0",
+    "chapter_level_gate": "both dated sister systems concordant",
+    "reason": "Matches the among-taxon grain of the frozen Azami colour-RSDS candidate and avoids treating public within-taxon photographs as macroevolutionary replicates."
+  },
+  "secondary_estimands": [
+    "0.05-degree taxon-by-cell median sensitivity before sister-system contrast, to reduce repeated-locality leverage",
+    "within-taxon demeaned chroma~RSDS slope pooled across all four taxa with predictor permutation restricted within taxon",
+    "within-taxon demeaned slope separately inside each sister system",
+    "bootstrap intervals for taxon-median RSDS and chroma differences"
+  ],
+  "multiplicity": "No environment-variable screen: RSDS and chroma are the single frozen predictor-endpoint pair. Secondary slopes and cell aggregation are diagnostics, not additional discovery tests.",
+  "classification": {
+    "two_system": "two_system_current_rsds_chroma_directional_concordance",
+    "one_system": "partial_current_rsds_chroma_directional_concordance",
+    "zero_system": "focal_current_rsds_chroma_discordance"
+  },
+  "claim_boundary": [
+    "This tests present-state spatial concordance with Azami, not the historical environmental cause of colour transition.",
+    "Current RSDS is a correlated observational gradient and does not isolate direct solar selection.",
+    "Taxon RSDS contrasts can also reflect geography, elevation, ancestry and other correlated environmental differences.",
+    "Public observations can cluster spatially; the 0.05-degree cell sensitivity is required before interpreting locality-robust direction.",
+    "Two sister systems do not establish a general macroevolutionary law, convergence, selection or adaptation.",
+    "Do not treat CHELSA current surface RSDS as a historical surface-radiation reconstruction."
+  ]
+}

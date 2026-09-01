@@ -1,0 +1,13 @@
+{
+  "contract_version": "chapter2_colour_rsds_chelsa_source_contract_v1",
+  "minimum_coverage": 0.98,
+  "sources": [
+    {
+      "column": "chelsa_rsds_mean",
+      "url": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_rsds_1981-2010_mean_V.2.1.tif",
+      "construct": "surface downwelling shortwave radiation",
+      "source_registry": "Azami commit 03ed29f1f476ca0d0a1ea8e14e75cb0050a213ef analysis/ch1/chelsa_process_environment_sources.json"
+    }
+  ],
+  "selection_rule": "Single predictor frozen from the Azami final colour-RSDS candidate before focal EAzami outcome inspection; no environmental screen."
+}
