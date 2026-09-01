@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Validate the Chapter 2 space-time public-data synthesis and closure ledger.
+"""Validate the frozen Chapter 2 space-time closure while allowing superseding routes.
 
-The v1 ledger remains a frozen historical synthesis. The active Chapter 2
-entrypoint may route either to that original synthesis or to the later V3 final
-integrated evidence that explicitly supersedes it.
+The v1 ledger and V3 synthesis remain immutable historical audit products.  The
+active Chapter 2 entrypoint may now route to the V6 differentiation-through-time
+programme, provided that the new route preserves the old claim ceilings rather
+than silently rewriting the frozen results.
 """
 
 from __future__ import annotations
@@ -17,6 +18,10 @@ SYNTHESIS = ROOT / "docs/chapter2/SPACE_TIME_PUBLIC_DATA_SYNTHESIS_V1.md"
 README = ROOT / "docs/chapter2/README.md"
 FINAL_V3 = ROOT / "data/evidence/chapter2_final_integrated_evidence_v3.json"
 FINAL_STORY_V3 = ROOT / "docs/chapter2/PUBLIC_DATA_FINAL_CHAPTER2_STORY_AND_ANALYSIS_PLAN_V3.md"
+V6_CONTRACT = ROOT / "data/evidence/chapter2_differentiation_time_axis_contract_v1.json"
+V6_TRIGGER_CONTRACT = ROOT / "data/evidence/chapter2_historical_differentiation_trigger_contract_v1.json"
+V6_OUTLINE = ROOT / "docs/chapter2/MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md"
+V6_TRIGGER_RESULT = ROOT / "docs/chapter2/HISTORICAL_DIFFERENTIATION_TRIGGER_RESULT_V1.md"
 
 REQUIRED_COLUMNS = {
     "trait_id",
@@ -91,18 +96,16 @@ def validate() -> int:
                 raise AssertionError(f"blank {column} for {row['trait_id']}")
     checks += 1
 
+    # Frozen v1 scientific checks remain unchanged.
     orientation = by_trait["orientation"]
     if orientation["cross_axis_class"] != "priority_space_time_ecology_bridge":
-        raise AssertionError("orientation must remain the priority space-time-ecology bridge")
+        raise AssertionError("orientation must remain the frozen priority space-time-ecology bridge")
     if "BIO12" not in orientation["azami_space_result"] or "BIO15" not in orientation["eazami_ecology_result"]:
         raise AssertionError("orientation ledger must preserve distinct BIO12 and BIO15 evidence")
     if "rain adaptation" not in orientation["forbidden_upgrade"]:
         raise AssertionError("orientation rain-adaptation claim ceiling was lost")
     checks += 3
 
-    # This is intentionally the frozen v1 colour row. Later V3 evidence adds two
-    # dated sister-system phenotype replications and a 1/2 current RSDS result;
-    # it does not rewrite this historical ledger in place.
     colour = by_trait["colour_continuous"]
     if colour["cross_axis_class"] != "space_only_radiation_sorting_candidate":
         raise AssertionError("frozen v1 colour ledger changed unexpectedly")
@@ -115,7 +118,7 @@ def validate() -> int:
     for trait_id in ("phyllary_posture", "stickiness"):
         row = by_trait[trait_id]
         if row["eazami_ecology_status"] != "not_evaluable":
-            raise AssertionError(f"{trait_id} must remain not_evaluable under current climate overlap")
+            raise AssertionError(f"{trait_id} must remain not_evaluable in frozen v1")
         if "no ecological relationship" not in row["forbidden_upgrade"]:
             raise AssertionError(f"{trait_id} must forbid rewriting not_evaluable as no relationship")
     checks += 2
@@ -133,7 +136,7 @@ def validate() -> int:
     )
     missing_phrases = [phrase for phrase in required_phrases if phrase not in synthesis_text]
     if missing_phrases:
-        raise AssertionError(f"synthesis lost canonical claims: {missing_phrases}")
+        raise AssertionError(f"frozen synthesis lost canonical claims: {missing_phrases}")
     checks += 2
 
     if not README.exists():
@@ -147,8 +150,14 @@ def validate() -> int:
         "PUBLIC_DATA_FINAL_CHAPTER2_STORY_AND_ANALYSIS_PLAN_V3.md" in readme_text
         and "chapter2_final_integrated_evidence_v3.json" in readme_text
     )
-    if not (legacy_route or v3_route):
-        raise AssertionError("Chapter 2 README routes to neither frozen v1 closure nor superseding V3 synthesis")
+    v6_route = (
+        "chapter2_differentiation_time_axis_contract_v1.json" in readme_text
+        and "MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md" in readme_text
+        and "HISTORICAL_DIFFERENTIATION_TRIGGER_RESULT_V1.md" in readme_text
+    )
+    if not (legacy_route or v3_route or v6_route):
+        raise AssertionError("Chapter 2 README routes to neither frozen v1/V3 nor active V6 differentiation synthesis")
+
     if v3_route:
         if not FINAL_V3.exists() or not FINAL_STORY_V3.exists():
             raise AssertionError("README routes to V3 but V3 final synthesis assets are missing")
@@ -160,11 +169,31 @@ def validate() -> int:
         ):
             if phrase not in final_text:
                 raise AssertionError(f"V3 final story lost required boundary: {phrase}")
+
+    if v6_route:
+        for path in (V6_CONTRACT, V6_TRIGGER_CONTRACT, V6_OUTLINE, V6_TRIGGER_RESULT):
+            if not path.exists() or path.stat().st_size == 0:
+                raise AssertionError(f"V6 route is missing {path.relative_to(ROOT)}")
+        combined = "\n".join(
+            p.read_text(encoding="utf-8") for p in (V6_OUTLINE, V6_TRIGGER_RESULT, README)
+        )
+        for phrase in (
+            "differentiation",
+            "relative lineage",
+            "not_evaluable",
+            "reproductive fitness",
+        ):
+            if phrase.lower() not in combined.lower():
+                raise AssertionError(f"V6 differentiation route lost boundary phrase: {phrase}")
+        if "rain adaptation" in combined.lower() and "does not" not in combined.lower():
+            raise AssertionError("V6 must not promote rain adaptation from historical alignment")
+        checks += 2
+
     checks += 3
 
     missing_inputs = [str(path.relative_to(ROOT)) for path in CANONICAL_INPUTS if not path.exists()]
     if missing_inputs:
-        raise AssertionError(f"canonical synthesis inputs are missing: {missing_inputs}")
+        raise AssertionError(f"canonical frozen synthesis inputs are missing: {missing_inputs}")
     checks += 1
 
     return checks
@@ -172,7 +201,7 @@ def validate() -> int:
 
 def main() -> None:
     checks = validate()
-    print(f"chapter2 space-time public-data closure: {checks} checks passed")
+    print(f"chapter2 frozen closure + active route: {checks} checks passed")
 
 
 if __name__ == "__main__":
