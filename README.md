@@ -79,7 +79,9 @@ The following labels are historical programme-routing aliases used by downstream
 - `Chapter 1: present-day space/environment`;
 - `Chapter 2: evolutionary time/history`;
 - `Chapter 3: own RAD-seq + linked phenotype/function`;
-- `Present-state v3/v4 covariance generators` remain Chapter 1/thesis-methods diagnostics rather than the Chapter 2 evolutionary-transition model.
+- `Present-state v3/v4 covariance generators` remain Chapter 1/thesis-methods diagnostics rather than the Chapter 2 evolutionary-transition model;
+- `COMPLETE_EXISTING_PUBLIC_HISTORY_CORE` is the frozen status label of the former history-only package;
+- the legacy title fragment `Capitulum configuration diversity, minimum change counts` and `MANUSCRIPT_JEB_V3.md` are retained only as reproducible audit-routing labels, not as current submission targets.
 
 ## Active Chapter 2 sources of truth
 
