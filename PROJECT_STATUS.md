@@ -2,12 +2,12 @@
 
 Status date: 2026-09-01
 
-## Active status: Chapter 2 public-data synthesis complete; JEB V5 production in progress
+## Active status: Chapter 2 public-data synthesis and JEB V5 production QA complete
 
 Chapter 2 now asks not only how many times capitulum traits changed, but whether similar phenotypes share the same environmental explanation across evolutionary time, lineages and biological scales.
 
 Scientific status: **COMPLETE_PUBLIC_DATA_V3_SYNTHESIS**.  
-Submission status: **V5_TEXT_FIGURES_AND_DOCX_BUILD_VALIDATED — FINAL_QA_PENDING**.
+Submission status: **V5_PUBLIC_DATA_PACKAGE_QA_COMPLETE — AUTHOR_FIELDS_AND_ARCHIVE_METADATA_PENDING**.
 
 The active manuscript is:
 
@@ -17,7 +17,7 @@ Active title:
 
 > **Modular evolutionary depth and lineage-dependent environmental correspondence of capitulum traits in a young thistle radiation**
 
-V5 validation passes at 220 abstract words and 4,980 main-text words before references. The five-figure package and the anonymous-manuscript/title-page/SI/cover-letter DOCX package also build successfully in CI.
+V5 validation passes at 220 abstract words and 4,980 main-text words before references. Five main figures are generated from frozen evidence and embedded in the anonymous manuscript. The rendered 26-page anonymous DOCX has passed full-page visual inspection, accessibility audit and metadata/anonymity checks.
 
 ## Dissertation mainline
 
@@ -214,20 +214,24 @@ The following exact phrases describe the former frozen package and are retained 
 
 V1–V4 manuscript and figure/package files are frozen audit history, not active submission sources.
 
-## Current production tasks
+## Current production status
 
-Completed in CI:
+Completed:
 
-- V5 manuscript evidence/word-count validation;
-- five main figures generated in PNG and PDF from frozen evidence;
-- anonymous V5 manuscript, separate title page, SI V3 and cover-letter template generated as DOCX and checked for active-title routing and basic anonymity.
+- V5 manuscript evidence/word-count and prohibited-claim validation;
+- five main figures generated in PNG/PDF from frozen evidence, with focal bootstrap uncertainty retained;
+- anonymous V5 manuscript, separate title page, SI V3 and cover-letter template generated as DOCX;
+- five figures embedded near first mention with figure title/description alternative text;
+- anonymous main manuscript rendered to 26 pages and visually inspected page-by-page: no clipping, overlap, missing figure or broken page flow;
+- accessibility audit: high/medium/low findings = 0/0/0;
+- anonymous DOCX core metadata, comments and tracked changes checked: no identifying creator/last-modified value and no comments/tracked revisions;
+- V5, production, dissertation-programme and frozen-legacy audit workflows pass together.
 
-Remaining QA:
+Remaining submission-only inputs are author-supplied rather than analytical:
 
-1. inspect visual legibility and finalize figure legends/alternative text;
-2. complete primary-source reference and DOI audit;
-3. complete data-availability, author declaration and repository-archive fields;
-4. perform final prohibited-claim and anonymous-file metadata review.
+1. author list, affiliations and ORCID identifiers;
+2. funding, conflicts, acknowledgements and any permission/ethics confirmations;
+3. archival repository URL, exact submission commit and persistent DOI/accession.
 
 No new discovery analysis is authorized merely to improve the submission story. New public data are incorporated only when they address a preregistered identifiability gap.
 
