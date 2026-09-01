@@ -83,6 +83,21 @@ The following labels are historical programme-routing aliases used by downstream
 - `COMPLETE_EXISTING_PUBLIC_HISTORY_CORE` is the frozen status label of the former history-only package;
 - the legacy title fragment `Capitulum configuration diversity, minimum change counts` and `MANUSCRIPT_JEB_V3.md` are retained only as reproducible audit-routing labels, not as current submission targets.
 
+## Frozen legacy submission package
+
+The former JEB package remains reproducible audit history and is explicitly **not** the active submission route. Its entry points remain:
+
+- `docs/chapter2/MANUSCRIPT_JEB_V4.md` — final pre-V5 manuscript snapshot;
+- `docs/chapter2/CHAPTER2_CORE_RESULT_RECOVERY_V1.md` — compressed history-only result recovery;
+- `MANUSCRIPT_JEB_V3.md` and the associated V3 figure/DOCX package — older frozen audit snapshot.
+
+Two negative reconstruction-aware continuous-change diagnostics from that frozen package remain part of the audit trail and are not erased by the V5 reframe:
+
+- original panel reconstruction-aware null: P=0.3504;
+- fixed JPN29-excluded provenance sensitivity: P=0.1959.
+
+These results remain scientific FAIL diagnostics from the legacy package; they are not current V5 headline estimands.
+
 ## Active Chapter 2 sources of truth
 
 Start here:
