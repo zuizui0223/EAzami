@@ -1,0 +1,85 @@
+{
+  "contract_version": "chapter2_common9_environment_source_contract_v1",
+  "status_date": "2026-09-01",
+  "purpose": "Define the complete current environmental measurement universe for the EAzami exploratory atlas independently of Azami outcome selection. The universe matches Chapter 1 only to make later cross-chapter comparison commensurate.",
+  "existing_occurrence_asset": {
+    "source_run_id": 32716015605,
+    "source_artifact_id": 9516784077,
+    "source_artifact_name": "fdt4-japan-orientation-niche-v1",
+    "eligible_table": "focal_occurrences_environment_complete.csv",
+    "eligible_rows_in_audit": 693,
+    "construction": "GBIF source scientificName guard -> Japan bounds/geospatial issue filter -> strict <=10 km coordinate uncertainty where >=10 records otherwise documented fallback -> 0.1 degree taxon-specific thinning -> complete BIO1/BIO4/BIO12/BIO15 extraction",
+    "reuse_boundary": "The old run failed only in a late empty-slot audit after the occurrence and environment files were written. Reuse requires rechecking query/source-name agreement and nonmissing coordinates; sampling-candidate rankings are not used for species environmental centroids."
+  },
+  "predictors": [
+    {
+      "id": "BIO1",
+      "block": "thermal",
+      "column": "chelsa_bio01",
+      "source": "existing_occurrence_asset"
+    },
+    {
+      "id": "BIO4",
+      "block": "thermal",
+      "column": "chelsa_bio04",
+      "source": "existing_occurrence_asset"
+    },
+    {
+      "id": "BIO12",
+      "block": "hydric",
+      "column": "chelsa_bio12",
+      "source": "existing_occurrence_asset"
+    },
+    {
+      "id": "BIO15",
+      "block": "hydric",
+      "column": "chelsa_bio15",
+      "source": "existing_occurrence_asset"
+    },
+    {
+      "id": "RSDS",
+      "block": "radiative_atmospheric",
+      "column": "chelsa_rsds_mean",
+      "construct": "surface downwelling shortwave radiation",
+      "url": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_rsds_1981-2010_mean_V.2.1.tif"
+    },
+    {
+      "id": "VPD",
+      "block": "radiative_atmospheric",
+      "column": "chelsa_vpd_mean",
+      "construct": "atmospheric drying power",
+      "url": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_vpd_mean_1981-2010_V.2.1.tif"
+    },
+    {
+      "id": "SFCWIND",
+      "block": "mechanical",
+      "column": "chelsa_sfcwind_mean",
+      "construct": "near-surface wind exposure",
+      "url": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_sfcWind_mean_1981-2010_V.2.1.tif"
+    },
+    {
+      "id": "GSP",
+      "block": "growing_season_water_input",
+      "column": "chelsa_gsp",
+      "construct": "CHELSA climatic growing-season precipitation",
+      "url": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_gsp_1981-2010_V.2.1.tif"
+    },
+    {
+      "id": "NPP",
+      "block": "resource_productivity",
+      "column": "chelsa_npp",
+      "construct": "CHELSA potential net primary productivity",
+      "url": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_npp_1981-2010_V.2.1.tif"
+    }
+  ],
+  "selection_rule": "All nine predictors are retained regardless of Azami or EAzami effect size, P value, direction or biological narrative.",
+  "environment_centroid_rule": "For every focal taxon, use the median across the same source-name-guarded, spatially thinned occurrence cohort after all nine environmental values are available. Do not use the 25-per-taxon niche-sampling candidate table because it intentionally enriches environmental/geographic edges.",
+  "minimum_taxon_environment_records": 10,
+  "claim_boundary": [
+    "The common nine-variable universe is a measurement alignment with Azami, not an Azami-derived hypothesis set.",
+    "The nine predictors are correlated observational gradients.",
+    "GSP is a climatic growing-season construct, not taxon-specific flowering-season precipitation.",
+    "NPP is modelled potential productivity, not measured resource supply.",
+    "Current environmental medians do not identify historical exposure, selection or adaptation."
+  ]
+}
