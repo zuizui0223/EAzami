@@ -1,0 +1,36 @@
+{
+  "contract_version": "chapter2_exploratory_topology_mapping_v1",
+  "status_date": "2026-09-01",
+  "purpose": "Map the EAzami continuous-trait taxon panel to exact Japan38 Comp1061 tips without silently collapsing infraspecific concepts.",
+  "mappings": [
+    {"taxon_name":"Cirsium aomorense","paper_japan_member_id":"JPN_05","tip_id":"J38S005","status":"exact"},
+    {"taxon_name":"Cirsium japonicum","paper_japan_member_id":null,"tip_id":null,"status":"not_comparable","reason":"Japan38 contains Cirsium japonicum var. horridum, not an exact plain-species concept; do not collapse automatically."},
+    {"taxon_name":"Cirsium kamtschaticum","paper_japan_member_id":"JPN_37","tip_id":"J38S038","status":"exact"},
+    {"taxon_name":"Cirsium lineare","paper_japan_member_id":"JPN_15","tip_id":"J38S015","status":"exact"},
+    {"taxon_name":"Cirsium maritimum","paper_japan_member_id":"JPN_17","tip_id":"J38S017","status":"exact"},
+    {"taxon_name":"Cirsium oligophyllum","paper_japan_member_id":"JPN_23","tip_id":"J38S024","status":"exact"},
+    {"taxon_name":"Cirsium pendulum","paper_japan_member_id":"JPN_38","tip_id":"J38S039","status":"exact"},
+    {"taxon_name":"Cirsium sieboldii","paper_japan_member_id":"JPN_36","tip_id":"J38S037","status":"exact"},
+    {"taxon_name":"Cirsium verutum","paper_japan_member_id":"JPN_29","tip_id":"J38S030","status":"exact","note":"Exact Japan38 mapping exists, but the common-nine live environment gate currently has fewer than 10 source-name-matched records."}
+  ],
+  "tree_sources": {
+    "workflow_run_id": 32923076873,
+    "artifact_id": 9590650447,
+    "artifact_name": "japan38-comp1061-frozen-tree-retry-32923076873",
+    "ml_tree": "tree_result/japan38_comp1061.treefile",
+    "ufboot": "tree_result/japan38_comp1061.ufboot",
+    "ufboot_count": 1000
+  },
+  "gate_design": {
+    "ml": "Brownian shared-path GLS using empirical Comp1061 branch lengths in substitutions/site; exact predictor-label permutation P within the fixed exact-tip subset.",
+    "ufboot": "Topology-only sensitivity on all 1000 UFBoot trees with unit branch lengths because the UFBoot Newick lines do not retain optimized branch lengths.",
+    "multiplicity": "Benjamini-Hochberg across all 63 ML branch-aware endpoint x environment rows; no row is removed before topology analysis.",
+    "interpretation": "The UFBoot layer tests topology sign stability, not absolute evolutionary rates or dated history."
+  },
+  "claim_boundary": [
+    "Cirsium japonicum is not silently equated with the Japan38 var. horridum concept.",
+    "Cirsium verutum remains excluded from the current common-nine atlas if the predeclared occurrence-depth gate is not met.",
+    "Substitutions/site and unit-branch topology sensitivity are not calendar time.",
+    "Phylogenetic sign stability does not establish selection, adaptation or causation."
+  ]
+}
