@@ -8,6 +8,7 @@ on:
       - "data/evidence/chapter2_orientation_differentiation_environment_v2_summary.json"
       - "data/evidence/chapter2_orientation_deboer_sealevel_envelope_v1_summary.json"
       - "data/evidence/chapter2_orientation_mpt_overlap_audit_v1.json"
+      - "data/evidence/chapter2_public_dated_tree_recovery_audit_v2.json"
       - "docs/chapter2/HISTORICAL_DIFFERENTIATION_EVIDENCE_SYNTHESIS_V1.md"
       - ".github/workflows/validate-chapter2-historical-differentiation-evidence-v1.yml"
   workflow_dispatch:
