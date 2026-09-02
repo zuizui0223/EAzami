@@ -1,0 +1,65 @@
+{
+  "summary_version": "chapter2_orientation_deboer_sealevel_envelope_v1_summary",
+  "status_date": "2026-09-02",
+  "event_id": "ORI_CORE_NIPPONO_STEM",
+  "source_workflow": {
+    "run_id": 33585632883,
+    "artifact_id": 9829967954,
+    "artifact_sha256": "ca91df7bf6eb31df22b6d6ef19f4dda9e2192b5ea64b32e8d99cce10b1e723ae"
+  },
+  "source": {
+    "dataset": "NOAA/WDS Global 5 Million Year Sea Level, Temperature, and d18Osw Reconstructions",
+    "dataset_doi": "10.25921/xs31-nt56",
+    "associated_publication_doi": "10.1038/ncomms3999",
+    "source_type": "model-based global eustatic sea-level reconstruction",
+    "analysis_resolution": "1 kyr interpolation of 100-yr source"
+  },
+  "chronology_coverage": {
+    "n_total_pairs": 94,
+    "n_covered_pairs": 94,
+    "coverage_fraction": 1.0
+  },
+  "primary_background": "same-duration Pleistocene windows, 0-2580 ka",
+  "primary_metric_percentile_summary": {
+    "mean_m": {"q05": 0.024231936861204516, "median": 0.2868845434595644, "q95": 0.3714058921452573},
+    "sd_m": {"q05": 0.6222200708016402, "median": 0.6994485886771771, "q95": 0.9431740496672808},
+    "range_m": {"q05": 0.6372249045414923, "median": 0.7137844925458257, "q95": 0.922749698696072},
+    "endpoint_abs_change_m": {"q05": 0.131291591046582, "median": 0.7843386747903045, "q95": 0.9827037055763418},
+    "mean_abs_1k_change_m": {"q05": 0.5628669008477617, "median": 0.8569313135018302, "q95": 0.971990807653923},
+    "max_abs_1k_change_m": {"q05": 0.33494378777106293, "median": 0.8071880650994575, "q95": 0.8894913644674015}
+  },
+  "primary_metric_classification": {
+    "mean_m": "unresolved_across_chronology",
+    "sd_m": "unresolved_across_chronology",
+    "range_m": "unresolved_across_chronology",
+    "endpoint_abs_change_m": "unresolved_across_chronology",
+    "mean_abs_1k_change_m": "unresolved_across_chronology",
+    "max_abs_1k_change_m": "unresolved_across_chronology"
+  },
+  "central_0_79_to_0_74_ma": {
+    "duration_ka": 50.0,
+    "mean_m": -38.2543137254902,
+    "sd_m": 26.43358382247114,
+    "range_m": 74.798,
+    "endpoint_abs_change_m": 2.235999999999997,
+    "mean_abs_1k_change_m": 2.9472000000000005,
+    "max_abs_1k_change_m": 19.126000000000005,
+    "pleistocene_percentiles": {
+      "mean_m": 0.266390205371248,
+      "sd_m": 0.8880331753554502,
+      "range_m": 0.8481437598736177,
+      "endpoint_abs_change_m": 0.06812796208530805,
+      "mean_abs_1k_change_m": 0.9093601895734598,
+      "max_abs_1k_change_m": 0.8955371248025277
+    }
+  },
+  "decision": "no_global_sea_level_metric_survives_full_chronology_gate",
+  "repeated_trigger_status": "not_evaluable_single_dated_transition_event",
+  "interpretation": "Across all 94 admissible orientation chronologies, no global eustatic sea-level level, variability, range, endpoint-change, or 1-kyr change-rate metric is consistently extreme relative to same-duration Pleistocene windows. The central 0.79-0.74 Ma window shows relatively high variability/change-rate percentiles but is not robust to chronology uncertainty.",
+  "claim_boundary": [
+    "The de Boer series is model-based and is an independent sensitivity, not a replacement for the Spratt-Lisiecki stack.",
+    "Global eustatic sea level does not reconstruct local island connectivity or fragmentation.",
+    "A global sea-level context cannot be interpreted as a selective pressure on capitulum orientation.",
+    "One dated orientation event cannot establish a repeated differentiation trigger."
+  ]
+}
