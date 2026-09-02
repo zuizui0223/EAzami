@@ -20,8 +20,6 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-import run_chapter2_orientation_origin_envelope_v1 as chronology
-
 METRICS = (
     "mean_m",
     "sd_m",
@@ -38,6 +36,24 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--noaa", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
     return p.parse_args()
+
+
+def enumerate_age_pairs(contract: dict[str, Any]) -> list[tuple[float, float]]:
+    """Reproduce the frozen orientation 94-pair chronology grid without climate imports."""
+    c = contract["chronology_scenarios"]
+    parent = c["parent_node"]
+    child = c["child_node"]
+    parent_grid = np.linspace(parent["lower_ma"], parent["upper_ma"], 16)
+    child_grid = np.linspace(child["lower_ma"], child["upper_ma"], 10)
+    pairs: set[tuple[float, float]] = set()
+    for old_ma in parent_grid:
+        for young_ma in child_grid:
+            if old_ma > young_ma and (old_ma - young_ma) >= 0.010:
+                pairs.add((round(float(young_ma), 6), round(float(old_ma), 6)))
+    central = (round(float(child["central_ma"]), 6), round(float(parent["central_ma"]), 6))
+    if central[1] > central[0]:
+        pairs.add(central)
+    return sorted(pairs, key=lambda x: (x[1] - x[0], x[0], x[1]))
 
 
 def load_noaa(path: Path) -> pd.DataFrame:
@@ -66,8 +82,6 @@ def window_metrics(df: pd.DataFrame, young_ka: float, old_ka: float) -> dict[str
     duration = float(old_ka - young_ka)
     if duration <= 0:
         raise ValueError("non-positive duration")
-    # Uniform 1-kyr grid makes short and long chronology windows comparable even
-    # when source rows are not perfectly aligned with window endpoints.
     n = max(3, int(np.ceil(duration)) + 1)
     ages = young_ka + np.linspace(0.0, duration, n)
     y = interp_values(df, ages)
@@ -111,7 +125,7 @@ def matched_windows(df: pd.DataFrame, duration_ka: float) -> dict[str, np.ndarra
 def main() -> int:
     args = parse_args()
     contract = json.loads(args.orientation_contract.read_text(encoding="utf-8"))
-    pairs = chronology.enumerate_age_pairs(contract)
+    pairs = enumerate_age_pairs(contract)
     if len(pairs) != 94:
         raise AssertionError(f"expected frozen 94 chronology pairs, got {len(pairs)}")
 
