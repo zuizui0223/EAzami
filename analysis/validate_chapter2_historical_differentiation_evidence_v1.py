@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -11,6 +12,7 @@ SYNTHESIS = ROOT / "docs/chapter2/HISTORICAL_DIFFERENTIATION_EVIDENCE_SYNTHESIS_
 CLIMATE = ROOT / "data/evidence/chapter2_orientation_differentiation_environment_v2_summary.json"
 SEA = ROOT / "data/evidence/chapter2_orientation_deboer_sealevel_envelope_v1_summary.json"
 MPT = ROOT / "data/evidence/chapter2_orientation_mpt_overlap_audit_v1.json"
+TREE_AUDIT = ROOT / "data/evidence/chapter2_public_dated_tree_recovery_audit_v2.json"
 
 REQUIRED_MODULES = {
     "orientation",
@@ -42,7 +44,7 @@ REQUIRED_COLUMNS = {
 
 
 def main() -> None:
-    for p in (LEDGER, SYNTHESIS, CLIMATE, SEA, MPT):
+    for p in (LEDGER, SYNTHESIS, CLIMATE, SEA, MPT, TREE_AUDIT):
         if not p.exists():
             raise AssertionError(f"missing active differentiation evidence: {p.relative_to(ROOT)}")
 
@@ -96,6 +98,16 @@ def main() -> None:
         raise AssertionError("whole-capitulum shared localization boundary was lost")
     if whole["repeated_trigger_status"] != "universal_common_trigger_not_supported":
         raise AssertionError("whole-capitulum universal trigger boundary changed")
+
+    tree = json.loads(TREE_AUDIT.read_text(encoding="utf-8"))
+    if tree["decision"] != "no_public_machine_readable_dated_tree_recovered_for_additional_transition_calendarization":
+        raise AssertionError("public dated-tree ceiling changed without updating the active evidence contract")
+    if tree["consequence"]["repeated_trigger"] != "not_evaluable_single_dated_transition_event":
+        raise AssertionError("dated-tree audit must not manufacture repeated trigger support")
+    stop = " ".join(tree["stop_rules"]).lower()
+    for phrase in ("published phylogeny graphics", "relative lineage depth", "lineage split or dispersal date"):
+        if phrase not in stop:
+            raise AssertionError(f"dated-tree stop rule lost: {phrase}")
 
     text = SYNTHESIS.read_text(encoding="utf-8")
     for phrase in (
