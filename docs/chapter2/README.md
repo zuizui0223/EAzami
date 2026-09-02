@@ -38,6 +38,10 @@ The canonical narrative synthesis is:
 
 - `HISTORICAL_DIFFERENTIATION_EVIDENCE_SYNTHESIS_V1.md`
 
+The first orientation differentiation-only branch-change result remains an active lower-level source:
+
+- `HISTORICAL_DIFFERENTIATION_TRIGGER_RESULT_V1.md`
+
 These supersede the earlier environment-first V5 scientific framing while retaining all frozen V5 production assets as audit history.
 
 ## Recurrence and relative depth
@@ -151,6 +155,7 @@ This does not mean historical environment was biologically irrelevant. It means 
 ## V6 architecture
 
 - `MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md`
+- `../../data/evidence/chapter2_differentiation_time_axis_contract_v1.json`
 
 Working title direction:
 
