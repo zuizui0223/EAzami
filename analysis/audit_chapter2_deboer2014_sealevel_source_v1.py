@@ -31,14 +31,28 @@ def main():
             continue
         low=[norm(x) for x in fields]
         if any('age' in x for x in low):
-            header_candidates.append({'line_number':i+1,'fields':fields})
+            header_candidates.append({
+                'line_number':i+1,
+                'fields':fields,
+                'next_line':lines[i+1] if i+1 < len(lines) else ''
+            })
     if not header_candidates:
         raise AssertionError('No tab-delimited age-bearing header candidate found')
-    # Prefer a candidate that also exposes a sea-level-looking field.
     def sea_like(field:str)->bool:
         n=norm(field)
-        return ('sea' in n and ('lev' in n or 'level' in n)) or n in {'sl','slm','rsl','rslm','sealevel','sealevelm'}
-    selected=next((h for h in header_candidates if any(sea_like(f) for f in h['fields'])),header_candidates[0])
+        return ('sea' in n and ('lev' in n or 'level' in n)) or n in {'sl','slm','rsl','rslm','sealev','sealevel','sealevelm'}
+    # A real data header should be followed by a numeric row. Prefer that over NOAA
+    # variable-description tables, which also contain age/sea-level words.
+    def numeric_next(h):
+        cells=h['next_line'].split('\t')
+        try:
+            float(cells[0])
+            return True
+        except Exception:
+            return False
+    selected=next((h for h in header_candidates if numeric_next(h) and any(sea_like(f) for f in h['fields'])),None)
+    if selected is None:
+        selected=next((h for h in header_candidates if numeric_next(h)),header_candidates[0])
     age_fields=[f for f in selected['fields'] if 'age' in norm(f)]
     sea_fields=[f for f in selected['fields'] if sea_like(f)]
     result={
@@ -46,8 +60,10 @@ def main():
       'status_date':'2026-09-02',
       'source_file':args.source.name,
       'n_lines':len(lines),
+      'header_candidates':header_candidates,
       'selected_header_line':selected['line_number'],
       'selected_fields':selected['fields'],
+      'selected_next_line':selected['next_line'],
       'age_field_candidates':age_fields,
       'sea_level_field_candidates':sea_fields,
       'n_header_candidates':len(header_candidates),
@@ -58,7 +74,7 @@ def main():
         'declared_coverage':'0-5.3 Ma',
         'role':'model-based full-chronology sea-level sensitivity; not local connectivity reconstruction'
       },
-      'parser_status':'ready_for_full_analysis' if len(age_fields)>=1 and len(sea_fields)==1 else 'needs_manual_column_selection',
+      'parser_status':'ready_for_full_analysis' if len(age_fields)>=1 and len(sea_fields)==1 and numeric_next(selected) else 'needs_manual_column_selection',
       'claim_boundary':[
         'This is a model-based global reconstruction and is not interchangeable with the Spratt-Lisiecki 0-798 ka stack.',
         'Global eustatic sea level does not reconstruct local Ryukyu/Taiwan connectivity.',
