@@ -1,0 +1,99 @@
+{
+  "audit_version": "chapter2_japan38_calendarization_feasibility_audit_v1",
+  "status_date": "2026-09-02",
+  "question": "Can the frozen Japan38 substitutions/site phylogram be converted into defensible calendar-time transition envelopes using existing published age constraints without rebuilding a broader dated phylogeny?",
+  "japan38_inputs": {
+    "tree": "data/evidence/japan38_comp1061_primary_tree_v1.nwk",
+    "concept_map": "data/evidence/japan38_comp1061_concept_map_v1.csv",
+    "tree_tips": 40,
+    "focal_japanese_biological_samples": 39,
+    "root_tip": "OUTGROUP_saff",
+    "branch_length_semantics": "substitutions/site"
+  },
+  "constraint_audit": [
+    {
+      "constraint": "Cirsium morii versus core Nipponocirsium split",
+      "central_ma": 0.79,
+      "published_interval_ma": [0.43, 1.18],
+      "source": "Chang et al. 2026; DOI 10.1186/s12870-026-08097-6",
+      "japan38_mapping": "not_directly_mappable",
+      "reason": "C. morii and the Taiwan/core comparison taxa are absent from Japan38."
+    },
+    {
+      "constraint": "Japanese-core versus Taiwan-core Nipponocirsium split",
+      "central_ma": 0.74,
+      "published_interval_ma": [0.60, 0.87],
+      "source": "Chang et al. 2025; DOI 10.1186/s40529-025-00454-2",
+      "japan38_mapping": "not_directly_mappable",
+      "reason": "Taiwan core taxa are absent from Japan38, so the cross-study node cannot be assigned to a Japan38 MRCA."
+    },
+    {
+      "constraint": "dominant Japanese Cirsium radiation founder dispersal",
+      "central_ma": 2.4,
+      "published_interval_ma": [1.7, 3.6],
+      "source": "Moreyra et al. 2025; DOI 10.1016/j.ympev.2025.108285",
+      "japan38_mapping": "not_a_node_calibration",
+      "reason": "The reported value is a BioGeoBEARS jump-dispersal/founder event on the stem leading to the dominant Japanese radiation, not the crown age of the Japan38 clade. The continental sister lineage needed to locate that stem event is not present in the Japan38-only tree."
+    },
+    {
+      "constraint": "Cirsium dipsacolepis jump dispersal to Japan",
+      "central_ma": 1.0,
+      "published_interval_ma": [0.4, 2.2],
+      "source": "Moreyra et al. 2025; DOI 10.1016/j.ympev.2025.108285",
+      "japan38_mapping": "not_a_node_calibration",
+      "reason": "JPN_06 is present, but the age describes an inferred range-change event on its lineage, not a divergence node."
+    },
+    {
+      "constraint": "Cirsium lineare East-Asia-to-Japan range expansion",
+      "central_ma": 1.4,
+      "published_interval_ma": [0.7, 2.7],
+      "source": "Moreyra et al. 2025; DOI 10.1016/j.ympev.2025.108285",
+      "japan38_mapping": "not_a_node_calibration",
+      "reason": "JPN_15 is present, but the age describes an ancestral range expansion, not a divergence node."
+    },
+    {
+      "constraint": "Japanese C. japonicum var. japonicum versus Taiwanese Sinocirsium split",
+      "central_ma": 0.44,
+      "published_interval_ma": [0.31, 0.66],
+      "source": "Chang et al. 2026; DOI 10.1186/s12870-026-08097-6",
+      "japan38_mapping": "not_directly_mappable",
+      "reason": "Japan38 contains C. japonicum var. horridum, not the published Japanese var. japonicum accession, and contains no Taiwanese Sinocirsium comparison clade."
+    },
+    {
+      "constraint": "Arenicola and Taiwan internal dated nodes",
+      "source": "Chang et al. 2025, 2026",
+      "japan38_mapping": "absent_taxa",
+      "reason": "C. brevicaule, C. irumtiense, C. kawakamii, C. tatakaense and C. pengii are not Japan38 tips."
+    },
+    {
+      "constraint": "deep fossil calibrations used by Chang et al. 2026",
+      "source": "Compositae origin and Cirsium-achene fossil calibration in the published BEAST analysis",
+      "japan38_mapping": "absent_calibration_clades",
+      "reason": "Japan38 lacks the broad outgroup sampling (including the relevant Cynara/Silybum and deeper Compositae nodes) needed to place those fossil calibrations. OUTGROUP_saff alone is insufficient."
+    }
+  ],
+  "direct_mrca_calibrations_available": 0,
+  "branch_process_ages_that_must_not_be_relabelled_as_nodes": 3,
+  "decision": "STOP_NOT_IDENTIFIABLE_JAPAN38_ONLY",
+  "reason": "No independent published calendar constraint maps directly to a Japan38 internal node. A one-anchor rescaling or assignment of biogeographic event ages to nodes would manufacture a clock and suppress rate heterogeneity in a rapid radiation.",
+  "forbidden_shortcuts": [
+    "Do not scale relative lineage depth by 2.4 Ma.",
+    "Do not set the Japan38 crown to the 2.4 Ma founder-event age.",
+    "Do not assign the 1.0 Ma C. dipsacolepis or 1.4 Ma C. lineare range-event ages to their divergence nodes.",
+    "Do not map the 0.79/0.74 Ma Nipponocirsium constraints onto a Japan38 MRCA when the defining comparison taxa are absent.",
+    "Do not place deep fossil calibrations on OUTGROUP_saff without the clades used by the published dating analysis."
+  ],
+  "next_admissible_routes": [
+    {
+      "route": "recover_original_processed_dated_tree",
+      "status": "not_recovered_publicly",
+      "note": "Would permit direct calendar crosswalk if obtained."
+    },
+    {
+      "route": "rebuild_broader_calibrated_public_data_tree",
+      "status": "feasibility_to_audit_next",
+      "note": "Augment the Japanese panel with continental/Taiwan calibration-bearing lineages and sufficient outgroups, then estimate a dated scaffold from public primary sequence data under explicit fossil/node calibration assumptions. This is a new analysis, not recovery of the published chronogram."
+    }
+  ],
+  "claim_boundary": "Failure of Japan38-only calendarization is an identifiability result. It does not imply that additional trait transitions lack historical ages; it means those ages cannot be inferred defensibly from the current Japan38-only tree and published summary dates."
+}
