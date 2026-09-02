@@ -1,0 +1,41 @@
+name: Audit Chapter 2 de Boer sea-level source v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_chapter2_deboer2014_sealevel_source_v1.py"
+      - ".github/workflows/audit-chapter2-deboer2014-sealevel-source-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download NOAA de Boer reconstruction
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/public /tmp/result
+          curl --fail --location --retry 8 --retry-delay 3 --retry-all-errors \
+            'https://www.ncei.noaa.gov/pub/data/paleo/reconstructions/deboer2014/deboer2014-noaa.txt' \
+            -o /tmp/public/deboer2014-noaa.txt
+          test -s /tmp/public/deboer2014-noaa.txt
+      - name: Audit fields and source semantics
+        run: |
+          python analysis/audit_chapter2_deboer2014_sealevel_source_v1.py \
+            --source /tmp/public/deboer2014-noaa.txt \
+            --out /tmp/result/chapter2_deboer2014_sealevel_source_audit_v1.json \
+            | tee /tmp/result/audit.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-deboer2014-sealevel-source-audit-${{ github.run_id }}
+          path: /tmp/result
+          if-no-files-found: error
+          retention-days: 90
