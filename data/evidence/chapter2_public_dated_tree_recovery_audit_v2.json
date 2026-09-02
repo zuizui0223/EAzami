@@ -1,0 +1,47 @@
+{
+  "audit_version": "chapter2_public_dated_tree_recovery_audit_v2",
+  "status_date": "2026-09-02",
+  "purpose": "Determine whether public machine-readable dated trees or posterior tree samples can calendar-bound additional capitulum-trait transitions without reading dates from figures or scaling relative lineage depth.",
+  "sources_checked": [
+    {
+      "source": "Moreyra et al. 2025, Molecular Phylogenetics and Evolution 204:108285",
+      "doi": "10.1016/j.ympev.2025.108285",
+      "public_data_statement": "Raw sequences are deposited in NCBI SRA under BioProject PRJNA957074; the journal page exposes one Supplementary Data Word document.",
+      "dated_tree_recovery": "not_recovered",
+      "notes": "The publication reports time-calibrated phylogeny/biogeography, but no public machine-readable dated Newick, BEAST posterior tree set, or equivalent processed-tree repository link was located in the journal data-availability route, supplementary listing, SRA route, or targeted web/repository search."
+    },
+    {
+      "source": "Chang et al. 2025, Botanical Studies 66:8",
+      "doi": "10.1186/s40529-025-00454-2",
+      "public_data_statement": "Article page provides Supplementary Material 1 as DOCX.",
+      "dated_tree_recovery": "not_recovered",
+      "notes": "BEAST divergence-time analysis is reported, but no public machine-readable posterior/Newick tree archive was located from the article or supplementary-data entrypoint. Published node estimates remain usable only as explicit node constraints."
+    },
+    {
+      "source": "Chang et al. 2026, BMC Plant Biology 26:545",
+      "doi": "10.1186/s12870-026-08097-6",
+      "public_data_statement": "Article page provides Supplementary Material 1 as DOCX and reports BEAST divergence-time estimation.",
+      "dated_tree_recovery": "not_recovered",
+      "notes": "No public machine-readable dated Newick/posterior archive was located from the article or supplementary-data entrypoint. Reported lineage ages remain lineage/node constraints, not direct dates of Japan38 parsimony changes."
+    }
+  ],
+  "repository_search": {
+    "target": "public repositories associated with the focal studies/authors and searches for Cirsium dated-tree/Newick/posterior assets",
+    "result": "no_reusable_dated_tree_asset_recovered",
+    "boundary": "Absence from this audit is not proof that no private or unindexed analysis file exists."
+  },
+  "decision": "no_public_machine_readable_dated_tree_recovered_for_additional_transition_calendarization",
+  "consequence": {
+    "orientation": "retain 4-6 repeated changes and relative lineage-depth ensemble, but only the cross-study core-Nipponocirsium stem can currently be bounded for historical-environment analysis",
+    "phyllary_posture": "retain exactly 3 changes and relative-depth envelope; historical trigger remains not_evaluable",
+    "stickiness": "retain exactly 5 shallow-biased changes; range-event ages cannot be assigned to trait transitions",
+    "repeated_trigger": "not_evaluable_single_dated_transition_event"
+  },
+  "stop_rules": [
+    "Do not infer calendar ages from published phylogeny graphics.",
+    "Do not scale Japan38 relative lineage depth by the approximately 2.4 Ma Japanese-radiation context.",
+    "Do not assign a published lineage split or dispersal date to a capitulum-trait transition unless the change-bearing branch is explicitly reconciled.",
+    "Do not turn failure to recover a public processed tree into evidence that no such tree exists privately."
+  ],
+  "next_external_resolution": "A machine-readable dated tree/posterior from the original analyses, or a newly generated calibrated tree from primary sequence data under an explicitly justified dating model, would be required to calendar-bound additional repeated transitions. The latter would be a new analysis rather than recovery of a published processed tree."
+}
