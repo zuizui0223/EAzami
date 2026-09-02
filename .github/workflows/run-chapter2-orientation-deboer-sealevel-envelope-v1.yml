@@ -1,0 +1,71 @@
+name: Run Chapter 2 orientation de Boer sea-level envelope v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_chapter2_orientation_deboer_sealevel_envelope_v1.py"
+      - "analysis/audit_chapter2_deboer2014_sealevel_source_v1.py"
+      - "data/evidence/chapter2_orientation_origin_envelope_contract_v1.json"
+      - ".github/workflows/run-chapter2-orientation-deboer-sealevel-envelope-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  de-boer-sea-level-envelope:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas
+          python -m py_compile analysis/run_chapter2_orientation_deboer_sealevel_envelope_v1.py
+      - name: Download NOAA de Boer reconstruction
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/public /tmp/result
+          curl --fail --location --retry 8 --retry-delay 3 --retry-all-errors \
+            'https://www.ncei.noaa.gov/pub/data/paleo/reconstructions/deboer2014/deboer2014-noaa.txt' \
+            -o /tmp/public/deboer2014-noaa.txt
+          test -s /tmp/public/deboer2014-noaa.txt
+      - name: Run full chronology envelope
+        run: |
+          python analysis/run_chapter2_orientation_deboer_sealevel_envelope_v1.py \
+            --orientation-contract data/evidence/chapter2_orientation_origin_envelope_contract_v1.json \
+            --source /tmp/public/deboer2014-noaa.txt \
+            --out /tmp/result/chapter2_orientation_deboer_sealevel_envelope_v1.json \
+            | tee /tmp/result/run_summary.log
+      - name: Validate fail-closed output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/result/chapter2_orientation_deboer_sealevel_envelope_v1.json').read_text())
+          assert x['event_id']=='ORI_CORE_NIPPONO_STEM'
+          assert x['chronology_coverage']['n_total_pairs']==94
+          assert x['chronology_coverage']['n_covered_pairs']==94
+          assert x['chronology_coverage']['coverage_fraction']==1.0
+          assert x['decision'] in {
+              'no_global_sea_level_metric_survives_full_chronology_gate',
+              'global_sea_level_metric_survives_full_chronology_gate'
+          }
+          assert x['repeated_trigger_status']=='not_evaluable_single_dated_transition_event'
+          assert 'local' in ' '.join(x['claim_boundary']).lower()
+          print(json.dumps({
+              'decision':x['decision'],
+              'primary_robust_metrics':x['primary_robust_metrics'],
+              'central':x['central_0_79_to_0_74_ma']
+          },indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-orientation-deboer-sealevel-envelope-${{ github.run_id }}
+          path: /tmp/result
+          if-no-files-found: error
+          retention-days: 90
