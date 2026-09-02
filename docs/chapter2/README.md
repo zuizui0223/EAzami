@@ -1,10 +1,10 @@
 # Chapter 2 — capitulum differentiation through evolutionary time
 
-## Active contract — 2026-09-01
+## Active state — 2026-09-02
 
-Chapter 2 is the historical-differentiation chapter. Its primary question is:
+Chapter 2 asks:
 
-> **How repeatedly and how deeply were capitulum traits differentiated, when can those changes be bounded in calendar time, and did particular environmental states, changes or instabilities repeatedly accompany the bounded differentiation events?**
+> **How repeatedly and how deeply were capitulum traits differentiated, which changes can actually be bounded in calendar time, and did any historical environmental state, change, instability or range-reorganization regime robustly accompany those bounded events?**
 
 The biological sequence is:
 
@@ -13,135 +13,158 @@ repeated trait history
 → relative evolutionary depth
 → calendar event identifiability
 → paleogeographic uncertainty
-→ historical environmental level / change / variability
-→ repeated historical trigger candidate where >=2 homologous events are independently bounded
+→ historical environment / range context
+→ repeated historical trigger candidate only if >=2 homologous events are independently bounded
 → Chapter 3 mechanism + reproductive fitness
 ```
 
-Present-day trait × environment analyses are supporting diagnostics only. They do not select the historical variables, transition events or manuscript results.
+Present-day trait × environment analyses are supporting diagnostics only. They do not select historical variables, transition events or manuscript results.
 
 ## Dissertation-level interpretation
 
 - **Chapter 1:** present environmental gradients after spatial control → current maintenance / ecological sorting candidates;
-- **Chapter 2:** environmental context of trait differentiation through time → origin / historical trigger candidates;
+- **Chapter 2:** environmental and geographic context of trait differentiation through time → origin / historical trigger candidates;
 - **Chapter 3:** environment → trait function → reproductive fitness → adaptive explanation if supported.
 
-Whether historical differentiation and present maintenance point in the same, different or reversed directions is evaluated only after both chapters are independently frozen.
+Maintenance–differentiation agreement or mismatch is evaluated only after Chapters 1 and 2 are independently frozen.
 
-## Current recurrence and depth
+## Active evidence ledger
 
-### Orientation
+The canonical trait-by-trait ledger is:
 
-- 20 resolved concepts;
-- ML minimum = 6 changes;
-- UFBoot minimum = 4–6;
-- median relative lineage-depth envelope = 0.795–0.994;
-- admissible histories span internal-to-terminal placements.
+- `../../data/evidence/chapter2_historical_differentiation_evidence_ledger_v1.csv`
 
-### Phyllary posture
+The canonical narrative synthesis is:
 
-- 10 resolved concepts;
-- exactly 3 changes across ML and all 1,000 UFBoot trees;
-- median relative-depth envelope = 0.695–1.000.
+- `HISTORICAL_DIFFERENTIATION_EVIDENCE_SYNTHESIS_V1.md`
 
-### Stickiness
+These supersede the earlier environment-first V5 scientific framing while retaining all frozen V5 production assets as audit history.
 
-- 13 resolved concepts;
-- exactly 5 changes across ML and all 1,000 UFBoot trees;
-- median relative-depth envelope = 0.937–0.954;
-- strongly shallow/terminal-biased relative history.
+## Recurrence and relative depth
 
-Zero of three discrete trait pairs passes robust shared-transition localization.
+- **Orientation:** ML minimum 6; UFBoot 4–6, median 5; median relative-depth envelope 0.795–0.994; internal-to-terminal.
+- **Phyllary posture:** exactly 3 changes; median relative-depth envelope 0.695–1.000; relatively deeper placements remain admissible.
+- **Stickiness:** exactly 5 changes; median relative-depth envelope 0.937–0.954; strongly shallow/terminal-biased.
+- **Whole capitulum:** 0/3 discrete trait pairs pass robust shared-transition localization.
 
-Minimum changes are lower bounds. Relative lineage depth is topology-only and is not calendar time or rate.
+Minimum changes are lower bounds. Relative lineage depth is topology-only, not calendar time or rate.
 
 ## Event-time identifiability
 
-The public event ledger currently separates four evidence levels:
+Current public evidence provides:
 
-1. **calendar + paleolocation + historical environment evaluable transition envelope** — one orientation event on the core-Nipponocirsium stem;
-2. **conditional dated transition branch envelopes** — white *C. kawakamii* and white *C. brevicaule* lineages, plus the broader Taiwan topology union;
-3. **dated extant sister phenotype contrasts, not reconstructed transitions** — phyllary architecture and floral-display differences in the Taiwan and Arenicola sister systems;
-4. **dated range process, trait age unlinked** — *C. dipsacolepis* and *C. lineare* distribution events relative to stickiness.
+1. **one calendar+paleolocation+historical-environment evaluable trait transition** — core-Nipponocirsium orientation;
+2. **three conditional flower-colour terminal branch envelopes**;
+3. **four dated sister phenotype contrasts that are not reconstructed transitions**;
+4. **two dated range processes whose ages are not stickiness-transition ages**.
 
-A published split or dispersal date is never assigned directly to a parsimony change.
+A lineage split or dispersal age is never assigned directly to a parsimony change.
 
-## Validated orientation differentiation-time result
+## Orientation — validated historical differentiation result
 
-Workflow `33482748258`, artifact `9790559360` re-summarizes the frozen 94 chronology × 4 paleolocation scenarios using only historical branch change and matched-window background.
+The erect/upward → nodding/downward core-Nipponocirsium event is evaluated over 94 admissible chronology pairs × 4 paleolocation regions = 376 scenarios.
 
-At the central 0.79 → 0.74 Ma pair:
+### Direction
 
-- BIO1 decreases in 4/4 regions;
-- BIO4 decreases in 4/4;
-- BIO15 decreases in 4/4;
-- BIO12 increases in 3/4.
-
-But every variable's regional q05–q95 signed-change range crosses zero after the full chronology uncertainty is propagated.
-
-Decision:
+At the central 0.79→0.74 Ma pair, BIO1/BIO4/BIO15 decrease in all four regions and BIO12 increases in three of four. Across the full uncertainty envelope, however, no BIO1/BIO4/BIO12/BIO15 signed direction remains robust.
 
 `no_tested_climate_direction_survives_full_chronology_paleolocation_envelope`
 
-Matched-window standardized direction is also unresolved.
+### Climate state, change magnitude and variability
 
-Repeated-trigger status:
+The V2 matched-window analysis also finds **0 variables** passing the robust full-envelope gate for:
+
+- environmental level;
+- signed change;
+- absolute endpoint change;
+- temporal variability.
+
+Tendency only:
+
+- BIO1 is generally low-side in level and high-side in variability;
+- BIO4 is generally high-side in level;
+- the central 0.79→0.74 Ma pair is near the lower 5% of BIO1 level and upper 5% of BIO1 temporal SD in all four regions.
+
+These are historical-regime diagnostics, not passed trigger tests.
+
+Source:
+
+- `../../data/evidence/chapter2_orientation_differentiation_environment_v2_summary.json`
+
+### Global sea level
+
+The Spratt–Lisiecki stack covers only 16/94 admissible chronologies, so full-envelope inference is coverage-limited.
+
+The independent de Boer 5.3-Myr model-based reconstruction covers 94/94. None of six metrics is robustly extreme across chronology:
+
+- mean sea level;
+- SD;
+- range;
+- absolute endpoint change;
+- mean absolute 1-kyr change;
+- maximum absolute 1-kyr change.
+
+`no_global_sea_level_metric_survives_full_chronology_gate`
+
+Global eustatic sea level is range-reorganization context, not a reconstruction of local island connectivity and not a selective pressure on orientation.
+
+Source:
+
+- `../../data/evidence/chapter2_orientation_deboer_sealevel_envelope_v1_summary.json`
+
+### Mid-Pleistocene context
+
+90/94 admissible orientation chronologies overlap 0.7–0.9 Ma. Therefore MPT overlap is chronology context, not independent trigger evidence.
+
+`mid_pleistocene_overlap_is_chronology_context_not_independent_trigger_evidence`
+
+Source:
+
+- `../../data/evidence/chapter2_orientation_mpt_overlap_audit_v1.json`
+
+### Repeated trigger
 
 `not_evaluable_single_dated_transition_event`
 
-Thus the public evidence identifies repeated orientation history and one bounded stem differentiation event more strongly than it identifies one common environmental direction that generated orientation differences.
+Orientation is recurrent in the undated/relative history, but only one transition is currently dateable at this resolution.
 
-Detailed result:
+## Other modules
 
-- `HISTORICAL_DIFFERENTIATION_TRIGGER_RESULT_V1.md`;
-- `../../data/evidence/chapter2_historical_differentiation_trigger_contract_v1.json`.
+### Phyllary posture
 
-## Extended trigger test
+Repeated and relatively deep, but the dated Taiwan/Arenicola architecture comparisons are extant sister contrasts rather than reconstructed posture transitions. Historical trigger remains `not_evaluable`.
 
-The active V2 analysis asks whether the event is unusual despite unstable signed direction by testing:
+### Stickiness
 
-- environmental level in the event window;
-- absolute endpoint change;
-- temporal variability;
-- same-duration background windows within each paleolocation region.
+Repeated and shallow, but current published ages concern range processes rather than sticky/nonsticky transition branches. Historical trigger remains `not_evaluable_trait_age_unlinked`.
 
-This is the direct test of a broader **climate-transition regime as a possible differentiation trigger**.
+### Flower colour
 
-## Active sources of truth
+Two dated white-lineage contexts exist, but ancestral colour and exact transition timing remain conditional, and no commensurate historical radiation series is available. A repeated colour trigger cannot currently be tested.
 
-### Scientific framing
+## Current Chapter 2 conclusion
 
-- `../../data/evidence/chapter2_differentiation_time_axis_contract_v1.json`;
-- `MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md`;
-- `HISTORICAL_DIFFERENTIATION_TRIGGER_RESULT_V1.md`.
+> **Capitulum traits differentiated repeatedly but at unequal evolutionary depths. Pleistocene climatic and geographic reorganization is well supported as lineage-diversification context, but trait-specific historical causes are substantially less identifiable. For the best-bounded orientation event, no tested directional climate change, extreme climate state, unusually large climate change/variability, or global eustatic sea-level metric survives the full chronology and paleolocation uncertainty gates.**
 
-### Recurrence and depth
+This does not mean historical environment was biologically irrelevant. It means the current public data resolve **differentiation history more strongly than differentiation cause**.
 
-- `../../data/evidence/japan38_relative_event_depth_v1.json`;
-- `../../data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv`;
-- `../../data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv`.
+## V6 architecture
 
-### Dated-event audit
+- `MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md`
 
-- `../../data/evidence/chapter2_public_trait_event_recovery_audit_v2.csv`;
-- `../../data/evidence/chapter2_dated_tree_paleoclimate_asset_audit_v1.csv`;
-- `../../data/evidence/chapter2_orientation_origin_envelope_result_v1.json`.
-
-### Supporting diagnostics only
-
-- `../../data/evidence/chapter2_space_breadth_time_depth_contract_v1.json`;
-- `SPACE_BREADTH_TIME_DEPTH_PILOT_RESULT_V1.md`;
-- 7×4 / 7×9 current trait × environment screens and their topology sensitivity.
-
-These are not required headline Results.
-
-## V5 production snapshot
-
-`MANUSCRIPT_JEB_V5.md` and its figure/DOCX package retain their completed QA, but V5 is a pre-reframe snapshot and is not the active submission text.
-
-Working V6 title direction:
+Working title direction:
 
 > **Evolutionary depth and historical environmental context of capitulum differentiation in a young East-Asian thistle radiation**
+
+The V6 manuscript should be rebuilt around the identifiability hierarchy:
+
+`recurrence → depth → dated event → historical context → repeated trigger status`
+
+rather than around a prespecified environmental association.
+
+## Supporting diagnostics only
+
+The environment-free spatial-breadth pilot, SPACE×TIME feasibility work, and 7×4/7×9 current trait×environment screens remain reproducible internal diagnostics. They may stay out of the final Results.
 
 ## Claim boundaries
 
@@ -150,19 +173,20 @@ Working V6 title direction:
 - dated lineage split ≠ exact trait-transition date;
 - regional paleolocation scenario ≠ ancestral-area probability;
 - event-window climate ≠ exact exposure at the unknown transition instant;
-- repeated historical alignment ≠ natural selection;
+- global sea level ≠ local land connectivity;
+- historical alignment ≠ natural selection;
 - adaptation requires Chapter 3 mechanism and reproductive fitness;
 - `not_evaluable` ≠ no biological relationship.
 
 ## Frozen legacy submission package
 
-The earlier JEB packages remain reproducible audit history and are explicitly not the active scientific route.
+Earlier JEB packages remain reproducible audit history and are explicitly not the active scientific route.
 
-- `MANUSCRIPT_JEB_V4.md` — final pre-V5 manuscript snapshot;
-- `CHAPTER2_CORE_RESULT_RECOVERY_V1.md` — compressed history-only result recovery;
-- `MANUSCRIPT_JEB_V3.md` and its associated figure/DOCX package — older frozen audit snapshot.
+- `MANUSCRIPT_JEB_V4.md`;
+- `CHAPTER2_CORE_RESULT_RECOVERY_V1.md`;
+- `MANUSCRIPT_JEB_V3.md` and associated package.
 
-Two reconstruction-aware diagnostics remain frozen negative audit results:
+Frozen reconstruction-aware audit diagnostics:
 
 - original panel P=0.3504;
 - fixed JPN29-excluded sensitivity P=0.1959.
