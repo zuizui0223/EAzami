@@ -1,0 +1,46 @@
+{
+  "version": "chapter2_jeb_v7_figure2_contract_v1",
+  "status_date": "2026-09-04",
+  "role": "submission_figure_contract_for_validated_headline_result",
+  "source_files": [
+    "data/evidence/chapter2_historical_differentiation_final_summary_v1.json",
+    "data/evidence/chapter2_depth_ordering_robustness_result_v1.json",
+    "data/evidence/chapter2_depth_coverage_matched_sensitivity_result_v1.json"
+  ],
+  "expected": {
+    "minimum_changes": {
+      "orientation_ml": 6,
+      "orientation_ufboot_range": [4, 6],
+      "orientation_ufboot_median": 5,
+      "phyllary": 3,
+      "stickiness": 5
+    },
+    "depth_median_envelopes": {
+      "orientation": [0.795, 0.994],
+      "phyllary": [0.695, 1.0],
+      "stickiness": [0.937, 0.954]
+    },
+    "paired_topology": {
+      "phyllary_lt_stickiness": 1.0,
+      "phyllary_lt_orientation": 0.993,
+      "orientation_lt_stickiness": 0.905,
+      "complete_ordering": 0.898
+    },
+    "coverage_matched": {
+      "phyllary_lt_orientation_median": 0.975,
+      "phyllary_lt_stickiness_median": 0.965,
+      "phyllary_lt_orientation_q05": 0.105,
+      "phyllary_lt_stickiness_5_5_q05": 0.11,
+      "phyllary_lt_stickiness_6_4_q05": 0.155
+    },
+    "shared_localization_passed_pairs": 0,
+    "shared_localization_total_pairs": 3
+  },
+  "display_rules": [
+    "Relative lineage depth axis must state 1 = terminal and topology only, not time.",
+    "Topology fractions are sensitivity descriptors, not probabilities or confidence levels.",
+    "Coverage-matched panel must show both central-median retention and strict-tail overlap.",
+    "Do not label minimum changes as independent origins or evolutionary rates.",
+    "Do not describe the result as coverage-independent or as equal lability."
+  ]
+}
