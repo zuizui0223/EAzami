@@ -1,0 +1,71 @@
+{
+  "contract_version": "chapter2_turnover_burden_comparability_v1",
+  "status_date": "2026-09-03",
+  "analysis_role": "post-result descriptive audit asking whether unequal relative evolutionary depth can be reduced to simple differences in minimum-change burden",
+  "source": "data/evidence/japan38_relative_event_depth_v1.json",
+  "traits": {
+    "orientation": {
+      "resolved_concepts": 20,
+      "state_universe_cardinality": 2,
+      "ml_minimum_steps": 6,
+      "ml_steps_per_resolved_concept": 0.3,
+      "ufboot_minimum_steps": {"min": 4, "q05": 5, "median": 5, "q95": 6, "max": 6},
+      "ufboot_median_steps_per_resolved_concept": 0.25,
+      "ml_depth_lower_bound": 0.7666666666666666,
+      "ufboot_median_depth_lower_bound": 0.7952380952380952
+    },
+    "phyllary": {
+      "resolved_concepts": 10,
+      "state_universe_cardinality": 4,
+      "ml_minimum_steps": 3,
+      "ml_steps_per_resolved_concept": 0.3,
+      "ufboot_minimum_steps": {"min": 3, "q05": 3, "median": 3, "q95": 3, "max": 3},
+      "ufboot_median_steps_per_resolved_concept": 0.3,
+      "ml_depth_lower_bound": 0.6952380952380953,
+      "ufboot_median_depth_lower_bound": 0.6952380952380953
+    },
+    "stickiness": {
+      "resolved_concepts": 13,
+      "state_universe_cardinality": 2,
+      "ml_minimum_steps": 5,
+      "ml_steps_per_resolved_concept": 0.38461538461538464,
+      "ufboot_minimum_steps": {"min": 5, "q05": 5, "median": 5, "q95": 5, "max": 5},
+      "ufboot_median_steps_per_resolved_concept": 0.38461538461538464,
+      "ml_depth_lower_bound": 0.9428571428571428,
+      "ufboot_median_depth_lower_bound": 0.937142857142857
+    }
+  },
+  "diagnostics": {
+    "orientation_vs_phyllary": {
+      "ml_step_burden_difference": 0.0,
+      "ufboot_median_step_burden_difference_orientation_minus_phyllary": -0.05,
+      "ml_depth_lower_difference_orientation_minus_phyllary": 0.07142857142857129,
+      "ufboot_median_depth_lower_difference_orientation_minus_phyllary": 0.09999999999999987,
+      "interpretation": "similar coverage-adjusted minimum-change burden coexists with distinct depth placement"
+    },
+    "stickiness_vs_orientation": {
+      "ml_step_burden_ratio_stickiness_over_orientation": 1.2820512820512822,
+      "ufboot_median_step_burden_ratio_stickiness_over_orientation": 1.5384615384615385,
+      "ufboot_median_depth_lower_difference_stickiness_minus_orientation": 0.14190476190476185,
+      "interpretation": "stickiness is both somewhat more step-dense under the coverage normalization and substantially shallower"
+    },
+    "stickiness_vs_phyllary": {
+      "ml_step_burden_ratio_stickiness_over_phyllary": 1.2820512820512822,
+      "ufboot_median_step_burden_ratio_stickiness_over_phyllary": 1.2820512820512822,
+      "ufboot_median_depth_lower_difference_stickiness_minus_phyllary": 0.24190476190476173
+    }
+  },
+  "classification": "unequal_depth_not_reducible_to_minimum_change_burden_equal_lability_not_established",
+  "allowed_inference": [
+    "Relative evolutionary-depth differences contain information not captured by simple minimum-step burden.",
+    "Orientation and phyllary have similar coverage-adjusted minimum-change burden but differ in relative-depth placement.",
+    "Stickiness is the shallow pole and also has a modestly higher coverage-adjusted minimum-change burden."
+  ],
+  "not_allowed": [
+    "The three traits have equal evolutionary rates or equal lability.",
+    "Minimum steps per resolved concept is a rate per unit evolutionary time.",
+    "Cross-trait burden is fully commensurable despite different state ontologies, especially the four-state phyllary character.",
+    "Unequal depth proves module-specific selection or adaptation."
+  ],
+  "manuscript_consequence": "Replace strong wording that modules differ in depth but not changeability with the bounded statement that depth stratification is not explained away by simple coverage-adjusted minimum-change burden; equal lability remains unestablished."
+}

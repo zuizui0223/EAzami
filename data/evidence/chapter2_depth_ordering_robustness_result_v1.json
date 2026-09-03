@@ -1,0 +1,55 @@
+{
+  "version": "chapter2_depth_ordering_robustness_result_v1",
+  "source_followup_contract": "data/evidence/chapter2_depth_ordering_robustness_contract_v1.json",
+  "analysis_role": "Post-result robustness quantification of the already observed unequal relative-lineage-depth pattern. This is not an independent preregistered hypothesis test.",
+  "input_verification": {
+    "tree_run_id": 32923076873,
+    "tree_artifact": "japan38-comp1061-frozen-tree-retry-32923076873",
+    "ml_tree_sha256": "ba592d3a9f52b5481314ab20e3202048505cdf72a3fc15134d5dca261b9d9b7e",
+    "ufboot_sha256": "32cb09118ed035b73e51df3faa0cc60d4ee0c77fcf53d3cf880d556c9bbfa786",
+    "concept_map_canonical_lf_sha256": "8eb2953ac1ee96587c2a60446eae2478e0925843f07e15fb2efbe5eb704914e3",
+    "base_trait_seed_canonical_lf_sha256": "f9e608af72076996a0e2ed925ecf35ccc0fc7834d5c1489507e378bcc3b0b4b5",
+    "authority_extension_canonical_lf_sha256": "3d091ea3a4d7084b1f31892cbd956f53637269617ca2c7d65e9edd0e319c1cba",
+    "bootstrap_replicates": 1000,
+    "biopython_version": "1.85",
+    "workflow_run_id": 33730096404,
+    "workflow_artifact_id": 9884409026,
+    "workflow_artifact_sha256": "7c44f5daffb1a7249c823a84cb53533687ac342a6806d96b4048570e21f23c77"
+  },
+  "primary_estimand": "For the same UFBoot topology, compare the lower bound of mean relative lineage depth across all globally minimum-cost histories. Smaller D means that a trait permits a deeper mean placement. Bootstrap trees are sensitivity realizations, not independent biological replicates.",
+  "pairwise_results": [
+    {
+      "deeper_candidate": "phyllary",
+      "shallower_candidate": "stickiness",
+      "lower_bound_difference_deeper_minus_shallower": {"n": 1000, "min": -0.7409523809523808, "q05": -0.4933333333333332, "median": -0.24761904761904752, "q95": -0.059047619047618904, "max": -0.013333333333333197},
+      "lower_bound_ordering": {"n": 1000, "fraction_negative": 1.0, "fraction_tied": 0.0, "fraction_positive": 0.0},
+      "fraction_prespecified_deeper_direction": 1.0,
+      "direction_class": "robust"
+    },
+    {
+      "deeper_candidate": "orientation",
+      "shallower_candidate": "stickiness",
+      "lower_bound_difference_deeper_minus_shallower": {"n": 1000, "min": -0.22857142857142854, "q05": -0.20000000000000007, "median": -0.10857142857142865, "q95": 0.017142857142857126, "max": 0.2114285714285714},
+      "lower_bound_ordering": {"n": 1000, "fraction_negative": 0.905, "fraction_tied": 0.007, "fraction_positive": 0.088},
+      "fraction_prespecified_deeper_direction": 0.905,
+      "direction_class": "stable"
+    },
+    {
+      "deeper_candidate": "phyllary",
+      "shallower_candidate": "orientation",
+      "lower_bound_difference_deeper_minus_shallower": {"n": 1000, "min": -0.6142857142857142, "q05": -0.3666666666666666, "median": -0.11904761904761907, "q95": -0.04190476190476167, "max": 0.03238095238095251},
+      "lower_bound_ordering": {"n": 1000, "fraction_negative": 0.993, "fraction_tied": 0.0, "fraction_positive": 0.007},
+      "fraction_prespecified_deeper_direction": 0.993,
+      "direction_class": "robust"
+    }
+  ],
+  "complete_lower_bound_ordering": {"ordering": "phyllary < orientation < stickiness", "count": 898, "fraction": 0.898},
+  "stickiness_shallow_contrast": {"phyllary_lower_bound_deeper_than_stickiness_fraction": 1.0, "orientation_lower_bound_deeper_than_stickiness_fraction": 0.905},
+  "classification": "paired_topology_depth_ordering_reproduced_under_frozen_runtime",
+  "interpretation_boundary": [
+    "A lower depth bound means that at least one globally minimum-cost history can place the mean change burden deeper; it is not an estimated event age.",
+    "Pairwise UFBoot fractions quantify topology sensitivity and must not be reported as probabilities, confidence levels, or independent replicate frequencies.",
+    "This analysis cannot establish independent origins, genetic modularity, adaptation, selection, or a causal mechanism.",
+    "Because this follow-up was motivated by the frozen ensemble summaries, it strengthens description of robustness but is not an independent confirmation of the unequal-depth hypothesis."
+  ]
+}

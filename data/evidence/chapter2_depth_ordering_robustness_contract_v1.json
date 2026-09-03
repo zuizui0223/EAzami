@@ -1,0 +1,43 @@
+{
+  "version": "chapter2_depth_ordering_robustness_contract_v1",
+  "status": "frozen_followup_before_paired_result_inspection",
+  "status_date": "2026-09-03",
+  "analysis_role": "Post-result robustness quantification of the already observed unequal relative-lineage-depth pattern. This is not an independent preregistered hypothesis test.",
+  "source_relative_depth_contract": "data/evidence/chapter2_relative_event_depth_contract_v1.json",
+  "source_relative_depth_result": "data/evidence/japan38_relative_event_depth_v1.json",
+  "primary_estimand": "For the same UFBoot topology, compare the lower bound of mean relative lineage depth across all globally minimum-cost histories. Smaller D means that a trait permits a deeper mean placement. Bootstrap trees are sensitivity realizations, not independent biological replicates.",
+  "pairwise_questions": [
+    {
+      "deeper_candidate": "phyllary",
+      "shallower_candidate": "stickiness",
+      "reason": "The frozen ensemble summaries place phyllary deeper and stickiness shallow; quantify topology-wise robustness."
+    },
+    {
+      "deeper_candidate": "orientation",
+      "shallower_candidate": "stickiness",
+      "reason": "The frozen ensemble summaries place orientation deeper and stickiness shallow; quantify topology-wise robustness."
+    },
+    {
+      "deeper_candidate": "phyllary",
+      "shallower_candidate": "orientation",
+      "reason": "Quantify whether the apparent phyllary-versus-orientation ordering is itself stable or mixed."
+    }
+  ],
+  "secondary_estimands": [
+    "paired difference in lower depth bound",
+    "paired difference in depth-envelope width",
+    "fraction of topologies with the prespecified lower-bound direction",
+    "fraction of topologies with the complete lower-bound ordering phyllary < orientation < stickiness"
+  ],
+  "direction_labels": {
+    "robust": "prespecified lower-bound direction in >=0.95 of UFBoot topologies",
+    "stable": "prespecified lower-bound direction in >=0.80 and <0.95 of UFBoot topologies",
+    "mixed": "prespecified lower-bound direction in <0.80 of UFBoot topologies"
+  },
+  "interpretation_boundary": [
+    "A lower depth bound means that at least one globally minimum-cost history can place the mean change burden deeper; it is not an estimated event age.",
+    "Pairwise UFBoot fractions quantify topology sensitivity and must not be reported as probabilities, confidence levels, or independent replicate frequencies.",
+    "This analysis cannot establish independent origins, genetic modularity, adaptation, selection, or a causal mechanism.",
+    "Because this follow-up was motivated by the frozen ensemble summaries, it strengthens description of robustness but is not an independent confirmation of the unequal-depth hypothesis."
+  ]
+}

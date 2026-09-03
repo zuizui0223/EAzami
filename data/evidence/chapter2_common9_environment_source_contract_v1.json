@@ -1,0 +1,29 @@
+{
+  "contract_version": "chapter2_common9_environment_source_contract_v1",
+  "status_date": "2026-09-01",
+  "status": "internal_exploratory_diagnostic_not_manuscript_axis",
+  "purpose": "Provide one broad, reproducible present-environment diagnostic panel for the focal radiation. This panel does not define Chapter 2 spatial breadth, does not define the manuscript trait universe, and is not required to appear in the final Results.",
+  "predictor_rationale": "The nine variables span thermal, hydric, radiative/atmospheric, mechanical, growing-season water-input and productivity domains. They are a practical exploratory panel, not a complete causal universe and not a preregistered list of expected drivers.",
+  "predictors": [
+    {"id":"BIO1","block":"thermal","column":"chelsa_bio01"},
+    {"id":"BIO4","block":"thermal","column":"chelsa_bio04"},
+    {"id":"BIO12","block":"hydric","column":"chelsa_bio12"},
+    {"id":"BIO15","block":"hydric","column":"chelsa_bio15"},
+    {"id":"RSDS","block":"radiative_atmospheric","column":"chelsa_rsds_mean","construct":"surface downwelling shortwave radiation","url":"https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_rsds_1981-2010_mean_V.2.1.tif"},
+    {"id":"VPD","block":"radiative_atmospheric","column":"chelsa_vpd_mean","construct":"atmospheric drying power","url":"https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_vpd_mean_1981-2010_V.2.1.tif"},
+    {"id":"SFCWIND","block":"mechanical","column":"chelsa_sfcwind_mean","construct":"near-surface wind exposure","url":"https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_sfcWind_mean_1981-2010_V.2.1.tif"},
+    {"id":"GSP","block":"growing_season_water_input","column":"chelsa_gsp","construct":"CHELSA climatic growing-season precipitation","url":"https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_gsp_1981-2010_V.2.1.tif"},
+    {"id":"NPP","block":"resource_productivity","column":"chelsa_npp","construct":"CHELSA potential net primary productivity","url":"https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_npp_1981-2010_V.2.1.tif"}
+  ],
+  "analysis_rule": "When this diagnostic is run, retain the complete successful trait x predictor matrix with multiplicity and coverage. Do not promote rows solely because they are narratively convenient.",
+  "environment_centroid_rule": "Use the median across source-name-guarded, spatially thinned occurrence coordinates after environmental extraction. Treat taxon-level environment medians as niche summaries, not phenotype-local exposure.",
+  "minimum_taxon_environment_records": 10,
+  "manuscript_role": "optional supplementary/internal diagnostic; may be absent entirely from the final paper",
+  "claim_boundary": [
+    "The nine predictors are correlated observational gradients and do not exhaust plausible abiotic or biotic processes.",
+    "GSP is a climatic growing-season construct, not taxon-specific flowering-season precipitation.",
+    "NPP is modelled potential productivity, not measured resource supply.",
+    "Taxon-level environmental medians do not identify historical exposure, selection or adaptation.",
+    "No result from this panel defines the primary space-breadth axis."
+  ]
+}

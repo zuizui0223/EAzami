@@ -1,0 +1,109 @@
+{
+  "summary_version": "chapter2_orientation_differentiation_environment_v2_summary",
+  "status_date": "2026-09-02",
+  "event_id": "ORI_CORE_NIPPONO_STEM",
+  "source_workflow": {
+    "run_id": 33487117183,
+    "artifact_id": 9793244189,
+    "artifact_sha256": "6e5bb00f3bd91404ec1efdbd18091aae38701f615d831da4a2475b387342b4d7"
+  },
+  "chronology": {
+    "n_valid_age_pairs": 94,
+    "n_paleolocation_scenarios": 4,
+    "n_region_by_chronology_scenarios": 376,
+    "scenario_rows_are_not_posterior_draws": true
+  },
+  "matched_window_design": {
+    "step_ka": 10,
+    "same_duration": true,
+    "same_paleolocation_region": true,
+    "percentiles_are_descriptive_not_probabilities": true
+  },
+  "cross_variable_summary": {
+    "variables_with_robust_signed_direction": [],
+    "variables_with_consistently_extreme_level": [],
+    "variables_with_consistently_extreme_absolute_change": [],
+    "variables_with_consistently_extreme_variability": [],
+    "repeated_trigger_status": "not_evaluable_single_dated_transition_event"
+  },
+  "variables": {
+    "BIO1": {
+      "signed_change_direction": "direction_unresolved",
+      "level_class": "level_mean_matched_window_position_unresolved",
+      "absolute_change_class": "absolute_delta_matched_window_position_unresolved",
+      "variability_class": "temporal_sd_matched_window_position_unresolved",
+      "regional_median_percentiles": {
+        "taiwan": {"level_mean": 0.142534, "absolute_delta": 0.851985, "temporal_sd": 0.847077},
+        "ryukyu_corridor": {"level_mean": 0.141412, "absolute_delta": 0.884065, "temporal_sd": 0.849895},
+        "southern_japan": {"level_mean": 0.142530, "absolute_delta": 0.871231, "temporal_sd": 0.851224},
+        "east_asia_core_corridor": {"level_mean": 0.141412, "absolute_delta": 0.878062, "temporal_sd": 0.849314}
+      },
+      "central_0_79_to_0_74_ma": {
+        "taiwan": {"delta": -0.545660, "level_mean_percentile": 0.051308, "absolute_delta_percentile": 0.435614, "temporal_sd_percentile": 0.948692},
+        "ryukyu_corridor": {"delta": -0.894421, "level_mean_percentile": 0.053320, "absolute_delta_percentile": 0.608652, "temporal_sd_percentile": 0.954728},
+        "southern_japan": {"delta": -1.318480, "level_mean_percentile": 0.049296, "absolute_delta_percentile": 0.638833, "temporal_sd_percentile": 0.950704},
+        "east_asia_core_corridor": {"delta": -0.767160, "level_mean_percentile": 0.053320, "absolute_delta_percentile": 0.483903, "temporal_sd_percentile": 0.954728}
+      }
+    },
+    "BIO4": {
+      "signed_change_direction": "direction_unresolved",
+      "level_class": "level_mean_matched_window_position_unresolved",
+      "absolute_change_class": "absolute_delta_matched_window_position_unresolved",
+      "variability_class": "temporal_sd_matched_window_position_unresolved",
+      "regional_median_percentiles": {
+        "taiwan": {"level_mean": 0.850487, "absolute_delta": 0.617254, "temporal_sd": 0.823096},
+        "ryukyu_corridor": {"level_mean": 0.854233, "absolute_delta": 0.653024, "temporal_sd": 0.734940},
+        "southern_japan": {"level_mean": 0.855602, "absolute_delta": 0.640243, "temporal_sd": 0.723185},
+        "east_asia_core_corridor": {"level_mean": 0.855119, "absolute_delta": 0.611142, "temporal_sd": 0.720496}
+      },
+      "central_0_79_to_0_74_ma": {
+        "taiwan": {"delta": -27.140569, "level_mean_percentile": 0.930584, "absolute_delta_percentile": 0.391348, "temporal_sd_percentile": 0.544266},
+        "ryukyu_corridor": {"delta": -31.245913, "level_mean_percentile": 0.934608, "absolute_delta_percentile": 0.483903, "temporal_sd_percentile": 0.326962},
+        "southern_japan": {"delta": -38.323340, "level_mean_percentile": 0.940644, "absolute_delta_percentile": 0.471831, "temporal_sd_percentile": 0.292757},
+        "east_asia_core_corridor": {"delta": -36.709191, "level_mean_percentile": 0.938632, "absolute_delta_percentile": 0.445674, "temporal_sd_percentile": 0.312877}
+      }
+    },
+    "BIO12": {
+      "signed_change_direction": "direction_unresolved",
+      "level_class": "level_mean_matched_window_position_unresolved",
+      "absolute_change_class": "absolute_delta_matched_window_position_unresolved",
+      "variability_class": "temporal_sd_matched_window_position_unresolved",
+      "regional_median_percentiles": {
+        "taiwan": {"level_mean": 0.861268, "absolute_delta": 0.473824, "temporal_sd": 0.321231},
+        "ryukyu_corridor": {"level_mean": 0.855137, "absolute_delta": 0.481596, "temporal_sd": 0.238872},
+        "southern_japan": {"level_mean": 0.488604, "absolute_delta": 0.581768, "temporal_sd": 0.474036},
+        "east_asia_core_corridor": {"level_mean": 0.870091, "absolute_delta": 0.479101, "temporal_sd": 0.073668}
+      },
+      "central_0_79_to_0_74_ma": {
+        "taiwan": {"delta": 108.178096, "level_mean_percentile": 0.966801, "absolute_delta_percentile": 0.544266, "temporal_sd_percentile": 0.117706},
+        "ryukyu_corridor": {"delta": 86.053950, "level_mean_percentile": 0.962777, "absolute_delta_percentile": 0.477867, "temporal_sd_percentile": 0.127767},
+        "southern_japan": {"delta": -12.416094, "level_mean_percentile": 0.258551, "absolute_delta_percentile": 0.367203, "temporal_sd_percentile": 0.194165},
+        "east_asia_core_corridor": {"delta": 7.025952, "level_mean_percentile": 0.827968, "absolute_delta_percentile": 0.149899, "temporal_sd_percentile": 0.021127}
+      }
+    },
+    "BIO15": {
+      "signed_change_direction": "direction_unresolved",
+      "level_class": "level_mean_matched_window_position_unresolved",
+      "absolute_change_class": "absolute_delta_matched_window_position_unresolved",
+      "variability_class": "temporal_sd_matched_window_position_unresolved",
+      "regional_median_percentiles": {
+        "taiwan": {"level_mean": 0.101938, "absolute_delta": 0.597013, "temporal_sd": 0.820337},
+        "ryukyu_corridor": {"level_mean": 0.138300, "absolute_delta": 0.608179, "temporal_sd": 0.803247},
+        "southern_japan": {"level_mean": 0.859019, "absolute_delta": 0.534336, "temporal_sd": 0.627273},
+        "east_asia_core_corridor": {"level_mean": 0.094145, "absolute_delta": 0.552648, "temporal_sd": 0.546660}
+      },
+      "central_0_79_to_0_74_ma": {
+        "taiwan": {"delta": -2.703000, "level_mean_percentile": 0.107646, "absolute_delta_percentile": 0.576459, "temporal_sd_percentile": 0.594567},
+        "ryukyu_corridor": {"delta": -1.299171, "level_mean_percentile": 0.061368, "absolute_delta_percentile": 0.487928, "temporal_sd_percentile": 0.562374},
+        "southern_japan": {"delta": -2.492841, "level_mean_percentile": 0.930584, "absolute_delta_percentile": 0.536217, "temporal_sd_percentile": 0.240443},
+        "east_asia_core_corridor": {"delta": -3.326560, "level_mean_percentile": 0.351107, "absolute_delta_percentile": 0.709256, "temporal_sd_percentile": 0.178068}
+      }
+    }
+  },
+  "interpretation": {
+    "formal_decision": "No BIO1/BIO4/BIO12/BIO15 metric passes the full chronology x paleolocation robust gate for signed direction, environmental level, absolute endpoint change, or temporal variability.",
+    "tendency_only": "BIO1 is consistently on the low-level and high-variability side in regional medians; the central 0.79->0.74 Ma pair is near the lower 5% for BIO1 level and upper 5% for BIO1 temporal SD in all four regions, but this does not survive chronology uncertainty.",
+    "repeated_trigger": "Not evaluable because only one orientation transition currently has a calendar+paleolocation envelope.",
+    "claim_ceiling": "Historical alignment/tendency only; no selection or adaptation inference."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "contract_version": "chapter2_space_breadth_time_depth_v1",
+  "status_date": "2026-09-01",
+  "status": "supporting_diagnostic_superseded_as_chapter_organizer_by_chapter2_differentiation_time_axis_v1",
+  "original_question": "How is capitulum diversity distributed across present geographic space, and how deeply and repeatedly is that diversity assembled through evolutionary time?",
+  "current_role": "Retain environment-free spatial breadth and the space x time feasibility pilot as supporting diagnostics. The active Chapter 2 biological question is historical differentiation through evolutionary time, defined in data/evidence/chapter2_differentiation_time_axis_contract_v1.json.",
+  "space_breadth": {
+    "definition": "The geographic extent and characteristic spatial scale over which a capitulum trait or state is presently expressed.",
+    "retained_estimands": [
+      "coordinate-bearing coverage and occupied cells",
+      "robust geographic extent",
+      "spatial dispersion of discrete states",
+      "continuous phenotype turnover where coverage permits"
+    ],
+    "manuscript_required": false,
+    "interpretation": "Useful for coverage and current-distribution context, but not the primary differentiation estimand."
+  },
+  "time_depth": {
+    "definition": "The topology-based recurrence and relative depth of trait change.",
+    "retained_estimands": [
+      "minimum-change lower bounds",
+      "relative lineage-depth envelopes",
+      "terminal/internal change burden",
+      "bootstrap topology uncertainty"
+    ],
+    "current_role": "Feeds the active differentiation-time analysis before calendar event and historical environment layers."
+  },
+  "exploratory_environment_role": {
+    "status": "internal_supporting_diagnostic",
+    "not_required_for_final_results": true,
+    "not_a_trait_selection_rule": true
+  },
+  "claim_boundary": [
+    "Spatial breadth is not evidence of adaptation.",
+    "Relative lineage depth is not calendar time.",
+    "The space x time pilot does not identify the environment that generated a trait difference.",
+    "The active historical differentiation analysis supersedes this contract as the Chapter 2 organizing logic."
+  ]
+}

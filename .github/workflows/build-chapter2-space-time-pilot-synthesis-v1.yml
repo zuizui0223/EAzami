@@ -1,0 +1,69 @@
+name: Build Chapter 2 space-time pilot synthesis v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_chapter2_space_time_pilot_synthesis_v1.py"
+      - "data/evidence/chapter2_space_breadth_time_depth_contract_v1.json"
+      - "data/evidence/japan38_relative_event_depth_v1.json"
+      - ".github/workflows/build-chapter2-space-time-pilot-synthesis-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pandas
+          python -m py_compile analysis/build_chapter2_space_time_pilot_synthesis_v1.py
+      - name: Recover frozen spatial pilot
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/ch2_space_time/spatial /tmp/ch2_space_time/out
+          curl -L --fail-with-body \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/actions/artifacts/9789577849/zip \
+            -o /tmp/ch2_space_time/spatial.zip
+          unzip -q /tmp/ch2_space_time/spatial.zip -d /tmp/ch2_space_time/spatial
+          test -s /tmp/ch2_space_time/spatial/chapter2_discrete_trait_spatial_breadth_pilot_v1.json
+      - name: Join spatial breadth to temporal depth
+        run: |
+          python analysis/build_chapter2_space_time_pilot_synthesis_v1.py \
+            --spatial-json /tmp/ch2_space_time/spatial/chapter2_discrete_trait_spatial_breadth_pilot_v1.json \
+            --time-json data/evidence/japan38_relative_event_depth_v1.json \
+            --out-json /tmp/ch2_space_time/out/chapter2_space_time_pilot_synthesis_v1.json \
+            --out-csv /tmp/ch2_space_time/out/chapter2_space_time_pilot_synthesis_v1.csv \
+            | tee /tmp/ch2_space_time/out/run_summary.log
+      - name: Validate two-axis boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/ch2_space_time/out/chapter2_space_time_pilot_synthesis_v1.json').read_text())
+          assert len(x['rows']) == 3
+          assert x['decision'].startswith('two_axis_framework_empirically_usable')
+          assert all('time_ml_minimum_steps' in r for r in x['rows'])
+          assert all('space_status' in r for r in x['rows'])
+          assert any('No composite space-time score' in s for s in x['claim_boundary'])
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-space-time-pilot-synthesis-${{ github.run_id }}
+          path: /tmp/ch2_space_time/out/
+          if-no-files-found: error
+          retention-days: 90

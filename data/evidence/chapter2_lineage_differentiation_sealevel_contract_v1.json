@@ -1,0 +1,79 @@
+{
+  "contract_version": "chapter2_lineage_differentiation_sealevel_v1",
+  "status_date": "2026-09-03",
+  "status": "internal_exploratory_lineage_range_context",
+  "scientific_question": "Do independently dated East-Asian Cirsium lineage divergences repeatedly occur during unusual global eustatic sea-level states or short-window sea-level dynamics?",
+  "analysis_scope": "lineage-diversification range-reorganization context only; not local island connectivity and not a capitulum-trait transition test",
+  "source": {
+    "dataset": "NOAA/WDS Global 5 Million Year Sea Level, Temperature, and d18Osw Reconstructions",
+    "dataset_doi": "10.25921/xs31-nt56",
+    "associated_publication": "de Boer et al. 2014 Nature Communications 5:2999",
+    "publication_doi": "10.1038/ncomms3999",
+    "age_column": "age_calkaBP",
+    "sea_level_column": "sealev",
+    "source_resolution": "100 yr; analysis interpolates to 1 kyr",
+    "source_type": "model-based global eustatic reconstruction"
+  },
+  "representative_events": [
+    {
+      "context_id": "NIPPONO_JAPAN_TAIWAN_CHANG2025",
+      "clade_group": "nipponocirsium",
+      "central_ma": 0.74,
+      "lower_ma": 0.60,
+      "upper_ma": 0.87
+    },
+    {
+      "context_id": "AREN_BREV_IRUM_CHANG2026",
+      "clade_group": "arenicola",
+      "central_ma": 0.93,
+      "lower_ma": 0.71,
+      "upper_ma": 1.33
+    },
+    {
+      "context_id": "SINOCIRSIUM_JAPAN_TAIWAN_CHANG2026",
+      "clade_group": "sinocirsium",
+      "central_ma": 0.44,
+      "lower_ma": 0.31,
+      "upper_ma": 0.66
+    }
+  ],
+  "excluded_nested_or_broad_contexts": [
+    "NIPPONO_MORII_CORE_CHANG2026",
+    "NIPPONO_PENGII_CHANG2025",
+    "NIPPONO_KAWA_TATA_CHANG2025",
+    "JAPAN_RADIATION_FOUNDER_MOREYRA2025"
+  ],
+  "exclusion_reason": "Use one representative dated divergence per broad clade group for recurrence. Nested Nipponocirsium nodes are diagnostics, not independent replicates; the 2.4 Ma founder event has different process semantics and a broad source/recipient uncertainty.",
+  "age_uncertainty": {
+    "grid_points_per_interval": 31,
+    "include_central_estimate_exactly": true,
+    "interpretation": "Deterministic scenarios across published marginal age intervals; not posterior samples."
+  },
+  "background_horizons": {
+    "focal_event_horizon": {"min_ma": 0.0, "max_ma": 1.5},
+    "broad_radiation_horizon": {"min_ma": 0.0, "max_ma": 3.6}
+  },
+  "short_windows_ka": [50, 100],
+  "metrics": {
+    "sea_level_state": "sea level at the candidate node age",
+    "window_mean": "mean sea level within the fixed short window",
+    "window_sd": "temporal SD within the fixed short window",
+    "window_range": "max minus min sea level within the fixed short window",
+    "endpoint_abs_change": "absolute sea-level difference across the fixed short window",
+    "mean_abs_1k_change": "mean absolute 1-kyr sea-level change within the fixed short window",
+    "max_abs_1k_change": "maximum absolute 1-kyr sea-level change within the fixed short window"
+  },
+  "robustness_rules": {
+    "low_or_high_state": "For sea_level_state and window_mean, low requires event-age percentile q95 <= 0.10 and high requires q05 >= 0.90 in both background horizons. For window_mean the same class must also hold for both 50- and 100-kyr windows.",
+    "high_dynamic_metric": "For SD, range, endpoint absolute change, mean absolute 1-kyr change and max absolute 1-kyr change, require event-age percentile q05 >= 0.90 in both background horizons and for both 50- and 100-kyr windows.",
+    "recurring_context_candidate": "A sea-level context is a descriptive recurring lineage-differentiation opportunity if the same robust class occurs in at least two of the three predeclared representative clade groups. Three of three is stronger. No p-value is assigned."
+  },
+  "claim_boundary": [
+    "Global eustatic sea level is a range-reorganization context variable, not a reconstruction of local Taiwan/Ryukyu/Japan land connectivity.",
+    "A low sea-level or high-dynamic result would identify an isolation/connectivity opportunity only; it would not identify a selective pressure on a capitulum trait.",
+    "Published lineage-divergence ages are not capitulum-trait transition ages.",
+    "Age scenarios are deterministic uncertainty grids, not independent events or posterior draws.",
+    "No result from this internal diagnostic is required to appear in the final manuscript.",
+    "A lineage-level range context cannot substitute for a missing trait-specific historical trigger."
+  ]
+}

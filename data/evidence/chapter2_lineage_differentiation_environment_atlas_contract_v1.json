@@ -1,0 +1,133 @@
+{
+  "contract_version": "chapter2_lineage_differentiation_environment_atlas_v1",
+  "status_date": "2026-09-03",
+  "status": "internal_exploratory_lineage_differentiation_context",
+  "scientific_question": "Across independently dated East-Asian Cirsium lineage divergences, do historical climate state, short-window climate change or climate variability occupy recurring extreme regimes after node-age and regional uncertainty are propagated?",
+  "analysis_scope": "lineage-diversification context only; this is not a capitulum-trait transition test and does not enter the manuscript by default",
+  "paleoclimate": {
+    "source": "PALEO-PGEM-Series v1 public mean fields",
+    "zenodo_record": "https://zenodo.org/records/21327244",
+    "resolution": "1 degree x 1 degree; 1 kyr; last 5 Myr",
+    "available_bioclim_variables_used": [
+      "BIO1", "BIO4", "BIO5", "BIO6", "BIO7", "BIO8", "BIO9", "BIO10", "BIO11",
+      "BIO12", "BIO13", "BIO14", "BIO15", "BIO16", "BIO17", "BIO18", "BIO19"
+    ],
+    "missing_from_public_series": ["BIO2", "BIO3"],
+    "selection_rule": "Use every BIOCLIM variable supplied by the PALEO-PGEM-Series record; no variable is selected from any present-day trait-environment result.",
+    "model_uncertainty_boundary": "This exploratory atlas uses the public mean fields. PALEO-PGEM emulator/downscaling uncertainty is not propagated here, so any signal remains diagnostic until separately validated."
+  },
+  "regions": {
+    "taiwan": {"lat_min": 21.5, "lat_max": 25.6, "lon_min": 119.0, "lon_max": 122.5},
+    "southern_ryukyu": {"lat_min": 23.5, "lat_max": 27.0, "lon_min": 122.5, "lon_max": 129.0},
+    "ryukyu_corridor": {"lat_min": 24.0, "lat_max": 31.5, "lon_min": 122.5, "lon_max": 131.5},
+    "southern_japan": {"lat_min": 29.5, "lat_max": 35.5, "lon_min": 128.0, "lon_max": 136.5},
+    "east_asia_core_corridor": {"lat_min": 21.5, "lat_max": 35.5, "lon_min": 119.0, "lon_max": 136.5}
+  },
+  "events": [
+    {
+      "context_id": "NIPPONO_MORII_CORE_CHANG2026",
+      "clade_group": "nipponocirsium",
+      "group_representative": false,
+      "central_ma": 0.79,
+      "lower_ma": 0.43,
+      "upper_ma": 1.18,
+      "region_scenarios": ["taiwan", "southern_ryukyu", "ryukyu_corridor", "southern_japan", "east_asia_core_corridor"],
+      "role": "parent divergence context for the bounded orientation stem; ancestral region unresolved"
+    },
+    {
+      "context_id": "NIPPONO_JAPAN_TAIWAN_CHANG2025",
+      "clade_group": "nipponocirsium",
+      "group_representative": true,
+      "central_ma": 0.74,
+      "lower_ma": 0.60,
+      "upper_ma": 0.87,
+      "region_scenarios": ["southern_ryukyu", "ryukyu_corridor", "southern_japan", "east_asia_core_corridor"],
+      "role": "representative Japanese-Taiwanese Nipponocirsium lineage differentiation"
+    },
+    {
+      "context_id": "AREN_BREV_IRUM_CHANG2026",
+      "clade_group": "arenicola",
+      "group_representative": true,
+      "central_ma": 0.93,
+      "lower_ma": 0.71,
+      "upper_ma": 1.33,
+      "region_scenarios": ["southern_ryukyu", "ryukyu_corridor"],
+      "role": "representative Arenicola sister-lineage differentiation across the central Ryukyus/Miyako Strait"
+    },
+    {
+      "context_id": "SINOCIRSIUM_JAPAN_TAIWAN_CHANG2026",
+      "clade_group": "sinocirsium",
+      "group_representative": true,
+      "central_ma": 0.44,
+      "lower_ma": 0.31,
+      "upper_ma": 0.66,
+      "region_scenarios": ["taiwan", "southern_ryukyu", "ryukyu_corridor", "southern_japan", "east_asia_core_corridor"],
+      "role": "representative Japanese-Taiwanese Sinocirsium lineage differentiation"
+    },
+    {
+      "context_id": "NIPPONO_PENGII_CHANG2025",
+      "clade_group": "nipponocirsium",
+      "group_representative": false,
+      "central_ma": 0.47,
+      "lower_ma": 0.35,
+      "upper_ma": 0.60,
+      "region_scenarios": ["taiwan"],
+      "role": "within-Taiwan Nipponocirsium temporal sequence diagnostic"
+    },
+    {
+      "context_id": "NIPPONO_KAWA_TATA_CHANG2025",
+      "clade_group": "nipponocirsium",
+      "group_representative": false,
+      "central_ma": 0.35,
+      "lower_ma": 0.26,
+      "upper_ma": 0.45,
+      "region_scenarios": ["taiwan"],
+      "role": "within-Taiwan sister differentiation temporal sequence diagnostic"
+    }
+  ],
+  "excluded_contexts": [
+    {
+      "context_id": "JAPAN_RADIATION_FOUNDER_MOREYRA2025",
+      "reason": "The 2.4 Ma founder event is a broad dispersal/radiation context with a 1.7-3.6 Ma interval and unresolved source-to-recipient paleolocation. It is retained as radiation background but excluded from this event-regime atlas."
+    }
+  ],
+  "age_uncertainty": {
+    "grid_points_per_interval": 31,
+    "include_central_estimate_exactly": true,
+    "interpretation": "Deterministic age scenarios across published marginal intervals; not posterior samples and not equal-probability event ages."
+  },
+  "backgrounds": {
+    "focal_event_horizon": {"min_ma": 0.0, "max_ma": 1.5},
+    "broad_radiation_horizon": {"min_ma": 0.0, "max_ma": 3.6}
+  },
+  "short_windows_ka": [50, 100],
+  "univariate_estimands": {
+    "level": "regional median climate value at the candidate node age, percentile-ranked against the same region/background horizon",
+    "absolute_change": "absolute difference between regional median climate at +/- half the fixed short window around the candidate node age, percentile-ranked against matched background centers",
+    "local_variability": "temporal SD of the regional median climate within the fixed short window around the candidate node age, percentile-ranked against matched background centers"
+  },
+  "multivariate_estimands": {
+    "method": "Within each region/background, standardize all 17 BIOCLIM series, derive PCA, retain the minimum number of PCs explaining at least 95 percent of variance, whiten retained PC scores, and compute climate-state distance, short-window displacement magnitude and within-window multivariate variability.",
+    "reason": "Avoid treating correlated BIOCLIM variables as independent votes while retaining an exploratory all-climate view."
+  },
+  "robustness_rules": {
+    "univariate_tail": "For a given event x metric x variable, require the same tail class across every allowed region scenario and both background horizons after propagating the full node-age grid. Low requires age-grid q95 <= 0.10; high requires q05 >= 0.90; otherwise unresolved.",
+    "multivariate_high": "For state distance, displacement or variability, require age-grid q05 >= 0.90 in every allowed region scenario and both background horizons; otherwise unresolved.",
+    "common_context_candidate": "Aggregate only the three group_representative events (Nipponocirsium, Arenicola, Sinocirsium). A domain is a descriptive recurring lineage-differentiation context if at least two of three representative clade groups independently pass the same robust class. Three of three is stronger. No p-value is assigned because these dated nodes and studies are not statistically independent replicates."
+  },
+  "outputs": {
+    "event_variable_long": "all event x age x region x background x variable x metric scenario summaries",
+    "event_summary": "robust event-level classes after age and region uncertainty",
+    "representative_group_summary": "descriptive recurrence across three representative clade contexts",
+    "multivariate_summary": "all-climate state/displacement/variability diagnostic"
+  },
+  "claim_boundary": [
+    "This analysis concerns lineage differentiation context, not the timing or cause of a capitulum-trait transition.",
+    "Nested Nipponocirsium nodes are not counted as independent biological replicates; only one predeclared representative per broad clade group enters the cross-group recurrence summary.",
+    "Published node-age intervals are uncertainty bounds, not biological transition durations and not posterior samples.",
+    "Regional boxes are paleolocation sensitivity scenarios, not ancestral-area probabilities.",
+    "A recurring climate regime at lineage divergence would be a historical differentiation-context candidate, not evidence of natural selection or adaptation.",
+    "No result from this exploratory atlas is required to appear in the final manuscript.",
+    "A lineage-diversification context cannot be substituted for a missing capitulum-trait trigger."
+  ]
+}

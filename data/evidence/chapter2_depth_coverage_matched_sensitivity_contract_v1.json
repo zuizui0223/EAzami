@@ -1,0 +1,96 @@
+{
+  "contract_version": "chapter2_depth_coverage_matched_sensitivity_contract_v1",
+  "status_date": "2026-09-03",
+  "status": "frozen_before_coverage_matched_result_inspection",
+  "analysis_role": "Post-result missing-state/coverage sensitivity for the already observed unequal relative-lineage-depth pattern. This is not an independent preregistered confirmation and does not estimate evolutionary rate.",
+  "question": "Could the apparently deeper phyllary history be explained primarily by phyllary having only 10 resolved concepts, versus 20 for orientation and 13 for stickiness?",
+  "source_contract": "data/evidence/chapter2_relative_event_depth_contract_v1.json",
+  "source_result": "data/evidence/japan38_relative_event_depth_v1.json",
+  "frozen_tree_source": {
+    "run_id": 32923076873,
+    "artifact_id": 9590650447,
+    "artifact_name": "japan38-comp1061-frozen-tree-retry-32923076873",
+    "artifact_sha256": "4f7d85bed338e0cc899b3ac77da7a6abae326befd014d3a256b038a75d9bf37e",
+    "ml_tree_sha256": "ba592d3a9f52b5481314ab20e3202048505cdf72a3fc15134d5dca261b9d9b7e",
+    "ufboot_sha256": "32cb09118ed035b73e51df3faa0cc60d4ee0c77fcf53d3cf880d556c9bbfa786"
+  },
+  "runtime": {
+    "python": "3.11",
+    "biopython": "1.85"
+  },
+  "target_resolved_concepts": 10,
+  "tree_rule": "Keep the full admitted 36-concept topology unchanged. Coverage matching changes only which previously observed tip states remain known; dropped observed states are reset to the full trait-state universe (missing/ambiguous). The relative-depth denominator therefore remains the same 36-tip admitted topology.",
+  "trait_rules": {
+    "phyllary": {
+      "role": "reference_observed_coverage",
+      "resolved_concepts": 10,
+      "masking": "none",
+      "state_ontology": "four_state_with_authority_ambiguity_retained"
+    },
+    "orientation": {
+      "original_resolved_concepts": 20,
+      "original_exact_state_counts": {"U": 14, "D": 6},
+      "matched_state_counts": {"U": 7, "D": 3},
+      "candidate_masks": 68640,
+      "retained_masks": 256,
+      "mask_selection": "Enumerate every 7-of-14 U x 3-of-6 D mask, hash the sorted retained concept IDs with SHA256 using the literal prefix 'orientation|20260903|', sort by hexadecimal digest, and retain the first 256. This is deterministic and result-blind."
+    },
+    "stickiness": {
+      "original_resolved_concepts": 13,
+      "original_exact_state_counts": {"sticky": 7, "nonsticky": 6},
+      "primary_matched_state_counts": {"sticky": 5, "nonsticky": 5},
+      "primary_masks": 126,
+      "primary_mask_selection": "exhaustive all 5-of-7 sticky x 5-of-6 nonsticky masks",
+      "secondary_matched_state_counts": {"sticky": 6, "nonsticky": 4},
+      "secondary_masks": 105,
+      "secondary_mask_selection": "exhaustive all 6-of-7 sticky x 4-of-6 nonsticky masks; frequency-profile sensitivity only"
+    }
+  },
+  "topology_rule": {
+    "source": "same frozen 1000 UFBoot topology file",
+    "selected_topologies": 200,
+    "selection_formula": "For k=0..199, use one-based topology index 1 + round(k*999/199), requiring 200 unique indices and including indices 1 and 1000.",
+    "reason": "Bound computation while spanning the full ordered bootstrap file deterministically. These are topology-sensitivity realizations, not independent biological replicates."
+  },
+  "per_topology_estimands": [
+    "observed phyllary lower bound of mean relative lineage depth among globally minimum-cost histories",
+    "orientation coverage-matched lower-bound distribution across 256 deterministic masks: min/q05/median/q95/max and minimum-step distribution",
+    "stickiness primary 5/5 coverage-matched lower-bound distribution across all 126 masks: min/q05/median/q95/max and minimum-step distribution",
+    "stickiness secondary 6/4 coverage-matched lower-bound distribution across all 105 masks: min/q05/median/q95/max and minimum-step distribution"
+  ],
+  "primary_comparisons": [
+    "fraction of selected topologies where observed phyllary lower bound is lower (deeper-permissive) than the orientation matched-mask median",
+    "fraction of selected topologies where observed phyllary lower bound is lower than the orientation matched-mask q05 (strict coverage-robust comparison)",
+    "fraction of selected topologies where observed phyllary lower bound is lower than the stickiness 5/5 matched-mask median",
+    "fraction of selected topologies where observed phyllary lower bound is lower than the stickiness 5/5 matched-mask q05"
+  ],
+  "secondary_comparisons": [
+    "repeat stickiness comparisons using the 6/4 state-frequency profile",
+    "report the distribution of minimum steps after masking to show how much information loss accompanies coverage matching"
+  ],
+  "descriptive_labels": {
+    "robust": "prespecified direction on >=0.95 of the 200 selected topology realizations",
+    "stable": "prespecified direction on >=0.80 and <0.95",
+    "mixed": "prespecified direction on <0.80"
+  },
+  "interpretation_rules": {
+    "coverage_robust_reading": "If phyllary remains deeper than the strict q05 coverage-matched distribution on most topology realizations, reduced observed-state coverage alone is insufficient to explain the depth ordering under this masking design.",
+    "coverage_sensitive_reading": "If coverage matching commonly makes orientation or stickiness as deep as or deeper than observed phyllary, the unequal-depth headline must be qualified as missing-state/coverage sensitive.",
+    "ontology_boundary": "Even a coverage-robust result does not make the three traits commensurable evolutionary-rate estimands because their state ontologies differ."
+  },
+  "fail_closed_rules": [
+    "Abort if the exact frozen ML/UFBoot hashes or declared tree artifact provenance differ.",
+    "Abort unless the unmasked source state counts are exactly orientation 14 U / 6 D, phyllary 10 resolved concepts, and stickiness 7 sticky / 6 nonsticky.",
+    "Abort unless the orientation deterministic mask set contains exactly 256 unique masks and the two stickiness exhaustive sets contain exactly 126 and 105 unique masks.",
+    "Abort unless topology selection produces exactly 200 unique one-based indices including 1 and 1000.",
+    "Do not replace dropped observations by the opposite state; they become fully ambiguous only.",
+    "Do not use topology x mask combinations as independent replicates or compute a P value from them.",
+    "Do not alter the frozen main relative-depth result or PR #160 paired-topology analysis based on this sensitivity; report it as a separate post-result robustness layer."
+  ],
+  "claim_boundary": [
+    "Coverage matching tests sensitivity to missing observed states, not sampling bias in authority descriptions or taxonomic representativeness.",
+    "A coverage-robust ordering does not establish equal lability, evolutionary rates, independent origins, adaptation, genetic modularity or a causal mechanism.",
+    "A coverage-sensitive ordering would weaken the unequal-depth interpretation but would not erase the frozen minimum-change histories themselves.",
+    "Bootstrap/topology fractions and mask quantiles are deterministic sensitivity summaries, not posterior probabilities or confidence levels."
+  ]
+}

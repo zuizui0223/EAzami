@@ -1,0 +1,29 @@
+name: Validate East Asia Cirsium antagonist synthesis v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/east_asia_cirsium_antagonist_context_v1.csv"
+      - "data/evidence/east_asia_cirsium_antagonist_synthesis_v1.json"
+      - "analysis/validate_east_asia_cirsium_antagonist_synthesis_v1.py"
+      - ".github/workflows/validate-east-asia-cirsium-antagonist-synthesis-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate evidence bridge and transport boundary
+        run: |
+          python -m py_compile analysis/validate_east_asia_cirsium_antagonist_synthesis_v1.py
+          python analysis/validate_east_asia_cirsium_antagonist_synthesis_v1.py \
+            --context data/evidence/east_asia_cirsium_antagonist_context_v1.csv \
+            --synthesis data/evidence/east_asia_cirsium_antagonist_synthesis_v1.json

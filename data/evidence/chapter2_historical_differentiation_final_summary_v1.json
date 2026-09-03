@@ -1,0 +1,114 @@
+{
+  "result_version": "chapter2_historical_differentiation_final_summary_v1",
+  "status_date": "2026-09-03",
+  "status": "public_data_ceiling_reached_for_current_differentiation_trigger_programme",
+  "active_scientific_question": "How repeatedly and how deeply did capitulum traits differentiate, and do independently bounded differentiation windows share a robust historical environmental or range-reorganization context?",
+  "final_classification": "repeated_differentiation_resolved_but_recurring_tested_environmental_trigger_not_identified_under_public_data",
+  "recurrence_and_depth": {
+    "orientation": {
+      "resolved_concepts": 20,
+      "minimum_changes_ml": 6,
+      "minimum_changes_ufboot_range": [4, 6],
+      "minimum_changes_ufboot_median": 5,
+      "relative_depth_median_envelope": [0.795, 0.994],
+      "reading": "recurrent with internal-to-terminal admissible placements"
+    },
+    "phyllary_posture": {
+      "resolved_concepts": 10,
+      "minimum_changes": 3,
+      "relative_depth_median_envelope": [0.695, 1.0],
+      "reading": "recurrent with relatively deeper placements admissible"
+    },
+    "stickiness": {
+      "resolved_concepts": 13,
+      "minimum_changes": 5,
+      "relative_depth_median_envelope": [0.937, 0.954],
+      "reading": "recurrent and strongly shallow/terminal-biased"
+    },
+    "shared_transition_localization": "0/3 discrete trait pairs pass the robust rule"
+  },
+  "calendar_identifiability": {
+    "trait_transitions_with_calendar_paleolocation_environment_gate": 1,
+    "best_resolved_event": "core-Nipponocirsium erect/upward to nodding/downward orientation transition",
+    "conditional_colour_branch_envelopes": 3,
+    "dated_sister_contrasts_not_transitions": 4,
+    "dated_range_processes_trait_age_unlinked": 2,
+    "additional_machine_readable_dated_tree_recovered": false,
+    "consequence": "repeated same-trait historical-trigger inference remains not_evaluable because multiple trait-changing branches cannot currently be calendarized from public machine-readable phylogenies"
+  },
+  "orientation_historical_environment": {
+    "chronology_pairs": 94,
+    "paleolocation_regions": 4,
+    "region_by_chronology_scenarios": 376,
+    "central_pair_ma": [0.79, 0.74],
+    "central_pair_tendency": "BIO1, BIO4 and BIO15 decrease in all four regions; BIO12 increases in three of four",
+    "full_uncertainty_signed_direction": "no_tested_climate_direction_survives_full_chronology_paleolocation_envelope",
+    "robust_extreme_level_variables": 0,
+    "robust_absolute_change_variables": 0,
+    "robust_variability_variables": 0,
+    "repeated_trigger_status": "not_evaluable_single_dated_transition_event",
+    "boundary": "central-age tendencies are not historical-trigger evidence after chronology and paleolocation uncertainty are propagated"
+  },
+  "lineage_level_climate_context": {
+    "analysis_scope": "lineage-diversification context only; not capitulum-trait transition trigger",
+    "n_bioclim_variables": 17,
+    "n_dated_lineage_contexts": 6,
+    "representative_clade_groups": ["nipponocirsium", "arenicola", "sinocirsium"],
+    "tested_scenario_variable_combinations": 15472,
+    "robust_event_level_classes": 0,
+    "recurring_context_candidates": [],
+    "decision": "no_recurring_lineage_differentiation_context_survives_age_region_background_gates",
+    "reading": "Pleistocene climate is a broad backdrop, but no single tested climate regime recurs robustly across representative lineage differentiations"
+  },
+  "global_sea_level_context": {
+    "analysis_scope": "range-reorganization context only; not local island connectivity and not a trait-transition test",
+    "representative_clade_groups": ["nipponocirsium", "arenicola", "sinocirsium"],
+    "n_representative_groups": 3,
+    "n_event_metric_classes": 21,
+    "robust_event_metric_classes": 0,
+    "recurring_context_candidates": [],
+    "decision": "no_recurring_global_sea_level_context_survives_age_background_window_gates",
+    "orientation_deboer_full_chronology": "no_global_sea_level_metric_survives_full_chronology_gate",
+    "orientation_spratt_lisiecki": "not_evaluable_insufficient_chronology_coverage",
+    "boundary": "global eustatic reconstruction cannot rule out local Taiwan/Ryukyu/Japan connectivity or fragmentation"
+  },
+  "mid_pleistocene_context": {
+    "broad_band_ma": [0.7, 0.9],
+    "orientation_chronology_overlap_fraction": 0.9574468,
+    "classification": "broad_mpt_overlap_high_but_not_event_discriminating",
+    "reading": "MPT overlap is broad era context largely implied by the chronology envelope, not independent trigger evidence"
+  },
+  "module_trigger_status": {
+    "orientation": "historical climate and global sea-level trigger unresolved after full uncertainty propagation; repeated trigger not evaluable with one dateable transition",
+    "flower_colour": "dated conditional white-lineage branch envelopes exist, but ancestral colour and exact transition timing remain conditional and historical radiative trigger is not evaluable",
+    "phyllary_posture": "recurrent and relatively deep, but transition-bearing calendar chronology is not available",
+    "stickiness": "recurrent and shallow, but dated range events are not stickiness-transition ages",
+    "whole_capitulum": "one universal synchronized historical trigger is not supported; complete independence is not demonstrated"
+  },
+  "scientific_reading": "Public evidence resolves repeated capitulum differentiation and unequal evolutionary depth substantially better than it resolves historical cause. Neither the best-bounded orientation event nor a broader set of representative lineage-differentiation windows identifies one robust recurring tested BIOCLIM or global eustatic sea-level trigger. This does not imply that climate, local geographic fragmentation, biotic interactions or selection were irrelevant; several of those processes remain unmeasured or not event-identifiable at the necessary scale.",
+  "dissertation_handoff": {
+    "chapter1": "freeze present-day maintenance/ecological-sorting candidates independently",
+    "chapter2": "freeze differentiation history and the current failure to identify one recurring tested historical trigger under public-data uncertainty",
+    "later_synthesis": "only then assess retained, lost, reversed or switched environmental domains between differentiation and maintenance",
+    "chapter3": "test ancestry-linked environment to trait function to reproductive fitness before any adaptive claim"
+  },
+  "canonical_sources": [
+    "data/evidence/chapter2_historical_differentiation_evidence_ledger_v1.csv",
+    "data/evidence/chapter2_orientation_differentiation_environment_v2_summary.json",
+    "data/evidence/chapter2_lineage_differentiation_environment_atlas_v1_summary.json",
+    "data/evidence/chapter2_lineage_differentiation_sealevel_v1.json",
+    "data/evidence/chapter2_orientation_mpt_overlap_audit_v1.json",
+    "data/evidence/chapter2_public_dated_tree_recovery_audit_v2.json",
+    "docs/chapter2/HISTORICAL_DIFFERENTIATION_EVIDENCE_SYNTHESIS_V1.md"
+  ],
+  "claim_boundary": [
+    "Minimum-change counts are lower bounds and do not establish independent origins or convergence.",
+    "Relative lineage depth is not calendar time.",
+    "Lineage divergence or dispersal ages are not automatically trait-transition ages.",
+    "Regional paleolocation boxes are sensitivity scenarios, not ancestral-area probabilities.",
+    "No robust recurring tested climate or global sea-level context does not mean historical environment was biologically irrelevant.",
+    "Global eustatic sea level does not reconstruct local island connectivity.",
+    "Historical alignment would remain observational and would not establish natural selection or adaptation.",
+    "Adaptation requires Chapter 3 mechanism and reproductive-fitness evidence."
+  ]
+}

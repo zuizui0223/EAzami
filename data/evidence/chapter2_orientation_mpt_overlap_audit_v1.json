@@ -1,0 +1,28 @@
+{
+  "audit_version": "chapter2_orientation_mpt_overlap_audit_v1",
+  "status_date": "2026-09-01",
+  "purpose": "Quantify how strongly the bounded core-Nipponocirsium orientation chronology overlaps Mid-Pleistocene timing so temporal coincidence is not misread as an independent trigger test.",
+  "source_contract": "data/evidence/chapter2_orientation_origin_envelope_contract_v1.json",
+  "chronology_enumeration": "same deterministic 16 x 10 marginal-node grid used by the frozen orientation-origin analysis; retain parent > child with duration >= 0.010 Ma and add central 0.74/0.79 Ma pair",
+  "n_valid_age_pairs": 94,
+  "overlap_counts": {
+    "spans_exact_0_800_Ma": 56,
+    "overlaps_0_700_to_0_900_Ma": 90,
+    "overlaps_0_750_to_0_850_Ma": 78,
+    "overlaps_0_770_to_0_830_Ma": 71
+  },
+  "overlap_fractions": {
+    "spans_exact_0_800_Ma": 0.5957446808510638,
+    "overlaps_0_700_to_0_900_Ma": 0.9574468085106383,
+    "overlaps_0_750_to_0_850_Ma": 0.8297872340425532,
+    "overlaps_0_770_to_0_830_Ma": 0.7553191489361702
+  },
+  "decision": "mid_pleistocene_overlap_is_chronology_context_not_independent_trigger_evidence",
+  "interpretation": "Because nearly all admissible chronology pairs overlap a broad 0.7-0.9 Ma Mid-Pleistocene band, saying the orientation branch overlaps the Mid-Pleistocene Transition is largely a consequence of the chronology constraint itself. It may be reported as regional/global temporal context, but it cannot discriminate a trigger mechanism without an independently specified event-level exposure test.",
+  "claim_boundary": [
+    "Temporal overlap is not a causal test.",
+    "The Mid-Pleistocene Transition is not inferred to have caused capitulum orientation change.",
+    "The chronology grid is a scenario envelope, not posterior event-time probability.",
+    "Regional sea-level/oceanographic changes around 0.8 Ma remain context until local paleogeography and repeated trait events are independently evaluated."
+  ]
+}

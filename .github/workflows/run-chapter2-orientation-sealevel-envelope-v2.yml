@@ -1,0 +1,70 @@
+name: Run Chapter 2 orientation sea-level envelope v2
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_chapter2_orientation_sealevel_envelope_v2.py"
+      - "analysis/run_chapter2_orientation_origin_envelope_v1.py"
+      - "data/evidence/chapter2_orientation_origin_envelope_contract_v1.json"
+      - ".github/workflows/run-chapter2-orientation-sealevel-envelope-v2.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: ch2-orientation-sealevel-envelope-v2-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  sea-level-envelope:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas
+          python -m py_compile analysis/run_chapter2_orientation_origin_envelope_v1.py analysis/run_chapter2_orientation_sealevel_envelope_v2.py
+      - name: Download NOAA Spratt-Lisiecki sea-level stack
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/public /tmp/result
+          curl --fail --location --retry 8 --retry-delay 3 --retry-all-errors \
+            'https://www.ncei.noaa.gov/pub/data/paleo/contributions_by_author/spratt2016/spratt2016-noaa.txt' \
+            -o /tmp/public/spratt2016-noaa.txt
+          grep -q 'SeaLev_longPC1' /tmp/public/spratt2016-noaa.txt
+      - name: Run coverage-limited chronology envelope sensitivity
+        run: |
+          set -euo pipefail
+          python analysis/run_chapter2_orientation_sealevel_envelope_v2.py \
+            --orientation-contract data/evidence/chapter2_orientation_origin_envelope_contract_v1.json \
+            --noaa /tmp/public/spratt2016-noaa.txt \
+            --out /tmp/result/chapter2_orientation_sealevel_envelope_v2.json \
+            | tee /tmp/result/run_summary.log
+      - name: Fail closed on chronology coverage
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/result/chapter2_orientation_sealevel_envelope_v2.json').read_text())
+          c=x['chronology_coverage']
+          assert c['n_total_pairs']==94
+          assert c['n_fully_covered_pairs']==16
+          assert abs(c['coverage_fraction'] - 16/94) < 1e-12
+          assert c['full_chronology_classification']=='not_evaluable_full_chronology_sea_level_coverage_limited'
+          assert x['central_0_79_to_0_74_ma']['young_ma']==0.74
+          assert x['central_0_79_to_0_74_ma']['old_ma']==0.79
+          assert 'local' in ' '.join(x['claim_boundary']).lower()
+          print(json.dumps({'coverage':c,'central':x['central_0_79_to_0_74_ma']},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-orientation-sealevel-envelope-v2-${{ github.run_id }}
+          path: /tmp/result
+          if-no-files-found: error
+          retention-days: 90

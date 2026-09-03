@@ -1,0 +1,31 @@
+name: Validate Chapter 2 historical differentiation evidence v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/validate_chapter2_historical_differentiation_evidence_v1.py"
+      - "data/evidence/chapter2_historical_differentiation_evidence_ledger_v1.csv"
+      - "data/evidence/chapter2_orientation_differentiation_environment_v2_summary.json"
+      - "data/evidence/chapter2_orientation_deboer_sealevel_envelope_v1_summary.json"
+      - "data/evidence/chapter2_orientation_mpt_overlap_audit_v1.json"
+      - "data/evidence/chapter2_public_dated_tree_recovery_audit_v2.json"
+      - "docs/chapter2/HISTORICAL_DIFFERENTIATION_EVIDENCE_SYNTHESIS_V1.md"
+      - ".github/workflows/validate-chapter2-historical-differentiation-evidence-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validator
+        run: python -m py_compile analysis/validate_chapter2_historical_differentiation_evidence_v1.py
+      - name: Validate active differentiation ledger
+        run: python analysis/validate_chapter2_historical_differentiation_evidence_v1.py

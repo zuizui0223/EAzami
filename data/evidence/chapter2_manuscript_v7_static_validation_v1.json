@@ -1,0 +1,42 @@
+{
+  "version": "chapter2_manuscript_v7_static_validation_v1",
+  "status_date": "2026-09-04",
+  "validation_mode": "deterministic_premerge_static_validation_mirroring_validate_manuscript_jeb_v7_working_v1",
+  "note": "This is not a GitHub Actions CI status. It records an independent static check performed after the validated PR #160/#164 results were merged into the V7 branch; the repository workflow will become executable from the default branch after V7 integration.",
+  "manuscript": "docs/chapter2/MANUSCRIPT_JEB_V7_WORKING.md",
+  "figure_map": "docs/chapter2/JEB_V7_FIGURE_MAP.md",
+  "format_checks": {
+    "abstract_words": 205,
+    "abstract_limit": 250,
+    "keywords": 7,
+    "keyword_allowed_range": [4, 10],
+    "main_text_words_before_references": 4816,
+    "main_text_limit": 7500,
+    "anonymous_main_file_has_data_availability_heading": false,
+    "anonymous_main_file_has_separate_ai_disclosure_heading": false
+  },
+  "scientific_checks": {
+    "paired_topology_result": "paired_topology_depth_ordering_reproduced_under_frozen_runtime",
+    "paired_phyllary_lt_stickiness": "1000/1000",
+    "paired_phyllary_lt_orientation": "993/1000",
+    "paired_orientation_lt_stickiness": "905/1000_with_7_ties",
+    "complete_ordering": "898/1000",
+    "coverage_result": "unequal_depth_retained_against_matched_medians_but_strict_tail_overlap_remains",
+    "coverage_phyllary_lt_orientation_median": "195/200",
+    "coverage_phyllary_lt_stickiness_median": "193/200",
+    "coverage_strict_tail": "q05 comparisons mixed: 10.5% orientation and 11.0-15.5% stickiness",
+    "orientation_ecology": "orientation_environment_association_is_scale_partitioned",
+    "regional_ordering": "relative_ordering_present_but_not_dominant",
+    "historical_trigger_ceiling": "0/324 climate event classes; 0/21 sea-level event-metric classes"
+  },
+  "forbidden_claim_checks_passed": [
+    "similarly labile",
+    "same lability",
+    "coverage-independent result",
+    "fully insensitive to missing states",
+    "minimum changes are independent origins",
+    "relative lineage depth is calendar time",
+    "environment is irrelevant"
+  ],
+  "result": "pass"
+}

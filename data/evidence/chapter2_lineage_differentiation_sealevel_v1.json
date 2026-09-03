@@ -1,0 +1,85 @@
+{
+  "contract_version": "chapter2_lineage_differentiation_sealevel_v1",
+  "analysis_scope": "lineage-diversification range-reorganization context only; not local island connectivity and not a capitulum-trait transition test",
+  "source": {
+    "dataset": "NOAA/WDS Global 5 Million Year Sea Level, Temperature, and d18Osw Reconstructions",
+    "dataset_doi": "10.25921/xs31-nt56",
+    "associated_publication": "de Boer et al. 2014 Nature Communications 5:2999",
+    "publication_doi": "10.1038/ncomms3999",
+    "age_column": "age_calkaBP",
+    "sea_level_column": "sealev",
+    "source_resolution": "100 yr; analysis interpolates to 1 kyr",
+    "source_type": "model-based global eustatic reconstruction"
+  },
+  "representative_events": [
+    {
+      "context_id": "NIPPONO_JAPAN_TAIWAN_CHANG2025",
+      "clade_group": "nipponocirsium",
+      "central_ma": 0.74,
+      "lower_ma": 0.6,
+      "upper_ma": 0.87
+    },
+    {
+      "context_id": "AREN_BREV_IRUM_CHANG2026",
+      "clade_group": "arenicola",
+      "central_ma": 0.93,
+      "lower_ma": 0.71,
+      "upper_ma": 1.33
+    },
+    {
+      "context_id": "SINOCIRSIUM_JAPAN_TAIWAN_CHANG2026",
+      "clade_group": "sinocirsium",
+      "central_ma": 0.44,
+      "lower_ma": 0.31,
+      "upper_ma": 0.66
+    }
+  ],
+  "n_representative_groups": 3,
+  "background_horizons": {
+    "focal_event_horizon": {
+      "min_ma": 0.0,
+      "max_ma": 1.5
+    },
+    "broad_radiation_horizon": {
+      "min_ma": 0.0,
+      "max_ma": 3.6
+    }
+  },
+  "short_windows_ka": [
+    50.0,
+    100.0
+  ],
+  "event_metric_classes": [
+    {"context_id":"NIPPONO_JAPAN_TAIWAN_CHANG2025","clade_group":"nipponocirsium","metric":"sea_level_state_m","robust_class":"unresolved"},
+    {"context_id":"NIPPONO_JAPAN_TAIWAN_CHANG2025","clade_group":"nipponocirsium","metric":"window_mean_m","robust_class":"unresolved"},
+    {"context_id":"NIPPONO_JAPAN_TAIWAN_CHANG2025","clade_group":"nipponocirsium","metric":"window_sd_m","robust_class":"unresolved"},
+    {"context_id":"NIPPONO_JAPAN_TAIWAN_CHANG2025","clade_group":"nipponocirsium","metric":"window_range_m","robust_class":"unresolved"},
+    {"context_id":"NIPPONO_JAPAN_TAIWAN_CHANG2025","clade_group":"nipponocirsium","metric":"endpoint_abs_change_m","robust_class":"unresolved"},
+    {"context_id":"NIPPONO_JAPAN_TAIWAN_CHANG2025","clade_group":"nipponocirsium","metric":"mean_abs_1k_change_m","robust_class":"unresolved"},
+    {"context_id":"NIPPONO_JAPAN_TAIWAN_CHANG2025","clade_group":"nipponocirsium","metric":"max_abs_1k_change_m","robust_class":"unresolved"},
+    {"context_id":"AREN_BREV_IRUM_CHANG2026","clade_group":"arenicola","metric":"sea_level_state_m","robust_class":"unresolved"},
+    {"context_id":"AREN_BREV_IRUM_CHANG2026","clade_group":"arenicola","metric":"window_mean_m","robust_class":"unresolved"},
+    {"context_id":"AREN_BREV_IRUM_CHANG2026","clade_group":"arenicola","metric":"window_sd_m","robust_class":"unresolved"},
+    {"context_id":"AREN_BREV_IRUM_CHANG2026","clade_group":"arenicola","metric":"window_range_m","robust_class":"unresolved"},
+    {"context_id":"AREN_BREV_IRUM_CHANG2026","clade_group":"arenicola","metric":"endpoint_abs_change_m","robust_class":"unresolved"},
+    {"context_id":"AREN_BREV_IRUM_CHANG2026","clade_group":"arenicola","metric":"mean_abs_1k_change_m","robust_class":"unresolved"},
+    {"context_id":"AREN_BREV_IRUM_CHANG2026","clade_group":"arenicola","metric":"max_abs_1k_change_m","robust_class":"unresolved"},
+    {"context_id":"SINOCIRSIUM_JAPAN_TAIWAN_CHANG2026","clade_group":"sinocirsium","metric":"sea_level_state_m","robust_class":"unresolved"},
+    {"context_id":"SINOCIRSIUM_JAPAN_TAIWAN_CHANG2026","clade_group":"sinocirsium","metric":"window_mean_m","robust_class":"unresolved"},
+    {"context_id":"SINOCIRSIUM_JAPAN_TAIWAN_CHANG2026","clade_group":"sinocirsium","metric":"window_sd_m","robust_class":"unresolved"},
+    {"context_id":"SINOCIRSIUM_JAPAN_TAIWAN_CHANG2026","clade_group":"sinocirsium","metric":"window_range_m","robust_class":"unresolved"},
+    {"context_id":"SINOCIRSIUM_JAPAN_TAIWAN_CHANG2026","clade_group":"sinocirsium","metric":"endpoint_abs_change_m","robust_class":"unresolved"},
+    {"context_id":"SINOCIRSIUM_JAPAN_TAIWAN_CHANG2026","clade_group":"sinocirsium","metric":"mean_abs_1k_change_m","robust_class":"unresolved"},
+    {"context_id":"SINOCIRSIUM_JAPAN_TAIWAN_CHANG2026","clade_group":"sinocirsium","metric":"max_abs_1k_change_m","robust_class":"unresolved"}
+  ],
+  "recurring_context_candidates": [],
+  "decision": "no_recurring_global_sea_level_context_survives_age_background_window_gates",
+  "claim_boundary": [
+    "Global eustatic sea level is a range-reorganization context variable, not a reconstruction of local Taiwan/Ryukyu/Japan land connectivity.",
+    "A low sea-level or high-dynamic result would identify an isolation/connectivity opportunity only; it would not identify a selective pressure on a capitulum trait.",
+    "Published lineage-divergence ages are not capitulum-trait transition ages.",
+    "Age scenarios are deterministic uncertainty grids, not independent events or posterior draws.",
+    "No result from this internal diagnostic is required to appear in the final manuscript.",
+    "A lineage-level range context cannot substitute for a missing trait-specific historical trigger."
+  ]
+}

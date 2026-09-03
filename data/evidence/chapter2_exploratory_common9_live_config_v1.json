@@ -1,0 +1,47 @@
+{
+  "contract_version": "chapter2_exploratory_common9_live_config_v1",
+  "status_date": "2026-09-01",
+  "purpose": "Build a source-name-guarded current-environment cohort for the exact nine taxa in the frozen EAzami continuous-trait snapshot. Taxa and environmental predictors are declared independently of Azami effect sizes.",
+  "gbif": {
+    "country": "JP",
+    "has_coordinate": true,
+    "occurrence_status": "PRESENT",
+    "page_size": 300,
+    "max_records_per_taxon": 5000,
+    "max_coordinate_uncertainty_m_primary": 10000,
+    "spatial_thin_degrees": 0.1,
+    "japan_bounds": {"lat_min": 20.0, "lat_max": 46.5, "lon_min": 122.0, "lon_max": 154.5}
+  },
+  "chelsa": {
+    "version": "2.1",
+    "baseline": "1981-2010",
+    "predictors": {
+      "bio01": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio01/1981-2010/CHELSA_bio01_1981-2010_V.2.1.tif",
+      "bio04": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio04/1981-2010/CHELSA_bio04_1981-2010_V.2.1.tif",
+      "bio12": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio12/1981-2010/CHELSA_bio12_1981-2010_V.2.1.tif",
+      "bio15": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio15/1981-2010/CHELSA_bio15_1981-2010_V.2.1.tif",
+      "rsds_mean": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_rsds_1981-2010_mean_V.2.1.tif",
+      "vpd_mean": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_vpd_mean_1981-2010_V.2.1.tif",
+      "sfcwind_mean": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_sfcWind_mean_1981-2010_V.2.1.tif",
+      "gsp": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_gsp_1981-2010_V.2.1.tif",
+      "npp": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_npp_1981-2010_V.2.1.tif"
+    }
+  },
+  "taxa": [
+    {"scientific_name":"Cirsium aomorense","planned_populations":0,"role":"EAzami_continuous_trait_taxon","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium japonicum","planned_populations":0,"role":"EAzami_continuous_trait_taxon","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium kamtschaticum","planned_populations":0,"role":"EAzami_continuous_trait_taxon","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium lineare","planned_populations":0,"role":"EAzami_continuous_trait_taxon","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium maritimum","planned_populations":0,"role":"EAzami_continuous_trait_taxon","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium oligophyllum","planned_populations":0,"role":"EAzami_continuous_trait_taxon","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium pendulum","planned_populations":0,"role":"EAzami_continuous_trait_taxon","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium sieboldii","planned_populations":0,"role":"EAzami_continuous_trait_taxon","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]},
+    {"scientific_name":"Cirsium verutum","planned_populations":0,"role":"EAzami_continuous_trait_taxon","slot_assignment":"niche_history_only","morph_linkage_required":false,"analysis_region_anchors":[]}
+  ],
+  "scoring": {
+    "candidate_components": ["niche_edge", "geographic_edge", "cluster_rarity"],
+    "not_computed_here": ["trait_selected_sampling", "adaptive_niche", "historical_causation"],
+    "rule": "The occurrence cohort is built without using trait values. Sampling-candidate scores are not used by the Chapter 2 atlas; the atlas uses the full thinned environment-complete cohort."
+  },
+  "claim_boundary": "Current public occurrence and CHELSA values are an exploratory environment layer. They do not establish historical exposure, selection or adaptation. Taxa failing the predeclared environment-depth gate remain not_evaluable rather than being replaced after outcomes are seen."
+}

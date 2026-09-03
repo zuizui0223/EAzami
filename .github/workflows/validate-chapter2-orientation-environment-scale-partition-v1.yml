@@ -1,0 +1,29 @@
+name: Validate Chapter 2 orientation environment scale partition v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/azami_orientation_cross_scale_environment_bridge_v1.csv"
+      - "data/evidence/chapter2_orientation_environment_scale_partition_v1.json"
+      - "analysis/validate_chapter2_orientation_environment_scale_partition_v1.py"
+      - ".github/workflows/validate-chapter2-orientation-environment-scale-partition-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate frozen bridge and classification
+        run: |
+          python -m py_compile analysis/validate_chapter2_orientation_environment_scale_partition_v1.py
+          python analysis/validate_chapter2_orientation_environment_scale_partition_v1.py \
+            --bridge data/evidence/azami_orientation_cross_scale_environment_bridge_v1.csv \
+            --result data/evidence/chapter2_orientation_environment_scale_partition_v1.json

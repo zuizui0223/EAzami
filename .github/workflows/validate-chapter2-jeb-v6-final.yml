@@ -1,0 +1,45 @@
+name: Validate Chapter 2 JEB V6 final
+
+on:
+  pull_request:
+    paths:
+      - 'docs/chapter2/MANUSCRIPT_JEB_V6_FINAL.md'
+      - 'docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V6.md'
+      - 'docs/chapter2/JEB_SUPPORTING_INFORMATION_V4.md'
+      - 'docs/chapter2/JEB_TITLE_PAGE_TEMPLATE_V3.md'
+      - 'docs/chapter2/JEB_COVER_LETTER_TEMPLATE_V3.md'
+      - 'analysis/make_chapter2_jeb_figures_v6.py'
+      - 'analysis/build_chapter2_jeb_docx_v4.py'
+      - 'analysis/validate_chapter2_manuscript_v6_final.py'
+      - '.github/workflows/validate-chapter2-jeb-v6-final.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile V6 scripts
+        run: python -m py_compile analysis/make_chapter2_jeb_figures_v6.py analysis/build_chapter2_jeb_docx_v4.py analysis/validate_chapter2_manuscript_v6_final.py
+      - name: Validate V6 scientific and production routing
+        run: python analysis/validate_chapter2_manuscript_v6_final.py
+      - name: Install production dependencies
+        run: python -m pip install --upgrade pip numpy matplotlib python-docx pillow
+      - name: Generate V6 figures
+        run: python analysis/make_chapter2_jeb_figures_v6.py --output-dir /tmp/figures_v6
+      - name: Check five PNG and five PDF figures
+        run: |
+          test "$(find /tmp/figures_v6 -maxdepth 1 -name '*.png' | wc -l)" -eq 5
+          test "$(find /tmp/figures_v6 -maxdepth 1 -name '*.pdf' | wc -l)" -eq 5
+      - name: Build V6 submission DOCX package
+        run: python analysis/build_chapter2_jeb_docx_v4.py --figure-dir /tmp/figures_v6 --output-dir /tmp/submission_package_v6
+      - name: Check four V6 DOCX outputs
+        run: |
+          test -s /tmp/submission_package_v6/Chapter2_JEB_Anonymous_Manuscript_V6.docx
+          test -s /tmp/submission_package_v6/Chapter2_JEB_Title_Page_TEMPLATE_V3.docx
+          test -s /tmp/submission_package_v6/Chapter2_JEB_Supporting_Information_V4.docx
+          test -s /tmp/submission_package_v6/Chapter2_JEB_Cover_Letter_TEMPLATE_V3.docx
+          test "$(find /tmp/submission_package_v6 -maxdepth 1 -name '*.docx' | wc -l)" -eq 4

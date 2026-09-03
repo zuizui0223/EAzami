@@ -1,0 +1,88 @@
+{
+  "contract_version": "chapter2_differentiation_time_axis_v1",
+  "status_date": "2026-09-01",
+  "status": "active_chapter2_scientific_contract",
+  "central_question": "How were capitulum traits differentiated through evolutionary time, and when trait-changing lineages can be bounded in calendar time, did particular environmental states, changes or instabilities repeatedly accompany that differentiation?",
+  "thesis_symmetry": {
+    "chapter1": {
+      "biological_role": "maintenance and present ecological sorting",
+      "estimand_direction": "present phenotype ~ present environmental gradient after explicit spatial controls",
+      "not_inferred": "the environment that originally generated the trait difference"
+    },
+    "chapter2": {
+      "biological_role": "origin and differentiation",
+      "estimand_direction": "trait-transition opportunity through evolutionary time ~ historical environmental level/change/variability",
+      "not_inferred": "natural selection or adaptation from historical alignment alone"
+    },
+    "later_integration": "Only after both chapters are independently frozen, compare whether historical differentiation direction is retained, lost, reversed or replaced in present maintenance. This comparison is a thesis synthesis layer, not a Chapter 2 row-selection rule.",
+    "chapter3": "Test candidate environment -> trait function -> reproductive fitness in ancestry-resolved material before using an adaptive explanation."
+  },
+  "chapter2_evidence_order": [
+    "trait recurrence: minimum number of changes under admitted histories",
+    "relative temporal depth: internal versus terminal placement and relative lineage-depth envelopes",
+    "calendar identifiability: which transition-bearing branches can independently be bounded by published chronology",
+    "paleogeographic identifiability: alternative ancestral-area/location scenarios rather than modern-tip substitution",
+    "historical environmental level, signed change, absolute change and temporal variability within dated event windows",
+    "matched same-duration background windows in the same paleolocation scenario",
+    "same-direction recurrence across at least two independently bounded homologous transitions",
+    "public-data identifiability ceiling and Chapter 3 mechanism/fitness handoff"
+  ],
+  "primary_traits": {
+    "orientation": {
+      "history_status": "4-6 minimum changes; relative depth spans internal-to-terminal placements",
+      "dated_event_status": "one core-Nipponocirsium transition envelope has chronology x paleolocation support",
+      "historical_environment_status": "evaluable for PALEO-PGEM BIO1/BIO4/BIO12/BIO15 branch-window diagnostics",
+      "repeated_trigger_status": "not_evaluable_until_at_least_two_independently_bounded_orientation_transitions"
+    },
+    "phyllary_posture": {
+      "history_status": "3 minimum changes; relatively deep placements remain admissible",
+      "dated_event_status": "published dated sister phenotype contrasts exist but are not reconstructed posture transitions",
+      "historical_environment_status": "not_evaluable_as_transition_trigger"
+    },
+    "stickiness": {
+      "history_status": "5 minimum changes; shallow/terminal-biased relative depth",
+      "dated_event_status": "published range-event ages exist for some taxa but are not trait-transition ages",
+      "historical_environment_status": "not_evaluable_as_transition_trigger"
+    },
+    "flower_colour": {
+      "history_status": "two conditional white-lineage terminal branch envelopes provide natural differentiation cases; a global fixed-state transition history is not resolved",
+      "dated_event_status": "conditional Taiwan and Arenicola terminal branch envelopes",
+      "historical_environment_status": "general climate context may be explored only with explicit branch/paleolocation uncertainty; a historical radiative driver remains not_evaluable without a commensurate radiation series"
+    }
+  },
+  "environmental_trigger_language": {
+    "allowed": [
+      "transition-associated environmental change",
+      "historical environmental alignment",
+      "historical differentiation-trigger candidate",
+      "environmental regime associated with a bounded differentiation window"
+    ],
+    "requires_repeated_events": "A common/repeated trigger candidate requires at least two independently bounded homologous transition events with compatible direction.",
+    "forbidden": [
+      "selection pressure demonstrated",
+      "environment caused the trait transition",
+      "adaptation demonstrated",
+      "convergent adaptation demonstrated"
+    ]
+  },
+  "role_of_space_breadth_pilot": {
+    "status": "internal_supporting_diagnostic_not_chapter_organizer",
+    "use": "Describe whether present trait states are geographically broad or localized and expose coverage limitations; it may help interpret lineage opportunities but is not the primary Chapter 2 biological question.",
+    "manuscript_required": false
+  },
+  "role_of_current_trait_environment_screens": {
+    "status": "internal_exploratory_diagnostic",
+    "use": "Generate possible mechanistic or historical variables to audit, provided the historical variable is independently available.",
+    "manuscript_required": false,
+    "selection_rule": "No present-day association can retroactively define which historical event/environment rows are considered primary."
+  },
+  "claim_boundary": [
+    "Minimum changes are lower bounds and do not identify independent origins.",
+    "Relative lineage depth is topology-based and is not calendar time.",
+    "A published lineage split or dispersal date is not an exact trait-transition age.",
+    "Paleolocation boxes are alternative scenarios, not ancestral-area probabilities.",
+    "Event-window environmental alignment does not establish the transition instant, exposure of the actual ancestral population, natural selection or adaptation.",
+    "A single dated event cannot establish a repeated environmental trigger.",
+    "Current maintenance and historical differentiation are kept independent until the later thesis-synthesis step."
+  ]
+}

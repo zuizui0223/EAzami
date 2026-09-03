@@ -1,0 +1,59 @@
+{
+  "analysis_id": "chapter2_eazami_exploratory_trait_environment_atlas_v1",
+  "version": "2026-09-01",
+  "status": "internal_exploratory_diagnostic_under_space_time_framework",
+  "purpose": "Retain a reproducible trait x present-environment exploratory diagnostic for the focal radiation without making it a primary Chapter 2 axis or a required manuscript result.",
+  "active_parent_framework": "data/evidence/chapter2_space_breadth_time_depth_contract_v1.json",
+  "trait_universe": {
+    "current_continuous_core": [
+      "orientation_angle_degrees",
+      "corolla_lab_lightness",
+      "corolla_lab_chroma",
+      "shape_aspect_ratio",
+      "shape_circularity",
+      "shape_solidity",
+      "shape_width_cv"
+    ],
+    "role": "available image-derived continuous traits for internal exploratory screening, not the complete or mandatory manuscript trait universe"
+  },
+  "environment_panel": {
+    "phase1": ["BIO1", "BIO4", "BIO12", "BIO15"],
+    "extended_diagnostic": ["BIO1", "BIO4", "BIO12", "BIO15", "RSDS", "VPD", "sfcWind", "GSP", "NPP"],
+    "boundary": "This is one broad abiotic diagnostic panel rather than a complete causal universe. The spatial-breadth axis is defined independently of these predictors."
+  },
+  "analysis_layers": [
+    {
+      "layer": "internal_current_environment_screen",
+      "primary_output": "complete trait x environment table with effect, raw P, BH q, coverage and leave-one-taxon-out direction",
+      "selection": "none; retain all successful rows"
+    },
+    {
+      "layer": "internal_topology_sensitivity",
+      "primary_output": "phylogeny/topology sensitivity for the complete diagnostic table",
+      "selection": "diagnostic only; does not determine manuscript entry"
+    }
+  ],
+  "multiplicity": {
+    "method": "Benjamini-Hochberg",
+    "retain_raw_p": true,
+    "retain_all_rows": true,
+    "raw_p_le_0_05_without_bh": "exploratory diagnostic only"
+  },
+  "current_phase1_gate": {
+    "source": "data/evidence/japan_radiation_pre_tree_trait_environment_snapshot_v1.csv",
+    "minimum_balanced_environment_observations_per_taxon": 10,
+    "expected_taxa_after_gate": 8,
+    "expected_traits": 7,
+    "expected_environment_axes": 4,
+    "expected_tests": 28,
+    "statistic": "Spearman rho on taxon medians with exact taxon-label permutation and leave-one-taxon-out sign envelope",
+    "role": "frozen small-n diagnostic retained for reproducibility"
+  },
+  "manuscript_role": "optional; may remain entirely outside final Results, figures and abstract",
+  "claim_boundary": [
+    "This diagnostic does not define the Chapter 2 spatial-breadth axis.",
+    "An association does not establish adaptation, selection, mechanism or historical causation.",
+    "Unsupported and low-coverage rows remain visible rather than being selected away.",
+    "Missing evidence remains not_evaluable rather than biological zero."
+  ]
+}

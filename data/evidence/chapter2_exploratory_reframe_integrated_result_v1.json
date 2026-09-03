@@ -1,0 +1,121 @@
+{
+  "contract_version": "chapter2_exploratory_reframe_integrated_result_v1",
+  "status_date": "2026-09-01",
+  "scientific_order": [
+    "EAzami_current_exploratory_atlas",
+    "EAzami_phylogenetic_topology_gate",
+    "evolutionary_depth_and_history",
+    "dated_historical_environment_where_evaluable",
+    "Azami_EAzami_concordance_discordance",
+    "Chapter3_mechanism_and_fitness"
+  ],
+  "common9_atlas": {
+    "workflow_run_id": 33477091186,
+    "artifact_id": 9788634414,
+    "artifact_digest": "sha256:d64a9cee1eb3bcd709776e1785e6fcfe4eefa2f1a511ff823c8be3baca8f3073",
+    "scope": "seven frozen EAzami continuous traits x nine frozen common current-environment predictors; Azami outcomes not used for row selection",
+    "source_name_guarded_common9_complete_occurrence_rows": 522,
+    "included_taxa": [
+      "Cirsium aomorense",
+      "Cirsium japonicum",
+      "Cirsium kamtschaticum",
+      "Cirsium lineare",
+      "Cirsium maritimum",
+      "Cirsium oligophyllum",
+      "Cirsium pendulum",
+      "Cirsium sieboldii"
+    ],
+    "excluded_by_predeclared_environment_depth_gate": {
+      "Cirsium verutum": "one source-scientificName-matched GBIF record; below >=10 thinned common-nine records"
+    },
+    "n_taxa": 8,
+    "n_tests": 63,
+    "exact_permutations_per_row": 40320,
+    "bh_supported_rows": 0,
+    "raw_p_le_0_05_rows": [
+      {"trait":"shape_circularity","environment":"BIO15","rho":0.8333333333333333,"exact_p":0.015376984126984126,"bh_q63":0.7218749999999999,"loo_direction":"positive"},
+      {"trait":"shape_solidity","environment":"BIO15","rho":0.7619047619047618,"exact_p":0.03675595238095238,"bh_q63":0.7218749999999999,"loo_direction":"positive"},
+      {"trait":"corolla_lab_lightness","environment":"BIO12","rho":0.7470421737034137,"exact_p":0.03968253968253968,"bh_q63":0.7218749999999999,"loo_direction":"positive"},
+      {"trait":"shape_circularity","environment":"SFCWIND","rho":-0.7380952380952379,"exact_p":0.04583333333333333,"bh_q63":0.7218749999999999,"loo_direction":"negative"}
+    ],
+    "azami_headline_pairs_in_eazami_atlas": [
+      {"trait":"orientation_angle_degrees","environment":"BIO12","rho":-0.4523809523809523,"exact_p":0.26746031746031745,"bh_q63":0.9475625000000001},
+      {"trait":"corolla_lab_chroma","environment":"RSDS","rho":0.1428571428571428,"exact_p":0.7520337301587302,"bh_q63":0.9475625000000001}
+    ],
+    "pilot_supersession_note": "The earlier 7 x 4 pilot used a different frozen species-environment summary and produced shape_width_cv x BIO12 as its strongest raw lead. That lead does not persist in the live source-name-guarded common-nine cohort and is retained only as a pilot diagnostic, not a manuscript candidate."
+  },
+  "topology_gate": {
+    "workflow_run_id": 33477912305,
+    "artifact_id": 9788834579,
+    "artifact_digest": "sha256:7857ddb54647dea02e498ebe52f794675a5e4edcedf3ceb1c3e1fe60c2749dbb",
+    "tree_source_run_id": 32923076873,
+    "tree_artifact_id": 9590650447,
+    "exact_japan38_taxa": 7,
+    "excluded_from_tree_gate": {
+      "Cirsium japonicum": "Japan38 contains C. japonicum var. horridum, not an exact plain-species concept; no automatic collapse"
+    },
+    "ml_exact_permutations_per_row": 5040,
+    "ufboot_topologies": 1000,
+    "ml_bh_supported_rows": 0,
+    "topology_stable_same_direction_rows": 46,
+    "raw_leads": [
+      {"trait":"shape_circularity","environment":"BIO15","ml_beta":0.8091654659505844,"ml_exact_p":0.01369047619047619,"ml_bh_q63":0.8625,"ufboot_same_sign_fraction":1.0,"ufboot_beta_q05":0.7015691668018006,"ufboot_beta_median":0.9515646178556162,"ufboot_beta_q95":1.0391676330232946},
+      {"trait":"shape_solidity","environment":"BIO15","ml_beta":0.7170911273076144,"ml_exact_p":0.07281746031746032,"ml_bh_q63":0.9972222222222222,"ufboot_same_sign_fraction":1.0},
+      {"trait":"shape_circularity","environment":"SFCWIND","ml_beta":-0.6844354550840995,"ml_exact_p":0.09384920634920635,"ml_bh_q63":0.9972222222222222,"ufboot_same_sign_fraction":1.0},
+      {"trait":"corolla_lab_lightness","environment":"BIO12","ml_beta":0.6087749584238701,"ml_exact_p":0.24742063492063493,"ml_bh_q63":0.9972222222222222,"ufboot_same_sign_fraction":1.0}
+    ],
+    "interpretation": "Topology stability identifies robust directions within this small exploratory panel but does not promote any row to confirmatory support because no EAzami row survives the 63-row BH family."
+  },
+  "azami_eazami_concordance": {
+    "workflow_run_id": 33478388870,
+    "artifact_id": 9788994025,
+    "artifact_digest": "sha256:c2a3af3179bfaf9a647f2a21011f73cfea696d009d026ba82fd19d54931efc12",
+    "comparison_rows": 63,
+    "primary_estimands": "EAzami ML branch-aware taxon-level direction vs Azami among-taxon min5 direction",
+    "concordant_rows": 26,
+    "discordant_rows": 37,
+    "concordance_fraction": 0.4126984126984127,
+    "effect_vector_spearman_eazami_ml_vs_azami_among": -0.39256912442396313,
+    "effect_vector_spearman_eazami_raw_vs_azami_among": -0.5283893301196326,
+    "azami_among_bh_supported_mapped_rows": 3,
+    "eazami_ml_bh_supported_rows": 0,
+    "azami_supported_rows": [
+      {"trait":"orientation_angle_degrees","environment":"BIO12","azami_beta":0.3043592858977514,"azami_q":0.021,"eazami_ml_beta":-0.49685936030447936,"eazami_ml_q63":0.9972222222222222,"comparison":"discordant_direction"},
+      {"trait":"orientation_angle_degrees","environment":"GSP","azami_beta":0.2580783524593076,"azami_q":0.03375,"eazami_ml_beta":-0.4266550347806651,"eazami_ml_q63":0.9972222222222222,"comparison":"discordant_direction"},
+      {"trait":"corolla_lab_chroma","environment":"RSDS","azami_beta":-0.3453720170895292,"azami_q":0.006,"eazami_ml_beta":0.021185793721084607,"eazami_ml_q63":0.9972222222222222,"comparison":"discordant_direction"}
+    ],
+    "eazami_raw_lead_cross_chapter_directions": [
+      {"trait":"shape_circularity","environment":"BIO15","comparison":"discordant_direction"},
+      {"trait":"shape_circularity","environment":"SFCWIND","comparison":"discordant_direction"},
+      {"trait":"corolla_lab_lightness","environment":"BIO12","comparison":"discordant_direction"},
+      {"trait":"shape_solidity","environment":"BIO15","comparison":"concordant_direction"}
+    ],
+    "by_trait_concordant_of_9": {
+      "corolla_lab_chroma":5,
+      "corolla_lab_lightness":2,
+      "orientation_angle_degrees":2,
+      "shape_aspect_ratio":6,
+      "shape_circularity":1,
+      "shape_solidity":4,
+      "shape_width_cv":6
+    },
+    "by_environment_block": {
+      "thermal":{"concordant":9,"discordant":5},
+      "hydric":{"concordant":5,"discordant":9},
+      "radiative_atmospheric":{"concordant":5,"discordant":9},
+      "mechanical":{"concordant":3,"discordant":4},
+      "growing_season_water_input":{"concordant":2,"discordant":5},
+      "resource_productivity":{"concordant":2,"discordant":5}
+    },
+    "interpretation": "The focal radiation does not reproduce the global Azami trait-environment field as a whole. Discordance is more common than concordance, including all three mapped Azami among-taxon BH-supported rows. Because EAzami has no BH-supported row, this is evidence for scale/lineage-dependent environmental geometry, not evidence for opposite adaptation."
+  },
+  "chapter2_reframe_decision": "EAzami-first exploratory atlas is now the active scientific entry point. Azami is a post-freeze comparison surface. V5 remains a reproducible pre-reframe manuscript snapshot and must not be treated as the final scientific framing.",
+  "claim_boundary": [
+    "No EAzami current trait-environment row survives the full-family BH correction.",
+    "Raw and topology-stable directions remain exploratory candidates, not demonstrated ecological effects.",
+    "Cross-chapter direction concordance is descriptive consistency across different taxon sets and estimators.",
+    "Cross-chapter discordance does not prove driver switching, opposite selection or adaptation.",
+    "Current environment does not identify historical origin environment.",
+    "Natural selection, mechanism and reproductive-fitness consequences remain Chapter 3 questions."
+  ]
+}

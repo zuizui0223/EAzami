@@ -1,0 +1,122 @@
+{
+  "contract_version": "chapter2_discrete_trait_occurrence_gate_sensitivity_v1",
+  "status_date": "2026-09-03",
+  "scope": "resolution audit of the frozen ecological-reach occurrence assets; no new environmental variable, occurrence harvesting, or causal model",
+  "source_artifacts": {
+    "japan": {
+      "run_id": 32716015605,
+      "artifact_id": 9516784077,
+      "sha256": "cb5717c90cbc769398f9ffce38787704a02e34253c1ff16cf8f368ba55aeda96",
+      "environment_complete_rows": 693
+    },
+    "taiwan": {
+      "run_id": 32725842871,
+      "artifact_id": 9520157997,
+      "sha256": "819936ceeb6008f356c580622fb72972617700402afaa3d3ab125bff2e6d9106",
+      "environment_complete_rows": 55
+    },
+    "broader_spatial_breadth": {
+      "run_id": 33480007180,
+      "artifact_id": 9789577849,
+      "sha256": "315d0bedf241a7492ad2fcb26271bd459ab6f5d46a01a3ce032553d033f3aeb9",
+      "minimum_thinned_occurrences": 3
+    }
+  },
+  "thresholds": {
+    "10": {
+      "phyllary": {
+        "n_taxa": 2,
+        "state_counts": {"ascending": 2},
+        "taxa": {"Cirsium alpicola": "ascending", "Cirsium yezoense": "ascending"},
+        "state_diverse": false
+      },
+      "stickiness": {
+        "n_taxa": 2,
+        "state_counts": {"nonsticky": 2},
+        "taxa": {"Cirsium alpicola": "nonsticky", "Cirsium yezoense": "nonsticky"},
+        "state_diverse": false
+      }
+    },
+    "5": {
+      "phyllary": {
+        "n_taxa": 3,
+        "state_counts": {"ascending": 3},
+        "taxa": {"Cirsium alpicola": "ascending", "Cirsium gyojanum": "ascending", "Cirsium yezoense": "ascending"},
+        "state_diverse": false
+      },
+      "stickiness": {
+        "n_taxa": 3,
+        "state_counts": {"nonsticky": 2, "sticky": 1},
+        "taxa": {"Cirsium alpicola": "nonsticky", "Cirsium gyojanum": "sticky", "Cirsium yezoense": "nonsticky"},
+        "state_diverse": true
+      }
+    },
+    "3": {
+      "phyllary": {
+        "n_taxa": 3,
+        "state_counts": {"ascending": 3},
+        "taxa": {"Cirsium alpicola": "ascending", "Cirsium gyojanum": "ascending", "Cirsium yezoense": "ascending"},
+        "state_diverse": false
+      },
+      "stickiness": {
+        "n_taxa": 3,
+        "state_counts": {"nonsticky": 2, "sticky": 1},
+        "taxa": {"Cirsium alpicola": "nonsticky", "Cirsium gyojanum": "sticky", "Cirsium yezoense": "nonsticky"},
+        "state_diverse": true
+      }
+    }
+  },
+  "stickiness_n_ge_5_descriptive_single_lineage_contrast": {
+    "warning": "one sticky taxon (C. gyojanum) versus two nonsticky taxa; magnitude is lineage-confounded and not a trait effect",
+    "sticky_taxon": "Cirsium gyojanum",
+    "nonsticky_taxa": ["Cirsium alpicola", "Cirsium yezoense"],
+    "taxon_mean_centroids": {
+      "Cirsium alpicola": {"BIO1": 7.028260869565218, "BIO4": 879.3304347826088, "BIO12": 2128.304347826087, "BIO15": 32.9695652173913},
+      "Cirsium gyojanum": {"BIO1": 13.516666666666667, "BIO4": 767.1333333333333, "BIO12": 3148.1666666666665, "BIO15": 49.95},
+      "Cirsium yezoense": {"BIO1": 8.210714285714285, "BIO4": 871.975, "BIO12": 2343.75, "BIO15": 30.3}
+    },
+    "sticky_minus_nonsticky_mean_raw": {"BIO1": 5.897178571428573, "BIO4": -108.5193840579712, "BIO12": 912.139492753623, "BIO15": 18.31521739130435},
+    "sticky_minus_nonsticky_mean_panel_sd": {"BIO1": 1.706513, "BIO4": -1.729075, "BIO12": 1.696913, "BIO15": 1.718415}
+  },
+  "broader_environment_free_spatial_support": {
+    "phyllary": {"n_taxa": 4, "state_counts": {"ascending": 3, "appressed": 1}, "spatial_segregation_p": 0.4998},
+    "stickiness": {"n_taxa": 12, "state_counts": {"nonsticky": 6, "sticky": 6}, "spatial_segregation_p": 0.1306},
+    "interpretation": "public spatial occurrence support exists for state-diverse panels outside the original targeted niche artifact; the original zero yield is therefore not evidence that the traits lack public occurrences"
+  },
+  "depth_ecological_reach_hypothesis_testability": {
+    "hypothesis": "shallower historical turnover should be associated with more lineage-local ecological explanatory reach, whereas deeper turnover should be associated with broader/clade-level ecological correspondence",
+    "trait_status": {
+      "orientation": {
+        "history": "resolved repeated history with intermediate relative-depth profile",
+        "ecological_reach": "evaluable and scale-partitioned: BIO12 is among-taxon only; BIO1 is within-taxon only; the East-Asian BIO15 state contrast is not reproduced as a positive within-taxon response",
+        "usable_for_cross_trait_tradeoff": true
+      },
+      "phyllary": {
+        "history": "resolved repeated history with deepest-permissive relative-depth profile among the three traits",
+        "ecological_reach": "not evaluable in the frozen environmental panel because state diversity is absent even at n>=3",
+        "usable_for_cross_trait_tradeoff": false
+      },
+      "stickiness": {
+        "history": "resolved repeated history with shallow relative-depth profile",
+        "ecological_reach": "state diversity returns at n>=5 but only one sticky lineage is represented, leaving trait effect confounded with lineage",
+        "usable_for_cross_trait_tradeoff": false
+      }
+    },
+    "classification": "three_trait_depth_vs_ecological_reach_tradeoff_not_identifiable_from_current_public_panel",
+    "reason": "Only orientation currently has an identified scale-aware ecological reach. Phyllary is state-degenerate in the environmental panel and stickiness has only one sticky lineage at the relaxed gate. A three-point regression/correlation would convert missing identification into numerical evidence.",
+    "figure_rule": "Do not plot a quantitative three-trait depth-versus-predictive-reach regression as a result. If shown, use a resolution/evidence matrix with phyllary and stickiness explicitly censored/not identified; retain the depth-predictability relation as a Chapter 3 prediction rather than a Chapter 2 conclusion."
+  },
+  "classification": {
+    "phyllary": "lowering_gate_does_not_recover_state_diversity_in_frozen_environment_panel",
+    "stickiness": "state_diversity_recovers_at_n_ge_5_but_lineage_replication_is_insufficient",
+    "overall": "coverage_threshold_and_targeted_panel_composition_jointly_limit_ecological_evaluability"
+  },
+  "implication": "The n>=10 gate is a real bottleneck for stickiness but not the sole bottleneck. Phyllary remains blocked by panel composition even at n>=3. A broader predeclared state-diverse panel would be required for a valid climate comparison, but that is a separate auxiliary analysis and not a reason to alter the V7 core.",
+  "claim_boundary": [
+    "This audit changes no frozen ecological-reach classification.",
+    "The one-sticky-taxon n>=5 climate contrast is descriptive and lineage-confounded.",
+    "The environment-free spatial breadth pilot does not identify an environmental driver.",
+    "The three-trait depth-versus-ecological-reach tradeoff is not identified by the current public panel.",
+    "No adaptation, selection, historical causation, or trait effect is inferred."
+  ]
+}
