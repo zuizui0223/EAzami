@@ -1,0 +1,42 @@
+{
+  "contract_version": "chapter2_orientation_origin_region_ranking_contract_v1",
+  "status_date": "2026-09-03",
+  "purpose": "Summarize relative regional compatibility within each already-generated chronology scenario without converting the deterministic scenario envelope into a posterior probability.",
+  "input": {
+    "path": "data/evidence/chapter2_orientation_origin_envelope_result_v1.json",
+    "expected_chronology_pairs": 94,
+    "expected_regions": [
+      "taiwan",
+      "ryukyu_corridor",
+      "southern_japan",
+      "east_asia_core_corridor"
+    ],
+    "expected_region_by_chronology_rows": 376,
+    "pairing_key": ["young_ma", "old_ma"]
+  },
+  "primary_estimand": "cosine_similarity",
+  "ranking_direction": "larger cosine is more concordant with the frozen Azami orientation-environment vector within that chronology scenario",
+  "summaries": [
+    "rank-1 frequency across the 94 deterministic chronology scenarios",
+    "median and quantile rank by region",
+    "paired cosine differences for all six region pairs",
+    "fraction of chronology scenarios with positive paired difference",
+    "minimum, q05, median, q95 and maximum paired difference"
+  ],
+  "southern_japan_predeclared_contrasts": [
+    ["southern_japan", "taiwan"],
+    ["southern_japan", "ryukyu_corridor"],
+    ["southern_japan", "east_asia_core_corridor"]
+  ],
+  "interpretation_rule": {
+    "scenario_dominant": "A region is scenario-dominant only if it is rank 1 in at least 75% of the 94 chronology scenarios and its paired cosine difference is positive in at least 75% of scenarios against every other region.",
+    "relative_ordering_present_but_not_dominant": "At least one region has the best median rank or positive majority pairwise ordering, but the scenario-dominant rule is not met.",
+    "no_stable_regional_ordering": "No region has a positive majority pairwise ordering against all other regions."
+  },
+  "claim_boundary": [
+    "Rank frequencies are fractions of a deterministic sensitivity grid, not posterior probabilities of ancestral area.",
+    "A higher regional rank does not identify the true ancestral location or transition-time environment.",
+    "This analysis does not change the frozen origin-trajectory classification; it only exposes ordering within its uncertainty envelope.",
+    "Regions differ in spatial extent and cell count, so rankings describe the declared regional summaries rather than area-normalized ancestral probabilities."
+  ]
+}
