@@ -167,7 +167,7 @@ def main() -> None:
 
     text = SYNTHESIS.read_text(encoding="utf-8")
     required_synthesis_phrases = (
-        "repeated history is much better identified than repeated historical cause",
+        "repeated trait history is much better identified than repeated historical cause",
         "no_tested_climate_direction_survives_full_chronology_paleolocation_envelope",
         "no_recurring_lineage_differentiation_context_survives_age_region_background_gates",
         "robust event-level classes: **0/324**",
