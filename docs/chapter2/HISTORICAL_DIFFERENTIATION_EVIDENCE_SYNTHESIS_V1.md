@@ -1,22 +1,25 @@
 # Chapter 2 historical differentiation evidence synthesis v1
 
-Status date: 2026-09-02  
-Status: **ACTIVE SCIENTIFIC SYNTHESIS; public-data claim ceiling**
+Status date: 2026-09-03  
+Status: **PUBLIC-DATA CEILING REACHED FOR CURRENT DIFFERENTIATION-TRIGGER PROGRAMME**
 
 ## Central result
 
-Chapter 2 now separates three questions that were previously too easy to collapse:
+Chapter 2 separates three questions that must not be collapsed:
 
-1. **Did the trait change repeatedly?**
+1. **Did capitulum traits differentiate repeatedly?**
 2. **How deep in the radiation can those changes occur?**
-3. **When a change can actually be bounded in calendar time, is its historical environmental context unusual or repeated?**
+3. **When differentiation can be bounded in calendar time, does a particular historical environmental or range-reorganization regime recur?**
 
-The current public evidence gives a strong answer to the first two questions for orientation, phyllary posture and stickiness, but a much weaker answer to the third.
+The public evidence answers the first two questions substantially better than the third. Repeated differentiation and unequal evolutionary depth are well resolved for several capitulum modules, but no tested climatic or global eustatic sea-level regime survives the full uncertainty gates as one recurring historical trigger.
 
-The result is therefore not a single environmental-causation story. It is an **identifiability gradient across capitulum modules**.
+The final current classification is:
 
-Machine-readable ledger:
+`repeated_differentiation_resolved_but_recurring_tested_environmental_trigger_not_identified_under_public_data`
 
+Machine-readable sources of truth:
+
+- `../../data/evidence/chapter2_historical_differentiation_final_summary_v1.json`
 - `../../data/evidence/chapter2_historical_differentiation_evidence_ledger_v1.csv`
 
 ## 1. Repeated differentiation is well supported, but differs in depth
@@ -29,9 +32,9 @@ Machine-readable ledger:
 
 Zero of three discrete trait pairs passes the robust shared-transition-localization rule.
 
-Thus capitulum differentiation was recurrent, but its temporal architecture differs among modules. This is stronger than merely counting present states, and it does not require a common historical cause.
+Thus the same capitulum did not simply shift as one synchronized historical syndrome. Its components were repeatedly reassembled at unequal evolutionary depths. This is a history result; it does not by itself identify independent adaptive origins, genetic modularity or a common selective cause.
 
-## 2. Calendar-time identifiability is the limiting step
+## 2. Calendar-time identifiability is the main limiting step
 
 Only one current trait transition passes the full public-data gate of:
 
@@ -39,44 +42,46 @@ Only one current trait transition passes the full public-data gate of:
 
 That event is the core-Nipponocirsium erect/upward -> nodding/downward orientation transition.
 
-Other available dates are weaker evidence classes:
+Other dates belong to weaker evidence classes:
 
 - flower colour: conditional dated terminal-lineage envelopes;
 - phyllary/display: dated extant sister contrasts, not reconstructed transitions;
 - stickiness: dated range processes whose ages are not trait-transition ages.
 
-This distinction is itself a primary Chapter 2 result: **repeated history is much better identified than repeated historical cause.**
+A new public dated-tree recovery audit again found no machine-readable dated Newick/posterior that can be crosswalked to the Japan38 change-bearing branches. Published phylogeny graphics, broad radiation ages, relative lineage depth, and dispersal dates are therefore not converted into event ages.
 
-## 3. Orientation: no tested directional climate trigger survives uncertainty
+This is itself a primary result: **repeated trait history is much better identified than repeated historical cause.**
 
-The one dateable orientation event is bounded between the *C. morii* split and the Japanese-core/Taiwan-core split. The cross-study node constraints yield 94 admissible chronology pairs, evaluated under four predeclared paleolocation scenarios (376 region × chronology scenarios).
+## 3. Orientation: the central-date trajectory looks coherent, but no directional climate trigger survives uncertainty
 
-At the single central 0.79 -> 0.74 Ma pair, the historical trajectory looks coherent:
+The one dateable orientation event is bounded between the *C. morii* split and the Japanese-core/Taiwan-core split. Cross-study node constraints produce 94 admissible chronology pairs evaluated under four predeclared paleolocation regions, for 376 region × chronology scenarios.
+
+At the single central 0.79 -> 0.74 Ma pair:
 
 - BIO1 decreases in 4/4 regions;
 - BIO4 decreases in 4/4;
 - BIO15 decreases in 4/4;
 - BIO12 increases in 3/4.
 
-But the apparent direction is not robust. Across the full chronology × paleolocation envelope, BIO1, BIO4, BIO12 and BIO15 are all directionally unresolved.
+That central-age pattern is tempting, but it is not robust. Once chronology and paleolocation uncertainty are propagated, BIO1, BIO4, BIO12 and BIO15 are all directionally unresolved.
 
 Formal decision:
 
 `no_tested_climate_direction_survives_full_chronology_paleolocation_envelope`
 
-This prevents a central-age narrative from being promoted to a historical trigger.
+The central pair can therefore illustrate how an apparently clean trigger story disappears when historical uncertainty is carried through the analysis; it cannot be promoted to the chapter conclusion.
 
-## 4. Climate regime, change magnitude and variability are also formally unresolved
+## 4. Climate level, change magnitude and variability do not rescue a general orientation trigger
 
-The extended V2 analysis evaluates, independently of any present-day coefficient:
+The extended orientation V2 analysis is independent of present-day trait–environment coefficients. It asks whether the bounded differentiation window is unusual in:
 
-- environmental level within the branch window;
+- environmental level;
 - signed endpoint change;
 - absolute endpoint change;
-- within-window temporal SD;
-- same-duration matched windows in the same paleolocation region.
+- within-window temporal variability;
+- relative position among same-duration windows in the same paleolocation region.
 
-No BIO1/BIO4/BIO12/BIO15 variable passes the full chronology × paleolocation robust gate for level, signed direction, absolute change or temporal variability.
+No BIO1/BIO4/BIO12/BIO15 variable passes the full chronology × paleolocation robust gate.
 
 Formal result:
 
@@ -85,53 +90,82 @@ Formal result:
 - consistently extreme absolute-change variables: 0;
 - consistently extreme variability variables: 0.
 
-### Tendency-only regime context
+There are tendency-only diagnostics: BIO1 tends toward low-side levels and high-side temporal variability, while BIO4 tends toward high-side levels. The central 0.79 -> 0.74 Ma pair is especially cold/high-variability in BIO1. These patterns remain below the claim threshold because they do not survive the full chronology envelope.
 
-There is nevertheless a useful diagnostic pattern that must remain below the formal claim threshold:
-
-- BIO1 regional median level percentiles are ~0.14 in all four paleolocation scenarios;
-- BIO1 regional median temporal-SD percentiles are ~0.85;
-- BIO4 regional median level percentiles are ~0.85;
-- for the central 0.79 -> 0.74 Ma pair, BIO1 level is near the lower 5% and BIO1 temporal SD near the upper 5% in all four regions.
-
-This suggests a **cold / climatically variable Pleistocene regime context** may be more plausible than a single directional temperature change as the relevant historical background. It is not a passed trigger test because chronology uncertainty broadens the event window enough that the pattern does not remain extreme across admissible scenarios.
-
-Source summary:
+Source:
 
 - `../../data/evidence/chapter2_orientation_differentiation_environment_v2_summary.json`
 
-## 5. Global sea level does not provide a robust trigger signal
+## 5. Broadening from one trait event to representative lineage differentiations still finds no recurring climate regime
 
-Two independent global sea-level sensitivities now constrain the range-reorganization interpretation.
+A separate lineage-level diagnostic asks a broader question: even if individual capitulum-transition ages are not known, do dated differentiation windows across major East-Asian *Cirsium* lineages repeatedly occupy the same unusual palaeoclimate regime?
 
-### Spratt–Lisiecki stack
+The analysis is deliberately separated from the trait-transition test. It evaluates:
 
-The empirical stack covers only 16/94 admissible orientation chronologies. The central 0.79 -> 0.74 Ma window is not unusual in sea-level mean, SD, range, endpoint change or 1-kyr change metrics. Because 78/94 chronology pairs are uncovered, full-envelope inference is `not_evaluable` under this source.
+- 17 BIOCLIM variables;
+- 6 dated lineage contexts;
+- three representative clade groups: Nipponocirsium, Arenicola and Sinocirsium;
+- 15,472 successfully tested scenario × variable combinations;
+- univariate level, absolute change and local variability;
+- multivariate climate-state distance, short-window displacement and variability;
+- age, regional-scenario and matched-background uncertainty.
 
-### de Boer 5.3-Myr model-based reconstruction
+Formal result:
 
-The independent de Boer reconstruction covers all 94 chronology pairs. Relative to same-duration Pleistocene windows, no tested metric is robustly high or low across chronology:
+- robust event-level classes: **0/324**;
+- recurring climate-context candidates: **0**.
 
-- mean sea level: unresolved;
-- SD: unresolved;
-- range: unresolved;
-- absolute endpoint change: unresolved;
-- mean absolute 1-kyr change: unresolved;
-- maximum absolute 1-kyr change: unresolved.
+Decision:
 
-Formal decision:
+`no_recurring_lineage_differentiation_context_survives_age_region_background_gates`
+
+There are lineage-specific tendencies. Nipponocirsium and Sinocirsium differentiation contexts tend toward cooler and more temperature-variable regimes, whereas Arenicola is nearer the background center. Because this pattern does not recur across all representative groups, it argues against one universal climatic differentiation regime rather than supporting one.
+
+Source:
+
+- `../../data/evidence/chapter2_lineage_differentiation_environment_atlas_v1_summary.json`
+
+This is a lineage-diversification context result, not a capitulum-trait transition result. It cannot substitute for missing transition-bearing chronology.
+
+## 6. Global sea level also fails as a recurring differentiation context
+
+### Orientation-specific sensitivities
+
+The empirical Spratt–Lisiecki stack covers only 16/94 admissible orientation chronologies and is therefore insufficient for a full-envelope test.
+
+The independent de Boer reconstruction covers all 94 chronology pairs. No tested global sea-level metric is robustly high or low across chronology:
+
+- mean sea level;
+- SD;
+- range;
+- absolute endpoint change;
+- mean absolute 1-kyr change;
+- maximum absolute 1-kyr change.
+
+Decision:
 
 `no_global_sea_level_metric_survives_full_chronology_gate`
 
-The central 50-kyr window has relatively high sea-level SD/range/change-rate percentiles, but this does not survive the full chronology envelope.
+### Multi-lineage range-reorganization diagnostic
 
-Source summary:
+The same de Boer source was then evaluated across three representative dated lineage differentiations: Nipponocirsium, Arenicola and Sinocirsium. Seven sea-level metrics were assessed for each group, producing 21 event-metric classes.
 
-- `../../data/evidence/chapter2_orientation_deboer_sealevel_envelope_v1_summary.json`
+Formal result:
 
-Global sea level remains a broad range-reorganization context. It is not a reconstruction of local Ryukyu/Taiwan land connectivity and is not a selective pressure on capitulum orientation.
+- robust event-metric classes: **0/21**;
+- recurring global sea-level context candidates: **0**.
 
-## 6. Mid-Pleistocene overlap is context, not independent evidence
+Decision:
+
+`no_recurring_global_sea_level_context_survives_age_background_window_gates`
+
+Source:
+
+- `../../data/evidence/chapter2_lineage_differentiation_sealevel_v1.json`
+
+This is an important boundary, not a claim that palaeogeography was irrelevant. Global eustatic sea level does **not** reconstruct local Taiwan/Ryukyu/Japan land connectivity, strait opening, island area or habitat continuity. Local fragmentation therefore remains untested rather than rejected.
+
+## 7. Mid-Pleistocene overlap is temporal context, not independent trigger evidence
 
 The orientation chronology is centered near ~0.8 Ma, but this overlap is largely built into the chronology constraint:
 
@@ -140,33 +174,35 @@ The orientation chronology is centered near ~0.8 Ma, but this overlap is largely
 - 78/94 overlap 0.750–0.850 Ma;
 - 71/94 overlap 0.770–0.830 Ma.
 
-Therefore a statement such as “orientation differentiation occurred around the Mid-Pleistocene Transition” is acceptable temporal context, but the MPT cannot be promoted to a causal trigger from overlap alone.
+Classification:
 
-Machine-readable audit:
+`broad_mpt_overlap_high_but_not_event_discriminating`
+
+Thus the Mid-Pleistocene Transition is a defensible broad era context but not an independent trigger test.
+
+Source:
 
 - `../../data/evidence/chapter2_orientation_mpt_overlap_audit_v1.json`
 
-## 7. Radiation context and trait trigger must remain separate
+## 8. What is common across the dated histories—and what is not
 
-Published phylogenomic/biogeographic studies support a young Pleistocene *Cirsium* radiation shaped by dispersal, geographic isolation, glacial oscillations and island fragmentation. That is **lineage-diversification context**.
+The commonality supported by public data is **not one tested environmental direction**. The stronger common pattern is hierarchical:
 
-The trait-specific result is narrower. Current public evidence does not show that the bounded orientation transition occurred during a climate or global sea-level regime that remains exceptional across chronology and paleolocation uncertainty.
+1. the focal radiation and several dated lineage divergences sit within a young Pleistocene history of climatic and geographic reorganization;
+2. capitulum traits repeatedly differentiated within that radiation;
+3. different traits show different evolutionary-depth profiles;
+4. when chronology, paleolocation and matched-background uncertainty are propagated, no single tested BIOCLIM variable or global sea-level metric recurs as a robust trigger;
+5. local palaeogeographic fragmentation, biotic interactions and other lineage-specific processes remain incompletely measured.
 
-The hierarchy is therefore:
+Therefore the data support a **shared dynamic historical backdrop with heterogeneous or unresolved event-specific drivers**, not a universal trigger.
 
-`Pleistocene lineage diversification context`
+This is exactly why a stronger lineage-level diversification narrative cannot be borrowed to fill a missing trait-event cause.
 
-is supported more strongly than
-
-`a particular climate/range process triggered a capitulum-trait transition`.
-
-A stronger lineage-level result cannot be borrowed to fill a missing trait-event result.
-
-## 8. Trait-specific synthesis
+## 9. Trait-specific synthesis
 
 ### Orientation
 
-**Best resolved historical module.** Recurrent across the phylogeny and spanning internal-to-terminal depths. One stem event is calendar-bounded. Its exact climate/range trigger remains unresolved. Cold/high-variability and high-temperature-seasonality regime tendencies are diagnostic only.
+**Best resolved historical module.** Recurrent across the phylogeny and spanning internal-to-terminal depths. One stem event is calendar-bounded. Its climate and global sea-level trigger remain unresolved after full uncertainty propagation. Repeated same-trait trigger inference is `not_evaluable_single_dated_transition_event`.
 
 ### Phyllary posture
 
@@ -174,34 +210,34 @@ A stronger lineage-level result cannot be borrowed to fill a missing trait-event
 
 ### Stickiness
 
-**Repeated shallow reassembly.** Existing public dates concern range events rather than sticky/nonsticky transitions. The shallow history is compatible with a local or biotic process, but this remains a hypothesis rather than a historical trigger result.
+**Repeated shallow reassembly.** Existing public dates concern range events rather than sticky/nonsticky transitions. The shallow pattern is compatible with local, biotic or rapidly changing costs/benefits, but those are hypotheses rather than historical trigger results.
 
 ### Flower colour
 
-**Two dated lineage contexts, but conditional trait history.** White/low-chroma phenotype occurs in Taiwan and Arenicola sister systems, but ancestral colour and the time of the colour change on each terminal branch are not sufficiently resolved. A common historical radiative trigger cannot currently be tested.
+**Two dated lineage contexts, but conditional trait history.** White/low-chroma phenotype occurs in Taiwan and Arenicola sister systems, but ancestral colour and the time of change on each terminal branch are not sufficiently resolved. A common historical radiative trigger cannot currently be tested.
 
 ### Whole capitulum
 
 Different recurrence counts, different relative-depth structures and 0/3 robust shared-transition localization reject the simplest model of one synchronized historical event or one universal trigger for the entire capitulum. This does not prove complete independence or genetic modularity.
 
-## 9. Current Chapter 2 conclusion
+## 10. Current Chapter 2 conclusion
 
 The strongest public-data conclusion is:
 
-> **Capitulum traits differentiated repeatedly but at unequal evolutionary depths. The Pleistocene radiation provides a well-supported backdrop of climatic and geographic reorganization, yet the historical environmental trigger of individual capitulum transitions is substantially less identifiable. For the best-bounded orientation event, neither a directional climate change, an extreme climate regime, unusually large climate variability/change, nor global eustatic sea-level dynamics survives the full chronology and paleolocation uncertainty gates.**
+> **Capitulum traits differentiated repeatedly but at unequal evolutionary depths. These changes occurred within a young Pleistocene radiation shaped by climatic and geographic reorganization, yet public data do not identify one recurring tested climatic or global eustatic sea-level trigger. For the best-bounded orientation transition, neither signed climate direction, extreme climate state, unusually large climate change/variability nor global sea-level dynamics survives the full chronology and paleolocation gates. The broader 17-BIOCLIM and three-clade sea-level diagnostics reach the same boundary at the lineage-differentiation level.**
 
-This is not a null evolutionary result. It distinguishes **when lineage diversification context is identifiable from when a trait-specific cause is not**.
+This is not evidence that environment did not matter. It distinguishes **a well-resolved history of differentiation from a much less identifiable history of cause**.
 
-## 10. Handoff to the dissertation synthesis and Chapter 3
+## 11. Dissertation synthesis and Chapter 3 handoff
 
-Chapter 1 can independently identify present-day environmental factors associated with the maintenance or sorting of phenotypic diversity. Chapter 2 identifies how those phenotypes were assembled through time and whether a historical differentiation trigger can be recovered.
+Chapter 1 should independently freeze the environmental gradients associated with present-day maintenance or ecological sorting. Chapter 2 now freezes what public historical data can and cannot identify about differentiation.
 
-Only after both are independently frozen should the dissertation ask whether:
+Only after both chapters are independently frozen should the dissertation ask whether:
 
 - the same environmental domain is retained from differentiation to maintenance;
-- historical and present directions differ;
+- historical and present directions differ or reverse;
 - a historical trigger disappeared after origin;
 - a present maintenance factor arose later;
 - driver switching or lineage-specific selection mosaics are plausible.
 
-Chapter 3 then tests the candidate environment -> trait function -> reproductive fitness path. Historical alignment alone never establishes natural selection or adaptation.
+The strongest unresolved historical candidates now lie outside what the current coarse public palaeo-surfaces can identify cleanly: local connectivity/fragmentation, lineage-specific exposure and biotic interactions. Chapter 3 can test ancestry-linked environment -> trait function -> reproductive fitness. Historical alignment alone never establishes natural selection or adaptation.
