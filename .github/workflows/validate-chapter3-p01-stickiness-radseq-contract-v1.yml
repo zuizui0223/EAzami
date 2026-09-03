@@ -5,6 +5,8 @@ on:
     paths:
       - 'data/evidence/chapter3_p01_stickiness_radseq_contract_v1.json'
       - 'data/evidence/chapter3_p01_same_individual_schema_v1.csv'
+      - 'data/evidence/chapter3_p01_decision_matrix_v1.csv'
+      - 'data/templates/chapter3_p01_recommended_sample_manifest_v1.csv'
       - 'docs/chapter3/CHAPTER3_P01_STICKINESS_RADSEQ_EXECUTION_V1.md'
       - 'analysis/validate_chapter3_p01_stickiness_radseq_contract_v1.py'
       - '.github/workflows/validate-chapter3-p01-stickiness-radseq-contract-v1.yml'
