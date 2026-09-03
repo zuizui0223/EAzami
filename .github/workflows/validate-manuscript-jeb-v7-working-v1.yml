@@ -1,0 +1,29 @@
+name: Validate JEB V7 working manuscript v1
+
+on:
+  pull_request:
+    paths:
+      - "docs/chapter2/MANUSCRIPT_JEB_V7_WORKING.md"
+      - "docs/chapter2/JEB_V7_FIGURE_MAP.md"
+      - "analysis/validate_manuscript_jeb_v7_working_v1.py"
+      - "data/evidence/chapter2_historical_differentiation_final_summary_v1.json"
+      - "data/evidence/chapter2_orientation_environment_scale_partition_v1.json"
+      - "data/evidence/chapter2_orientation_origin_region_ranking_result_v1.json"
+      - ".github/workflows/validate-manuscript-jeb-v7-working-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validator
+        run: python -m py_compile analysis/validate_manuscript_jeb_v7_working_v1.py
+      - name: Validate manuscript against frozen V7 evidence
+        run: python analysis/validate_manuscript_jeb_v7_working_v1.py
