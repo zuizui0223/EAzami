@@ -1,0 +1,81 @@
+{
+  "contract_version": "chapter2_orientation_environment_scale_partition_v1",
+  "status_date": "2026-09-03",
+  "sources": {
+    "azami_bridge": "data/evidence/azami_orientation_cross_scale_environment_bridge_v1.csv",
+    "azami_source_repo": "zuizui0223/azami",
+    "azami_source_workflow_run_id": 33035785120,
+    "azami_source_artifact_id": 9632715852,
+    "azami_source_artifact_sha256": "51e7a26b5bd09e030b67b9342586699abaaf46e630f45b6bb4ee7bfc9152ced6",
+    "azami_source_internal_path": "alignment/geb_v2_within_among_alignment.csv",
+    "eazami_integrated_evidence": "data/evidence/chapter2_final_integrated_evidence_v3.json"
+  },
+  "orientation_scale_partition": {
+    "BIO12_annual_precipitation": {
+      "azami_within": {
+        "beta_std": 0.0053264197896164,
+        "p": 0.601043018172208,
+        "q": 0.8742443900686662,
+        "fdr_supported": false
+      },
+      "azami_among": {
+        "beta_std": 0.3043592858977514,
+        "p": 0.0005999400059994,
+        "q": 0.0063993600639936,
+        "fdr_supported": true
+      },
+      "cross_scale_class": "among_only",
+      "interpretation": "The strongest Azami hydric association is expressed among taxa, not as a detectable same-direction within-taxon association. This is compatible with lineage/clade-level ecological structure but does not identify selection or a causal rain mechanism."
+    },
+    "BIO15_precipitation_seasonality": {
+      "azami_within": {
+        "beta_std": -0.0076180061143611,
+        "p": 0.045533940688235,
+        "q": 0.1214238418352934,
+        "fdr_supported": false
+      },
+      "azami_among": {
+        "beta_std": 0.0670043446773373,
+        "p": 0.4306569343065693,
+        "q": 0.5991748651221834,
+        "fdr_supported": false
+      },
+      "eazami_downward_minus_upward": {
+        "standardized_difference_range": [1.320, 1.330],
+        "accepted_topology_sign_consistency": "6/6",
+        "topology_x_species_loo_sign_consistency": "54/54"
+      },
+      "cross_scale_class": "lineage_state_difference_not_mirrored_by_within_taxon_response",
+      "interpretation": "The East-Asian state contrast is strongly direction-stable, while the global within-taxon continuous association is weak, opposite in sign, and not FDR-supported. A universal within-taxon precipitation-seasonality reaction norm is therefore not supported."
+    },
+    "BIO1_annual_mean_temperature": {
+      "azami_within": {
+        "beta_std": 0.0171502769396607,
+        "p": 0.0065390721589385,
+        "q": 0.0348750515143389,
+        "fdr_supported": true
+      },
+      "azami_among": {
+        "beta_std": -0.0302378798369909,
+        "p": 0.7163283671632836,
+        "q": 0.8364877797934492,
+        "fdr_supported": false
+      },
+      "eazami_downward_minus_upward": {
+        "standardized_difference_range": [-0.975, -0.967],
+        "topology_x_species_loo_sign_consistency": "54/54"
+      },
+      "cross_scale_class": "within_only_in_azami_with_opposite_east_asian_state_direction",
+      "interpretation": "Temperature is a scale-dependent competing axis: within-taxon Azami orientation increases weakly with BIO1, whereas the East-Asian downward state occupies cooler current environments. This does not support one universal thermal rule."
+    }
+  },
+  "classification": "orientation_environment_association_is_scale_partitioned",
+  "main_result": "Orientation does not express one repeated environment-response coefficient across biological levels. Annual precipitation is among-taxon only in Azami, while BIO1 is within-taxon only and BIO15 shows a direction-stable East-Asian state contrast that is not reproduced as a positive within-taxon Azami association.",
+  "implication_for_chapter2": "The current hydric signal is better treated as lineage-embedded ecological correspondence than as evidence for repeated within-lineage environmental tracking. This strengthens a depth/ecological-reach interpretation while weakening a universal direct-gradient model.",
+  "claim_boundary": [
+    "The within-taxon and East-Asian state contrasts are not identical estimands and are not pooled.",
+    "Among-taxon support can reflect ancestry, correlated geography or unmeasured lineage properties; it is not itself proof of climatic selection.",
+    "The result does not establish a causal precipitation mechanism, adaptation, plasticity or the environmental state at historical orientation transitions.",
+    "Image-referenced orientation remains distinct from a fully gravity-calibrated field posture phenotype."
+  ]
+}
