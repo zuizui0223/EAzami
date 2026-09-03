@@ -1,0 +1,85 @@
+{
+  "contract_id": "chapter3_p01_stickiness_radseq_contract_v1",
+  "status": "PRE_DATA_FROZEN",
+  "issue": 154,
+  "parent_scientific_state": {
+    "source_pr": 153,
+    "source_head": "857f2d25a03dbbf6f6c0297011735b38aa36e9f3",
+    "chapter2_classification": "repeated_differentiation_resolved_but_recurring_tested_environmental_trigger_not_identified_under_public_data"
+  },
+  "question": "Does the Chapter 2 JPN06 terminal stickiness placement and JPN06-JPN15 sister contrast survive own-data ancestry, ploidy, locus-sharing and network sensitivities?",
+  "focal_concepts": [
+    {
+      "paper_concept": "JPN_06",
+      "taxon": "Cirsium dipsacolepis",
+      "chapter2_state": "nonsticky",
+      "minimum_individuals": 16,
+      "recommended_individuals": 24,
+      "minimum_populations": 2,
+      "recommended_populations": 3
+    },
+    {
+      "paper_concept": "JPN_15",
+      "taxon": "Cirsium lineare",
+      "chapter2_state": "sticky",
+      "minimum_individuals": 16,
+      "recommended_individuals": 24,
+      "minimum_populations": 2,
+      "recommended_populations": 3
+    }
+  ],
+  "total_sampling_target": {
+    "minimum_individuals": 32,
+    "recommended_individuals": 48,
+    "minimum_population_replication_per_taxon": 2,
+    "recommended_population_replication_per_taxon": 3
+  },
+  "same_individual_required_fields": [
+    "individual_id",
+    "paper_concept",
+    "field_taxon_name",
+    "population_id",
+    "deidentified_locality_id",
+    "voucher_id",
+    "rad_tissue_id",
+    "stickiness_state",
+    "gland_exudate_documentation_id",
+    "orientation_state",
+    "phyllary_posture_state",
+    "cytotype_status",
+    "genome_size_status",
+    "authorization_record_id"
+  ],
+  "radseq_admission_gates": [
+    "independent_population_replication",
+    "shared_homologous_locus_coverage",
+    "restriction_site_dropout_sensitivity",
+    "ploidy_aware_calling_or_within_cytotype_sensitivity",
+    "homeolog_paralog_collapse_screen",
+    "admixture_diagnostic",
+    "network_sensitivity",
+    "strict_locus_sensitivity"
+  ],
+  "primary_estimands": {
+    "sister_relation": "support for JPN06-JPN15 sister relationship across admitted own-data topology/network sensitivities",
+    "terminal_localization": "fraction of admitted own-data topology/history ensemble retaining a terminal JPN06 stickiness change",
+    "minimum_change_burden": "stickiness minimum-change lower bound after mapping same-individual or population-resolved states onto admitted own-data histories"
+  },
+  "predeclared_falsifiers": [
+    "JPN06-JPN15 sister relationship is not retained across admitted own-data sensitivities",
+    "JPN06 terminal concentration is materially reduced or relocated across admitted own-data histories",
+    "strict-locus, ploidy-aware or network sensitivity reverses the focal placement"
+  ],
+  "decision_rules": {
+    "retain_chapter2_history": "all admission gates pass and the sister relation plus terminal concentration remain qualitatively stable across the admitted sensitivity set",
+    "revise_chapter2_history": "one or more predeclared falsifiers is met after admission gates pass",
+    "ancestry_only": "cross-species admission gates fail; report population ancestry/within-cytotype structure and retain Comp1061 as primary cross-species scaffold"
+  },
+  "next_causal_test_if_history_retained": "within-JPN15 stickiness neutralization versus sham with enemy access/damage and reproductive-fitness endpoints",
+  "claim_boundary": [
+    "RAD-seq placement is historical evidence, not adaptation",
+    "a sister contrast does not establish defence function",
+    "minimum changes are not independent-origin counts",
+    "no manipulation proceeds without site-specific authorization and conservation review"
+  ]
+}
