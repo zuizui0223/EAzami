@@ -1,0 +1,109 @@
+{
+  "contract_version": "chapter2_orientation_origin_region_ranking_result_v1",
+  "status_date": "2026-09-03",
+  "source_origin_contract_version": "chapter2_orientation_origin_envelope_v1",
+  "source_workflow_run_id": 33403515236,
+  "source_artifact_id": 9762830184,
+  "source_artifact_sha256": "65ff0756f9682efce2640ea7269d7e43c632b87a16714e71e804d81ca4c71570",
+  "n_chronology_scenarios": 94,
+  "n_region_by_chronology_rows": 376,
+  "classification": "relative_ordering_present_but_not_dominant",
+  "leading_region_descriptive": "southern_japan",
+  "scenario_dominant_regions": [],
+  "region_rank_summary": {
+    "taiwan": {
+      "n_chronology_scenarios": 94,
+      "rank1_fraction": 0.1595744680851064,
+      "rank1_count": 15,
+      "mean_rank": 2.75531914893617,
+      "median_rank": 3.0,
+      "rank_quantiles": {"min": 1.0, "q05": 1.0, "median": 3.0, "q95": 4.0, "max": 4.0},
+      "cosine_quantiles": {"min": -0.9968514173234555, "q05": -0.7912451044970455, "median": -0.12188679469945418, "q95": 0.5921083956790492, "max": 0.7023869098549863}
+    },
+    "ryukyu_corridor": {
+      "n_chronology_scenarios": 94,
+      "rank1_fraction": 0.22340425531914893,
+      "rank1_count": 21,
+      "mean_rank": 2.723404255319149,
+      "median_rank": 3.0,
+      "rank_quantiles": {"min": 1.0, "q05": 1.0, "median": 3.0, "q95": 4.0, "max": 4.0},
+      "cosine_quantiles": {"min": -0.9160140226511174, "q05": -0.8594886593545632, "median": -0.08395431108524735, "q95": 0.6407792925977046, "max": 0.8854291235903259}
+    },
+    "southern_japan": {
+      "n_chronology_scenarios": 94,
+      "rank1_fraction": 0.5106382978723404,
+      "rank1_count": 48,
+      "mean_rank": 2.021276595744681,
+      "median_rank": 1.0,
+      "rank_quantiles": {"min": 1.0, "q05": 1.0, "median": 1.0, "q95": 4.0, "max": 4.0},
+      "cosine_quantiles": {"min": -0.8056694228312806, "q05": -0.6946230287594598, "median": 0.05417341856401893, "q95": 0.6427885142679864, "max": 0.8925726551710511}
+    },
+    "east_asia_core_corridor": {
+      "n_chronology_scenarios": 94,
+      "rank1_fraction": 0.10638297872340426,
+      "rank1_count": 10,
+      "mean_rank": 2.5,
+      "median_rank": 2.0,
+      "rank_quantiles": {"min": 1.0, "q05": 1.0, "median": 2.0, "q95": 4.0, "max": 4.0},
+      "cosine_quantiles": {"min": -0.8716459377691859, "q05": -0.8102879949417746, "median": -0.07805897349938386, "q95": 0.5775212057833247, "max": 0.8764719672798298}
+    }
+  },
+  "pairwise_ordering": {
+    "taiwan_minus_ryukyu_corridor": {
+      "region_a": "taiwan", "region_b": "ryukyu_corridor", "n_chronology_scenarios": 94,
+      "fraction_a_gt_b": 0.46808510638297873, "count_a_gt_b": 44,
+      "fraction_a_eq_b": 0.0, "count_a_eq_b": 0,
+      "fraction_a_lt_b": 0.5319148936170213, "count_a_lt_b": 50,
+      "difference_quantiles": {"min": -0.34074145883482526, "q05": -0.21473379858374408, "median": -0.005110115026587619, "q95": 0.21707695565241864, "max": 0.40187439715525636}
+    },
+    "taiwan_minus_southern_japan": {
+      "region_a": "taiwan", "region_b": "southern_japan", "n_chronology_scenarios": 94,
+      "fraction_a_gt_b": 0.35106382978723405, "count_a_gt_b": 33,
+      "fraction_a_eq_b": 0.0, "count_a_eq_b": 0,
+      "fraction_a_lt_b": 0.648936170212766, "count_a_lt_b": 61,
+      "difference_quantiles": {"min": -1.546682675761936, "q05": -1.0542902897841924, "median": -0.15020182821637143, "q95": 0.8378668965022342, "max": 1.4128752770109168}
+    },
+    "taiwan_minus_east_asia_core_corridor": {
+      "region_a": "taiwan", "region_b": "east_asia_core_corridor", "n_chronology_scenarios": 94,
+      "fraction_a_gt_b": 0.425531914893617, "count_a_gt_b": 40,
+      "fraction_a_eq_b": 0.0, "count_a_eq_b": 0,
+      "fraction_a_lt_b": 0.574468085106383, "count_a_lt_b": 54,
+      "difference_quantiles": {"min": -0.8806800266555094, "q05": -0.6014712152049025, "median": -0.049375698346010855, "q95": 0.5110373339036437, "max": 0.9760138818738604}
+    },
+    "ryukyu_corridor_minus_southern_japan": {
+      "region_a": "ryukyu_corridor", "region_b": "southern_japan", "n_chronology_scenarios": 94,
+      "fraction_a_gt_b": 0.35106382978723405, "count_a_gt_b": 33,
+      "fraction_a_eq_b": 0.0, "count_a_eq_b": 0,
+      "fraction_a_lt_b": 0.648936170212766, "count_a_lt_b": 61,
+      "difference_quantiles": {"min": -1.3996368893747544, "q05": -0.9836880704569445, "median": -0.19897416813351673, "q95": 0.9254650093285491, "max": 1.5959174907462563}
+    },
+    "ryukyu_corridor_minus_east_asia_core_corridor": {
+      "region_a": "ryukyu_corridor", "region_b": "east_asia_core_corridor", "n_chronology_scenarios": 94,
+      "fraction_a_gt_b": 0.39361702127659576, "count_a_gt_b": 37,
+      "fraction_a_eq_b": 0.0, "count_a_eq_b": 0,
+      "fraction_a_lt_b": 0.6063829787234043, "count_a_lt_b": 57,
+      "difference_quantiles": {"min": -0.9020713823311419, "q05": -0.5130125436405276, "median": -0.066156071223029, "q95": 0.5904831275913454, "max": 1.1590560956092}
+    },
+    "southern_japan_minus_east_asia_core_corridor": {
+      "region_a": "southern_japan", "region_b": "east_asia_core_corridor", "n_chronology_scenarios": 94,
+      "fraction_a_gt_b": 0.6808510638297872, "count_a_gt_b": 64,
+      "fraction_a_eq_b": 0.0, "count_a_eq_b": 0,
+      "fraction_a_lt_b": 0.3191489361702128, "count_a_lt_b": 30,
+      "difference_quantiles": {"min": -0.5184043237849172, "q05": -0.41307474383131004, "median": 0.0726248732736002, "q95": 0.7750440710098532, "max": 1.4214771962076664}
+    }
+  },
+  "pairwise_win_fraction_matrix": {
+    "taiwan": {"ryukyu_corridor": 0.46808510638297873, "southern_japan": 0.35106382978723405, "east_asia_core_corridor": 0.425531914893617},
+    "ryukyu_corridor": {"taiwan": 0.5319148936170213, "southern_japan": 0.35106382978723405, "east_asia_core_corridor": 0.39361702127659576},
+    "southern_japan": {"taiwan": 0.648936170212766, "ryukyu_corridor": 0.648936170212766, "east_asia_core_corridor": 0.6808510638297872},
+    "east_asia_core_corridor": {"taiwan": 0.574468085106383, "ryukyu_corridor": 0.6063829787234043, "southern_japan": 0.3191489361702128}
+  },
+  "frozen_origin_trajectory_classification": "origin_trajectory_unresolved_under_public_chronology_and_paleolocation_uncertainty",
+  "interpretation": "Southern Japan is the descriptive leading region inside the deterministic chronology x paleolocation envelope, but it does not meet the preregistered 75% scenario-dominance rule. The result exposes relative ordering only and does not alter the frozen unresolved origin-trajectory classification.",
+  "claim_boundary": [
+    "Rank frequencies are fractions of a deterministic sensitivity grid, not posterior probabilities of ancestral area.",
+    "A higher regional rank does not identify the true ancestral location or transition-time environment.",
+    "This analysis does not change the frozen origin-trajectory classification; it only exposes ordering within its uncertainty envelope.",
+    "Regions differ in spatial extent and cell count, so rankings describe the declared regional summaries rather than area-normalized ancestral probabilities."
+  ]
+}
