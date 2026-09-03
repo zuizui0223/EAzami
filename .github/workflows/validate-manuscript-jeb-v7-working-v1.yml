@@ -9,6 +9,8 @@ on:
       - "data/evidence/chapter2_historical_differentiation_final_summary_v1.json"
       - "data/evidence/chapter2_orientation_environment_scale_partition_v1.json"
       - "data/evidence/chapter2_orientation_origin_region_ranking_result_v1.json"
+      - "data/evidence/chapter2_depth_ordering_robustness_result_v1.json"
+      - "data/evidence/chapter2_depth_coverage_matched_sensitivity_result_v1.json"
       - ".github/workflows/validate-manuscript-jeb-v7-working-v1.yml"
   workflow_dispatch:
 
