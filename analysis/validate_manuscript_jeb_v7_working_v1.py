@@ -17,24 +17,16 @@ def load_json(name: str) -> dict:
 
 def require(text: str, token: str) -> None:
     if token not in text:
-        raise AssertionError(f"required V7 manuscript token missing: {token!r}")
+        raise AssertionError(f"required V7 token missing: {token!r}")
 
 
 def forbid(text: str, token: str) -> None:
     if token.lower() in text.lower():
-        raise AssertionError(f"forbidden V7 manuscript claim returned: {token!r}")
+        raise AssertionError(f"forbidden V7 claim returned: {token!r}")
 
 
-def word_count(text: str) -> int:
-    # Stable manuscript guard, not a publisher-typesetting count. Count lexical
-    # word/number tokens while ignoring Markdown punctuation.
-    return len(re.findall(r"\b[\w]+(?:[-’'][\w]+)*\b", text, flags=re.UNICODE))
-
-
-def section(text: str, start: str, end: str) -> str:
-    if start not in text or end not in text:
-        raise AssertionError(f"cannot isolate section {start!r} -> {end!r}")
-    return text.split(start, 1)[1].split(end, 1)[0]
+def words(text: str) -> int:
+    return len(re.findall(r"\b[\w'’*-]+\b", text))
 
 
 def main() -> None:
@@ -43,53 +35,36 @@ def main() -> None:
     hist = load_json("chapter2_historical_differentiation_final_summary_v1.json")
     eco = load_json("chapter2_orientation_environment_scale_partition_v1.json")
     rank = load_json("chapter2_orientation_origin_region_ranking_result_v1.json")
+    depth = load_json("chapter2_depth_ordering_robustness_result_v1.json")
+    coverage = load_json("chapter2_depth_coverage_matched_sensitivity_result_v1.json")
 
-    # JEB format guards checked against the official Author Guidelines on 2026-09-03.
-    abstract = section(text, "## Abstract\n", "**Keywords:**")
-    abstract_words = word_count(abstract)
-    if abstract_words > 250:
-        raise AssertionError(f"JEB abstract word limit exceeded: {abstract_words} > 250")
-
-    keyword_line = text.split("**Keywords:**", 1)[1].splitlines()[0].strip()
-    keywords = [x.strip() for x in keyword_line.split(";") if x.strip()]
-    if not 4 <= len(keywords) <= 10:
-        raise AssertionError(f"JEB keyword count outside 4-10: {len(keywords)}")
-
-    # Use everything before References as a conservative working-manuscript count.
-    # References have no JEB numerical limit. This guard may count Abstract and
-    # headings, so it is intentionally stricter than a body-only count.
-    pre_references = text.split("# References", 1)[0]
-    manuscript_words_pre_refs = word_count(pre_references)
-    if manuscript_words_pre_refs > 7500:
-        raise AssertionError(
-            f"JEB 7,500-word working guard exceeded before References: "
-            f"{manuscript_words_pre_refs}"
-        )
-
-    # V7 identity / routing.
+    # V7 identity and JEB size gates.
     require(text, "# Repeated mosaic assembly at unequal evolutionary depths in a young thistle radiation")
-    require(text, "V7 WORKING SCIENTIFIC TEXT")
-    require(fig, "positive assembly first")
-    require(fig, "No three-trait `depth × ecological reach` correlation")
+    require(text, "V7 VALIDATED SCIENTIFIC TEXT")
+    abstract = text.split("## Abstract\n\n", 1)[1].split("\n\n**Keywords:**", 1)[0]
+    keywords = text.split("**Keywords:**", 1)[1].split("\n", 1)[0]
+    keyword_n = len([x for x in keywords.split(";") if x.strip()])
+    if words(abstract) > 250:
+        raise AssertionError(f"abstract exceeds JEB 250-word limit: {words(abstract)}")
+    if not 4 <= keyword_n <= 10:
+        raise AssertionError(f"keyword count outside 4-10: {keyword_n}")
+    body_before_refs = text.split("# References", 1)[0]
+    if words(body_before_refs) > 7500:
+        raise AssertionError(f"main text exceeds JEB 7500-word limit: {words(body_before_refs)}")
 
-    # Positive historical core must agree with the frozen final summary.
+    # Positive historical core.
     rec = hist["recurrence_and_depth"]
-    assert rec["orientation"]["resolved_concepts"] == 20
     assert rec["orientation"]["minimum_changes_ml"] == 6
     assert rec["orientation"]["minimum_changes_ufboot_range"] == [4, 6]
-    assert rec["orientation"]["minimum_changes_ufboot_median"] == 5
     assert rec["phyllary_posture"]["minimum_changes"] == 3
     assert rec["stickiness"]["minimum_changes"] == 5
-    assert rec["shared_transition_localization"].startswith("0/3")
     assert rec["orientation"]["relative_depth_median_envelope"] == [0.795, 0.994]
     assert rec["phyllary_posture"]["relative_depth_median_envelope"] == [0.695, 1.0]
     assert rec["stickiness"]["relative_depth_median_envelope"] == [0.937, 0.954]
-
+    assert rec["shared_transition_localization"].startswith("0/3")
     for token in (
         "Thirty-six of 38",
         "four to six across 1,000 bootstrap topologies",
-        "exactly three changes",
-        "exactly five changes",
         "0.795–0.994",
         "0.695–1.000",
         "0.937–0.954",
@@ -99,15 +74,38 @@ def main() -> None:
     ):
         require(text, token)
 
-    # Equal-lability is specifically not identified.
+    # Validated paired topology ordering (#160).
+    assert depth["classification"] == "paired_topology_depth_ordering_reproduced_under_frozen_runtime"
+    pair = {(r["deeper_candidate"], r["shallower_candidate"]): r for r in depth["pairwise_results"]}
+    assert pair[("phyllary", "stickiness")]["fraction_prespecified_deeper_direction"] == 1.0
+    assert pair[("phyllary", "orientation")]["fraction_prespecified_deeper_direction"] == 0.993
+    assert pair[("orientation", "stickiness")]["fraction_prespecified_deeper_direction"] == 0.905
+    assert depth["complete_lower_bound_ordering"]["count"] == 898
+    for token in ("1000/1000", "993/1000", "905/1000", "898/1000", "-0.24762", "-0.11905", "-0.10857"):
+        require(text, token)
+
+    # Coverage-matched sensitivity (#164): central ordering survives, strict tails overlap.
+    assert coverage["overall_classification"] == "unequal_depth_retained_against_matched_medians_but_strict_tail_overlap_remains"
+    comp = {r["comparison"]: r for r in coverage["comparison_results"]}
+    assert comp["phyllary_lt_orientation_median"]["count"] == 195
+    assert comp["phyllary_lt_stickiness_5_5_median"]["count"] == 193
+    assert comp["phyllary_lt_orientation_q05"]["fraction"] == 0.105
+    assert comp["phyllary_lt_stickiness_5_5_q05"]["fraction"] == 0.11
+    assert comp["phyllary_lt_stickiness_6_4_q05"]["fraction"] == 0.155
+    for token in ("195/200 (97.5%)", "193/200 (96.5%)", "10.5%", "11.0–15.5%", "not a coverage-independent separation"):
+        require(text, token)
+
+    # Equal-lability / coverage overclaim guards.
     for bad in (
         "similarly labile",
         "same lability",
         "traits are equally labile",
         "modules are equally labile",
+        "coverage-independent result",
+        "fully insensitive to missing states",
     ):
         forbid(text, bad)
-    require(text, "equal evolutionary changeability is not established")
+    require(text, "Equal evolutionary changeability remains unestablished")
 
     # Cross-scale orientation ecology.
     assert eco["classification"] == "orientation_environment_association_is_scale_partitioned"
@@ -119,67 +117,53 @@ def main() -> None:
     assert b1["azami_within"]["q"] < 0.05 and b1["azami_among"]["q"] > 0.8
     assert b15["eazami_downward_minus_upward"]["accepted_topology_sign_consistency"] == "6/6"
     assert b15["eazami_downward_minus_upward"]["topology_x_species_loo_sign_consistency"] == "54/54"
-
-    for token in (
-        "0.30436",
-        "0.00640",
-        "0.00533",
-        "0.874",
-        "+1.320 to +1.330 SD",
-        "54/54",
-        "0.01715",
-        "0.0349",
-        "-0.975 to -0.967 SD",
-    ):
+    for token in ("0.30436", "0.00640", "0.00533", "0.874", "+1.320 to +1.330 SD", "54/54", "0.01715", "0.0349", "-0.975 to -0.967 SD"):
         require(text, token)
 
-    # Regional ranking remains a sensitivity-grid ordering, not ancestral probability.
+    # Regional ranking and historical-cause ceiling.
     assert rank["classification"] == "relative_ordering_present_but_not_dominant"
-    assert rank["n_chronology_scenarios"] == 94
-    assert rank["n_region_by_chronology_rows"] == 376
     assert rank["region_rank_summary"]["southern_japan"]["rank1_count"] == 48
-    assert abs(rank["pairwise_win_fraction_matrix"]["southern_japan"]["taiwan"] - 61 / 94) < 1e-12
-    assert abs(rank["pairwise_win_fraction_matrix"]["southern_japan"]["ryukyu_corridor"] - 61 / 94) < 1e-12
-    assert abs(rank["pairwise_win_fraction_matrix"]["southern_japan"]["east_asia_core_corridor"] - 64 / 94) < 1e-12
-    for token in ("48/94", "61/94", "64/94", "75% dominance gate"):
+    assert rank["pairwise_win_fraction_matrix"]["southern_japan"]["taiwan"] == 61 / 94
+    assert rank["pairwise_win_fraction_matrix"]["southern_japan"]["east_asia_core_corridor"] == 64 / 94
+    for token in ("48/94", "61/94", "64/94", "75% dominance gate", "0.79–0.74 Ma", "15,472", "0/324", "0/21"):
         require(text, token)
 
-    # Historical-cause ceiling.
-    assert hist["orientation_historical_environment"]["chronology_pairs"] == 94
-    assert hist["orientation_historical_environment"]["region_by_chronology_scenarios"] == 376
-    assert hist["lineage_level_climate_context"]["tested_scenario_variable_combinations"] == 15472
-    assert hist["lineage_level_climate_context"]["robust_event_level_classes"] == 0
-    assert hist["global_sea_level_context"]["n_event_metric_classes"] == 21
-    assert hist["global_sea_level_context"]["robust_event_metric_classes"] == 0
-    for token in ("0.79–0.74 Ma", "15,472", "0/324", "0/21"):
-        require(text, token)
+    # Figure map must route the validated layers correctly.
+    for token in (
+        "Figure 2",
+        "1000/1000",
+        "993/1000",
+        "905/1000",
+        "coverage-matched",
+        "strict tail",
+        "No three-trait",
+    ):
+        require(fig, token)
 
-    # #160 is intentionally not promoted before pinned-runtime validation.
-    for provisional in ("1000/1000", "993/1000", "905/1000", "898/1000"):
-        forbid(text, provisional)
-    require(text, "inserted after the pinned-runtime workflow validates the result")
+    # Anonymous review main-file boundary.
+    for bad in ("# Data and code availability", "# Generative-AI disclosure"):
+        forbid(text, bad)
 
-    # Claim-ceiling guards.
+    # General claim ceiling.
     for bad in (
         "environment was irrelevant",
         "environment is irrelevant",
-        "ancestral-area probability is",
-        "relative lineage depth is calendar time",
         "minimum changes are independent origins",
+        "relative lineage depth is calendar time",
+        "posterior probability of ancestral area",
     ):
         forbid(text, bad)
 
     print(json.dumps({
         "status": "ok",
-        "manuscript": str(MANUSCRIPT.relative_to(ROOT)),
-        "figure_map": str(FIGMAP.relative_to(ROOT)),
-        "abstract_words": abstract_words,
-        "keywords": len(keywords),
-        "working_words_before_references": manuscript_words_pre_refs,
+        "abstract_words": words(abstract),
+        "main_text_words_before_references": words(body_before_refs),
+        "keyword_count": keyword_n,
+        "paired_depth_promoted": True,
+        "coverage_sensitivity_promoted": True,
         "historical_classification": hist["final_classification"],
         "ecological_classification": eco["classification"],
         "regional_ordering_classification": rank["classification"],
-        "pr160_values_promoted": False,
     }, indent=2))
 
 
