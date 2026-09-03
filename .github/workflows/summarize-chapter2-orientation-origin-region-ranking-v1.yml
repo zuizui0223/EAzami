@@ -1,0 +1,67 @@
+name: Summarize Chapter 2 orientation origin region ranking v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/chapter2_orientation_origin_envelope_result_v1.json"
+      - "data/evidence/chapter2_orientation_origin_region_ranking_contract_v1.json"
+      - "analysis/summarize_chapter2_orientation_origin_region_ranking_v1.py"
+      - ".github/workflows/summarize-chapter2-orientation-origin-region-ranking-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  summarize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas
+          python -m py_compile analysis/summarize_chapter2_orientation_origin_region_ranking_v1.py
+      - name: Summarize paired regional ranking
+        run: |
+          mkdir -p /tmp/result
+          python analysis/summarize_chapter2_orientation_origin_region_ranking_v1.py \
+            --origin data/evidence/chapter2_orientation_origin_envelope_result_v1.json \
+            --contract data/evidence/chapter2_orientation_origin_region_ranking_contract_v1.json \
+            --out-dir /tmp/result \
+            | tee /tmp/result/run.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/result')
+          x=json.loads((root/'chapter2_orientation_origin_region_ranking_result_v1.json').read_text())
+          assert x['n_chronology_scenarios']==94
+          assert x['n_region_by_chronology_rows']==376
+          assert x['frozen_origin_trajectory_classification']=='origin_trajectory_unresolved_under_public_chronology_and_paleolocation_uncertainty'
+          assert x['classification'] in {
+              'scenario_dominant_region',
+              'relative_ordering_present_but_not_dominant',
+              'no_stable_regional_ordering',
+          }
+          print(json.dumps({
+              'classification':x['classification'],
+              'leading_region_descriptive':x['leading_region_descriptive'],
+              'rank1':{k:v['rank1_fraction'] for k,v in x['region_rank_summary'].items()},
+              'southern_japan_pairwise':x['pairwise_win_fraction_matrix']['southern_japan'],
+          }, indent=2))
+          PY
+      - name: Upload region-ranking results
+        uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-orientation-origin-region-ranking-${{ github.run_id }}
+          path: |
+            /tmp/result/chapter2_orientation_origin_region_ranking_result_v1.json
+            /tmp/result/chapter2_orientation_origin_region_scenario_ranks_v1.csv
+            /tmp/result/chapter2_orientation_origin_region_pairwise_differences_v1.csv
+            /tmp/result/run.log
+          if-no-files-found: error
+          retention-days: 90
