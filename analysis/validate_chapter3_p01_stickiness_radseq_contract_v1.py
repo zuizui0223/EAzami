@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import csv
 import json
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "data/evidence/chapter3_p01_stickiness_radseq_contract_v1.json"
 SCHEMA = ROOT / "data/evidence/chapter3_p01_same_individual_schema_v1.csv"
+MANIFEST = ROOT / "data/templates/chapter3_p01_recommended_sample_manifest_v1.csv"
+DECISIONS = ROOT / "data/evidence/chapter3_p01_decision_matrix_v1.csv"
 PLAN = ROOT / "docs/chapter3/CHAPTER3_P01_STICKINESS_RADSEQ_EXECUTION_V1.md"
 
 
@@ -45,6 +48,28 @@ def main() -> None:
     contract_fields = set(c["same_individual_required_fields"])
     assert contract_fields.issubset(required_fields), contract_fields - required_fields
     assert {"individual_id", "stickiness_state", "rad_tissue_id", "voucher_id", "cytotype_status"}.issubset(required_fields)
+
+    with MANIFEST.open(encoding="utf-8", newline="") as fh:
+        manifest = list(csv.DictReader(fh))
+    assert len(manifest) == 48
+    counts = Counter(r["taxon_concept"] for r in manifest)
+    assert counts == {"JPN06": 24, "JPN15": 24}
+    core = Counter(r["taxon_concept"] for r in manifest if r["minimum_core"] == "yes")
+    assert core == {"JPN06": 16, "JPN15": 16}
+    pop_counts = Counter((r["taxon_concept"], r["population_slot"]) for r in manifest)
+    for taxon in ("JPN06", "JPN15"):
+        assert [pop_counts[(taxon, p)] for p in ("P1", "P2", "P3")] == [8, 8, 8]
+    assert len({r["planned_slot"] for r in manifest}) == 48
+    assert all(r["authorization_status"] == "required" for r in manifest)
+
+    with DECISIONS.open(encoding="utf-8", newline="") as fh:
+        decisions = list(csv.DictReader(fh))
+    assert [r["gate_id"] for r in decisions] == [f"G{i:02d}" for i in range(1, 12)]
+    by_id = {r["gate_id"]: r for r in decisions}
+    assert by_id["G08"]["chapter2_effect"] == "revise"
+    assert by_id["G09"]["chapter2_effect"] == "revise"
+    assert by_id["G10"]["chapter2_effect"] == "revise"
+    assert "neutralization" in by_id["G11"]["next_action"]
 
     text = PLAN.read_text(encoding="utf-8")
     for phrase in (
