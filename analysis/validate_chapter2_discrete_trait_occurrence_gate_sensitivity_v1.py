@@ -48,16 +48,28 @@ def main() -> None:
     assert spatial["stickiness"]["state_counts"] == {"nonsticky": 6, "sticky": 6}
     assert x["classification"]["overall"] == "coverage_threshold_and_targeted_panel_composition_jointly_limit_ecological_evaluability"
 
+    # The proposed depth x ecological-reach tradeoff cannot be converted into a
+    # three-trait quantitative result when two trait-specific ecological reaches
+    # are not identified.
+    testability = x["depth_ecological_reach_hypothesis_testability"]
+    assert testability["trait_status"]["orientation"]["usable_for_cross_trait_tradeoff"] is True
+    assert testability["trait_status"]["phyllary"]["usable_for_cross_trait_tradeoff"] is False
+    assert testability["trait_status"]["stickiness"]["usable_for_cross_trait_tradeoff"] is False
+    assert testability["classification"] == "three_trait_depth_vs_ecological_reach_tradeoff_not_identifiable_from_current_public_panel"
+    assert "do not plot" in testability["figure_rule"].lower()
+
     # This is an auxiliary resolution audit, not a reopening of V7 environmental fishing.
     boundary = " ".join(x["claim_boundary"]).lower()
     for forbidden in ("adaptation", "selection", "historical causation", "trait effect"):
         assert forbidden in boundary
+    assert "not identified" in boundary
 
     print(json.dumps({
         "status": "ok",
         "phyllary": x["classification"]["phyllary"],
         "stickiness": x["classification"]["stickiness"],
         "overall": x["classification"]["overall"],
+        "depth_ecological_reach": testability["classification"],
     }, indent=2))
 
 
