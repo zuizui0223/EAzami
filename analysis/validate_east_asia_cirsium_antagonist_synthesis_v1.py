@@ -15,11 +15,14 @@ def main() -> int:
 
     with args.context.open(encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
-    if len(rows) != 2:
-        raise ValueError(f"expected two East-Asian evidence rows, found {len(rows)}")
+    if len(rows) != 3:
+        raise ValueError(f"expected three East-Asian evidence rows, found {len(rows)}")
     by_id = {r["evidence_id"]: r for r in rows}
-    if set(by_id) != {"EAA001", "EAA002"}:
+    if set(by_id) != {"EAA001", "EAA002", "EAA003"}:
         raise ValueError(f"unexpected evidence IDs: {sorted(by_id)}")
+    assert by_id["EAA003"]["year"] == "2026"
+    assert "75-85%" in by_id["EAA003"]["quantitative_result"]
+    assert "not antagonist exclusion" in by_id["EAA003"]["transport_boundary"].lower() or "not antagonist exclusion" in by_id["EAA003"]["design"].lower() or "not antagonist exclusion" in (by_id["EAA003"]["transport_boundary"] + by_id["EAA003"]["design"]).lower()
 
     synthesis = json.loads(args.synthesis.read_text(encoding="utf-8"))
     focal = synthesis["direct_east_asia_findings"]["focal_taxon_antagonist_channel"]
@@ -42,11 +45,18 @@ def main() -> int:
     assert display["nikko_predator_number_vs_seed_damage_r2"] == 0.48
     assert display["nikko_saturating_floret_vs_seed_damage_r2"] == 0.44
 
+    recruitment = synthesis["direct_east_asia_findings"]["mt_fuji_recruitment_context"]
+    assert recruitment["taxon"] == "Cirsium purpuratum"
+    assert recruitment["high_herbivory_nonanthropogenic_area_percent_november"] == [75, 85]
+    assert "almost none" in recruitment["recruitment_pattern"].lower()
+    assert "not a randomized" in recruitment["claim_boundary"].lower()
+
     anchor = synthesis["existing_experimental_magnitude_anchor"]
     assert anchor["pooled_reduced_vs_ambient_herbivory_seed_output_RR"] == 2.674
     assert anchor["ci95"] == [2.388, 2.993]
     assert anchor["transport_status"] == "magnitude_not_transportable_to_east_asia_as_measured_effect"
-    assert synthesis["classification"] == "east_asian_antagonist_pathway_and_regime_supported_effect_magnitude_not_transferred"
+    assert synthesis["classification"] == "east_asian_antagonist_pathway_regime_and_downstream_context_supported_effect_magnitude_not_transferred"
+    assert synthesis["search_update_2026_09_03"]["east_asian_antagonist_reduction_seed_fitness_experiment_recovered"] is False
 
     print(json.dumps({
         "classification": synthesis["classification"],
@@ -54,6 +64,7 @@ def main() -> int:
         "focal_positive_samples": f"{focal['positive_samples']}/{focal['effective_samples']}",
         "japanese_cirsium_taxa": regime["cirsium_taxa"],
         "purpuratum_heads_infested_percent": display["nikko_heads_infested_percent"],
+        "mt_fuji_high_herbivory_percent": recruitment["high_herbivory_nonanthropogenic_area_percent_november"],
         "experimental_RR_anchor": anchor["pooled_reduced_vs_ambient_herbivory_seed_output_RR"],
         "transport_status": anchor["transport_status"],
     }, indent=2))
