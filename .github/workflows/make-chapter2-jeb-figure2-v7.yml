@@ -1,0 +1,41 @@
+name: Make Chapter 2 JEB Figure 2 V7
+
+on:
+  pull_request:
+    paths:
+      - "analysis/make_chapter2_jeb_figure2_v7.py"
+      - "data/evidence/chapter2_jeb_v7_figure2_contract_v1.json"
+      - "data/evidence/chapter2_historical_differentiation_final_summary_v1.json"
+      - "data/evidence/chapter2_depth_ordering_robustness_result_v1.json"
+      - "data/evidence/chapter2_depth_coverage_matched_sensitivity_result_v1.json"
+      - ".github/workflows/make-chapter2-jeb-figure2-v7.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  make:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install plotting runtime
+        run: python -m pip install --disable-pip-version-check matplotlib numpy
+      - name: Compile generator
+        run: python -m py_compile analysis/make_chapter2_jeb_figure2_v7.py
+      - name: Generate validated Figure 2
+        run: python analysis/make_chapter2_jeb_figure2_v7.py --output-dir .tmp/figure2_v7
+      - name: Verify outputs
+        run: |
+          test -s .tmp/figure2_v7/figure2_v7_mosaic_depth.png
+          test -s .tmp/figure2_v7/figure2_v7_mosaic_depth.pdf
+          test -s .tmp/figure2_v7/figure2_v7_manifest.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-jeb-v7-figure2
+          path: .tmp/figure2_v7/
+          if-no-files-found: error
+          retention-days: 90
