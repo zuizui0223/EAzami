@@ -1,0 +1,76 @@
+name: Run Chapter 2 depth ordering robustness v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_chapter2_depth_ordering_robustness_v1.py"
+      - "data/evidence/chapter2_depth_ordering_robustness_contract_v1.json"
+      - ".github/workflows/run-chapter2-depth-ordering-robustness-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: chapter2-depth-ordering-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  TREE_RUN_ID: "32923076873"
+  TREE_ARTIFACT: "japan38-comp1061-frozen-tree-retry-32923076873"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen topology runtime
+        run: python -m pip install --disable-pip-version-check biopython==1.85
+      - name: Compile follow-up analysis
+        run: python -m py_compile analysis/run_chapter2_depth_ordering_robustness_v1.py
+      - name: Download frozen accepted Japan38 tree ensemble
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.TREE_ARTIFACT }}
+          path: frozen_current
+          run-id: ${{ env.TREE_RUN_ID }}
+          github-token: ${{ github.token }}
+      - name: Run paired topology robustness analysis
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/chapter2-depth-ordering
+          python analysis/run_chapter2_depth_ordering_robustness_v1.py \
+            --followup-contract data/evidence/chapter2_depth_ordering_robustness_contract_v1.json \
+            --source-contract data/evidence/chapter2_relative_event_depth_contract_v1.json \
+            --tree frozen_current/tree_result/japan38_comp1061.treefile \
+            --bootstrap-trees frozen_current/tree_result/japan38_comp1061.ufboot \
+            --concept-map data/evidence/japan38_comp1061_concept_map_v1.csv \
+            --base-trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --trait-extension data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv \
+            --output-json .tmp/chapter2-depth-ordering/result.json \
+            --output-csv .tmp/chapter2-depth-ordering/topology_rows.csv
+      - name: Validate result shape
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('.tmp/chapter2-depth-ordering/result.json')
+          x=json.loads(p.read_text())
+          assert x['version']=='chapter2_depth_ordering_robustness_result_v1'
+          assert x['input_verification']['bootstrap_replicates']==1000
+          assert len(x['pairwise_results'])==3
+          for row in x['pairwise_results']:
+              assert row['direction_class'] in {'robust','stable','mixed'}
+          print(json.dumps(x, indent=2))
+          PY
+      - name: Upload frozen follow-up outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-depth-ordering-robustness-v1
+          path: .tmp/chapter2-depth-ordering/
+          if-no-files-found: error
