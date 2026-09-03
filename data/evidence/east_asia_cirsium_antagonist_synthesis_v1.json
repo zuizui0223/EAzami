@@ -1,0 +1,63 @@
+{
+  "contract_version": "east_asia_cirsium_antagonist_synthesis_v1",
+  "status_date": "2026-09-03",
+  "question": "Does direct East-Asian Cirsium evidence support transporting the existence and context dependence of a flower-head antagonist pathway, while keeping the North-American experimental seed-loss magnitude separate?",
+  "source_table": "data/evidence/east_asia_cirsium_antagonist_context_v1.csv",
+  "direct_east_asia_findings": {
+    "focal_taxon_antagonist_channel": {
+      "taxon": "Cirsium brevicaule",
+      "flower_heads": 837,
+      "effective_samples": 3,
+      "positive_samples": 3,
+      "antagonist": "Larinus latissimus",
+      "mean_attack_rate": 26.1,
+      "attack_rate_definition": "emerged insects / collected flower heads x 100",
+      "classification": "direct_focal_taxon_antagonist_exposure_supported"
+    },
+    "japan_regime_structure": {
+      "cirsium_taxa": 35,
+      "study_sites_all_cardueae": 163,
+      "core_flower_head_insects_on_cirsium": 6,
+      "phenology_partition": "Larinus latissimus associated with the two spring-blooming Cirsium (C. japonicum and C. brevicaule), whereas L. meleagris primarily used autumn-blooming hosts in central Honshu.",
+      "geographic_partition": "Urophora sachalinensis occurred mainly on the Pacific side and Xyphosia punctigera mainly on the Japan Sea side of central Honshu; simultaneous occurrence was rare.",
+      "classification": "antagonist_regime_is_phenology_and_geography_structured"
+    },
+    "japan_display_cost": {
+      "taxon": "Cirsium purpuratum",
+      "populations": 2,
+      "pattern": "predispersal seed predation increased with flower/head production at both populations",
+      "nikko_heads_infested_percent": 90.8,
+      "nikko_seed_predation_probability_percent": 25.3,
+      "nikko_seed_damage_range_percent": [7.9, 51.5],
+      "nikko_predator_number_vs_seed_damage_r2": 0.48,
+      "nikko_predator_number_vs_seed_damage_p": 0.001,
+      "nikko_saturating_floret_vs_seed_damage_r2": 0.44,
+      "nikko_saturating_floret_vs_seed_damage_p": 0.013,
+      "classification": "direct_japanese_display_antagonist_tradeoff_supported_observationally"
+    }
+  },
+  "existing_experimental_magnitude_anchor": {
+    "pooled_reduced_vs_ambient_herbivory_seed_output_RR": 2.674,
+    "ci95": [2.388, 2.993],
+    "equivalent_ambient_loss_percent": 62.6,
+    "I2_percent_approx": 1.02,
+    "transport_status": "magnitude_not_transportable_to_east_asia_as_measured_effect",
+    "allowed_use": "pathway-level fitness magnitude anchor showing that Cirsium reproductive herbivory can be large in experimentally studied systems"
+  },
+  "classification": "east_asian_antagonist_pathway_and_regime_supported_effect_magnitude_not_transferred",
+  "inference": {
+    "allowed": [
+      "Flower-head antagonist exposure is directly documented in Japanese Cirsium and in the focal Ryukyu taxon C. brevicaule.",
+      "Japanese antagonist assemblages are structured by host flowering season and geography rather than behaving as one spatially uniform pressure.",
+      "In Japanese C. purpuratum, greater flower production can increase predispersal seed-predator exposure and offset reproductive gains.",
+      "These findings strengthen ecological-gate and selection-mosaic hypotheses relative to a single monotonic abiotic-scaling model."
+    ],
+    "not_allowed": [
+      "RR=2.674 is the effect size in East Asian Cirsium.",
+      "The C. brevicaule attack rate of 26.1 is a 26.1% seed-fitness loss.",
+      "Antagonists caused the evolution of white colour, orientation, phyllary posture or stickiness.",
+      "Phenology/geography structure identifies disturbance as the causal driver."
+    ]
+  },
+  "decisive_remaining_gap": "A focal East-Asian manipulation that reduces flower-head antagonists and measures viable seed/recruitment on ancestry-matched populations; for colour/display questions, the same populations must also quantify pollination assurance and phenotype-specific antagonist exposure."
+}
