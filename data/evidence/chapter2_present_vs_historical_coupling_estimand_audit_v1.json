@@ -1,0 +1,28 @@
+{
+  "contract_version": "chapter2_present_vs_historical_coupling_estimand_audit_v1",
+  "status_date": "2026-09-03",
+  "source_integrated_evidence": "data/evidence/chapter2_final_integrated_evidence_v3.json",
+  "question": "Can rho=0.3663 and 0/3 robust shared-transition localization be treated as a direct contrast between present phenotypic integration and historical coupling?",
+  "source_values": {
+    "present_cross_scale_association_matrix_spearman_rho": 0.3663,
+    "present_rho_estimand": "Spearman similarity between the 18-D within-taxon and among-taxon association matrices in the complete-case synthesis",
+    "historical_shared_transition_result": "0/3 discrete trait pairs pass the robust shared-transition-localization rule",
+    "historical_estimand": "pairwise similarity of reconstructed transition localization for orientation, phyllary posture and stickiness under the declared branch-aware/equal-branch robustness rule"
+  },
+  "estimand_comparability": "non_exchangeable",
+  "classification": "present_cross_scale_association_architecture_partial_historical_transition_synchrony_not_supported_but_direct_integration_contrast_not_identified",
+  "allowed_inference": [
+    "Present within-taxon and among-taxon association architectures are partially concordant rather than identical (rho=0.3663).",
+    "The three discrete historical trait pairs do not pass the robust shared-transition-localization rule.",
+    "Present ecological/association organization and historical transition synchrony are therefore empirically distinct layers and should not be treated as equivalent evidence.",
+    "The juxtaposition is compatible with partial present organization inside trait-specific historical assembly, but it is not a causal or developmental test."
+  ],
+  "not_allowed": [
+    "rho=0.3663 is a direct measure of present phenotypic trait covariance or a genetic/developmental integration coefficient.",
+    "Present phenotypic integration was generated without shared transition history.",
+    "0/3 proves complete historical independence among modules.",
+    "The mismatch identifies pleiotropy, developmental modularity, correlated selection or any causal mechanism."
+  ],
+  "manuscript_disposition": "supporting_interpretive_boundary_not_required_as_main_numeric_result",
+  "preferred_wording": "Present association architecture is partially concordant across biological scales, whereas the three discrete trait histories do not show robust shared transition localization; these are distinct estimands and do not constitute a direct test of present integration versus historical coupling."
+}
