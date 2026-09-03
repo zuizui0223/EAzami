@@ -1,0 +1,49 @@
+{
+  "version": "chapter2_depth_coverage_matched_sensitivity_result_v1",
+  "source_contract": "data/evidence/chapter2_depth_coverage_matched_sensitivity_contract_v1.json",
+  "analysis_role": "Post-result missing-state/coverage sensitivity for the already observed unequal relative-lineage-depth pattern. This is not an independent preregistered confirmation and does not estimate evolutionary rate.",
+  "input_verification": {
+    "tree_run_id": 32923076873,
+    "tree_artifact": "japan38-comp1061-frozen-tree-retry-32923076873",
+    "ml_tree_sha256": "ba592d3a9f52b5481314ab20e3202048505cdf72a3fc15134d5dca261b9d9b7e",
+    "ufboot_sha256": "32cb09118ed035b73e51df3faa0cc60d4ee0c77fcf53d3cf880d556c9bbfa786",
+    "concept_map_canonical_lf_sha256": "8eb2953ac1ee96587c2a60446eae2478e0925843f07e15fb2efbe5eb704914e3",
+    "base_trait_seed_canonical_lf_sha256": "f9e608af72076996a0e2ed925ecf35ccc0fc7834d5c1489507e378bcc3b0b4b5",
+    "authority_extension_canonical_lf_sha256": "3d091ea3a4d7084b1f31892cbd956f53637269617ca2c7d65e9edd0e319c1cba",
+    "python": "3.11",
+    "biopython": "1.85",
+    "selected_topologies": 200,
+    "orientation_masks": 256,
+    "stickiness_5_5_masks": 126,
+    "stickiness_6_4_masks": 105,
+    "workflow_run_id": 33733021985,
+    "workflow_artifact_id": 9885453882,
+    "workflow_artifact_sha256": "c3c5fb92e07d137b3d89ed9dbaa6befeeb65fc8bb5bb0b78682d9e3a387de276"
+  },
+  "source_state_counts": {
+    "orientation": {"D": 6, "U": 14},
+    "phyllary_resolved": 10,
+    "stickiness": {"nonsticky": 6, "sticky": 7}
+  },
+  "comparison_results": [
+    {"comparison": "phyllary_lt_orientation_median", "n_topologies": 200, "count": 195, "fraction": 0.975, "direction_class": "robust"},
+    {"comparison": "phyllary_lt_orientation_q05", "n_topologies": 200, "count": 21, "fraction": 0.105, "direction_class": "mixed"},
+    {"comparison": "phyllary_lt_stickiness_5_5_median", "n_topologies": 200, "count": 193, "fraction": 0.965, "direction_class": "robust"},
+    {"comparison": "phyllary_lt_stickiness_5_5_q05", "n_topologies": 200, "count": 22, "fraction": 0.11, "direction_class": "mixed"},
+    {"comparison": "phyllary_lt_stickiness_6_4_median", "n_topologies": 200, "count": 193, "fraction": 0.965, "direction_class": "robust"},
+    {"comparison": "phyllary_lt_stickiness_6_4_q05", "n_topologies": 200, "count": 31, "fraction": 0.155, "direction_class": "mixed"}
+  ],
+  "overall_classification": "unequal_depth_retained_against_matched_medians_but_strict_tail_overlap_remains",
+  "selected_topology_phyllary_lower_depth": {"n": 200, "min": 0.19047619047619047, "q05": 0.42857142857142855, "median": 0.6952380952380953, "q95": 0.6952380952380953, "max": 0.7047619047619048},
+  "selected_topology_matched_median_depths": {
+    "orientation": {"n": 200, "min": 0.6666666666666666, "q05": 0.8476190476190476, "median": 0.9047619047619048, "q95": 0.9523809523809522, "max": 0.9523809523809524},
+    "stickiness_5_5": {"n": 200, "min": 0.6535714285714286, "q05": 0.7392857142857143, "median": 0.7866666666666666, "q95": 0.8166666666666667, "max": 0.8285714285714285},
+    "stickiness_6_4": {"n": 200, "min": 0.6428571428571428, "q05": 0.8071428571428572, "median": 0.9047619047619048, "q95": 0.9142857142857143, "max": 0.9142857142857143}
+  },
+  "interpretation": "Matching observed-state coverage to n=10 preserves the central phyllary-deeper ordering against the matched median in 195/200 orientation topologies and 193/200 stickiness topologies, but phyllary is deeper than the matched q05 in only 10.5-15.5% of selected topologies. Reduced coverage alone therefore does not erase the central ordering, but strict tail overlap remains and the headline must not be described as coverage-independent.",
+  "claim_boundary": [
+    "Coverage matching tests sensitivity to missing observed states, not sampling bias in authority descriptions or taxonomic representativeness.",
+    "A coverage-robust central ordering does not establish equal lability, evolutionary rates, independent origins, adaptation, genetic modularity or a causal mechanism.",
+    "Bootstrap/topology fractions and mask quantiles are deterministic sensitivity summaries, not posterior probabilities or confidence levels."
+  ]
+}
