@@ -1,0 +1,69 @@
+{
+  "result_version": "chapter2_lineage_differentiation_environment_atlas_v1_summary",
+  "status_date": "2026-09-03",
+  "status": "completed_internal_exploratory_diagnostic",
+  "provenance": {
+    "workflow": "Run Chapter 2 lineage differentiation environment atlas v1",
+    "run_id": 33704837646,
+    "artifact_id": 9874890222,
+    "artifact_sha256": "a9ded89c5da641fd3aac19b5c352b6672bde829cbe912721131c714245750e62",
+    "head_sha": "0306dd765baa5b97f5df8013d9eb8c4135ef8057"
+  },
+  "analysis_scope": "lineage-diversification context only; not a capitulum-trait transition test",
+  "inputs": {
+    "paleoclimate_source": "PALEO-PGEM-Series v1 public mean fields",
+    "n_bioclim_variables": 17,
+    "bioclim_variables": ["BIO1", "BIO4", "BIO5", "BIO6", "BIO7", "BIO8", "BIO9", "BIO10", "BIO11", "BIO12", "BIO13", "BIO14", "BIO15", "BIO16", "BIO17", "BIO18", "BIO19"],
+    "n_dated_lineage_contexts": 6,
+    "representative_clade_groups": ["nipponocirsium", "arenicola", "sinocirsium"],
+    "age_grid": "31 deterministic ages across each published interval plus exact central estimate",
+    "background_horizons_ma": [[0.0, 1.5], [0.0, 3.6]],
+    "short_windows_ka": [50, 100],
+    "univariate_metrics": ["level", "absolute_change", "local_variability"],
+    "multivariate_metrics": ["17-BIOCLIM PCA-whitened state distance", "short-window displacement", "within-window multivariate variability"]
+  },
+  "formal_result": {
+    "decision": "no_recurring_lineage_differentiation_context_survives_age_region_background_gates",
+    "n_recurring_context_candidates": 0,
+    "recurring_context_candidates": [],
+    "n_event_level_classes": 324,
+    "n_event_level_robust_classes": 0,
+    "interpretation": "Neither any single BIOCLIM level/change/variability metric nor the all-climate multivariate state/change/variability diagnostics survives the full age, regional-scenario and background-horizon gates as a robust event-level regime. Consequently no climate context recurs formally across at least two of the three representative clade groups."
+  },
+  "descriptive_tendencies_below_claim_threshold": {
+    "nipponocirsium_japan_taiwan": {
+      "context_id": "NIPPONO_JAPAN_TAIWAN_CHANG2025",
+      "temperature_level": "low-side tendency: median-of-scenario-median percentiles BIO1=0.189, BIO11=0.198, BIO6=0.206",
+      "temperature_variability": "high-side tendency: BIO1=0.757, BIO10=0.754, BIO11=0.745",
+      "boundary": "not robust to every age/region/background/window gate"
+    },
+    "sinocirsium_japan_taiwan": {
+      "context_id": "SINOCIRSIUM_JAPAN_TAIWAN_CHANG2026",
+      "temperature_level": "low-side tendency: BIO6=0.229, BIO11=0.233, BIO1=0.263",
+      "temperature_variability": "high-side tendency: BIO11=0.816, BIO1=0.802, BIO8=0.784",
+      "boundary": "not robust to every age/region/background/window gate"
+    },
+    "arenicola": {
+      "context_id": "AREN_BREV_IRUM_CHANG2026",
+      "temperature_level": "nearer background center: BIO11=0.391, BIO1=0.432",
+      "temperature_variability": "near background center: BIO1=0.506; no analogous high-temperature-variability tendency",
+      "boundary": "the Japan-Taiwan tendency is therefore not a universal East-Asian lineage-differentiation regime"
+    },
+    "multivariate": {
+      "state_distance_median_percentiles": {"nipponocirsium": 0.525, "arenicola": 0.514, "sinocirsium": 0.527},
+      "displacement_median_percentiles": {"nipponocirsium": 0.434, "arenicola": 0.497, "sinocirsium": 0.445},
+      "variability_median_percentiles": {"nipponocirsium": 0.345, "arenicola": 0.447, "sinocirsium": 0.356},
+      "interpretation": "The full 17-variable climate state, transition magnitude and variability are not generally extreme at the representative divergence contexts."
+    }
+  },
+  "scientific_reading": "The Pleistocene is a shared broad temporal backdrop, but a single recurrent climate regime is not recovered across the three representative lineage differentiations. The data are more compatible with heterogeneous or lineage-specific differentiation contexts than with one universal climatic trigger. This remains a lineage-level diagnostic and cannot identify a capitulum-trait cause.",
+  "manuscript_rule": "Do not add this exploratory atlas to the main Results by default. It can support the Discussion boundary that broad Pleistocene diversification does not imply one shared climate trigger, and it can motivate lineage-specific hypotheses.",
+  "claim_boundary": [
+    "No Azami or present-day trait-environment result selected the historical variables.",
+    "Nested Nipponocirsium nodes were not counted as independent recurring events.",
+    "Published node-age intervals are deterministic uncertainty scenarios, not posterior replicates.",
+    "Regional boxes are paleolocation sensitivities, not ancestral-area probabilities.",
+    "PALEO-PGEM mean fields were used without full emulator/downscaling uncertainty propagation.",
+    "Lineage differentiation context is not a capitulum-trait transition trigger, natural selection or adaptation."
+  ]
+}
