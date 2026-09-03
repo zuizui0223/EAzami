@@ -1,0 +1,68 @@
+{
+  "contract_version": "chapter2_white_establishment_surface_gate_contract_v1",
+  "status_date": "2026-09-03",
+  "purpose": "Test whether the two frozen white-coloured sister systems share present-day establishment-surface proxies more consistently than they share current RSDS direction.",
+  "input_cohort": {
+    "path": "data/evidence/chapter2_four_taxon_balanced_colour_environment_cohort_v1.csv",
+    "n_observations": 56,
+    "systems": [
+      "ARENICOLA_BREVICAULE_IRUMTIENSE",
+      "TAIWAN_KAWAKAMII_TATAKAENSE"
+    ],
+    "selection_rule": "Reuse the frozen balanced four-taxon cohort without adding, dropping or reweighting records based on establishment-surface outcomes."
+  },
+  "primary_proxies": {
+    "open_surface_fraction_500m": {
+      "source": "ESA WorldCover 2021 v200 10 m",
+      "classes": [30, 40, 50, 60, 90],
+      "classes_meaning": ["grassland", "cropland", "built-up", "bare_or_sparse_vegetation", "herbaceous_wetland"],
+      "predicted_white_minus_coloured_direction": "positive",
+      "interpretation": "Open recruitment/establishment surface proxy; not direct disturbance history."
+    },
+    "hand_median_250m": {
+      "source": "ASF Global 30 m Height Above Nearest Drainage v1 from Copernicus GLO-30 2021",
+      "predicted_white_minus_coloured_direction": "negative",
+      "interpretation": "Low drainage-relative terrain/floodplain opportunity proxy; not direct flood frequency or disturbance."
+    }
+  },
+  "secondary_descriptors": {
+    "bare_built_crop_fraction_500m": [40, 50, 60],
+    "bare_sparse_fraction_500m": [60],
+    "tree_fraction_500m": [10],
+    "wetland_water_fraction_500m": [80, 90, 95]
+  },
+  "spatial_sensitivity": {
+    "cell_degrees": 0.05,
+    "rule": "Repeat sister-system contrasts after collapsing observations to taxon x 0.05-degree cell medians."
+  },
+  "decision_rule": {
+    "per_proxy_robust_shared_direction": "Both sister systems must show the preregistered sign at observation level and after 0.05-degree cell aggregation.",
+    "multi_proxy_shared_establishment_context": "Both primary proxies pass robust shared direction.",
+    "single_proxy_shared_establishment_context": "Exactly one primary proxy passes robust shared direction.",
+    "no_shared_establishment_proxy": "Neither primary proxy passes robust shared direction."
+  },
+  "comparison_reference": {
+    "path": "data/evidence/chapter2_colour_rsds_focal_concordance_result_v1.json",
+    "frozen_current_rsds_pair_concordance": "1/2",
+    "comparison_question": "Do establishment-surface proxies replicate direction across both sister systems more consistently than current RSDS?"
+  },
+  "source_contracts": {
+    "worldcover": {
+      "dataset": "ESA WorldCover 2021 v200",
+      "base_url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map",
+      "tile_scheme": "3 x 3 degree COG tiles in EPSG:4326"
+    },
+    "hand": {
+      "dataset": "Global 30m Height Above Nearest Drainage v1 / Copernicus DEM 2021",
+      "base_url": "https://glo-30-hand.s3.us-west-2.amazonaws.com/v1/2021",
+      "tile_scheme": "1 x 1 degree COG tiles aligned to GLO-30"
+    }
+  },
+  "claim_boundary": [
+    "Static 2021 land cover is not a measurement of historical or recurrent disturbance.",
+    "HAND is drainage-relative terrain, not observed flooding, safe-site availability or recruitment.",
+    "A repeated proxy direction does not establish selection, adaptation or the environmental state at the colour transition.",
+    "Failure of these proxies does not falsify all disturbance or demographic-gate mechanisms.",
+    "The two systems are lineage comparisons, not independent randomized experiments."
+  ]
+}
