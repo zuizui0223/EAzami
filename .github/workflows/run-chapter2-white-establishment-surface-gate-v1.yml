@@ -1,0 +1,87 @@
+name: Run Chapter 2 white establishment-surface gate v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/chapter2_four_taxon_balanced_colour_environment_cohort_v1.csv"
+      - "data/evidence/chapter2_colour_rsds_focal_concordance_result_v1.json"
+      - "data/evidence/chapter2_white_establishment_surface_gate_contract_v1.json"
+      - "analysis/run_chapter2_white_establishment_surface_gate_v1.py"
+      - ".github/workflows/run-chapter2-white-establishment-surface-gate-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install analysis dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas rasterio
+          python -m py_compile analysis/run_chapter2_white_establishment_surface_gate_v1.py
+      - name: Probe declared public COG sources
+        run: |
+          set -euxo pipefail
+          curl --fail --location --retry 5 --range 0-1023 \
+            https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N24E120_Map.tif \
+            -o /tmp/worldcover_probe.bin
+          curl --fail --location --retry 5 --range 0-1023 \
+            https://glo-30-hand.s3.us-west-2.amazonaws.com/v1/2021/Copernicus_DSM_COG_10_N24_00_E121_00_HAND.tif \
+            -o /tmp/hand_probe.bin
+          test -s /tmp/worldcover_probe.bin
+          test -s /tmp/hand_probe.bin
+      - name: Test shared establishment-surface proxies
+        env:
+          GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+          CPL_VSIL_CURL_ALLOWED_EXTENSIONS: .tif
+          GDAL_HTTP_MULTIRANGE: YES
+          GDAL_HTTP_MERGE_CONSECUTIVE_RANGES: YES
+        run: |
+          mkdir -p /tmp/result
+          python analysis/run_chapter2_white_establishment_surface_gate_v1.py \
+            --cohort data/evidence/chapter2_four_taxon_balanced_colour_environment_cohort_v1.csv \
+            --contract data/evidence/chapter2_white_establishment_surface_gate_contract_v1.json \
+            --rsds-result data/evidence/chapter2_colour_rsds_focal_concordance_result_v1.json \
+            --out-dir /tmp/result \
+            | tee /tmp/result/run.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/result')
+          x=json.loads((root/'chapter2_white_establishment_surface_gate_result_v1.json').read_text())
+          assert x['n_observations']==56
+          assert x['coverage']['open_surface_fraction_500m'] >= 0.90
+          assert x['coverage']['hand_median_250m'] >= 0.90
+          assert x['primary_direction_counts']['current_rsds']==1
+          assert x['classification'] in {
+              'multi_proxy_shared_establishment_context',
+              'single_proxy_shared_establishment_context',
+              'no_shared_establishment_proxy',
+          }
+          print(json.dumps({
+              'classification': x['classification'],
+              'primary_direction_counts': x['primary_direction_counts'],
+              'coverage': x['coverage'],
+              'more_directionally_replicated_than_rsds': x['establishment_proxy_more_directionally_replicated_than_rsds'],
+          }, indent=2))
+          PY
+      - name: Upload establishment-surface results
+        uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-white-establishment-surface-${{ github.run_id }}
+          path: |
+            /tmp/result/chapter2_white_establishment_surface_enriched_cohort_v1.csv
+            /tmp/result/chapter2_white_establishment_surface_system_contrasts_v1.csv
+            /tmp/result/chapter2_white_establishment_surface_gate_result_v1.json
+            /tmp/result/chapter2_white_establishment_surface_sampling_errors_v1.json
+            /tmp/result/run.log
+          if-no-files-found: error
+          retention-days: 90
