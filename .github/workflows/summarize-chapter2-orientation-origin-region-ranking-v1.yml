@@ -3,14 +3,15 @@ name: Summarize Chapter 2 orientation origin region ranking v1
 on:
   pull_request:
     paths:
-      - "data/evidence/chapter2_orientation_origin_envelope_result_v1.json"
       - "data/evidence/chapter2_orientation_origin_region_ranking_contract_v1.json"
+      - "data/evidence/chapter2_orientation_origin_region_ranking_result_v1.json"
       - "analysis/summarize_chapter2_orientation_origin_region_ranking_v1.py"
       - ".github/workflows/summarize-chapter2-orientation-origin-region-ranking-v1.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   summarize:
@@ -26,11 +27,35 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install numpy pandas
           python -m py_compile analysis/summarize_chapter2_orientation_origin_region_ranking_v1.py
+      - name: Recover frozen full 376-row origin artifact
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/EAzami
+          run-id: 33403515236
+          artifact-ids: 9762830184
+          github-token: ${{ github.token }}
+          path: /tmp/origin-source
+      - name: Locate full origin result
+        run: |
+          set -euo pipefail
+          ORIGIN=$(find /tmp/origin-source -name chapter2_orientation_origin_envelope_v1.json -print -quit)
+          test -n "$ORIGIN"
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          paths=list(Path('/tmp/origin-source').rglob('chapter2_orientation_origin_envelope_v1.json'))
+          assert len(paths)==1, paths
+          p=paths[0]
+          x=json.loads(p.read_text())
+          assert len(x['scenario_rows'])==376
+          print(p)
+          PY
       - name: Summarize paired regional ranking
         run: |
           mkdir -p /tmp/result
+          ORIGIN=$(find /tmp/origin-source -name chapter2_orientation_origin_envelope_v1.json -print -quit)
           python analysis/summarize_chapter2_orientation_origin_region_ranking_v1.py \
-            --origin data/evidence/chapter2_orientation_origin_envelope_result_v1.json \
+            --origin "$ORIGIN" \
             --contract data/evidence/chapter2_orientation_origin_region_ranking_contract_v1.json \
             --out-dir /tmp/result \
             | tee /tmp/result/run.log
@@ -38,20 +63,21 @@ jobs:
           import json
           from pathlib import Path
           root=Path('/tmp/result')
-          x=json.loads((root/'chapter2_orientation_origin_region_ranking_result_v1.json').read_text())
-          assert x['n_chronology_scenarios']==94
-          assert x['n_region_by_chronology_rows']==376
-          assert x['frozen_origin_trajectory_classification']=='origin_trajectory_unresolved_under_public_chronology_and_paleolocation_uncertainty'
-          assert x['classification'] in {
-              'scenario_dominant_region',
-              'relative_ordering_present_but_not_dominant',
-              'no_stable_regional_ordering',
-          }
+          got=json.loads((root/'chapter2_orientation_origin_region_ranking_result_v1.json').read_text())
+          frozen=json.loads(Path('data/evidence/chapter2_orientation_origin_region_ranking_result_v1.json').read_text())
+          assert got['n_chronology_scenarios']==94
+          assert got['n_region_by_chronology_rows']==376
+          assert got['classification']=='relative_ordering_present_but_not_dominant'
+          assert got['leading_region_descriptive']=='southern_japan'
+          assert got['region_rank_summary']==frozen['region_rank_summary']
+          assert got['pairwise_ordering']==frozen['pairwise_ordering']
+          assert got['pairwise_win_fraction_matrix']==frozen['pairwise_win_fraction_matrix']
+          assert got['frozen_origin_trajectory_classification']=='origin_trajectory_unresolved_under_public_chronology_and_paleolocation_uncertainty'
           print(json.dumps({
-              'classification':x['classification'],
-              'leading_region_descriptive':x['leading_region_descriptive'],
-              'rank1':{k:v['rank1_fraction'] for k,v in x['region_rank_summary'].items()},
-              'southern_japan_pairwise':x['pairwise_win_fraction_matrix']['southern_japan'],
+              'classification':got['classification'],
+              'leading_region_descriptive':got['leading_region_descriptive'],
+              'rank1':{k:v['rank1_fraction'] for k,v in got['region_rank_summary'].items()},
+              'southern_japan_pairwise':got['pairwise_win_fraction_matrix']['southern_japan'],
           }, indent=2))
           PY
       - name: Upload region-ranking results
