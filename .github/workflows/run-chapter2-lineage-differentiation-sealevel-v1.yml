@@ -1,0 +1,74 @@
+name: Run Chapter 2 lineage differentiation sea-level v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_chapter2_lineage_differentiation_sealevel_v1.py"
+      - "data/evidence/chapter2_lineage_differentiation_sealevel_contract_v1.json"
+      - ".github/workflows/run-chapter2-lineage-differentiation-sealevel-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lineage-sea-level:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas
+          python -m py_compile analysis/run_chapter2_lineage_differentiation_sealevel_v1.py
+      - name: Download NOAA de Boer reconstruction
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/public /tmp/result
+          curl --fail --location --retry 8 --retry-delay 3 --retry-all-errors \
+            'https://www.ncei.noaa.gov/pub/data/paleo/reconstructions/deboer2014/deboer2014-noaa.txt' \
+            -o /tmp/public/deboer2014-noaa.txt
+          test -s /tmp/public/deboer2014-noaa.txt
+      - name: Run three-clade sea-level context diagnostic
+        run: |
+          set -euo pipefail
+          python analysis/run_chapter2_lineage_differentiation_sealevel_v1.py \
+            --contract data/evidence/chapter2_lineage_differentiation_sealevel_contract_v1.json \
+            --source /tmp/public/deboer2014-noaa.txt \
+            --out-json /tmp/result/chapter2_lineage_differentiation_sealevel_v1.json \
+            --out-csv /tmp/result/chapter2_lineage_differentiation_sealevel_scenarios_v1.csv \
+            | tee /tmp/result/run_summary.log
+      - name: Validate scope, independence and fail-closed classes
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/result/chapter2_lineage_differentiation_sealevel_v1.json')
+          x=json.loads(p.read_text())
+          assert x['n_representative_groups']==3
+          assert {e['clade_group'] for e in x['representative_events']}=={'nipponocirsium','arenicola','sinocirsium'}
+          assert len(x['event_metric_classes'])==3*7
+          assert x['decision'] in {
+              'one_or_more_recurring_global_sea_level_context_candidates_detected',
+              'no_recurring_global_sea_level_context_survives_age_background_window_gates'
+          }
+          assert x['analysis_scope'].startswith('lineage-diversification range-reorganization context only')
+          text=p.read_text().lower()
+          assert 'azami' not in text
+          assert 'local island connectivity' in text
+          print(json.dumps({
+              'decision':x['decision'],
+              'event_metric_robust_classes':[r for r in x['event_metric_classes'] if r['robust_class']!='unresolved'],
+              'recurring_context_candidates':x['recurring_context_candidates']
+          },indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-lineage-differentiation-sealevel-${{ github.run_id }}
+          path: /tmp/result
+          if-no-files-found: error
+          retention-days: 90
