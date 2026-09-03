@@ -8,6 +8,7 @@ on:
       - "data/evidence/chapter2_historical_differentiation_final_summary_v1.json"
       - "data/evidence/chapter2_depth_ordering_robustness_result_v1.json"
       - "data/evidence/chapter2_depth_coverage_matched_sensitivity_result_v1.json"
+      - "docs/chapter2/JEB_V7_FIGURE_MAP.md"
       - ".github/workflows/make-chapter2-jeb-figure2-v7.yml"
   workflow_dispatch:
 
