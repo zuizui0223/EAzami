@@ -78,6 +78,25 @@ def blank_identifying_metadata(doc: Document) -> None:
     props.keywords = ""
 
 
+def anonymize_main_for_review(doc: Document) -> None:
+    replacement = (
+        "For double-anonymous review, the archival repository location, exact submission commit "
+        "and persistent DOI/accession are withheld from this manuscript. The review data package "
+        "contains the machine-readable evidence tables and scripts named in the Supporting Information; "
+        "full public archive details will be supplied through the journal submission system."
+    )
+    replaced = 0
+    for paragraph in doc.paragraphs:
+        if "EAzami repository" in paragraph.text:
+            paragraph.text = replacement
+            replaced += 1
+    if replaced != 1:
+        raise RuntimeError(f"Expected exactly one identifying repository paragraph, replaced={replaced}")
+    visible = "\n".join(p.text for p in doc.paragraphs)
+    if "EAzami repository" in visible or "github.com/zuizui0223" in visible:
+        raise RuntimeError("Identifying repository reference remains in anonymous manuscript")
+
+
 def paragraph_after(paragraph: Paragraph) -> Paragraph:
     new_p = OxmlElement("w:p")
     paragraph._p.addnext(new_p)
@@ -127,6 +146,7 @@ def build_main(output_dir: Path, figure_dir: Path) -> Path:
         ),
         stop_heading="Submission completion gates",
     )
+    anonymize_main_for_review(doc)
     embed_main_figures(doc, figure_dir)
     path = output_dir / "Chapter2_JEB_Anonymous_Manuscript_V6.docx"
     legacy.save_document(doc, path)
