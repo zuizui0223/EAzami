@@ -1,0 +1,27 @@
+name: Validate Chapter 2 discrete-trait occurrence gate sensitivity v1
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/chapter2_discrete_trait_occurrence_gate_sensitivity_v1.json"
+      - "data/evidence/chapter2_ecological_explanatory_reach_v1.json"
+      - "analysis/validate_chapter2_discrete_trait_occurrence_gate_sensitivity_v1.py"
+      - ".github/workflows/validate-chapter2-discrete-trait-occurrence-gate-sensitivity-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate frozen resolution audit
+        run: |
+          python -m py_compile analysis/validate_chapter2_discrete_trait_occurrence_gate_sensitivity_v1.py
+          python analysis/validate_chapter2_discrete_trait_occurrence_gate_sensitivity_v1.py
