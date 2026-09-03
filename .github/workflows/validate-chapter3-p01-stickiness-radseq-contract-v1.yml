@@ -1,0 +1,22 @@
+name: Validate Chapter 3 P01 stickiness RAD-seq contract
+
+on:
+  pull_request:
+    paths:
+      - 'data/evidence/chapter3_p01_stickiness_radseq_contract_v1.json'
+      - 'data/evidence/chapter3_p01_same_individual_schema_v1.csv'
+      - 'docs/chapter3/CHAPTER3_P01_STICKINESS_RADSEQ_EXECUTION_V1.md'
+      - 'analysis/validate_chapter3_p01_stickiness_radseq_contract_v1.py'
+      - '.github/workflows/validate-chapter3-p01-stickiness-radseq-contract-v1.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate frozen P01 contract
+        run: python analysis/validate_chapter3_p01_stickiness_radseq_contract_v1.py
