@@ -7,10 +7,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 EVID = ROOT / "data" / "evidence"
-MANUSCRIPT = ROOT / "docs" / "chapter2" / "MANUSCRIPT_JEB_V6_FINAL.md"
-FIGMAP = ROOT / "docs" / "chapter2" / "JEB_QUESTION_RESULT_FIGURE_MAP_V6.md"
-SI = ROOT / "docs" / "chapter2" / "JEB_SUPPORTING_INFORMATION_V4.md"
+CH = ROOT / "docs" / "chapter2"
+MANUSCRIPT = CH / "MANUSCRIPT_JEB_V6_FINAL.md"
+FIGMAP = CH / "JEB_QUESTION_RESULT_FIGURE_MAP_V6.md"
+SI = CH / "JEB_SUPPORTING_INFORMATION_V4.md"
+TITLE = CH / "JEB_TITLE_PAGE_TEMPLATE_V3.md"
+COVER = CH / "JEB_COVER_LETTER_TEMPLATE_V3.md"
 FIGSCRIPT = ROOT / "analysis" / "make_chapter2_jeb_figures_v6.py"
+BUILDER = ROOT / "analysis" / "build_chapter2_jeb_docx_v4.py"
 
 
 def load(name: str) -> dict:
@@ -81,6 +85,9 @@ def main() -> None:
     for phrase in required:
         assert phrase in manuscript, phrase
 
+    for i in range(1, 6):
+        assert f"(Fig. {i}" in manuscript, f"missing main-text Figure {i} call"
+
     prohibited_mainline = (
         "pair-level concordance = 1/2",
         "partial coordinated remodelling inside",
@@ -104,7 +111,33 @@ def main() -> None:
     for phrase in ("0/324", "0/21", "Calendar identifiability funnel", "V5 evidence retained outside the V6 main spine"):
         assert phrase in si, phrase
 
+    title = TITLE.read_text(encoding="utf-8")
+    cover = COVER.read_text(encoding="utf-8")
+    active_title = "Repeated capitulum differentiation at unequal evolutionary depths without a recurring coarse historical trigger in a young thistle radiation"
+    assert active_title in title
+    assert active_title in cover
+    assert "0/324" in cover and "0/21" in cover
+
     assert FIGSCRIPT.exists()
+    assert BUILDER.exists()
+    builder = BUILDER.read_text(encoding="utf-8")
+    for source in (
+        "MANUSCRIPT_JEB_V6_FINAL.md",
+        "JEB_SUPPORTING_INFORMATION_V4.md",
+        "JEB_TITLE_PAGE_TEMPLATE_V3.md",
+        "JEB_COVER_LETTER_TEMPLATE_V3.md",
+        "figures_v6",
+        "submission_package_v6",
+    ):
+        assert source in builder, source
+    for stale in (
+        "MANUSCRIPT_JEB_V5.md",
+        "JEB_SUPPORTING_INFORMATION_V3.md",
+        "figures_v5",
+        "submission_package_v5",
+    ):
+        assert stale not in builder, stale
+
     print("chapter2_manuscript_v6_final: PASS")
     print(f"abstract_words={words(abstract)}")
     print(f"main_before_refs_words={words(main_before_refs)}")
