@@ -83,6 +83,29 @@
     "stickiness": {"n_taxa": 12, "state_counts": {"nonsticky": 6, "sticky": 6}, "spatial_segregation_p": 0.1306},
     "interpretation": "public spatial occurrence support exists for state-diverse panels outside the original targeted niche artifact; the original zero yield is therefore not evidence that the traits lack public occurrences"
   },
+  "depth_ecological_reach_hypothesis_testability": {
+    "hypothesis": "shallower historical turnover should be associated with more lineage-local ecological explanatory reach, whereas deeper turnover should be associated with broader/clade-level ecological correspondence",
+    "trait_status": {
+      "orientation": {
+        "history": "resolved repeated history with intermediate relative-depth profile",
+        "ecological_reach": "evaluable and scale-partitioned: BIO12 is among-taxon only; BIO1 is within-taxon only; the East-Asian BIO15 state contrast is not reproduced as a positive within-taxon response",
+        "usable_for_cross_trait_tradeoff": true
+      },
+      "phyllary": {
+        "history": "resolved repeated history with deepest-permissive relative-depth profile among the three traits",
+        "ecological_reach": "not evaluable in the frozen environmental panel because state diversity is absent even at n>=3",
+        "usable_for_cross_trait_tradeoff": false
+      },
+      "stickiness": {
+        "history": "resolved repeated history with shallow relative-depth profile",
+        "ecological_reach": "state diversity returns at n>=5 but only one sticky lineage is represented, leaving trait effect confounded with lineage",
+        "usable_for_cross_trait_tradeoff": false
+      }
+    },
+    "classification": "three_trait_depth_vs_ecological_reach_tradeoff_not_identifiable_from_current_public_panel",
+    "reason": "Only orientation currently has an identified scale-aware ecological reach. Phyllary is state-degenerate in the environmental panel and stickiness has only one sticky lineage at the relaxed gate. A three-point regression/correlation would convert missing identification into numerical evidence.",
+    "figure_rule": "Do not plot a quantitative three-trait depth-versus-predictive-reach regression as a result. If shown, use a resolution/evidence matrix with phyllary and stickiness explicitly censored/not identified; retain the depth-predictability relation as a Chapter 3 prediction rather than a Chapter 2 conclusion."
+  },
   "classification": {
     "phyllary": "lowering_gate_does_not_recover_state_diversity_in_frozen_environment_panel",
     "stickiness": "state_diversity_recovers_at_n_ge_5_but_lineage_replication_is_insufficient",
@@ -93,6 +116,7 @@
     "This audit changes no frozen ecological-reach classification.",
     "The one-sticky-taxon n>=5 climate contrast is descriptive and lineage-confounded.",
     "The environment-free spatial breadth pilot does not identify an environmental driver.",
+    "The three-trait depth-versus-ecological-reach tradeoff is not identified by the current public panel.",
     "No adaptation, selection, historical causation, or trait effect is inferred."
   ]
 }
