@@ -34,6 +34,16 @@
       "nikko_saturating_floret_vs_seed_damage_r2": 0.44,
       "nikko_saturating_floret_vs_seed_damage_p": 0.013,
       "classification": "direct_japanese_display_antagonist_tradeoff_supported_observationally"
+    },
+    "mt_fuji_recruitment_context": {
+      "taxon": "Cirsium purpuratum",
+      "evidence_type": "2026 Ecological Society of Japan conference abstract; motion-camera plus vegetation survey",
+      "sites": ["Gotemba trail", "Subashiri trail"],
+      "mechanism_observed": "deer and Japanese hare feeding immediately below heads was inferred to cause flower-head fall and reproductive-opportunity loss",
+      "high_herbivory_nonanthropogenic_area_percent_november": [75, 85],
+      "recruitment_pattern": "many current-year seedlings near human infrastructure where herbivory was lower; almost none in high-herbivory bare-ground/grassland/forest-edge areas",
+      "classification": "recent_japanese_reproductive_structure_loss_recruitment_context_supported_observationally",
+      "claim_boundary": "Not a randomized antagonist-removal experiment; human activity, habitat category and herbivory covary; no viable-seed response ratio is estimated."
     }
   },
   "existing_experimental_magnitude_anchor": {
@@ -44,20 +54,26 @@
     "transport_status": "magnitude_not_transportable_to_east_asia_as_measured_effect",
     "allowed_use": "pathway-level fitness magnitude anchor showing that Cirsium reproductive herbivory can be large in experimentally studied systems"
   },
-  "classification": "east_asian_antagonist_pathway_and_regime_supported_effect_magnitude_not_transferred",
+  "classification": "east_asian_antagonist_pathway_regime_and_downstream_context_supported_effect_magnitude_not_transferred",
   "inference": {
     "allowed": [
       "Flower-head antagonist exposure is directly documented in Japanese Cirsium and in the focal Ryukyu taxon C. brevicaule.",
       "Japanese antagonist assemblages are structured by host flowering season and geography rather than behaving as one spatially uniform pressure.",
       "In Japanese C. purpuratum, greater flower production can increase predispersal seed-predator exposure and offset reproductive gains.",
+      "A 2026 Mt. Fuji C. purpuratum survey links severe reproductive-structure herbivory with a strong spatial contrast in current-year seedling establishment, providing downstream demographic context but not experimental effect identification.",
       "These findings strengthen ecological-gate and selection-mosaic hypotheses relative to a single monotonic abiotic-scaling model."
     ],
     "not_allowed": [
       "RR=2.674 is the effect size in East Asian Cirsium.",
       "The C. brevicaule attack rate of 26.1 is a 26.1% seed-fitness loss.",
+      "The Mt. Fuji 75-85% damaged-stem fraction is an experimental herbivory treatment effect.",
       "Antagonists caused the evolution of white colour, orientation, phyllary posture or stickiness.",
       "Phenology/geography structure identifies disturbance as the causal driver."
     ]
+  },
+  "search_update_2026_09_03": {
+    "east_asian_antagonist_reduction_seed_fitness_experiment_recovered": false,
+    "interpretation": "The added English/Japanese search recovered direct Japanese observational pathway, seed-production and recruitment-context evidence, but no focal East-Asian antagonist-reduction experiment with a viable-seed endpoint suitable for joining the experimental RR meta-analysis."
   },
   "decisive_remaining_gap": "A focal East-Asian manipulation that reduces flower-head antagonists and measures viable seed/recruitment on ancestry-matched populations; for colour/display questions, the same populations must also quantify pollination assurance and phenotype-specific antagonist exposure."
 }
