@@ -1,0 +1,20 @@
+field,required,description,allowed_or_example
+individual_id,yes,Immutable cross-layer individual identifier,P01-J06-P01-I001
+paper_concept,yes,Frozen Moreyra/EAzami paper concept,JPN_06|JPN_15
+field_taxon_name,yes,Field determination retained verbatim,Cirsium dipsacolepis
+population_id,yes,Deidentified population identifier,J06-P01
+deidentified_locality_id,yes,Public-safe locality key,LOC-001
+voucher_id,yes,Voucher or voucher-linked specimen/photo identifier,VCH-001
+rad_tissue_id,yes,Silica/fresh tissue identifier,RAD-001
+stickiness_state,yes,Same-individual involucre stickiness state,sticky|nonsticky|ambiguous
+gland_exudate_documentation_id,yes,Photo/measurement record supporting stickiness scoring,IMG-001
+orientation_state,yes,Same-individual head orientation,upward|downward|intermediate|ambiguous
+phyllary_posture_state,yes,Same-individual phyllary posture,ascending|spreading|reflexed|ambiguous
+cytotype_status,yes,Direct/literature/unknown cytotype status,direct_2x|direct_4x|literature_only|unknown
+genome_size_status,yes,Flow-cytometry/genome-size linkage,measured|pending|not_measured
+authorization_record_id,yes,Non-public permit/access/conservation record key,AUTH-001
+collection_date,yes,Collection date,YYYY-MM-DD
+collector_code,yes,Collector identifier without personal data leakage,C01
+phenology_stage,yes,Reproductive stage at phenotype scoring,bud|anthesis|post_anthesis
+raw_image_id,yes,Raw phenotype image key,RAW-001
+notes,no,Protocol deviations or ambiguity,free text
