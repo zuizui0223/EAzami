@@ -1,0 +1,7 @@
+taxon_concept,source_taxon_name,population_slot,target_n,minimum_core,current_occurrence_verified,population_census_completed,land_access_status,collection_permission_status,dna_tissue_permission_status,voucher_permission_status,conservation_review_status,authorization_record_id,deidentified_locality_id,admit_for_sampling,notes
+JPN06,Cirsium dipsacolepis,P1,8,yes,no,no,pending,pending,pending,pending,pending,,,no,
+JPN06,Cirsium dipsacolepis,P2,8,yes,no,no,pending,pending,pending,pending,pending,,,no,
+JPN06,Cirsium dipsacolepis,P3,8,no,no,no,pending,pending,pending,pending,pending,,,no,
+JPN15,Cirsium lineare,P1,8,yes,no,no,pending,pending,pending,pending,pending,,,no,
+JPN15,Cirsium lineare,P2,8,yes,no,no,pending,pending,pending,pending,pending,,,no,
+JPN15,Cirsium lineare,P3,8,no,no,no,pending,pending,pending,pending,pending,,,no,
