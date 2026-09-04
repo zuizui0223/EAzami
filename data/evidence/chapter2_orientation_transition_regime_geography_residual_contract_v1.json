@@ -42,5 +42,6 @@
     "Present-day residual niche centroids are not historical transition-time environments.",
     "No result identifies temperature, precipitation seasonality, rain/wetting, UV, pollination, selection, adaptation, or fitness causation.",
     "No environmental variable or direction may be changed after inspection."
-  ]
+  ],
+  "execution_trigger": "post-default-branch-workflow-registration"
 }
