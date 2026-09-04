@@ -33,5 +33,6 @@
     "This test evaluates persistence of a predeclared sign regime only; it does not identify the historical causal environment.",
     "Failure to match H4 would support origin-maintenance or history-present decoupling, but would not prove environment was irrelevant.",
     "No additional paleoclimate variable, region, chronology, weighting, or threshold may be added after result inspection."
-  ]
+  ],
+  "execution_trigger": "result_blind_default_branch_execution_20260904"
 }
