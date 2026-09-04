@@ -31,7 +31,7 @@
       "within_q": 0.0348750515143389,
       "among_beta": -0.0302378798369909,
       "among_q": 0.8364877797934492,
-      "east_asia_effect_range": [-0.975455593698576, -0.9670455926600778],
+      "east_asia_effect_range": [-0.975, -0.967],
       "state_count_rank": [8, 126],
       "recurrence_rank": [4, 40],
       "nearest_history_rank": [3, 10],
