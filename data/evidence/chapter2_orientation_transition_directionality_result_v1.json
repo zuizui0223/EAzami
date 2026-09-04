@@ -1,0 +1,41 @@
+{
+  "version": "chapter2_orientation_transition_directionality_result_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Post-result mechanistic falsification of the already-supported transition-regime H1. Test whether environmental tracking is bidirectionally reversible across U->D and D->U transition probabilities, rather than being carried only by one direction.",
+  "classification": "bidirectional_reversible_regime_supported",
+  "fixed_environment_vector": {
+    "u_to_d_expected": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+    "d_to_u_expected": {"chelsa_bio15": -1.0, "chelsa_bio01": 1.0}
+  },
+  "h1_reproduction": {
+    "observed": 0.33085368107660174,
+    "target": 0.33085368107660174,
+    "status": "pass"
+  },
+  "observed": {
+    "forward_alignment_median": 0.32089135588343304,
+    "reverse_alignment_median": 0.33952850966334225,
+    "bidirectional_floor_median": 0.32089135588343304,
+    "forward_positive_6_of_6": true,
+    "reverse_positive_6_of_6": true
+  },
+  "exact_floor_rank": {
+    "count_at_least_observed": 3,
+    "n_maps": 126,
+    "exact_fraction": 0.023809523809523808
+  },
+  "interpretation": "Under the frozen strict nine-taxon CTMC/Brownian estimator, U->D transition probability aligns with the predeclared higher-BIO15/lower-BIO1 niche direction and D->U transition probability aligns with the exact opposite niche direction on all six accepted topologies. The weaker of the two directional alignments is more extreme than 123/126 count-preserving alternative state maps. This supports bidirectional reversible present-niche transition-regime tracking, not historical climate causation or adaptation.",
+  "claim_boundary": [
+    "This is a post-result directional decomposition of H1, not independent confirmation.",
+    "Bidirectional alignment shows reversible present-niche transition-regime tracking under the declared estimator, not historical climatic causation or adaptation.",
+    "It does not establish that the environment at the actual transition time changed in the inferred direction.",
+    "No new environmental axis, taxon, threshold, or mechanism was admitted after result inspection."
+  ],
+  "workflow_provenance": {
+    "run_id": 33850432620,
+    "artifact_id": 9928126499,
+    "artifact_name": "chapter2-orientation-transition-directionality-v1",
+    "artifact_sha256": "838ed0bd7c05419beba390767131ec53475a236926e8514949060bfc01eec9b3",
+    "source_head_sha": "c4b99dedaca7df7db08eb62bf81a38d6feac9088"
+  }
+}
