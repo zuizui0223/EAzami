@@ -1,0 +1,98 @@
+name: Build Chapter 2 JEB V7 DOCX package
+
+on:
+  pull_request:
+    paths:
+      - 'docs/chapter2/MANUSCRIPT_JEB_V7_WORKING.md'
+      - 'docs/chapter2/JEB_SUPPORTING_INFORMATION_V3.md'
+      - 'docs/chapter2/JEB_V7_TITLE_PAGE_WORKING.md'
+      - 'docs/chapter2/JEB_COVER_LETTER_TEMPLATE_V3.md'
+      - 'analysis/build_chapter2_jeb_docx_v7.py'
+      - 'analysis/build_chapter2_jeb_docx_v1.py'
+      - 'analysis/make_chapter2_jeb_figure2_v7.py'
+      - 'analysis/make_chapter2_jeb_figure3_v7.py'
+      - 'analysis/make_chapter2_jeb_figures145_v7.py'
+      - 'analysis/make_chapter2_jeb_figures145_v7_v2.py'
+      - 'analysis/make_chapter2_jeb_figures145_v7_v3.py'
+      - 'analysis/validate_manuscript_jeb_v7_working_v1.py'
+      - 'analysis/validate_chapter2_jeb_v7_submission_texts_v1.py'
+      - '.github/workflows/build-chapter2-jeb-v7-docx-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install production dependencies
+        run: python -m pip install --disable-pip-version-check python-docx pillow matplotlib numpy
+      - name: Compile V7 production scripts
+        run: |
+          python -m py_compile analysis/build_chapter2_jeb_docx_v7.py
+          python -m py_compile analysis/make_chapter2_jeb_figure2_v7.py
+          python -m py_compile analysis/make_chapter2_jeb_figure3_v7.py
+          python -m py_compile analysis/make_chapter2_jeb_figures145_v7_v3.py
+      - name: Validate active scientific and submission text
+        run: |
+          python analysis/validate_manuscript_jeb_v7_working_v1.py
+          python analysis/validate_chapter2_jeb_v7_submission_texts_v1.py
+      - name: Generate all five validated V7 figures
+        run: |
+          mkdir -p /tmp/figures_v7
+          python analysis/make_chapter2_jeb_figures145_v7_v3.py --output-dir /tmp/figures_v7
+          python analysis/make_chapter2_jeb_figure2_v7.py --output-dir /tmp/figures_v7
+          python analysis/make_chapter2_jeb_figure3_v7.py --output-dir /tmp/figures_v7
+      - name: Check five V7 PNG figures
+        run: |
+          test -s /tmp/figures_v7/figure1_v7_diversity_context.png
+          test -s /tmp/figures_v7/figure2_v7_mosaic_depth.png
+          test -s /tmp/figures_v7/figure3_v7_transition_regime_ecology.png
+          test -s /tmp/figures_v7/figure4_v7_bounded_history.png
+          test -s /tmp/figures_v7/figure5_v7_identifiability_ceiling.png
+      - name: Build V7 submission DOCX package
+        run: python analysis/build_chapter2_jeb_docx_v7.py --figure-dir /tmp/figures_v7 --output-dir /tmp/submission_package_v7
+      - name: Structural DOCX checks
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile
+          from lxml import etree
+
+          out = Path('/tmp/submission_package_v7')
+          expected = [
+              'Chapter2_JEB_Anonymous_Manuscript_V7.docx',
+              'Chapter2_JEB_Title_Page_V7.docx',
+              'Chapter2_JEB_Supporting_Information_V3.docx',
+              'Chapter2_JEB_Cover_Letter_V7.docx',
+          ]
+          for name in expected:
+              p = out / name
+              assert p.exists() and p.stat().st_size > 1000, name
+
+          main = out / expected[0]
+          with zipfile.ZipFile(main) as z:
+              doc = etree.fromstring(z.read('word/document.xml'))
+              ns = {'w':'http://schemas.openxmlformats.org/wordprocessingml/2006/main',
+                    'a':'http://schemas.openxmlformats.org/drawingml/2006/main'}
+              text = '\n'.join(doc.xpath('//w:t/text()', namespaces=ns)).lower()
+              assert 'github.com/zuizui0223' not in text
+              assert 'zuizui0223' not in text
+              assert len(doc.xpath('//w:drawing', namespaces=ns)) == 5
+              sect = doc.xpath('//w:sectPr', namespaces=ns)
+              assert sect
+              assert sect[-1].xpath('./w:lnNumType', namespaces=ns)
+          print('V7 DOCX structural checks: ok')
+          PY
+      - name: Upload V7 DOCX package
+        uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-jeb-v7-docx-package
+          path: /tmp/submission_package_v7/*.docx
+          if-no-files-found: error
+          retention-days: 90
