@@ -1,187 +1,232 @@
-# Chapter 2 — capitulum differentiation through evolutionary time
+# Chapter 2 — repeated mosaic assembly through evolutionary time
 
-## Active state — 2026-09-03
+## Active state — 2026-09-04
 
-Chapter 2 asks:
+Chapter 2 is now a standalone *Journal of Evolutionary Biology* manuscript built around a positive assembly-history result.
 
-> **How repeatedly and how deeply were capitulum traits differentiated, which changes can actually be bounded in calendar time, and did any historical environmental state, change, instability or range-reorganization regime robustly recur across bounded differentiation events?**
+The central question is:
 
-The biological sequence is:
+> **How was a multidimensional capitulum assembled within one young radiation, how is its present ecological correspondence partitioned across biological scale and historical placement, and how far can current public data identify the specific historical causes of those changes?**
+
+The active V7 spine is:
 
 ```text
-repeated trait history
+diversity within the dominant radiation
+→ repeated component histories
 → relative evolutionary depth
-→ calendar event identifiability
-→ paleogeographic uncertainty
-→ historical environment / range context
-→ repeated historical trigger only if independently supported
-→ Chapter 3 mechanism + reproductive fitness
+→ shared-transition localization
+→ present ecological scale
+→ history-conditioned counterfactual ecology
+→ calendar-time / historical-cause boundary
 ```
 
-Present-day trait × environment analyses are supporting diagnostics only. They do not select historical variables, transition events or manuscript results.
+Historical-trigger failure is the terminal identifiability boundary, not the opening result.
 
-## Dissertation-level interpretation
+## Active manuscript and figures
 
-- **Chapter 1:** present environmental gradients after spatial control → maintenance / current ecological sorting candidates;
-- **Chapter 2:** environmental and geographic context of trait differentiation through time → origin / historical trigger candidates;
-- **Chapter 3:** environment → trait function → reproductive fitness → adaptive explanation if supported.
+- scientific text: `MANUSCRIPT_JEB_V7_WORKING.md`;
+- figure architecture: `JEB_V7_FIGURE_MAP.md`;
+- counterfactual framework: `COUNTERFACTUAL_CONDITIONING_FRAMEWORK_V1.md`;
+- counterfactual orientation result: `ORIENTATION_ENVIRONMENT_COUNTERFACTUAL_V1.md`.
 
-Maintenance–differentiation agreement or mismatch is evaluated only after Chapters 1 and 2 are independently frozen.
+Validated manuscript workflow run `33838561827`:
 
-## Final current public-data classification
+- Abstract: **229 words**;
+- main text before References: **5,811 words**;
+- keywords: **7**;
+- status: **green**.
 
-`repeated_differentiation_resolved_but_recurring_tested_environmental_trigger_not_identified_under_public_data`
+## Biological result 1 — repeated mosaic assembly
 
-Canonical sources:
+Thirty-six of 38 sampled Japanese paper concepts occur within the dominant radiation, which retains multiple authority-backed capitulum configurations.
 
-- `../../data/evidence/chapter2_historical_differentiation_final_summary_v1.json`;
-- `HISTORICAL_DIFFERENTIATION_EVIDENCE_SYNTHESIS_V1.md`;
-- `../../data/evidence/chapter2_historical_differentiation_evidence_ledger_v1.csv`.
+Three focal components each require repeated differentiation:
 
-## Recurrence and relative depth
+- **orientation:** ML minimum 6; UFBoot 4–6, median 5;
+- **phyllary posture:** exactly 3 changes;
+- **involucre stickiness:** exactly 5 changes.
 
-- **Orientation:** ML minimum 6; UFBoot 4–6, median 5; median relative-depth envelope 0.795–0.994; internal-to-terminal.
-- **Phyllary posture:** exactly 3 changes; median relative-depth envelope 0.695–1.000; relatively deeper placements remain admissible.
-- **Stickiness:** exactly 5 changes; median relative-depth envelope 0.937–0.954; strongly shallow/terminal-biased.
-- **Whole capitulum:** 0/3 discrete trait pairs pass robust shared-transition localization.
+Zero of three trait pairs passes the robust shared-transition-localization rule. The current interpretation is **mosaic historical assembly**, not one persistent synchronized whole-capitulum history.
 
-Minimum changes are lower bounds. Relative lineage depth is topology-only, not calendar time or rate.
+Minimum changes are lower bounds. They are not independent-origin counts, convergence counts or evolutionary rates.
 
-## Event-time identifiability
+## Biological result 2 — unequal evolutionary depth
 
-Current public evidence provides:
+Frozen UFBoot median relative-depth envelopes:
 
-1. **one calendar+paleolocation+historical-environment evaluable trait transition** — core-Nipponocirsium orientation;
-2. **three conditional flower-colour terminal branch envelopes**;
-3. **four dated sister phenotype contrasts that are not reconstructed transitions**;
-4. **two dated range processes whose ages are not stickiness-transition ages**.
+- orientation: **0.795–0.994**;
+- phyllary posture: **0.695–1.000**;
+- stickiness: **0.937–0.954**.
 
-No additional public machine-readable dated tree/posterior was recovered that can calendarize the multiple Japan38 change-bearing branches. A lineage split, broad radiation age or dispersal date is never assigned directly to a parsimony change.
+Paired comparisons on the same 1,000 UFBoot topologies strengthen the ordering:
 
-## Orientation — completed historical differentiation test
+- phyllary deeper-permissive than stickiness: **1000/1000**;
+- phyllary deeper-permissive than orientation: **993/1000**;
+- orientation deeper-permissive than stickiness: **905/1000**, with 7 ties;
+- complete `phyllary < orientation < stickiness`: **898/1000**.
 
-The erect/upward → nodding/downward core-Nipponocirsium event is evaluated over 94 chronology pairs × 4 paleolocation regions = 376 scenarios.
+Coverage-matched masking retains the central ordering while bounding the claim:
 
-At the central 0.79→0.74 Ma pair, BIO1/BIO4/BIO15 decrease in all four regions and BIO12 increases in three of four. Across the full uncertainty envelope, however:
+- phyllary deeper than matched orientation median: **195/200 = 97.5%**;
+- phyllary deeper than matched stickiness median: **193/200 = 96.5%**;
+- strict q05 comparisons: **10.5%** for orientation and **11.0–15.5%** for stickiness.
 
-- robust signed climate directions: 0;
-- consistently extreme climate-level variables: 0;
-- consistently extreme absolute-change variables: 0;
-- consistently extreme variability variables: 0.
+Thus the central depth ordering is robust to matched observed-state coverage, but the deepest tails overlap. Do not call the result coverage-independent.
 
-`no_tested_climate_direction_survives_full_chronology_paleolocation_envelope`
+Simple ML minimum steps / resolved concepts are orientation 6/20=0.300, phyllary 3/10=0.300 and stickiness 5/13=0.385. Because the state ontologies differ, these are descriptive burdens rather than commensurable rates. Equal evolutionary changeability is not established.
 
-An independent de Boer global sea-level reconstruction covers 94/94 chronologies. No tested state/variability/change metric survives the full chronology gate.
+## Biological result 3 — present orientation ecology is scale- and history-conditioned
 
-`no_global_sea_level_metric_survives_full_chronology_gate`
+The cross-scale orientation result is not one universal environment-response coefficient.
 
-Repeated orientation trigger:
+- **BIO12 annual precipitation:** Azami among-taxon +0.30436, q=0.00640; within-taxon +0.00533, q=0.874 → `among_only`.
+- **BIO1 annual mean temperature:** Azami within-taxon +0.01715, q=0.0349; among-taxon unsupported; East-Asian downward-minus-upward contrast is negative.
+- **BIO15 precipitation seasonality:** East-Asian downward-minus-upward contrast +1.320 to +1.330 SD, with 6/6 accepted-topology and 54/54 topology × species-LOO sign stability, but no matching positive within-taxon Azami response.
 
-`not_evaluable_single_dated_transition_event`
+The frozen source classification remains:
 
-Sources:
+`orientation_environment_association_is_scale_partitioned`
 
-- `../../data/evidence/chapter2_orientation_differentiation_environment_v2_summary.json`;
-- `../../data/evidence/chapter2_orientation_deboer_sealevel_envelope_v1_summary.json`.
+The V7 interpretation is more specific after the counterfactual analysis: the strongest East-Asian BIO15 correspondence is also **history embedded**.
 
-## Broader lineage-differentiation context
+## Counterfactual conditioning result
 
-A separate diagnostic tests whether dated differentiation windows across representative East-Asian lineages share a recurring historical context, without treating those lineage dates as capitulum-transition ages.
+The nine-taxon ecological panel contains five upward/erect and four downward/nodding taxa. All `choose(9,4)=126` possible placements of the four downward states were exhaustively evaluated while keeping environmental observations and the six accepted topologies fixed.
 
-### 17-BIOCLIM atlas
+The counterfactual conditioning ladder is:
 
-- 17 variables;
-- 6 dated lineage contexts;
-- Nipponocirsium, Arenicola and Sinocirsium;
-- 15,472 tested scenario × variable combinations;
-- robust event-level classes: **0/324**;
-- recurring climate-context candidates: **0**.
+```text
+same state frequency
+→ same recurrence profile
+→ same recurrence + near-matched relative-depth geometry
+```
 
-`no_recurring_lineage_differentiation_context_survives_age_region_background_gates`
+BIO15 observed direction (`D > U`):
 
-Source:
+| Counterfactual class | Maps at least as positive as observed | Conditional fraction | Reverse BIO15 available? |
+| --- | ---: | ---: | --- |
+| state frequency only | 5/126 | **3.97%** | yes |
+| exact recurrence profile | 3/40 | **7.5%** | yes; strongest signed statistic −1.784 |
+| nearest recurrence + depth histories | 3/10 | **30%** | no |
 
-- `../../data/evidence/chapter2_lineage_differentiation_environment_atlas_v1_summary.json`.
+BIO1 gives **8/126 = 6.35% → 4/40 = 10% → 3/10 = 30%**, and a reverse-sign BIO1 map remains even in the nearest-history pool.
 
-### Global sea-level context
+Classification:
 
-- 3 representative clade contexts;
-- 7 sea-level metrics per group;
-- robust event-metric classes: **0/21**;
-- recurring global sea-level candidates: **0**.
+`counterfactual_correspondence_not_strengthened_beyond_history`
 
-`no_recurring_global_sea_level_context_survives_age_background_window_gates`
+The result does **not** support an ancestry-independent climate effect. Instead:
 
-Source:
+> The observed BIO15 association is unusual under arbitrary placement of the same number of states, but its magnitude ceases to be unusual once recurrence and relative-depth geometry resemble the observed history. The ecological correspondence is therefore lineage/history embedded under the current panel.
 
-- `../../data/evidence/chapter2_lineage_differentiation_sealevel_v1.json`.
+The absence of reverse BIO15 among the 10 nearest-history maps constrains that finite counterfactual class only; it does not establish biological impossibility.
 
-These results constrain a universal coarse climate/sea-level trigger. They do **not** rule out local island connectivity/fragmentation, lineage-specific exposure, biotic interactions or other processes not reconstructed by the tested surfaces.
+## Methodological contributions
 
-## Mid-Pleistocene context
+EAzami now contains four distinct inference contributions.
 
-90/94 admissible orientation chronologies overlap 0.7–0.9 Ma, so MPT overlap is largely implied by the chronology envelope.
+### 1. Reconstruction-aware null
 
-`broad_mpt_overlap_high_but_not_event_discriminating`
+A descriptive continuous branch-change correlation initially suggested coordinated remodelling. Repeating ancestral reconstruction after independent tip-label permutation showed that the apparent coupling was compatible with reconstruction/phylogenetic geometry:
 
-Source:
+- original eight-concept panel: P=0.3504;
+- fixed seven-concept sensitivity: P=0.1959.
 
-- `../../data/evidence/chapter2_orientation_mpt_overlap_audit_v1.json`.
+This demonstrates why correlations among reconstructed changes require a null that repeats the reconstruction process rather than manipulating already reconstructed branch values alone.
 
-## Module-specific boundary
+### 2. Exact minimum-history relative-depth envelopes
 
-- **Phyllary posture:** repeated and relatively deep; historical transition trigger remains `not_evaluable` because dated sister architecture contrasts are not transition ages.
-- **Stickiness:** repeated and shallow; historical trigger remains `not_evaluable_trait_age_unlinked` because current dated events are range processes.
-- **Flower colour:** conditional dated white-lineage contexts exist, but ancestral colour, exact transition timing and a commensurate historical radiation driver remain unresolved.
-- **Whole capitulum:** unequal recurrence/depth and 0/3 shared-transition localization do not support one synchronized historical trigger; complete independence is not demonstrated.
+Relative lineage depth provides a topology-only coordinate for where minimum changes can be placed without converting substitutions/site into time. Dynamic programming returns exact lower and upper bounds across all globally minimum-cost histories rather than selecting one arbitrary ancestral reconstruction.
+
+### 3. Separate topology and coverage robustness
+
+Paired-topology ordering tests whether depth ordering survives the same phylogenetic uncertainty realization. Coverage-matched masking separately tests whether unequal observed-state coverage can explain the ordering. These answer different questions and are not interchangeable.
+
+### 4. Counterfactual conditioning ladder
+
+Trait–environment correspondence is compared with alternative state maps under progressively stronger historical constraints:
+
+`state frequency -> recurrence -> recurrence + relative depth`.
+
+This asks which part of apparent ecological extremeness survives after preserving increasingly realistic features of the observed evolutionary history.
+
+The general methodological message is an **uncertainty-aware inference framework**, not a new ancestral-state reconstruction algorithm.
+
+## Historical-cause ceiling
+
+The Japan38 scaffold remains undated. Only one current capitulum event reaches the full public-data chain:
+
+`trait transition -> bounded chronology -> palaeolocation scenarios -> historical environment`.
+
+For the core-*Nipponocirsium* orientation event:
+
+- central chronology: 0.79–0.74 Ma;
+- 94 chronology pairs × four regional scenarios = 376 scenarios;
+- southern Japan rank 1: 48/94;
+- southern Japan > Taiwan: 61/94;
+- > Ryukyu: 61/94;
+- > East-Asian core: 64/94;
+- all remain below the frozen 75% dominance gate.
+
+No tested BIO1/BIO4/BIO12/BIO15 direction, environmental level, absolute change or temporal variability survives the complete chronology × palaeolocation uncertainty envelope.
+
+Broader diagnostics likewise do not recover one recurring coarse historical regime:
+
+- 17-BIOCLIM lineage atlas: **0/324** robust event-level classes;
+- three-clade global sea-level diagnostic: **0/21** robust event-metric classes.
+
+This constrains tested coarse historical explanations. It does not show that environment was unimportant.
 
 ## Current Chapter 2 conclusion
 
-> **Capitulum traits differentiated repeatedly but at unequal evolutionary depths. The Pleistocene is a shared dynamic backdrop, but current public data do not identify one recurring tested climatic or global eustatic sea-level trigger. Historical differentiation is therefore much better resolved than historical cause.**
+> **A multidimensional capitulum was repeatedly assembled within a young radiation, with constituent traits occupying unequal evolutionary depths and without one robust synchronized transition history. Present orientation ecology is organized across biological scales but is also embedded in historical lineage placement. Phenotypic assembly is therefore much better identified than one recurring historical cause.**
 
-This is a public-data identifiability result, not evidence that historical environment was biologically irrelevant.
+A compact dissertation-level synthesis is:
 
-## V6 architecture
+```text
+Chapter 1 / Azami:
+public photographs -> quantitative phenotype -> present spatial/ecological organization
 
-- `MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md`
-- `../../data/evidence/chapter2_differentiation_time_axis_contract_v1.json`
+Chapter 2 / EAzami:
+trait states + phylogeny -> recurrence -> depth -> counterfactual interpretation -> historical-cause ceiling
 
-Working title direction:
+Combined:
+phenotype is multidimensional in space and mosaically assembled through time
+```
 
-> **Evolutionary depth and historical environmental context of capitulum differentiation in a young East-Asian thistle radiation**
+## Figure / submission state
 
-The next main task is manuscript rebuilding around:
+- Figure 2: fail-closed V7 headline generator exists; verify current open/merged QA state before submission freeze.
+- Figure 3: workflow run `33838864287` green; artifact `9924217106`; 600-dpi PNG + vector PDF + manifest; visual QA passed.
+- Cover letter: synchronized to V7 mosaic-assembly and counterfactual-conditioning framing.
+- Title page: synchronized to 5,811-word main text, 229-word abstract and seven keywords.
 
-`recurrence → depth → dated event → historical context → repeated-trigger status`
+Remaining work is presentation/submission rather than broad scientific result hunting:
 
-rather than further opportunistic environmental discovery.
+1. freeze remaining main figures and captions;
+2. build anonymous line-numbered main manuscript and Supporting Information package;
+3. freeze author/affiliation/funding/COI metadata;
+4. archive immutable data/code snapshot and insert DOI.
 
-## Supporting diagnostics only
-
-The environment-free spatial-breadth pilot, SPACE×TIME feasibility work, and present 7×4/7×9 trait×environment screens remain reproducible internal diagnostics. They may stay out of the final Results.
+No further opportunistic broad climate/sea-level/proxy fishing is an active Chapter 2 task.
 
 ## Claim boundaries
 
 - minimum changes ≠ independent origins or convergence;
-- relative lineage depth ≠ calendar time;
+- relative lineage depth ≠ calendar time or rate;
+- bootstrap/topology fractions ≠ posterior probabilities or independent biological replicates;
+- central coverage robustness ≠ coverage independence;
+- `0/3` shared localization ≠ genetic/developmental independence;
+- within/among/East-Asian ecology are non-exchangeable estimands and are not pooled;
+- counterfactual conditional ranks ≠ P values or independent confirmations;
+- history-conditioned BIO15 correspondence ≠ climatic selection or ancestry-independent effect;
+- no three-trait depth × ecological-reach regression is identified under current coverage;
 - dated lineage split ≠ exact trait-transition date;
-- regional paleolocation scenario ≠ ancestral-area probability;
-- event-window climate ≠ exact exposure at the unknown transition instant;
+- regional palaeolocation scenario ≠ ancestral-area probability;
 - global sea level ≠ local land connectivity;
 - no recovered recurring tested trigger ≠ environment was irrelevant;
-- historical alignment ≠ natural selection;
-- adaptation requires Chapter 3 mechanism and reproductive fitness;
-- `not_evaluable` ≠ no biological relationship.
+- adaptation requires direct mechanism and reproductive-fitness evidence.
 
-## Frozen legacy submission package
+## Frozen legacy packages
 
-Earlier JEB packages remain reproducible audit history and are explicitly not the active scientific route.
-
-- `MANUSCRIPT_JEB_V4.md`;
-- `CHAPTER2_CORE_RESULT_RECOVERY_V1.md`;
-- `MANUSCRIPT_JEB_V3.md` and associated package.
-
-Frozen reconstruction-aware audit diagnostics:
-
-- original panel P=0.3504;
-- fixed JPN29-excluded sensitivity P=0.1959.
+V1–V6 manuscripts and earlier JEB packages remain reproducible audit history rather than the active scientific route. Their value is methodological provenance, especially the transition from apparent coordinated remodelling to reconstruction-aware null testing and from trigger hunting to positive mosaic-assembly inference.
