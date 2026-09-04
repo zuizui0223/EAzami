@@ -1,0 +1,48 @@
+{
+  "version": "chapter2_orientation_transition_regime_robustness_result_v1",
+  "status_date": "2026-09-04",
+  "classification": "transition_regime_concordance_strict_coverage_robust_but_region_sensitive",
+  "fixed_hypothesis": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+  "strict_n10": {
+    "n_taxa": 9,
+    "state_counts": {"U": 5, "D": 4},
+    "composite_median": 0.33085368107660174,
+    "bio15_median": 0.2686701291935414,
+    "bio1_median": -0.19922641579599754,
+    "topology_composite_positive": "6/6",
+    "exact_primary_rank": {"count_at_least_observed": 4, "n_maps": 126, "exact_fraction": 0.031746031746031744},
+    "bio15_only_rank": {"count_at_least_observed": 7, "n_maps": 126, "exact_fraction": 0.05555555555555555},
+    "lower_bio1_rank": {"count_at_least_observed": 8, "n_maps": 126, "exact_fraction": 0.06349206349206349},
+    "passes_frozen_rule": true
+  },
+  "japan_n5": {
+    "n_taxa": 8,
+    "state_counts": {"U": 5, "D": 3},
+    "composite_median": 0.1759180728075902,
+    "bio15_median": 0.09328350237042463,
+    "bio1_median": -0.1554607221786426,
+    "topology_composite_positive": "6/6",
+    "exact_primary_rank": {"count_at_least_observed": 10, "n_maps": 56, "exact_fraction": 0.17857142857142858},
+    "bio15_only_rank": {"count_at_least_observed": 18, "n_maps": 56, "exact_fraction": 0.32142857142857145},
+    "lower_bio1_rank": {"count_at_least_observed": 7, "n_maps": 56, "exact_fraction": 0.125},
+    "passes_frozen_rule": false
+  },
+  "interpretation": {
+    "coverage": "The H1 composite remains exceptional under the original strict n>=10 occurrence gate; the positive result is therefore not an artefact of lowering occurrence coverage to n>=5.",
+    "region": "The same fixed-vector H1 is directionally positive but not exceptional in the Japan-only n>=5 panel. The current support is therefore East-Asian/regional-context dependent rather than a Japan-only repeated rule.",
+    "axis": "At strict n>=10, neither BIO15 nor lower BIO1 alone crosses the frozen 0.05 rank threshold, whereas the predeclared composite does. The robust object is the joint two-axis regime, not either single climate variable."
+  },
+  "workflow_provenance": {
+    "run_id": 33846549634,
+    "artifact_id": 9926735895,
+    "artifact_name": "chapter2-orientation-transition-regime-robustness-v1",
+    "artifact_sha256": "374723152d39b79c5e15b8f459268f6d4a1498e4d294b609a293003548865da7",
+    "source_head_sha": "29219c6d1ea758898e7198cfcc3c2a8df8b6c8b3"
+  },
+  "claim_ceiling": [
+    "Do not call this an East-Asian climate cause; it is present-niche transition-regime concordance.",
+    "Do not claim Japan-only replication.",
+    "Do not isolate BIO15 or BIO1 as the driver from this result.",
+    "Do not claim selection, adaptation, or transition-time environment."
+  ]
+}

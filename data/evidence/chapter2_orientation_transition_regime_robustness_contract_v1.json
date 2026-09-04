@@ -55,5 +55,6 @@
     "Exact map fractions are finite randomization ranks, not biological-replicate P values.",
     "Japan-only persistence is regional robustness, not an independent evolutionary replication.",
     "A robust result still does not identify historical climate causation, selection, adaptation, or a mediator."
-  ]
+  ],
+  "execution_trigger": "result_blind_default_branch_execution_20260904"
 }
