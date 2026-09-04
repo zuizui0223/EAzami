@@ -112,18 +112,19 @@ def main() -> int:
     validate(contract, hist, paired, coverage)
     setup_style()
 
-    fig = plt.figure(figsize=(7.2, 7.35))
+    fig = plt.figure(figsize=(7.2, 7.45))
     gs = fig.add_gridspec(
         3, 2,
         height_ratios=[1.0, 1.03, 0.62],
-        left=0.13, right=0.98, top=0.96, bottom=0.06,
-        hspace=0.72, wspace=0.62,
+        left=0.13, right=0.98, top=0.96, bottom=0.065,
+        hspace=0.78, wspace=0.62,
     )
     rec = hist["recurrence_and_depth"]
     traits = ["Orientation", "Phyllary", "Stickiness"]
     cols = [BLUE, ORANGE, GREEN]
     yy = np.arange(3)[::-1]
 
+    # a — minimum changes.
     ax = fig.add_subplot(gs[0, 0])
     values = [(4, 6, 5, 6, 20), (3, 3, 3, 3, 10), (5, 5, 5, 5, 13)]
     for y, (lo, hi, med, ml, n), col in zip(yy, values, cols):
@@ -136,9 +137,10 @@ def main() -> int:
     ax.set_xlabel("Minimum unordered changes")
     ax.set_title("Minimum changes", pad=9)
     ax.grid(axis="x", color=LIGHT, lw=0.6)
-    ax.text(0.02, 0.02, "line = UFBoot range   ○ median   ◆ ML", transform=ax.transAxes, fontsize=6.4, color=GREY)
+    ax.text(0.5, -0.25, "line: UFBoot range   ○ median   ◆ ML", transform=ax.transAxes, ha="center", fontsize=6.4, color=GREY)
     panel(ax, "a")
 
+    # b — relative-depth envelopes.
     ax = fig.add_subplot(gs[0, 1])
     envelopes = [
         tuple(rec["orientation"]["relative_depth_median_envelope"]),
@@ -155,9 +157,10 @@ def main() -> int:
     ax.set_xlabel("Relative lineage depth (1 = terminal)")
     ax.set_title("Relative-depth envelopes", pad=9)
     ax.grid(axis="x", color=LIGHT, lw=0.6)
-    ax.text(0.02, 0.02, "lower = deeper-permissive; topology only, not time", transform=ax.transAxes, fontsize=6.3, color=GREY)
+    ax.text(0.5, -0.25, "lower = deeper-permissive; topology only, not time", transform=ax.transAxes, ha="center", fontsize=6.3, color=GREY)
     panel(ax, "b")
 
+    # c — paired topology ordering.
     ax = fig.add_subplot(gs[1, 0])
     labels = ["P<S", "P<O", "O<S", "P<O<S"]
     vals = np.array([1.000, 0.993, 0.905, 0.898]) * 100
@@ -170,30 +173,31 @@ def main() -> int:
     ax.set_ylim(0, 106)
     ax.set_ylabel("Topologies retaining ordering (%)")
     ax.set_title("Paired topology ordering", pad=9)
-    ax.text(0.02, 0.02, "P=phyllary  O=orientation  S=stickiness", transform=ax.transAxes, fontsize=6.3, color=GREY)
+    ax.text(0.5, -0.23, "P=phyllary   O=orientation   S=stickiness", transform=ax.transAxes, ha="center", fontsize=6.3, color=GREY)
     panel(ax, "c")
 
+    # d — coverage-matched central vs strict tail. Direct labels avoid legend overlap.
     ax = fig.add_subplot(gs[1, 1])
     groups = ["O 7U/3D", "S 5/5", "S 6/4"]
     med = np.array([97.5, 96.5, 96.5])
     q05 = np.array([10.5, 11.0, 15.5])
     gy = np.arange(3)[::-1]
     h = 0.28
-    ax.barh(gy + h/2, med, height=h, color=BLUE, label="phyllary < matched median")
-    ax.barh(gy - h/2, q05, height=h, color=GREY, label="phyllary < matched q05")
+    ax.barh(gy + h/2, med, height=h, color=BLUE)
+    ax.barh(gy - h/2, q05, height=h, color=GREY)
     for y, v in zip(gy + h/2, med):
-        ax.text(v + 1.2, y, f"{v:.1f}%", va="center", fontsize=6.7)
+        ax.text(v + 1.2, y, f"{v:.1f}% median", va="center", fontsize=6.6)
     for y, v in zip(gy - h/2, q05):
-        ax.text(v + 1.2, y, f"{v:.1f}%", va="center", fontsize=6.7)
+        ax.text(v + 1.2, y, f"{v:.1f}% q05", va="center", fontsize=6.6)
     ax.set_yticks(gy, groups)
-    ax.set_xlim(0, 108)
+    ax.set_xlim(0, 112)
     ax.set_xlabel("Selected topology realizations (%)")
     ax.set_title("Coverage-matched sensitivity", pad=9)
     ax.grid(axis="x", color=LIGHT, lw=0.6)
-    ax.legend(frameon=False, fontsize=6.2, loc="lower right")
-    ax.text(0.02, 0.02, "central ordering retained; strict deep tails overlap", transform=ax.transAxes, fontsize=6.3, color=RED)
+    ax.text(0.5, -0.20, "central ordering retained; strict deep tails overlap", transform=ax.transAxes, ha="center", fontsize=6.4, color=RED)
     panel(ax, "d")
 
+    # e — localization boundary and interpretation.
     ax = fig.add_subplot(gs[2, :])
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
