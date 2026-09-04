@@ -7,6 +7,7 @@ on:
       - "data/evidence/chapter2_orientation_environment_counterfactual_contract_v1.json"
       - "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv"
       - "data/evidence/chapter2_ecological_explanatory_reach_v1.json"
+      - "docs/chapter2/ORIENTATION_ENVIRONMENT_COUNTERFACTUAL_V1.md"
       - ".github/workflows/run-chapter2-orientation-environment-counterfactual-v1.yml"
   workflow_dispatch:
 
