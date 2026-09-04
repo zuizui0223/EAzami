@@ -1,7 +1,8 @@
 # JEB V7 title page — working template
 
 **Target:** *Journal of Evolutionary Biology* — Research Article  
-**Main title:** Repeated mosaic assembly at unequal evolutionary depths in a young thistle radiation
+**Main title:** Repeated mosaic assembly at unequal evolutionary depths in a young thistle radiation  
+**Submission-text status:** synchronized to the active transition-regime V7 manuscript
 
 ## Authors
 
