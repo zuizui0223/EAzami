@@ -2,6 +2,7 @@
   "version": "chapter2_jeb_v7_figure3_contract_v1",
   "status_date": "2026-09-04",
   "role": "Fail-closed publication figure contract for scale- and history-conditioned orientation ecology.",
+  "execution_trigger": "2026-09-04 post-merge render QA; no scientific estimand or required value changed",
   "sources": {
     "scale_partition": "data/evidence/chapter2_orientation_environment_scale_partition_v1.json",
     "counterfactual": "data/evidence/chapter2_orientation_environment_counterfactual_result_v1.json"
