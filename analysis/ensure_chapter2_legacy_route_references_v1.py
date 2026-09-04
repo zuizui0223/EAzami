@@ -22,5 +22,5 @@ The following files remain a **historical audit route only**; they are not the a
 - `MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md`;
 - `HISTORICAL_DIFFERENTIATION_TRIGGER_RESULT_V1.md`.
 """
-P.write_text(text.rstrip() + block + "\n", encoding="utf-8")
+P.write_text(text.rstrip() + block.rstrip() + "\n", encoding="utf-8")
 print("added superseded V6 audit route references")
