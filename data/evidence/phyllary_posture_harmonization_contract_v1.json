@@ -1,0 +1,31 @@
+{
+  "contract_version": "phyllary_posture_harmonization_v1",
+  "date": "2026-08-24",
+  "source": "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv",
+  "purpose": "Predeclare a conservative mapping before any phyllary-posture history analysis so categories are not collapsed after seeing a phylogenetic signal.",
+  "raw_state_counts": {
+    "appressed": 1,
+    "appressed_or_ascending": 2,
+    "ascending": 4,
+    "ascending_or_recurved": 1,
+    "spreading": 1,
+    "spreading_or_recurved": 1
+  },
+  "coarse_mapping": {
+    "appressed": "closed_to_ascending",
+    "appressed_or_ascending": "closed_to_ascending",
+    "ascending": "closed_to_ascending",
+    "ascending_or_recurved": "unresolved_cross_boundary",
+    "spreading": "spreading_to_recurved",
+    "spreading_or_recurved": "spreading_to_recurved"
+  },
+  "coarse_state_counts_expected": {
+    "closed_to_ascending": 7,
+    "spreading_to_recurved": 2,
+    "unresolved_cross_boundary": 1
+  },
+  "current_decision": "exploratory_only_not_primary_history_ready",
+  "reason": "The conservative binary-compatible mapping leaves only two spreading/recurved tips and one cross-boundary ambiguous tip. This is too sparse and imbalanced to treat absence of repeated transitions as biological evidence.",
+  "next_data_priority": "Collect direct voucher-linked phyllary posture/spread and spine measurements on the Japan-wide backbone; preserve continuous angle/spread where possible rather than forcing binary states.",
+  "claim_boundary": "This mapping describes posture geometry only. It does not label either state as defensive, adaptive, stronger, or weaker, and it must not be altered after looking at a tree to increase transition count."
+}
