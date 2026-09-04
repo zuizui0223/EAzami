@@ -1,0 +1,68 @@
+{
+  "version": "chapter2_bio15_specificity_matched_contrast_contract_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Post-result mechanism-discrimination boundary test. Without adding new climate variables, ask whether the primary BIO15 orientation correspondence retains information after conditioning on the already-frozen BIO1 axis and coarse geography, and whether the same direction appears in phylogenetically matched opposite-state taxon pairs.",
+  "frozen_sources": {
+    "geography_result": "data/evidence/chapter2_orientation_geography_causal_boundary_result_v1.json",
+    "japan_occurrence_run_id": 32716015605,
+    "japan_occurrence_artifact_id": 9516784077,
+    "japan_occurrence_artifact_sha256": "cb5717c90cbc769398f9ffce38787704a02e34253c1ff16cf8f368ba55aeda96",
+    "taiwan_occurrence_run_id": 32725842871,
+    "taiwan_occurrence_artifact_id": 9520157997,
+    "taiwan_occurrence_artifact_sha256": "819936ceeb6008f356c580622fb72972617700402afaa3d3ab125bff2e6d9106",
+    "au_topology_run_id": 32614839764,
+    "au_topology_artifact_id": 9486643703,
+    "au_topology_artifact_sha256": "d90f30e4fcc3a2a0296a7d0cfa13d0f3ecc008b36d28298ac9782a001e6f63c5"
+  },
+  "frozen_panel": {
+    "n_taxa": 9,
+    "state_counts": {"U": 5, "D": 4},
+    "primary_axis": "chelsa_bio15",
+    "primary_direction": "D_gt_U",
+    "competing_axis": "chelsa_bio01",
+    "competing_direction": "D_lt_U",
+    "no_new_environmental_axes": true
+  },
+  "tests": {
+    "A_conditional_specificity": {
+      "primary_model": "Brownian GLS z(BIO15) ~ orientation + z(BIO1) + z(latitude) + z(longitude)",
+      "reverse_model": "Brownian GLS z(BIO1) ~ orientation + z(BIO15) + z(latitude) + z(longitude)",
+      "topologies": 6,
+      "robustness": "species leave-one-out on every accepted topology",
+      "primary_direction_retained": "orientation coefficient positive in 6/6 topologies and all 54 species-LOO fits",
+      "reverse_direction_retained": "orientation coefficient negative in 6/6 topologies and all 54 species-LOO fits",
+      "interpretation": "Retention of BIO15 after conditioning on BIO1 and geography strengthens environmental-axis specificity but remains observational and non-causal."
+    },
+    "B_incremental_prediction": {
+      "outcome": "z(BIO15)",
+      "baseline": "Brownian conditional prediction with intercept + z(BIO1) + z(latitude) + z(longitude)",
+      "trait_model": "same baseline + orientation",
+      "evaluation": "leave one taxon out for each of six accepted topologies",
+      "metrics": ["MSE improvement", "MAE improvement"],
+      "sign_rule": "positive improvement means orientation adds held-out BIO15 predictive information beyond the frozen competing climate axis, geography and phylogenetic covariance",
+      "role": "supporting diagnostic; not required for causal classification"
+    },
+    "C_phylogenetic_opposite_state_matching": {
+      "full_panel": "For each topology, pair all four D taxa one-to-one with four of five U taxa by exact minimum-total patristic distance; no taxon reuse; deterministic lexicographic tie break.",
+      "japan_only": "Repeat after excluding Taiwan: pair all three Japan D taxa one-to-one with three of four Japan U taxa by the same rule.",
+      "environmental_contrast": "For every matched pair compute D minus U difference in panel-standardized BIO15 and BIO1 centroids.",
+      "primary_summary": "number of positive BIO15 pair contrasts, median BIO15 pair contrast, and whether all matched BIO15 contrasts are positive on each topology",
+      "secondary_summary": "analogous BIO1 contrasts in the prespecified negative D-minus-U direction",
+      "boundary": "Topology-specific matched pairs are sensitivity constructions, not independent evolutionary transitions or biological replicates."
+    }
+  },
+  "classification_order": [
+    "bio15_specificity_and_near_lineage_contrast_supported",
+    "bio15_conditional_specificity_supported_but_near_lineage_contrasts_mixed",
+    "bio15_direction_persists_without_axis_specificity",
+    "bio15_specificity_not_supported_after_competing_axis_adjustment"
+  ],
+  "claim_ceiling": [
+    "No result establishes precipitation seasonality as a selective agent or historical cause.",
+    "No result establishes a hydric mechanism, adaptation or plasticity.",
+    "BIO15 and BIO1 are present-day climate summaries and may remain correlated with unmeasured geography or lineage properties.",
+    "Matched extant taxon pairs are not reconstructed independent transitions.",
+    "Accepted topology realizations are sensitivity analyses, not independent biological replicates.",
+    "No additional environmental predictor may be added after result inspection."
+  ]
+}
