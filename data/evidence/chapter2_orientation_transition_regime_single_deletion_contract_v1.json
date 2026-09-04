@@ -1,0 +1,31 @@
+{
+  "version": "chapter2_orientation_transition_regime_single_deletion_contract_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Post-result single-taxon falsification of the fixed transition-regime H1. Determine whether its direction or exact exceptional rank requires any one taxon in the strict n>=10 East-Asian panel.",
+  "source_robustness_result": "data/evidence/chapter2_orientation_transition_regime_robustness_result_v1.json",
+  "fixed_hypothesis": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+  "panel": {"source": "strict_n10", "n": 9, "U": 5, "D": 4, "occurrence_threshold": 10},
+  "tests": {
+    "deletion_panels": "Delete each of the nine strict-panel taxa once; restandardize BIO15/BIO1 within the remaining eight taxa; use the same CTMC/Brownian estimator and enumerate every count-preserving state map.",
+    "expected_map_count_if_deleted_U": 70,
+    "expected_map_count_if_deleted_D": 56,
+    "primary_direction_rule": "For every deletion panel, observed composite must remain positive on all six accepted topologies.",
+    "secondary_exceptionality_rule": "For each deletion panel, report whether the exact one-sided finite-map rank remains <=0.05."
+  },
+  "classification_order": [
+    "transition_regime_direction_and_exceptionality_robust_to_every_single_taxon_deletion",
+    "transition_regime_direction_not_single_taxon_dependent_but_exceptionality_sensitive",
+    "transition_regime_direction_depends_on_at_least_one_taxon"
+  ],
+  "decision_rule": {
+    "class1": "all nine deletion panels retain positive composite on all six topologies AND all nine exact ranks <=0.05",
+    "class2": "all nine deletion panels retain positive composite on all six topologies BUT at least one exact rank >0.05",
+    "class3": "at least one deletion panel has a non-positive composite on at least one topology"
+  },
+  "claim_ceiling": [
+    "A single-deletion result is a sensitivity analysis, not independent replication.",
+    "Failure of exact <=0.05 after deletion may reflect reduced finite-map resolution as well as biological dependence and must be reported with the actual rank.",
+    "Do not alter the vector, taxa states, or environmental variables after inspection.",
+    "No result establishes climatic causation, selection, adaptation, or a mediator."
+  ]
+}
