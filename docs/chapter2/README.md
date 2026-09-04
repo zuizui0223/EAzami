@@ -17,6 +17,8 @@ diversity within the dominant radiation
 → shared-transition localization
 → present ecological scale
 → history-conditioned counterfactual ecology
+→ fixed transition-regime concordance
+→ present/origin regime persistence test
 → calendar-time / historical-cause boundary
 ```
 
@@ -26,15 +28,17 @@ Historical-trigger failure is the terminal identifiability boundary, not the ope
 
 - scientific text: `MANUSCRIPT_JEB_V7_WORKING.md`;
 - figure architecture: `JEB_V7_FIGURE_MAP.md`;
+- current transition-regime synthesis: `CURRENT_CLAIMS_AND_EVIDENCE_TRANSITION_REGIME_V2.md`;
 - counterfactual framework: `COUNTERFACTUAL_CONDITIONING_FRAMEWORK_V1.md`;
 - counterfactual orientation result: `ORIENTATION_ENVIRONMENT_COUNTERFACTUAL_V1.md`.
 
-Validated manuscript workflow run `33838561827`:
+Validated transition-regime integration workflow run `33867159716`:
 
-- Abstract: **229 words**;
-- main text before References: **5,811 words**;
+- Abstract: **231 words**;
+- main text before References: **6,944 words**;
 - keywords: **7**;
-- status: **green**.
+- legacy V7 validator: **green**;
+- transition-regime validator: **green**.
 
 ## Biological result 1 — repeated mosaic assembly
 
@@ -75,7 +79,7 @@ Thus the central depth ordering is robust to matched observed-state coverage, bu
 
 Simple ML minimum steps / resolved concepts are orientation 6/20=0.300, phyllary 3/10=0.300 and stickiness 5/13=0.385. Because the state ontologies differ, these are descriptive burdens rather than commensurable rates. Equal evolutionary changeability is not established.
 
-## Biological result 3 — present orientation ecology is scale- and history-conditioned
+## Biological result 3 — orientation ecology is scale-, history- and transition-conditioned
 
 The cross-scale orientation result is not one universal environment-response coefficient.
 
@@ -87,7 +91,26 @@ The frozen source classification remains:
 
 `orientation_environment_association_is_scale_partitioned`
 
-The V7 interpretation is more specific after the counterfactual analysis: the strongest East-Asian BIO15 correspondence is also **history embedded**.
+A specific transition-level test adds a second positive result. For the fixed present-niche vector `BIO15 up + BIO1 down`, U→D transition tracking is exceptional under exhaustive count-preserving state maps:
+
+- n>=5, 12 taxa: **16/792 = 2.02%**;
+- n>=3, 13 taxa: **19/1716 = 1.11%**;
+- strict n>=10, 9 taxa: **4/126 = 3.17%**.
+
+The strict single-axis ranks are weaker than the composite: BIO15 **7/126 = 5.56%**, lower BIO1 **8/126 = 6.35%**. The supported object is therefore a **composite present-niche regime**, not a single-axis causal effect.
+
+The reverse D→U direction tracks the opposite side of the same strict present-niche regime, with bidirectional-floor rank **3/126 = 2.38%**. This is present-niche tracking, not demonstrated genetic/developmental reversibility.
+
+Fixed falsifications bound the result:
+
+- Japan-only n>=5: **10/56 = 17.86%** — directional but not exceptional;
+- deleting any one strict-panel taxon: expected direction retained in **9/9** deletion panels, while <=5% exact extremeness survives only **2/9**;
+- linear latitude/longitude residualization: **5/126 = 3.97%**;
+- internal-edge-only scoring: **3/126 = 2.38%**;
+- geography residualization + internal-edge-only: **3/126 = 2.38%**;
+- combined n>=5 sensitivity: **29/792 = 3.66%**.
+
+Thus the U→D transition-regime signal is not reducible, under the declared reconstruction, to one taxon, a simple linear geographic gradient or terminal-edge contribution, but it is not a universal Japan-only rule.
 
 ## Counterfactual conditioning result
 
@@ -123,7 +146,7 @@ The absence of reverse BIO15 among the 10 nearest-history maps constrains that f
 
 ## Methodological contributions
 
-EAzami now contains four distinct inference contributions.
+EAzami now contains five linked inference contributions.
 
 ### 1. Reconstruction-aware null
 
@@ -150,9 +173,13 @@ Trait–environment correspondence is compared with alternative state maps under
 
 This asks which part of apparent ecological extremeness survives after preserving increasingly realistic features of the observed evolutionary history.
 
+### 5. Fixed transition-regime falsification ladder
+
+A predeclared two-axis present-niche vector is tested at the transition level and then subjected to strict coverage, regional, single-taxon, linear-geography, internal-edge and combined falsifications. This distinguishes a transition-linked ecological pattern from simpler terminal-tip or first-order geographic explanations without converting it into a causal climate claim.
+
 The general methodological message is an **uncertainty-aware inference framework**, not a new ancestral-state reconstruction algorithm.
 
-## Historical-cause ceiling
+## Historical-cause ceiling and present/origin decoupling
 
 The Japan38 scaffold remains undated. Only one current capitulum event reaches the full public-data chain:
 
@@ -168,18 +195,20 @@ For the core-*Nipponocirsium* orientation event:
 - > East-Asian core: 64/94;
 - all remain below the frozen 75% dominance gate.
 
-No tested BIO1/BIO4/BIO12/BIO15 direction, environmental level, absolute change or temporal variability survives the complete chronology × palaeolocation uncertainty envelope.
+The fixed present U→D regime (`BIO15 delta > 0` and `BIO1 delta < 0`) matches only **99/376 = 26.3%** historical chronology × region scenarios. At the central 0.79–0.74 Ma chronology, BIO1 decreases in all four regions but BIO15 also decreases in all four, opposite the present U→D BIO15 direction. The present regime is therefore not supported as a persistent origin regime.
+
+No broader tested BIO1/BIO4/BIO12/BIO15 direction, environmental level, absolute change or temporal variability survives the complete chronology × palaeolocation uncertainty envelope.
 
 Broader diagnostics likewise do not recover one recurring coarse historical regime:
 
 - 17-BIOCLIM lineage atlas: **0/324** robust event-level classes;
 - three-clade global sea-level diagnostic: **0/21** robust event-metric classes.
 
-This constrains tested coarse historical explanations. It does not show that environment was unimportant.
+This constrains tested coarse historical explanations. It does not imply environmental irrelevance.
 
 ## Current Chapter 2 conclusion
 
-> **A multidimensional capitulum was repeatedly assembled within a young radiation, with constituent traits occupying unequal evolutionary depths and without one robust synchronized transition history. Present orientation ecology is organized across biological scales but is also embedded in historical lineage placement. Phenotypic assembly is therefore much better identified than one recurring historical cause.**
+> **A multidimensional capitulum was repeatedly and mosaically assembled at unequal evolutionary depths. Orientation additionally shows a distributed East-Asian present transition–niche regime: U↔D transition probabilities track opposite sides of a fixed BIO15/BIO1 niche vector, the U→D direction survives strict coverage, deletion of any one taxon, simple linear geography removal, internal-edge-only scoring and their combined stress, but the same regime is not supported across the historical uncertainty envelope of the only calendarized U→D origin event.**
 
 A compact dissertation-level synthesis is:
 
@@ -188,7 +217,7 @@ Chapter 1 / Azami:
 public photographs -> quantitative phenotype -> present spatial/ecological organization
 
 Chapter 2 / EAzami:
-trait states + phylogeny -> recurrence -> depth -> counterfactual interpretation -> historical-cause ceiling
+trait states + phylogeny -> recurrence -> depth -> transition-niche tracking -> historical persistence test -> causal ceiling
 
 Combined:
 phenotype is multidimensional in space and mosaically assembled through time
@@ -197,18 +226,18 @@ phenotype is multidimensional in space and mosaically assembled through time
 ## Figure / submission state
 
 - Figure 2: fail-closed V7 headline generator exists; verify current open/merged QA state before submission freeze.
-- Figure 3: workflow run `33838864287` green; artifact `9924217106`; 600-dpi PNG + vector PDF + manifest; visual QA passed.
-- Cover letter: synchronized to V7 mosaic-assembly and counterfactual-conditioning framing.
-- Title page: synchronized to 5,811-word main text, 229-word abstract and seven keywords.
+- Figure 3 v2: transition-regime 4-panel generator green; visual QA passed on workflow run `33867374607`, artifact `9934492559` (600-dpi PNG + vector PDF + manifest).
+- Cover letter: still needs synchronization from the earlier history-conditioned framing to the transition-regime result.
+- Title page: still needs synchronization from the earlier 5,811-word / 229-word snapshot to **6,944 words / 231-word abstract**.
 
 Remaining work is presentation/submission rather than broad scientific result hunting:
 
 1. freeze remaining main figures and captions;
-2. build anonymous line-numbered main manuscript and Supporting Information package;
-3. freeze author/affiliation/funding/COI metadata;
-4. archive immutable data/code snapshot and insert DOI.
+2. synchronize cover letter/title page;
+3. build anonymous line-numbered main manuscript and Supporting Information package;
+4. freeze author/affiliation/funding/COI metadata and archive DOI.
 
-No further opportunistic broad climate/sea-level/proxy fishing is an active Chapter 2 task.
+No further opportunistic broad climate/sea-level/proxy fishing is an active Chapter 2 task. The combined transition-regime stress test is the frozen stop point for coarse public-data robustness.
 
 ## Claim boundaries
 
@@ -219,14 +248,27 @@ No further opportunistic broad climate/sea-level/proxy fishing is an active Chap
 - `0/3` shared localization ≠ genetic/developmental independence;
 - within/among/East-Asian ecology are non-exchangeable estimands and are not pooled;
 - counterfactual conditional ranks ≠ P values or independent confirmations;
-- history-conditioned BIO15 correspondence ≠ climatic selection or ancestry-independent effect;
+- transition-regime exact ranks ≠ biological-replicate P values;
+- internal-edge reconstructed environmental values ≠ observed ancestral environments;
+- transition-niche tracking ≠ climatic causation, selection or adaptation;
 - no three-trait depth × ecological-reach regression is identified under current coverage;
 - dated lineage split ≠ exact trait-transition date;
 - regional palaeolocation scenario ≠ ancestral-area probability;
 - global sea level ≠ local land connectivity;
-- no recovered recurring tested trigger ≠ environment was irrelevant;
+- no recovered recurring tested trigger ≠ environmental irrelevance;
 - adaptation requires direct mechanism and reproductive-fitness evidence.
 
 ## Frozen legacy packages
 
 V1–V6 manuscripts and earlier JEB packages remain reproducible audit history rather than the active scientific route. Their value is methodological provenance, especially the transition from apparent coordinated remodelling to reconstruction-aware null testing and from trigger hunting to positive mosaic-assembly inference.
+
+**Frozen legacy submission package:** `MANUSCRIPT_JEB_V4.md`.  
+Historical recovery note retained for audit compatibility: `CHAPTER2_CORE_RESULT_RECOVERY_V1.md`.
+
+### Superseded V6 space-time audit route
+
+The following files remain a **historical audit route only**; they are not the active V7 scientific spine:
+
+- `chapter2_differentiation_time_axis_contract_v1.json`;
+- `MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md`;
+- `HISTORICAL_DIFFERENTIATION_TRIGGER_RESULT_V1.md`.
