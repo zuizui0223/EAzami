@@ -1,0 +1,69 @@
+{
+  "version": "chapter2_orientation_transition_regime_hypothesis_contract_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Specific hypothesis test, not predictor exploration. Test whether repeated U->D orientation transition probability is aligned with a predeclared two-axis present-day environmental shift: higher BIO15 and lower BIO1.",
+  "hypothesis": {
+    "primary": "Across the phylogeny, branches carrying greater U->D than D->U transition probability should align with a composite environmental shift toward higher precipitation seasonality (BIO15) and lower annual mean temperature (BIO1).",
+    "vector": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+    "mechanistic_scope": "This tests repeated transition-regime concordance. It does not test wetting, pollen viability, fitness, selection, adaptation, or historical transition-time climate.",
+    "not_a_hypothesis": [
+      "BIO15 alone is the causal driver",
+      "BIO1 alone is the causal driver",
+      "downward orientation is adaptive"
+    ]
+  },
+  "sources": {
+    "orientation_crosswalk": "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv",
+    "coverage_audit": "data/evidence/chapter2_orientation_occurrence_coverage_audit_result_v1.json",
+    "legacy_branchwise_result": "data/evidence/fdt4_branchwise_niche_transition_concordance_v1.json",
+    "japan_occurrence_artifact_id": 9516784077,
+    "japan_occurrence_artifact_sha256": "cb5717c90cbc769398f9ffce38787704a02e34253c1ff16cf8f368ba55aeda96",
+    "taiwan_occurrence_artifact_id": 9520157997,
+    "taiwan_occurrence_artifact_sha256": "819936ceeb6008f356c580622fb72972617700402afaa3d3ab125bff2e6d9106",
+    "au_topology_artifact_id": 9486643703,
+    "au_topology_artifact_sha256": "d90f30e4fcc3a2a0296a7d0cfa13d0f3ecc008b36d28298ac9782a001e6f63c5"
+  },
+  "panels": {
+    "n10_method_check": {"threshold": 10, "expected_n": 9, "expected_U": 5, "expected_D": 4, "role": "method_reproduction_only"},
+    "n5_primary": {"threshold": 5, "expected_n": 12, "expected_U": 7, "expected_D": 5, "exact_state_maps": 792, "role": "primary_hypothesis_test"},
+    "n3_sensitivity": {"threshold": 3, "expected_n": 13, "expected_U": 7, "expected_D": 6, "exact_state_maps": 1716, "role": "secondary_resolution_sensitivity"}
+  },
+  "method": {
+    "topologies": 6,
+    "discrete_model": "Symmetric two-state CTMC. Estimate q separately for each topology and each counterfactual state map by maximum likelihood. Use exact edge joint posterior probabilities P(U,D) and P(D,U) conditional on all admitted tip states.",
+    "continuous_model": "For BIO15 and BIO1 separately, z-score taxon centroids within panel and estimate internal values by Brownian squared-change minimization on the panel-spanning subtree using substitution branch lengths.",
+    "axis_statistic": "For each edge, multiply environmental child-minus-parent shift by P(U,D)-P(D,U). Sum over edges and divide by total posterior change probability sum[P(U,D)+P(D,U)]. Positive means the environmental shift is aligned with the U->D direction.",
+    "primary_statistic": "Unit-vector projection (S_BIO15 - S_BIO1)/sqrt(2), then median across the six accepted topologies.",
+    "null": "Enumerate every tip-state assignment preserving panel U/D counts; recompute CTMC q and edge transition posteriors for every map. Environmental values and tree topology/branch lengths remain fixed.",
+    "exact_rank": "One-sided exact state-map permutation fraction: number of count-preserving maps with six-topology median composite statistic >= observed, divided by all maps. Observed map is included.",
+    "single_axis_results": "BIO15 and sign-reversed BIO1 exact ranks are reported as secondary decomposition only; they cannot replace the composite primary test."
+  },
+  "method_validation": {
+    "n10_observed_direction_required": "BIO15 branchwise statistic positive and BIO1 branchwise statistic negative on all six topologies.",
+    "legacy_numeric_tolerance": 0.03,
+    "legacy_target_ranges": {
+      "chelsa_bio15": [0.267907, 0.269417],
+      "chelsa_bio01": [-0.199306, -0.199151]
+    },
+    "failure_rule": "If the new implementation cannot reproduce each legacy n=9 observed branchwise axis statistic within absolute tolerance 0.03 on all six topologies, stop without interpreting n5/n3 results."
+  },
+  "decision_rule": {
+    "supported": "n5 observed composite statistic is positive on all six topologies and exact one-sided state-map permutation fraction <= 0.05.",
+    "directional_not_exceptional": "n5 observed composite statistic is positive on all six topologies but exact fraction > 0.05.",
+    "direction_not_repeated": "at least one n5 topology has a non-positive composite statistic.",
+    "n3_role": "n3 is a sensitivity only and cannot rescue an unsupported n5 primary test."
+  },
+  "classification_order": [
+    "repeated_u_to_d_transition_regime_concordance_supported",
+    "u_to_d_transition_regime_directional_but_not_exceptional",
+    "u_to_d_transition_regime_direction_not_repeated"
+  ],
+  "claim_ceiling": [
+    "A supported transition-regime test would show repeated phylogenetic concordance with the declared present-day environmental vector, not climatic causation.",
+    "Present-day taxon centroids are not transition-time environments.",
+    "No result identifies rain/wetting, UV, temperature, pollinators, or another mediator.",
+    "No result establishes adaptation, selection, independent origins, or transition-time fitness.",
+    "n>=5 and n>=3 remain relaxed occurrence-coverage sensitivities; the n>=10 ecology result remains the frozen primary present-day panel.",
+    "No new environmental axis may be added after result inspection."
+  ]
+}
