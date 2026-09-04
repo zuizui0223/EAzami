@@ -34,5 +34,6 @@
     "Passing jointly rules out only the conjunction of simple linear geography and terminal-edge-only explanation under the declared reconstruction.",
     "Reconstructed internal residual environments are not observed ancestral environments.",
     "No result establishes climate causation, selection, adaptation, convergence, or physiological mechanism."
-  ]
+  ],
+  "execution_trigger": "post-default-branch-workflow-registration"
 }
