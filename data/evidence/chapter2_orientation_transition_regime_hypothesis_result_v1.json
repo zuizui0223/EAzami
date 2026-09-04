@@ -1,0 +1,53 @@
+{
+  "version": "chapter2_orientation_transition_regime_hypothesis_result_v1",
+  "status_date": "2026-09-04",
+  "classification": "repeated_u_to_d_transition_regime_concordance_supported",
+  "hypothesis": "Branches carrying greater U->D than D->U orientation transition probability align with a predeclared composite present-day environmental shift toward higher BIO15 and lower BIO1.",
+  "method_reproduction_n10": {
+    "status": "pass",
+    "new_bio15_range": [0.2679067074232189, 0.26941688974572237],
+    "legacy_bio15_range": [0.267907, 0.269417],
+    "new_bio1_range": [-0.1993059297833776, -0.19915108859274677],
+    "legacy_bio1_range": [-0.199306, -0.199151],
+    "expected_changes_range": [5.174337716776595, 5.204365465731378]
+  },
+  "n5_primary": {
+    "n_taxa": 12,
+    "state_counts": {"U": 7, "D": 5},
+    "observed_topology_composite": [0.25266522464452634, 0.25256542615405386, 0.252566450171595, 0.2536923816651301, 0.25357261266493997, 0.25357381332725076],
+    "observed_composite_median": 0.2531189186547331,
+    "observed_bio15_median": 0.11730526689377382,
+    "observed_bio1_median": -0.24061485663537205,
+    "exact_primary_rank": {"count_at_least_observed": 16, "n_maps": 792, "exact_fraction": 0.020202020202020204},
+    "bio15_only_rank": {"count_at_least_observed": 123, "n_maps": 792, "exact_fraction": 0.1553030303030303},
+    "lower_bio1_rank": {"count_at_least_observed": 15, "n_maps": 792, "exact_fraction": 0.01893939393939394}
+  },
+  "n3_sensitivity": {
+    "n_taxa": 13,
+    "state_counts": {"U": 7, "D": 6},
+    "observed_composite_median": 0.31134204356607353,
+    "observed_bio15_median": 0.15437595386319,
+    "observed_bio1_median": -0.28592818668490616,
+    "exact_primary_rank": {"count_at_least_observed": 19, "n_maps": 1716, "exact_fraction": 0.011072261072261072},
+    "bio15_only_rank": {"count_at_least_observed": 123, "n_maps": 1716, "exact_fraction": 0.07167832167832168},
+    "lower_bio1_rank": {"count_at_least_observed": 16, "n_maps": 1716, "exact_fraction": 0.009324009324009324}
+  },
+  "interpretation": {
+    "supported": "The predeclared composite (+BIO15, -BIO1) transition-regime direction is positive on all six accepted topologies and unusually strong relative to all count-preserving state maps in the n>=5 primary hypothesis panel.",
+    "axis_decomposition": "BIO15 alone is not exceptional in n>=5, whereas the lower-BIO1 component is. The supported object is therefore the composite transition-regime hypothesis, with stronger contribution from the lower-temperature component, not a unique precipitation-seasonality driver.",
+    "causal_boundary": "This is repeated phylogenetic transition-regime concordance using present-day taxon niche centroids. It does not establish transition-time climatic causation, selection, adaptation, or a physiological mediator."
+  },
+  "workflow_provenance": {
+    "run_id": 33845826254,
+    "artifact_id": 9926532782,
+    "artifact_name": "chapter2-orientation-transition-regime-hypothesis-v1",
+    "artifact_sha256": "f82733d5a3f9b5783267ee8c67b6ed2f4105f4a42d9359b66df9a94f92057110",
+    "source_head_sha": "e5a0951978dd71371b8749371cbba56225478fa8"
+  },
+  "claim_ceiling": [
+    "Do not call BIO1 or BIO15 a causal driver.",
+    "Do not call the exact state-map fraction a P value from biological replicates; it is an exhaustive finite-map null rank.",
+    "Present-day taxon centroids are not historical transition-time environments.",
+    "Do not claim adaptation, selection, independent origins, or transition-time fitness."
+  ]
+}
