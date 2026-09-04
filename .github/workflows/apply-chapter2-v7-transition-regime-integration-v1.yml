@@ -25,9 +25,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Detect existing integration
+        id: integration_state
+        run: |
+          if grep -Fq "## Fixed transition-regime concordance and falsification tests" docs/chapter2/MANUSCRIPT_JEB_V7_WORKING.md; then
+            echo "already=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "already=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Apply deterministic manuscript and figure-map integration
+        if: steps.integration_state.outputs.already != 'true'
         run: python analysis/apply_chapter2_transition_regime_v7_integration_v1.py
       - name: Normalize legacy guard wording
+        if: steps.integration_state.outputs.already != 'true'
         run: python analysis/normalize_chapter2_v7_legacy_guard_phrases_v1.py
       - name: Validate legacy V7 contracts
         run: python analysis/validate_manuscript_jeb_v7_working_v1.py
@@ -35,13 +45,13 @@ jobs:
         run: python analysis/validate_manuscript_jeb_v7_transition_regime_v2.py
       - name: Check patch hygiene
         run: git diff --check
-      - name: Commit validated integration to head branch
+      - name: Commit generated integration when needed
         if: github.event_name == 'pull_request'
         run: |
           set -euo pipefail
           if git diff --quiet -- docs/chapter2/MANUSCRIPT_JEB_V7_WORKING.md docs/chapter2/JEB_V7_FIGURE_MAP.md; then
-            echo "No manuscript/figure-map diff produced" >&2
-            exit 1
+            echo "Integration already present; validators passed; nothing to commit."
+            exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
