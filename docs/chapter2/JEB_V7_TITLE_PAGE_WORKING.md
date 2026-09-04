@@ -1,7 +1,8 @@
 # JEB V7 title page — working template
 
 **Target:** *Journal of Evolutionary Biology* — Research Article  
-**Main title:** Repeated mosaic assembly at unequal evolutionary depths in a young thistle radiation
+**Main title:** Repeated mosaic assembly at unequal evolutionary depths in a young thistle radiation  
+**Submission-text status:** synchronized to the active transition-regime V7 manuscript
 
 ## Authors
 
@@ -30,11 +31,11 @@ Mosaic capitulum assembly through time
 
 ## Article metrics
 
-Validated on V7 manuscript workflow run `33838561827`:
+Validated on the active V7 transition-regime manuscript (workflow run `33867953835`):
 
 - article type: Research Article;
-- main text before References: **5,811 words** (<7,500);
-- abstract: **229 words** (<250);
+- main text before References: **6,944 words** (<7,500);
+- abstract: **231 words** (<250);
 - keywords: **7**.
 
 ## Data Availability Statement
@@ -63,9 +64,9 @@ The anonymous main manuscript already contains a disclosure in the Methods `Tran
 
 ## Social-media abstract (<=280 characters)
 
-Validated working version, 261 characters:
+Validated working version, 239 characters:
 
-> Three thistle capitulum traits were repeatedly assembled at unequal evolutionary depths. Orientation–climate correspondence changes across biological scale and weakens under history-matched counterfactuals; recurring historical climate causes remain unresolved.
+> Three thistle capitulum traits were mosaically assembled at unequal evolutionary depths. Orientation transitions track a bidirectional East-Asian present-niche regime, yet that regime is not supported at the only calendarized origin event.
 
 ## Title-page freeze gates
 
