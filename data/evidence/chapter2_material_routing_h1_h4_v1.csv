@@ -1,0 +1,39 @@
+material_id,question,material,role,main_text,main_figure,disposition,reason
+M01,Q1,japan38 nuclear scaffold,primary,yes,Figure1,KEEP_MAIN,Defines one young radiation and 36/38 context
+M02,Q1,authority configuration matrix,primary,yes,Figure1,KEEP_MAIN,Shows multidimensional diversity within radiation
+M03,Q1,orientation minimum history,primary,yes,Figure2,KEEP_MAIN,Repeated component history
+M04,Q1,phyllary minimum history,primary,yes,Figure2,KEEP_MAIN,Repeated component history
+M05,Q1,stickiness minimum history,primary,yes,Figure2,KEEP_MAIN,Repeated component history
+M06,Q1,relative depth envelopes,primary,yes,Figure2,KEEP_MAIN,Temporal geometry beyond change count
+M07,Q1,paired topology depth ordering,primary,yes,Figure2,KEEP_MAIN,Headline robustness
+M08,Q1,coverage matched depth sensitivity,robustness,brief,Figure2,KEEP_SUPPORT,Bounds missing state explanation
+M09,Q1,shared transition localization 0/3,primary,yes,Figure2,KEEP_MAIN,Supports mosaic not synchronized history
+M10,Q1,reconstruction aware continuous null,boundary,brief,none,SI_OR_METHODS,Explains rejection of old coordinated remodeling claim
+M11,Q1,continuous trait phylogenetic retention,boundary,no,none,SI,Resolution limited and not focal
+M12,Q1,cytotype/ploidy lane,context,no,none,SI_OR_FUTURE,Sparse and not explanatory
+M13,Q1,colour/lightness historical lane,legacy,no,none,ARCHIVE,Not one of three complete discrete histories
+M14,Q2,cross-scale Azami/EAzami orientation ecology,context,yes,Figure3,KEEP_MAIN,Shows scale partition
+M15,Q2,H1 composite transition regime,primary,yes,Figure3,KEEP_MAIN,Specific exact hypothesis test
+M16,Q2,H2 bidirectional directional decomposition,primary,yes,Figure3,KEEP_MAIN,Second positive ecological result
+M17,Q2,H2 single taxon deletion,robustness,brief,Figure3,KEEP_SUPPORT,Shows direction not one taxon dependent
+M18,Q2,geography adjusted specificity analysis,boundary,brief,none,SI,Rejects simple geography/BIO15-only reading
+M19,Q2,Japan only H1,boundary,brief,Figure3,KEEP_SUPPORT,Defines regional context boundary
+M20,Q2,counterfactual conditioning ladder,methodological_support,no,none,SI,Useful method but superseded as main biology by H1/H2
+M21,Q2,expanded n5/n3 coverage panels,robustness,brief,Figure3,KEEP_SUPPORT,Shows strict coverage result not n9 artefact
+M22,Q2,phyllary/stickiness occurrence gate,boundary,no,none,SI,Explains why no three trait ecology comparison
+M23,Q2,Cremanthodium orientation experiment,mechanism_prior,discussion,none,DISCUSSION_PRIOR,Functional plausibility only
+M24,Q2,Cirsium antagonist meta evidence,mechanism_prior,discussion,none,DISCUSSION_PRIOR,Alternative causal pathway prior only
+M25,Q2,colour RSDS sister systems,side_line,no,none,ARCHIVE_OR_SI,Distinct trait and no longer focal
+M26,Q3,core Nipponocirsium bounded event,primary,yes,Figure4,KEEP_MAIN,Only calendarized trait transition
+M27,Q3,H4 historical regime persistence,primary,yes,Figure4,KEEP_MAIN,Direct origin versus present test
+M28,Q3,regional ranking,robustness,brief,Figure4,KEEP_SUPPORT,Descriptive palaeolocation boundary
+M29,Q3,full BIO1 BIO4 BIO12 BIO15 historical gate,boundary,brief,none,SI,Shows historical uncertainty ceiling
+M30,Q3,17 BIOCLIM atlas 0 of 324,boundary,one_sentence,none,SI_OR_DISCUSSION,Coarse historical rescue fails
+M31,Q3,sea level 0 of 21,boundary,one_sentence,none,SI_OR_DISCUSSION,Coarse eustatic rescue fails
+M32,Q3,dated tree recovery request,future,no,none,FUTURE,Needed to date additional transitions
+M33,Q3,local palaeogeography reconstruction,future,no,none,FUTURE,Needed for stronger origin causal inference
+M34,Q3,population genomics ancestry discriminator,future,no,none,CHAPTER3,Distinguish retention origin sorting introgression
+M35,Q3,wetting radiation pollen fitness experiment,future,no,none,CHAPTER3,Direct mediator and fitness chain
+M36,GLOBAL,auxiliary simulations,legacy,no,none,ARCHIVE,Model adequacy diagnostics not focal empirical result
+M37,GLOBAL,colonization secondary arrival synthesis,context,no,none,SI_OR_DISCUSSION,Broad context only
+M38,GLOBAL,pre-tree disparity phylomorphospace pilots,legacy,no,none,ARCHIVE,Not needed for current three questions
