@@ -1,0 +1,32 @@
+name: Validate Chapter 2 JEB V7 submission texts
+
+on:
+  pull_request:
+    paths:
+      - "docs/chapter2/JEB_COVER_LETTER_TEMPLATE_V3.md"
+      - "docs/chapter2/JEB_V7_TITLE_PAGE_WORKING.md"
+      - "analysis/validate_chapter2_jeb_v7_submission_texts_v1.py"
+      - ".github/workflows/validate-chapter2-jeb-v7-submission-texts-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validators
+        run: |
+          python -m py_compile analysis/validate_manuscript_jeb_v7_working_v1.py
+          python -m py_compile analysis/validate_chapter2_jeb_v7_submission_texts_v1.py
+      - name: Validate active manuscript counts and claims
+        run: python analysis/validate_manuscript_jeb_v7_working_v1.py
+      - name: Validate cover letter and title page synchronization
+        run: python analysis/validate_chapter2_jeb_v7_submission_texts_v1.py
+      - name: Check patch hygiene
+        run: git diff --check
