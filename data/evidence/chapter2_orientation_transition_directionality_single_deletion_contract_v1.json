@@ -33,5 +33,6 @@
     "The primary robustness target is directional persistence, not exact <=0.05 in every reduced finite-map panel.",
     "Failure of exact <=0.05 after deletion may reflect reduced finite-map resolution as well as biological dependence.",
     "No result establishes historical climate causation, selection, adaptation, or a mediator."
-  ]
+  ],
+  "execution_trigger": "result_blind_default_branch_execution_20260904"
 }
