@@ -1,0 +1,100 @@
+{
+  "version": "chapter2_orientation_causal_triangulation_v2",
+  "status_date": "2026-09-04",
+  "classification": "abiotic_protection_mechanism_experimentally_plausible_but_east_asian_cirsium_cause_not_identified",
+  "question": "After geography, competing-climate and near-lineage falsification, which orientation mechanisms remain compatible with the East-Asian Cirsium pattern, and which stronger causal stories are no longer supported?",
+  "eazami_evidence": {
+    "present_state_contrast": {
+      "bio15_D_minus_U_sd": [1.320, 1.330],
+      "bio1_D_minus_U_sd": [-0.975, -0.967],
+      "topology_sign_stability": "6/6",
+      "species_loo_sign_stability": "54/54 in the original two-axis screen"
+    },
+    "regional_geography_boundary": {
+      "japan_only_bio15_beta_sd": [1.056948555381386, 1.1028303660007557],
+      "japan_only_sign": "6/6 topology and 42/42 species-LOO positive",
+      "lat_lon_adjusted_bio15_beta_sd": [1.1175044422226137, 1.125019837271089],
+      "lat_lon_adjusted_sign": "6/6 topology and 54/54 species-LOO positive",
+      "classification": "bio15_persists_regionally_but_not_beyond_joint_history_geography"
+    },
+    "axis_specificity_boundary": {
+      "bio15_given_bio1_geography_beta_sd": [0.7444919393401991, 0.7776941676947089],
+      "bio15_given_bio1_geography_sign": "6/6 topology but 48/54 species-LOO positive",
+      "bio15_incremental_prediction_delta_mse_median": -0.508262949107952,
+      "bio15_incremental_prediction_positive_topologies": "0/6",
+      "bio15_nearest_pair_direction": "2/4 positive in full9 and 2/3 positive in Japan7",
+      "bio1_given_bio15_geography_sign": "6/6 topology and 54/54 species-LOO negative",
+      "classification": "bio15_direction_persists_without_axis_specificity"
+    },
+    "historical_environment_boundary": {
+      "dateable_orientation_events": 1,
+      "chronology_x_paleolocation_scenarios": 376,
+      "robust_tested_historical_climate_classes": 0,
+      "repeated_trigger": "not_evaluable_single_dated_transition_event"
+    }
+  },
+  "direct_mechanism_anchors": [
+    {
+      "system": "Cremanthodium campanulatum",
+      "family": "Asteraceae",
+      "structure": "capitulum",
+      "experiment": "natural nodding versus artificially held erect capitula",
+      "fitness_result": "achene set 56.3±3.9% nodding versus 15.7±3.6% erect; RR about 3.59; n=30; F=59.1; P<0.01",
+      "mediator_results": "water and UV-B reduced pollen viability; nodding/involucral architecture was interpreted as sheltering reproductive tissues from rain/UV exposure",
+      "pollinator_result": "no detected pollinator preference between nodding and erect capitula",
+      "doi": "10.1080/17550874.2012.702793",
+      "relevance": "strongest direct external capitulum-level functional anchor for abiotic protection; not Cirsium and not an East-Asian historical transition test"
+    },
+    {
+      "system": "Polygonatum cyrtonema",
+      "family": "Asparagaceae",
+      "structure": "downward tubular flower",
+      "experiment": "natural downward versus artificially reoriented upward flowers with pollinator, rainwater/sunlight, pollen/stigma and reproductive-fitness assays",
+      "result": "downward flowers retained greater pollen viability/stigma receptivity under exposure and showed higher effective pollination and seed/fruit performance",
+      "doi": "10.1002/ece3.73221",
+      "relevance": "independent 2026 demonstration that orientation can integrate abiotic protection and pollination; non-Asteraceae morphology, therefore general mechanism plausibility only"
+    }
+  ],
+  "mechanism_discrimination": {
+    "static_pollinator_preference_only": {
+      "status": "weakened",
+      "reason": "The closest Asteraceae manipulation shows a large achene benefit without detectable pollinator orientation preference, and the existing EAzami mechanism-reduction analysis could not reproduce the cross-study bundle with a static pollinator-only pathway."
+    },
+    "rain_wetting_uv_protection": {
+      "status": "strongest_external_functional_prior_not_focal_cause",
+      "reason": "Direct capitulum manipulation in Cremanthodium links nodding to pollen protection and achene fitness in a cool wet monsoonal setting. The East-Asian Cirsium state contrast points toward a cooler / higher-BIO15 present regime and survives coarse geography, making this mechanism directionally compatible, but BIO15 is not isolated as a unique axis and no Cirsium wetting-to-fitness experiment exists."
+    },
+    "thermal_or_time_window_pollination": {
+      "status": "plausible_parallel_pathway",
+      "reason": "Existing cross-scale EAzami/Azami evidence and the earlier mechanism-reduction analysis support scale/time dependence rather than one static visitation coefficient; current data do not identify this pathway as the historical cause."
+    },
+    "integrated_abiotic_biotic_orientation_function": {
+      "status": "plausible",
+      "reason": "Independent manipulation systems show that orientation can affect abiotic protection and pollination simultaneously, so the two-pathway model is biologically realistic; focal East-Asian Cirsium mediator and fitness links remain missing."
+    },
+    "precipitation_seasonality_as_unique_cause": {
+      "status": "not_supported",
+      "reason": "BIO15 loses all-LOO specificity after BIO1 and geography are conditioned, adds no held-out prediction, and nearest phylogenetic pairs are mixed."
+    },
+    "one_recurring_historical_climate_trigger": {
+      "status": "not_identified",
+      "reason": "Only one orientation event is calendar/paleolocation evaluable and no tested coarse historical climate class survives the full uncertainty envelope."
+    }
+  },
+  "supported_statement": "External experiments make abiotic protection, especially rain/wetting and radiation protection, a biologically credible mechanism for downward floral orientation. EAzami shows that the East-Asian Cirsium orientation contrast occupies a compatible present climatic regime and is not a trivial coarse-geography artifact, but it does not isolate BIO15 or any single climate axis as the cause. The focal causal chain remains incomplete at orientation -> wetting/pollen/effective contact -> viable achene fitness in ancestry-matched Cirsium.",
+  "decisive_missing_link": "direct ancestry-matched Cirsium orientation manipulation measuring wetting/rain exposure, pollen retention/viability, effective pollination and viable achene set",
+  "claim_ceiling": [
+    "External mechanism experiments are priors/anchors, not evidence that Japanese or Taiwanese Cirsium evolved orientation for the same reason.",
+    "Present BIO15/BIO1 correspondence is not transition-time exposure.",
+    "The Cremanthodium achene-set ratio must not be transferred as a Cirsium effect size.",
+    "Mechanism plausibility is not adaptation or historical cause.",
+    "No additional correlated climate proxies are needed to claim more causal resolution from the current public panel."
+  ],
+  "sources": {
+    "geography_result": "data/evidence/chapter2_orientation_geography_causal_boundary_result_v1.json",
+    "specificity_result": "data/evidence/chapter2_bio15_specificity_matched_contrast_result_v1.json",
+    "existing_mechanism_reduction": "docs/ORIENTATION_MECHANISM_REDUCTION_RESULT_V1.md",
+    "cremanthodium_doi": "10.1080/17550874.2012.702793",
+    "polygonatum_doi": "10.1002/ece3.73221"
+  }
+}
