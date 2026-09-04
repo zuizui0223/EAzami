@@ -1,0 +1,165 @@
+name: Run Azami colour solar public-data v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/collect_azami_public_artifacts_v1.py"
+      - "analysis/resolve_azami_colour_observations_v1.py"
+      - "analysis/sample_worldclim_solar_for_azami_colour_v1.py"
+      - "analysis/run_azami_colour_solar_spatial_models_v1.py"
+      - ".github/workflows/run-azami-colour-solar-public-data-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  colour_solar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install analysis dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas scipy statsmodels requests rasterio pyarrow openpyxl
+          python -m pip check
+
+      - name: Clone Azami spatial-breadth repository
+        run: |
+          set -euo pipefail
+          git clone --depth 1 https://github.com/zuizui0223/azami.git external/azami
+          git -C external/azami rev-parse HEAD | tee external/azami_head_sha.txt
+
+      - name: Recover relevant non-expired Azami workflow artifacts
+        run: |
+          set -euo pipefail
+          python analysis/collect_azami_public_artifacts_v1.py \
+            --repository zuizui0223/azami \
+            --out-dir output/azami_public_artifacts \
+            --max-total-mb 1200 \
+            --max-artifact-mb 300 \
+            --min-score 2 \
+            --max-artifacts 40
+
+      - name: Resolve one public row-level flower-colour observation table
+        run: |
+          set -euo pipefail
+          python analysis/resolve_azami_colour_observations_v1.py \
+            --root external/azami \
+            --root output/azami_public_artifacts/extracted \
+            --out-dir output/colour_resolution \
+            --min-rows 100 \
+            --min-taxa 5 \
+            --score-margin 5
+
+      - name: Sample official WorldClim solar/climate and fit spatial models when evaluable
+        run: |
+          set -euo pipefail
+          STATUS=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('output/colour_resolution/azami_colour_observation_resolution_v1.json').read_text())
+          print(p['status'])
+          PY
+          )
+          mkdir -p output/colour_solar
+          if [ "$STATUS" = "selected_unique_public_colour_observation_table" ]; then
+            python analysis/sample_worldclim_solar_for_azami_colour_v1.py \
+              --observations output/colour_resolution/azami_colour_observations_normalized_v1.csv \
+              --cache-dir output/worldclim_cache \
+              --out-dir output/colour_environment
+            python analysis/run_azami_colour_solar_spatial_models_v1.py \
+              --data output/colour_environment/azami_colour_worldclim_environment_v1.csv \
+              --resolution output/colour_resolution/azami_colour_observation_resolution_v1.json \
+              --out-dir output/colour_solar
+          else
+            python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('output/colour_resolution/azami_colour_observation_resolution_v1.json').read_text())
+          p={
+            'contract_version':'azami_colour_solar_spatial_models_v1',
+            'status':'not_evaluable_input_resolution',
+            'input_resolution_status':r['status'],
+            'files_inspected':r['files_inspected'],
+            'admissible_nonidentical_candidates':r['admissible_nonidentical_candidates'],
+            'ranked_candidates':r['ranked_candidates'],
+            'claim_boundary':'No solar-colour coefficient is estimated because the public row-level colour input was not uniquely resolved under the frozen schema rule.'
+          }
+          Path('output/colour_solar/azami_colour_solar_spatial_models_v1.json').write_text(json.dumps(p,indent=2,ensure_ascii=False)+'\n')
+          print(json.dumps(p,indent=2,ensure_ascii=False))
+          PY
+          fi
+
+      - name: Validate and freeze compact result
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          resolution=json.loads(Path('output/colour_resolution/azami_colour_observation_resolution_v1.json').read_text())
+          result=json.loads(Path('output/colour_solar/azami_colour_solar_spatial_models_v1.json').read_text())
+          assert resolution['contract_version']=='azami_colour_observation_resolution_v1'
+          assert result['contract_version']=='azami_colour_solar_spatial_models_v1'
+          if resolution['status']=='selected_unique_public_colour_observation_table':
+              assert result['coverage']['cell_source_rows']>=30
+              assert result['coverage']['taxa']>=5
+              assert result['primary_metric'] in result['results']
+          else:
+              assert result['status']=='not_evaluable_input_resolution'
+          Path('data/evidence/azami_colour_observation_resolution_v1.json').write_text(json.dumps(resolution,indent=2,ensure_ascii=False)+'\n')
+          Path('data/evidence/azami_colour_solar_spatial_models_v1.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n')
+          lines=['# Azami flower colour × solar radiation public-data result v1','',f"Input resolution: **{resolution['status']}**",'']
+          if 'overall_classification' in result:
+              lines += [f"Overall classification: **{result['overall_classification']}**",'',f"Primary metric: `{result['primary_metric']}`",'',f"Coverage: {result['coverage']['cell_source_rows']} taxon×source×0.05° cells; {result['coverage']['taxa']} taxa; {result['coverage']['sources']} sources.",'','| metric | classification | adjusted-total solar beta | P | within-taxon beta | P | among-taxon beta | P |','| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |']
+              for metric, block in result['results'].items():
+                  def value(model,key):
+                      x=block['models'].get(model,{})
+                      return x.get(key)
+                  def fmt(x): return 'NA' if x is None else f'{x:.4g}'
+                  lines.append(f"| {metric} | `{block['classification']}` | {fmt(value('adjusted_total','solar_beta_standardized'))} | {fmt(value('adjusted_total','solar_p'))} | {fmt(value('within_taxon_adjusted','solar_beta_standardized'))} | {fmt(value('within_taxon_adjusted','solar_p'))} | {fmt(value('among_taxon_adjusted','solar_beta_standardized'))} | {fmt(value('among_taxon_adjusted','solar_p'))} |")
+          else:
+              lines += ['No coefficient was admitted because the public colour observation input did not pass unique-resolution and coverage rules.','', 'Top candidate paths are retained in the machine-readable resolution ledger.']
+          lines += ['', '## Boundary','', 'Spatial agreement across total, within-taxon and among-taxon levels can strengthen a radiative-exposure hypothesis, but public-image colour and present climatology do not establish adaptive fitness or historical causation.','']
+          Path('docs/chapter2/AZAMI_COLOUR_SOLAR_PUBLIC_DATA_RESULT_V1.md').write_text('\n'.join(lines))
+          PY
+
+      - name: Commit compact ledgers to PR branch
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add \
+            data/evidence/azami_colour_observation_resolution_v1.json \
+            data/evidence/azami_colour_solar_spatial_models_v1.json \
+            docs/chapter2/AZAMI_COLOUR_SOLAR_PUBLIC_DATA_RESULT_V1.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Freeze public Azami colour-solar result [skip colour-solar]"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: azami-colour-solar-public-data-v1
+          path: |
+            output/azami_public_artifacts/azami_public_artifact_inventory_v1.json
+            output/azami_public_artifacts/azami_public_artifact_inventory_v1.csv
+            output/azami_public_artifacts/azami_public_artifact_extraction_manifest_v1.csv
+            output/colour_resolution
+            output/colour_environment
+            output/colour_solar
+          if-no-files-found: warn
+          retention-days: 90
