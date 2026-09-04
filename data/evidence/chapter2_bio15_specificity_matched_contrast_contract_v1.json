@@ -1,6 +1,7 @@
 {
   "version": "chapter2_bio15_specificity_matched_contrast_contract_v1",
   "status_date": "2026-09-04",
+  "execution_trigger": "2026-09-04 result-blind workflow trigger; no estimand, source, model, direction or classification rule changed",
   "analysis_role": "Post-result mechanism-discrimination boundary test. Without adding new climate variables, ask whether the primary BIO15 orientation correspondence retains information after conditioning on the already-frozen BIO1 axis and coarse geography, and whether the same direction appears in phylogenetically matched opposite-state taxon pairs.",
   "frozen_sources": {
     "geography_result": "data/evidence/chapter2_orientation_geography_causal_boundary_result_v1.json",
