@@ -1,0 +1,91 @@
+{
+  "version": "chapter2_jeb_v7_figures145_contract_v1",
+  "status_date": "2026-09-05",
+  "role": "fail_closed_submission_figure_contract_for_v7_figures_1_4_5",
+  "sources": {
+    "radiation": "data/evidence/japan_cirsium_origin_meta_analysis_v1.json",
+    "scaffold": "data/evidence/japan38_comp1061_primary_tree_acceptance_v1.json",
+    "authority_seed": "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv",
+    "authority_extension": "data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv",
+    "authority_combinations": "data/evidence/japan38_authority_module_combinations_v1.json",
+    "historical_summary": "data/evidence/chapter2_historical_differentiation_final_summary_v1.json",
+    "region_ranking": "data/evidence/chapter2_orientation_origin_region_ranking_result_v1.json",
+    "current_claims": "data/evidence/chapter2_current_claims_h1_h4_v1.json"
+  },
+  "figure1": {
+    "sampled_japanese_concepts": 38,
+    "dominant_radiation_concepts": 36,
+    "scaffold_qc_loci": 236,
+    "scaffold_rootable_loci": 176,
+    "alignment_length_bp": 161654,
+    "base_authority_rows": 22,
+    "extension_rows": 2,
+    "secondary_ids_in_base_authority_panel": ["JPN_06", "JPN_15"],
+    "resolved_trait_counts_after_extensions": {
+      "orientation": 20,
+      "phyllary": 10,
+      "stickiness": 13
+    },
+    "dominant_orientation_stickiness_combinations": 4,
+    "claim": "Multiple authority-backed capitulum configurations occur within the dominant young radiation.",
+    "boundary": "Descriptive diversity only; not correlated evolution, transition history, diversification rate, selection or adaptation."
+  },
+  "figure4": {
+    "chronology_pairs": 94,
+    "regions": 4,
+    "scenarios": 376,
+    "central_pair_ma": [0.79, 0.74],
+    "region_rank1_counts": {
+      "taiwan": 15,
+      "ryukyu_corridor": 21,
+      "southern_japan": 48,
+      "east_asia_core_corridor": 10
+    },
+    "southern_japan_pairwise_win_counts": {
+      "taiwan": 61,
+      "ryukyu_corridor": 61,
+      "east_asia_core_corridor": 64
+    },
+    "dominance_gate_fraction": 0.75,
+    "central_trajectory": {
+      "BIO1": "down_4_of_4",
+      "BIO4": "down_4_of_4",
+      "BIO15": "down_4_of_4",
+      "BIO12": "up_3_of_4"
+    },
+    "present_regime_historical_match": {
+      "overall": "99/376 = 26.3%",
+      "taiwan": "20/94 = 21.3%",
+      "ryukyu_corridor": "9/94 = 9.6%",
+      "southern_japan": "41/94 = 43.6%",
+      "east_asia_core_corridor": "29/94 = 30.9%"
+    },
+    "classification": "historical_regime_persistence_not_supported",
+    "boundary": "Sensitivity-grid fractions are not ancestral-area probabilities and present-regime non-persistence is not environmental irrelevance."
+  },
+  "figure5": {
+    "identifiability_steps": [
+      "configuration diversity — resolved",
+      "repeated minimum histories — resolved for three traits",
+      "relative depth — resolved with topology and coverage bounds",
+      "present ecology — scale/history/transition-linked for orientation",
+      "shared named/localized history — partial",
+      "calendar-linked trait events — sparse",
+      "recurring historical cause — not identified"
+    ],
+    "bioclim_variables": 17,
+    "dated_lineage_contexts": 6,
+    "scenario_variable_combinations": 15472,
+    "robust_climate_event_classes": 0,
+    "total_climate_event_classes": 324,
+    "sea_level_clade_groups": 3,
+    "sea_level_event_metric_classes": 21,
+    "robust_sea_level_event_metric_classes": 0,
+    "claim": "Phenotypic assembly is identifiable farther than one recurring coarse historical cause.",
+    "boundary": "No recurring tested coarse regime does not imply environmental irrelevance or reconstruct local land connectivity."
+  },
+  "output": {
+    "png_dpi": 600,
+    "pdf_vector": true
+  }
+}
