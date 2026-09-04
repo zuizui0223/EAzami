@@ -27,5 +27,6 @@
     "Failure of exact <=0.05 after deletion may reflect reduced finite-map resolution as well as biological dependence and must be reported with the actual rank.",
     "Do not alter the vector, taxa states, or environmental variables after inspection.",
     "No result establishes climatic causation, selection, adaptation, or a mediator."
-  ]
+  ],
+  "execution_trigger": "result_blind_default_branch_execution_20260904"
 }

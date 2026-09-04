@@ -1,0 +1,29 @@
+{
+  "version": "chapter2_orientation_transition_regime_single_deletion_frozen_v1",
+  "status_date": "2026-09-04",
+  "classification": "transition_regime_direction_not_single_taxon_dependent_but_exceptionality_sensitive",
+  "fixed_hypothesis": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+  "all_deletions_direction_pass": true,
+  "all_deletions_exact_exceptionality_pass": false,
+  "n_exact_exceptionality_pass": 2,
+  "n_deletions": 9,
+  "deletions": [
+    {"taxon":"Cirsium alpicola","state":"U","composite_median":0.4647946932333875,"direction_pass":true,"exact_count":1,"n_maps":70,"exact_fraction":0.014285714285714285,"exact_exceptionality_pass":true},
+    {"taxon":"Cirsium brevicaule","state":"U","composite_median":0.4366843429779925,"direction_pass":true,"exact_count":5,"n_maps":70,"exact_fraction":0.07142857142857142,"exact_exceptionality_pass":false},
+    {"taxon":"Cirsium irumtiense","state":"U","composite_median":0.4181404606736513,"direction_pass":true,"exact_count":5,"n_maps":70,"exact_fraction":0.07142857142857142,"exact_exceptionality_pass":false},
+    {"taxon":"Cirsium japonicum var. australe","state":"U","composite_median":0.31581103578444925,"direction_pass":true,"exact_count":4,"n_maps":70,"exact_fraction":0.05714285714285714,"exact_exceptionality_pass":false},
+    {"taxon":"Cirsium japonicum var. japonicum","state":"U","composite_median":0.3383208092324642,"direction_pass":true,"exact_count":4,"n_maps":70,"exact_fraction":0.05714285714285714,"exact_exceptionality_pass":false},
+    {"taxon":"Cirsium kamtschaticum","state":"D","composite_median":0.33595670153221346,"direction_pass":true,"exact_count":4,"n_maps":56,"exact_fraction":0.07142857142857142,"exact_exceptionality_pass":false},
+    {"taxon":"Cirsium kawakamii","state":"D","composite_median":0.31835643705122585,"direction_pass":true,"exact_count":3,"n_maps":56,"exact_fraction":0.05357142857142857,"exact_exceptionality_pass":false},
+    {"taxon":"Cirsium suffultum","state":"D","composite_median":0.3299285249132992,"direction_pass":true,"exact_count":3,"n_maps":56,"exact_fraction":0.05357142857142857,"exact_exceptionality_pass":false},
+    {"taxon":"Cirsium yezoense","state":"D","composite_median":0.41882394105737,"direction_pass":true,"exact_count":1,"n_maps":56,"exact_fraction":0.017857142857142856,"exact_exceptionality_pass":true}
+  ],
+  "interpretation": "The fixed (+BIO15,-BIO1) transition-regime direction remains positive on all six accepted topologies after deleting any one of the nine strict-panel taxa. However, exact <=0.05 exceptionality survives only two of nine deletions, so the directional regime is not single-taxon dependent whereas its extreme finite-map rank is distributed across the multi-taxon East-Asian configuration.",
+  "claim_boundary": [
+    "A single-deletion result is a sensitivity analysis, not independent replication.",
+    "Failure of exact <=0.05 after deletion may reflect reduced finite-map resolution as well as biological dependence and must be reported with the actual rank.",
+    "Do not alter the vector, taxa states, or environmental variables after inspection.",
+    "No result establishes climatic causation, selection, adaptation, or a mediator."
+  ],
+  "workflow_provenance": {"run_id":33846927401,"artifact_id":9926883514,"artifact_name":"chapter2-orientation-transition-regime-single-deletion-v1","artifact_sha256":"892a3f281ff324014dbbbd14b5171ddb275ccd143198a58eab92e9e8aac89216","source_head_sha":"cccaabd9277f33cc7549e9f3054904567c451503"}
+}
