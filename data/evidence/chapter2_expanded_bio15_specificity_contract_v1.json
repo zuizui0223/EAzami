@@ -1,6 +1,7 @@
 {
   "version": "chapter2_expanded_bio15_specificity_contract_v1",
   "status_date": "2026-09-04",
+  "execution_trigger": "default_branch_workflow_execution_only_no_scientific_change",
   "analysis_role": "Post-result resolution sensitivity. Refit the already-frozen mutually adjusted BIO15/BIO1 + latitude/longitude Brownian models on the larger state-diverse panels already present in frozen occurrence assets. This tests whether the n=9 panel size alone explains failure of BIO15 axis specificity.",
   "sources": {
     "coverage_audit": "data/evidence/chapter2_orientation_occurrence_coverage_audit_result_v1.json",
