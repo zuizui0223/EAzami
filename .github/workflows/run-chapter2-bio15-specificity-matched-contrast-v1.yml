@@ -1,0 +1,78 @@
+name: Run Chapter 2 BIO15 specificity matched contrast v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_chapter2_bio15_specificity_matched_contrast_v1.py"
+      - "data/evidence/chapter2_bio15_specificity_matched_contrast_contract_v1.json"
+      - "data/evidence/chapter2_orientation_geography_causal_boundary_result_v1.json"
+      - ".github/workflows/run-chapter2-bio15-specificity-matched-contrast-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install analysis runtime
+        run: |
+          python -m pip install --disable-pip-version-check numpy pandas scipy biopython
+          python -m pip check
+      - name: Verify frozen source artifacts
+        run: |
+          set -euo pipefail
+          test "$(gh api repos/zuizui0223/EAzami/actions/artifacts/9516784077 --jq .digest)" = "sha256:cb5717c90cbc769398f9ffce38787704a02e34253c1ff16cf8f368ba55aeda96"
+          test "$(gh api repos/zuizui0223/EAzami/actions/artifacts/9520157997 --jq .digest)" = "sha256:819936ceeb6008f356c580622fb72972617700402afaa3d3ab125bff2e6d9106"
+          test "$(gh api repos/zuizui0223/EAzami/actions/artifacts/9486643703 --jq .digest)" = "sha256:d90f30e4fcc3a2a0296a7d0cfa13d0f3ecc008b36d28298ac9782a001e6f63c5"
+      - name: Recover frozen occurrence and topology assets
+        run: |
+          mkdir -p recovered/japan recovered/taiwan recovered/au .tmp/bio15_specificity
+          gh run download 32716015605 --name fdt4-japan-orientation-niche-v1 --dir recovered/japan
+          gh run download 32725842871 --name fdt4-taiwan-orientation-niche-v1 --dir recovered/taiwan
+          gh run download 32614839764 --name comp1061-alt-topology-au-32614839764 --dir recovered/au
+      - name: Compile analysis
+        run: python -m py_compile analysis/run_chapter2_bio15_specificity_matched_contrast_v1.py
+      - name: Run frozen specificity and matched-contrast tests
+        run: |
+          python analysis/run_chapter2_bio15_specificity_matched_contrast_v1.py \
+            --contract data/evidence/chapter2_bio15_specificity_matched_contrast_contract_v1.json \
+            --geography-result data/evidence/chapter2_orientation_geography_causal_boundary_result_v1.json \
+            --japan-occurrences recovered/japan/focal_occurrences_environment_complete.csv \
+            --taiwan-occurrences recovered/taiwan/focal_occurrences_environment_complete.csv \
+            --au-trees recovered/au/au.trees \
+            --out-json .tmp/bio15_specificity/result.json \
+            --out-pairs .tmp/bio15_specificity/matched_pairs.csv
+      - name: Validate output structure
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('.tmp/bio15_specificity/result.json').read_text())
+          assert x['version']=='chapter2_bio15_specificity_matched_contrast_result_v1'
+          assert x['classification'] in {
+              'bio15_specificity_and_near_lineage_contrast_supported',
+              'bio15_conditional_specificity_supported_but_near_lineage_contrasts_mixed',
+              'bio15_direction_persists_without_axis_specificity',
+              'bio15_specificity_not_supported_after_competing_axis_adjustment',
+          }
+          assert x['phylogenetic_matched_pairs']['full9']['n_topologies']==6
+          assert x['phylogenetic_matched_pairs']['japan7']['n_topologies']==6
+          print(json.dumps(x, indent=2))
+          PY
+      - name: Upload result artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-bio15-specificity-matched-contrast-v1
+          path: .tmp/bio15_specificity/
+          if-no-files-found: error
+          retention-days: 90
