@@ -1,0 +1,66 @@
+name: Run Chapter 2 orientation historical regime persistence v1
+
+on:
+  pull_request:
+    paths:
+      - 'data/evidence/chapter2_orientation_historical_regime_persistence_contract_v1.json'
+      - 'analysis/run_chapter2_orientation_historical_regime_persistence_v1.py'
+      - '.github/workflows/run-chapter2-orientation-historical-regime-persistence-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  run:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install runtime
+        run: |
+          python -m pip install --disable-pip-version-check pandas
+          python -m pip check
+      - name: Verify frozen historical artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(gh api repos/zuizui0223/EAzami/actions/artifacts/9793244189 --jq .digest)" = "sha256:6e5bb00f3bd91404ec1efdbd18091aae38701f615d831da4a2475b387342b4d7"
+      - name: Recover historical artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p recovered .tmp/h4
+          gh run download 33487117183 --name chapter2-orientation-differentiation-environment-v2-33487117183 --dir recovered
+      - name: Compile analysis
+        run: python -m py_compile analysis/run_chapter2_orientation_historical_regime_persistence_v1.py
+      - name: Run H4 historical persistence test
+        run: |
+          python analysis/run_chapter2_orientation_historical_regime_persistence_v1.py \
+            --contract data/evidence/chapter2_orientation_historical_regime_persistence_contract_v1.json \
+            --historical-json recovered/chapter2_orientation_differentiation_environment_v2.json \
+            --out-json .tmp/h4/result.json \
+            --out-csv .tmp/h4/scenarios.csv
+      - name: Validate output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('.tmp/h4/result.json').read_text())
+          assert x['version']=='chapter2_orientation_historical_regime_persistence_result_v1'
+          assert x['event_id']=='ORI_CORE_NIPPONO_STEM'
+          assert x['overall']['n_scenarios']==376
+          assert set(x['per_region'])=={'taiwan','ryukyu_corridor','southern_japan','east_asia_core_corridor'}
+          assert x['classification'] in {'historical_regime_persistence_supported','historical_regime_persistence_not_supported','historical_regime_opposite_direction_dominant'}
+          print(json.dumps(x,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-orientation-historical-regime-persistence-v1
+          path: .tmp/h4/
+          if-no-files-found: error
+          retention-days: 90

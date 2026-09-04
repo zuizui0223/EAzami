@@ -1,0 +1,37 @@
+{
+  "version": "chapter2_orientation_historical_regime_persistence_contract_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Specific falsification of historical persistence for the already-supported present-niche orientation transition regime. Test the only calendarized U->D event without screening any additional variable.",
+  "event_id": "ORI_CORE_NIPPONO_STEM",
+  "source_historical_artifact": {
+    "run_id": 33487117183,
+    "artifact_id": 9793244189,
+    "artifact_sha256": "6e5bb00f3bd91404ec1efdbd18091aae38701f615d831da4a2475b387342b4d7",
+    "expected_chronology_pairs": 94,
+    "expected_regions": ["taiwan","ryukyu_corridor","southern_japan","east_asia_core_corridor"],
+    "expected_region_by_chronology_scenarios": 376
+  },
+  "fixed_hypothesis": {
+    "historical_u_to_d_expected_signs": {"BIO15": "positive", "BIO1": "negative"},
+    "rationale": "The present-niche H1/H2 regime was fixed as U->D aligning with higher BIO15 and lower BIO1. H4 asks whether the sole calendarized U->D event shares those same historical endpoint-change signs."
+  },
+  "estimand": "For each of the 376 chronology x paleolocation scenarios, match BIO15 and BIO1 rows by region, young_ma and old_ma. A scenario matches H4 iff BIO15 delta > 0 and BIO1 delta < 0. No rescaling or weighting of the two variables is allowed.",
+  "decision": {
+    "historical_regime_persistence_supported": "Each of all four predeclared regions has H4 sign match in >=0.75 of its 94 chronology scenarios.",
+    "historical_regime_persistence_not_supported": "The support criterion is not met.",
+    "historical_regime_opposite_direction_dominant": "In each of all four regions, the exact opposite sign pair (BIO15 < 0 and BIO1 > 0) occurs in >=0.75 of chronology scenarios."
+  },
+  "secondary_outputs": [
+    "overall 376-scenario H4 match fraction",
+    "per-region H4 match fraction",
+    "per-region exact-opposite fraction",
+    "number of chronology pairs with H4 match in 4/4, >=3/4, >=2/4 regions",
+    "central 0.79->0.74 Ma sign classification"
+  ],
+  "claim_boundary": [
+    "Scenario fractions are deterministic sensitivity-grid fractions, not posterior probabilities.",
+    "This test evaluates persistence of a predeclared sign regime only; it does not identify the historical causal environment.",
+    "Failure to match H4 would support origin-maintenance or history-present decoupling, but would not prove environment was irrelevant.",
+    "No additional paleoclimate variable, region, chronology, weighting, or threshold may be added after result inspection."
+  ]
+}
