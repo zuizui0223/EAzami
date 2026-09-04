@@ -1,0 +1,46 @@
+{
+  "version": "chapter2_orientation_transition_regime_geography_residual_contract_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Specific falsification of supported H1. Test whether the fixed (+BIO15,-BIO1) branchwise transition-regime concordance persists after removing linear latitude/longitude structure from both environmental axes.",
+  "fixed_hypothesis": {
+    "vector": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+    "no_new_environmental_axis": true,
+    "no_refitting_of_direction": true,
+    "interpretation": "U->D transition probability should align with higher geography-residual BIO15 and lower geography-residual BIO1."
+  },
+  "geography_adjustment": {
+    "unit": "taxon centroid",
+    "model_each_axis": "environmental centroid ~ 1 + latitude centroid + longitude centroid",
+    "residualization": "ordinary least squares within each panel, followed by z-scoring of residuals",
+    "reason": "Remove the simplest linear geographic gradient before phylogenetic branchwise reconstruction; this is not spatially exhaustive deconfounding."
+  },
+  "panels": {
+    "strict_n10_primary": {"threshold":10,"expected_n":9,"expected_U":5,"expected_D":4,"exact_state_maps":126},
+    "n5_sensitivity": {"threshold":5,"expected_n":12,"expected_U":7,"expected_D":5,"exact_state_maps":792}
+  },
+  "method": {
+    "topologies": 6,
+    "discrete_estimator": "identical symmetric CTMC edge-joint posterior estimator from chapter2_orientation_transition_regime_hypothesis_v1",
+    "continuous_estimator": "Brownian squared-change reconstruction of geography-residual z(BIO15) and z(BIO1)",
+    "primary_statistic": "(S_residBIO15 - S_residBIO1)/sqrt(2), median across six accepted topologies",
+    "null": "all count-preserving state maps; CTMC refit for every map; geography-residual environmental values fixed",
+    "exact_rank": "one-sided fraction with median composite >= observed, observed map included"
+  },
+  "decision_rule": {
+    "supported": "strict_n10 observed composite positive on all six topologies and exact fraction <=0.05",
+    "directional_not_exceptional": "strict_n10 positive on all six topologies but exact fraction >0.05",
+    "direction_destabilized": "at least one strict_n10 topology composite <=0",
+    "n5_role": "secondary sensitivity only; cannot rescue strict_n10 failure"
+  },
+  "classification_order": [
+    "transition_regime_concordance_persists_after_linear_geography_residualization",
+    "transition_regime_direction_persists_but_exceptionality_is_geography_sensitive",
+    "transition_regime_direction_is_explained_by_or_unstable_after_linear_geography_residualization"
+  ],
+  "claim_ceiling": [
+    "Passing this test rules out only a simple linear latitude/longitude explanation, not all spatial or regional confounding.",
+    "Present-day residual niche centroids are not historical transition-time environments.",
+    "No result identifies temperature, precipitation seasonality, rain/wetting, UV, pollination, selection, adaptation, or fitness causation.",
+    "No environmental variable or direction may be changed after inspection."
+  ]
+}
