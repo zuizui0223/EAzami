@@ -1,0 +1,109 @@
+{
+  "version": "chapter2_expanded_bio15_specificity_result_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Post-result resolution sensitivity using only already-frozen occurrence assets and the same mutually adjusted BIO15/BIO1 + latitude/longitude Brownian models.",
+  "classification": "expanded_panels_retain_bio15_direction_without_specificity",
+  "workflow_provenance": {
+    "run_id": 33844471401,
+    "artifact_id": 9926011213,
+    "artifact_name": "chapter2-expanded-bio15-specificity-v1",
+    "artifact_sha256": "f155b69c0bbb2be972dd6124fce29bda21d35e995d1b7c8bbec0d0615d3f9bfb",
+    "source_head_sha": "d5ccb7316af7dbe94ddda08b567fcd13537b8a90"
+  },
+  "primary_reference_n10": {
+    "n_taxa": 9,
+    "n_U": 5,
+    "n_D": 4,
+    "bio15_given_bio1_geography": {
+      "beta_range": [0.7444919393401991, 0.7776941676947089],
+      "beta_median": 0.7611629815048189,
+      "p_range": [0.3357108954215319, 0.3556077060726711],
+      "topology_sign": "6/6",
+      "species_loo_sign": "48/54"
+    },
+    "bio1_given_bio15_geography": {
+      "beta_range": [-0.4897622410446413, -0.48690191862495763],
+      "beta_median": -0.4883299170364427,
+      "p_range": [0.5270841082608834, 0.5353661833346848],
+      "topology_sign": "6/6",
+      "species_loo_sign": "54/54"
+    },
+    "orientation_incremental_bio15_prediction": {
+      "delta_mse_median": -0.508262949107952,
+      "delta_mae_median": -0.2898337353859566,
+      "positive_topologies": "0/6"
+    }
+  },
+  "n5": {
+    "threshold": 5,
+    "n_taxa": 12,
+    "n_U": 7,
+    "n_D": 5,
+    "bio15_given_bio1_geography": {
+      "beta_range": [0.15734229197158933, 0.1940731738828367],
+      "beta_median": 0.17578599349935958,
+      "p_range": [0.7796296974926749, 0.8203243648012567],
+      "topology_sign": "6/6",
+      "species_loo_sign": "60/72",
+      "species_loo_beta_range": [-0.8860799648022202, 0.9006315843876133]
+    },
+    "bio1_given_bio15_geography": {
+      "beta_range": [-0.7410574251178037, -0.7327206159853298],
+      "beta_median": -0.736891554529411,
+      "p_range": [0.11760145095915985, 0.12516580257115115],
+      "topology_sign": "6/6",
+      "species_loo_sign": "72/72",
+      "species_loo_beta_range": [-0.9678968706582667, -0.49067279651253737]
+    },
+    "orientation_incremental_bio15_prediction": {
+      "delta_mse_range": [-0.6796035241071192, -0.6622942687053038],
+      "delta_mse_median": -0.6709080833204497,
+      "delta_mae_range": [-0.23438454435945322, -0.22965723561512882],
+      "delta_mae_median": -0.23200993370355621,
+      "positive_topologies_mse": "0/6",
+      "positive_topologies_mae": "0/6"
+    }
+  },
+  "n3": {
+    "threshold": 3,
+    "n_taxa": 13,
+    "n_U": 7,
+    "n_D": 6,
+    "bio15_given_bio1_geography": {
+      "beta_range": [0.26524277406340574, 0.28498117568143894],
+      "beta_median": 0.27517628758123214,
+      "p_range": [0.6594131632506087, 0.6816672566192609],
+      "topology_sign": "6/6",
+      "species_loo_sign": "66/78",
+      "species_loo_beta_range": [-0.19025776541083594, 0.9809416069131025]
+    },
+    "bio1_given_bio15_geography": {
+      "beta_range": [-0.7415089992897457, -0.7374258813934778],
+      "beta_median": -0.739474107722211,
+      "p_range": [0.10533696814737278, 0.10965111516042098],
+      "topology_sign": "6/6",
+      "species_loo_sign": "78/78",
+      "species_loo_beta_range": [-0.9972289779346625, -0.4838530625827203]
+    },
+    "orientation_incremental_bio15_prediction": {
+      "delta_mse_range": [-0.4000967485996704, -0.3915030147370443],
+      "delta_mse_median": -0.39577945910414414,
+      "delta_mae_range": [-0.16153758327720866, -0.15943314123909152],
+      "delta_mae_median": -0.16048200862733866,
+      "positive_topologies_mse": "0/6",
+      "positive_topologies_mae": "0/6"
+    }
+  },
+  "interpretation": {
+    "bio15": "The positive adjusted BIO15 direction survives all six full-topology fits at n>=5 and n>=3, but it becomes much smaller than in the n>=10 panel, fails the all-LOO specificity rule, and adds no held-out BIO15 predictive information beyond BIO1 plus geography. The lack of BIO15 specificity is therefore not explained by n=9 alone.",
+    "bio1": "The negative BIO1 orientation coefficient remains 6/6 and all-LOO directionally stable in both expanded panels after conditioning on BIO15 and geography. This makes BIO1 the more deletion-stable component of the composite present-day climate regime, but its P values remain above conventional thresholds and it is not a demonstrated cause.",
+    "causal_boundary": "Present orientation is associated with a composite climatic/lineage regime rather than a uniquely identified precipitation-seasonality axis. Additional coarse climate-variable fishing is not justified by these results."
+  },
+  "claim_ceiling": [
+    "The n>=10 result remains the primary occurrence-quality analysis; n>=5 and n>=3 are resolution sensitivities.",
+    "Direction stability does not establish statistical confirmation, climatic selection, adaptation, plasticity or historical causation.",
+    "BIO1 being more deletion-stable than BIO15 does not identify temperature as the causal agent.",
+    "Lower occurrence counts increase centroid uncertainty and do not constitute independent replication.",
+    "No new occurrence source, taxon alias or environmental predictor was added."
+  ]
+}
