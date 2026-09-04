@@ -264,3 +264,11 @@ V1–V6 manuscripts and earlier JEB packages remain reproducible audit history r
 
 **Frozen legacy submission package:** `MANUSCRIPT_JEB_V4.md`.  
 Historical recovery note retained for audit compatibility: `CHAPTER2_CORE_RESULT_RECOVERY_V1.md`.
+
+### Superseded V6 space-time audit route
+
+The following files remain a **historical audit route only**; they are not the active V7 scientific spine:
+
+- `chapter2_differentiation_time_axis_contract_v1.json`;
+- `MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md`;
+- `HISTORICAL_DIFFERENTIATION_TRIGGER_RESULT_V1.md`.
