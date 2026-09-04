@@ -1,0 +1,52 @@
+{
+  "version": "chapter2_orientation_transition_regime_internal_edge_result_v1",
+  "status_date": "2026-09-04",
+  "classification": "transition_regime_concordance_supported_on_internal_edges",
+  "fixed_hypothesis": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+  "strict_n10_primary": {
+    "n_taxa": 9,
+    "n_U": 5,
+    "n_D": 4,
+    "internal_edges_scored_per_topology": 7,
+    "composite_positive_topologies": "6/6",
+    "composite_median": 0.25620641653905474,
+    "bio15_median": 0.19689822352096775,
+    "bio1_median": -0.16543140670036593,
+    "internal_expected_changes_range": [2.0170212936224337, 2.02122767334863],
+    "exact_primary_rank": {"count_at_least_observed": 3, "n_maps": 126, "exact_fraction": 0.023809523809523808},
+    "secondary_axis_ranks": {
+      "bio15": {"count_at_least_observed": 5, "n_maps": 126, "exact_fraction": 0.03968253968253968},
+      "bio1_lower_expected": {"count_at_least_observed": 8, "n_maps": 126, "exact_fraction": 0.06349206349206349}
+    }
+  },
+  "n5_sensitivity": {
+    "n_taxa": 12,
+    "n_U": 7,
+    "n_D": 5,
+    "internal_edges_scored_per_topology": 10,
+    "composite_positive_topologies": "6/6",
+    "composite_median": 0.276027115809501,
+    "bio15_median": 0.21723829526281746,
+    "bio1_median": -0.17312299549770785,
+    "internal_expected_changes_range": [2.5627151866069915, 2.5739679541208003],
+    "exact_primary_rank": {"count_at_least_observed": 29, "n_maps": 792, "exact_fraction": 0.036616161616161616},
+    "secondary_axis_ranks": {
+      "bio15": {"count_at_least_observed": 25, "n_maps": 792, "exact_fraction": 0.03156565656565657},
+      "bio1_lower_expected": {"count_at_least_observed": 36, "n_maps": 792, "exact_fraction": 0.045454545454545456}
+    }
+  },
+  "interpretation": {
+    "supported": "The fixed U->D transition-regime correspondence remains exceptional when terminal edges are excluded from the scored statistic. The signal is therefore not confined to terminal tip-state separation under the declared CTMC/Brownian reconstruction.",
+    "boundary": "Internal environmental values are Brownian reconstructions from present-day tip niche centroids. Internal-edge support does not establish observed ancestral environments, historical transition ages, causation, selection or adaptation."
+  },
+  "provenance": {
+    "workflow_run_id": 33864986116,
+    "artifact_id": 9933634319,
+    "artifact_sha256": "c051eaebee5dfc5254a2078c2e3822ccf53f9addf2d910ba8c9c084bca20e619"
+  },
+  "claim_ceiling": [
+    "Internal-edge support is evidence against a purely terminal-edge explanation, not direct observation of ancestral environments.",
+    "Brownian internal environmental values are reconstructed from present-day niche centroids.",
+    "No result establishes climatic causation, selection, adaptation, convergence, or a physiological mediator."
+  ]
+}
