@@ -1,0 +1,87 @@
+{
+  "version": "chapter2_bio15_specificity_matched_contrast_result_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Post-result mechanism-discrimination boundary test using only frozen BIO15, BIO1, coarse geography, the nine-taxon orientation panel and six accepted topologies.",
+  "classification": "bio15_direction_persists_without_axis_specificity",
+  "conditional_specificity": {
+    "bio15_given_bio1_geography": {
+      "model": "z(BIO15) ~ orientation + z(BIO1) + z(latitude) + z(longitude)",
+      "beta_range": [0.7444919393401991, 0.7776941676947089],
+      "beta_median": 0.7611629815048189,
+      "p_range": [0.3357108954215319, 0.3556077060726711],
+      "topology_sign_agreement": "6/6",
+      "species_loo_sign_agreement": "48/54",
+      "species_loo_beta_range": [-0.3068582193104095, 1.2502127377704733]
+    },
+    "bio1_given_bio15_geography": {
+      "model": "z(BIO1) ~ orientation + z(BIO15) + z(latitude) + z(longitude)",
+      "beta_range": [-0.4897622410446413, -0.48690191862495763],
+      "beta_median": -0.4883299170364427,
+      "p_range": [0.5270841082608834, 0.5353661833346848],
+      "topology_sign_agreement": "6/6",
+      "species_loo_sign_agreement": "54/54",
+      "species_loo_beta_range": [-1.1841486063480617, -0.23811727048024936]
+    }
+  },
+  "incremental_prediction": {
+    "outcome": "z(BIO15)",
+    "baseline": "BIO1 + latitude + longitude + Brownian conditional prediction",
+    "trait_model": "baseline + orientation",
+    "delta_mse_range": [-0.5120746366910587, -0.5045032395516801],
+    "delta_mse_median": -0.508262949107952,
+    "delta_mae_range": [-0.293126283257486, -0.28656033672791836],
+    "delta_mae_median": -0.2898337353859566,
+    "topologies_positive_delta_mse": 0,
+    "topologies_positive_delta_mae": 0,
+    "interpretation": "Orientation does not improve held-out BIO15 prediction beyond BIO1, coarse geography and Brownian covariance in this n=9 panel."
+  },
+  "phylogenetic_matched_pairs": {
+    "full9": {
+      "unique_matching_count": 1,
+      "matching": [
+        ["Cirsium kamtschaticum", "Cirsium japonicum var. japonicum"],
+        ["Cirsium kawakamii", "Cirsium brevicaule"],
+        ["Cirsium suffultum", "Cirsium irumtiense"],
+        ["Cirsium yezoense", "Cirsium alpicola"]
+      ],
+      "bio15_positive_pairs_per_topology": "2/4 on all 6 topologies",
+      "bio15_median_D_minus_U": 1.07280280760016,
+      "bio15_range_D_minus_U": [-0.23742448520912784, 2.770525472672409],
+      "bio1_negative_pairs_per_topology": "3/4 on all 6 topologies",
+      "bio1_median_D_minus_U": -1.1807936428254582,
+      "bio1_range_D_minus_U": [-2.064820535001193, 0.17019397199191721]
+    },
+    "japan7": {
+      "unique_matching_count": 1,
+      "matching": [
+        ["Cirsium kamtschaticum", "Cirsium brevicaule"],
+        ["Cirsium suffultum", "Cirsium irumtiense"],
+        ["Cirsium yezoense", "Cirsium alpicola"]
+      ],
+      "bio15_positive_pairs_per_topology": "2/3 on all 6 topologies",
+      "bio15_median_D_minus_U": 0.5863732643299436,
+      "bio15_range_D_minus_U": [-0.2083356964348385, 2.770525472672409],
+      "bio1_negative_pairs_per_topology": "2/3 on all 6 topologies",
+      "bio1_median_D_minus_U": -1.3589222216069214,
+      "bio1_range_D_minus_U": [-2.4199566089801934, 0.17019397199191721]
+    }
+  },
+  "interpretation": {
+    "bio15": "The BIO15 coefficient retains its positive sign on every accepted topology after conditioning on BIO1 and coarse geography, but sign stability falls to 48/54 species-LOO fits, the adjusted coefficient is not threshold-supported, orientation worsens held-out BIO15 prediction on every topology, and nearest opposite-state taxon pairs are directionally mixed. BIO15 therefore persists as a component of the present climatic contrast but is not isolated as a specific explanatory axis.",
+    "bio1": "BIO1 retains the prespecified negative orientation direction in 54/54 species-LOO fits after conditioning on BIO15 and geography, but the adjusted coefficient is also not threshold-supported and matched-pair contrasts are mixed. The current data therefore support a composite climatic/lineage correspondence rather than a unique BIO15 or BIO1 cause."
+  },
+  "claim_ceiling": [
+    "No result establishes precipitation seasonality or temperature as a selective agent or historical cause.",
+    "No result establishes a hydric or thermal mechanism, adaptation or plasticity.",
+    "Matched extant taxon pairs are not reconstructed independent transitions.",
+    "BIO15 and BIO1 may reflect correlated present climatic regimes and unmeasured lineage/geographic properties.",
+    "No additional environmental predictor may be added after result inspection."
+  ],
+  "workflow_provenance": {
+    "run_id": 33842648617,
+    "artifact_id": 9925423215,
+    "artifact_name": "chapter2-bio15-specificity-matched-contrast-v1",
+    "artifact_sha256": "a20f742e2c6c1140598f9071f9f7b9835337643ea6ecff7d28d8529f677f7aa9",
+    "source_head_sha": "54c1a7ba454c3a552a4a3abaac0e3e7c2c36b63f"
+  }
+}
