@@ -1,0 +1,31 @@
+{
+  "version": "chapter2_orientation_historical_regime_persistence_result_v1",
+  "status_date": "2026-09-04",
+  "event_id": "ORI_CORE_NIPPONO_STEM",
+  "classification": "historical_regime_persistence_not_supported",
+  "fixed_hypothesis": {"BIO15_delta": "positive", "BIO1_delta": "negative"},
+  "overall": {"n_scenarios":376,"h4_match_count":99,"h4_match_fraction":0.2632978723404255,"exact_opposite_count":70,"exact_opposite_fraction":0.18617021276595744},
+  "per_region": {
+    "taiwan": {"n":94,"h4_match_count":20,"h4_match_fraction":0.2127659574468085,"exact_opposite_count":10,"exact_opposite_fraction":0.10638297872340426,"bio15_positive_fraction":0.43617021276595747,"bio1_negative_fraction":0.6702127659574468},
+    "ryukyu_corridor": {"n":94,"h4_match_count":9,"h4_match_fraction":0.09574468085106383,"exact_opposite_count":14,"exact_opposite_fraction":0.14893617021276595,"bio15_positive_fraction":0.2978723404255319,"bio1_negative_fraction":0.648936170212766},
+    "southern_japan": {"n":94,"h4_match_count":41,"h4_match_fraction":0.43617021276595747,"exact_opposite_count":24,"exact_opposite_fraction":0.2553191489361702,"bio15_positive_fraction":0.5531914893617021,"bio1_negative_fraction":0.6276595744680851},
+    "east_asia_core_corridor": {"n":94,"h4_match_count":29,"h4_match_fraction":0.30851063829787234,"exact_opposite_count":22,"exact_opposite_fraction":0.23404255319148937,"bio15_positive_fraction":0.40425531914893614,"bio1_negative_fraction":0.6702127659574468}
+  },
+  "chronology_region_match_counts": {"0":45,"1":19,"2":16,"3":8,"4":6},
+  "n_chronologies_ge_3_of_4_regions": 14,
+  "n_chronologies_4_of_4_regions": 6,
+  "central_0_79_to_0_74_ma": [
+    {"region":"east_asia_core_corridor","BIO15_delta":-3.32656028747558,"BIO1_delta":-0.7671598243713316,"h4_match":false},
+    {"region":"ryukyu_corridor","BIO15_delta":-1.2991712570190153,"BIO1_delta":-0.8944207763671805,"h4_match":false},
+    {"region":"southern_japan","BIO15_delta":-2.4928408813477034,"BIO1_delta":-1.3184800148010183,"h4_match":false},
+    {"region":"taiwan","BIO15_delta":-2.702999877929635,"BIO1_delta":-0.5456598281860323,"h4_match":false}
+  ],
+  "interpretation": "The present-niche U->D regime (+BIO15,-BIO1) does not persist robustly into the sole calendarized historical U->D event. This supports history-present/origin-maintenance decoupling under the declared sensitivity envelope: current bidirectional state-regime tracking should not be projected backward as the historical trigger of the core-Nipponocirsium transition.",
+  "claim_boundary": [
+    "Scenario fractions are deterministic sensitivity-grid fractions, not posterior probabilities.",
+    "Failure of persistence does not prove environment was irrelevant at origin.",
+    "The test concerns sign persistence for BIO15/BIO1 only and does not identify an alternative historical cause.",
+    "No selection or adaptation inference is made."
+  ],
+  "workflow_provenance": {"run_id":33851434070,"artifact_id":9928491775,"artifact_name":"chapter2-orientation-historical-regime-persistence-v1","artifact_sha256":"e91792ec98a563d895cc807cdbc6d93f131f23e513e6a418874636e00917067d","source_head_sha":"a8f0ce2f18cba69afc86af330c18ab7ec8d2bb38"}
+}
