@@ -1,0 +1,34 @@
+{
+  "version": "chapter2_orientation_occurrence_coverage_audit_contract_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Result-blind resolution audit using only already-frozen Japan/Taiwan orientation occurrence artifacts. Determine whether relaxing the occurrence-count gate from n>=10 to n>=5 or n>=3 expands the state-diverse orientation panel enough to justify a secondary conditional-specificity sensitivity.",
+  "sources": {
+    "orientation_crosswalk": "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv",
+    "japan_config": "data/evidence/fdt4_japan_orientation_niche_config_v1.json",
+    "taiwan_config": "data/evidence/fdt4_taiwan_orientation_niche_config_v1.json",
+    "japan_occurrence_artifact_id": 9516784077,
+    "japan_occurrence_artifact_sha256": "cb5717c90cbc769398f9ffce38787704a02e34253c1ff16cf8f368ba55aeda96",
+    "taiwan_occurrence_artifact_id": 9520157997,
+    "taiwan_occurrence_artifact_sha256": "819936ceeb6008f356c580622fb72972617700402afaa3d3ab125bff2e6d9106"
+  },
+  "thresholds": [10, 5, 3],
+  "eligibility": {
+    "state": "analysis_state must be U or D in the frozen 20-tip crosswalk",
+    "occurrences": "count independent thinned environment-complete rows already present in the frozen artifacts",
+    "no_new_sources": true,
+    "no_new_taxon_aliases": true,
+    "no_new_environmental_variables": true
+  },
+  "secondary_model_evaluability_rule": {
+    "minimum_total_taxa": 10,
+    "minimum_taxa_per_state": 3,
+    "must_add_taxa_relative_to_n10": true,
+    "note": "This rule only decides whether a secondary sensitivity is worth running; it cannot change the frozen n>=10 primary classification."
+  },
+  "claim_ceiling": [
+    "Lower occurrence thresholds are resolution sensitivities, not replacements for the frozen n>=10 primary panel.",
+    "Additional taxa recovered at lower thresholds do not constitute independent replication.",
+    "No result from this audit establishes climate causation, adaptation or selection.",
+    "If relaxed thresholds do not materially expand a state-diverse panel, public-data causal analysis stops rather than adding new occurrence sources or climate proxies."
+  ]
+}
