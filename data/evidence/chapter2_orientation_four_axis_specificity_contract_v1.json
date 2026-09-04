@@ -1,6 +1,7 @@
 {
   "version": "chapter2_orientation_four_axis_specificity_contract_v1",
   "status_date": "2026-09-04",
+  "execution_trigger": "2026-09-04 result-blind workflow trigger; no axis, estimand, ranking rule, or counterfactual pool changed",
   "analysis_role": "Post-result bounded specificity sensitivity using only the four climate axes frozen in the original orientation ecology screen. It asks whether BIO15 is merely one member of a broad climate gradient or remains the strongest current orientation correspondence across pre-existing axes. It cannot identify climatic selection or historical cause.",
   "axes": [
     {"key": "chelsa_bio01", "label": "annual mean temperature", "family": "thermal"},
