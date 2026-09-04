@@ -1,0 +1,43 @@
+{
+  "version": "chapter2_orientation_transition_directionality_contract_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Post-result mechanistic falsification of the already-supported transition-regime H1. Test whether environmental tracking is bidirectionally reversible across U->D and D->U transition probabilities, rather than being carried only by one direction.",
+  "panel": {
+    "threshold": "n>=10 frozen strict panel",
+    "taxa": [
+      "Cirsium alpicola",
+      "Cirsium brevicaule",
+      "Cirsium irumtiense",
+      "Cirsium japonicum var. australe",
+      "Cirsium japonicum var. japonicum",
+      "Cirsium kamtschaticum",
+      "Cirsium kawakamii",
+      "Cirsium suffultum",
+      "Cirsium yezoense"
+    ],
+    "state_counts": {"U": 5, "D": 4},
+    "expected_count_preserving_maps": 126
+  },
+  "fixed_environment_vector": {
+    "u_to_d_expected": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+    "d_to_u_expected": {"chelsa_bio15": -1.0, "chelsa_bio01": 1.0}
+  },
+  "estimands": {
+    "forward_alignment": "Sum[P(U->D on edge) * dot(edge environmental shift, (+BIO15,-BIO1)/sqrt(2))] / Sum[P(U->D on edge)]",
+    "reverse_alignment": "Sum[P(D->U on edge) * dot(edge environmental shift, (-BIO15,+BIO1)/sqrt(2))] / Sum[P(D->U on edge)]",
+    "bidirectional_floor": "min(forward_alignment, reverse_alignment) within topology; primary statistic is median floor across the six accepted topologies"
+  },
+  "null": "Enumerate all 126 count-preserving U/D assignments on the same nine taxa. Refit the symmetric CTMC rate for every state map and reuse the same Brownian environmental reconstructions and six accepted topologies.",
+  "decision": {
+    "bidirectional_reversible_regime_supported": "forward and reverse alignment are positive on all six topologies and exact one-sided rank of the median bidirectional floor is <=0.05",
+    "u_to_d_specific_asymmetry": "forward alignment is positive on all six topologies but reverse alignment fails positivity on at least one topology",
+    "bidirectional_directional_but_not_exceptional": "both directions are positive on all six topologies but exact floor rank is >0.05",
+    "directional_tracking_not_resolved": "none of the above"
+  },
+  "claim_boundary": [
+    "This is a post-result directional decomposition of H1, not independent confirmation.",
+    "Bidirectional alignment would show reversible present-niche transition-regime tracking, not historical climatic causation or adaptation.",
+    "Failure of reverse alignment does not prove evolutionary irreversibility; it only rejects symmetric environmental tracking under the declared CTMC/Brownian estimator.",
+    "No new environmental axis, taxon, threshold, or mechanism is admitted after result inspection."
+  ]
+}
