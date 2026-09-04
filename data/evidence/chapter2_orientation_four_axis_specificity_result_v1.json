@@ -1,0 +1,44 @@
+{
+  "version": "chapter2_orientation_four_axis_specificity_result_v1",
+  "classification": "bio15_consistently_strongest_among_four_frozen_axes",
+  "absolute_effect_rank_leaders": {
+    "full9": ["chelsa_bio15", "chelsa_bio01", "chelsa_bio12", "chelsa_bio04"],
+    "japan_only7": ["chelsa_bio15", "chelsa_bio12", "chelsa_bio04", "chelsa_bio01"],
+    "lat_lon_adjusted9": ["chelsa_bio15", "chelsa_bio01", "chelsa_bio12", "chelsa_bio04"]
+  },
+  "panels": {
+    "full9": {
+      "chelsa_bio01": {"beta_range": [-0.9754555936985758, -0.9670455926600782], "beta_median": -0.97124257447411, "abs_beta_median": 0.97124257447411, "topology_sign_agreement": "6/6", "loo_sign_agreement": "54/54", "absolute_effect_rank": 2},
+      "chelsa_bio04": {"beta_range": [0.25337020056934223, 0.27585282016417145], "beta_median": 0.26459619598047485, "abs_beta_median": 0.26459619598047485, "topology_sign_agreement": "6/6", "loo_sign_agreement": "54/54", "absolute_effect_rank": 4},
+      "chelsa_bio12": {"beta_range": [0.8475581535834205, 0.8613351966878926], "beta_median": 0.8544505496496235, "abs_beta_median": 0.8544505496496235, "topology_sign_agreement": "6/6", "loo_sign_agreement": "54/54", "absolute_effect_rank": 3},
+      "chelsa_bio15": {"beta_range": [1.3199975182508858, 1.3302025884233373], "beta_median": 1.325136519772713, "abs_beta_median": 1.325136519772713, "topology_sign_agreement": "6/6", "loo_sign_agreement": "54/54", "absolute_effect_rank": 1}
+    },
+    "japan_only7": {
+      "chelsa_bio01": {"beta_range": [-0.474974736549148, -0.4734999052419671], "beta_median": -0.47424267954393784, "abs_beta_median": 0.47424267954393784, "topology_sign_agreement": "6/6", "loo_sign_agreement": "42/42", "absolute_effect_rank": 4},
+      "chelsa_bio04": {"beta_range": [0.6050301886842695, 0.6127131536195976], "beta_median": 0.6088650811098374, "abs_beta_median": 0.6088650811098374, "topology_sign_agreement": "6/6", "loo_sign_agreement": "42/42", "absolute_effect_rank": 3},
+      "chelsa_bio12": {"beta_range": [0.6081206999842163, 0.6419257840704135], "beta_median": 0.6249643757442516, "abs_beta_median": 0.6249643757442516, "topology_sign_agreement": "6/6", "loo_sign_agreement": "36/42", "absolute_effect_rank": 2},
+      "chelsa_bio15": {"beta_range": [1.056948555381386, 1.1028303660007557], "beta_median": 1.079959104439299, "abs_beta_median": 1.079959104439299, "topology_sign_agreement": "6/6", "loo_sign_agreement": "42/42", "absolute_effect_rank": 1}
+    },
+    "lat_lon_adjusted9": {
+      "chelsa_bio01": {"beta_range": [-0.8938396055616648, -0.8772928796822269], "beta_median": -0.8855519734772734, "abs_beta_median": 0.8855519734772734, "topology_sign_agreement": "6/6", "loo_sign_agreement": "54/54", "absolute_effect_rank": 2},
+      "chelsa_bio04": {"beta_range": [0.289807481159308, 0.29520574803858457], "beta_median": 0.29250086726744506, "abs_beta_median": 0.29250086726744506, "topology_sign_agreement": "6/6", "loo_sign_agreement": "54/54", "absolute_effect_rank": 4},
+      "chelsa_bio12": {"beta_range": [0.6886744154820643, 0.6893690189727784], "beta_median": 0.6890228687686888, "abs_beta_median": 0.6890228687686888, "topology_sign_agreement": "6/6", "loo_sign_agreement": "54/54", "absolute_effect_rank": 3},
+      "chelsa_bio15": {"beta_range": [1.1175044422226137, 1.125019837271089], "beta_median": 1.1212849432207013, "abs_beta_median": 1.1212849432207013, "topology_sign_agreement": "6/6", "loo_sign_agreement": "54/54", "absolute_effect_rank": 1}
+    }
+  },
+  "counterfactual": {
+    "chelsa_bio01": {"observed_beta_median": -0.97124257447411, "observed_direction": "negative", "all_126": {"n": 126, "count_at_least_observed": 8, "fraction": 0.06349206349206349}, "recurrence_matched_40": {"n": 40, "count_at_least_observed": 4, "fraction": 0.1}},
+    "chelsa_bio04": {"observed_beta_median": 0.26459619598047485, "observed_direction": "positive", "all_126": {"n": 126, "count_at_least_observed": 39, "fraction": 0.30952380952380953}, "recurrence_matched_40": {"n": 40, "count_at_least_observed": 8, "fraction": 0.2}},
+    "chelsa_bio12": {"observed_beta_median": 0.8544505496496235, "observed_direction": "positive", "all_126": {"n": 126, "count_at_least_observed": 19, "fraction": 0.15079365079365079}, "recurrence_matched_40": {"n": 40, "count_at_least_observed": 10, "fraction": 0.25}},
+    "chelsa_bio15": {"observed_beta_median": 1.325136519772713, "observed_direction": "positive", "all_126": {"n": 126, "count_at_least_observed": 5, "fraction": 0.03968253968253968}, "recurrence_matched_40": {"n": 40, "count_at_least_observed": 3, "fraction": 0.075}}
+  },
+  "interpretation": "Among the four climate axes frozen before this follow-up, precipitation seasonality (BIO15) is the largest absolute standardized orientation contrast in the full East-Asian panel, after removing Taiwan, and after coarse latitude/longitude adjustment. It is also the most extreme axis under both state-count-preserving and recurrence-matched counterfactual maps. This supports bounded axis specificity among the four tested variables, not a causal precipitation-seasonality mechanism.",
+  "interpretation_boundary": [
+    "The four axes are correlated and are not independent mechanistic candidates.",
+    "This analysis is post-result and cannot be treated as independent confirmation of BIO15.",
+    "Ranking among four frozen axes cannot establish precipitation seasonality as the causal driver.",
+    "No new environmental variable, transformed proxy, or month-specific variable may be added after result inspection.",
+    "Counterfactual fractions are finite conditional ranks, not P values or posterior probabilities."
+  ],
+  "workflow_provenance": {"run_id": 33842645618, "artifact_id": 9925425183, "artifact_name": "chapter2-orientation-four-axis-specificity-v1", "artifact_sha256": "c5f352ade35bc1060156f1a9c37d6b76d63d0f2f5d9adebdb02f574c3d3c1faa", "source_head_sha": "3af409b73dcaa2a86cd31f08b8716be3801697a1"}
+}
