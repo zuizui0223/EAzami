@@ -1,0 +1,47 @@
+name: Apply Chapter 2 V7 transition-regime integration v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/apply_chapter2_transition_regime_v7_integration_v1.py"
+      - "analysis/validate_manuscript_jeb_v7_transition_regime_v2.py"
+      - ".github/workflows/apply-chapter2-v7-transition-regime-integration-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  apply-and-validate:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Apply deterministic manuscript and figure-map integration
+        run: python analysis/apply_chapter2_transition_regime_v7_integration_v1.py
+      - name: Validate legacy V7 contracts
+        run: python analysis/validate_manuscript_jeb_v7_working_v1.py
+      - name: Validate transition-regime promotion
+        run: python analysis/validate_manuscript_jeb_v7_transition_regime_v2.py
+      - name: Check patch hygiene
+        run: git diff --check
+      - name: Commit validated integration to head branch
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- docs/chapter2/MANUSCRIPT_JEB_V7_WORKING.md docs/chapter2/JEB_V7_FIGURE_MAP.md; then
+            echo "No manuscript/figure-map diff produced" >&2
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/chapter2/MANUSCRIPT_JEB_V7_WORKING.md docs/chapter2/JEB_V7_FIGURE_MAP.md
+          git commit -m "Chapter 2: integrate transition-regime evidence into V7 [skip ci]"
+          git push origin "HEAD:${{ github.head_ref }}"
