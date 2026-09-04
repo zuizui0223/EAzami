@@ -1,0 +1,38 @@
+{
+  "version": "chapter2_orientation_four_axis_specificity_contract_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Post-result bounded specificity sensitivity using only the four climate axes frozen in the original orientation ecology screen. It asks whether BIO15 is merely one member of a broad climate gradient or remains the strongest current orientation correspondence across pre-existing axes. It cannot identify climatic selection or historical cause.",
+  "axes": [
+    {"key": "chelsa_bio01", "label": "annual mean temperature", "family": "thermal"},
+    {"key": "chelsa_bio04", "label": "temperature seasonality", "family": "thermal_seasonality"},
+    {"key": "chelsa_bio12", "label": "annual precipitation", "family": "hydric_amount"},
+    {"key": "chelsa_bio15", "label": "precipitation seasonality", "family": "hydric_seasonality"}
+  ],
+  "frozen_focal_axis": "chelsa_bio15",
+  "panels": {
+    "full9": "Brownian PGLS standardized D-minus-U effect across the same six accepted AU topologies",
+    "japan_only7": "same PGLS after removing the two Taiwan-source taxa",
+    "lat_lon_adjusted9": "Brownian GLS environment ~ orientation + z(mean latitude) + z(mean longitude)",
+    "state_count_counterfactual": "all choose(9,4)=126 U=5/D=4 maps; for each axis compare the observed signed magnitude in its observed direction with all maps",
+    "recurrence_counterfactual": "same exact six-topology recurrence-profile gate used by the frozen BIO15 counterfactual analysis"
+  },
+  "specificity_metrics": {
+    "effect_rank": "rank the four axes by absolute median standardized orientation coefficient separately for full9, Japan-only and lat/lon-adjusted panels",
+    "topology_stability": "record sign agreement across all six accepted topologies",
+    "loo_stability": "record species leave-one-out sign agreement where evaluable",
+    "counterfactual_extremeness": "finite conditional fraction of maps at least as extreme in the observed signed direction; not a P value",
+    "focal_specificity_rule": "BIO15 is called the strongest tested current axis only if it ranks first in absolute median coefficient in full9, Japan-only7 and lat_lon_adjusted9. No significance claim follows from this ranking."
+  },
+  "interpretation_classes": [
+    "bio15_consistently_strongest_among_four_frozen_axes",
+    "bio15_strong_but_not_unique_among_four_frozen_axes",
+    "bio15_not_the_leading_frozen_axis"
+  ],
+  "claim_ceiling": [
+    "The four axes are correlated and are not independent mechanistic candidates.",
+    "This analysis is post-result and cannot be treated as independent confirmation of BIO15.",
+    "Ranking among four frozen axes cannot establish precipitation seasonality as the causal driver.",
+    "No new environmental variable, transformed proxy, or month-specific variable may be added after result inspection.",
+    "Counterfactual fractions are finite conditional ranks, not P values or posterior probabilities."
+  ]
+}
