@@ -1,0 +1,39 @@
+{
+  "version": "chapter2_orientation_transition_regime_internal_edge_contract_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Specific falsification of supported H1. Test whether the fixed (+BIO15,-BIO1) transition-regime concordance persists when terminal edges contribute zero to the scored environmental-transition statistic.",
+  "hypothesis": {
+    "primary": "If H1 reflects historical branch structure rather than only terminal state separation, internal branches carrying greater U->D than D->U transition probability should align with higher BIO15 and lower BIO1.",
+    "vector": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+    "no_refitting_of_direction": true
+  },
+  "scoring": {
+    "ctmc_fit": "fit on the complete pruned panel tree using all admitted tip states",
+    "brownian_reconstruction": "fit on the complete pruned panel tree using all admitted tip environmental centroids",
+    "scored_edges": "internal child edges only; edges whose child is a terminal tip contribute zero to numerator and denominator",
+    "axis_statistic": "sum_internal[(P(U,D)-P(D,U))*environmental_shift] / sum_internal[P(U,D)+P(D,U)]",
+    "primary_statistic": "(S_BIO15 - S_BIO1)/sqrt(2), median across six accepted topologies"
+  },
+  "panels": {
+    "strict_n10_primary": {"threshold":10,"expected_n":9,"expected_U":5,"expected_D":4,"exact_state_maps":126},
+    "n5_sensitivity": {"threshold":5,"expected_n":12,"expected_U":7,"expected_D":5,"exact_state_maps":792}
+  },
+  "null": "Enumerate every count-preserving tip-state map; refit symmetric CTMC for each map; retain fixed environmental observations; score internal edges only.",
+  "decision_rule": {
+    "supported": "strict_n10 internal-edge composite is positive on all six topologies and exact fraction <=0.05",
+    "directional_not_exceptional": "strict_n10 composite positive on all six but exact fraction >0.05",
+    "terminal_dependent": "at least one strict_n10 topology has a non-positive internal-edge composite",
+    "n5_role": "secondary sensitivity only"
+  },
+  "classification_order": [
+    "transition_regime_concordance_supported_on_internal_edges",
+    "transition_regime_internal_edge_directional_but_not_exceptional",
+    "transition_regime_concordance_requires_terminal_edge_contribution"
+  ],
+  "claim_ceiling": [
+    "Internal-edge support would show that H1 is not merely a terminal-tip contrast; it would not date those internal changes or establish ancestral environmental exposure.",
+    "Brownian internal environmental values are reconstructed from present-day tip centroids and are not palaeoenvironment observations.",
+    "No result establishes climatic causation, selection, adaptation, convergence, or a physiological mediator.",
+    "No predictor, vector direction, or threshold may be changed after result inspection."
+  ]
+}
