@@ -30,10 +30,12 @@ Mosaic capitulum assembly through time
 
 ## Article metrics
 
+Validated on V7 manuscript workflow run `33838561827`:
+
 - article type: Research Article;
-- main-text word count: `[AUTO-FILL AT SUBMISSION FREEZE; MUST BE <= 7,500]`;
-- abstract word count: `[AUTO-FILL; MUST BE <= 250]`;
-- keywords: 7.
+- main text before References: **5,811 words** (<7,500);
+- abstract: **229 words** (<250);
+- keywords: **7**.
 
 ## Data Availability Statement
 
@@ -61,9 +63,9 @@ The anonymous main manuscript already contains a disclosure in the Methods `Tran
 
 ## Social-media abstract (<=280 characters)
 
-Working version:
+Validated working version, 261 characters:
 
-> Three thistle capitulum traits changed repeatedly but at different evolutionary depths and without one synchronized history. Present ecology is scale-dependent, while recurring historical climate causes remain less identifiable.
+> Three thistle capitulum traits were repeatedly assembled at unequal evolutionary depths. Orientation–climate correspondence changes across biological scale and weakens under history-matched counterfactuals; recurring historical climate causes remain unresolved.
 
 ## Title-page freeze gates
 
@@ -72,6 +74,6 @@ Working version:
 3. Affiliations and ORCIDs verified.
 4. Funding / COI / acknowledgements finalized.
 5. Immutable data/code DOI minted and inserted into Data Availability Statement.
-6. Main-text and abstract word counts inserted.
+6. Re-run manuscript validator and update counts only if scientific text changes.
 7. AI disclosure copied into cover letter.
 8. Social-media abstract checked to <=280 characters.
