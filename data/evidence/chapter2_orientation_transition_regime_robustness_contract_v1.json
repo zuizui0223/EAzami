@@ -1,0 +1,59 @@
+{
+  "version": "chapter2_orientation_transition_regime_robustness_contract_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Post-result falsification of the already-supported transition-regime hypothesis. Keep the exact same (+BIO15,-BIO1) estimator and test whether the result depends on relaxed occurrence coverage or Taiwan/Japan composition.",
+  "source_hypothesis_result": "data/evidence/chapter2_orientation_transition_regime_hypothesis_result_v1.json",
+  "fixed_hypothesis": {
+    "vector": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+    "estimator": "identical CTMC edge-joint posterior x Brownian branch-shift composite implemented in analysis/run_chapter2_orientation_transition_regime_hypothesis_v1.py",
+    "no_refitting_of_hypothesis_direction": true
+  },
+  "tests": {
+    "strict_n10": {
+      "question": "Does H1 remain exceptional when only taxa meeting the original frozen n>=10 occurrence gate are used?",
+      "threshold": 10,
+      "expected_n": 9,
+      "expected_U": 5,
+      "expected_D": 4,
+      "exact_state_maps": 126,
+      "occurrence_scope": "Japan plus Taiwan frozen artifacts"
+    },
+    "japan_n5": {
+      "question": "Does H1 remain exceptional after Taiwan taxa are removed, using only the already-frozen Japan occurrence artifact at n>=5?",
+      "threshold": 5,
+      "expected_n": 8,
+      "expected_U": 5,
+      "expected_D": 3,
+      "exact_state_maps": 56,
+      "taxa": [
+        "Cirsium alpicola",
+        "Cirsium brevicaule",
+        "Cirsium gyojanum",
+        "Cirsium irumtiense",
+        "Cirsium japonicum var. japonicum",
+        "Cirsium kamtschaticum",
+        "Cirsium suffultum",
+        "Cirsium yezoense"
+      ],
+      "occurrence_scope": "Japan frozen artifact only"
+    }
+  },
+  "decision_rule": {
+    "panel_pass": "observed composite is positive on all six topologies and exact one-sided count-preserving state-map fraction <=0.05",
+    "robust_across_both": "strict_n10 and japan_n5 both pass",
+    "coverage_robust_region_sensitive": "strict_n10 passes but japan_n5 fails",
+    "relaxed_coverage_dependent": "strict_n10 fails regardless of japan_n5",
+    "note": "These are robustness classifications for an already-observed result, not independent preregistered replications."
+  },
+  "classification_order": [
+    "transition_regime_concordance_robust_to_strict_coverage_and_japan_only",
+    "transition_regime_concordance_strict_coverage_robust_but_region_sensitive",
+    "transition_regime_concordance_depends_on_relaxed_coverage"
+  ],
+  "claim_ceiling": [
+    "Do not change the environmental vector or add predictors after result inspection.",
+    "Exact map fractions are finite randomization ranks, not biological-replicate P values.",
+    "Japan-only persistence is regional robustness, not an independent evolutionary replication.",
+    "A robust result still does not identify historical climate causation, selection, adaptation, or a mediator."
+  ]
+}
