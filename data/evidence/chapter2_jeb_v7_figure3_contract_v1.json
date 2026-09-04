@@ -1,0 +1,52 @@
+{
+  "version": "chapter2_jeb_v7_figure3_contract_v1",
+  "status_date": "2026-09-04",
+  "role": "Fail-closed publication figure contract for scale- and history-conditioned orientation ecology.",
+  "sources": {
+    "scale_partition": "data/evidence/chapter2_orientation_environment_scale_partition_v1.json",
+    "counterfactual": "data/evidence/chapter2_orientation_environment_counterfactual_result_v1.json"
+  },
+  "required_values": {
+    "bio12": {
+      "within_beta": 0.0053264197896164,
+      "within_q": 0.8742443900686662,
+      "among_beta": 0.3043592858977514,
+      "among_q": 0.0063993600639936
+    },
+    "bio15": {
+      "within_beta": -0.0076180061143611,
+      "within_q": 0.1214238418352934,
+      "among_beta": 0.0670043446773373,
+      "among_q": 0.5991748651221834,
+      "east_asia_effect_range": [1.32, 1.33],
+      "state_count_rank": [5, 126],
+      "recurrence_rank": [3, 40],
+      "nearest_history_rank": [3, 10],
+      "recurrence_reverse_signed_statistic": -1.7840766075815615,
+      "nearest_history_reverse_exists": false
+    },
+    "bio1": {
+      "within_beta": 0.0171502769396607,
+      "within_q": 0.0348750515143389,
+      "among_beta": -0.0302378798369909,
+      "among_q": 0.8364877797934492,
+      "east_asia_effect_range": [-0.975455593698576, -0.9670455926600778],
+      "state_count_rank": [8, 126],
+      "recurrence_rank": [4, 40],
+      "nearest_history_rank": [3, 10],
+      "nearest_history_reverse_exists": true
+    }
+  },
+  "display_rules": [
+    "Do not place within/among coefficients and East-Asian state contrasts on one numerical effect-size axis; they are non-exchangeable estimands.",
+    "Counterfactual fractions are conditional ranks, not P values.",
+    "The BIO15 magnitude is not exceptional in the nearest-history pool.",
+    "Absence of a reverse BIO15 map in the nearest-history pool is a finite-class constraint, not biological impossibility.",
+    "Do not claim climatic selection, adaptation, plasticity, ancestry independence, or transition-time cause."
+  ],
+  "output": {
+    "stem": "figure3_v7_scale_history_ecology",
+    "png_dpi": 600,
+    "pdf_vector": true
+  }
+}
