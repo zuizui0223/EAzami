@@ -39,5 +39,6 @@
     "Bidirectional alignment would show reversible present-niche transition-regime tracking, not historical climatic causation or adaptation.",
     "Failure of reverse alignment does not prove evolutionary irreversibility; it only rejects symmetric environmental tracking under the declared CTMC/Brownian estimator.",
     "No new environmental axis, taxon, threshold, or mechanism is admitted after result inspection."
-  ]
+  ],
+  "execution_trigger": "result_blind_default_branch_execution_20260904"
 }
