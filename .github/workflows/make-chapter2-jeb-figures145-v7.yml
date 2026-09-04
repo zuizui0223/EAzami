@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "analysis/make_chapter2_jeb_figures145_v7.py"
+      - "analysis/make_chapter2_jeb_figures145_v7_v2.py"
       - "data/evidence/chapter2_jeb_v7_figures145_contract_v1.json"
       - "data/evidence/japan_cirsium_origin_meta_analysis_v1.json"
       - "data/evidence/japan38_comp1061_primary_tree_acceptance_v1.json"
@@ -30,10 +31,12 @@ jobs:
           python-version: "3.12"
       - name: Install plotting runtime
         run: python -m pip install --disable-pip-version-check matplotlib numpy
-      - name: Compile generator
-        run: python -m py_compile analysis/make_chapter2_jeb_figures145_v7.py
+      - name: Compile generators
+        run: |
+          python -m py_compile analysis/make_chapter2_jeb_figures145_v7.py
+          python -m py_compile analysis/make_chapter2_jeb_figures145_v7_v2.py
       - name: Generate validated Figures 1 4 5
-        run: python analysis/make_chapter2_jeb_figures145_v7.py --output-dir .tmp/figures145_v7
+        run: python analysis/make_chapter2_jeb_figures145_v7_v2.py --output-dir .tmp/figures145_v7
       - name: Verify outputs
         run: |
           for f in \
