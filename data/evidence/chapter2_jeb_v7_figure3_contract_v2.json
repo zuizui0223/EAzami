@@ -1,0 +1,57 @@
+{
+  "version": "chapter2_jeb_v7_figure3_contract_v2",
+  "status_date": "2026-09-04",
+  "role": "Fail-closed publication figure contract for scale-partitioned, transition-linked and history-conditioned orientation ecology.",
+  "sources": {
+    "scale_partition": "data/evidence/chapter2_orientation_environment_scale_partition_v1.json",
+    "counterfactual": "data/evidence/chapter2_orientation_environment_counterfactual_result_v1.json",
+    "current_claims": "data/evidence/chapter2_current_claims_h1_h4_v1.json",
+    "h1": "data/evidence/chapter2_orientation_transition_regime_hypothesis_result_v1.json",
+    "regional_robustness": "data/evidence/chapter2_orientation_transition_regime_robustness_result_v1.json",
+    "single_deletion": "data/evidence/chapter2_orientation_transition_regime_single_deletion_result_v1.json",
+    "geography_residual": "data/evidence/chapter2_orientation_transition_regime_geography_residual_result_v1.json",
+    "internal_edge": "data/evidence/chapter2_orientation_transition_regime_internal_edge_result_v1.json",
+    "combined_stress": "data/evidence/chapter2_orientation_transition_regime_combined_stress_result_v1.json"
+  },
+  "panel_b": {
+    "primary_ranks": {
+      "n5_12_taxa": [16, 792],
+      "n3_13_taxa": [19, 1716],
+      "strict_n10_9_taxa": [4, 126]
+    },
+    "strict_axes": {
+      "BIO15": [7, 126],
+      "lower_BIO1": [8, 126],
+      "composite": [4, 126]
+    },
+    "bidirectional_floor": [3, 126]
+  },
+  "panel_c": {
+    "strict": [4, 126],
+    "japan_only": [10, 56],
+    "geography_residual": [5, 126],
+    "internal_edge": [3, 126],
+    "combined": [3, 126],
+    "combined_n5": [29, 792],
+    "single_deletion_direction": [9, 9],
+    "single_deletion_exceptionality": [2, 9]
+  },
+  "panel_d": {
+    "bio15_nested": [[5,126],[3,40],[3,10]],
+    "recurrence_reverse_signed_statistic": -1.7840766075815615,
+    "nearest_history_reverse_exists": false
+  },
+  "display_rules": [
+    "Within-taxon, among-taxon and East-Asian state contrasts are non-exchangeable estimands and must not share one quantitative effect-size axis.",
+    "Exact fractions are finite-map ranks, not biological-replicate P values.",
+    "The 5 percent line is the frozen finite-map decision boundary, not a conventional inferential P-value threshold.",
+    "The transition-regime signal is not a universal Japan-only rule.",
+    "Internal-edge environmental values are reconstructed from present-day niche centroids, not observed ancestral environments.",
+    "Do not claim climatic causation, selection, adaptation, convergence or a physiological mediator."
+  ],
+  "output": {
+    "stem": "figure3_v7_transition_regime_ecology",
+    "png_dpi": 600,
+    "pdf_vector": true
+  }
+}
