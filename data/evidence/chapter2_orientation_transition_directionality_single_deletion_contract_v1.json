@@ -1,0 +1,37 @@
+{
+  "version": "chapter2_orientation_transition_directionality_single_deletion_contract_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Post-result single-taxon falsification of H2. Test whether bidirectional reversible present-niche transition-regime tracking requires any one taxon in the strict n>=10 East-Asian panel.",
+  "fixed_hypothesis": {
+    "u_to_d_expected": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+    "d_to_u_expected": {"chelsa_bio15": -1.0, "chelsa_bio01": 1.0}
+  },
+  "strict_panel_taxa": [
+    "Cirsium alpicola",
+    "Cirsium brevicaule",
+    "Cirsium irumtiense",
+    "Cirsium japonicum var. australe",
+    "Cirsium japonicum var. japonicum",
+    "Cirsium kamtschaticum",
+    "Cirsium kawakamii",
+    "Cirsium suffultum",
+    "Cirsium yezoense"
+  ],
+  "tests": {
+    "delete_each_taxon_once": true,
+    "expected_map_count_if_deleted_U": 70,
+    "expected_map_count_if_deleted_D": 56,
+    "directional_robustness": "for every deletion, forward and reverse alignment must each be positive on all six accepted topologies",
+    "secondary_exceptionality": "report exact one-sided rank of the median bidirectional floor; <=0.05 is descriptive secondary robustness"
+  },
+  "decision": {
+    "bidirectional_direction_not_single_taxon_dependent": "all nine deletion panels retain forward and reverse positivity on all six topologies",
+    "bidirectional_direction_depends_on_taxon": "at least one deletion loses forward or reverse positivity on at least one topology"
+  },
+  "claim_boundary": [
+    "This is a post-result sensitivity analysis of H2, not independent replication.",
+    "The primary robustness target is directional persistence, not exact <=0.05 in every reduced finite-map panel.",
+    "Failure of exact <=0.05 after deletion may reflect reduced finite-map resolution as well as biological dependence.",
+    "No result establishes historical climate causation, selection, adaptation, or a mediator."
+  ]
+}
