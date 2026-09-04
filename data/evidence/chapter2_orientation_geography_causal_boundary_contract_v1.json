@@ -1,6 +1,7 @@
 {
   "version": "chapter2_orientation_geography_causal_boundary_contract_v1",
   "status_date": "2026-09-04",
+  "execution_trigger": "2026-09-04 result-blind workflow trigger; no estimand, pool, variable, or decision rule changed",
   "analysis_role": "Post-result causal-boundary falsification. Test whether the current East-Asian orientation-BIO15 correspondence persists after removing coarse regional and geographic placement explanations. This analysis cannot establish climatic selection or adaptation.",
   "frozen_sources": {
     "orientation_crosswalk": "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv",
