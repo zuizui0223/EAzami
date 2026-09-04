@@ -1,6 +1,7 @@
 {
   "version": "chapter2_orientation_occurrence_coverage_audit_contract_v1",
   "status_date": "2026-09-04",
+  "execution_trigger": "2026-09-04 result-blind workflow trigger; no threshold, eligibility or evaluability rule changed",
   "analysis_role": "Result-blind resolution audit using only already-frozen Japan/Taiwan orientation occurrence artifacts. Determine whether relaxing the occurrence-count gate from n>=10 to n>=5 or n>=3 expands the state-diverse orientation panel enough to justify a secondary conditional-specificity sensitivity.",
   "sources": {
     "orientation_crosswalk": "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv",

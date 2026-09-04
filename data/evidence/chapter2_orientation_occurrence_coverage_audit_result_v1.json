@@ -1,0 +1,89 @@
+{
+  "version": "chapter2_orientation_occurrence_coverage_audit_result_v1",
+  "status_date": "2026-09-04",
+  "classification": "relaxed_existing_coverage_materially_expands_state_diverse_panel",
+  "threshold_summaries": {
+    "10": {
+      "n_taxa": 9,
+      "n_U": 5,
+      "n_D": 4,
+      "taxa": [
+        "Cirsium alpicola",
+        "Cirsium brevicaule",
+        "Cirsium irumtiense",
+        "Cirsium japonicum var. australe",
+        "Cirsium japonicum var. japonicum",
+        "Cirsium kamtschaticum",
+        "Cirsium kawakamii",
+        "Cirsium suffultum",
+        "Cirsium yezoense"
+      ],
+      "added_vs_n10": [],
+      "secondary_specificity_sensitivity_evaluable": false
+    },
+    "5": {
+      "n_taxa": 12,
+      "n_U": 7,
+      "n_D": 5,
+      "taxa": [
+        "Cirsium alpicola",
+        "Cirsium brevicaule",
+        "Cirsium gyojanum",
+        "Cirsium irumtiense",
+        "Cirsium japonicum var. australe",
+        "Cirsium japonicum var. japonicum",
+        "Cirsium kamtschaticum",
+        "Cirsium kawakamii",
+        "Cirsium morii",
+        "Cirsium suffultum",
+        "Cirsium tatakaense",
+        "Cirsium yezoense"
+      ],
+      "added_vs_n10": ["Cirsium gyojanum", "Cirsium morii", "Cirsium tatakaense"],
+      "secondary_specificity_sensitivity_evaluable": true
+    },
+    "3": {
+      "n_taxa": 13,
+      "n_U": 7,
+      "n_D": 6,
+      "taxa": [
+        "Cirsium alpicola",
+        "Cirsium brevicaule",
+        "Cirsium gyojanum",
+        "Cirsium irumtiense",
+        "Cirsium japonicum var. australe",
+        "Cirsium japonicum var. japonicum",
+        "Cirsium kamtschaticum",
+        "Cirsium kawakamii",
+        "Cirsium kujuense",
+        "Cirsium morii",
+        "Cirsium suffultum",
+        "Cirsium tatakaense",
+        "Cirsium yezoense"
+      ],
+      "added_vs_n10": ["Cirsium gyojanum", "Cirsium kujuense", "Cirsium morii", "Cirsium tatakaense"],
+      "secondary_specificity_sensitivity_evaluable": true
+    }
+  },
+  "taxa_with_any_frozen_occurrences": 14,
+  "resolved_orientation_taxa_in_crosswalk": 17,
+  "zero_occurrence_taxa": [
+    "Cirsium japonicum var. albescens",
+    "Cirsium japonicum var. fukienense",
+    "Cirsium pengii"
+  ],
+  "interpretation": "The already-frozen occurrence assets materially expand the state-diverse orientation panel at n>=5 and n>=3, so a secondary conditional-specificity sensitivity is justified. The frozen n>=10 analysis remains primary and cannot be replaced by relaxed thresholds.",
+  "claim_ceiling": [
+    "Lower occurrence thresholds are resolution sensitivities, not replacements for the frozen n>=10 primary panel.",
+    "Additional taxa recovered at lower thresholds do not constitute independent replication.",
+    "No result from this audit establishes climate causation, adaptation or selection.",
+    "No new occurrence source, taxon alias or environmental variable is admitted by this audit."
+  ],
+  "workflow_provenance": {
+    "run_id": 33843385096,
+    "artifact_id": 9925653428,
+    "artifact_name": "chapter2-orientation-occurrence-coverage-audit-v1",
+    "artifact_sha256": "62cb80861d9e983b15bd6ce42e81087c66d0c0bbed79d254dad6084d62eabbb3",
+    "source_head_sha": "21afbb452aa76dd40212374f52931e53bce6b118"
+  }
+}
