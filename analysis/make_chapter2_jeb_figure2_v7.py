@@ -27,7 +27,6 @@ GREEN = "#5A9367"
 GREY = "#777777"
 LIGHT = "#D9DDE2"
 PALE = "#F4F5F6"
-RED = "#B04A4A"
 
 
 def load_json(path: Path) -> dict:
@@ -124,7 +123,6 @@ def main() -> int:
     cols = [BLUE, ORANGE, GREEN]
     yy = np.arange(3)[::-1]
 
-    # a — minimum changes.
     ax = fig.add_subplot(gs[0, 0])
     values = [(4, 6, 5, 6, 20), (3, 3, 3, 3, 10), (5, 5, 5, 5, 13)]
     for y, (lo, hi, med, ml, n), col in zip(yy, values, cols):
@@ -140,7 +138,6 @@ def main() -> int:
     ax.text(0.5, -0.25, "line: UFBoot range   ○ median   ◆ ML", transform=ax.transAxes, ha="center", fontsize=6.4, color=GREY)
     panel(ax, "a")
 
-    # b — relative-depth envelopes.
     ax = fig.add_subplot(gs[0, 1])
     envelopes = [
         tuple(rec["orientation"]["relative_depth_median_envelope"]),
@@ -160,7 +157,6 @@ def main() -> int:
     ax.text(0.5, -0.25, "lower = deeper-permissive; topology only, not time", transform=ax.transAxes, ha="center", fontsize=6.3, color=GREY)
     panel(ax, "b")
 
-    # c — paired topology ordering.
     ax = fig.add_subplot(gs[1, 0])
     labels = ["P<S", "P<O", "O<S", "P<O<S"]
     vals = np.array([1.000, 0.993, 0.905, 0.898]) * 100
@@ -176,7 +172,6 @@ def main() -> int:
     ax.text(0.5, -0.23, "P=phyllary   O=orientation   S=stickiness", transform=ax.transAxes, ha="center", fontsize=6.3, color=GREY)
     panel(ax, "c")
 
-    # d — coverage-matched central vs strict tail. Direct labels avoid legend overlap.
     ax = fig.add_subplot(gs[1, 1])
     groups = ["O 7U/3D", "S 5/5", "S 6/4"]
     med = np.array([97.5, 96.5, 96.5])
@@ -192,12 +187,10 @@ def main() -> int:
     ax.set_yticks(gy, groups)
     ax.set_xlim(0, 112)
     ax.set_xlabel("Selected topology realizations (%)")
-    ax.set_title("Coverage-matched sensitivity", pad=9)
+    ax.set_title("Coverage matching: central vs strict tail", pad=9)
     ax.grid(axis="x", color=LIGHT, lw=0.6)
-    ax.text(0.5, -0.20, "central ordering retained; strict deep tails overlap", transform=ax.transAxes, ha="center", fontsize=6.4, color=RED)
     panel(ax, "d")
 
-    # e — localization boundary and interpretation.
     ax = fig.add_subplot(gs[2, :])
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
