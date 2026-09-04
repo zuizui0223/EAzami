@@ -1,0 +1,51 @@
+{
+  "version": "chapter2_orientation_transition_regime_geography_residual_result_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Specific falsification of supported H1 using the same fixed (+BIO15,-BIO1) branchwise transition-regime statistic after linear latitude/longitude residualization of both environmental axes.",
+  "classification": "transition_regime_concordance_persists_after_linear_geography_residualization",
+  "fixed_hypothesis": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+  "strict_n10_primary": {
+    "n_taxa": 9,
+    "n_U": 5,
+    "n_D": 4,
+    "composite_positive_topologies": "6/6",
+    "composite_median": 0.4139511842027829,
+    "bio15_residual_median": 0.3113946561004369,
+    "bio1_residual_median": -0.27402198891945373,
+    "exact_primary_rank": {"count_at_least_observed": 5, "n_maps": 126, "exact_fraction": 0.03968253968253968},
+    "secondary_axis_ranks": {
+      "bio15_residual": {"count_at_least_observed": 5, "n_maps": 126, "exact_fraction": 0.03968253968253968},
+      "bio1_lower_residual": {"count_at_least_observed": 12, "n_maps": 126, "exact_fraction": 0.09523809523809523}
+    }
+  },
+  "n5_sensitivity": {
+    "n_taxa": 12,
+    "n_U": 7,
+    "n_D": 5,
+    "composite_positive_topologies": "6/6",
+    "composite_median": 0.32083198968165527,
+    "bio15_residual_median": 0.2009634911425166,
+    "bio1_residual_median": -0.25276145990842525,
+    "exact_primary_rank": {"count_at_least_observed": 41, "n_maps": 792, "exact_fraction": 0.05176767676767677},
+    "secondary_axis_ranks": {
+      "bio15_residual": {"count_at_least_observed": 90, "n_maps": 792, "exact_fraction": 0.11363636363636363},
+      "bio1_lower_residual": {"count_at_least_observed": 31, "n_maps": 792, "exact_fraction": 0.039141414141414144}
+    }
+  },
+  "interpretation": {
+    "supported": "In the strict n>=10 East-Asian panel, the fixed U->D transition-regime correspondence remains positive on every accepted topology and exceptional among all count-preserving state maps after removing linear latitude/longitude structure from BIO15 and BIO1.",
+    "boundary": "The n>=5 sensitivity is borderline at 41/792 = 5.18%, so the exact exceptional rank is not fully insensitive to expanded-panel composition. Passing the strict test rules out only a simple linear latitude/longitude explanation, not all regional, spatial, phylogenetic or historical confounding.",
+    "synthesis": "Together with the Japan-only failure and single-taxon deletion results, the supported object is a distributed East-Asian lineage/regional transition-regime correspondence that is not reducible to one taxon or a simple linear geographic gradient."
+  },
+  "provenance": {
+    "workflow_run_id": 33864409677,
+    "artifact_id": 9933416995,
+    "artifact_sha256": "3d2e3c9a506c6f86e2f412e9d0654b431457a0a03b472fb057195384977321ea"
+  },
+  "claim_ceiling": [
+    "Present-day residual niche centroids are not historical transition-time environments.",
+    "Linear latitude/longitude residualization does not remove all spatial or regional confounding.",
+    "No result identifies BIO15 or BIO1 as a causal selective agent.",
+    "No result establishes rain/wetting, UV, pollination, selection, adaptation or fitness causation."
+  ]
+}
