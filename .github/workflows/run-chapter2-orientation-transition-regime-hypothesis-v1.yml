@@ -1,0 +1,81 @@
+name: Run Chapter 2 orientation transition-regime hypothesis v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_chapter2_orientation_transition_regime_hypothesis_v1.py"
+      - "data/evidence/chapter2_orientation_transition_regime_hypothesis_contract_v1.json"
+      - ".github/workflows/run-chapter2-orientation-transition-regime-hypothesis-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: |
+          python -m pip install --disable-pip-version-check numpy pandas scipy biopython
+          python -m pip check
+      - name: Verify frozen source artifacts
+        run: |
+          set -euo pipefail
+          test "$(gh api repos/zuizui0223/EAzami/actions/artifacts/9516784077 --jq .digest)" = "sha256:cb5717c90cbc769398f9ffce38787704a02e34253c1ff16cf8f368ba55aeda96"
+          test "$(gh api repos/zuizui0223/EAzami/actions/artifacts/9520157997 --jq .digest)" = "sha256:819936ceeb6008f356c580622fb72972617700402afaa3d3ab125bff2e6d9106"
+          test "$(gh api repos/zuizui0223/EAzami/actions/artifacts/9486643703 --jq .digest)" = "sha256:d90f30e4fcc3a2a0296a7d0cfa13d0f3ecc008b36d28298ac9782a001e6f63c5"
+      - name: Recover frozen assets
+        run: |
+          mkdir -p recovered/japan recovered/taiwan recovered/au .tmp/transition_regime
+          gh run download 32716015605 --name fdt4-japan-orientation-niche-v1 --dir recovered/japan
+          gh run download 32725842871 --name fdt4-taiwan-orientation-niche-v1 --dir recovered/taiwan
+          gh run download 32614839764 --name comp1061-alt-topology-au-32614839764 --dir recovered/au
+      - name: Compile analysis
+        run: python -m py_compile analysis/run_chapter2_orientation_transition_regime_hypothesis_v1.py
+      - name: Run frozen specific hypothesis test
+        run: |
+          python analysis/run_chapter2_orientation_transition_regime_hypothesis_v1.py \
+            --contract data/evidence/chapter2_orientation_transition_regime_hypothesis_contract_v1.json \
+            --coverage-audit data/evidence/chapter2_orientation_occurrence_coverage_audit_result_v1.json \
+            --legacy data/evidence/fdt4_branchwise_niche_transition_concordance_v1.json \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --japan-occurrences recovered/japan/focal_occurrences_environment_complete.csv \
+            --taiwan-occurrences recovered/taiwan/focal_occurrences_environment_complete.csv \
+            --au-trees recovered/au/au.trees \
+            --out-json .tmp/transition_regime/result.json \
+            --out-csv .tmp/transition_regime/maps.csv
+      - name: Validate output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('.tmp/transition_regime/result.json').read_text())
+          assert x['version']=='chapter2_orientation_transition_regime_hypothesis_result_v1'
+          assert x['method_reproduction_n10']['status']=='pass'
+          assert x['panels']['n5_primary']['n_taxa']==12
+          assert x['panels']['n5_primary']['exact_primary_rank']['n_maps']==792
+          assert x['panels']['n3_sensitivity']['n_taxa']==13
+          assert x['panels']['n3_sensitivity']['exact_primary_rank']['n_maps']==1716
+          assert x['classification'] in {
+            'repeated_u_to_d_transition_regime_concordance_supported',
+            'u_to_d_transition_regime_directional_but_not_exceptional',
+            'u_to_d_transition_regime_direction_not_repeated',
+          }
+          print(json.dumps(x, indent=2))
+          PY
+      - name: Upload outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-orientation-transition-regime-hypothesis-v1
+          path: .tmp/transition_regime/
+          if-no-files-found: error
+          retention-days: 90
