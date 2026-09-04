@@ -1,0 +1,85 @@
+{
+  "contract_version": "chapter2_orientation_environment_counterfactual_contract_v1",
+  "status_date": "2026-09-04",
+  "status": "frozen_before_counterfactual_result_inspection",
+  "analysis_role": "Post-result falsification/sensitivity analysis of the already observed orientation-environment correspondence. This is not an independent preregistered confirmation and cannot establish causation or adaptation.",
+  "question": "Is the observed East-Asian orientation-environment correspondence unusually strong relative to counterfactual orientation state maps that preserve the observed 5U/4D ecological-panel state count, and does that conclusion persist among counterfactuals with an orientation recurrence profile and relative-depth geometry close to the observed history?",
+  "frozen_sources": {
+    "japan_niche": {
+      "run_id": 32716015605,
+      "artifact_id": 9516784077,
+      "artifact_name": "fdt4-japan-orientation-niche-v1",
+      "artifact_sha256": "cb5717c90cbc769398f9ffce38787704a02e34253c1ff16cf8f368ba55aeda96"
+    },
+    "taiwan_niche": {
+      "run_id": 32725842871,
+      "artifact_id": 9520157997,
+      "artifact_name": "fdt4-taiwan-orientation-niche-v1",
+      "artifact_sha256": "819936ceeb6008f356c580622fb72972617700402afaa3d3ab125bff2e6d9106"
+    },
+    "accepted_au_topologies": {
+      "run_id": 32614839764,
+      "artifact_id": 9486643703,
+      "artifact_name": "comp1061-alt-topology-au-32614839764",
+      "artifact_sha256": "d90f30e4fcc3a2a0296a7d0cfa13d0f3ecc008b36d28298ac9782a001e6f63c5",
+      "topologies_used": 6
+    },
+    "orientation_crosswalk": "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv",
+    "frozen_ecology_result": "data/evidence/chapter2_ecological_explanatory_reach_v1.json"
+  },
+  "frozen_panel": {
+    "occurrence_gate": ">=10 independent thinned environment-complete occurrences per taxon",
+    "expected_taxa": 9,
+    "expected_state_counts": {"U": 5, "D": 4},
+    "counterfactual_assignments": 126,
+    "enumeration_rule": "Enumerate all choose(9,4)=126 assignments of D to the frozen eligible taxa. Every assignment has exactly four D and five U states. The observed assignment is one member of this exhaustive set. No environmental value is shuffled or altered."
+  },
+  "historical_counterfactual_rule": {
+    "full_map": "For each 9-taxon counterfactual, replace only those nine observed U/D states in the full orientation crosswalk. All other resolved states remain fixed and unresolved states remain {U,D} ambiguous.",
+    "topologies": "Use the same first six AU-nonrejected optimized Comp1061 topologies as the frozen ecological analysis.",
+    "history_metrics": [
+      "minimum unordered Sankoff steps",
+      "exact lower bound of mean relative lineage depth among globally minimum-cost histories",
+      "exact upper bound of mean relative lineage depth among globally minimum-cost histories"
+    ],
+    "relative_depth_definition": "For an admitted orientation tree with N tips and a changed edge subtending d descendant tips, D=(N-d)/(N-1); terminal=1; lower is deeper-permissive. This is topology only, not time.",
+    "recurrence_profile_match": "A counterfactual is recurrence-profile matched only if its six-topology vector of minimum steps exactly equals the observed six-topology vector.",
+    "depth_distance": "For a recurrence-profile-matched assignment, compute the median across six topologies of abs(lower_cf-lower_obs)+abs(upper_cf-upper_obs).",
+    "history_nearest_pool": "Among recurrence-profile-matched assignments, retain the lowest 25% by depth_distance, including all ties at the 25th-percentile cutoff. Pool definition uses history only and is independent of environmental outcomes.",
+    "minimum_pool_size": 10,
+    "fail_closed": "If fewer than 10 assignments are recurrence-profile matched or fewer than 10 remain in the history-nearest pool, that comparison is not_evaluable; do not widen the pool after viewing environmental results."
+  },
+  "environmental_estimands": {
+    "primary": {
+      "axis": "chelsa_bio15",
+      "biological_direction": "downward/nodding D associated with higher precipitation seasonality",
+      "signed_statistic": "median across the six accepted topologies of standardized PGLS beta_D_minus_U_sd"
+    },
+    "secondary": {
+      "axis": "chelsa_bio01",
+      "biological_direction": "downward/nodding D associated with lower annual mean temperature",
+      "signed_statistic": "negative of the median across the six accepted topologies of standardized PGLS beta_D_minus_U_sd"
+    },
+    "standardization": "Within the fixed 9-taxon panel, standardize each environmental axis by its sample mean and sample SD exactly as the frozen ecological-reach analysis.",
+    "covariance": "Use Brownian covariance from each accepted topology exactly as in summarize_chapter2_ecological_explanatory_reach_v1.py."
+  },
+  "counterfactual_rank_tests": {
+    "pools": ["all_126_count_preserving", "recurrence_profile_matched", "history_nearest_quartile"],
+    "exact_rank_fraction": "Because the assignment set is exhaustive and includes the observed assignment, report count(T_cf >= T_observed)/N for the declared signed statistic; ties count as at least as extreme. This is a conditional randomization rank, not an independent confirmatory P value.",
+    "topology_sensitivity": "Also report the corresponding exact rank fraction separately for each of the six accepted topologies; do not treat the six values as independent replicates.",
+    "reverse_world_calibration": "Within each pool, report whether any counterfactual has the opposite signed direction (T<0), the most reverse statistic, and its historical distance. This tests whether the observed sign is mechanically forced by state counts/history geometry."
+  },
+  "classification_rule": {
+    "counterfactual_correspondence_strongly_strengthened": "For BIO15, exact rank fraction <=0.05 in all three evaluable pools and at least one opposite-direction counterfactual exists in the history-nearest pool.",
+    "counterfactual_correspondence_strengthened_but_history_overlap_remains": "BIO15 exact rank fraction <=0.05 in the all-126 and recurrence-profile pools, but the history-nearest pool either exceeds 0.05 or contains no opposite-direction counterfactual.",
+    "counterfactual_correspondence_not_strengthened_beyond_history": "BIO15 fails the <=0.05 rank criterion in the recurrence-profile-matched pool, or that pool is not evaluable.",
+    "bio1_role": "BIO1 is a frozen secondary axis and is reported analogously but does not change the primary BIO15 classification."
+  },
+  "claim_boundary": [
+    "This post-result analysis cannot retroactively convert the frozen primary ecological classification from unresolved to a preregistered confirmatory result.",
+    "A low conditional rank shows that the observed trait-environment correspondence is unusual relative to declared counterfactual state maps; it does not establish climatic selection, historical causation, plasticity or adaptation.",
+    "History matching conditions on recurrence and topology-only depth geometry; it does not condition on all unmeasured lineage properties or geography.",
+    "Opposite-direction counterfactuals demonstrate that the sign is not mathematically forced by the declared state-count/history constraints; they are not claims about actual alternative evolutionary histories.",
+    "The nine-taxon ecological panel remains small and species-level centroids are not same-individual phenotype-environment measurements."
+  ]
+}
