@@ -2,6 +2,7 @@
   "version": "chapter2_jeb_v7_figures145_contract_v1",
   "status_date": "2026-09-05",
   "role": "fail_closed_submission_figure_contract_for_v7_figures_1_4_5",
+  "execution_trigger": "2026-09-05 current-main render QA; no scientific value or display rule changed",
   "sources": {
     "radiation": "data/evidence/japan_cirsium_origin_meta_analysis_v1.json",
     "scaffold": "data/evidence/japan38_comp1061_primary_tree_acceptance_v1.json",
