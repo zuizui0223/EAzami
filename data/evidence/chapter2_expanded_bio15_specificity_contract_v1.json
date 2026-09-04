@@ -1,0 +1,46 @@
+{
+  "version": "chapter2_expanded_bio15_specificity_contract_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Post-result resolution sensitivity. Refit the already-frozen mutually adjusted BIO15/BIO1 + latitude/longitude Brownian models on the larger state-diverse panels already present in frozen occurrence assets. This tests whether the n=9 panel size alone explains failure of BIO15 axis specificity.",
+  "sources": {
+    "coverage_audit": "data/evidence/chapter2_orientation_occurrence_coverage_audit_result_v1.json",
+    "n10_specificity": "data/evidence/chapter2_bio15_specificity_matched_contrast_result_v1.json",
+    "orientation_crosswalk": "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv",
+    "japan_occurrence_artifact_id": 9516784077,
+    "japan_occurrence_artifact_sha256": "cb5717c90cbc769398f9ffce38787704a02e34253c1ff16cf8f368ba55aeda96",
+    "taiwan_occurrence_artifact_id": 9520157997,
+    "taiwan_occurrence_artifact_sha256": "819936ceeb6008f356c580622fb72972617700402afaa3d3ab125bff2e6d9106",
+    "au_topology_artifact_id": 9486643703,
+    "au_topology_artifact_sha256": "d90f30e4fcc3a2a0296a7d0cfa13d0f3ecc008b36d28298ac9782a001e6f63c5"
+  },
+  "panels": {
+    "n5": {"threshold": 5, "expected_n": 12, "expected_U": 7, "expected_D": 5, "role": "primary_resolution_sensitivity"},
+    "n3": {"threshold": 3, "expected_n": 13, "expected_U": 7, "expected_D": 6, "role": "secondary_boundary_sensitivity"}
+  },
+  "models": {
+    "primary": "Brownian GLS z(BIO15) ~ orientation + z(BIO1) + z(latitude) + z(longitude)",
+    "reciprocal": "Brownian GLS z(BIO1) ~ orientation + z(BIO15) + z(latitude) + z(longitude)",
+    "standardization": "z-score within each threshold-specific panel",
+    "topologies": 6,
+    "robustness": "species leave-one-out on every accepted topology",
+    "prediction": "LOO Brownian conditional prediction of BIO15: BIO1 + latitude + longitude versus the same model plus orientation"
+  },
+  "decision_rule": {
+    "specificity_recovered": "n5 BIO15 orientation coefficient is positive on 6/6 topologies and all 72 n5 topology-by-species LOO fits; n3 is reported as a secondary boundary and cannot rescue failure at n5",
+    "direction_only": "n5 BIO15 coefficient is positive on all six full fits but at least one n5 LOO fit reverses sign",
+    "direction_destabilized": "at least one n5 full-topology BIO15 coefficient is non-positive",
+    "prediction_role": "held-out MSE/MAE improvement is supporting only and cannot override the sign-based classification"
+  },
+  "classification_order": [
+    "expanded_n5_recovers_bio15_axis_specificity",
+    "expanded_panels_retain_bio15_direction_without_specificity",
+    "expanded_panels_destabilize_bio15_direction"
+  ],
+  "claim_ceiling": [
+    "The frozen n>=10 result remains primary; relaxed occurrence thresholds are sensitivity analyses only.",
+    "Lower occurrence counts increase centroid uncertainty and cannot create independent replication.",
+    "No new occurrence source, alias or environmental predictor is admitted.",
+    "No result establishes precipitation seasonality as a selective agent, historical cause, adaptation or plasticity.",
+    "Topology and leave-one-out stability are sensitivity diagnostics, not biological replicate counts."
+  ]
+}
