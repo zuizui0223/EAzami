@@ -2,6 +2,8 @@
 
 Status: **FROZEN DESIGN; RESULT PENDING CI**
 
+Execution trigger: 2026-09-04; this line changes no contract, estimand, pool or decision rule.
+
 ## Question
 
 The existing nine-taxon East-Asian panel shows a large, direction-stable orientation contrast for precipitation seasonality (BIO15) and a secondary temperature contrast (BIO1), but the frozen phylogeny-aware threshold is not crossed and the small held-out predictor does not beat phylogeny-only prediction.
