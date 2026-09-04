@@ -1,0 +1,52 @@
+name: Make Chapter 2 JEB Figures 1 4 5 V7
+
+on:
+  pull_request:
+    paths:
+      - "analysis/make_chapter2_jeb_figures145_v7.py"
+      - "data/evidence/chapter2_jeb_v7_figures145_contract_v1.json"
+      - "data/evidence/japan_cirsium_origin_meta_analysis_v1.json"
+      - "data/evidence/japan38_comp1061_primary_tree_acceptance_v1.json"
+      - "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv"
+      - "data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv"
+      - "data/evidence/japan38_authority_module_combinations_v1.json"
+      - "data/evidence/chapter2_historical_differentiation_final_summary_v1.json"
+      - "data/evidence/chapter2_orientation_origin_region_ranking_result_v1.json"
+      - "data/evidence/chapter2_current_claims_h1_h4_v1.json"
+      - "docs/chapter2/JEB_V7_FIGURE_MAP.md"
+      - ".github/workflows/make-chapter2-jeb-figures145-v7.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  make:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install plotting runtime
+        run: python -m pip install --disable-pip-version-check matplotlib numpy
+      - name: Compile generator
+        run: python -m py_compile analysis/make_chapter2_jeb_figures145_v7.py
+      - name: Generate validated Figures 1 4 5
+        run: python analysis/make_chapter2_jeb_figures145_v7.py --output-dir .tmp/figures145_v7
+      - name: Verify outputs
+        run: |
+          for f in \
+            figure1_v7_diversity_context.png figure1_v7_diversity_context.pdf \
+            figure4_v7_bounded_history.png figure4_v7_bounded_history.pdf \
+            figure5_v7_identifiability_ceiling.png figure5_v7_identifiability_ceiling.pdf \
+            figures145_v7_manifest.json; do
+            test -s ".tmp/figures145_v7/$f"
+          done
+      - name: Upload Figures 1 4 5 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-jeb-v7-figures145
+          path: .tmp/figures145_v7/
+          if-no-files-found: error
+          retention-days: 90
