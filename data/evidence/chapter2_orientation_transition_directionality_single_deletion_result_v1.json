@@ -1,0 +1,27 @@
+{
+  "version": "chapter2_orientation_transition_directionality_single_deletion_result_v1",
+  "status_date": "2026-09-04",
+  "classification": "bidirectional_direction_not_single_taxon_dependent",
+  "all_deletions_bidirectional_direction_pass": true,
+  "n_exact_exceptionality_pass": 3,
+  "n_deletions": 9,
+  "deletion_results": [
+    {"deleted_taxon":"Cirsium alpicola","deleted_state":"U","forward_median":0.3925446986407545,"reverse_median":0.5415836963053872,"floor_median":0.3925446986407545,"exact_count":2,"n_maps":70,"exact_fraction":0.02857142857142857,"exact_pass":true},
+    {"deleted_taxon":"Cirsium brevicaule","deleted_state":"U","forward_median":0.281165029104258,"reverse_median":0.5825541615939265,"floor_median":0.281165029104258,"exact_count":5,"n_maps":70,"exact_fraction":0.07142857142857142,"exact_pass":false},
+    {"deleted_taxon":"Cirsium irumtiense","deleted_state":"U","forward_median":0.25538646802871734,"reverse_median":0.5691911742961642,"floor_median":0.25538646802871734,"exact_count":5,"n_maps":70,"exact_fraction":0.07142857142857142,"exact_pass":false},
+    {"deleted_taxon":"Cirsium japonicum var. australe","deleted_state":"U","forward_median":0.2731910588518517,"reverse_median":0.35696687001066685,"floor_median":0.2731910588518517,"exact_count":5,"n_maps":70,"exact_fraction":0.07142857142857142,"exact_pass":false},
+    {"deleted_taxon":"Cirsium japonicum var. japonicum","deleted_state":"U","forward_median":0.2907517047208827,"reverse_median":0.383825664984423,"floor_median":0.2907517047208827,"exact_count":5,"n_maps":70,"exact_fraction":0.07142857142857142,"exact_pass":false},
+    {"deleted_taxon":"Cirsium kamtschaticum","deleted_state":"D","forward_median":0.34644211743686426,"reverse_median":0.32842517567825436,"floor_median":0.32842517567825436,"exact_count":2,"n_maps":56,"exact_fraction":0.03571428571428571,"exact_pass":true},
+    {"deleted_taxon":"Cirsium kawakamii","deleted_state":"D","forward_median":0.41102450960134707,"reverse_median":0.23203631776612654,"floor_median":0.23203631776612654,"exact_count":4,"n_maps":56,"exact_fraction":0.07142857142857142,"exact_pass":false},
+    {"deleted_taxon":"Cirsium suffultum","deleted_state":"D","forward_median":0.3848719692556959,"reverse_median":0.28351274405285515,"floor_median":0.28351274405285515,"exact_count":4,"n_maps":56,"exact_fraction":0.07142857142857142,"exact_pass":false},
+    {"deleted_taxon":"Cirsium yezoense","deleted_state":"D","forward_median":0.4548619224500038,"reverse_median":0.3920900996175446,"floor_median":0.3920900996175446,"exact_count":1,"n_maps":56,"exact_fraction":0.017857142857142856,"exact_pass":true}
+  ],
+  "interpretation": "Both U->D forward alignment and D->U reverse alignment remain positive on all six accepted topologies after deleting any one strict-panel taxon. Bidirectional directional tracking is therefore not single-taxon dependent. Exact <=0.05 floor rank survives only three of nine deletions, so finite-map exceptionality is deletion-sensitive and belongs to the multi-taxon configuration rather than every reduced panel.",
+  "claim_boundary": [
+    "This is a post-result sensitivity analysis of H2, not independent replication.",
+    "The primary robustness target is directional persistence, not exact <=0.05 in every reduced finite-map panel.",
+    "Failure of exact <=0.05 after deletion may reflect reduced finite-map resolution as well as biological dependence.",
+    "No result establishes historical climate causation, selection, adaptation, or a mediator."
+  ],
+  "workflow_provenance": {"run_id":33850901353,"artifact_id":9928305111,"artifact_name":"chapter2-orientation-transition-directionality-single-deletion-v1","artifact_sha256":"d3a629e03b993f4da04b4ad753ade8cd2eb9de8bf296801641f5f44834032e8c","source_head_sha":"9ee126f6f6ea7f1d607d91f4283263e2551aff03"}
+}
