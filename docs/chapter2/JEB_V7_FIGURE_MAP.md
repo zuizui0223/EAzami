@@ -94,58 +94,61 @@ Because state ontologies differ, these are descriptive burdens, not rates. Do no
 
 # Figure 3 — Orientation ecology is scale- and history-conditioned
 
-The figure has two linked questions: at what biological scale does orientation correspond to environment, and how much of the East-Asian contrast remains exceptional after increasingly strict historical conditioning?
+The figure now has four linked questions: at what biological scale does orientation correspond to environment; whether transition direction tracks a fixed present-niche regime; which falsifications that regime survives; and how the earlier history-conditioned null changes the interpretation of tip-level extremeness.
 
 ### Panel 3A — cross-scale effect/support matrix
 Three rows = BIO12, BIO15, BIO1. Three evidence columns = Azami within-taxon, Azami among-taxon, EAzami East-Asian state comparison.
 
-#### BIO12 annual precipitation
-- within +0.00533, q=0.874 — unsupported;
-- among +0.30436, q=0.00640 — supported;
-- class `among_only`.
+- BIO12: within +0.00533, q=0.874; among +0.30436, q=0.00640 — `among_only`.
+- BIO15: within -0.00762, q=0.121; among +0.0670, q=0.599; East-Asian D-U +1.320 to +1.330 SD, sign stable 6/6 topologies and 54/54 topology x species-LOO fits.
+- BIO1: within +0.01715, q=0.0349; among -0.03024, q=0.836; East-Asian D-U approximately -0.975 to -0.967 SD, 54/54 sign stable.
 
-#### BIO15 precipitation seasonality
-- within −0.00762, q=0.121 — not FDR-supported;
-- among +0.0670, q=0.599 — unsupported;
-- East-Asian D−U +1.320 to +1.330 SD;
-- sign stable 6/6 topologies and 54/54 topology × species-LOO fits.
+Keep the three columns visually distinct because they are non-exchangeable estimands.
 
-#### BIO1 annual mean temperature
-- within +0.01715, q=0.0349 — supported;
-- among −0.03024, q=0.836 — unsupported;
-- East-Asian D−U approximately −0.975 to −0.967 SD, 54/54 sign stable.
+### Panel 3B — fixed transition-regime test
+Source: `chapter2_orientation_transition_regime_hypothesis_result_v1.json` plus the strict-panel robustness result.
 
-Use a direction/support matrix rather than a pooled coefficient.
+Plot exact finite-map ranks for the predeclared `BIO15 up + BIO1 down` U->D composite:
 
-### Panel 3B — counterfactual conditioning ladder for BIO15
-Source: `chapter2_orientation_environment_counterfactual_result_v1.json`.
+- n>=5, 12 taxa: **16/792 = 2.02%**;
+- n>=3, 13 taxa: **19/1716 = 1.11%**;
+- strict n>=10, 9 taxa: **4/126 = 3.17%**.
 
-Plot the fraction of declared counterfactual maps whose signed BIO15 statistic is at least as positive as observed:
-- same state frequency only: **5/126 = 3.97%**;
-- exact six-topology recurrence profile: **3/40 = 7.5%**;
-- recurrence + nearest relative-depth geometry: **3/10 = 30%**.
+Show strict single-axis ranks as a small annotation:
 
-This is the central methodological panel. Label the x-axis as progressively stronger historical conditioning:
+- BIO15 alone: **7/126 = 5.56%**;
+- lower BIO1 alone: **8/126 = 6.35%**;
+- composite: **4/126 = 3.17%**.
 
-`state frequency -> recurrence -> recurrence + relative depth`.
+Also annotate the bidirectional strict result: U->D and D->U both positive on 6/6 topologies; exact bidirectional-floor rank **3/126 = 2.38%**. Label this `present-niche tracking`, not adaptation or climatic causation.
 
-Do not call these fractions P values. The visual message is that apparent ecological extremeness weakens as more of the observed evolutionary placement is retained.
+### Panel 3C — falsification ladder for U->D tracking
+Use a compact stress-test matrix, not multiple hypothesis numbers.
 
-### Panel 3C — reverse-direction calibration
-For BIO15:
-- opposite-direction worlds exist among all 126 maps;
-- a strong reverse world also exists among exact recurrence-profile matches (signed statistic −1.784);
-- no reverse BIO15 world occurs among the 10 nearest-history maps.
+- strict n>=10: **4/126 = 3.17%** — pass;
+- Japan-only n>=5: **10/56 = 17.86%** — directional but not exceptional;
+- delete each strict-panel taxon: direction retained in **9/9** deletion panels; exact extremeness deletion-sensitive;
+- linear latitude/longitude residualization: **5/126 = 3.97%** — pass;
+- internal-edge-only scoring: **3/126 = 2.38%** — pass;
+- geography residualization + internal-edge-only: **3/126 = 2.38%** — pass;
+- combined-stress n>=5 sensitivity: **29/792 = 3.66%** — pass.
 
-For BIO1, an opposite-direction world remains even in the nearest-history pool. This contrast supports the interpretation that BIO15 sign is more tightly coupled to historical placement than BIO1 under the current panel.
+Visual message: the transition-regime direction is not a one-taxon, simple linear geography, or terminal-edge artefact under the declared reconstruction, but it is region-sensitive.
+
+### Panel 3D — history-conditioned tip-contrast calibration
+Retain the earlier counterfactual conditioning ladder for BIO15 as a methodological boundary:
+
+- same state frequency: **5/126 = 3.97%**;
+- same recurrence: **3/40 = 7.5%**;
+- recurrence + nearest relative depth: **3/10 = 30%**.
+
+Label the x-axis `state frequency -> recurrence -> recurrence + relative depth`. These are finite conditional ranks, not P values. Note that a recurrence-matched reverse world reaches -1.784 but no reverse BIO15 world occurs in the nearest-history pool.
 
 ### Figure 3 boundary
 
-**No three-trait** `depth × ecological reach` correlation is allowed: phyllary is state-degenerate in the frozen environment panel and stickiness is lineage-confounded after gate relaxation.
+The transition-regime analyses use reconstructed branches from present-day niche centroids. Geography residualization removes only linear latitude/longitude structure, and internal-edge support is not observed ancestral climate. The analyses do not establish selection, adaptation, historical exposure or a mediator. **No three-trait** depth x ecological-reach regression is allowed.
 
-The counterfactual analysis is post-result falsification, not independent confirmation. It does not support an ancestry-independent climate effect, climatic selection, adaptation, plasticity or transition-time causation.
-
-**Figure 3 claim:** Present orientation–environment correspondence is organized across biological scales, while the strongest East-Asian BIO15 contrast is unusual under arbitrary state placement but no longer exceptional after conditioning on similar recurrence and relative-depth history. Present ecology is therefore scale-partitioned and history-embedded.
+**Figure 3 claim:** Present orientation ecology is scale-partitioned and history-embedded, while transition direction additionally tracks a fixed East-Asian composite present-niche regime that survives the declared strict-coverage, single-taxon, simple-geography and internal-edge falsifications but is not a universal Japan-only rule.
 
 # Figure 4 — Bounded orientation history: tendency versus uncertainty
 
@@ -163,10 +166,10 @@ Show the frozen 75% dominance gate. Label these `scenario-wise ranking robustnes
 ### Panel 4C — central climate trajectory
 At 0.79–0.74 Ma, BIO1/BIO4/BIO15 decrease in all four regions; BIO12 increases in three of four. Explicitly descriptive.
 
-### Panel 4D — full uncertainty decision
-No tested BIO1/BIO4/BIO12/BIO15 direction, environmental level, absolute change or variability survives the full chronology × palaeolocation envelope.
+### Panel 4D — present-regime persistence falsification
+The fixed current U->D sign combination (`BIO15 delta > 0`, `BIO1 delta < 0`) matches only **99/376 = 26.3%** scenarios: Taiwan 20/94, Ryukyu 9/94, southern Japan 41/94, East-Asian core 29/94. At the central 0.79–0.74 Ma chronology, BIO1 decreases in all four regions but BIO15 also decreases in all four, so the current-regime sign test fails in 4/4 central regional scenarios. No broader tested BIO1/BIO4/BIO12/BIO15 direction, level, absolute change or variability class survives the full chronology x palaeolocation envelope.
 
-**Figure 4 claim:** The best-bounded event contains regional and climate tendencies but they are not robust to admitted timing and palaeolocation uncertainty.
+**Figure 4 claim:** The best-bounded event contains regional and climate tendencies, but the fixed present transition-niche regime is not supported as a persistent origin regime across admitted timing and palaeolocation uncertainty.
 
 # Figure 5 — Historical identifiability ceiling
 
@@ -174,7 +177,7 @@ No tested BIO1/BIO4/BIO12/BIO15 direction, environmental level, absolute change 
 1. configuration diversity — resolved;
 2. repeated minimum histories — resolved for three traits;
 3. relative depth — resolved with topology and coverage sensitivity bounds;
-4. present ecological correspondence — scale-partitioned and history-conditioned for orientation;
+4. present ecological correspondence — scale-partitioned, history-conditioned and transition-linked for orientation;
 5. shared named/localized history — partial;
 6. calendar-linked trait events — sparse;
 7. recurring historical cause — not identified.
