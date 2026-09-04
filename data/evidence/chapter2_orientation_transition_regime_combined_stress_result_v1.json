@@ -1,0 +1,53 @@
+{
+  "version": "chapter2_orientation_transition_regime_combined_stress_result_v1",
+  "status_date": "2026-09-04",
+  "classification": "transition_regime_concordance_survives_combined_geography_and_terminal_edge_stress",
+  "fixed_hypothesis": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+  "strict_n10_primary": {
+    "n_taxa": 9,
+    "n_U": 5,
+    "n_D": 4,
+    "internal_edges_scored_per_topology": 7,
+    "composite_positive_topologies": "6/6",
+    "composite_median": 0.22594503678244654,
+    "bio15_residual_internal_median": 0.15622116425973276,
+    "bio1_residual_internal_median": -0.163313371108891,
+    "exact_primary_rank": {"count_at_least_observed": 3, "n_maps": 126, "exact_fraction": 0.023809523809523808},
+    "secondary_axis_ranks": {
+      "bio15_residual_internal": {"count_at_least_observed": 5, "n_maps": 126, "exact_fraction": 0.03968253968253968},
+      "bio1_lower_residual_internal": {"count_at_least_observed": 4, "n_maps": 126, "exact_fraction": 0.031746031746031744}
+    }
+  },
+  "n5_sensitivity": {
+    "n_taxa": 12,
+    "n_U": 7,
+    "n_D": 5,
+    "internal_edges_scored_per_topology": 10,
+    "composite_positive_topologies": "6/6",
+    "composite_median": 0.23451443609383432,
+    "bio15_residual_internal_median": 0.15932023335346704,
+    "bio1_residual_internal_median": -0.172333262742712,
+    "exact_primary_rank": {"count_at_least_observed": 29, "n_maps": 792, "exact_fraction": 0.036616161616161616},
+    "secondary_axis_ranks": {
+      "bio15_residual_internal": {"count_at_least_observed": 23, "n_maps": 792, "exact_fraction": 0.02904040404040404},
+      "bio1_lower_residual_internal": {"count_at_least_observed": 29, "n_maps": 792, "exact_fraction": 0.036616161616161616}
+    }
+  },
+  "interpretation": {
+    "supported": "The fixed East-Asian U->D transition-regime correspondence survives simultaneous removal of simple linear latitude/longitude structure and terminal-edge contribution under the declared CTMC/Brownian reconstruction.",
+    "synthesis": "Across the prespecified test ladder, the signal is strict-coverage robust, directionally insensitive to deletion of any single taxon, not a universal Japan-only rule, not reducible to a simple linear geographic gradient, and not confined to terminal edges.",
+    "boundary": "This remains a present-day niche-based reconstructed branch correspondence. It does not establish observed ancestral environments, historical transition-time climate, selection, adaptation, convergence or mechanism."
+  },
+  "stop_rule": "No further coarse environmental predictors or post-result public-data robustness variants will be added to rescue or strengthen H1. Further causal resolution requires new focal mediator/fitness or event-linked historical data.",
+  "provenance": {
+    "workflow_run_id": 33865458096,
+    "artifact_id": 9933809049,
+    "artifact_sha256": "033b4c4e7739e3cec6c9f6ebf733f48c519284ae673e576994e3bbbb6b0ff8d2"
+  },
+  "claim_ceiling": [
+    "This is post-result robustness, not independent confirmation.",
+    "Passing jointly rules out only the declared combination of simple linear geography and terminal-edge-only explanation.",
+    "Reconstructed internal residual environments are not observed ancestral environments.",
+    "No result establishes climate causation, selection, adaptation, convergence, or physiological mechanism."
+  ]
+}
