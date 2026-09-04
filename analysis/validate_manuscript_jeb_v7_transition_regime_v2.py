@@ -29,6 +29,12 @@ def words(text: str) -> int:
     return len(re.findall(r"\b[\w'’*-]+\b", text))
 
 
+def rank_eq(block: dict, count: int, n: int) -> None:
+    rank = block["exact_primary_rank"]
+    assert rank["count_at_least_observed"] == count
+    assert rank["n_maps"] == n
+
+
 def main() -> None:
     text = MANUSCRIPT.read_text(encoding="utf-8")
     fig = FIGMAP.read_text(encoding="utf-8")
@@ -41,39 +47,52 @@ def main() -> None:
     internal = load("chapter2_orientation_transition_regime_internal_edge_result_v1.json")
     combined = load("chapter2_orientation_transition_regime_combined_stress_result_v1.json")
 
+    # H1 frozen compact result.
+    assert h1["version"] == "chapter2_orientation_transition_regime_hypothesis_result_v1"
     assert h1["classification"] == "repeated_u_to_d_transition_regime_concordance_supported"
-    assert h1["panels"]["n5_primary"]["exact_primary_rank"]["count_at_least_observed"] == 16
-    assert h1["panels"]["n5_primary"]["exact_primary_rank"]["n_maps"] == 792
-    assert h1["panels"]["n3_sensitivity"]["exact_primary_rank"]["count_at_least_observed"] == 19
-    assert h1["panels"]["n3_sensitivity"]["exact_primary_rank"]["n_maps"] == 1716
+    rank_eq(h1["n5_primary"], 16, 792)
+    rank_eq(h1["n3_sensitivity"], 19, 1716)
+    assert h1["n5_primary"]["bio15_only_rank"]["count_at_least_observed"] == 123
+    assert h1["n5_primary"]["lower_bio1_rank"]["count_at_least_observed"] == 15
 
+    # R1: strict coverage / region boundary.
+    assert region["version"] == "chapter2_orientation_transition_regime_robustness_result_v1"
     assert region["classification"] == "transition_regime_concordance_strict_coverage_robust_but_region_sensitive"
-    assert region["tests"]["strict_n10"]["exact_primary_rank"]["count_at_least_observed"] == 4
-    assert region["tests"]["strict_n10"]["exact_primary_rank"]["n_maps"] == 126
-    assert region["tests"]["japan_n5"]["exact_primary_rank"]["count_at_least_observed"] == 10
-    assert region["tests"]["japan_n5"]["exact_primary_rank"]["n_maps"] == 56
+    rank_eq(region["strict_n10"], 4, 126)
+    rank_eq(region["japan_n5"], 10, 56)
+    assert region["strict_n10"]["bio15_only_rank"]["count_at_least_observed"] == 7
+    assert region["strict_n10"]["lower_bio1_rank"]["count_at_least_observed"] == 8
 
+    # R1b: one-taxon deletion.
     assert deletion["classification"] == "transition_regime_direction_not_single_taxon_dependent_but_exceptionality_sensitive"
     assert deletion["all_deletions_direction_pass"] is True
     assert deletion["n_deletions"] == 9
     assert deletion["n_exact_exceptionality_pass"] == 2
 
+    # R2: linear geography residualization.
+    assert geo["version"] == "chapter2_orientation_transition_regime_geography_residual_result_v1"
     assert geo["classification"] == "transition_regime_concordance_persists_after_linear_geography_residualization"
-    assert geo["panels"]["strict_n10_primary"]["exact_primary_rank"]["count_at_least_observed"] == 5
-    assert geo["panels"]["strict_n10_primary"]["exact_primary_rank"]["n_maps"] == 126
+    rank_eq(geo["strict_n10_primary"], 5, 126)
+    rank_eq(geo["n5_sensitivity"], 41, 792)
+    assert geo["strict_n10_primary"]["composite_positive_topologies"] == "6/6"
 
+    # R3: internal-edge-only.
+    assert internal["version"] == "chapter2_orientation_transition_regime_internal_edge_result_v1"
     assert internal["classification"] == "transition_regime_concordance_supported_on_internal_edges"
-    assert internal["panels"]["strict_n10_primary"]["exact_primary_rank"]["count_at_least_observed"] == 3
-    assert internal["panels"]["strict_n10_primary"]["exact_primary_rank"]["n_maps"] == 126
-    assert internal["panels"]["n5_sensitivity"]["exact_primary_rank"]["count_at_least_observed"] == 29
-    assert internal["panels"]["n5_sensitivity"]["exact_primary_rank"]["n_maps"] == 792
+    rank_eq(internal["strict_n10_primary"], 3, 126)
+    rank_eq(internal["n5_sensitivity"], 29, 792)
+    assert internal["strict_n10_primary"]["internal_edges_scored_per_topology"] == 7
+    assert internal["n5_sensitivity"]["internal_edges_scored_per_topology"] == 10
 
+    # R4: combined geography + internal-edge stress.
+    assert combined["version"] == "chapter2_orientation_transition_regime_combined_stress_result_v1"
     assert combined["classification"] == "transition_regime_concordance_survives_combined_geography_and_terminal_edge_stress"
-    assert combined["panels"]["strict_n10_primary"]["exact_primary_rank"]["count_at_least_observed"] == 3
-    assert combined["panels"]["strict_n10_primary"]["exact_primary_rank"]["n_maps"] == 126
-    assert combined["panels"]["n5_sensitivity"]["exact_primary_rank"]["count_at_least_observed"] == 29
-    assert combined["panels"]["n5_sensitivity"]["exact_primary_rank"]["n_maps"] == 792
+    rank_eq(combined["strict_n10_primary"], 3, 126)
+    rank_eq(combined["n5_sensitivity"], 29, 792)
+    assert combined["strict_n10_primary"]["composite_positive_topologies"] == "6/6"
+    assert "No further coarse environmental predictors" in combined["stop_rule"]
 
+    # Existing biological H2 and H4 are sourced from the authoritative compact synthesis.
     h2 = current["orientation_transition_regime"]["h2"]
     assert h2["classification"] == "bidirectional_reversible_regime_supported"
     assert h2["both_positive_topologies"] == "6/6"
@@ -81,6 +100,7 @@ def main() -> None:
     hist = current["historical_persistence"]["h4"]
     assert hist["classification"] == "historical_regime_persistence_not_supported"
     assert hist["overall_match"] == "99/376 = 26.3%"
+    assert hist["chronologies_match_4_of_4_regions"] == "6/94"
 
     for token in (
         "## Fixed transition-regime concordance and falsification tests",
@@ -126,7 +146,7 @@ def main() -> None:
         "temperature caused orientation",
         "transition-regime test proves adaptation",
         "transition-regime test proves selection",
-        "observed ancestral climate",
+        "internal environmental values are observed ancestral climates",
         "universal Japan-only rule is supported",
     ):
         forbid(text, bad)
