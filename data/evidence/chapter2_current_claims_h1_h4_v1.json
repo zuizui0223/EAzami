@@ -1,0 +1,72 @@
+{
+  "version": "chapter2_current_claims_h1_h4_v1",
+  "status_date": "2026-09-04",
+  "paper_headline": "repeated_mosaic_assembly_at_unequal_evolutionary_depths",
+  "secondary_claim": "orientation_bidirectional_present_niche_tracking_with_historical_non_persistence",
+  "assembly": {
+    "dominant_radiation_japan_concepts": "36/38",
+    "minimum_changes": {
+      "orientation": "4-6 across UFBoot; ML 6",
+      "phyllary": 3,
+      "stickiness": 5
+    },
+    "paired_depth": {
+      "phyllary_deeper_than_stickiness": "1000/1000",
+      "phyllary_deeper_than_orientation": "993/1000",
+      "orientation_deeper_than_stickiness": "905/1000",
+      "complete_ordering": "898/1000"
+    },
+    "shared_transition_localization_pass": "0/3"
+  },
+  "orientation_transition_regime": {
+    "fixed_u_to_d_vector": {"BIO15": "up", "BIO1": "down"},
+    "h1": {
+      "n5_12_taxa_exact_rank": "16/792 = 2.02%",
+      "n3_13_taxa_exact_rank": "19/1716 = 1.11%",
+      "strict_n10_exact_rank": "4/126 = 3.17%",
+      "japan_only_n5_exact_rank": "10/56 = 17.86%",
+      "classification": "repeated_u_to_d_transition_regime_concordance_supported_with_regional_boundary"
+    },
+    "h2": {
+      "forward_alignment_median": 0.32089135588343304,
+      "reverse_alignment_median": 0.33952850966334225,
+      "both_positive_topologies": "6/6",
+      "exact_bidirectional_floor_rank": "3/126 = 2.38%",
+      "classification": "bidirectional_reversible_regime_supported"
+    },
+    "h3": {
+      "single_taxon_deletions": 9,
+      "forward_and_reverse_positive_all_deletions": true,
+      "exact_exceptionality_pass": "3/9",
+      "classification": "bidirectional_direction_not_single_taxon_dependent"
+    }
+  },
+  "historical_persistence": {
+    "h4": {
+      "event_id": "ORI_CORE_NIPPONO_STEM",
+      "fixed_expected_signs": {"BIO15": "positive", "BIO1": "negative"},
+      "n_scenarios": 376,
+      "overall_match": "99/376 = 26.3%",
+      "per_region": {
+        "taiwan": "20/94 = 21.3%",
+        "ryukyu_corridor": "9/94 = 9.6%",
+        "southern_japan": "41/94 = 43.6%",
+        "east_asia_core_corridor": "29/94 = 30.9%"
+      },
+      "chronologies_match_4_of_4_regions": "6/94",
+      "chronologies_match_ge_3_of_4_regions": "14/94",
+      "classification": "historical_regime_persistence_not_supported"
+    },
+    "broader_climate_classes_robust": "0/324",
+    "sea_level_classes_robust": "0/21"
+  },
+  "current_interpretation": "Phenotypic assembly is strongly resolved; orientation shows distributed bidirectional present-niche tracking; the same fixed regime is not supported across the sole bounded historical origin event; the specific historical causal mechanism remains unidentified.",
+  "claim_ceiling": [
+    "Minimum changes are not independent origins or convergence counts.",
+    "Relative lineage depth is not time or evolutionary rate.",
+    "H1/H2/H3 do not establish climatic selection or adaptation.",
+    "Reversible present-niche tracking does not demonstrate genetic/developmental reversibility.",
+    "H4 failure supports history-present/origin-maintenance decoupling under the fixed regime but does not show environment was irrelevant.",
+    "No current result identifies rain/wetting, UV, temperature, or pollinator mechanism in East-Asian Cirsium."
+  ]
+}
