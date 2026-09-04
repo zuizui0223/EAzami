@@ -5,7 +5,7 @@ Status: **VALIDATED MAP FOR V7 SCIENTIFIC TEXT**
 
 ## Paper spine
 
-`diversity within dominant radiation -> repeated component histories -> unequal evolutionary depth / mosaic assembly -> scale-partitioned present ecology -> calendar-time and historical-cause ceiling`
+`diversity within dominant radiation -> repeated component histories -> unequal evolutionary depth / mosaic assembly -> scale- and history-conditioned present ecology -> calendar-time and historical-cause ceiling`
 
 Historical-trigger failure is the terminal discrimination layer, not the opening biological result.
 
@@ -13,7 +13,7 @@ Historical-trigger failure is the terminal discrimination layer, not the opening
 | --- | --- | --- | --- | --- |
 | Figure 1 | What diversity is being assembled? | dominant-radiation membership + authority configurations | substantial capitulum diversity occurs within one young radiation | descriptive diversity, not transition history or diversification rate |
 | Figure 2 | How were three components assembled through the radiation? | minimum steps + depth envelopes + paired topology ordering + coverage-matched sensitivity + shared localization | repeated changes occupy unequal central depths and do not form one synchronized history | no independent origins, rates, coverage independence, adaptation or genetic modularity |
-| Figure 3 | Is present ecological correspondence expressed on one biological scale? | Azami within/among + EAzami orientation contrasts | orientation–environment correspondence is scale-partitioned | no pooling of estimands, climatic selection or historical-cause claim |
+| Figure 3 | Is present ecological correspondence independent of biological scale and historical placement? | Azami within/among + EAzami orientation contrasts + nested counterfactual conditioning | orientation–environment correspondence is scale-partitioned and history-embedded | no pooling of estimands, ancestry-independent climate effect, selection or historical-cause claim |
 | Figure 4 | What can the best-bounded orientation event tell us historically? | 94 chronologies × 4 regions + regional ranking + BIOCLIM | descriptive tendencies exist but do not survive the full uncertainty gate | scenario robustness is not ancestral-area probability |
 | Figure 5 | How far does historical identifiability extend? | climate/sea-level decision counts + evidence hierarchy | phenotypic assembly is better identified than one recurring coarse historical cause | no environmental irrelevance; no local land-bridge inference |
 
@@ -92,31 +92,60 @@ Because state ontologies differ, these are descriptive burdens, not rates. Do no
 
 **Figure 2 claim:** Three components changed repeatedly and retain a strong central depth ordering across topology and matched-state-coverage sensitivities, while deep tails overlap and the components do not repeatedly share one synchronized transition history.
 
-# Figure 3 — Orientation ecology is scale-partitioned
+# Figure 3 — Orientation ecology is scale- and history-conditioned
 
+The figure has two linked questions: at what biological scale does orientation correspond to environment, and how much of the East-Asian contrast remains exceptional after increasingly strict historical conditioning?
+
+### Panel 3A — cross-scale effect/support matrix
 Three rows = BIO12, BIO15, BIO1. Three evidence columns = Azami within-taxon, Azami among-taxon, EAzami East-Asian state comparison.
 
-### BIO12 annual precipitation
+#### BIO12 annual precipitation
 - within +0.00533, q=0.874 — unsupported;
 - among +0.30436, q=0.00640 — supported;
 - class `among_only`.
 
-### BIO15 precipitation seasonality
+#### BIO15 precipitation seasonality
 - within −0.00762, q=0.121 — not FDR-supported;
 - among +0.0670, q=0.599 — unsupported;
 - East-Asian D−U +1.320 to +1.330 SD;
 - sign stable 6/6 topologies and 54/54 topology × species-LOO fits.
 
-### BIO1 annual mean temperature
+#### BIO1 annual mean temperature
 - within +0.01715, q=0.0349 — supported;
 - among −0.03024, q=0.836 — unsupported;
 - East-Asian D−U approximately −0.975 to −0.967 SD, 54/54 sign stable.
 
 Use a direction/support matrix rather than a pooled coefficient.
 
+### Panel 3B — counterfactual conditioning ladder for BIO15
+Source: `chapter2_orientation_environment_counterfactual_result_v1.json`.
+
+Plot the fraction of declared counterfactual maps whose signed BIO15 statistic is at least as positive as observed:
+- same state frequency only: **5/126 = 3.97%**;
+- exact six-topology recurrence profile: **3/40 = 7.5%**;
+- recurrence + nearest relative-depth geometry: **3/10 = 30%**.
+
+This is the central methodological panel. Label the x-axis as progressively stronger historical conditioning:
+
+`state frequency -> recurrence -> recurrence + relative depth`.
+
+Do not call these fractions P values. The visual message is that apparent ecological extremeness weakens as more of the observed evolutionary placement is retained.
+
+### Panel 3C — reverse-direction calibration
+For BIO15:
+- opposite-direction worlds exist among all 126 maps;
+- a strong reverse world also exists among exact recurrence-profile matches (signed statistic −1.784);
+- no reverse BIO15 world occurs among the 10 nearest-history maps.
+
+For BIO1, an opposite-direction world remains even in the nearest-history pool. This contrast supports the interpretation that BIO15 sign is more tightly coupled to historical placement than BIO1 under the current panel.
+
+### Figure 3 boundary
+
 **No three-trait** `depth × ecological reach` correlation is allowed: phyllary is state-degenerate in the frozen environment panel and stickiness is lineage-confounded after gate relaxation.
 
-**Figure 3 claim:** Present orientation–environment correspondence is organized, but the relevant scale changes among environmental axes.
+The counterfactual analysis is post-result falsification, not independent confirmation. It does not support an ancestry-independent climate effect, climatic selection, adaptation, plasticity or transition-time causation.
+
+**Figure 3 claim:** Present orientation–environment correspondence is organized across biological scales, while the strongest East-Asian BIO15 contrast is unusual under arbitrary state placement but no longer exceptional after conditioning on similar recurrence and relative-depth history. Present ecology is therefore scale-partitioned and history-embedded.
 
 # Figure 4 — Bounded orientation history: tendency versus uncertainty
 
@@ -145,9 +174,10 @@ No tested BIO1/BIO4/BIO12/BIO15 direction, environmental level, absolute change 
 1. configuration diversity — resolved;
 2. repeated minimum histories — resolved for three traits;
 3. relative depth — resolved with topology and coverage sensitivity bounds;
-4. shared named/localized history — partial;
-5. calendar-linked trait events — sparse;
-6. recurring historical cause — not identified.
+4. present ecological correspondence — scale-partitioned and history-conditioned for orientation;
+5. shared named/localized history — partial;
+6. calendar-linked trait events — sparse;
+7. recurring historical cause — not identified.
 
 ### Panel 5B — broader climate diagnostic
 17 BIOCLIM variables; six dated lineage contexts; 15,472 scenario × variable combinations; **0/324** robust event-level classes.
@@ -172,6 +202,9 @@ Three representative clades × seven metrics; **0/21** robust event-metric class
 ## SI — coverage sensitivity details
 Full mask distributions and topology summaries from `chapter2_depth_coverage_matched_sensitivity_result_v1.json` belong in SI even if Panel 2D shows the headline fractions.
 
+## SI — counterfactual ecology details
+Full 126 assignment table and BIO15/BIO1 signed statistics belong in SI. The main figure should show only the nested conditional ranks and reverse-direction availability.
+
 ## Companion mechanism prior
 East-Asian *Cirsium* antagonist pathway/regime evidence remains a mechanistic prior. The RR=2.674 experimental anchor is not an East-Asian measured effect and does not identify a focal historical transition mechanism.
 
@@ -182,8 +215,10 @@ East-Asian *Cirsium* antagonist pathway/regime evidence remains a mechanistic pr
 3. UFBoot fractions are not posterior probabilities or independent replicate frequencies.
 4. Coverage matching supports a central ordering but strict tail overlap prevents a coverage-independence claim.
 5. Within/among/East-Asian ecological estimands are not pooled.
-6. No three-trait `depth × ecological reach` correlation is identified.
-7. Regional scenario fractions are not ancestral-area probabilities.
-8. Global sea level is not local palaeogeography.
-9. `0/324` and `0/21` constrain tested coarse regimes, not the importance of environment generally.
-10. Main visual emphasis remains on assembly history; mechanism priors and resolution audits stay supporting/companion.
+6. Counterfactual conditional ranks are not P values or independent confirmations.
+7. Do not call BIO15 an ancestry-independent climate effect; the observed magnitude is not exceptional in the nearest-history pool.
+8. No three-trait `depth × ecological reach` correlation is identified.
+9. Regional scenario fractions are not ancestral-area probabilities.
+10. Global sea level is not local palaeogeography.
+11. `0/324` and `0/21` constrain tested coarse regimes, not the importance of environment generally.
+12. Main visual emphasis remains on assembly history; mechanism priors and resolution audits stay supporting/companion.

@@ -34,6 +34,7 @@ def main() -> None:
     fig = FIGMAP.read_text(encoding="utf-8")
     hist = load_json("chapter2_historical_differentiation_final_summary_v1.json")
     eco = load_json("chapter2_orientation_environment_scale_partition_v1.json")
+    cf = load_json("chapter2_orientation_environment_counterfactual_result_v1.json")
     rank = load_json("chapter2_orientation_origin_region_ranking_result_v1.json")
     depth = load_json("chapter2_depth_ordering_robustness_result_v1.json")
     coverage = load_json("chapter2_depth_coverage_matched_sensitivity_result_v1.json")
@@ -120,6 +121,44 @@ def main() -> None:
     for token in ("0.30436", "0.00640", "0.00533", "0.874", "+1.320 to +1.330 SD", "54/54", "0.01715", "0.0349", "-0.975 to -0.967 SD"):
         require(text, token)
 
+    # History-conditioned counterfactual ecology (#169).
+    assert cf["classification"] == "counterfactual_correspondence_not_strengthened_beyond_history"
+    assert cf["panel"]["n_assignments"] == 126
+    assert cf["frozen_result_reproduction"]["status"] == "exact_within_1e-10"
+    assert cf["history_matching"]["recurrence_profile_matched_n"] == 40
+    assert cf["history_matching"]["history_nearest_n"] == 10
+    bio15 = cf["axis_results"]["chelsa_bio15"]["pools"]
+    bio1 = cf["axis_results"]["chelsa_bio01"]["pools"]
+    assert bio15["all_126_count_preserving"]["rank"]["count_at_least_observed"] == 5
+    assert bio15["recurrence_profile_matched"]["rank"]["count_at_least_observed"] == 3
+    assert bio15["history_nearest_quartile"]["rank"]["count_at_least_observed"] == 3
+    assert bio15["all_126_count_preserving"]["rank"]["fraction"] == 5 / 126
+    assert bio15["recurrence_profile_matched"]["rank"]["fraction"] == 3 / 40
+    assert bio15["history_nearest_quartile"]["rank"]["fraction"] == 3 / 10
+    assert bio15["recurrence_profile_matched"]["reverse_world"]["opposite_direction_exists"] is True
+    assert bio15["history_nearest_quartile"]["reverse_world"]["opposite_direction_exists"] is False
+    assert bio1["history_nearest_quartile"]["reverse_world"]["opposite_direction_exists"] is True
+    for token in (
+        "5 of 126 state-count-preserving maps (3.97%)",
+        "3/40 (7.5%)",
+        "3/10 (30%)",
+        "signed statistic of -1.784",
+        "no opposite-direction BIO15 map occurred",
+        "history-conditioned ecological correspondence",
+        "scale- and history-dependent",
+    ):
+        require(text, token)
+
+    # Counterfactual claim ceiling: do not promote the post-result sensitivity to causal support.
+    for bad in (
+        "BIO15 causes orientation",
+        "precipitation seasonality caused orientation",
+        "counterfactual test proves selection",
+        "counterfactual test proves adaptation",
+        "ancestry-independent climate effect is supported",
+    ):
+        forbid(text, bad)
+
     # Regional ranking and historical-cause ceiling.
     assert rank["classification"] == "relative_ordering_present_but_not_dominant"
     assert rank["region_rank_summary"]["southern_japan"]["rank1_count"] == 48
@@ -136,6 +175,12 @@ def main() -> None:
         "905/1000",
         "coverage-matched",
         "strict tail",
+        "Figure 3",
+        "5/126 = 3.97%",
+        "3/40 = 7.5%",
+        "3/10 = 30%",
+        "state frequency -> recurrence -> recurrence + relative depth",
+        "history-embedded",
         "No three-trait",
     ):
         require(fig, token)
@@ -161,6 +206,8 @@ def main() -> None:
         "keyword_count": keyword_n,
         "paired_depth_promoted": True,
         "coverage_sensitivity_promoted": True,
+        "counterfactual_ecology_promoted": True,
+        "counterfactual_ecology_classification": cf["classification"],
         "historical_classification": hist["final_classification"],
         "ecological_classification": eco["classification"],
         "regional_ordering_classification": rank["classification"],
