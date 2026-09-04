@@ -1,0 +1,38 @@
+{
+  "version": "chapter2_orientation_transition_regime_combined_stress_contract_v1",
+  "status_date": "2026-09-04",
+  "analysis_role": "Final combined public-data falsification of the fixed transition-regime H1. Apply both prior stress conditions simultaneously: linear latitude/longitude residualization of BIO15/BIO1 and internal-edge-only scoring.",
+  "fixed_hypothesis": {
+    "vector": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+    "no_refitting_of_direction": true,
+    "question": "Does U->D transition probability remain aligned with the fixed composite regime when simple linear geography and terminal-edge contribution are both removed at once?"
+  },
+  "primary_panel": {"threshold":10,"expected_n":9,"expected_U":5,"expected_D":4,"exact_state_maps":126},
+  "sensitivity_panel": {"threshold":5,"expected_n":12,"expected_U":7,"expected_D":5,"exact_state_maps":792},
+  "method": {
+    "geography": "OLS residualize each taxon-centroid BIO15 and BIO1 against intercept + latitude + longitude within panel; z-score residuals",
+    "ctmc": "same full-tree symmetric two-state CTMC with q refit for every count-preserving state map",
+    "continuous": "Brownian squared-change reconstruction on geography-residualized environmental values",
+    "scoring": "internal child edges only; terminal child edges excluded from numerator and denominator",
+    "statistic": "(S_residBIO15 - S_residBIO1)/sqrt(2), median across six accepted topologies",
+    "null": "all count-preserving state maps, observed included"
+  },
+  "decision_rule": {
+    "supported": "strict n>=10 composite positive on all six topologies and exact one-sided fraction <=0.05",
+    "directional_not_exceptional": "strict composite positive 6/6 but exact fraction >0.05",
+    "combined_stress_breaks_direction": "at least one strict topology composite <=0",
+    "n5_role": "secondary sensitivity only"
+  },
+  "classification_order": [
+    "transition_regime_concordance_survives_combined_geography_and_terminal_edge_stress",
+    "transition_regime_direction_survives_combined_stress_but_exceptionality_does_not",
+    "transition_regime_direction_breaks_under_combined_stress"
+  ],
+  "stop_rule": "After this fixed combined test, do not add further coarse environmental predictors or post-result robustness variants to rescue or strengthen H1. Further causal resolution requires new focal mediator/fitness or event-linked historical data.",
+  "claim_ceiling": [
+    "This is post-result robustness, not independent confirmation.",
+    "Passing jointly rules out only the conjunction of simple linear geography and terminal-edge-only explanation under the declared reconstruction.",
+    "Reconstructed internal residual environments are not observed ancestral environments.",
+    "No result establishes climate causation, selection, adaptation, convergence, or physiological mechanism."
+  ]
+}
