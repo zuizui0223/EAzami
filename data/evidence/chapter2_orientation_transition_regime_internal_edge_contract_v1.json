@@ -35,5 +35,6 @@
     "Brownian internal environmental values are reconstructed from present-day tip centroids and are not palaeoenvironment observations.",
     "No result establishes climatic causation, selection, adaptation, convergence, or a physiological mediator.",
     "No predictor, vector direction, or threshold may be changed after result inspection."
-  ]
+  ],
+  "execution_trigger": "post-default-branch-workflow-registration"
 }
