@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "analysis/apply_chapter2_transition_regime_v7_integration_v1.py"
+      - "analysis/normalize_chapter2_v7_legacy_guard_phrases_v1.py"
       - "analysis/validate_manuscript_jeb_v7_transition_regime_v2.py"
       - ".github/workflows/apply-chapter2-v7-transition-regime-integration-v1.yml"
   workflow_dispatch:
@@ -26,6 +27,8 @@ jobs:
           python-version: "3.12"
       - name: Apply deterministic manuscript and figure-map integration
         run: python analysis/apply_chapter2_transition_regime_v7_integration_v1.py
+      - name: Normalize legacy guard wording
+        run: python analysis/normalize_chapter2_v7_legacy_guard_phrases_v1.py
       - name: Validate legacy V7 contracts
         run: python analysis/validate_manuscript_jeb_v7_working_v1.py
       - name: Validate transition-regime promotion
