@@ -1,0 +1,50 @@
+name: Build Chapter 2 trait-cause falsification v1
+
+on:
+  pull_request:
+    paths:
+      - 'analysis/build_chapter2_trait_cause_falsification_v1.py'
+      - 'data/evidence/japan38_relative_event_depth_v1.json'
+      - 'data/evidence/chapter2_discrete_trait_occurrence_gate_sensitivity_v1.json'
+      - 'data/evidence/fdt1_broad_functional_calibration_seed_v1.csv'
+      - 'data/evidence/cirsium_interaction_evidence_seed_v1.csv'
+      - 'data/evidence/chapter2_to_chapter3_sampling_priorities_v1.csv'
+      - '.github/workflows/build-chapter2-trait-cause-falsification-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile builder
+        run: python -m py_compile analysis/build_chapter2_trait_cause_falsification_v1.py
+      - name: Build frozen model-elimination result
+        run: python analysis/build_chapter2_trait_cause_falsification_v1.py --output /tmp/chapter2_trait_cause_falsification_v1.json
+      - name: Sanity-check classifications
+        run: |
+          python - <<'PY'
+          import json
+          p='/tmp/chapter2_trait_cause_falsification_v1.json'
+          x=json.load(open(p))
+          assert x['phyllary']['current_best_explanation']=='reproductive_enemy_protection_prior_leads_over_pollinator_access_and_broad_spatial_sorting'
+          sm={r['model']:r['status'] for r in x['stickiness']['models']}
+          assert sm['S1_universal_antagonist_defence']=='contradicted_as_universal_model'
+          assert sm['S2_universal_trait_cost']=='contradicted_as_universal_model'
+          assert sm['S3_enemy_dependent_defence_cost_balance']=='compatible_and_only_model_not_contradicted'
+          assert x['stickiness']['history']['JPN06_UFBoot_forced_fraction']==0.995
+          assert x['phyllary']['history']['JPN36_UFBoot_forced_fraction']==0.728
+          print('trait-cause falsification v1: ok')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-trait-cause-falsification-v1
+          path: /tmp/chapter2_trait_cause_falsification_v1.json
+          if-no-files-found: error
+          retention-days: 90
