@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'analysis/build_chapter2_trait_cause_falsification_v1.py'
+      - 'data/evidence/chapter2_trait_cause_falsification_v1.json'
       - 'data/evidence/japan38_relative_event_depth_v1.json'
       - 'data/evidence/chapter2_discrete_trait_occurrence_gate_sensitivity_v1.json'
       - 'data/evidence/fdt1_broad_functional_calibration_seed_v1.csv'
@@ -42,6 +43,8 @@ jobs:
           assert x['phyllary']['history']['JPN36_UFBoot_forced_fraction']==0.728
           print('trait-cause falsification v1: ok')
           PY
+      - name: Reproduce committed result exactly
+        run: cmp /tmp/chapter2_trait_cause_falsification_v1.json data/evidence/chapter2_trait_cause_falsification_v1.json
       - uses: actions/upload-artifact@v4
         with:
           name: chapter2-trait-cause-falsification-v1
