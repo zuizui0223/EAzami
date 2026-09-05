@@ -1,0 +1,52 @@
+{
+  "version": "chapter2_stickiness_context_external_validation_v1",
+  "status_date": "2026-09-05",
+  "role": "post_freeze_external_validation_of_previously_selected_context_dependent_stickiness_model",
+  "frozen_parent_result": "data/evidence/chapter2_trait_cause_falsification_v1.json",
+  "parent_model_tested_without_revision": "S3_enemy_dependent_defence_cost_balance",
+  "prediction": "If floral stickiness is context-dependent rather than a universal defence or universal cost, direct Cirsium manipulations may yield defensive benefit in some species/year contexts and null effects in others.",
+  "external_direct_cirsium_evidence": [
+    {
+      "study": "Willson, Anderson & Thomas 1983",
+      "title": "Bracteal Exudates in Two Cirsium Species as Possible Deterrents to Insect Consumers of Seeds",
+      "journal": "American Midland Naturalist 110(1):212-214",
+      "taxon": "Cirsium discolor",
+      "place_time": "central Illinois, 1980",
+      "manipulation": "sticky bracteal exudates experimentally occluded",
+      "result": "seed predation significantly greater when sticky exudates were occluded",
+      "direction": "stickiness_defensive_benefit",
+      "source_locator": "JSTOR issue Vol. 110 No. 1; bibliographic record and abstract indexed in external validation audit"
+    },
+    {
+      "study": "Willson, Anderson & Thomas 1983",
+      "title": "Bracteal Exudates in Two Cirsium Species as Possible Deterrents to Insect Consumers of Seeds",
+      "journal": "American Midland Naturalist 110(1):212-214",
+      "taxon": "Cirsium flodmani",
+      "place_time": "northwestern Minnesota, 1980 and 1982",
+      "manipulation": "sticky bracteal exudates experimentally occluded",
+      "result": "no treatment effect detected",
+      "direction": "null",
+      "source_locator": "JSTOR issue Vol. 110 No. 1; bibliographic record and abstract indexed in external validation audit"
+    },
+    {
+      "study": "Thomas 2003",
+      "title": "Sticky Exudates on the Inflorescences of Cirsium discolor (Asteraceae) and Penstemon digitalis (Scrophulariaceae) as Possible Defense Against Seed Predators",
+      "journal": "The Great Lakes Entomologist 36:112-121",
+      "doi": "10.22543/0090-0222.2085",
+      "taxon": "Cirsium discolor",
+      "place_time": "1982-1987 study series",
+      "manipulation": "sticky traps neutralized",
+      "result": "no increase in seed predators or decrease in predatory arthropods, and no decrease in seed production",
+      "direction": "null",
+      "source_locator": "Valparaiso University Scholar repository DOI record"
+    }
+  ],
+  "validation_result": "supports_context_dependence_without_establishing_focal_east_asian_causation",
+  "interpretation": "Direct Cirsium manipulations contain both a defensive-benefit context and null contexts, including temporally different evidence for C. discolor. This is expected under the frozen enemy-pressure-by-trait-cost model and is inconsistent with a universal positive defence effect.",
+  "claim_boundary": [
+    "This validation was recovered after S1/S2/S3 were frozen and therefore does not redefine the model set.",
+    "The studies are North American Cirsium and are not transported as effect sizes for JPN15 or other East-Asian lineages.",
+    "Benefit/null heterogeneity supports context dependence but does not identify which antagonist, secretion cost or pollinator cost generated any Japan38 stickiness transition.",
+    "Focal causation still requires within-JPN15 stickiness neutralization with enemy, pollinator and viable-seed endpoints."
+  ]
+}
