@@ -43,8 +43,15 @@ jobs:
           assert x['phyllary']['history']['JPN36_UFBoot_forced_fraction']==0.728
           print('trait-cause falsification v1: ok')
           PY
-      - name: Reproduce committed result exactly
-        run: cmp /tmp/chapter2_trait_cause_falsification_v1.json data/evidence/chapter2_trait_cause_falsification_v1.json
+      - name: Reproduce committed result semantically
+        run: |
+          python - <<'PY'
+          import json
+          generated=json.load(open('/tmp/chapter2_trait_cause_falsification_v1.json'))
+          committed=json.load(open('data/evidence/chapter2_trait_cause_falsification_v1.json'))
+          assert generated == committed, 'committed result differs from regenerated result'
+          print('committed result == regenerated result')
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: chapter2-trait-cause-falsification-v1
