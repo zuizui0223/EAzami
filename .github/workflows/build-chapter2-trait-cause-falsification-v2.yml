@@ -4,8 +4,10 @@ on:
   pull_request:
     paths:
       - 'analysis/build_chapter2_trait_cause_falsification_v2.py'
+      - 'analysis/build_chapter2_trait_cause_homology_restricted_v1.py'
       - 'data/evidence/chapter2_trait_cause_falsification_v1.json'
       - 'data/evidence/chapter2_trait_cause_falsification_v2.json'
+      - 'data/evidence/chapter2_focal_species_cause_evidence_audit_v1.json'
       - 'data/evidence/chapter2_current_claims_h1_h4_v1.json'
       - 'data/evidence/orientation_mechanism_reduction_result_v1.json'
       - 'data/evidence/fdt1_broad_functional_calibration_seed_extension_v1.csv'
@@ -24,8 +26,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Compile builder
-        run: python -m py_compile analysis/build_chapter2_trait_cause_falsification_v2.py
+      - name: Compile builders
+        run: |
+          python -m py_compile analysis/build_chapter2_trait_cause_falsification_v2.py
+          python -m py_compile analysis/build_chapter2_trait_cause_homology_restricted_v1.py
       - name: Build fixed three-trait result
         run: python analysis/build_chapter2_trait_cause_falsification_v2.py --output /tmp/chapter2_trait_cause_falsification_v2.json
       - name: Sanity-check frozen classifications
@@ -43,12 +47,29 @@ jobs:
           assert x['orientation']['historical_origin_boundary'].startswith('the present regime matches only 99/376')
           print('trait-cause v2 checks: ok')
           PY
-      - name: Verify frozen result is exactly reproducible
-        if: ${{ hashFiles('data/evidence/chapter2_trait_cause_falsification_v2.json') != '' }}
+      - name: Verify frozen v2 result is exactly reproducible
         run: cmp /tmp/chapter2_trait_cause_falsification_v2.json data/evidence/chapter2_trait_cause_falsification_v2.json
+      - name: Build homology-restricted result
+        run: python analysis/build_chapter2_trait_cause_homology_restricted_v1.py --output /tmp/chapter2_trait_cause_homology_restricted_v1.json
+      - name: Sanity-check homology-restricted mechanisms
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/chapter2_trait_cause_homology_restricted_v1.json'))
+          assert x['version']=='chapter2_trait_cause_homology_restricted_v1'
+          assert x['orientation']['leading_physical_mechanism']=='protection of reproductive tissues from wetting/rain and UV-B exposure'
+          assert x['phyllary']['leading_physical_mechanism']=='mechanical restriction of illegitimate or damaging visitor access to the reproductive head'
+          assert x['stickiness']['leading_physical_mechanism']=='guild-selective filtering of arthropod access and residence on the involucre'
+          assert x['orientation']['models']['static_pollinator_preference'].startswith('weakened')
+          assert x['phyllary']['models']['pollinator_access_as_primary_benefit']=='further_weakened'
+          assert x['stickiness']['models']['universal_physical_barrier_to_seed_predators']=='contradicted'
+          print('homology-restricted cause checks: ok')
+          PY
       - uses: actions/upload-artifact@v4
         with:
-          name: chapter2-trait-cause-falsification-v2
-          path: /tmp/chapter2_trait_cause_falsification_v2.json
+          name: chapter2-trait-cause-homology-restricted-v1
+          path: |
+            /tmp/chapter2_trait_cause_falsification_v2.json
+            /tmp/chapter2_trait_cause_homology_restricted_v1.json
           if-no-files-found: error
           retention-days: 90
