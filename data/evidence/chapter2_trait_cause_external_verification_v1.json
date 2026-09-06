@@ -1,0 +1,80 @@
+{
+  "version": "chapter2_trait_cause_external_verification_v2",
+  "status_date": "2026-09-06",
+  "scope": "targeted primary-literature verification of the surviving phyllary and stickiness mechanism models; no new environmental predictor search and no transport of external effect sizes into East-Asian Cirsium",
+  "phyllary": {
+    "close_cardueae_analog": {
+      "taxon": "Centaurea solstitialis",
+      "study": "Agrawal et al. 2000",
+      "doi": "10.2307/3672545",
+      "design": "experimental removal of involucral spines",
+      "result": "naturally occurring spines deterred illegitimate Lepidoptera; legitimate bee/fly visitation frequency did not increase after spine removal, although visit duration increased about 20%; spine removal reduced the percentage of filled seeds by 22%",
+      "interpretation": "supports antagonist-exclusion benefit with a possible pollinator-handling cost; weakens a simple pollinator-access-primary model",
+      "homology_boundary": "Centaurea involucral spines are a closer Cardueae structural analog than Pedicularis cupulate bracts, but they are not identical to authority-coded Cirsium phyllary posture"
+    },
+    "independent_bract_analog": {
+      "taxon": "Pedicularis rex",
+      "study": "Sun and Huang 2015",
+      "doi": "10.1093/aobpla/plv019",
+      "design": "experimental drainage of rainwater-retaining cupulate bracts",
+      "result": "legitimate pollinators and nectar robbers did not discriminate treatments; seed predation increased after drainage in five of six populations and final seed set declined",
+      "interpretation": "independently supports protective architecture operating through antagonist exclusion rather than pollinator visitation gain",
+      "homology_boundary": "nonhomologous Orobanchaceae bract system"
+    },
+    "updated_model_reading": {
+      "pollinator_access_primary": "weakened_by_two_independent_structural_manipulations",
+      "reproductive_enemy_protection": "leading_external_prior_strengthened_by_close_Cardueae_analog",
+      "broad_abiotic_geographic_sorting": "not_supported_in_current_public_phyllary_panel",
+      "focal_Cirsium_causation": "not_evaluable_without_direct_phyllary_manipulation"
+    }
+  },
+  "stickiness": {
+    "direct_genus_context_dependence": {
+      "study": "Willson, Anderson & Thomas 1983",
+      "journal": "American Midland Naturalist 110:212-214",
+      "design": "experimental occlusion of sticky bracteal exudates in two Cirsium species",
+      "results": {
+        "Cirsium discolor_Illinois_1980": "seed predation was significantly greater when sticky bracteal exudates were experimentally occluded",
+        "Cirsium flodmani_Minnesota_1980_1982": "no experimental treatment effect was evident"
+      },
+      "interpretation": "benefit versus null occurs within Cirsium itself, directly rejecting a universal sign and supporting lineage/site/context dependence"
+    },
+    "later_direct_Cirsium_null": {
+      "taxon": "Cirsium discolor",
+      "study": "Thomas 2003",
+      "doi": "10.22543/0090-0222.2085",
+      "design": "neutralization of sticky inflorescence exudates across later observations/experiments",
+      "result": "neutralizing stickiness did not increase seed predators, did not decrease predatory arthropods, and did not decrease successful seed production",
+      "interpretation": "the same species can fail to show the earlier defensive effect under other years/conditions, strengthening a context-dependent rather than constitutive defence model"
+    },
+    "arthropod_mechanism_boundary": {
+      "study": "Thomas 2007",
+      "doi": "10.22543/0090-0222.2188",
+      "result": "pollinators did not contact the sticky traps; several seed predators successfully avoided them; ants and aphids were deterred and some predatory arthropods used the inflorescences",
+      "interpretation": "stickiness is guild-selective rather than a general physical barrier, providing a plausible mechanism for sign changes across enemy communities"
+    },
+    "benefit_context_outside_Cirsium": {
+      "taxon": "Bejaria resinosa",
+      "study": "Gonzalez-Teuber et al. 2022",
+      "doi": "10.1038/s41598-022-23261-2",
+      "design": "floral stickiness manipulation",
+      "result": "washing sticky flowers increased florivory and lowered fruit set; fruit-set effect varied with population/context",
+      "interpretation": "contradicts a universal cost model and independently supports context-dependent floral defence"
+    },
+    "cost_context": {
+      "taxon": "Datura wrightii",
+      "studies": ["Hare et al. 1999", "Hare et al. 2003", "Hare 2005"],
+      "dois": ["10.1111/j.0014-3820.1999.tb05330.x", "10.1111/j.0014-3820.2003.tb00291.x", "10.1890/04-0972"],
+      "design": "glandular sticky versus nonglandular morphs under herbivore and exclusion/common-garden conditions",
+      "result": "sticky plants showed large reproductive or demographic costs, including about 45% fewer viable seeds without herbivores in the initial study and 46-60% lower first-year seed production with an overall finite-rate-of-increase penalty in a later field experiment",
+      "interpretation": "supports a resistance-cost term and contradicts universal net benefit"
+    },
+    "updated_model_reading": {
+      "universal_antagonist_defence": "contradicted_by_within_genus_benefit_null_heterogeneity_and_later_direct_null",
+      "universal_trait_cost": "contradicted_by_direct_floral_benefit_context",
+      "enemy_dependent_defence_cost_balance": "strongly_supported_as_the_only_surviving_general_model_by_within_Cirsium_context_dependence_plus_external_cost_benefit_evidence",
+      "focal_East_Asian_Cirsium_causation": "not_evaluable_without_within_JPN15_neutralization_and_enemy_context_measurement"
+    }
+  },
+  "chapter2_use": "Trait-specific cause-space reduction: phyllary is narrowed toward protective antagonist-exclusion architecture; stickiness now has direct within-genus evidence for context dependence, making an antagonist-defence versus trait-cost selection mosaic the strongest surviving general explanation. These remain mechanism-level priors and falsified universal rules, not East-Asian adaptation claims."
+}

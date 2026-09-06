@@ -1,0 +1,50 @@
+name: Build Chapter 2 trait-cause falsification v2
+
+on:
+  pull_request:
+    paths:
+      - 'analysis/build_chapter2_trait_cause_falsification_v2.py'
+      - 'data/evidence/chapter2_trait_cause_falsification_v1.json'
+      - 'data/evidence/chapter2_current_claims_h1_h4_v1.json'
+      - 'data/evidence/orientation_mechanism_reduction_result_v1.json'
+      - 'data/evidence/fdt1_broad_functional_calibration_seed_extension_v1.csv'
+      - 'data/evidence/cirsium_interaction_evidence_seed_extension_v1.csv'
+      - '.github/workflows/build-chapter2-trait-cause-falsification-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile builder
+        run: python -m py_compile analysis/build_chapter2_trait_cause_falsification_v2.py
+      - name: Build fixed three-trait result
+        run: python analysis/build_chapter2_trait_cause_falsification_v2.py --output /tmp/chapter2_trait_cause_falsification_v2.json
+      - name: Sanity-check frozen classifications
+        run: |
+          python - <<'PY'
+          import json
+          p='/tmp/chapter2_trait_cause_falsification_v2.json'
+          x=json.load(open(p))
+          assert x['version']=='chapter2_trait_cause_falsification_v2'
+          assert x['orientation']['leading_domain']=='abiotic_reproductive_exposure_plus_timing'
+          assert x['phyllary']['leading_domain']=='mechanical_antagonist_exclusion'
+          assert x['stickiness']['leading_domain']=='arthropod_community_filter_by_trait_cost'
+          assert x['whole_capitulum']['one_common_driver']=='not_supported_as_simplest_model'
+          assert x['whole_capitulum']['trait_specific_filter_model']=='best_current_integrative_model'
+          assert x['orientation']['historical_origin_boundary'].startswith('the present regime matches only 99/376')
+          print('trait-cause v2 checks: ok')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-trait-cause-falsification-v2
+          path: /tmp/chapter2_trait_cause_falsification_v2.json
+          if-no-files-found: error
+          retention-days: 90
