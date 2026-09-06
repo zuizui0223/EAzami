@@ -1,0 +1,103 @@
+{
+  "version": "chapter2_trait_specific_filter_synthesis_v1",
+  "status_date": "2026-09-06",
+  "question": "Do the three repeatedly evolving capitulum components map to one common ecological cause or to distinct ecological filtering domains?",
+  "source_scope": {
+    "focal_history": [
+      "data/evidence/japan38_relative_event_depth_v1.json",
+      "data/evidence/chapter2_current_claims_h1_h4_v1.json",
+      "data/evidence/chapter2_trait_cause_falsification_v1.json"
+    ],
+    "targeted_external_verification": "data/evidence/chapter2_trait_cause_external_verification_v1.json"
+  },
+  "models": {
+    "one_common_driver": {
+      "prediction": "orientation, phyllary posture and stickiness should be explainable by the same dominant ecological domain and should not require mutually distinct mechanism classes",
+      "status": "not_supported_as_simplest_model",
+      "reason": "orientation has focal transition-level present-niche evidence and a direct Asteraceae abiotic-protection manipulation; phyllary close analogs support mechanical antagonist exclusion without a pollinator-visitation gain; stickiness shows direct within-Cirsium context-dependent arthropod effects plus a cost term. The focal histories also differ in relative evolutionary depth and do not share robust transition localization.",
+      "boundary": "different evidence domains do not prove independent genes, developmental modules or separate selective histories for every transition"
+    },
+    "trait_specific_ecological_filters": {
+      "prediction": "each component can regulate a different interface between the reproductive head and its environment, allowing different histories and different selective domains",
+      "status": "best_current_integrative_model",
+      "boundary": "orientation has the strongest focal ecological support; phyllary and stickiness remain mechanism-domain assignments rather than focal East-Asian adaptation proofs"
+    }
+  },
+  "traits": {
+    "orientation": {
+      "filter_domain": "abiotic_reproductive_exposure",
+      "physical_interface": "capitulum angle controls exposure of pollen/stigma/florets to precipitation, wetting and radiation; thermal/pollinator pathways remain secondary alternatives",
+      "focal_evidence": {
+        "history": "4-6 minimum changes across UFBoot; intermediate relative-depth profile",
+        "present_transition_regime": "U-to-D tracks BIO15-up plus BIO1-down; strict exact rank 4/126; bidirectional floor rank 3/126; combined geography-residual plus internal-edge stress 3/126",
+        "origin_boundary": "same current regime matches only 99/376 historical chronology-by-region scenarios"
+      },
+      "external_direct_manipulation": {
+        "taxon": "Cremanthodium campanulatum",
+        "doi": "10.1080/17550874.2012.702793",
+        "result": "artificially erect capitula produced fewer achenes; water and UV-B reduced pollen viability; no pollinator preference between erect and nodding treatments; no meaningful orientation-driven internal thermal difference",
+        "reading": "abiotic protection is more directly supported than pollinator attraction in this Asteraceae analog"
+      },
+      "current_causal_strength": "strongest_focal_candidate_but_not_origin_cause_proof"
+    },
+    "phyllary_posture": {
+      "filter_domain": "mechanical_antagonist_access",
+      "physical_interface": "appressed/spreading/recurved involucral architecture changes mechanical access to the reproductive head and can impose antagonist exclusion versus legitimate-visitor handling tradeoffs",
+      "focal_evidence": {
+        "history": "exactly 3 minimum changes; deepest-permissive profile; JPN36 appressed state forced on the ML terminal edge and in 0.728 of UFBoot trees",
+        "broad_spatial_test": "current public state-diverse panel does not show broad spatial segregation; p=0.4998 with n=4"
+      },
+      "external_direct_manipulations": [
+        {
+          "taxon": "Centaurea solstitialis",
+          "doi": "10.2307/3672545",
+          "result": "involucral-spine removal removed deterrence of illegitimate Lepidoptera and reduced filled seeds by 22%; legitimate bee/fly visitation frequency did not increase, though visit duration increased"
+        },
+        {
+          "taxon": "Pedicularis rex",
+          "doi": "10.1093/aobpla/plv019",
+          "result": "draining protective cupulate bracts increased seed predation in 5/6 populations and reduced final seed set without detectable legitimate-pollinator discrimination"
+        }
+      ],
+      "current_causal_strength": "mechanical_protection_is_leading_external_prior; focal_Cirsium_phyllary_causation_not_evaluable"
+    },
+    "stickiness": {
+      "filter_domain": "adhesive_arthropod_community_filter_with_trait_cost",
+      "physical_interface": "sticky involucral exudates selectively deter, trap or alter access of some arthropod guilds while other seed predators and pollinators may avoid or bypass the adhesive zone; secretion/resistance can carry production costs",
+      "focal_evidence": {
+        "history": "exactly 5 minimum changes; shallow relative-depth envelope 0.937-0.954; JPN06 terminal forced fraction 0.995; sticky JPN15 and nonsticky JPN06 are 100/100 ML sisters",
+        "broad_spatial_test": "balanced 6 sticky/6 nonsticky public occurrence panel shows no simple broad spatial segregation; p=0.1306"
+      },
+      "direct_Cirsium_evidence": [
+        {
+          "study": "Willson, Anderson & Thomas 1983",
+          "result": "occluding sticky bracteal exudate increased seed predation in C. discolor in Illinois in 1980, but had no effect in C. flodmani in Minnesota in 1980 or 1982"
+        },
+        {
+          "study": "Thomas 2003",
+          "doi": "10.22543/0090-0222.2085",
+          "result": "later neutralization tests in C. discolor did not increase seed predators or reduce seed production"
+        },
+        {
+          "study": "Thomas 2007",
+          "doi": "10.22543/0090-0222.2188",
+          "result": "pollinators did not contact traps; several seed predators bypassed them; ants and aphids were deterred and some predatory arthropods used the sticky inflorescences"
+        }
+      ],
+      "external_cost_benefit_context": "Bejaria floral stickiness supplies a direct benefit context, whereas Datura glandular stickiness supplies substantial reproductive/demographic cost contexts",
+      "current_causal_strength": "within_genus_context_dependence_supported; local_arthropod_community_by_cost_model_is_leading; focal_JPN15_causation_not_evaluable"
+    }
+  },
+  "biological_synthesis": "The three capitulum components are best treated as different environmental interfaces rather than one syndrome responding to one driver: orientation filters abiotic reproductive exposure, phyllary architecture filters mechanical access to the reproductive head, and stickiness filters arthropod-community access under a defence-cost tradeoff. Their unequal evolutionary depths and non-shared transition localization are therefore biologically compatible with trait-specific selection mosaics, but only orientation currently has a focal East-Asian ecological transition test.",
+  "falsifiers": {
+    "orientation": "direct focal Cirsium manipulation showing no wetting/radiation/pollen or fitness effect while an alternative pathway explains the transition-regime pattern",
+    "phyllary": "JPN36 reversible phyllary manipulation showing no enemy/access/fitness effect or a clear pollinator-access benefit opposite the current protection prior",
+    "stickiness": "within-JPN15 neutralization showing a stable context-independent sign unrelated to local antagonist community/cost, or population-replicated results inconsistent with the predicted benefit-null-cost variation"
+  },
+  "claim_ceiling": [
+    "External analog effect sizes are not transported to East-Asian Cirsium.",
+    "Trait-specific ecological-filter assignments are mechanistic hypotheses with unequal focal support, not three demonstrated adaptations.",
+    "Different ecological interfaces do not prove genetic or developmental modularity.",
+    "Current evidence does not identify the historical selective cause of every reconstructed transition."
+  ]
+}
