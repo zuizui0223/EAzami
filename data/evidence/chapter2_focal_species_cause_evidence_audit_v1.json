@@ -1,0 +1,50 @@
+{
+  "version": "chapter2_focal_species_cause_evidence_audit_v1",
+  "status_date": "2026-09-06",
+  "scope": "targeted recovery audit for direct or near-direct functional evidence in the highest-information focal taxa; absence means not recovered in this search, not proof that no study exists",
+  "phyllary_JPN36": {
+    "taxon": "Cirsium sieboldii",
+    "frozen_state": "appressed phyllary posture; nonsticky or nearly nonsticky involucre",
+    "focal_history_role": "JPN36 appressed state is a current high-information phyllary transition target; current UFBoot forced fraction 0.728",
+    "recovered_pollinator_evidence": {
+      "source": "Effectiveness of interval photography cameras for a survey of pollinator communities: Comparison with direct observation, Applications in Plant Sciences, 2025",
+      "doi": "10.1002/aps3.70023",
+      "documented_visitors": ["Amegilla florea", "Papilio helenus", "Macroglossum pyrrhosticta"],
+      "interpretation": "legitimate floral visitation occurs in the natural appressed-phyllary state; an open/spreading phyllary posture is therefore not a demonstrated prerequisite for pollinator access",
+      "boundary": "visitor occurrence does not quantify effective pollen transfer, compare alternate phyllary postures, or test phyllary manipulation"
+    },
+    "older_pollination_context": {
+      "source": "Kyoto University pollination-guild survey",
+      "result": "Cirsium sieboldii was among long-tubed flowers mainly visited by butterflies or small bees in the survey and discussed in relation to long-tongued Bombus diversus pollination",
+      "interpretation": "independent evidence that the appressed target remains accessible to multiple legitimate visitor guilds",
+      "boundary": "historical observational guild inference; not a posture-effect experiment"
+    },
+    "model_update": {
+      "pollinator_access_primary": "further_weakened_as_a_necessary_condition",
+      "mechanical_antagonist_exclusion": "remains_leading_external_mechanism_domain",
+      "direct_focal_causation": "not_evaluable"
+    }
+  },
+  "stickiness_JPN06_JPN15": {
+    "pair": ["JPN06 Cirsium dipsacolepis", "JPN15 Cirsium lineare"],
+    "frozen_states": {"JPN06": "nonsticky_or_nearly_nonsticky", "JPN15": "sticky"},
+    "history_role": "100/100 ML sister contrast; JPN06 current UFBoot forced fraction 0.995",
+    "authority_context": {
+      "JPN06": "C. dipsacolepis inhabits dry grasslands and has hard spreading to recurved phyllaries",
+      "JPN15": "C. lineare has a well-sticky involucre"
+    },
+    "targeted_search_result": "No focal experimental study was recovered that directly manipulates or links JPN06/JPN15 involucre stickiness to antagonist damage, pollinator effective transfer or seed fitness.",
+    "model_update": {
+      "arthropod_community_filter_by_trait_cost": "remains_leading_general_model_from_direct_other_Cirsium_context_dependence",
+      "focal_JPN06_JPN15_causation": "not_evaluable",
+      "required_discriminator": "within-JPN15 stickiness neutralization versus sham with local arthropod-guild, pollinator-transfer and viable-seed endpoints; JPN06 restoration only as a secondary sufficiency test"
+    },
+    "boundary": "failure to recover a focal publication in a targeted web search is not evidence of no ecological effect"
+  },
+  "orientation_focal_context": {
+    "note": "No new focal species search was needed to select the leading orientation domain because the current East-Asian transition-regime test already supplies focal ecological evidence; external Asteraceae manipulation is used only for mechanism discrimination.",
+    "leading_domain": "abiotic reproductive exposure / timing",
+    "origin_boundary": "current regime is not supported as the sole calendarized origin regime"
+  },
+  "chapter2_implication": "Focal-species recovery does not overturn the v2 trait-specific filter model. It further weakens phyllary pollinator-access as a necessary explanation because the appressed JPN36 target is naturally visited by multiple pollinator guilds, while stickiness remains blocked at the focal sister pair by absence of a direct local manipulation/fitness study."
+}
