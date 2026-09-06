@@ -1,0 +1,43 @@
+{
+  "version": "chapter2_direct_cirsium_mechanism_recovery_audit_v1",
+  "status_date": "2026-09-06",
+  "scope": "targeted web recovery for direct Cirsium manipulations of the three focal capitulum traits; not a systematic review; not-recovered means not found in this targeted search rather than proof of absence",
+  "orientation": {
+    "direct_Cirsium_orientation_manipulation_recovered": false,
+    "recovered_Cirsium_context": [
+      "Cirsium purpuratum has naturally nodding capitula and is visited predominantly by Bombus diversus, but the recovered study manipulates/display-assesses pollination rather than capitulum orientation",
+      "Cirsium pitcheri studies link head position and weevil infestation to seed production, but head position is architectural order rather than nodding-versus-erect orientation"
+    ],
+    "closest_direct_manipulation": "Cremanthodium campanulatum (Asteraceae): nodding-versus-artificially-erect capitula, pollen viability, pollinator preference and achene production",
+    "current_evidence_tier": "focal_transition_ecology_plus_close_Asteraceae_mechanism",
+    "current_leading_mechanism": "wetting/rain/UV-B reproductive protection",
+    "ceiling": "direct Cirsium orientation causation remains untested"
+  },
+  "phyllary_posture": {
+    "direct_Cirsium_phyllary_posture_or_spine_manipulation_recovered": false,
+    "focal_Cirsium_context": "Cirsium sieboldii naturally has appressed phyllaries yet documented bee, butterfly and hawkmoth visitors, constraining any claim that open/spreading phyllaries are required for legitimate visitor access",
+    "closest_direct_manipulation": "Centaurea solstitialis (Cardueae): involucral-spine removal altered illegitimate Lepidoptera access and reduced filled seeds by 22% without increasing legitimate visitation frequency",
+    "independent_structural_analog": "Pedicularis rex protective bract drainage increased seed predation and reduced final seed set without detectable pollinator discrimination",
+    "current_evidence_tier": "focal_repeated_history_plus_close_Cardueae_mechanism",
+    "current_leading_mechanism": "mechanical antagonist exclusion/access control",
+    "ceiling": "direct Cirsium phyllary causation remains untested"
+  },
+  "stickiness": {
+    "direct_Cirsium_stickiness_manipulation_recovered": true,
+    "direct_Cirsium_evidence": [
+      "Willson, Anderson & Thomas 1983: experimentally occluding sticky bracteal exudates increased seed predation in C. discolor in Illinois but had no effect in C. flodmani in Minnesota",
+      "Thomas 2003: later C. discolor neutralization did not increase seed predators or reduce successful seed production",
+      "Thomas 2007: pollinators did not contact traps, several seed predators bypassed them, ants/aphids were deterred and some predatory arthropods used the sticky inflorescences"
+    ],
+    "current_evidence_tier": "focal_repeated_history_plus_direct_within_genus_mechanism_class",
+    "current_leading_mechanism": "guild-selective arthropod-community filtering with context-dependent benefit and an external cost prior",
+    "ceiling": "East-Asian JPN15/JPN06 causal effect remains untested without within-JPN15 neutralization and local community/fitness measurement"
+  },
+  "evidence_strength_order": [
+    "stickiness: direct Cirsium manipulation and guild evidence",
+    "orientation: focal East-Asian transition ecology plus close Asteraceae manipulation",
+    "phyllary: focal repeated history plus close Cardueae manipulation"
+  ],
+  "chapter2_stop_rule": "No further broad public cause searching is justified for these three mappings unless a direct Cirsium orientation/phyllary manipulation or focal JPN15/JPN36 functional dataset is recovered. The next causal gain otherwise requires new focal manipulation/fitness data.",
+  "claim_boundary": "This audit ranks evidence proximity and recovery status; it does not convert external analogs into Cirsium effects or prove adaptation."
+}
