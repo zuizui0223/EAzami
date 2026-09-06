@@ -7,6 +7,7 @@ on:
       - 'analysis/build_chapter2_trait_cause_homology_restricted_v1.py'
       - 'data/evidence/chapter2_trait_cause_falsification_v1.json'
       - 'data/evidence/chapter2_trait_cause_falsification_v2.json'
+      - 'data/evidence/chapter2_trait_cause_homology_restricted_v1.json'
       - 'data/evidence/chapter2_focal_species_cause_evidence_audit_v1.json'
       - 'data/evidence/chapter2_current_claims_h1_h4_v1.json'
       - 'data/evidence/orientation_mechanism_reduction_result_v1.json'
@@ -36,8 +37,7 @@ jobs:
         run: |
           python - <<'PY'
           import json
-          p='/tmp/chapter2_trait_cause_falsification_v2.json'
-          x=json.load(open(p))
+          x=json.load(open('/tmp/chapter2_trait_cause_falsification_v2.json'))
           assert x['version']=='chapter2_trait_cause_falsification_v2'
           assert x['orientation']['leading_domain']=='abiotic_reproductive_exposure_plus_timing'
           assert x['phyllary']['leading_domain']=='mechanical_antagonist_exclusion'
@@ -65,6 +65,8 @@ jobs:
           assert x['stickiness']['models']['universal_physical_barrier_to_seed_predators']=='contradicted'
           print('homology-restricted cause checks: ok')
           PY
+      - name: Verify frozen homology-restricted result is exactly reproducible
+        run: cmp /tmp/chapter2_trait_cause_homology_restricted_v1.json data/evidence/chapter2_trait_cause_homology_restricted_v1.json
       - uses: actions/upload-artifact@v4
         with:
           name: chapter2-trait-cause-homology-restricted-v1
