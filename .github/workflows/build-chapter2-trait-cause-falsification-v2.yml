@@ -5,6 +5,7 @@ on:
     paths:
       - 'analysis/build_chapter2_trait_cause_falsification_v2.py'
       - 'data/evidence/chapter2_trait_cause_falsification_v1.json'
+      - 'data/evidence/chapter2_trait_cause_falsification_v2.json'
       - 'data/evidence/chapter2_current_claims_h1_h4_v1.json'
       - 'data/evidence/orientation_mechanism_reduction_result_v1.json'
       - 'data/evidence/fdt1_broad_functional_calibration_seed_extension_v1.csv'
@@ -42,6 +43,9 @@ jobs:
           assert x['orientation']['historical_origin_boundary'].startswith('the present regime matches only 99/376')
           print('trait-cause v2 checks: ok')
           PY
+      - name: Verify frozen result is exactly reproducible
+        if: ${{ hashFiles('data/evidence/chapter2_trait_cause_falsification_v2.json') != '' }}
+        run: cmp /tmp/chapter2_trait_cause_falsification_v2.json data/evidence/chapter2_trait_cause_falsification_v2.json
       - uses: actions/upload-artifact@v4
         with:
           name: chapter2-trait-cause-falsification-v2
