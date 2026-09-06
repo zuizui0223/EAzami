@@ -1,0 +1,93 @@
+{
+  "version": "chapter2_trait_cause_falsification_v1",
+  "status_date": "2026-09-05",
+  "scope": "frozen competing-model elimination using existing Chapter 2 history, occurrence-resolution and functional evidence; no new predictor search",
+  "decision_rule": {
+    "contradicted": "a model-required qualitative prediction fails in a direct manipulation relevant to that model",
+    "weakened": "the primary prediction is absent in a nonhomologous analog or small focal panel",
+    "compatible": "the observed qualitative evidence pattern is allowed by the model",
+    "not_evaluable": "the focal mediator or manipulation is absent"
+  },
+  "phyllary": {
+    "history": {
+      "minimum_steps": 3,
+      "JPN36_state": "appressed",
+      "JPN36_ML_forced_terminal": true,
+      "JPN36_UFBoot_forced_fraction": 0.728,
+      "median_relative_depth_envelope": [0.695, 1.0]
+    },
+    "models": [
+      {
+        "model": "P1_pollinator_access_primary",
+        "prediction": "a protective bract state should require a detectable legitimate-pollinator access/visitation benefit or its removal should improve pollinator visitation",
+        "evidence": "Pedicularis rex protective-bract manipulation: pollinator treatment beta=0.012, p=0.958 (external nonhomologous analog)",
+        "status": "weakened",
+        "reason": "the analog protective-bract benefit occurred without a pollinator-visitation effect; this does not directly test Cirsium phyllary geometry"
+      },
+      {
+        "model": "P2_reproductive_enemy_protection",
+        "prediction": "removing protective bract function should increase seed predation and reduce final seed set without requiring pollinator gain",
+        "evidence": "Pedicularis rex: seed-predation beta=-0.072 for intact coding with p<0.0001; final-seed-set beta=+0.025 with p<0.0001; pollinator effect null",
+        "status": "compatible_leading_external_prior",
+        "reason": "all three qualitative predictions align in one direct manipulation, but the structure is nonhomologous to Cirsium phyllaries"
+      },
+      {
+        "model": "P3_broad_abiotic_or_geographic_sorting",
+        "prediction": "authority-coded posture should show broad spatial segregation if a coarse regional abiotic driver dominates",
+        "evidence": "broader public occurrence panel n=4 (3 ascending, 1 appressed), spatial-segregation p=0.4998",
+        "status": "not_supported_current_public_panel",
+        "reason": "no broad spatial segregation is recovered; state replication is too small to exclude local abiotic or biotic effects"
+      }
+    ],
+    "current_best_explanation": "reproductive_enemy_protection_prior_leads_over_pollinator_access_and_broad_spatial_sorting",
+    "focal_causation_status": "not_evaluable_without_Cirsium_phyllary_manipulation",
+    "specific_next_falsifier": "JPN36 reversible appressed-phyllary access/protection manipulation versus sham measuring enemy attack, legitimate pollinator access/effective transfer, wetting and mature viable seed jointly",
+    "claim_boundary": "Pedicularis bracts are nonhomologous analogs; no current result proves enemy protection, wetting protection or pollinator-access selection in Cirsium"
+  },
+  "stickiness": {
+    "history": {
+      "minimum_steps": 5,
+      "median_relative_depth_envelope": [0.937, 0.954],
+      "JPN06_state": "nonsticky_or_nearly_nonsticky",
+      "JPN15_state": "sticky",
+      "JPN06_JPN15_ML_sister_support": "100/100",
+      "JPN06_UFBoot_forced_fraction": 0.995,
+      "JPN36_UFBoot_forced_fraction": 0.707,
+      "JPN30_UFBoot_forced_fraction": 0.545
+    },
+    "models": [
+      {
+        "model": "S1_universal_antagonist_defence",
+        "prediction": "neutralizing floral stickiness should generally increase seed predators and reduce successful seed production",
+        "evidence": "direct Cirsium discolor neutralization: no increase in seed predators and no decrease in seed production",
+        "status": "contradicted_as_universal_model",
+        "reason": "the closest genus-level direct manipulation returned the explicit null predicted against a universal-defence rule"
+      },
+      {
+        "model": "S2_universal_trait_cost",
+        "prediction": "sticky structures should generally reduce reproductive performance",
+        "evidence": "Bejaria resinosa floral manipulation: florivory risk difference=-0.21 and fruit-set RR=1.48148 favor intact sticky flowers",
+        "status": "contradicted_as_universal_model",
+        "reason": "a direct floral-stickiness manipulation shows a context with clear defensive and reproductive benefit"
+      },
+      {
+        "model": "S3_enemy_dependent_defence_cost_balance",
+        "prediction": "stickiness can be beneficial where antagonists impose damage, neutral in some systems, and costly when enemy benefit is weak or excluded",
+        "evidence": "Bejaria benefit + direct Cirsium discolor null + Datura cost under herbivore exclusion (first-year seed production about -53%, finite rate of increase -13%)",
+        "status": "compatible_and_only_model_not_contradicted",
+        "reason": "the observed benefit/null/cost sign heterogeneity is expected under context-dependent enemy pressure and trait cost"
+      }
+    ],
+    "broad_spatial_auxiliary": {
+      "n_taxa": 12,
+      "state_counts": {"nonsticky": 6, "sticky": 6},
+      "spatial_segregation_p": 0.1306,
+      "reading": "simple broad spatial segregation is not supported; this does not test local antagonist communities"
+    },
+    "current_best_explanation": "local_enemy_pressure_by_trait_cost_selection_mosaic",
+    "focal_causation_status": "not_evaluable_without_within_JPN15_neutralization",
+    "specific_next_falsifier": "within-JPN15 natural-stickiness neutralization versus sham, with enemy access/damage, pollinator effective transfer, secretion-treatment controls and mature viable seed; JPN06 restoration remains secondary",
+    "claim_boundary": "benefit/null/cost evidence comes from different taxa and systems and is model-discriminating rather than a pooled Cirsium effect"
+  },
+  "chapter2_interpretation": "Among the two previously unresolved modules, current evidence narrows phyllary toward a protective/enemy-exclusion mechanism prior and stickiness toward a context-dependent antagonist-defence-versus-cost mechanism. Only the stickiness universal-defence and universal-cost models are directly falsified as universal rules; focal East-Asian Cirsium causal mechanisms remain unproven."
+}
