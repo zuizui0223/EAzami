@@ -1,0 +1,51 @@
+{
+  "version": "chapter2_trait_cause_homology_restricted_v1",
+  "status_date": "2026-09-06",
+  "rule": "when naming a physical mechanism, prioritize evidence closest in organ, geometry and taxonomic context; broader analogs cannot rescue a mechanism unsupported by closer evidence",
+  "orientation": {
+    "geometry_restriction": "vertical nodding-versus-erect capitulum manipulations prioritized over azimuthal orientation or nonhomologous flower-orientation systems",
+    "models": {
+      "static_pollinator_preference": "weakened_as_primary_by_no_preference_in_Cremanthodium",
+      "orientation_driven_floral_heating": "not_supported_in_close_Asteraceae_manipulation",
+      "hydric_UVB_reproductive_protection": "leading_physical_mechanism_prior",
+      "thermal_timing": "retained_as_secondary_cross_system_domain_not_a_close_geometry_mechanism"
+    },
+    "leading_physical_mechanism": "protection of reproductive tissues from wetting/rain and UV-B exposure",
+    "link_to_focal_result": "compatible with the focal East-Asian transition-regime signal, but BIO15/BIO1 are ecological regime coordinates rather than direct wetting/UV measurements",
+    "origin_boundary": "not demonstrated as the origin cause because current regime persistence is only 99/376 scenarios",
+    "focal_causation": "not_proven"
+  },
+  "phyllary": {
+    "structure_restriction": "close Cardueae involucral-spine manipulation prioritized over nonhomologous bract systems; focal JPN36 natural visitor access used only as a necessity constraint",
+    "models": {
+      "pollinator_access_as_primary_benefit": "further_weakened",
+      "mechanical_antagonist_exclusion": "leading_physical_mechanism_prior",
+      "wetting_protection": "not_evaluable_as_a_distinct_phyllary_mechanism",
+      "broad_abiotic_sorting": "not_supported_current_public_panel"
+    },
+    "leading_physical_mechanism": "mechanical restriction of illegitimate or damaging visitor access to the reproductive head",
+    "focal_constraint": "appressed JPN36 is naturally visited by multiple bee, butterfly and hawkmoth taxa, so open/spreading phyllaries are not a demonstrated prerequisite for legitimate visitor access",
+    "focal_causation": "not_evaluable_without_JPN36_manipulation"
+  },
+  "stickiness": {
+    "taxonomic_restriction": "direct Cirsium benefit/null experiments and Cirsium arthropod-guild observations prioritized over other sticky-plant systems",
+    "models": {
+      "universal_physical_barrier_to_seed_predators": "contradicted",
+      "pollinator_interference_as_general_cost": "weakened_in_Cirsium_discolor_because_pollinators_do_not_contact_sticky_traps",
+      "guild_selective_arthropod_filter": "directly_supported_as_mechanism_class_within_Cirsium",
+      "production_or_resistance_cost": "external_prior_only_not_measured_in_focal_Cirsium"
+    },
+    "leading_physical_mechanism": "guild-selective filtering of arthropod access and residence on the involucre",
+    "net_selection_model": "local arthropod-community benefit minus secretion/resistance and other trait costs",
+    "focal_causation": "not_evaluable_without_JPN15_neutralization_and_local_community_fitness_measurement"
+  },
+  "whole_capitulum": {
+    "physical_interface_model": {
+      "orientation": "abiotic exposure filter",
+      "phyllary": "mechanical access filter",
+      "stickiness": "adhesive arthropod-community filter"
+    },
+    "interpretation": "the three traits can be functionally integrated in one capitulum while mediating different interfaces with the environment; this provides a biological mechanism-level interpretation of mosaic historical assembly",
+    "claim_boundary": "distinct interface mechanisms do not prove separate genes, developmental modules, or a unique selective cause for every transition"
+  }
+}
