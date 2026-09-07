@@ -1,0 +1,109 @@
+{
+  "version": "chapter2_direct_cirsium_mechanism_recovery_audit_v2",
+  "status_date": "2026-09-07",
+  "scope": "renewed targeted public-evidence recovery and causal-triangulation audit for orientation, phyllary posture and stickiness; not a systematic review; not-recovered means not found in this search rather than proof of absence",
+  "orientation": {
+    "direct_Cirsium_nodding_vs_erect_manipulation_recovered": false,
+    "public_Cirsium_context_added": [
+      {
+        "taxon": "Cirsium purpuratum",
+        "source": "Ohashi & Yahara 1998, American Journal of Botany",
+        "doi": "10.2307/2446309",
+        "result": "the study system has naturally nodding capitula and is pollinated predominantly by Bombus diversus; the paper quantifies pollinator responses to floral display rather than manipulating capitulum angle",
+        "use": "shows that nodding Cirsium capitula remain compatible with effective legitimate visitation; it does not estimate an orientation effect"
+      },
+      {
+        "taxon": "Cirsium purpuratum",
+        "source": "Makino et al. 2007, Functional Ecology",
+        "doi": "10.1111/j.1365-2435.2006.01211.x",
+        "result": "tagged Bombus diversus repeatedly visited naturally nodding Cirsium capitula across variation in floral display and neighbourhood density",
+        "use": "within-genus pollination context only; no erect-versus-nodding comparison"
+      }
+    ],
+    "closest_direct_manipulation": {
+      "taxon": "Cremanthodium campanulatum",
+      "family": "Asteraceae",
+      "doi": "10.1080/17550874.2012.702793",
+      "result": "natural nodding versus artificially erect capitula; nodding heads had higher achene set, water and UV-B reduced pollen viability, no pollinator preference was detected between angle treatments, and no meaningful orientation-driven internal thermal difference was detected"
+    },
+    "current_best_public_inference": "abiotic wetting/rain/UV-B reproductive protection remains the leading physical mechanism prior; static pollinator preference is not required to explain the closest manipulation and naturally nodding Cirsium heads can receive effective Bombus visitation",
+    "public_data_ceiling": "direct focal-genus angle causation cannot be raised above an Asteraceae mechanism analog without a Cirsium head-angle manipulation linked to wetting/UV exposure, pollen viability and reproductive fitness",
+    "next_own_data_discriminator": "randomized within-Cirsium head-angle manipulation with sham support; crossed or separately staged wetting/rain and UV exposure; pollen viability plus effective visitation/pollen transfer plus mature viable achene endpoints"
+  },
+  "phyllary_posture": {
+    "direct_Cirsium_phyllary_posture_or_spine_manipulation_recovered": false,
+    "public_triangulation": {
+      "structure_to_access_close_Cardueae": {
+        "taxon": "Centaurea solstitialis",
+        "doi": "10.2307/3672545",
+        "result": "involucral-spine removal removed deterrence of illegitimate Lepidoptera and reduced filled seeds by 22%; legitimate bee/fly visitation frequency did not increase"
+      },
+      "enemy_interface_to_fitness_within_Cirsium": {
+        "taxon": "Cirsium pitcheri",
+        "doi": "10.1016/j.gecco.2020.e00945",
+        "result": "Larinus planus oviposition is detectable as scars on phyllaries; infested capitula produced about 60% fewer mature seeds, about 40% fewer unfilled seeds, and lighter seeds",
+        "boundary": "capitulum position and infestation were studied; phyllary geometry itself was not experimentally altered"
+      },
+      "legitimate_access_in_focal_appressed_state": {
+        "taxon": "Cirsium sieboldii",
+        "focal_id": "JPN36",
+        "result": "the natural appressed-phyllary state has documented bee, butterfly and hawkmoth visitors",
+        "source_provenance": "chapter2_focal_species_cause_evidence_audit_v1.json",
+        "boundary": "visitor occurrence is not effective pollen transfer and is not a posture manipulation"
+      }
+    },
+    "current_best_public_inference": "mechanical antagonist-access control is strengthened by three-way triangulation: a close Cardueae structure manipulation changes illegitimate access and seed filling, a Cirsium seed predator uses the phyllary surface as an oviposition interface and strongly gates seed output, and focal appressed JPN36 remains accessible to legitimate visitors",
+    "public_data_ceiling": "the missing causal edge is Cirsium phyllary/spine geometry -> antagonist or legitimate-visitor access; public evidence cannot supply that edge without a direct reversible focal-genus manipulation",
+    "next_own_data_discriminator": "within-Cirsium reversible phyllary/access manipulation versus structure-matched sham, separating legitimate visitor access/effective transfer from seed-predator or florivore access/damage and carrying both to mature viable achene output"
+  },
+  "stickiness": {
+    "direct_Cirsium_stickiness_manipulation_recovered": true,
+    "peer_reviewed_within_genus_evidence": [
+      {
+        "study": "Willson, Anderson & Thomas 1983",
+        "result": "occluding sticky bracteal exudates increased seed predation in Cirsium discolor in Illinois but had no detectable effect in Cirsium flodmani in Minnesota"
+      },
+      {
+        "study": "Thomas 2003",
+        "doi": "10.22543/0090-0222.2085",
+        "result": "later neutralization in Cirsium discolor did not increase seed predators, reduce predatory arthropods, or reduce successful seed production"
+      },
+      {
+        "study": "Thomas 2007",
+        "doi": "10.22543/0090-0222.2188",
+        "result": "pollinators did not contact sticky traps, several seed predators bypassed them, ants and aphids were deterred, and some predatory arthropods used sticky inflorescences"
+      }
+    ],
+    "secondary_public_alternative_mechanism": {
+      "source": "Patricia A. Thomas dissertation, University of Illinois repository, The Function of Insect Trapping by Penstemon Digitalis and Cirsium Discolor",
+      "uri": "http://hdl.handle.net/2142/77627",
+      "evidence_tier": "public_dissertation_secondary_to_peer_reviewed_evidence",
+      "result": "radio-labelled prey experiments reported digestion, uptake and transport of nutrients from trapped insects and reproductive enhancement; for Cirsium discolor the trapped-insect N and P were estimated to represent only about 2-3% of seed N and P",
+      "interpretation": "nutrient subsidy is an additional mechanism worth measuring or excluding, but this secondary source does not overturn the peer-reviewed evidence for context-dependent and guild-selective effects"
+    },
+    "focal_JPN15_public_context": {
+      "taxon": "Cirsium lineare",
+      "focal_id": "JPN15",
+      "authority_source": "National Museum of Nature and Science Japan Cirsium database",
+      "authority_url": "https://www.kahaku.go.jp/research/db/botany/azami/detail.html?no=156",
+      "confirmed_traits": ["capitula upward", "involucre strongly sticky", "grassland distribution in western Japan"],
+      "quantitative_local_arthropod_guild_dataset_recovered": false,
+      "boundary": "public occurrence and natural-history material do not identify which local guilds contact, avoid, bypass or benefit from the adhesive zone, nor the net seed-fitness effect"
+    },
+    "current_best_public_inference": "stickiness is already a direct within-Cirsium mechanism class, but its sign is context dependent and guild selective; the East-Asian causal question is now local context rather than generic function",
+    "public_data_ceiling": "no public dataset recovered that combines JPN15 stickiness manipulation, local arthropod guild response and reproductive fitness",
+    "next_own_data_discriminator": "within-JPN15 stickiness neutralization versus sham across replicated local contexts, with pretreatment guild characterization, treatment-induced changes in seed predators/herbivores/predators/ants/aphids/pollinators, mature viable seed output, treatment side-effect checks, and optional nutrient-status/captured-arthropod measurements to discriminate a nutrient-subsidy alternative"
+  },
+  "cross_trait_result": {
+    "orientation": "public evidence stops one edge before focal-genus causation",
+    "phyllary": "public evidence now triangulates structure-access, Cirsium enemy-fitness and focal legitimate-access components but still lacks direct Cirsium structure manipulation",
+    "stickiness": "within-genus mechanism is directly manipulated; only focal East-Asian context and net fitness sign remain unresolved",
+    "priority_for_new_biology": [
+      "P03b direct Cirsium orientation manipulation",
+      "P01b direct/reversible Cirsium phyllary-access manipulation",
+      "P02b within-JPN15 stickiness neutralization with local guild and fitness endpoints"
+    ]
+  },
+  "public_data_stop_rule": "Further broad public searching should not be treated as a substitute for the three focal manipulations. Re-open public recovery only for a newly located direct Cirsium head-angle manipulation, direct Cirsium phyllary/spine manipulation, or quantitative JPN15 manipulation/guild/fitness dataset.",
+  "claim_boundary": "The triangulations rank mechanistic proximity and close specific causal edges. They do not transport effect sizes across taxa, establish historical selective causes, or prove adaptation in East-Asian Cirsium."
+}
