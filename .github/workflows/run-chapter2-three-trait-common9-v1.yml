@@ -1,0 +1,58 @@
+name: Run Chapter 2 three-trait common9 v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_chapter2_three_trait_common9_v1.py"
+      - "analysis/run_chapter2_three_trait_ecology_panel_v1.py"
+      - "data/evidence/chapter2_three_trait_common9_contract_v1.json"
+      - "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv"
+      - "data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv"
+      - ".github/workflows/run-chapter2-three-trait-common9-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas requests rasterio
+          python -m py_compile analysis/run_chapter2_three_trait_common9_v1.py
+      - name: Run frozen common9 panel
+        run: |
+          mkdir -p /tmp/ch2_common9
+          python analysis/run_chapter2_three_trait_common9_v1.py \
+            --seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --extension data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv \
+            --contract data/evidence/chapter2_three_trait_common9_contract_v1.json \
+            --out-json /tmp/ch2_common9/chapter2_three_trait_common9_result_v1.json \
+            --out-taxa /tmp/ch2_common9/taxa.csv \
+            --out-rows /tmp/ch2_common9/univariate_rows.csv \
+            | tee /tmp/ch2_common9/run_summary.log
+      - name: Validate output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/ch2_common9/chapter2_three_trait_common9_result_v1.json').read_text())
+          assert x['environment_variables']==['BIO1','BIO4','BIO12','BIO15','RSDS','VPD','WIND','GSP','NPP']
+          assert set(x['primary'])=={'orientation','phyllary','stickiness'}
+          assert x['multiplicity']['method']=='Benjamini-Hochberg'
+          assert any('not a biological region class' in s for s in x['claim_boundary'])
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-three-trait-common9-${{ github.run_id }}
+          path: /tmp/ch2_common9/
+          if-no-files-found: error
+          retention-days: 90
