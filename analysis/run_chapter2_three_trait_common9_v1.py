@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, importlib.util, json, math, time
+import argparse, importlib.util, json, time
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -42,17 +42,33 @@ def main():
         for t in core.UNIVERSE:
             st=core.states(r,t); out[t+'_singleton_state']=next(iter(st)) if len(st)==1 else ''; out[t+'_allowed_states']='|'.join(sorted(st)); any1 |= len(st)==1
         if any1: reg.append(out)
+
     session=requests.Session(); session.headers.update({'User-Agent':'EAzami three-trait common9 panel'})
-    envs=list(c['environment']['variables']); urls=c['environment']['urls']; rows=[]
+    envs=list(c['environment']['variables']); urls=c['environment']['urls']
+    occ_parts=[]; n_by_taxon={}
     for i,r in enumerate(reg):
-        q=r['taxon_name']; thin=core.clean(core.fetch_occ(session,q),q); out=dict(r); out['n_thinned']=len(thin)
+        q=r['taxon_name']; thin=core.clean(core.fetch_occ(session,q),q); n_by_taxon[q]=int(len(thin))
         if len(thin):
-            for e in envs: thin[e]=core.sample(thin,urls[e])
-            out.update({e:float(np.nanmedian(thin[e])) for e in envs}); out['centroid_lat']=float(np.nanmedian(thin.latitude)); out['centroid_lon']=float(np.nanmedian(thin.longitude))
+            thin=thin[['latitude','longitude']].copy(); thin['taxon_name']=q; occ_parts.append(thin)
+        print(i+1,len(reg),q,len(thin),flush=True); time.sleep(.01)
+
+    all_occ=pd.concat(occ_parts,ignore_index=True) if occ_parts else pd.DataFrame(columns=['latitude','longitude','taxon_name'])
+    if not all_occ.empty:
+        for e in envs:
+            print('sampling',e,len(all_occ),flush=True)
+            all_occ[e]=core.sample(all_occ,urls[e])
+
+    rows=[]
+    for r in reg:
+        q=r['taxon_name']; out=dict(r); out['n_thinned']=n_by_taxon.get(q,0)
+        g=all_occ.loc[all_occ.taxon_name==q] if not all_occ.empty else all_occ
+        if len(g):
+            out.update({e:float(np.nanmedian(g[e])) for e in envs}); out['centroid_lat']=float(np.nanmedian(g.latitude)); out['centroid_lon']=float(np.nanmedian(g.longitude))
         else:
             out.update({e:np.nan for e in envs}); out['centroid_lat']=np.nan; out['centroid_lon']=np.nan
-        rows.append(out); print(i+1,len(reg),q,len(thin),flush=True); time.sleep(.01)
+        rows.append(out)
     taxa=pd.DataFrame(rows)
+
     result={'version':'chapter2_three_trait_common9_result_v1','status_date':'2026-09-08','environment_variables':envs,'primary':{},'sensitivity':{},'claim_boundary':c['claim_ceiling']}
     for t in core.UNIVERSE: result['primary'][t]=core.analyze(taxa,t,3,envs)
     result['sensitivity']['phyllary_min1']=core.analyze(taxa,'phyllary',1,envs)
@@ -64,8 +80,8 @@ def main():
             frac=z['two_sided_rank_count']/z['n_maps']
             flat.append({'trait':trait,'environment':env,'contrast':z['contrast'],'standardized_difference':z['observed'],'rank_count':z['two_sided_rank_count'],'n_maps':z['n_maps'],'exact_fraction':frac})
     if flat:
-        q=bh_adjust([r['exact_fraction'] for r in flat])
-        for r,v in zip(flat,q): r['bh_q_across_evaluable_trait_environment_rows']=float(v)
+        qvals=bh_adjust([r['exact_fraction'] for r in flat])
+        for r,v in zip(flat,qvals): r['bh_q_across_evaluable_trait_environment_rows']=float(v)
     result['univariate_rows']=flat
     result['multiplicity']={'family':'all evaluable primary trait x common9 univariate rows','n_rows':len(flat),'method':'Benjamini-Hochberg'}
     result['cross_trait_conclusion']='All three historical traits were passed through the same nine-variable present-environment pipeline. Ecological evidence is compared by identical data/QC rules, while trait-specific resolution limits remain explicit.'
