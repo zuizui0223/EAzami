@@ -1,0 +1,50 @@
+{
+  "version": "chapter2_three_trait_ecology_result_v1",
+  "status_date": "2026-09-08",
+  "workflow_provenance": {
+    "run_id": 34207050406,
+    "artifact_id": 10048213495,
+    "artifact_sha256": "42d6d874f6226aad47329d1b8ea66caeb3e0fab1a5a7a3b28805356ae87e1a9d"
+  },
+  "environment_variables": ["BIO1", "BIO4", "BIO12", "BIO15"],
+  "primary": {
+    "orientation": {
+      "n_taxa": 17,
+      "state_counts": {"D": 5, "U": 12},
+      "omnibus_four_climate_rank": "1627/6188 = 26.29%",
+      "univariate_two_sided_ranks": {"BIO1": "1972/6188 = 31.87%", "BIO4": "1200/6188 = 19.39%", "BIO12": "1440/6188 = 23.27%", "BIO15": "2319/6188 = 37.48%"},
+      "interpretation": "No strong simple tip-state separation in the common Japan-only four-climate panel. This does not replace the separately frozen transition-level orientation analysis."
+    },
+    "phyllary": {
+      "n_taxa": 4,
+      "state_counts": {"appressed": 1, "ascending": 3},
+      "omnibus_four_climate_rank": "3/4 = 75%",
+      "resolution": "not_identifiable_as_trait_effect",
+      "reason": "Only one appressed taxon is represented at the primary >=3-occurrence gate."
+    },
+    "stickiness": {
+      "n_taxa": 12,
+      "state_counts": {"nonsticky": 6, "sticky": 6},
+      "omnibus_four_climate_rank": "88/924 = 9.52%",
+      "univariate_two_sided_ranks": {"BIO1": "464/924 = 50.22%", "BIO4": "554/924 = 59.96%", "BIO12": "22/924 = 2.38%", "BIO15": "70/924 = 7.58%"},
+      "standardized_contrasts_sticky_minus_nonsticky": {"BIO1": 0.4063, "BIO4": -0.3130, "BIO12": 1.3110, "BIO15": 1.0485},
+      "interpretation": "Sticky taxa occupy wetter current niches in this Japan provenance frame, with the strongest single-axis separation on BIO12. Because four climate axes were frozen and examined together, BIO12 is a focused lead rather than a standalone confirmatory claim; the omnibus four-climate rank is 9.52%."
+    }
+  },
+  "sensitivity": {
+    "phyllary_min1": {
+      "n_taxa": 6,
+      "state_counts": {"appressed": 1, "ascending": 4, "spreading": 1},
+      "omnibus_rank": "30/30 = 100%",
+      "interpretation": "Lowering occurrence depth does not solve state replication; both appressed and spreading remain single-lineage states."
+    }
+  },
+  "cross_trait_conclusion": "The three historical traits can now be passed through one common present-environment pipeline. Their ecological evidence is not equivalent: orientation lacks strong simple tip-state separation in the common Japan panel but has a separately established transition-level signal; stickiness has a replicated 6-vs-6 current-niche panel with a precipitation lead; phyllary remains public-data resolution-limited because state replication is inadequate.",
+  "claim_boundary": [
+    "Present-environment correspondence is not adaptation, selection or historical cause.",
+    "Taxon-level authority states are not measured at each occurrence coordinate.",
+    "The BIO12 stickiness rank is one of four frozen climate axes and should not be presented as an unadjusted discovery without its omnibus/multiplicity context.",
+    "Phyllary coverage failure is a resolution result, not evidence of no ecological relationship.",
+    "Japan is a provenance frame for matching the Japan38 phylogeny, not a biological region class."
+  ]
+}
