@@ -1,0 +1,56 @@
+name: Run Chapter 2 three-trait ecology panel v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_chapter2_three_trait_ecology_panel_v1.py"
+      - "data/evidence/chapter2_three_trait_ecology_contract_v1.json"
+      - "data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv"
+      - "data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv"
+      - ".github/workflows/run-chapter2-three-trait-ecology-panel-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: |
+          python -m pip install --disable-pip-version-check numpy pandas requests rasterio
+          python -m pip check
+          python -m py_compile analysis/run_chapter2_three_trait_ecology_panel_v1.py
+      - name: Run frozen three-trait ecology panel
+        run: |
+          mkdir -p /tmp/ch2_three_trait
+          python analysis/run_chapter2_three_trait_ecology_panel_v1.py \
+            --seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --extension data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv \
+            --contract data/evidence/chapter2_three_trait_ecology_contract_v1.json \
+            --out-json /tmp/ch2_three_trait/result.json \
+            --out-taxa /tmp/ch2_three_trait/taxa.csv \
+            | tee /tmp/ch2_three_trait/run.log
+      - name: Validate output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/ch2_three_trait/result.json').read_text())
+          assert x['version']=='chapter2_three_trait_ecology_result_v1'
+          assert set(x['primary'])=={'orientation','phyllary','stickiness'}
+          assert x['environment_variables']==['BIO1','BIO4','BIO12','BIO15']
+          assert 'phyllary_min1' in x['sensitivity']
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-three-trait-ecology-${{ github.run_id }}
+          path: /tmp/ch2_three_trait/
+          if-no-files-found: error
+          retention-days: 90
