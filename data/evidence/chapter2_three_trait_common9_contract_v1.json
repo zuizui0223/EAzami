@@ -1,0 +1,41 @@
+{
+  "version": "chapter2_three_trait_common9_contract_v1",
+  "status_date": "2026-09-08",
+  "purpose": "Evaluate orientation, phyllary posture and involucre stickiness in one trait-blind nine-variable present-environment universe using the same occurrence/QC rules.",
+  "traits": ["orientation", "phyllary", "stickiness"],
+  "environment": {
+    "variables": ["BIO1", "BIO4", "BIO12", "BIO15", "RSDS", "VPD", "WIND", "GSP", "NPP"],
+    "urls": {
+      "BIO1": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio01/1981-2010/CHELSA_bio01_1981-2010_V.2.1.tif",
+      "BIO4": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio04/1981-2010/CHELSA_bio04_1981-2010_V.2.1.tif",
+      "BIO12": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio12/1981-2010/CHELSA_bio12_1981-2010_V.2.1.tif",
+      "BIO15": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio15/1981-2010/CHELSA_bio15_1981-2010_V.2.1.tif",
+      "RSDS": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_rsds_1981-2010_mean_V.2.1.tif",
+      "VPD": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_vpd_mean_1981-2010_V.2.1.tif",
+      "WIND": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_sfcWind_mean_1981-2010_V.2.1.tif",
+      "GSP": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_gsp_1981-2010_V.2.1.tif",
+      "NPP": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_npp_1981-2010_V.2.1.tif"
+    }
+  },
+  "occurrence": {
+    "country": "JP",
+    "role": "provenance frame matching Japan38 nuclear tips; not a biological region class",
+    "minimum_thinned_occurrences_primary": 3,
+    "minimum_thinned_occurrences_phyllary_sensitivity": 1,
+    "max_coordinate_uncertainty_m": 10000,
+    "thin_degrees": 0.1
+  },
+  "inference": {
+    "primary": "nine-dimensional standardized omnibus finite state-label permutation rank within each trait",
+    "secondary": "all nine univariate two-sided exact ranks; Benjamini-Hochberg across all evaluable trait x environment rows",
+    "no_borrowed_direction": "Do not transfer the orientation-specific BIO15/BIO1 sign hypothesis to phyllary or stickiness.",
+    "coverage_rule": "A state represented by one taxon remains lineage-confounded; lowering the occurrence gate does not create biological replication."
+  },
+  "claim_ceiling": [
+    "Present-environment correspondence is not adaptation, selection or historical cause.",
+    "The nine-variable atlas is exploratory across traits; single-axis leads must be reported with the full multiplicity context.",
+    "Taxon-level authority states are not measured at each occurrence coordinate.",
+    "Japan is a provenance frame matching the Japan38 phylogeny, not a biological region class.",
+    "Phyllary coverage failure, if retained, is a resolution result rather than evidence of no ecology."
+  ]
+}
