@@ -1,0 +1,83 @@
+{
+  "version": "chapter2_orientation_regional_scale_contract_v1",
+  "status_date": "2026-09-08",
+  "analysis_role": "Post-result spatial-scale decomposition of the already-fixed orientation transition-regime hypothesis. Reuse the exact (+BIO15,-BIO1) CTMC/Brownian estimator and frozen occurrence assets to ask whether the observed concordance is primarily among Japan/Taiwan regional contexts, within regions, or remains exceptional after preserving region-specific orientation-state frequencies.",
+  "fixed_hypothesis": {
+    "vector": {"chelsa_bio15": 1.0, "chelsa_bio01": -1.0},
+    "no_refitting_of_hypothesis_direction": true,
+    "no_new_environmental_predictors": true,
+    "estimator": "Identical symmetric-CTMC edge-joint posterior x Brownian branch-shift composite used by chapter2_orientation_transition_regime_hypothesis_v1."
+  },
+  "source_results": {
+    "hypothesis": "data/evidence/chapter2_orientation_transition_regime_hypothesis_result_v1.json",
+    "robustness": "data/evidence/chapter2_orientation_transition_regime_robustness_result_v1.json",
+    "coverage": "data/evidence/chapter2_orientation_occurrence_coverage_audit_result_v1.json",
+    "orientation_crosswalk": "data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv"
+  },
+  "panel": {
+    "name": "n5_primary_12taxa",
+    "threshold": 5,
+    "expected_n": 12,
+    "expected_U": 7,
+    "expected_D": 5,
+    "expected_all_count_preserving_maps": 792,
+    "japan": {
+      "taxa": [
+        "Cirsium alpicola",
+        "Cirsium brevicaule",
+        "Cirsium gyojanum",
+        "Cirsium irumtiense",
+        "Cirsium japonicum var. japonicum",
+        "Cirsium kamtschaticum",
+        "Cirsium suffultum",
+        "Cirsium yezoense"
+      ],
+      "expected_n": 8,
+      "expected_U": 5,
+      "expected_D": 3,
+      "expected_maps": 56
+    },
+    "taiwan": {
+      "taxa": [
+        "Cirsium japonicum var. australe",
+        "Cirsium kawakamii",
+        "Cirsium morii",
+        "Cirsium tatakaense"
+      ],
+      "expected_n": 4,
+      "expected_U": 2,
+      "expected_D": 2,
+      "expected_maps": 6
+    },
+    "expected_region_frequency_preserving_maps": 336
+  },
+  "decomposition": {
+    "scale": "Use the n>=5 12-taxon panel because it is the smallest frozen occurrence gate with four Taiwan taxa and eight Japan taxa, allowing an explicit two-region decomposition without adding taxa or occurrence sources.",
+    "standardization": "First z-score each taxon centroid across the full 12-taxon panel exactly as in H1. Then decompose each standardized axis additively into region mean plus taxon deviation from region mean: z_total = z_between_region + z_within_region. Do not z-score the two components again.",
+    "between_region_component": "For each taxon and axis, assign the mean standardized value of its declared region (Japan or Taiwan).",
+    "within_region_component": "For each taxon and axis, subtract its declared region mean from its full-panel standardized value.",
+    "additivity_check": "Require z_total = z_between_region + z_within_region to machine precision for both BIO15 and BIO1."
+  },
+  "tests": {
+    "T0_total_reproduction": "Reproduce the frozen n>=5 H1 total-environment result before interpreting scale decomposition.",
+    "T1_between_region": "Apply the unchanged transition-regime statistic to the between-region environmental component and rank the observed map among all 792 count-preserving maps.",
+    "T2_within_region": "Apply the unchanged transition-regime statistic to the within-region environmental component and rank the observed map among all 792 count-preserving maps.",
+    "T3_region_frequency_preserving_null": "Preserve the observed number of downward states separately in Japan (3/8) and Taiwan (2/4), enumerate all 336 such maps, and rank the observed total, between-region and within-region composite statistics within that constrained universe.",
+    "T4_leave_one_region_out": "Re-run the unchanged panel estimator within Japan alone (8 taxa; 56 maps) and Taiwan alone (4 taxa; 6 maps). Taiwan-only exact ranks are coarse diagnostic bounds because only six maps exist."
+  },
+  "decision_interpretation": {
+    "between_region_dominant": "Between-region component is exceptional under the all-map null while within-region is not, and the full observed total is no longer exceptional under the region-frequency-preserving null.",
+    "regional_composition_not_sufficient": "The full observed total remains exceptional under the region-frequency-preserving null, indicating that region-specific U/D counts alone do not account for the observed concordance.",
+    "within_region_signal_retained": "The within-region component is positive on all six topologies and exceptional under its declared finite-map null.",
+    "mixed_scale": "Both between-region and within-region components retain directional/exceptional structure, or constrained-null results do not support a single dominant scale."
+  },
+  "claim_ceiling": [
+    "This is a post-result scale decomposition, not an independent preregistered replication.",
+    "Japan and Taiwan are the only region classes in the frozen occurrence assets used here; do not generalize the result to all East Asia without new data.",
+    "Region-preserving map fractions are finite conditional ranks, not biological-replicate P values.",
+    "A between-region result does not establish a regional climatic cause; it identifies the spatial scale at which present-niche transition concordance is organized.",
+    "Do not alter the fixed BIO15/BIO1 vector, taxon panel, region assignment, or add predictors after result inspection.",
+    "Do not infer selection, adaptation, historical transition-time climate, or a physiological mediator."
+  ],
+  "execution_trigger": "result_blind_pull_request_execution_20260908"
+}
