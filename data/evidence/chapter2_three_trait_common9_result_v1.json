@@ -1,0 +1,51 @@
+{
+  "version": "chapter2_three_trait_common9_result_v1",
+  "status_date": "2026-09-08",
+  "workflow_provenance": {
+    "run_id": 34208671960,
+    "artifact_id": 10049165416,
+    "artifact_sha256": "b92694b1527fe46856bda972420802dbe7468588d347c10d0dc02e74b5eae502"
+  },
+  "environment_variables": ["BIO1","BIO4","BIO12","BIO15","RSDS","VPD","WIND","GSP","NPP"],
+  "primary": {
+    "orientation": {
+      "n_taxa": 17,
+      "state_counts": {"D": 5, "U": 12},
+      "omnibus_nine_environment_rank": "2138/6188 = 34.55%",
+      "strongest_univariate_rank": "GSP 1005/6188 = 16.24%",
+      "interpretation": "No strong simple static tip-state separation across the common9 environment universe. The separately frozen phylogeny-conditioned transition-level orientation signal remains the stronger ecological result."
+    },
+    "phyllary": {
+      "n_taxa": 4,
+      "state_counts": {"appressed": 1, "ascending": 3},
+      "omnibus_nine_environment_rank": "4/4 = 100%",
+      "resolution": "not_identifiable_as_trait_effect",
+      "sensitivity_min1": "6 taxa: appressed 1, ascending 4, spreading 1; omnibus 28/30 = 93.33%",
+      "interpretation": "Adding five environmental axes does not solve the state-replication bottleneck."
+    },
+    "stickiness": {
+      "n_taxa": 12,
+      "state_counts": {"nonsticky": 6, "sticky": 6},
+      "omnibus_nine_environment_rank": "116/924 = 12.55%",
+      "raw_leads": {
+        "GSP": {"standardized_sticky_minus_nonsticky": 1.2781, "rank": "18/924 = 1.95%", "BH_q_across_27_rows": 0.3214285714},
+        "BIO12": {"standardized_sticky_minus_nonsticky": 1.3110, "rank": "22/924 = 2.38%", "BH_q_across_27_rows": 0.3214285714},
+        "BIO15": {"standardized_sticky_minus_nonsticky": 1.0485, "rank": "70/924 = 7.58%", "BH_q_across_27_rows": 0.6818181818}
+      },
+      "interpretation": "Sticky taxa show a coherent precipitation-related exploratory lead, but the nine-dimensional omnibus is not exceptional and no univariate row survives BH correction across the 27 evaluable trait-by-environment rows."
+    }
+  },
+  "multiplicity": {
+    "family": "27 primary trait x common9 univariate rows",
+    "method": "Benjamini-Hochberg",
+    "supported_rows_q_lt_0_05": 0
+  },
+  "cross_trait_conclusion": "The common9 expansion does not support a single shared abiotic niche axis for the three capitulum traits. Orientation retains its strongest ecological evidence at the transition level; stickiness retains a coherent but exploratory precipitation-related tip-niche lead; phyllary remains resolution-limited. Distinct ecological-interface claims therefore require trait-appropriate evidence rather than forcing all three traits through climate alone.",
+  "claim_boundary": [
+    "Present-environment correspondence is not adaptation, selection or historical cause.",
+    "The common9 analysis is exploratory across traits and all univariate leads are reported with the 27-row multiplicity context.",
+    "Japan is a provenance frame matching the Japan38 phylogeny, not a biological region class.",
+    "Phyllary coverage failure is a resolution result rather than evidence of no ecological relationship.",
+    "The absence of a common9 omnibus signal does not test visitor, antagonist or arthropod-community mechanisms directly."
+  ]
+}
