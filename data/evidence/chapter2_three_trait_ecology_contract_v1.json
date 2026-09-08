@@ -1,0 +1,40 @@
+{
+  "version": "chapter2_three_trait_ecology_contract_v1",
+  "status_date": "2026-09-08",
+  "purpose": "Build one trait-blind present-environment pipeline for orientation, phyllary posture and involucre stickiness using the same occurrence QC, thinning and CHELSA variables.",
+  "traits": ["orientation", "phyllary", "stickiness"],
+  "environment": {
+    "variables": ["BIO1", "BIO4", "BIO12", "BIO15"],
+    "selection_rule": "Use the four CHELSA variables already frozen for Chapter 2 before this cross-trait comparison; do not add or remove predictors after seeing results.",
+    "urls": {
+      "BIO1": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio01/1981-2010/CHELSA_bio01_1981-2010_V.2.1.tif",
+      "BIO4": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio04/1981-2010/CHELSA_bio04_1981-2010_V.2.1.tif",
+      "BIO12": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio12/1981-2010/CHELSA_bio12_1981-2010_V.2.1.tif",
+      "BIO15": "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio15/1981-2010/CHELSA_bio15_1981-2010_V.2.1.tif"
+    }
+  },
+  "occurrence": {
+    "source": "GBIF",
+    "country": "JP",
+    "has_coordinate": true,
+    "occurrence_status": "PRESENT",
+    "max_coordinate_uncertainty_m_primary": 10000,
+    "spatial_thin_degrees": 0.1,
+    "primary_minimum_thinned_occurrences_per_taxon": 3,
+    "phyllary_resolution_sensitivity_minimum": 1,
+    "note": "Japan is the population-provenance frame of the Japan38 nuclear-tip analysis, not a biological region class. No Japan-versus-Taiwan country contrast is used as a biological predictor."
+  },
+  "analysis": {
+    "taxon_summary": "median CHELSA value across thinned occurrences",
+    "trait_test": "For each trait and environment variable, compare observed between-state separation with all unique state-label permutations preserving observed state counts. For multistate phyllary posture use the median pairwise distance between state centroids in standardized environment space as the omnibus statistic.",
+    "primary_rule": "Report complete finite ranks and state coverage. Do not convert coverage failure into a null ecological conclusion.",
+    "cross_trait_rule": "Compare ecological evaluability and finite-rank patterns across all three traits without forcing equal taxon counts or borrowing orientation-specific BIO15/BIO1 direction hypotheses."
+  },
+  "claim_ceiling": [
+    "Present-environment correspondence is not adaptation, selection or historical cause.",
+    "Taxon-level authority states are not measured at each occurrence coordinate.",
+    "Phyllary results with one taxon in a state are resolution-limited even if a finite rank can be computed.",
+    "The one-occurrence phyllary sensitivity is diagnostic only and cannot replace the primary >=3-occurrence gate.",
+    "No country boundary is treated as an ecological region boundary."
+  ]
+}
