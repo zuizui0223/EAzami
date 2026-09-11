@@ -162,4 +162,11 @@ This reframes a common question in phenotypic integration. Rather than asking on
 
 A young *Cirsium* radiation repeatedly reassembled the capitulum from component traits that do not share one synchronized evolutionary history. Orientation, phyllary posture and involucre stickiness each changed repeatedly, but their histories occupy unequal relative lineage depths and do not repeatedly localize to the same branches. Ecological correspondence is likewise representation-dependent: a common static environmental analysis does not recover one shared climatic syndrome, whereas orientation becomes informative when aligned to reconstructed transitions.
 
-The primary contribution is therefore not that capitulum parts have different functions. It is that **repeated evolution within one complex reproductive phenotype is historically stratified**. Recognizable components persist, but their relationships are repeatedly reorganized across lineage depth and branch history.
+The primary contribution is therefore not that capitulum parts have different functions. It is that **repeated evolution within one complex reproductive phenotype is historically stratified**. Recognizable components persist, but their relationships are reorganized across lineage depth and branch history.
+
+## Submission-preparation notes (remove before final manuscript)
+- JEB Research Article maximum: 7,500 words; abstract maximum: 250 words; 4–10 keywords.
+- Initial main-text file must be line-numbered, double-anonymous, and include references plus figures/tables near first citation.
+- Figure legends require `Alt text:` descriptions.
+- AI-assisted code/prose use must be disclosed to the editor and in the manuscript/acknowledgement location required by JEB.
+- Figure architecture and remaining submission gates are frozen in `V9_5_FIGURE_MAP_AND_SUBMISSION_GATE.md`.
