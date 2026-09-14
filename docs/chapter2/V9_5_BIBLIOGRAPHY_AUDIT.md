@@ -1,7 +1,7 @@
 # V9.5 bibliography audit
 
 ## Purpose
-This file freezes the first-pass bibliography synchronization for the active V9.5 organization-first manuscript. It starts from sources that are already linked to frozen EAzami evidence and then verifies bibliographic metadata externally where needed. It is not yet the final JEB-formatted reference list.
+This file freezes the first-pass bibliography synchronization for the active V9.5 organization-first manuscript. It starts from sources already linked to frozen EAzami evidence and verifies bibliographic metadata against publisher/indexed records where possible. It is not yet the final JEB-formatted reference list.
 
 ## Core phylogeny / radiation reference
 
@@ -15,13 +15,11 @@ This file freezes the first-pass bibliography synchronization for the active V9.
   - manuscript role: closest direct capitulum-angle manipulation; nodding vs experimentally erect heads, water/UV-B pollen-vulnerability measurements, achene outcome, no detected static pollinator orientation preference.
   - boundary: Asteraceae analog, not direct *Cirsium* angle causation.
 
-- Ohashi & Yahara (1998), *American Journal of Botany*. DOI: `10.2307/2446309`.
-  - manuscript role: naturally nodding *Cirsium purpuratum* remains compatible with effective legitimate bumblebee visitation.
-  - metadata/title still to be normalized from primary source before final bibliography.
+- Ohashi, K. & Yahara, T. (1998). **Effects of variation in flower number on pollinator visits in Cirsium purpuratum (Asteraceae).** *American Journal of Botany* 85:219–224. DOI: `10.2307/2446309`.
+  - manuscript role: naturally nodding *C. purpuratum* supports effective legitimate bumblebee visitation; used only as within-genus pollination context, not as angle manipulation.
 
-- Makino et al. (2007), *Functional Ecology*. DOI: `10.1111/j.1365-2435.2006.01211.x`.
-  - manuscript role: within-genus nodding-capitulum pollination context.
-  - metadata/title still to be normalized from primary source before final bibliography.
+- Makino, T.T., Ohashi, K. & Sakai, S. (2007). **How do floral display size and the density of surrounding flowers influence the likelihood of bumble bee revisitation to a plant?** *Functional Ecology* 21:87–95. DOI: `10.1111/j.1365-2435.2006.01211.x`.
+  - manuscript role: within-genus floral-display / bumblebee visitation context for *Cirsium purpuratum*.
 
 ## Phyllary / mechanical-access evidence
 
@@ -29,22 +27,21 @@ This file freezes the first-pass bibliography synchronization for the active V9.
   - manuscript role: close-Cardueae structural manipulation linking involucral spines to illegitimate visitor access and filled-seed outcome.
   - boundary: not a focal *Cirsium* phyllary-posture manipulation.
 
-- Gijsman, Havens & Vitt (2020). DOI: `10.1016/j.gecco.2020.e00945`.
-  - manuscript role: *Cirsium pitcheri* seed-predator access/oviposition at phyllaries and strong mature-seed loss.
-  - metadata/title still to be normalized from primary source before final bibliography.
+- Gijsman, F., Havens, K. & Vitt, P. (2020). **Effect of capitulum position and weevil infestation on seed production of threatened monocarpic perennial, Cirsium pitcheri.** *Global Ecology and Conservation* 22:e00945. DOI: `10.1016/j.gecco.2020.e00945`.
+  - manuscript role: direct *Cirsium* evidence connecting seed-predator infestation / phyllary-associated oviposition scars to mature-seed loss.
+  - boundary: antagonist-to-fitness evidence, not direct phyllary-posture manipulation.
 
 ## Stickiness evidence
 
 - Thomas, P.A. (2003). **Sticky Exudates on the Inflorescences of Cirsium discolor (Asteraceae) and Penstemon digitalis (Scrophulariaceae) as Possible Defense Against Seed Predators.** *The Great Lakes Entomologist* 36:112–121. DOI: `10.22543/0090-0222.2085`.
-  - manuscript role: direct *Cirsium* stickiness-neutralization experiment with a null net seed-production result in the later test.
+  - manuscript role: direct *Cirsium* stickiness-neutralization experiment with no decrease in seed production after neutralization in the later test.
 
-- Thomas, P.A. (2007). DOI: `10.22543/0090-0222.2188`.
-  - manuscript role: arthropod-guild contact/bypass/deterrence on sticky *Cirsium* inflorescences.
-  - metadata/title still to be normalized from primary source before final bibliography.
+- Thomas, P.A. (2007). **Arthropods Utilizing Sticky Inflorescences of Cirsium discolor and Penstemon digitalis.** *The Great Lakes Entomologist* 40:169–176. DOI: `10.22543/0090-0222.2188`.
+  - manuscript role: direct arthropod-guild observations showing that pollinators can avoid the sticky traps, some seed predators bypass them, and ants/aphids are deterred.
 
-- Willson, Anderson & Thomas (1983).
-  - manuscript role: earlier direct sticky-exudate occlusion comparison showing context-dependent effects across *Cirsium* systems.
-  - full bibliographic metadata still to be recovered before final bibliography.
+- Willson, M.F., Anderson, P.K. & Thomas, P.A. (1983). **Bracteal Exudates in Two Cirsium Species as Possible Deterrents to Insect Consumers of Seeds.** *The American Midland Naturalist* 110:212–214.
+  - manuscript role: direct experimental occlusion of sticky bracteal exudates; increased seed predation in *C. discolor* in one context, but no treatment effect in *C. flodmanii* in tested years.
+  - interpretation: key evidence for context dependence rather than a universal defensive benefit.
 
 ## Cirsium reproductive-herbivory synthesis
 
