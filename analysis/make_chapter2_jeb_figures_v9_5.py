@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the V9.5 organization-first JEB figure package from frozen evidence.
-
-The script deliberately prioritizes the direct historical estimands used by V9.5:
-recurrence, paired relative-depth ordering, shared-transition localization, and
-representation-dependent ecology. It does not plot historical-climate nulls in the
-main figure package.
-"""
+"""Generate the V9.5 organization-first JEB figure package from frozen evidence."""
 from __future__ import annotations
 
 import argparse
@@ -130,20 +124,15 @@ def figure1(out: Path, hist: dict) -> list[Path]:
 
 
 def figure2(out: Path, depth: dict, coverage: dict) -> list[Path]:
-    fig, axes = plt.subplots(1, 3, figsize=(11.2, 3.6), gridspec_kw={"width_ratios": [1.45, 1.0, 1.05]})
+    fig, axes = plt.subplots(1, 3, figsize=(12.2, 3.8), gridspec_kw={"width_ratios": [1.45, 1.05, 1.15]})
 
     ax = axes[0]
     pairs = depth["pairwise_results"]
-    labels = []
-    med = []
-    lo = []
-    hi = []
+    labels, med, lo, hi = [], [], [], []
     for r in pairs:
         labels.append(f"{r['deeper_candidate']} − {r['shallower_candidate']}")
         d = r["lower_bound_difference_deeper_minus_shallower"]
-        med.append(d["median"])
-        lo.append(d["q05"])
-        hi.append(d["q95"])
+        med.append(d["median"]); lo.append(d["q05"]); hi.append(d["q95"])
     y = np.arange(len(labels))[::-1]
     ax.axvline(0, color=DARK, lw=0.8)
     for yy, m, l, h in zip(y, med, lo, hi):
@@ -155,34 +144,36 @@ def figure2(out: Path, depth: dict, coverage: dict) -> list[Path]:
     panel(ax, "a")
 
     ax = axes[1]
-    names = ["Phyllary <\nstickiness", "Phyllary <\norientation", "Orientation <\nstickiness", "Complete\nordering"]
+    names = ["P < S", "P < O", "O < S", "P < O < S"]
     vals = [1000, 993, 905, depth["complete_lower_bound_ordering"]["count"]]
-    den = [1000, 1000, 1000, 1000]
-    pct = np.array(vals) / np.array(den) * 100
-    ax.bar(range(4), pct, color=[TEAL, TEAL, GOLD, BLUE], alpha=0.9)
-    ax.set_xticks(range(4), names)
-    ax.set_ylim(0, 105)
-    ax.set_ylabel("Topology sensitivity (%)")
+    pct = np.array(vals) / 10.0
+    y2 = np.arange(4)[::-1]
+    ax.barh(y2, pct, color=[TEAL, TEAL, GOLD, BLUE], alpha=0.9)
+    ax.set_yticks(y2, names)
+    ax.set_xlim(0, 105)
+    ax.set_xlabel("Topology sensitivity (%)")
     ax.set_title("Central ordering is stable")
-    for i, (v, d) in enumerate(zip(vals, den)):
-        ax.text(i, pct[i] + 2, f"{v}/{d}", ha="center", fontsize=7.5)
+    for yy, p, v in zip(y2, pct, vals):
+        ax.text(min(p + 1.2, 101.5), yy, f"{v}/1000", va="center", fontsize=7.5)
+    ax.text(0.5, -0.24, "P = phyllary, O = orientation, S = stickiness", transform=ax.transAxes, ha="center", fontsize=7.1, color=MID)
     panel(ax, "b")
 
     ax = axes[2]
     comp = {r["comparison"]: r for r in coverage["comparison_results"]}
-    labels = ["vs orientation\nmatched median", "vs stickiness\nmatched median", "vs orientation\nmatched q05", "vs stickiness\nmatched q05"]
+    labels = ["orientation\nmatched median", "stickiness\nmatched median", "orientation\nmatched q05", "stickiness\nmatched q05"]
     vals = [
         100 * comp["phyllary_lt_orientation_median"]["fraction"],
         100 * comp["phyllary_lt_stickiness_5_5_median"]["fraction"],
         100 * comp["phyllary_lt_orientation_q05"]["fraction"],
         100 * comp["phyllary_lt_stickiness_5_5_q05"]["fraction"],
     ]
-    ax.barh(np.arange(4)[::-1], vals, color=[TEAL, TEAL, MID, MID], alpha=0.9)
-    ax.set_yticks(np.arange(4)[::-1], labels)
+    y3 = np.arange(4)[::-1]
+    ax.barh(y3, vals, color=[TEAL, TEAL, MID, MID], alpha=0.9)
+    ax.set_yticks(y3, labels)
     ax.set_xlim(0, 100)
     ax.set_xlabel("Selected topologies (%)")
     ax.set_title("Coverage-matched sensitivity")
-    ax.text(0.5, -0.25, "Central ordering retained; strict tails overlap", transform=ax.transAxes, ha="center", fontsize=7.2, color=MID)
+    ax.text(0.5, -0.24, "Central ordering retained; strict tails overlap", transform=ax.transAxes, ha="center", fontsize=7.1, color=MID)
     panel(ax, "c")
 
     fig.suptitle("Figure 2. Repeated histories are stratified across unequal evolutionary depths", fontsize=11, y=1.02)
@@ -194,21 +185,12 @@ def figure3(out: Path, fdt: dict, hist: dict) -> list[Path]:
     aware = cm["branch_length_aware_ml"]
     topo = cm["topology_only_equal_branch_sensitivity"]
     pairs = ["Orientation–phyllary", "Orientation–stickiness", "Phyllary–stickiness"]
-    aware_vals = [
-        aware["orientation_phyllary_excess_rho"],
-        aware["orientation_stickiness_excess_rho"],
-        aware["phyllary_stickiness_excess_rho"],
-    ]
-    topo_vals = [
-        topo["orientation_phyllary_ml_rho"],
-        topo["orientation_stickiness_ml_rho"],
-        topo["phyllary_stickiness_ml_rho"],
-    ]
+    aware_vals = [aware["orientation_phyllary_excess_rho"], aware["orientation_stickiness_excess_rho"], aware["phyllary_stickiness_excess_rho"]]
+    topo_vals = [topo["orientation_phyllary_ml_rho"], topo["orientation_stickiness_ml_rho"], topo["phyllary_stickiness_ml_rho"]]
 
     fig, axes = plt.subplots(1, 2, figsize=(9.4, 3.7), gridspec_kw={"width_ratios": [1.55, 0.85]})
     ax = axes[0]
-    x = np.arange(3)
-    w = 0.34
+    x = np.arange(3); w = 0.34
     ax.axhline(0, color=DARK, lw=0.8)
     ax.bar(x - w/2, aware_vals, width=w, color=BLUE, label="branch-length-aware")
     ax.bar(x + w/2, topo_vals, width=w, color=GOLD, label="equal-branch topology-only")
@@ -218,8 +200,7 @@ def figure3(out: Path, fdt: dict, hist: dict) -> list[Path]:
     ax.legend(frameon=False, fontsize=7.5)
     panel(ax, "a")
 
-    ax = axes[1]
-    ax.axis("off")
+    ax = axes[1]; ax.axis("off")
     ax.add_patch(plt.Rectangle((0.08, 0.48), 0.84, 0.34, facecolor=PALE, edgecolor=DARK, transform=ax.transAxes))
     ax.text(0.5, 0.69, "0 / 3", transform=ax.transAxes, ha="center", va="center", fontsize=26, fontweight="bold", color=RED)
     ax.text(0.5, 0.56, "trait pairs pass the robust\nshared-localization rule", transform=ax.transAxes, ha="center", va="center", fontsize=8)
@@ -232,24 +213,18 @@ def figure3(out: Path, fdt: dict, hist: dict) -> list[Path]:
 
 
 def _parse_fraction(text: str) -> float:
-    left = text.split("=")[0].strip()
-    a, b = left.split("/")
+    left = text.split("=")[0].strip(); a, b = left.split("/")
     return 100 * float(a) / float(b)
 
 
 def figure4(out: Path, common9: dict, claims: dict) -> list[Path]:
-    fig, axes = plt.subplots(1, 3, figsize=(11.2, 3.7), gridspec_kw={"width_ratios": [1.0, 1.25, 1.05]})
+    fig, axes = plt.subplots(1, 3, figsize=(12.6, 3.9), gridspec_kw={"width_ratios": [1.0, 1.25, 1.25]})
 
     ax = axes[0]
     labels = ["Orientation", "Phyllary", "Stickiness"]
-    static_texts = [
-        common9["primary"]["orientation"]["omnibus_nine_environment_rank"],
-        common9["primary"]["phyllary"]["omnibus_nine_environment_rank"],
-        common9["primary"]["stickiness"]["omnibus_nine_environment_rank"],
-    ]
+    static_texts = [common9["primary"]["orientation"]["omnibus_nine_environment_rank"], common9["primary"]["phyllary"]["omnibus_nine_environment_rank"], common9["primary"]["stickiness"]["omnibus_nine_environment_rank"]]
     vals = [_parse_fraction(x) for x in static_texts]
-    cols = [BLUE, MID, TEAL]
-    ax.bar(range(3), vals, color=cols, alpha=0.9)
+    ax.bar(range(3), vals, color=[BLUE, MID, TEAL], alpha=0.9)
     ax.set_xticks(range(3), labels, rotation=18)
     ax.set_ylabel("Maps at least as extreme (%)")
     ax.set_title("Common9 static state separation")
@@ -271,8 +246,7 @@ def figure4(out: Path, common9: dict, claims: dict) -> list[Path]:
         ax.text(i, v + 0.2, t.split("=")[0].strip(), ha="center", fontsize=7.5)
     panel(ax, "b")
 
-    ax = axes[2]
-    ax.axis("off")
+    ax = axes[2]; ax.axis("off")
     h2 = claims["orientation_transition_regime"]["h2"]
     h3 = claims["orientation_transition_regime"]["h3"]
     lines = [
@@ -281,12 +255,12 @@ def figure4(out: Path, common9: dict, claims: dict) -> list[Path]:
         ("Single-taxon deletions", "9/9 direction retained" if h3["forward_and_reverse_positive_all_deletions"] else "not retained"),
         ("Exact exceptionality", h3["exact_exceptionality_pass"]),
     ]
-    y = 0.82
+    y = 0.83
     for label, value in lines:
-        ax.text(0.05, y, label, transform=ax.transAxes, fontsize=8, color=MID)
-        ax.text(0.95, y, value, transform=ax.transAxes, ha="right", fontsize=8.5, fontweight="bold")
-        y -= 0.17
-    ax.text(0.5, 0.07, "Ecological signal depends on phenotype representation", transform=ax.transAxes, ha="center", fontsize=8.5, fontweight="bold")
+        ax.text(0.04, y, label, transform=ax.transAxes, fontsize=7.5, color=MID, va="center")
+        ax.text(0.98, y, value, transform=ax.transAxes, ha="right", fontsize=8.1, fontweight="bold", va="center")
+        y -= 0.18
+    ax.text(0.5, 0.06, "Ecological signal depends on\nphenotype representation", transform=ax.transAxes, ha="center", fontsize=8.3, fontweight="bold")
     panel(ax, "c")
 
     fig.suptitle("Figure 4. Ecological correspondence is weak in static state space but informative for orientation transitions", fontsize=11, y=1.02)
@@ -294,15 +268,13 @@ def figure4(out: Path, common9: dict, claims: dict) -> list[Path]:
 
 
 def main() -> None:
-    a = parse_args()
-    style()
+    a = parse_args(); style()
     hist = load_json("chapter2_historical_differentiation_final_summary_v1.json")
     depth = load_json("chapter2_depth_ordering_robustness_result_v1.json")
     coverage = load_json("chapter2_depth_coverage_matched_sensitivity_result_v1.json")
     common9 = load_json("chapter2_three_trait_common9_result_v1.json")
     fdt = load_json("fdt_multitrait_execution_readiness_v2.json")
     claims = load_json("chapter2_current_claims_h1_h4_v1.json")
-
     outputs: list[Path] = []
     outputs += figure1(a.output_dir, hist)
     outputs += figure2(a.output_dir, depth, coverage)
