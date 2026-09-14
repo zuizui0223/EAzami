@@ -7,6 +7,7 @@ on:
       - 'docs/chapter2/V9_5_FIGURE_MAP_AND_SUBMISSION_GATE.md'
       - 'docs/chapter2/V9_5_BIBLIOGRAPHY_AUDIT.md'
       - 'analysis/make_chapter2_jeb_figures_v9_5.py'
+      - 'analysis/validate_manuscript_jeb_v9_5.py'
       - '.github/workflows/validate-chapter2-jeb-v9-5.yml'
       - 'data/evidence/chapter2_historical_differentiation_final_summary_v1.json'
       - 'data/evidence/chapter2_depth_ordering_robustness_result_v1.json'
@@ -24,8 +25,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Compile V9.5 figure generator
-        run: python -m py_compile analysis/make_chapter2_jeb_figures_v9_5.py
+      - name: Compile V9.5 scripts
+        run: python -m py_compile analysis/make_chapter2_jeb_figures_v9_5.py analysis/validate_manuscript_jeb_v9_5.py
+      - name: Validate V9.5 manuscript and evidence synchronization
+        run: python analysis/validate_manuscript_jeb_v9_5.py
       - name: Install figure dependencies
         run: python -m pip install --upgrade pip numpy matplotlib
       - name: Generate V9.5 figures
