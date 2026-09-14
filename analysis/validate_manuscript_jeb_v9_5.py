@@ -88,10 +88,13 @@ def main() -> None:
     for token in ("16/792 (2.02%)", "19/1,716 (1.11%)", "4/126 (3.17%)", "3/126 (2.38%)", "3/9"):
         require(text, token)
 
+    # Catch affirmative overclaims without rejecting explicit boundary statements such as
+    # "not interpreted as independent adaptive origins".
     for bad in (
-        "independent adaptive origins",
         "independent origins were demonstrated",
+        "we demonstrate independent adaptive origins",
         "adaptation was demonstrated",
+        "we demonstrate adaptation",
         "BIO15 causes orientation",
         "BIO1 causes orientation",
         "phyllary has no ecological relationship",
@@ -99,6 +102,9 @@ def main() -> None:
         "relative lineage depth is calendar time",
     ):
         forbid(text, bad)
+    # Explicit claim-boundary language must remain present.
+    require(text, "not interpreted as counts of independent adaptive origins")
+    require(text, "not the historical selective cause")
 
     for token in ("Figure 1", "Figure 2", "Figure 3", "Figure 4", "0/3", "1000/1000", "coverage-matched"):
         require(fig, token)
