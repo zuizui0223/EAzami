@@ -1,0 +1,45 @@
+name: Validate Chapter 2 JEB V9.5
+
+on:
+  pull_request:
+    paths:
+      - 'docs/chapter2/MANUSCRIPT_JEB_V9_5_ORGANIZATION_SPINE.md'
+      - 'docs/chapter2/V9_5_FIGURE_MAP_AND_SUBMISSION_GATE.md'
+      - 'docs/chapter2/V9_5_BIBLIOGRAPHY_AUDIT.md'
+      - 'analysis/make_chapter2_jeb_figures_v9_5.py'
+      - '.github/workflows/validate-chapter2-jeb-v9-5.yml'
+      - 'data/evidence/chapter2_historical_differentiation_final_summary_v1.json'
+      - 'data/evidence/chapter2_depth_ordering_robustness_result_v1.json'
+      - 'data/evidence/chapter2_depth_coverage_matched_sensitivity_result_v1.json'
+      - 'data/evidence/chapter2_three_trait_common9_result_v1.json'
+      - 'data/evidence/fdt_multitrait_execution_readiness_v2.json'
+      - 'data/evidence/chapter2_current_claims_h1_h4_v1.json'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile V9.5 figure generator
+        run: python -m py_compile analysis/make_chapter2_jeb_figures_v9_5.py
+      - name: Install figure dependencies
+        run: python -m pip install --upgrade pip numpy matplotlib
+      - name: Generate V9.5 figures
+        run: python analysis/make_chapter2_jeb_figures_v9_5.py --output-dir /tmp/figures_v9_5
+      - name: Check four PNG and four PDF figures
+        run: |
+          test "$(find /tmp/figures_v9_5 -maxdepth 1 -name '*.png' | wc -l)" -eq 4
+          test "$(find /tmp/figures_v9_5 -maxdepth 1 -name '*.pdf' | wc -l)" -eq 4
+          test -s /tmp/figures_v9_5/figure1_repeated_components.png
+          test -s /tmp/figures_v9_5/figure2_depth_ordering.png
+          test -s /tmp/figures_v9_5/figure3_shared_localization.png
+          test -s /tmp/figures_v9_5/figure4_representation_dependent_ecology.png
+      - name: Upload V9.5 figure package
+        uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-jeb-v9-5-figures
+          path: /tmp/figures_v9_5
