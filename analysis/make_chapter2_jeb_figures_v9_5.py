@@ -242,13 +242,19 @@ def figure4(out: Path, common9: dict, claims: dict) -> list[Path]:
 
     ax = axes[0]
     labels = ["Orientation", "Phyllary", "Stickiness"]
-    vals = [34.55, 100.0, 12.55]
+    static_texts = [
+        common9["primary"]["orientation"]["omnibus_nine_environment_rank"],
+        common9["primary"]["phyllary"]["omnibus_nine_environment_rank"],
+        common9["primary"]["stickiness"]["omnibus_nine_environment_rank"],
+    ]
+    vals = [_parse_fraction(x) for x in static_texts]
     cols = [BLUE, MID, TEAL]
     ax.bar(range(3), vals, color=cols, alpha=0.9)
     ax.set_xticks(range(3), labels, rotation=18)
     ax.set_ylabel("Maps at least as extreme (%)")
     ax.set_title("Common9 static state separation")
-    ax.text(1, 86, "resolution-limited\n(3:1 states)", ha="center", fontsize=7.2, color=DARK)
+    ph_counts = common9["primary"]["phyllary"]["state_counts"]
+    ax.text(1, max(8, vals[1] - 14), f"resolution-limited\n({ph_counts['ascending']}:{ph_counts['appressed']} states)", ha="center", fontsize=7.2, color=DARK)
     panel(ax, "a")
 
     ax = axes[1]
@@ -303,7 +309,7 @@ def main() -> None:
     outputs += figure3(a.output_dir, fdt, hist)
     outputs += figure4(a.output_dir, common9, claims)
     for p in outputs:
-        print(p.relative_to(ROOT))
+        print(p)
 
 
 if __name__ == "__main__":
