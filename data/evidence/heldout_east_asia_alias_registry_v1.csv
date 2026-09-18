@@ -1,0 +1,16 @@
+analysis_taxon,query_name,alias_status,reason
+Cirsium lidjiangense,Cirsium lidjiangense,admit_exact,Exact source concept.
+Cirsium schantarense,Cirsium schantarense,admit_exact,Exact source concept.
+Cirsium schantarense,Cirsium pendulum var. oligocephalum,deny_alias,Could contaminate the frozen discovery C. pendulum concept.
+Cirsium fangii,Cirsium fangii,admit_exact,Exact source concept.
+Cirsium reflexiphyllarium,Cirsium reflexiphyllarium,admit_exact,Exact 2026 species only.
+Cirsium reflexiphyllarium,Cirsium schantarense,deny_historical_misidentification,The new species was historically confused with this taxon; records are not reassigned without specimen redetermination.
+Cirsium reflexiphyllarium,Cirsium pendulum,deny_historical_misidentification,The new species was historically confused with this discovery taxon.
+Cirsium rubricorollatum,Cirsium rubricorollatum,admit_exact,Exact 2026 species only.
+Cirsium vlassovianum,Cirsium vlassovianum,admit_exact,Exact source concept.
+Cirsium vernonioides,Cirsium vernonioides,admit_exact,Exact source concept.
+Cirsium muliense,Cirsium muliense,admit_exact,Exact source concept.
+Cirsium argyracanthum,Cirsium argyracanthum,admit_exact,Exact source concept.
+Cirsium tianmushanicum,Cirsium tianmushanicum,admit_exact,Exact source concept.
+Cirsium jilongense,Cirsium jilongense,admit_exact,Exact 2026 species only.
+Cirsium setidens,Cirsium setidens,admit_exact,Exact accepted Korean concept.
