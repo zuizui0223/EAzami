@@ -1,0 +1,111 @@
+{
+  "version": "chapter2_ecological_reassortment_confirmation_contract_v1",
+  "status_date": "2026-09-18",
+  "status": "FROZEN_BEFORE_HELDOUT_ECOLOGICAL_OUTCOME_EXTRACTION",
+  "manuscript_question": "Does ecological diversification act on the capitulum as one coordinated syndrome, or are component traits repeatedly reassorted across distinct ecological interfaces?",
+  "discovery_is_not_prospective": true,
+  "heldout_scope": {
+    "primary_regions": [
+      "Korean Peninsula",
+      "mainland China"
+    ],
+    "optional_regions": [
+      "other East Asian taxa outside frozen Japan–Taiwan discovery concepts"
+    ],
+    "exclude_discovery_concepts_and_synonyms": true,
+    "freeze_taxon_and_trait_inventory_before_climate": true,
+    "minimum_taxa_per_compared_state_after_occurrence_gate": 2
+  },
+  "hypotheses": {
+    "orientation": {
+      "status": "confirmatory",
+      "primary_components": {
+        "BIO15": "downward_minus_upward > 0",
+        "BIO1": "downward_minus_upward < 0"
+      },
+      "primary_composite": "S_O = (z(BIO15) - z(BIO1)) / sqrt(2)",
+      "predicted_composite_direction": "downward > upward",
+      "alpha": 0.05,
+      "test": "one_sided_randomization_or_permutation",
+      "pass_requires": [
+        "composite effect > 0",
+        "BIO15 D-U > 0",
+        "BIO1 D-U < 0",
+        "one-sided composite p < 0.05"
+      ]
+    },
+    "stickiness": {
+      "status": "confirmatory",
+      "primary_endpoint": {
+        "BIO12": "sticky_minus_nonsticky > 0"
+      },
+      "secondary_directional_endpoint": {
+        "GSP": "sticky_minus_nonsticky > 0"
+      },
+      "exploratory_only": [
+        "BIO15"
+      ],
+      "alpha": 0.05,
+      "test": "one_sided_randomization_or_permutation",
+      "pass_requires": [
+        "BIO12 sticky-nonsticky > 0",
+        "one-sided BIO12 p < 0.05"
+      ]
+    },
+    "phyllary": {
+      "status": "no_confirmatory_abiotic_hypothesis",
+      "climate_results": "exploratory_only",
+      "mechanistic_hypothesis": "validated phyllary/spine architecture may alter antagonist access with possible pollinator-access cost"
+    }
+  },
+  "analysis_order": [
+    "freeze exact held-out taxon eligibility",
+    "freeze trait-state provenance without climate inspection",
+    "freeze alias registry",
+    "freeze occurrence QC, thinning and minimum-N gate",
+    "freeze exact analysis script",
+    "extract held-out occurrence/environment outcomes",
+    "execute primary tests once",
+    "run predeclared ancestry-aware and region-stratified robustness analyses if available"
+  ],
+  "claim_boundary": {
+    "allowed_if_supported": [
+      "historical reassortment of component traits",
+      "trait-specific ecological correspondence",
+      "out-of-sample recurrence of preregistered ecological directions",
+      "consistency with partially independent ecological interfaces"
+    ],
+    "prohibited_from_this_evidence_alone": [
+      "adaptation",
+      "direct natural selection",
+      "convergence",
+      "historical climatic causation",
+      "proven antagonist mechanism for phyllary posture",
+      "universal defensive mechanism for stickiness",
+      "established modular evolvability"
+    ]
+  },
+  "occurrence": {
+    "provenance_frame": [
+      "CN",
+      "KR"
+    ],
+    "provenance_note": "Country code is an occurrence provenance/QC frame, not a biological region class.",
+    "minimum_thinned_occurrences_primary": 3,
+    "max_coordinate_uncertainty_m": 10000,
+    "thin_degrees": 0.1,
+    "deduplicate_exact_coordinates": true,
+    "deterministic_thinning": true,
+    "environment_variables": [
+      "BIO1",
+      "BIO4",
+      "BIO12",
+      "BIO15",
+      "RSDS",
+      "VPD",
+      "WIND",
+      "GSP",
+      "NPP"
+    ]
+  }
+}

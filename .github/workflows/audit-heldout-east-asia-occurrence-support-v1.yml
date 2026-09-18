@@ -1,0 +1,29 @@
+name: Held-out occurrence support audit
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/heldout_east_asia_trait_state_audit_v1.csv"
+      - "data/evidence/chapter2_ecological_reassortment_confirmation_contract_v1.json"
+      - "analysis/audit_heldout_east_asia_occurrence_support_v1.py"
+      - ".github/workflows/audit-heldout-east-asia-occurrence-support-v1.yml"
+  workflow_dispatch:
+
+jobs:
+  occurrence-support:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit GBIF occurrence support without climate extraction
+        run: |
+          python analysis/audit_heldout_east_asia_occurrence_support_v1.py \
+            --traits data/evidence/heldout_east_asia_trait_state_audit_v1.csv \
+            --contract data/evidence/chapter2_ecological_reassortment_confirmation_contract_v1.json \
+            --out /tmp/heldout_east_asia_occurrence_support_v1.csv
+          echo "===== occurrence support ====="
+          cat /tmp/heldout_east_asia_occurrence_support_v1.csv
+      - uses: actions/upload-artifact@v4
+        with:
+          name: heldout-east-asia-occurrence-support-v1
+          path: /tmp/heldout_east_asia_occurrence_support_v1.csv
