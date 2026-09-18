@@ -8,6 +8,7 @@ on:
       - 'docs/chapter2/JEB_V7_TITLE_PAGE_WORKING.md'
       - 'docs/chapter2/JEB_COVER_LETTER_TEMPLATE_V3.md'
       - 'analysis/build_chapter2_jeb_docx_v7.py'
+      - 'analysis/normalize_chapter2_v7_docx_math.py'
       - 'analysis/build_chapter2_jeb_docx_v1.py'
       - 'analysis/make_chapter2_jeb_figure2_v7.py'
       - 'analysis/make_chapter2_jeb_figure3_v7.py'
@@ -35,6 +36,7 @@ jobs:
       - name: Compile V7 production scripts
         run: |
           python -m py_compile analysis/build_chapter2_jeb_docx_v7.py
+          python -m py_compile analysis/normalize_chapter2_v7_docx_math.py
           python -m py_compile analysis/make_chapter2_jeb_figure2_v7.py
           python -m py_compile analysis/make_chapter2_jeb_figure3_v7.py
           python -m py_compile analysis/make_chapter2_jeb_figures145_v7_v3.py
@@ -57,6 +59,8 @@ jobs:
           test -s /tmp/figures_v7/figure5_v7_identifiability_ceiling.png
       - name: Build V7 submission DOCX package
         run: python analysis/build_chapter2_jeb_docx_v7.py --figure-dir /tmp/figures_v7 --output-dir /tmp/submission_package_v7
+      - name: Normalize Word-readable math in anonymous main
+        run: python analysis/normalize_chapter2_v7_docx_math.py /tmp/submission_package_v7/Chapter2_JEB_Anonymous_Manuscript_V7.docx
       - name: Structural DOCX checks
         run: |
           python - <<'PY'
@@ -70,10 +74,15 @@ jobs:
           with zipfile.ZipFile(out/expected[0]) as z:
               doc=etree.fromstring(z.read('word/document.xml'))
               ns={'w':'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
-              text='\n'.join(doc.xpath('//w:t/text()',namespaces=ns)).lower()
-              assert 'github.com/zuizui0223' not in text and 'zuizui0223' not in text
+              text='\n'.join(doc.xpath('//w:t/text()',namespaces=ns))
+              low=text.lower()
+              assert 'github.com/zuizui0223' not in low and 'zuizui0223' not in low
               assert len(doc.xpath('//w:drawing',namespaces=ns))==5
               sect=doc.xpath('//w:sectPr',namespaces=ns); assert sect and sect[-1].xpath('./w:lnNumType',namespaces=ns)
+              for raw in ('\\[','\\]','\\frac','\\binom','\\(','\\)'):
+                  assert raw not in text, raw
+              assert 'D = (N − d)/(N − 1).' in text
+              assert 'C(9, 4) = 126' in text
           print('V7 DOCX structural checks: ok')
           PY
       - name: Upload V7 DOCX package
