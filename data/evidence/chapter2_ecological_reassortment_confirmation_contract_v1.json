@@ -13,7 +13,8 @@
       "other East Asian taxa outside frozen Japan–Taiwan discovery concepts"
     ],
     "exclude_discovery_concepts_and_synonyms": true,
-    "freeze_taxon_and_trait_inventory_before_climate": true
+    "freeze_taxon_and_trait_inventory_before_climate": true,
+    "minimum_taxa_per_compared_state_after_occurrence_gate": 2
   },
   "hypotheses": {
     "orientation": {
