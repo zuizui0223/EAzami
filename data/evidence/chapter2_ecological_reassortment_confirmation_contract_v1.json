@@ -83,5 +83,28 @@
       "universal defensive mechanism for stickiness",
       "established modular evolvability"
     ]
+  },
+  "occurrence": {
+    "provenance_frame": [
+      "CN",
+      "KR"
+    ],
+    "provenance_note": "Country code is an occurrence provenance/QC frame, not a biological region class.",
+    "minimum_thinned_occurrences_primary": 3,
+    "max_coordinate_uncertainty_m": 10000,
+    "thin_degrees": 0.1,
+    "deduplicate_exact_coordinates": true,
+    "deterministic_thinning": true,
+    "environment_variables": [
+      "BIO1",
+      "BIO4",
+      "BIO12",
+      "BIO15",
+      "RSDS",
+      "VPD",
+      "WIND",
+      "GSP",
+      "NPP"
+    ]
   }
 }
