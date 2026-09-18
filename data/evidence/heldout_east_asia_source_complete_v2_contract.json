@@ -1,0 +1,78 @@
+{
+  "version": "heldout_east_asia_source_complete_expansion_v2",
+  "status_date": "2026-09-18",
+  "status": "FROZEN_BEFORE_V2_TRAIT_CENSUS_AND_ENVIRONMENT",
+  "parent_v1_result": "data/evidence/heldout_east_asia_occurrence_support_v1.csv",
+  "source_census": {
+    "china": "complete current Flora of China Cirsium treatment for mainland-China concepts",
+    "korea": "complete selected NIBR national flora/taxonomic Cirsium lane",
+    "occurrence_blind": true,
+    "environment_blind": true,
+    "exclude_discovery_concepts_and_synonyms": true
+  },
+  "orientation_ontology": {
+    "downward_or_nodding": [
+      "explicit nodding",
+      "explicit pendulous/hanging",
+      "explicit downward"
+    ],
+    "upward_or_erect": [
+      "explicit erect",
+      "explicit upright"
+    ],
+    "exclude": [
+      "erect or nodding",
+      "nodding to erect",
+      "± nodding",
+      "sometimes/rarely nodding without stable state",
+      "lateral/oblique not safely binary",
+      "no explicit orientation"
+    ]
+  },
+  "stickiness_ontology": {
+    "sticky": [
+      "explicit sticky",
+      "explicit glutinous",
+      "explicit adhesive"
+    ],
+    "nonsticky": [
+      "explicit nonsticky",
+      "explicit non-glutinous",
+      "explicit not adhesive"
+    ],
+    "forbidden_inference": [
+      "resinous gland alone",
+      "dark gland alone"
+    ]
+  },
+  "occurrence_qc": {
+    "provenance_country_codes": [
+      "CN",
+      "KR"
+    ],
+    "coordinate_uncertainty_required": true,
+    "max_coordinate_uncertainty_m": 10000,
+    "deduplicate_exact_coordinates": true,
+    "thin_degrees": 0.1,
+    "minimum_thinned_occurrences_per_taxon": 3,
+    "minimum_taxa_per_state": 2
+  },
+  "ecological_test": {
+    "orientation": {
+      "primary_composite": "S_O = (z(BIO15) - z(BIO1)) / sqrt(2)",
+      "signs": {
+        "BIO15": "D-U > 0",
+        "BIO1": "D-U < 0"
+      },
+      "alpha": 0.05,
+      "test": "one-sided exact/randomization"
+    },
+    "stickiness": {
+      "primary": "BIO12 sticky-nonsticky > 0",
+      "secondary": "GSP sticky-nonsticky > 0",
+      "alpha": 0.05,
+      "test": "one-sided exact/randomization"
+    }
+  },
+  "stop_rule": "V2 is the final public-taxon expansion attempt; if not evaluable, stop external-taxon confirmation."
+}
