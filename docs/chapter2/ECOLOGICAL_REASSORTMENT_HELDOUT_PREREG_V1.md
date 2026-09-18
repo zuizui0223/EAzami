@@ -87,6 +87,8 @@ Required provenance fields:
 
 Ambiguous taxa are excluded from the primary confirmation rather than resolved using ecological information.
 
+A confirmatory trait must retain **at least two eligible taxa in each compared state after the frozen occurrence gate**. A 1-vs-many or 1-vs-1 contrast is lineage-confounded and is reported as not confirmatory, regardless of its numerical effect.
+
 ## Occurrence and environment contract
 
 After the taxon/state inventory is frozen, occurrences are extracted under the existing EAzami provenance philosophy:
