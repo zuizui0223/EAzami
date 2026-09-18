@@ -1,0 +1,87 @@
+name: Run Chapter 2 space-time public-data audit v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_chapter2_spacetime_public_data_v1.py"
+      - "data/evidence/chapter2_spacetime_public_data_contract_v1.json"
+      - ".github/workflows/run-chapter2-spacetime-public-data-audit-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install audit dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pandas
+          python -m pip check
+
+      - name: Clone public Azami spatial-breadth repository
+        run: |
+          set -euo pipefail
+          git clone --depth 1 https://github.com/zuizui0223/azami.git external/azami
+          git -C external/azami rev-parse HEAD
+          git rev-parse HEAD
+
+      - name: Run fail-closed cross-repository discovery audit
+        run: |
+          set -euo pipefail
+          rm -rf output/chapter2_spacetime_audit
+          python analysis/audit_chapter2_spacetime_public_data_v1.py \
+            --azami-root external/azami \
+            --eazami-root . \
+            --out-dir output/chapter2_spacetime_audit
+
+      - name: Validate audit structure
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('output/chapter2_spacetime_audit/chapter2_spacetime_public_data_audit_v1.json').read_text())
+          assert p['contract_version']=='chapter2_spacetime_public_data_audit_v1'
+          assert p['repositories']['azami']['sha']!='unavailable'
+          assert p['repositories']['eazami']['sha']!='unavailable'
+          assert p['n_text_contexts']>0
+          assert p['n_table_schemas']>0
+          assert set(p['questions'])=={'orientation_precipitation','colour_solar'}
+          print(json.dumps({'status':p['status'],'candidate_counts':{k:len(v) for k,v in p['candidate_tables'].items()}},indent=2))
+          PY
+
+      - name: Freeze compact audit result on the PR branch
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          cp output/chapter2_spacetime_audit/chapter2_spacetime_public_data_audit_v1.json \
+            data/evidence/chapter2_spacetime_public_data_audit_v1.json
+          cp output/chapter2_spacetime_audit/CHAPTER2_SPACETIME_PUBLIC_DATA_AUDIT_V1.md \
+            docs/chapter2/CHAPTER2_SPACETIME_PUBLIC_DATA_AUDIT_V1.md
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/evidence/chapter2_spacetime_public_data_audit_v1.json docs/chapter2/CHAPTER2_SPACETIME_PUBLIC_DATA_AUDIT_V1.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Freeze Chapter 2 space-time public-data audit [skip audit]"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: chapter2-spacetime-public-data-audit-v1
+          path: output/chapter2_spacetime_audit
+          if-no-files-found: error
+          retention-days: 90

@@ -1,0 +1,178 @@
+name: Run FDT4 orientation precipitation partition v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_fdt4_orientation_precipitation_partition_v1.py"
+      - "data/evidence/chapter2_space_time_public_data_contract_v1.json"
+      - "data/evidence/chang2026_orientation_alias_overlap_pruned_topology_v1.nwk"
+      - ".github/workflows/run-fdt4-orientation-precipitation-partition-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  partition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas scipy biopython
+          python -m pip check
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-japan-orientation-niche-v1
+          path: inputs/japan
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32716015605
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-taiwan-orientation-niche-v1
+          path: inputs/taiwan
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33225237163
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-alt-topology-au-32614839764
+          path: inputs/au
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614839764
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-topology-concordance-32614242600
+          path: inputs/concordance
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614242600
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-orientation-phylogeny-saturation-v1
+          path: inputs/saturation
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33245270887
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-taiwan-tbn-alias-sensitivity-v1
+          path: inputs/alias
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33246077732
+
+      - name: Validate immutable public inputs
+        run: |
+          set -euo pipefail
+          python -m py_compile analysis/run_fdt4_orientation_precipitation_partition_v1.py
+          test -s inputs/japan/focal_occurrences_environment_complete.csv
+          test -s inputs/taiwan/focal_occurrences_environment_complete.csv
+          test -s inputs/taiwan/multisource_sensitivity/tbn_native_additions_environment_complete.csv
+          test -s inputs/taiwan/multisource_sensitivity/tbn_non_gbif_additions_environment_complete.csv
+          test -s inputs/au/au.trees
+          test -s inputs/concordance/sensitivity/loci.treefile
+          test $(wc -l < inputs/concordance/sensitivity/loci.treefile) -eq 153
+          test -s inputs/saturation/full20_bootstrap/full20_comp1061.ufboot
+          test $(wc -l < inputs/saturation/full20_bootstrap/full20_comp1061.ufboot) -eq 1000
+          test -s inputs/saturation/astral153/astral153.tre
+          test -s inputs/alias/alias_sensitivity/alias_native_additions_environment_complete.csv
+          test -s inputs/alias/alias_sensitivity/alias_broad_additions_environment_complete.csv
+
+      - name: Build source-deduplicated alias unions
+        run: |
+          mkdir -p output/unions
+          python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+
+          japan=Path('inputs/japan/focal_occurrences_environment_complete.csv')
+          taiwan=Path('inputs/taiwan/focal_occurrences_environment_complete.csv')
+          direct_native=Path('inputs/taiwan/multisource_sensitivity/tbn_native_additions_environment_complete.csv')
+          direct_broad=Path('inputs/taiwan/multisource_sensitivity/tbn_non_gbif_additions_environment_complete.csv')
+          alias_native=Path('inputs/alias/alias_sensitivity/alias_native_additions_environment_complete.csv')
+          alias_broad=Path('inputs/alias/alias_sensitivity/alias_broad_additions_environment_complete.csv')
+
+          def write_union(paths, target):
+              frames=[pd.read_csv(p) for p in paths]
+              x=pd.concat(frames, ignore_index=True)
+              if {'scientific_name_query','thin_lat','thin_lon'} <= set(x.columns):
+                  x=x.drop_duplicates(['scientific_name_query','thin_lat','thin_lon'], keep='first')
+              x.to_csv(target,index=False)
+              print(target, len(x), x.groupby('scientific_name_query').size().sort_index().to_dict())
+
+          write_union([japan,taiwan,direct_native,alias_native], 'output/unions/native_alias_union.csv')
+          write_union([japan,taiwan,direct_broad,alias_broad], 'output/unions/broad_alias_union.csv')
+          PY
+
+      - name: Partition precipitation amount and seasonality
+        run: |
+          set -euo pipefail
+          python analysis/run_fdt4_orientation_precipitation_partition_v1.py \
+            --japan-occ inputs/japan/focal_occurrences_environment_complete.csv \
+            --taiwan-gbif inputs/taiwan/focal_occurrences_environment_complete.csv \
+            --tbn-native inputs/taiwan/multisource_sensitivity/tbn_native_additions_environment_complete.csv \
+            --tbn-broad inputs/taiwan/multisource_sensitivity/tbn_non_gbif_additions_environment_complete.csv \
+            --extra-panel native_alias_union output/unions/native_alias_union.csv \
+            --extra-panel broad_alias_union output/unions/broad_alias_union.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --au-trees inputs/au/au.trees \
+            --accepted-count 6 \
+            --ufboot-trees inputs/saturation/full20_bootstrap/full20_comp1061.ufboot \
+            --gene-trees inputs/concordance/sensitivity/loci.treefile \
+            --extra-tree astral153_from_public_loci inputs/saturation/astral153/astral153.tre \
+            --extra-tree chang2026_alias_overlap data/evidence/chang2026_orientation_alias_overlap_pruned_topology_v1.nwk \
+            --min-n 10 \
+            --out-dir output/partition
+
+      - name: Fail closed on amount-seasonality structure
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+
+          p=json.loads(Path('output/partition/fdt4_orientation_precipitation_partition_v1.json').read_text())
+          assert p['contract_version']=='fdt4_orientation_precipitation_partition_v1'
+          assert set(p['model_specs'])=={
+              'bio12_unadjusted','bio15_unadjusted',
+              'bio12_adjusted_bio15','bio15_adjusted_bio12'
+          }
+          assert {'gbif','native_tbn','broad_non_gbif_tbn','native_alias_union','broad_alias_union'} <= set(p['panels'])
+          assert p['panels']['gbif']['n_taxa']==9
+          assert p['panels']['native_tbn']['n_taxa']>=11
+          assert p['panels']['broad_non_gbif_tbn']['n_taxa']>=11
+          u=p['ensembles']['concatenated_ufboot']['gbif']['equal']
+          assert u['bio12_unadjusted']['n']==1000
+          assert u['bio15_unadjusted']['n']==1000
+          l=p['ensembles']['public_locus_trees_complete']['gbif']['equal']
+          assert l['bio12_unadjusted']['n']>=149
+          assert l['bio15_adjusted_bio12']['n']>=149
+          rows=pd.read_csv('output/partition/orientation_precipitation_partition_by_tree_v1.csv')
+          assert rows['information_condition_number'].notna().all()
+          print('FDT4 precipitation amount-seasonality partition structural contract PASS')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fdt4-orientation-precipitation-partition-v1
+          path: output
+          if-no-files-found: error
+          retention-days: 90

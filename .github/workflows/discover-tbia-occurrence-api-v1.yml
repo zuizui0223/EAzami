@@ -1,0 +1,86 @@
+name: Discover TBIA occurrence API v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/discover_tbia_occurrence_api_v1.py"
+      - ".github/workflows/discover-tbia-occurrence-api-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install requests
+          python -m pip check
+
+      - name: Run bounded official-host discovery
+        run: |
+          set -euo pipefail
+          rm -rf output/tbia_api_discovery
+          mkdir -p output/tbia_api_discovery
+          python analysis/discover_tbia_occurrence_api_v1.py \
+            --out-json output/tbia_api_discovery/tbia_occurrence_api_discovery_v1.json \
+            --out-md output/tbia_api_discovery/TBIA_OCCURRENCE_API_DISCOVERY_V1.md \
+            --max-pages 60 \
+            --timeout 30
+
+      - name: Validate discovery contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('output/tbia_api_discovery/tbia_occurrence_api_discovery_v1.json').read_text())
+          assert p['contract_version']=='tbia_occurrence_api_discovery_v1'
+          assert p['pages_attempted']>0
+          assert p['successful_pages']>=0
+          assert p['status'] in {
+              'OCCURRENCE_SPEC_FOUND',
+              'NO_OPENAPI_OCCURRENCE_SPEC_FOUND_MANUAL_ENDPOINT_CONTRACT_REQUIRED',
+          }
+          for row in p['pages']:
+              requested=row.get('requested_url','')
+              assert requested.startswith('https://')
+              assert any(s in requested for s in ('tbia.org.tw','tbia.github.io'))
+          print(json.dumps({'status':p['status'],'pages_attempted':p['pages_attempted'],'occurrence_specs':len(p['occurrence_specs'])},indent=2))
+          PY
+
+      - name: Freeze compact discovery result on PR branch
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          cp output/tbia_api_discovery/tbia_occurrence_api_discovery_v1.json \
+            data/evidence/tbia_occurrence_api_discovery_v1.json
+          cp output/tbia_api_discovery/TBIA_OCCURRENCE_API_DISCOVERY_V1.md \
+            docs/chapter2/TBIA_OCCURRENCE_API_DISCOVERY_V1.md
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/evidence/tbia_occurrence_api_discovery_v1.json docs/chapter2/TBIA_OCCURRENCE_API_DISCOVERY_V1.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Freeze TBIA API discovery [skip tbia-discovery]"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tbia-occurrence-api-discovery-v1
+          path: output/tbia_api_discovery
+          if-no-files-found: error
+          retention-days: 90

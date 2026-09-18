@@ -1,0 +1,75 @@
+{
+  "contract_version": "fdt4_orientation_phylogeny_saturation_summary_v1",
+  "status_date": "2026-08-29",
+  "source_run_id": 33245270887,
+  "source_head_sha": "e3ab4b33299e88bd7f0271eb671ff469b0176d31",
+  "source_artifact": "fdt4-orientation-phylogeny-saturation-v1",
+  "question": "Does the present-day BIO1/BIO15 orientation correspondence retain its direction after exhausting reusable public phylogenetic uncertainty layers?",
+  "panels": {
+    "gbif": {"n_taxa": 9, "n_U": 5, "n_D": 4},
+    "native_tbn": {"n_taxa": 11, "n_U": 6, "n_D": 5},
+    "broad_non_gbif_tbn": {"n_taxa": 11, "n_U": 6, "n_D": 5}
+  },
+  "au_candidate_layer": {
+    "candidate_trees": 9,
+    "au_nonrejected": 6,
+    "unique_induced_topologies": {"gbif": 1, "native_tbn": 1, "broad_non_gbif_tbn": 1},
+    "interpretation": "The six AU-nonrejected trees and all nine optimized candidate trees collapse to the same induced topology on the ecology panels. Their effect-range stability is not, by itself, a substantive ecology-panel topology sensitivity test."
+  },
+  "concatenated_ufboot_layer": {
+    "trees": 1000,
+    "branch_lengths_in_raw_ufboot": false,
+    "unique_induced_topologies": {"gbif": 14, "native_tbn": 21, "broad_non_gbif_tbn": 21},
+    "topology_only_expected_sign_rate": {
+      "gbif": {"BIO1": 1.0, "BIO15": 1.0},
+      "native_tbn": {"BIO1": 1.0, "BIO15": 1.0},
+      "broad_non_gbif_tbn": {"BIO1": 1.0, "BIO15": 1.0}
+    },
+    "expected_direction": {"BIO1": "downward_minus_upward_negative", "BIO15": "downward_minus_upward_positive"}
+  },
+  "public_comp1061_locus_tree_layer": {
+    "gene_trees": 153,
+    "complete_panel_gene_trees": {"gbif": 149, "native_tbn": 149, "broad_non_gbif_tbn": 149},
+    "unique_induced_topologies_complete_or_all_signature": {"gbif": 150, "native_tbn": 153, "broad_non_gbif_tbn": 153},
+    "complete_panel_topology_only_expected_sign_rate": {
+      "gbif": {"BIO1": 1.0, "BIO15": 1.0},
+      "native_tbn": {"BIO1": 1.0, "BIO15": 1.0},
+      "broad_non_gbif_tbn": {"BIO1": 1.0, "BIO15": 1.0}
+    },
+    "complete_panel_branch_length_aware_expected_sign_rate": {
+      "gbif": {"BIO1": 0.7718120805369127, "BIO15": 0.8187919463087249},
+      "native_tbn": {"BIO1": 0.8120805369127517, "BIO15": 0.8456375838926175},
+      "broad_non_gbif_tbn": {"BIO1": 0.8120805369127517, "BIO15": 0.8456375838926175}
+    },
+    "interpretation": "Topology-only direction is invariant across the complete-panel public locus trees, whereas using each short single-locus fitted branch-length geometry as a species-level Brownian covariance causes substantial sign instability. The latter is retained only as a covariance-geometry stress test."
+  },
+  "concordance_context": {
+    "internal_branches": 18,
+    "gCF_percent": {"median": 7.545, "mean": 11.10388888888889, "min": 0.65, "max": 40.79},
+    "sCF_percent": {"median": 46.92, "mean": 49.50333333333334, "min": 33.34, "max": 89.51},
+    "interpretation": "The public Comp1061 loci are strongly discordant, so the invariant topology-only ecological direction is not a consequence of near-identical gene trees."
+  },
+  "coalescent_and_external_topologies": {
+    "astral153_from_public_loci": {
+      "topology_only_expected_sign": {"gbif": {"BIO1": "negative", "BIO15": "positive"}, "native_tbn": {"BIO1": "negative", "BIO15": "positive"}, "broad_non_gbif_tbn": {"BIO1": "negative", "BIO15": "positive"}}
+    },
+    "chang2026_astral_pruned_topology": {
+      "native_tbn": {"BIO1_beta_sd": -1.4364081390661132, "BIO1_p": 0.09365164397070964, "BIO15_beta_sd": 1.3575227388322024, "BIO15_p": 0.07597968906182753},
+      "broad_non_gbif_tbn": {"BIO1_beta_sd": -1.2791646296883064, "BIO1_p": 0.15162274593706435, "BIO15_beta_sd": 1.2216555668396274, "BIO15_p": 0.1180058171552726},
+      "interpretation": "Direction agrees on the taxon overlap, but the independent panel remains small and does not cross the frozen inferential threshold."
+    }
+  },
+  "resolved_boundary": "For the current occurrence/taxon panels, phylogenetic topology uncertainty is no longer a leading explanation for the BIO1-negative/BIO15-positive orientation direction.",
+  "remaining_limits_ranked": [
+    "taxon and occurrence coverage, especially Taiwan/East-Asian resolved orientation taxa",
+    "species-level branch-length/covariance model rather than topology",
+    "same-individual phenotype-genotype linkage and within-species population structure",
+    "historical niche and causal/fitness evidence"
+  ],
+  "claim_boundaries": [
+    "Bootstrap trees and locus trees are not independent ecological replications.",
+    "Single-locus branch lengths are not treated as preferred species-level evolutionary distances.",
+    "Direction stability does not establish adaptation, historical niche causation, convergence or fitness effects.",
+    "The orientation ecological status remains governed by the frozen Chapter 2 classification rule rather than by counting sensitivity trees."
+  ]
+}

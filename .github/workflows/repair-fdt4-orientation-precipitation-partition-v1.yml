@@ -1,0 +1,61 @@
+name: Repair FDT4 orientation precipitation partition v1
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/repair-fdt4-orientation-precipitation-partition-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 1
+
+      - name: Patch source-unified cell deduplication and argparse metadata
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path=Path('analysis/run_fdt4_orientation_precipitation_partition_v1.py')
+          text=path.read_text()
+          text=text.replace(
+              'metavar=("LABEL", "OCCURRENCE_CSV"),\n        help="Repeat as --panel LABEL file1.csv [file2.csv ...].",',
+              'metavar="ITEM",\n        help="Repeat as --panel LABEL file1.csv [file2.csv ...].",'
+          )
+          old='''        # Different source tiers must not double-count an identical taxon/cell.\n        dedup_cols = ["scientific_name_query"]\n        if {"thin_lat", "thin_lon"}.issubset(data.columns):\n            dedup_cols += ["thin_lat", "thin_lon"]\n        elif {"latitude", "longitude"}.issubset(data.columns):\n            dedup_cols += ["latitude", "longitude"]\n        data = data.drop_duplicates(dedup_cols, keep="first")\n'''
+          new='''        # Rebuild one canonical 0.05-degree cell for every source.  We do\n        # not deduplicate on partly missing source-specific thin_lat/thin_lon\n        # columns because pandas treats repeated NaN keys as duplicates.\n        lat_col = "latitude" if "latitude" in data.columns else "decimalLatitude"\n        lon_col = "longitude" if "longitude" in data.columns else "decimalLongitude"\n        if lat_col not in data.columns or lon_col not in data.columns:\n            raise KeyError(f"panel {label} lacks latitude/longitude for cross-source deduplication")\n        lat = pd.to_numeric(data[lat_col], errors="coerce")\n        lon = pd.to_numeric(data[lon_col], errors="coerce")\n        data = data.loc[lat.notna() & lon.notna()].copy()\n        data["canonical_thin_lat_005"] = np.floor(pd.to_numeric(data[lat_col]) / 0.05).astype(int)\n        data["canonical_thin_lon_005"] = np.floor(pd.to_numeric(data[lon_col]) / 0.05).astype(int)\n        data = data.sort_values(["scientific_name_query", "canonical_thin_lat_005", "canonical_thin_lon_005"])\n        data = data.drop_duplicates(\n            ["scientific_name_query", "canonical_thin_lat_005", "canonical_thin_lon_005"],\n            keep="first",\n        )\n'''
+          if old not in text:
+              raise SystemExit('expected dedup block not found; refusing blind patch')
+          text=text.replace(old,new)
+          path.write_text(text)
+
+          wf=Path('.github/workflows/run-fdt4-orientation-precipitation-partition-v1.yml')
+          w=wf.read_text()
+          marker='''          for v in JAPAN TAIWAN TBN_NATIVE TBN_BROAD ALIAS_NATIVE ALIAS_BROAD AU GENES UFBOOT ASTRAL; do\n            test -n "${!v}" && test -s "${!v}" || { echo "missing $v"; exit 1; }\n          done\n'''
+          addition=marker+'''          python - <<'PY2'\n          import pandas as pd\n          import os\n          for key in ('JAPAN','TAIWAN','TBN_NATIVE','TBN_BROAD','ALIAS_NATIVE','ALIAS_BROAD'):\n              d=pd.read_csv(os.environ[key])\n              lat='latitude' if 'latitude' in d else 'decimalLatitude'\n              lon='longitude' if 'longitude' in d else 'decimalLongitude'\n              assert lat in d and lon in d, (key,d.columns.tolist())\n              assert pd.to_numeric(d[lat],errors='coerce').notna().any(), key\n              assert pd.to_numeric(d[lon],errors='coerce').notna().any(), key\n          print('cross-source coordinate contract PASS')\n          PY2\n'''
+          if marker not in w:
+              raise SystemExit('expected workflow marker not found; refusing blind patch')
+          wf.write_text(w.replace(marker,addition))
+          PY
+
+      - name: Compile repaired analysis
+        run: |
+          python -m py_compile analysis/run_fdt4_orientation_precipitation_partition_v1.py
+          grep -q canonical_thin_lat_005 analysis/run_fdt4_orientation_precipitation_partition_v1.py
+
+      - name: Commit repair
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add analysis/run_fdt4_orientation_precipitation_partition_v1.py .github/workflows/run-fdt4-orientation-precipitation-partition-v1.yml
+          if ! git diff --cached --quiet; then
+            git commit -m "Fix source-unified occurrence-cell deduplication [skip precip-repair]"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi

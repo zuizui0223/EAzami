@@ -1,0 +1,232 @@
+{
+  "contract_version": "chapter2_public_data_ecological_resolution_envelope_v1",
+  "status_date": "2026-08-30",
+  "scope": "Maximum currently reusable public-data resolution of the orientation-climate correspondence without pooling incompatible phylogenetic markers or lowering source/taxon identity guards.",
+  "headline": {
+    "orientation": "direction_resolved_inferential_strength_unresolved",
+    "bio15": "robust_positive_D_minus_U_precipitation_seasonality_direction",
+    "bio01": "coverage_and_topology_sensitive_secondary_pattern",
+    "legacy_frozen_primary_class": "unresolved",
+    "interpretation": "Downward/nodding orientation remains associated with higher precipitation seasonality across source expansion, strict coordinate-quality harmonization, genuine public topology uncertainty, covariance-strength sensitivity and within-taxon occurrence resampling. Whether the contrast crosses a P<0.05 threshold is not stable across those admissible analyses. The earlier lower-temperature direction is not comparably robust after the expanded n=12 panel and genuine topology uncertainty are propagated."
+  },
+  "critical_correction": {
+    "old_statement": "six AU-nonrejected optimized Comp1061 trees supplied six ecology-panel topology sensitivities",
+    "corrected_statement": "all six AU-nonrejected trees, and all nine optimized candidates, induce the same topology after pruning to the n=9, n=11 and n=12 ecology panels; they are branch-length/candidate sensitivities rather than six distinct ecology topologies",
+    "replacement_topology_layers": [
+      "1000 regenerated full20 concatenated UFBoot topologies",
+      "153 public Comp1061 locus trees",
+      "ASTRAL-III reconstructed from all 153 public locus trees",
+      "independent Chang et al. 2026 ASTRAL topology"
+    ]
+  },
+  "phylogeny_saturation": {
+    "run_id": 33245270887,
+    "full20_gene_tree_concordance": {
+      "gene_trees": 153,
+      "median_gcf_percent": 7.545,
+      "median_scf_percent": 46.92,
+      "interpretation": "strong public gene-tree discordance"
+    },
+    "broad_n12": {
+      "n_taxa": 12,
+      "n_U": 6,
+      "n_D": 6,
+      "ufboot": {
+        "trees": 1000,
+        "bio15_positive": 1000,
+        "bio15_beta_range": [0.6843, 0.9960],
+        "bio15_p_range": [0.0246, 0.1515],
+        "bio15_descriptive_p_lt_0_05_fraction": 0.53,
+        "bio01_negative": 803,
+        "bio01_beta_crosses_zero": true,
+        "unique_induced_topologies": 27,
+        "branch_length_status": "raw IQ-TREE .ufboot topology only; equal branches used"
+      },
+      "complete_public_locus_trees": {
+        "complete_trees": 149,
+        "bio15_equal_branch_positive": 149,
+        "bio15_equal_branch_beta_range": [0.176, 1.856],
+        "bio15_descriptive_p_lt_0_05_fraction": 0.5235,
+        "bio01_equal_branch_expected_sign_rate": 0.9396,
+        "single_locus_branch_length_role": "covariance_geometry_stress_only"
+      },
+      "astral153_equal_branch": {
+        "bio15_beta": 0.6991,
+        "bio15_p": 0.05408,
+        "bio01_beta": -0.1375,
+        "bio01_p": 0.7075
+      },
+      "chang2026_equal_branch": {
+        "bio15_beta": 1.15593,
+        "bio15_p": 0.02856,
+        "bio01_beta": -0.15512,
+        "bio01_p": 0.80451
+      }
+    },
+    "strict_n8": {
+      "n_taxa": 8,
+      "n_U": 3,
+      "n_D": 5,
+      "ufboot": {
+        "bio15_positive": 1000,
+        "bio15_beta_range": [0.5035, 0.7091],
+        "bio15_p_lt_0_05_fraction": 0.0,
+        "bio01_negative": 1000
+      },
+      "complete_public_locus_trees": {
+        "complete_trees": 149,
+        "bio15_equal_branch_positive": 149,
+        "bio01_equal_branch_negative": 148
+      },
+      "astral153_equal_branch": {
+        "bio15_beta": 0.6406,
+        "bio15_p": 0.1317,
+        "bio01_beta": -0.2607,
+        "bio01_p": 0.5312
+      }
+    }
+  },
+  "occurrence_source_envelope": {
+    "frozen_gbif_only": {
+      "n_taxa": 9,
+      "n_U": 5,
+      "n_D": 4,
+      "status": "unresolved",
+      "bio15_beta_range": [1.320, 1.330],
+      "bio15_p_range": [0.05054, 0.05239],
+      "bio01_beta_range": [-0.975, -0.967],
+      "bio01_p_range": [0.09604, 0.09793]
+    },
+    "direct_tbn_native": {
+      "n_taxa": 11,
+      "n_U": 6,
+      "n_D": 5,
+      "role": "supporting_source_sensitivity",
+      "frozen_rule_status": "source_definition_dependent",
+      "note": "Earlier direct-native and exact-name TBN tiers crossed or approached the fixed threshold but are not selected as primary after observing results."
+    },
+    "guarded_broad_tbn_alias": {
+      "run_id": 33246077732,
+      "n_taxa": 12,
+      "n_U": 6,
+      "n_D": 6,
+      "added_state_diverse_taxon": "Cirsium japonicum var. fukienense",
+      "bio15_beta_range": [1.0633, 1.0670],
+      "bio15_p_range": [0.01249, 0.01295],
+      "bio15_species_loo_sign": "72/72",
+      "bio01_beta_range": [-0.2765, -0.2745],
+      "bio01_p_range": [0.5039, 0.5077],
+      "bio01_species_loo_sign": "72/72",
+      "taxonomic_guards": [
+        "C. albescens mapped only to the predeclared C. japonicum var. albescens concept and constrained to its documented southern-Taiwan geography",
+        "C. japonicum var. fukienense parent lookup admitted only occurrence-level names explicitly containing the fukienense concept and documented island/region guards",
+        "C. pengii has no surrogate mapping"
+      ]
+    },
+    "tbia": {
+      "status": "not_retrievable_public_production_api",
+      "status_date": "2026-08-30",
+      "documented_endpoint": "https://tbiadata.tw/api/v1/occurrence",
+      "positive_control": "name=小白鷺",
+      "result": "all tested documented production URL forms returned HTTP 404 even for the documentation positive control",
+      "boundary": "not interpreted as zero focal records; dev host and portal scraping are not substituted"
+    }
+  },
+  "coordinate_quality_harmonization": {
+    "run_id": 33280192246,
+    "rule": "all GBIF/TBN cells require explicit coordinate uncertainty <=10 km; no missing-uncertainty fallback",
+    "n_taxa": 8,
+    "n_U": 3,
+    "n_D": 5,
+    "bio15_beta_range": [0.8476, 0.8481],
+    "bio15_p_range": [0.09256, 0.09280],
+    "bio15_species_loo_sign": "48/48",
+    "bio01_beta_approx": -0.3668,
+    "bio01_p_approx": 0.430,
+    "interpretation": "BIO15 direction survives a single stricter coordinate-quality rule, but threshold support does not."
+  },
+  "covariance_strength_sensitivity": {
+    "run_id": 33280469986,
+    "lambda_grid": [0.0, 0.25, 0.5, 0.75, 1.0],
+    "trees": 9,
+    "broad_n12": {
+      "bio15_expected_sign_rate": 1.0,
+      "bio15_beta_range": [1.0633320288386243, 1.2222697856433398],
+      "bio15_p_range": [0.01242528213038393, 0.02953209203933485],
+      "bio15_all_fixed_grid_p_lt_0_05": true,
+      "profile_reml_lambda_range": [0.9999999700466811, 0.9999999700466811],
+      "bio01_beta_range": [-0.7549422483459631, -0.2744693094300449],
+      "bio01_p_range": [0.17598956431739132, 0.5077385286300695]
+    },
+    "strict_n8": {
+      "bio15_expected_sign_rate": 1.0,
+      "bio15_beta_range": [0.8475966131768735, 0.9944016575981052],
+      "bio15_p_range": [0.09255597794934604, 0.1922060608706529],
+      "bio15_all_fixed_grid_p_lt_0_05": false,
+      "bio01_beta_range": [-0.872878135474951, -0.365870697098885],
+      "bio01_p_range": [0.2556295777990462, 0.43093792484796273]
+    },
+    "interpretation": "BIO15 sign is not generated by fixing Brownian covariance at lambda=1; threshold strength is much more sensitive to occurrence coverage/quality than to lambda within these species-tree branch geometries."
+  },
+  "joint_occurrence_topology_uncertainty": {
+    "run_id": 33280470043,
+    "replicates": 2000,
+    "ufboot_trees": 1000,
+    "broad_n12": {
+      "bio15_canonical_branch": {
+        "expected_sign_rate": 1.0,
+        "beta_q025_q50_q975": [0.8712881114783019, 1.062608824612001, 1.2251116056790836],
+        "p_lt_0_05_fraction_descriptive": 0.9875
+      },
+      "bio15_matched_ufboot_equal": {
+        "expected_sign_rate": 1.0,
+        "beta_q025_q50_q975": [0.6130650238257246, 0.8069770938035781, 1.0072954458006074],
+        "p_lt_0_05_fraction_descriptive": 0.4265
+      },
+      "bio01_matched_ufboot_equal": {
+        "expected_negative_sign_rate": 0.809,
+        "beta_q025_q50_q975": [-0.4008925773065588, -0.20006724636616302, 0.26269843085995515],
+        "p_lt_0_05_fraction_descriptive": 0.0
+      }
+    },
+    "strict_n8": {
+      "bio15_canonical_branch": {
+        "expected_sign_rate": 1.0,
+        "beta_q025_q50_q975": [0.596414333173293, 0.8515888992724097, 1.0801413777292295],
+        "p_lt_0_05_fraction_descriptive": 0.1
+      },
+      "bio15_matched_ufboot_equal": {
+        "expected_sign_rate": 1.0,
+        "beta_q025_q50_q975": [0.38888561491127255, 0.6057505222875184, 0.828827212826573],
+        "p_lt_0_05_fraction_descriptive": 0.0005
+      },
+      "bio01_matched_ufboot_equal": {
+        "expected_negative_sign_rate": 1.0,
+        "p_lt_0_05_fraction_descriptive": 0.0
+      }
+    },
+    "interpretation": "BIO15 direction survives joint sampling uncertainty of taxon niche centroids and genuine topology uncertainty, while the fraction of nominally significant fits changes strongly. BIO1 does not retain the same cross-layer direction in broad n=12."
+  },
+  "current_data_ceiling": {
+    "resolved": [
+      "orientation BIO15 effect direction",
+      "lack of substantive ecology-panel diversity among the old six AU candidate trees",
+      "topology robustness of BIO15 across concatenated bootstrap, locus-tree and coalescent/external species-tree layers",
+      "failure of BIO1 to remain an equally robust ecological axis",
+      "source and coordinate-quality sensitivity of threshold-level support"
+    ],
+    "unresolved": [
+      "a single source/quality/topology-invariant P<0.05 classification",
+      "historical niche at individual orientation transitions",
+      "causal selective mechanism",
+      "fitness effect of orientation",
+      "whether precipitation seasonality acts through rainfall/wetting, correlated topography/temperature, pollinator presentation or another covariate"
+    ],
+    "not_evaluable": [
+      "phyllary climate correspondence under current state-diverse overlap",
+      "stickiness climate correspondence under current state-diverse overlap",
+      "dense joined Japan38 pollinator/enemy predictors"
+    ]
+  },
+  "claim_boundary": "The strongest admissible Chapter 2 ecological statement is a direction-robust but inferential-strength-sensitive present-day association between downward/nodding orientation and higher precipitation seasonality. Do not call it adaptation, historical climate causation, event-specific convergence, a transition rate, or proof of a rainfall mechanism. BIO1 should not be presented as equally robust."
+}
