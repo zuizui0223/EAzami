@@ -1,0 +1,13 @@
+analysis_taxon,provenance_frame,orientation_state,stickiness_state,countries_queried,gbif_match_type,gbif_usage_key,gbif_scientific_name,gbif_canonical_name,n_raw,n_exact_name,n_quality,n_coordinate_unique,n_thinned,passes_primary_occurrence_gate,minimum_thinned_occurrences_primary,max_coordinate_uncertainty_m,thin_degrees,environment_opened
+Cirsium lidjiangense,mainland China,downward_or_nodding,unknown,CN,EXACT,3112718,Cirsium lidjiangense Petr. ex Hand.-Mazz.,Cirsium lidjiangense,28,28,0,0,0,False,3,10000.0,0.1,False
+Cirsium schantarense,NE China / Korea,downward_or_nodding,unknown,CN|KR,EXACT,3112641,Cirsium schantarense Trautv. & C.A.Mey.,Cirsium schantarense,149,149,9,9,8,True,3,10000.0,0.1,False
+Cirsium fangii,mainland China,downward_or_nodding,unknown,CN,EXACT,3113159,Cirsium fangii Petr.,Cirsium fangii,4,4,0,0,0,False,3,10000.0,0.1,False
+Cirsium reflexiphyllarium,Korean Peninsula,downward_or_nodding,nonsticky,KR,NONE,,,,0,0,0,0,0,False,3,10000.0,0.1,False
+Cirsium rubricorollatum,mainland China,downward_or_nodding,unknown,CN,NONE,,,,0,0,0,0,0,False,3,10000.0,0.1,False
+Cirsium vlassovianum,NE China / Korea,upward_or_erect,unknown,CN|KR,EXACT,3113493,Cirsium vlassovianum Fisch. ex DC.,Cirsium vlassovianum,203,202,10,10,8,True,3,10000.0,0.1,False
+Cirsium vernonioides,mainland China,upward_or_erect,unknown,CN,EXACT,3112692,Cirsium vernonioides C.Shih,Cirsium vernonioides,1,1,0,0,0,False,3,10000.0,0.1,False
+Cirsium muliense,mainland China,upward_or_erect,unknown,CN,EXACT,3113108,Cirsium muliense C.Shih,Cirsium muliense,3,3,0,0,0,False,3,10000.0,0.1,False
+Cirsium argyracanthum,mainland China,upward_or_erect,unknown,CN,EXACT,3113806,Cirsium argyracanthum Wall. ex DC.,Cirsium argyracanthum,38,26,0,0,0,False,3,10000.0,0.1,False
+Cirsium tianmushanicum,mainland China,upward_or_erect,unknown,CN,EXACT,3113175,Cirsium tianmushanicum C.Shih,Cirsium tianmushanicum,5,5,0,0,0,False,3,10000.0,0.1,False
+Cirsium jilongense,mainland China,upward_or_erect,unknown,CN,NONE,,,,0,0,0,0,0,False,3,10000.0,0.1,False
+Cirsium setidens,Korean Peninsula,unknown,sticky,KR,EXACT,3112677,Cirsium setidens (Dunn) Nakai,Cirsium setidens,514,514,36,31,25,True,3,10000.0,0.1,False
