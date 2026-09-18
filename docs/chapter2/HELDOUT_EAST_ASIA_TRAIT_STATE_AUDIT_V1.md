@@ -38,3 +38,7 @@ Run occurrence-support QC only, without environmental extraction:
 6. retain taxa with >=3 thinned records.
 
 The surviving set is then the deterministic orientation primary panel. The ecological endpoints remain unopened until that panel and the exact test script are committed.
+
+## Repository execution record
+
+This frozen audit is carried by PR #233. The PR workflow is climate-blind and may only determine occurrence support under the rules above; it must not sample environmental rasters before the surviving primary panel is committed.
