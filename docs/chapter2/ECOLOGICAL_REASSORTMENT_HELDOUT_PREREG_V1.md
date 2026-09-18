@@ -92,11 +92,12 @@ Ambiguous taxa are excluded from the primary confirmation rather than resolved u
 After the taxon/state inventory is frozen, occurrences are extracted under the existing EAzami provenance philosophy:
 
 - exact accepted names plus a source-backed alias table;
-- geographic filtering to the registered held-out region;
-- coordinate-quality filtering;
-- deduplication;
-- spatial thinning;
-- a predeclared minimum-occurrence gate;
+- geographic filtering to the registered held-out provenance frame (China/Korean Peninsula are provenance filters, not biological region classes);
+- coordinate uncertainty <= 10,000 m;
+- removal of records lacking usable coordinates;
+- exact-coordinate deduplication before thinning;
+- 0.1-degree spatial thinning using one deterministic representative per grid cell;
+- primary minimum gate = >=3 independent thinned occurrences per taxon;
 - CHELSA/current environmental extraction using the same variable definitions as the discovery analysis.
 
 No taxon may be added, removed or recoded based on the direction of its climate niche.
@@ -109,21 +110,11 @@ No taxon may be added, removed or recoded based on the direction of its climate 
 
 Held-out downward/nodding taxa occupy a climate niche shifted toward the same frozen discovery direction:
 
-[
-BIO15_{D-U} > 0,qquad BIO1_{D-U} < 0.
-]
+`BIO15(D-U) > 0` and `BIO1(D-U) < 0`.
 
 The primary confirmatory statistic is the preregistered composite
 
-[
-S_O = \frac{z(BIO15)-z(BIO1)}{\sqrt{2}},
-]
-
-with the prediction
-
-[
-S_O(D) > S_O(U).
-]
+`S_O = (z(BIO15) - z(BIO1)) / sqrt(2)`, with the prediction `S_O(D) > S_O(U)`.
 
 BIO15 and BIO1 component effects are always reported separately with uncertainty.
 
@@ -146,15 +137,11 @@ Held-out sticky taxa occupy wetter niches than nonsticky taxa.
 
 The **single primary endpoint is BIO12**:
 
-[
-BIO12_{sticky-nonsticky} > 0.
-]
+`BIO12(sticky-nonsticky) > 0`.
 
 GSP is a preregistered secondary directional endpoint:
 
-[
-GSP_{sticky-nonsticky} > 0.
-]
+`GSP(sticky-nonsticky) > 0`.
 
 BIO15 is exploratory only.
 
