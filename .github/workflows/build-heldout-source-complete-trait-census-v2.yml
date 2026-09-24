@@ -46,6 +46,20 @@ jobs:
           assert x['environment_opened'] is False
           assert x['occurrence_opened'] is False
           assert x['foc_completeness_pass'] is True
+          assert x['source_counts']['foc_linked_taxa'] == 46
+          assert x['source_counts']['nibr_printed_cirsium_concepts'] == 18
+
+          import csv
+          rows=list(csv.DictReader(open('/tmp/heldout_v2/heldout_east_asia_source_complete_trait_census_v2.csv',encoding='utf-8')))
+          nibr=[r for r in rows if r['source_lane']=='NIBR_national_species_list']
+          assert all(r['analysis_taxon'] != 'Cirsium Mill' for r in nibr)
+          # The checklist lane itself supplies no orientation descriptions; do not
+          # recycle Flora-of-China states into the Korean lane.
+          assert all(r['orientation_state']=='unknown' for r in nibr)
+          var=[r for r in nibr if r['analysis_taxon']=='Cirsium setidens var. niveoaraneum']
+          assert len(var)==1 and var[0]['stickiness_state']=='unknown'
+          sp=[r for r in nibr if r['analysis_taxon']=='Cirsium setidens']
+          assert len(sp)==1 and sp[0]['stickiness_state']=='sticky'
           print(json.dumps(x,indent=2,ensure_ascii=False))
           PY
       - uses: actions/upload-artifact@v4
