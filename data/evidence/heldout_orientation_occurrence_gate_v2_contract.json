@@ -1,0 +1,53 @@
+{
+  "version": "heldout_orientation_occurrence_gate_v2_contract",
+  "status_date": "2026-09-24",
+  "status": "FROZEN_BEFORE_V2_GBIF_OCCURRENCE_QUERY",
+  "candidate_panel": "data/evidence/heldout_east_asia_orientation_candidate_panel_v2.csv",
+  "n_candidates": 13,
+  "state_counts_before_occurrence": {
+    "downward_or_nodding": 3,
+    "upward_or_erect": 10
+  },
+  "provenance": {
+    "country_code": "CN",
+    "rationale": "All accepted V2 orientation candidates come from the complete Flora of China source lane; mainland China is an occurrence provenance frame, not a biological region class."
+  },
+  "name_matching": {
+    "primary": "exact accepted analysis name only",
+    "gbif_match_type_required": "EXACT",
+    "returned_scientific_name_rule": "normalized returned name must equal query or start with query plus authorship/rank continuation",
+    "aliases": "none in primary v2 occurrence gate"
+  },
+  "occurrence_qc": {
+    "occurrence_status": "PRESENT",
+    "has_coordinate": true,
+    "coordinate_uncertainty_required": true,
+    "max_coordinate_uncertainty_m": 10000,
+    "reject_issues": [
+      "ZERO_COORDINATE",
+      "COUNTRY_COORDINATE_MISMATCH",
+      "COORDINATE_INVALID",
+      "GEODETIC_DATUM_INVALID"
+    ],
+    "exact_coordinate_deduplication": true,
+    "deterministic_thin_degrees": 0.1,
+    "deterministic_representative": "lowest coordinate uncertainty, then lowest GBIF occurrence key",
+    "minimum_thinned_occurrences_per_taxon": 3
+  },
+  "evaluability": {
+    "minimum_taxa_per_state": 2,
+    "required_states": [
+      "downward_or_nodding",
+      "upward_or_erect"
+    ],
+    "if_not_evaluable": "stop public external-taxon confirmation under the frozen V2 stop rule; do not open environmental endpoints",
+    "if_evaluable": "freeze exact surviving taxon panel before any BIO1/BIO15 extraction"
+  },
+  "forbidden_at_this_gate": [
+    "BIO1 extraction",
+    "BIO15 extraction",
+    "other environmental extraction",
+    "taxon addition/removal based on occurrence counts",
+    "trait recoding based on occurrence geography"
+  ]
+}
