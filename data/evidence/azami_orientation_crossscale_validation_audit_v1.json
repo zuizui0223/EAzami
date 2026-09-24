@@ -1,0 +1,77 @@
+{
+  "version": "azami_orientation_crossscale_validation_audit_v1",
+  "status_date": "2026-09-25",
+  "purpose": "Determine whether the already-existing Azami image dataset can serve as prospective held-out confirmation of the EAzami orientation transition-climate discovery.",
+  "decision": "NOT_ELIGIBLE_AS_PROSPECTIVE_P3",
+  "reasons": [
+    "Azami already analyzed the same orientation endpoint against the same nine-variable climate universe, including within-taxon models; reusing BIO1/BIO15 now would be post-result, not held-out.",
+    "The Azami endpoint is an image-referenced presentation angle, not a gravity-referenced botanical head-orientation measurement.",
+    "Existing within-taxon BIO1 and BIO15 directions do not reproduce the EAzami downward-transition discovery direction."
+  ],
+  "azami_endpoint": {
+    "endpoint": "orientation_image_vertical_angle",
+    "construct": "presentation_angle",
+    "unit": "degrees",
+    "definition": "signed PCA head axis relative to EXIF-oriented image vertical",
+    "sign_mapping": "0 up, 90 horizontal, 180 down",
+    "biological_limit": "not a direct gravity-referenced inclinometer angle or peduncle-deflection measurement"
+  },
+  "eazami_discovery": {
+    "downward_transition_direction": {
+      "BIO15": "higher",
+      "BIO1": "lower"
+    },
+    "interpretation": "phylogeny-conditioned transition-level present-niche correspondence; not historical climatic causation"
+  },
+  "azami_existing_within_taxon": {
+    "n_observations": 37196,
+    "n_taxa": 199,
+    "BIO1": {
+      "beta_std": 0.017150276939660723,
+      "p_value": 0.006539072158938744,
+      "q_fdr": 0.04753402453997779,
+      "direction_given_angle_mapping": "warmer -> larger angle -> more downward in image coordinates",
+      "relation_to_eazami": "opposite to EAzami D-associated lower BIO1",
+      "spatial_beta_std": 0.026537367101996816,
+      "spatial_permutation_p": 0.002,
+      "residual_moran_p": 0.324,
+      "broad_spatial_sensitivity_pass": true
+    },
+    "BIO12": {
+      "beta_std": 0.005326419789616406,
+      "p_value": 0.6010430181722077,
+      "q_fdr": 0.8231676118445455,
+      "interpretation": "no supported within-taxon annual-precipitation association"
+    },
+    "BIO15": {
+      "beta_std": -0.0076180061143611795,
+      "p_value": 0.04553394068823519,
+      "q_fdr": 0.1831045700016266,
+      "direction_given_angle_mapping": "higher precipitation seasonality -> smaller angle -> more upward in image coordinates",
+      "relation_to_eazami": "directionally opposite to EAzami D-associated higher BIO15; not FDR-supported"
+    },
+    "GSP": {
+      "beta_std": 0.003872393404636179,
+      "p_value": 0.07116693020489136,
+      "q_fdr": 0.21694435175362042,
+      "interpretation": "weak positive, not FDR-supported"
+    }
+  },
+  "azami_existing_among_taxon": {
+    "BIO12": {
+      "beta_std": 0.3043592858977514,
+      "interpretation": "strong existing among-taxon anchor; different estimand and predictor from EAzami BIO15/BIO1 transition vector"
+    }
+  },
+  "inference": {
+    "prospective_confirmation_status": "not_available",
+    "cross_scale_result": "orientation-environment correspondence is scale/representation dependent rather than a simple repeated sign across taxonomic levels",
+    "allowed_use": "existing complementary cross-scale evidence and Discussion-level boundary",
+    "prohibited_use": [
+      "independent held-out confirmation",
+      "proof that EAzami transition signal generalizes within taxa",
+      "proof of adaptation or climatic causation"
+    ]
+  },
+  "next_validation": "aza3 gravity-referenced field orientation manipulation/measurement with preregistered wetting/temperature/pollination/fitness pathways"
+}
