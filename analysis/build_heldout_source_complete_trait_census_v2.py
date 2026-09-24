@@ -154,26 +154,44 @@ def read_discovery_bins(paths: list[Path]) -> set[str]:
     return out
 
 
+def exact_taxon_key(name: str) -> str:
+    return clean(name).casefold()
+
+
 def parse_nibr_names(html: str) -> list[str]:
     txt = clean(BeautifulSoup(html, "html.parser").get_text(" ", strip=True))
     # The selected page is a taxonomic checklist. Keep unique Cirsium names in printed order.
+    # Fail closed on the genus-author heading "Cirsium Mill.": the second token must
+    # be a lowercase taxon epithet, not an author surname.
     names=[]
     for m in CIRSIUM_NAME.finditer(txt):
         n=clean(m.group(0))
+        parts=n.split()
+        if len(parts) < 2 or not parts[1] or not parts[1][0].islower():
+            continue
         if n not in names:
             names.append(n)
     return names
 
 
 def load_v1_explicit(path: Path) -> dict[str, dict]:
+    """Reuse only exact-concept NIBR evidence that was frozen before v2.
+
+    Do not inherit a species state into a variety by binomial matching, and do
+    not import Flora-of-China evidence into the NIBR source lane.
+    """
     out={}
     if not path.exists():
         return out
     with path.open(encoding="utf-8", newline="") as f:
         for r in csv.DictReader(f):
-            if "Korean" not in r.get("provenance_frame","") and "Korea" not in r.get("provenance_frame",""):
+            source_url=clean(r.get("source_url",""))
+            if "nibr.go.kr" not in source_url.casefold():
                 continue
-            out[binomial(r["analysis_taxon"])] = r
+            taxon=clean(r.get("analysis_taxon",""))
+            if not taxon:
+                continue
+            out[exact_taxon_key(taxon)] = r
     return out
 
 
@@ -226,7 +244,7 @@ def main():
     nibr_text=clean(BeautifulSoup(nibr_html,"html.parser").get_text(" ",strip=True))
     for name in nibr_names:
         overlap=binomial(name) in discovery_bins
-        old=v1k.get(binomial(name))
+        old=v1k.get(exact_taxon_key(name))
         o="unknown"
         k="unknown"
         note="selected NIBR national checklist enumerates concept but supplies no explicit trait state in this lane"
