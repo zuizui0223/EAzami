@@ -28,7 +28,10 @@ from pathlib import Path
 from urllib.parse import urljoin
 
 import requests
+import urllib3
 from bs4 import BeautifulSoup
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 FOC_GENUS = "https://efloras.org/florataxon.aspx?flora_id=2&taxon_id=107139"
 NIBR_LIST = "https://www.nibr.go.kr/aiibook/access/ecatalogt.jsp?Dir=20&callmode=admin&catimage=&eclang=ko&start=161&um=s"
@@ -94,7 +97,12 @@ def code_stickiness(text: str) -> tuple[str, str]:
 
 
 def get(session: requests.Session, url: str) -> str:
-    r = session.get(url, timeout=90)
+    # eFloras currently presents a certificate chain that GitHub-hosted runners
+    # reject as self-signed. This is a transport-only exception: the exact URL
+    # and returned source text are still hashed and recorded; no scientific
+    # inclusion/coding rule changes.
+    verify = False if "efloras.org" in url else True
+    r = session.get(url, timeout=90, verify=verify)
     r.raise_for_status()
     return r.text
 
