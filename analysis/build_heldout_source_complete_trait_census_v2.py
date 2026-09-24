@@ -40,8 +40,9 @@ UA = "EAzami-source-complete-trait-census-v2/1.0"
 DOWN = re.compile(r"\b(nodding|pendulous|pendent|hanging|downward(?:[- ]facing)?)\b", re.I)
 UP = re.compile(r"\b(erect|upright|upward(?:[- ]facing)?)\b", re.I)
 AMBIG = re.compile(
-    r"\b(erect\s+or\s+nodding|nodding\s+(?:or|to)\s+erect|erect\s+to\s+nodding|"
-    r"rarely\s+nodding|sometimes\s+nodding|[±+-]\s*nodding)\b", re.I
+    r"(?:\berect\s+or\s+nodding\b|\bnodding\s+(?:or|to)\s+erect\b|"
+    r"\berect\s+to\s+nodding\b|\brarely\s+nodding\b|\bsometimes\s+nodding\b|"
+    r"[±]\s*nodding\b)", re.I
 )
 NONSTICKY = re.compile(r"\b(non[- ]?sticky|non[- ]?glutinous|not\s+(?:sticky|glutinous|adhesive))\b", re.I)
 STICKY = re.compile(r"\b(sticky|glutinous|adhesive)\b", re.I)
@@ -71,19 +72,30 @@ def sentence_candidates(text: str) -> list[str]:
     return out
 
 
+def capitulum_clauses(text: str) -> str:
+    """Return only clauses whose grammatical subject is Capitulum/Capitula.
+
+    This prevents phrases such as "Stems erect ... below capitula" from being
+    misread as head orientation.
+    """
+    text = clean(text)
+    hits = re.findall(r"\bCapitul(?:um|a)\b[^.]{0,500}(?:\.|$)", text, flags=re.I)
+    return clean(" ".join(hits))
+
+
 def code_orientation(text: str) -> tuple[str, str]:
-    relevant = " ".join(sentence_candidates(text))
+    relevant = capitulum_clauses(text)
     if AMBIG.search(relevant):
-        return "ambiguous", clean(relevant)
+        return "ambiguous", relevant
     d = bool(DOWN.search(relevant))
     u = bool(UP.search(relevant))
     if d and u:
-        return "ambiguous", clean(relevant)
+        return "ambiguous", relevant
     if d:
-        return "downward_or_nodding", clean(relevant)
+        return "downward_or_nodding", relevant
     if u:
-        return "upward_or_erect", clean(relevant)
-    return "unknown", clean(relevant)
+        return "upward_or_erect", relevant
+    return "unknown", relevant
 
 
 def code_stickiness(text: str) -> tuple[str, str]:
