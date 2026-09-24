@@ -272,3 +272,10 @@ The following files remain a **historical audit route only**; they are not the a
 - `chapter2_differentiation_time_axis_contract_v1.json`;
 - `MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md`;
 - `HISTORICAL_DIFFERENTIATION_TRIGGER_RESULT_V1.md`.
+
+
+## Public-data external-confirmation stop point — 2026-09-25
+
+The preregistered external-confirmation programme is closed. The source-complete V2 orientation panel (3 D / 10 U) collapsed under the unchanged strict GBIF occurrence gate to **D=0 / U=1**; BIO1/BIO15 were therefore never opened. Stickiness was already blocked by source-complete trait replication (no external nonsticky comparison). Azami cannot serve as prospective P3 because the relevant within-/among-taxon climate outcomes were previously analyzed; it remains existing cross-scale evidence. See `PUBLIC_DATA_ECOLOGY_PAPER_DECISION_V1.md` and `AZAMI_ORIENTATION_CROSSSCALE_VALIDATION_AUDIT_V1.md`.
+
+No further public taxon-panel or opportunistic climate-proxy rescue is active. The next independent ecological test is the prospective aza3 field mechanism -> reproductive-fitness programme.

@@ -1,0 +1,46 @@
+{
+  "version": "public_data_ecology_paper_decision_v1",
+  "status_date": "2026-09-25",
+  "decision": "DO_NOT_SPLIT_A_STANDALONE_PUBLIC_DATA_ECOLOGY_PAPER_FROM_CURRENT_EAZAMI_RESULTS",
+  "rationale": [
+    "The strongest ecological result, orientation_environment_association_is_scale_partitioned, is already a frozen core result of Chapter 2 rather than unused validation material.",
+    "The preregistered external-taxon V1 and source-complete V2 confirmation attempts are not evaluable under strict public occurrence metadata; V2 leaves D=0 and U=1 after QC.",
+    "Azami image data are existing non-independent cross-scale evidence and already contain the relevant BIO1/BIO12/BIO15 outcomes.",
+    "Phyllary public ecology remains state-replication limited and stickiness has no source-complete external nonsticky comparison."
+  ],
+  "public_data_stop": {
+    "external_orientation_confirmation": "not_evaluable_public_occurrence_metadata",
+    "external_stickiness_confirmation": "not_evaluable_trait_replication",
+    "azami_as_prospective_p3": "not_eligible_already_analyzed",
+    "further_public_taxon_expansion": "stopped",
+    "further_opportunistic_climate_proxy_search": "stopped"
+  },
+  "chapter2_role": {
+    "manuscript": "current JEB organization-first Chapter 2",
+    "ecological_core": [
+      "common9 shows no one shared abiotic niche signature across three historical traits",
+      "orientation ecology is scale-partitioned across within-taxon, among-taxon and East-Asian state/transition representations",
+      "transition-conditioned BIO15-up/BIO1-down correspondence is positive but history-embedded",
+      "historical climate does not identify a persistent origin regime"
+    ],
+    "headline": "mosaic historical assembly with scale-conditioned ecological correspondence",
+    "claim_boundary": "not adaptation, direct selection, convergence or historical climatic causation"
+  },
+  "next_standalone_ecology_paper": {
+    "programme": "aza3",
+    "role": "prospective causal field ecology",
+    "central_question": "Do capitulum components affect reproductive fitness through distinct ecological pathways rather than one common floral-syndrome mechanism?",
+    "first_module": "orientation",
+    "causal_chain": [
+      "gravity-referenced orientation manipulation/sham",
+      "wetting + floral microclimate + time-resolved effective pollination + antagonist exposure",
+      "pollen integrity/deposition",
+      "filled achenes"
+    ],
+    "supporting_context": [
+      "Cirsium reproductive-antagonist meta-analysis",
+      "EAzami repeated/history evidence",
+      "scale-partitioned public ecology"
+    ]
+  }
+}
