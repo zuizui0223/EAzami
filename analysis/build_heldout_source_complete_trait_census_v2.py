@@ -218,6 +218,7 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--contract", type=Path, required=True)
     ap.add_argument("--v1-traits", type=Path, required=True)
+    ap.add_argument("--nibr-snapshot", type=Path, required=True)
     ap.add_argument("--discovery", type=Path, action="append", default=[])
     ap.add_argument("--out-csv", type=Path, required=True)
     ap.add_argument("--out-json", type=Path, required=True)
@@ -258,9 +259,15 @@ def main():
         print("FOC",i,len(links),name,o,k,"overlap",overlap,flush=True)
         time.sleep(.03)
 
-    nibr_html=get(s,NIBR_LIST)
-    nibr_names=parse_nibr_names(nibr_html)
-    nibr_text=clean(BeautifulSoup(nibr_html,"html.parser").get_text(" ",strip=True))
+    # NIBR checklist concepts are read from a source-only snapshot captured by
+    # successful workflow run 36014651461. This avoids making reproducibility
+    # depend on transient NIBR availability while preserving the complete
+    # preregistered source lane.
+    with args.nibr_snapshot.open(encoding="utf-8", newline="") as nf:
+        nibr_snapshot=list(csv.DictReader(nf))
+    nibr_names=[clean(r["analysis_taxon"]) for r in nibr_snapshot]
+    nibr_meta={clean(r["analysis_taxon"]):r for r in nibr_snapshot}
+    nibr_text_hash=next(iter({r["source_page_sha256"] for r in nibr_snapshot}), "")
     for name in nibr_names:
         overlap=binomial(name) in discovery_bins
         old=v1k.get(exact_taxon_key(name))
@@ -284,7 +291,7 @@ def main():
             "analysis_taxon":name,
             "source_label":name,
             "source_url":src,
-            "source_sha256":sha(nibr_text),
+            "source_sha256":nibr_text_hash,
             "orientation_state":o,
             "stickiness_state":k,
             "relevant_trait_text":rel,
