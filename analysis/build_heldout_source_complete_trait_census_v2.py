@@ -114,9 +114,16 @@ def get(session: requests.Session, url: str) -> str:
     # and returned source text are still hashed and recorded; no scientific
     # inclusion/coding rule changes.
     verify = False if "efloras.org" in url else True
-    r = session.get(url, timeout=90, verify=verify)
-    r.raise_for_status()
-    return r.text
+    last = None
+    for attempt in range(3):
+        try:
+            r = session.get(url, timeout=20, verify=verify)
+            r.raise_for_status()
+            return r.text
+        except requests.RequestException as exc:
+            last = exc
+            time.sleep(1 + attempt)
+    raise last
 
 
 def parse_foc_links(html: str) -> list[tuple[str, str]]:
