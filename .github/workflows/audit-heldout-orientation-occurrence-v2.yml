@@ -1,0 +1,52 @@
+name: Execute V2 held-out orientation occurrence gate
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_heldout_orientation_occurrence_support_v2.py"
+      - "data/evidence/heldout_orientation_occurrence_gate_v2_contract.json"
+      - "data/evidence/heldout_east_asia_orientation_candidate_panel_v2.csv"
+      - ".github/workflows/audit-heldout-orientation-occurrence-v2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  occurrence-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile frozen audit
+        run: python -m py_compile analysis/audit_heldout_orientation_occurrence_support_v2.py
+      - name: Run climate-blind GBIF gate
+        run: |
+          mkdir -p /tmp/heldout_occ_v2
+          python analysis/audit_heldout_orientation_occurrence_support_v2.py \
+            --panel data/evidence/heldout_east_asia_orientation_candidate_panel_v2.csv \
+            --contract data/evidence/heldout_orientation_occurrence_gate_v2_contract.json \
+            --out-csv /tmp/heldout_occ_v2/heldout_orientation_occurrence_support_v2.csv \
+            --out-json /tmp/heldout_occ_v2/heldout_orientation_occurrence_support_v2.json \
+            | tee /tmp/heldout_occ_v2/run.log
+      - name: Assert climate remains unopened
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/heldout_occ_v2/heldout_orientation_occurrence_support_v2.json').read_text())
+          rows=list(csv.DictReader(open('/tmp/heldout_occ_v2/heldout_orientation_occurrence_support_v2.csv',encoding='utf-8')))
+          assert x['environment_opened'] is False
+          assert all(r['environment_opened'].lower()=='false' for r in rows)
+          assert x['n_candidates']==13
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: heldout-orientation-occurrence-v2
+          path: /tmp/heldout_occ_v2/
+          if-no-files-found: error
+          retention-days: 90
