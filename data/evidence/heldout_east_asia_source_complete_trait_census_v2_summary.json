@@ -1,0 +1,52 @@
+{
+  "version": "heldout_east_asia_source_complete_trait_census_v2_frozen",
+  "status_date": "2026-09-24",
+  "workflow_run": 36014106532,
+  "artifact_id": 10814305807,
+  "artifact_sha256": "505a4aeb797f677e0133bdaf212a45e70ea19aa792b793308b0aea865a241673",
+  "environment_opened": false,
+  "occurrence_opened": false,
+  "source_rows": {
+    "flora_of_china": 46,
+    "nibr_national_species_list": 19,
+    "total": 65
+  },
+  "eligible_rows_total": 55,
+  "orientation": {
+    "row_counts": {
+      "downward_or_nodding": 8,
+      "upward_or_erect": 15,
+      "ambiguous": 4,
+      "unknown": 28
+    },
+    "unique_taxon_counts": {
+      "downward_or_nodding": 7,
+      "upward_or_erect": 14,
+      "total_explicit_binary": 21
+    },
+    "cross_source_duplicates": [
+      "Cirsium schantarense",
+      "Cirsium vlassovianum"
+    ],
+    "next_gate": "strict v2 GBIF occurrence QC on the 21 unique explicit-binary taxa"
+  },
+  "stickiness": {
+    "row_counts": {
+      "sticky": 2,
+      "nonsticky": 0,
+      "unknown": 53
+    },
+    "explicit_sticky_concepts": [
+      "Cirsium setidens",
+      "Cirsium setidens var. niveoaraneum"
+    ],
+    "confirmation_status": "not_evaluable_no_nonsticky_source_complete_candidate",
+    "action": "stop external stickiness confirmation; do not query ecology to rescue it"
+  },
+  "completeness": {
+    "flora_of_china_expected": 46,
+    "flora_of_china_recovered": 46,
+    "pass": true
+  },
+  "claim_boundary": "Source-complete trait census only. No GBIF occurrence or environmental endpoint was queried."
+}
