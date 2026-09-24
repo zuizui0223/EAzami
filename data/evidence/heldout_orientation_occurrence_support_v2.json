@@ -1,0 +1,20 @@
+{
+  "version": "heldout_orientation_occurrence_support_v2",
+  "status_date": "2026-09-24",
+  "workflow_run": 36070410995,
+  "artifact_id": 10838360802,
+  "artifact_sha256": "b58429771b03efdc33cd83327346a980a46419a00410fdb8c9f457e111aadd42",
+  "environment_opened": false,
+  "n_candidates": 13,
+  "n_taxa_passing": 1,
+  "state_counts_passing": {
+    "downward_or_nodding": 0,
+    "upward_or_erect": 1
+  },
+  "minimum_taxa_per_state": 2,
+  "confirmatory_ecology_evaluable": false,
+  "surviving_taxa": [
+    "Cirsium vulgare"
+  ],
+  "stop_decision": "stop_external_taxon_confirmation_without_environment"
+}
