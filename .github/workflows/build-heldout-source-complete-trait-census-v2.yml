@@ -1,0 +1,72 @@
+name: Build held-out source-complete trait census v2
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_heldout_source_complete_trait_census_v2.py"
+      - "data/evidence/heldout_east_asia_source_complete_v2_contract.json"
+      - "data/evidence/heldout_nibr_cirsium_source_snapshot_v1.csv"
+      - ".github/workflows/build-heldout-source-complete-trait-census-v2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install parser
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install requests beautifulsoup4
+          python -m py_compile analysis/build_heldout_source_complete_trait_census_v2.py
+      - name: Build trait-only census
+        run: |
+          mkdir -p /tmp/heldout_v2
+          python analysis/build_heldout_source_complete_trait_census_v2.py \
+            --contract data/evidence/heldout_east_asia_source_complete_v2_contract.json \
+            --v1-traits data/evidence/heldout_east_asia_trait_state_audit_v1.csv \
+            --nibr-snapshot data/evidence/heldout_nibr_cirsium_source_snapshot_v1.csv \
+            --discovery data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --discovery data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv \
+            --discovery data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --out-csv /tmp/heldout_v2/heldout_east_asia_source_complete_trait_census_v2.csv \
+            --out-json /tmp/heldout_v2/heldout_east_asia_source_complete_trait_census_v2.json \
+            | tee /tmp/heldout_v2/run.log
+      - name: Assert no ecology opened
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/heldout_v2/heldout_east_asia_source_complete_trait_census_v2.json').read_text())
+          assert x['environment_opened'] is False
+          assert x['occurrence_opened'] is False
+          assert x['foc_completeness_pass'] is True
+          assert x['source_counts']['foc_linked_taxa'] == 46
+          assert x['source_counts']['nibr_printed_cirsium_concepts'] == 18
+
+          import csv
+          rows=list(csv.DictReader(open('/tmp/heldout_v2/heldout_east_asia_source_complete_trait_census_v2.csv',encoding='utf-8')))
+          nibr=[r for r in rows if r['source_lane']=='NIBR_national_species_list']
+          assert all(r['analysis_taxon'] != 'Cirsium Mill' for r in nibr)
+          # The checklist lane itself supplies no orientation descriptions; do not
+          # recycle Flora-of-China states into the Korean lane.
+          assert all(r['orientation_state']=='unknown' for r in nibr)
+          var=[r for r in nibr if r['analysis_taxon']=='Cirsium setidens var. niveoaraneum']
+          assert len(var)==1 and var[0]['stickiness_state']=='unknown'
+          sp=[r for r in nibr if r['analysis_taxon']=='Cirsium setidens']
+          assert len(sp)==1 and sp[0]['stickiness_state']=='sticky'
+          print(json.dumps(x,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: heldout-source-complete-trait-census-v2
+          path: /tmp/heldout_v2/
+          if-no-files-found: error
+          retention-days: 90
