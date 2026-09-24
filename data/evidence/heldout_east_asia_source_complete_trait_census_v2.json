@@ -1,0 +1,31 @@
+{
+  "version": "heldout_east_asia_source_complete_trait_census_v2",
+  "status_date": "2026-09-24",
+  "status": "FROZEN_TRAIT_CENSUS_BEFORE_V2_OCCURRENCE_QUERY",
+  "validated_workflow_run": 36014935082,
+  "validated_artifact_id": 10814118268,
+  "validated_artifact_sha256": "1db3a53fa9f5ca8faf3f92372b712850d92af681347b90730de8b7bf3193131d",
+  "occurrence_opened": false,
+  "environment_opened": false,
+  "source_counts": {
+    "flora_of_china_taxa": 46,
+    "nibr_cirsium_concepts": 18,
+    "eligible_rows_total": 54
+  },
+  "eligible_orientation_counts": {
+    "downward_or_nodding": 3,
+    "upward_or_erect": 10,
+    "ambiguous": 8,
+    "unknown": 33
+  },
+  "eligible_stickiness_counts": {
+    "sticky": 1,
+    "nonsticky": 0,
+    "unknown": 53
+  },
+  "orientation_status": "ready_for_strict_occurrence_gate",
+  "stickiness_status": "not_confirmatory_trait_replication",
+  "stickiness_reason": "Only one eligible explicit sticky taxon and zero eligible explicit nonsticky taxa after the source-complete census.",
+  "accepted_orientation_candidate_file": "data/evidence/heldout_east_asia_orientation_candidate_panel_v2.csv",
+  "claim_boundary": "Trait-source census only. No V2 GBIF occurrence support or environmental endpoint has been queried."
+}
