@@ -5,6 +5,7 @@ on:
     paths:
       - "analysis/build_heldout_source_complete_trait_census_v2.py"
       - "data/evidence/heldout_east_asia_source_complete_v2_contract.json"
+      - "data/evidence/heldout_nibr_cirsium_source_snapshot_v1.csv"
       - ".github/workflows/build-heldout-source-complete-trait-census-v2.yml"
   workflow_dispatch:
 
@@ -31,6 +32,7 @@ jobs:
           python analysis/build_heldout_source_complete_trait_census_v2.py \
             --contract data/evidence/heldout_east_asia_source_complete_v2_contract.json \
             --v1-traits data/evidence/heldout_east_asia_trait_state_audit_v1.csv \
+            --nibr-snapshot data/evidence/heldout_nibr_cirsium_source_snapshot_v1.csv \
             --discovery data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
             --discovery data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv \
             --discovery data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
