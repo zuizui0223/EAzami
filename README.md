@@ -1,152 +1,136 @@
-# EAzami — differentiation of capitulum diversity through evolutionary time
+# EAzami — mosaic capitulum evolution through time and ecological scale
 
-## Active state — 2026-09-03
+## Active state — 2026-09-30
 
-EAzami is currently being closed as a **standalone Chapter 2 paper**. The active scientific question is:
+EAzami Chapter 2 is now organized around one positive historical result plus a bounded ecological extension.
 
-> **How repeatedly and how deeply did capitulum traits differentiate through evolutionary time, and does one recurring coarse historical environment explain those differentiations?**
+### Central paper question
 
-The paper-level sequence is:
+> **Was the capitulum repeatedly reorganized as one synchronized phenotype, or were its component traits reassembled at different evolutionary depths and ecological scales?**
 
-`recurrence → relative evolutionary depth → calendar identifiability → historical context → repeated-trigger status`.
+### Current answer
 
-Present-day Chapter 1 trait–environment results are not used to select or rescue Chapter 2 historical results. Chapter 3 experiments are outside the submission gate for this paper.
+> **Orientation, phyllary posture and involucre stickiness repeatedly changed within one young Japanese *Cirsium* radiation, but their histories occupy unequal evolutionary depths and do not repeatedly localize to the same branches. Ecological correspondence is likewise non-invariant: the three traits do not share one climatic syndrome, and orientation exposes different environmental structure across static states, within-taxon variation, among-taxon differentiation and reconstructed transitions.**
 
-## Current Chapter 2 result
+The active manuscript is:
 
-> **Public data resolve repeated capitulum differentiation and unequal evolutionary depth more strongly than they resolve historical cause. No tested recurring BIOCLIM or global eustatic sea-level trigger survives the current age, palaeolocation and matched-background uncertainty gates.**
+- `docs/chapter2/MANUSCRIPT_JEB_V9_6_SCALE_CONDITIONED_ECOLOGY.md`
 
-Final current classification:
+The active figure/claim architecture is:
 
-`repeated_differentiation_resolved_but_recurring_tested_environmental_trigger_not_identified_under_public_data`
+- `docs/chapter2/V9_6_FIGURE_MAP_AND_CLAIM_ARCHITECTURE.md`
 
-### Recurrence and depth
+The active validator is:
 
-- orientation: ML minimum 6; UFBoot 4–6, median 5; median relative-depth envelope 0.795–0.994;
-- phyllary posture: exactly 3 changes; median relative-depth envelope 0.695–1.000;
-- stickiness: exactly 5 changes; shallow median relative-depth envelope 0.937–0.954;
-- 0/3 discrete trait pairs pass robust shared-transition localization.
+- `analysis/validate_manuscript_jeb_v9_6.py`
 
-Minimum changes are lower bounds. Relative lineage depth is topology-only, not calendar age or evolutionary rate.
+V9.6 validation is green: abstract 203 words, main text before References 4,020 words, 8 keywords.
 
-### Calendar identifiability
+## Historical core
 
-Only one trait transition currently passes the full public-data gate of
+Within the dominant Japanese radiation:
 
-`trait transition → bounded chronology → palaeolocation scenarios → historical environment`:
+- orientation: ML minimum 6; UFBoot 4–6;
+- phyllary posture: exactly 3 minimum changes;
+- stickiness: exactly 5 minimum changes;
+- phyllary is deeper-permissive than stickiness in 1000/1000 paired topologies;
+- phyllary is deeper-permissive than orientation in 993/1000;
+- orientation is deeper-permissive than stickiness in 905/1000;
+- complete `phyllary < orientation < stickiness` ordering occurs in 898/1000;
+- 0/3 trait pairs pass the robust shared-transition-localization rule.
 
-the core-Nipponocirsium erect/upward → nodding/downward orientation event.
+These are topology-sensitivity summaries, not independent biological replicates or posterior probabilities.
 
-A renewed public audit recovered no machine-readable dated Newick/posterior that can calendarize the multiple Japan38 change-bearing branches. Broad radiation ages, lineage splits, dispersal ages and relative lineage depth are not substituted for trait-event ages.
+## Ecology
 
-### Orientation historical context
+### Common static environment
 
-For 94 chronology pairs × 4 palaeolocation regions = 376 scenarios:
+The nine-variable common screen does not recover one shared abiotic syndrome:
 
-- no BIO1/BIO4/BIO12/BIO15 signed direction survives the full envelope;
-- no tested climate variable passes the robust gate for extreme level, absolute change or temporal variability;
-- the central 0.79→0.74 Ma pair shows coherent climate tendencies, but those tendencies do not survive the full chronology envelope;
-- the de Boer global sea-level reconstruction covers 94/94 chronology pairs, but no sea-level state/variability/change metric survives the full chronology gate;
-- repeated orientation trigger remains `not_evaluable_single_dated_transition_event` because only one transition is currently calendar+palaeolocation evaluable.
+- orientation: weak static D/U separation;
+- phyllary: public state replication is insufficient;
+- stickiness: precipitation-related leads remain exploratory and none survives the 27-row BH family.
 
-### Broader lineage-differentiation context
+### Orientation across scale
 
-A separate diagnostic tested **17 BIOCLIM variables across 6 dated lineage contexts** representing Nipponocirsium, Arenicola and Sinocirsium.
+The current ecological synthesis is:
 
-- tested scenario × variable combinations: 15,472;
-- robust event-level classes: **0/324**;
-- recurring climate-context candidates: **0**.
+> **orientation–environment correspondence is scale- and representation-dependent rather than one repeated climate coefficient.**
 
-Decision:
+Evidence layers:
 
-`no_recurring_lineage_differentiation_context_survives_age_region_background_gates`
+- Azami among taxa: image presentation angle tracks BIO12 annual precipitation;
+- Azami within taxa: BIO1 is supported, but its sign is opposite to the EAzami transition-level direction;
+- EAzami reconstructed U→D transitions align with BIO15 up + BIO1 down;
+- static East-Asian D/U tip separation is weak.
 
-A three-clade global sea-level diagnostic similarly produced:
+These estimands are not pooled or treated as replications of one coefficient.
 
-- 21 event-metric classes;
-- robust classes: **0/21**;
-- recurring global sea-level candidates: **0**.
+## Public-data confirmation ceiling
 
-Decision:
+The preregistered external confirmation programme is closed.
 
-`no_recurring_global_sea_level_context_survives_age_background_window_gates`
+- V1: strict occurrence QC left one D and one U lineage -> not evaluable.
+- Source-complete V2: 46/46 Flora of China taxa were censused and a frozen 13-taxon orientation panel was formed.
+- Strict V2 GBIF QC retained only *Cirsium vulgare* (U; 16 thinned records), leaving D=0 / U=1.
+- BIO1/BIO15 were therefore never opened for held-out V2.
+- Stickiness external confirmation was already blocked by lack of a source-complete external nonsticky comparison.
 
-These are negative results for the **tested coarse historical surfaces**, not evidence that climate, local island fragmentation, biotic interactions or other environmental processes were biologically irrelevant. Global eustatic sea level is not local Taiwan/Ryukyu/Japan connectivity.
+This is a public occurrence-metadata resolution ceiling, not an ecological null.
 
-### Mid-Pleistocene context
+No new public taxon rescue panel, QC relaxation or opportunistic climate-variable search is active.
 
-90/94 admissible orientation chronologies overlap 0.7–0.9 Ma. Because that overlap is largely implied by the chronology envelope, Mid-Pleistocene timing is broad temporal context rather than independent trigger evidence.
+## Historical-cause boundary
 
-`broad_mpt_overlap_high_but_not_event_discriminating`
+Repeated history is much better resolved than historical cause.
 
-## Trait-specific endpoint
+The single calendar+palaeolocation-evaluable orientation event and the broader public lineage-context audits do not identify one recurring tested climatic or global eustatic trigger after uncertainty propagation.
 
-- **Orientation:** repeated history + one calendar-bounded event; historical climate and global sea-level trigger unresolved.
-- **Phyllary posture:** repeated and relatively deep; no dated reconstructed posture transition.
-- **Stickiness:** repeated and shallow; published range-event ages are not stickiness-transition ages.
-- **Flower colour:** dated conditional white-lineage contexts exist, but ancestral colour and exact transition timing remain conditional.
-- **Whole capitulum:** unequal recurrence/depth and 0/3 shared-transition localization reject the simplest one-event/one-trigger history without proving complete independence.
+This does not imply that climate, local geography, biotic interactions or selection were irrelevant.
 
-## Active V6 submission sources of truth
+## Causal handoff
 
-Start here:
+The next genuinely independent ecological test is the prospective **aza3** field programme:
 
-1. `docs/chapter2/MANUSCRIPT_JEB_V6_FINAL.md` — **active final scientific manuscript text**;
-2. `docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V6.md` — active five-figure contract;
-3. `docs/chapter2/JEB_SUPPORTING_INFORMATION_V4.md` — active V6 Supporting Information;
-4. `analysis/make_chapter2_jeb_figures_v6.py` — active figure generator;
-5. `analysis/validate_chapter2_manuscript_v6_final.py` — V6 scientific validator;
-6. `data/evidence/chapter2_historical_differentiation_final_summary_v1.json` — final machine-readable synthesis;
-7. `docs/chapter2/HISTORICAL_DIFFERENTIATION_EVIDENCE_SYNTHESIS_V1.md` — full scientific evidence narrative;
-8. `data/evidence/chapter2_historical_differentiation_evidence_ledger_v1.csv` — trait-by-trait identifiability ledger;
-9. `data/evidence/chapter2_orientation_differentiation_environment_v2_summary.json` — focal orientation matched-window result;
-10. `data/evidence/chapter2_lineage_differentiation_environment_atlas_v1_summary.json` — 17-BIOCLIM lineage-context result;
-11. `data/evidence/chapter2_lineage_differentiation_sealevel_v1.json` — three-clade global sea-level result;
-12. `data/evidence/chapter2_public_dated_tree_recovery_audit_v2.json` — calendarization ceiling.
+`gravity-referenced trait manipulation -> ecological mechanism -> pollen/reproductive process -> filled achenes`
 
-## V5 and earlier status
+Priority order:
 
-`docs/chapter2/MANUSCRIPT_JEB_V5.md` and its figure/DOCX package remain fully reproducible **pre-reframe audit snapshots**. V5 is not the active scientific submission text. V4, V3 and earlier manuscripts remain audit history only.
+1. orientation manipulation/sham;
+2. phyllary/spine access experiment;
+3. stickiness neutralization/restoration;
+4. colour visible/UV/pigment pathway.
 
-The V5 present-day environmental correspondence, white–coloured public-image comparisons, current RSDS–chroma analyses and partial coordinated-remodelling results remain valid frozen analyses, but they do not determine the V6 historical-differentiation conclusion.
+Until those experiments, EAzami supports historical mosaic reassembly and scale-conditioned ecological correspondence, not adaptation.
 
-## Active V6 title
+## Submission work remaining
 
-> **Repeated capitulum differentiation at unequal evolutionary depths without a recurring coarse historical trigger in a young thistle radiation**
+Scientific result hunting is stopped. Remaining Chapter 2 work is production:
 
-## Submission boundary
-
-No Chapter 3, field, RAD-seq, mechanism or reproductive-fitness result is required to close this public-data manuscript.
-
-Remaining submission work is limited to:
-
-1. V6 figure generation and scientific CI;
-2. anonymous line-numbered DOCX + title page + SI production;
-3. final author/affiliation/ORCID information;
-4. funding, conflicts and acknowledgements;
-5. archival DOI/accession and exact submission commit.
+1. build/freeze Figures 1–4 from machine-readable evidence;
+2. synchronize Supporting Information;
+3. generate anonymous line-numbered JEB main DOCX + title page + SI + cover letter;
+4. finalize author/affiliation/funding/COI metadata;
+5. mint the immutable archive/DOI at the exact submission commit.
 
 ## Claim boundary
 
-Chapter 2 does not establish adaptation, natural selection, independent origins, convergence, exact transition ages, ancestral-area probabilities, local land bridges or a common environmental trigger. Failure to recover a recurring tested trigger is not evidence that historical environment was irrelevant.
+Do not claim:
 
-## Legacy programme-routing labels retained for audit compatibility
+- minimum changes = independent origins;
+- relative lineage depth = calendar time or evolutionary rate;
+- 0/3 shared localization = complete genetic/developmental independence;
+- transition–niche tracking = climate causation, selection or adaptation;
+- external public confirmation succeeded;
+- Azami is prospective held-out P3;
+- one universal stickiness defence or one universal orientation–climate rule.
 
-These exact labels are historical aliases used by downstream validators and are not the active scientific frame:
+## Legacy audit compatibility
 
-- `Chapter 1: present-day space/environment`;
-- `Chapter 2: evolutionary time/history`;
-- `Chapter 3: own RAD-seq + linked phenotype/function`;
-- `Present-state v3/v4 covariance generators`;
+Earlier packages remain **audit snapshots** in Git history. The following exact labels are retained only because historical validators still verify them:
+
 - `COMPLETE_EXISTING_PUBLIC_HISTORY_CORE`;
 - `Capitulum configuration diversity, minimum change counts`;
 - `MANUSCRIPT_JEB_V3.md`.
 
-## Frozen legacy submission package
-
-Historical audit entry points include `docs/chapter2/MANUSCRIPT_JEB_V5.md`, `docs/chapter2/MANUSCRIPT_JEB_V4.md`, `docs/chapter2/CHAPTER2_CORE_RESULT_RECOVERY_V1.md`, and `MANUSCRIPT_JEB_V3.md`.
-
-Two frozen negative reconstruction-aware diagnostics remain part of the audit trail:
-
-- P=0.3504;
-- P=0.1959.
+They are not the active scientific route.
