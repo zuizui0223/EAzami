@@ -174,7 +174,7 @@ def build_supporting(output_dir: Path) -> Path:
 def build_cover_letter(output_dir: Path) -> Path:
     doc = Document()
     legacy.configure_document(doc, running_header="", line_numbers=False)
-    legacy.render_markdown(doc, CH / "JEB_COVER_LETTER_TEMPLATE_V3.md")
+    legacy.render_markdown(doc, CH / "JEB_COVER_LETTER_V6_ARCHIVE.md")
     path = output_dir / "Chapter2_JEB_Cover_Letter_TEMPLATE_V3.docx"
     legacy.save_document(doc, path)
     return path
