@@ -1,0 +1,26 @@
+name: Validate Chapter 2 V9.6 scale-conditioned ecology
+
+on:
+  pull_request:
+    paths:
+      - "docs/chapter2/MANUSCRIPT_JEB_V9_6_SCALE_CONDITIONED_ECOLOGY.md"
+      - "docs/chapter2/V9_6_FIGURE_MAP_AND_CLAIM_ARCHITECTURE.md"
+      - "analysis/validate_manuscript_jeb_v9_6.py"
+      - ".github/workflows/validate-manuscript-jeb-v9-6.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate V9.6 against frozen evidence
+        run: |
+          python -m py_compile analysis/validate_manuscript_jeb_v9_6.py
+          python analysis/validate_manuscript_jeb_v9_6.py
