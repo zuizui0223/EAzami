@@ -166,7 +166,7 @@ The common9 comparison prevents a selective focus on orientation alone. Under th
 
 Existing experiments make the historical mosaic biologically plausible by pointing to different physical and biotic interfaces: reproductive exposure for orientation, access geometry for phyllaries and arthropod filtering for stickiness. But these functional differences are not the novelty of this study and are not used as proof of adaptation.
 
-The next causal step is direct focal *Cirsium* manipulation of each trait followed by mechanism and reproductive-fitness endpoints. Public-data expansion is stopped: additional taxon panels, relaxed occurrence-quality thresholds and opportunistic climate predictors would no longer provide an independent test. Until prospective manipulation, the present study establishes repeated historical reassembly and scale-conditioned ecological correspondence, not the historical selective cause of each transition.
+The next causal step is the prospective **aza3** field programme: direct focal *Cirsium* manipulation of each trait followed by mechanism and reproductive-fitness endpoints. Public-data expansion is stopped: additional taxon panels, relaxed occurrence-quality thresholds and opportunistic climate predictors would no longer provide an independent test. Until prospective manipulation, the present study establishes repeated historical reassembly and scale-conditioned ecological correspondence, not the historical selective cause of each transition.
 
 ## Broader implication
 
