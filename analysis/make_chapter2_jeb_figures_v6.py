@@ -351,7 +351,10 @@ def main() -> None:
     outputs += figure4(a.output_dir, atlas, sea)
     outputs += figure5(a.output_dir, summary)
     for p in outputs:
-        print(p.relative_to(ROOT))
+        try:
+            print(p.relative_to(ROOT))
+        except ValueError:
+            print(p)
 
 
 if __name__ == "__main__":
