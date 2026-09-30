@@ -58,7 +58,7 @@ def setup_style():
     })
 
 def panel(ax, letter):
-    ax.text(-0.10,1.04,letter,transform=ax.transAxes,fontsize=11,fontweight="bold",va="bottom")
+    ax.text(-0.14,1.08,letter,transform=ax.transAxes,fontsize=11,fontweight="bold",va="bottom")
 
 def save(fig,out,stem,dpi=600):
     out.mkdir(parents=True,exist_ok=True)
@@ -250,8 +250,8 @@ def figure2(out,hist,depth,cov):
     ax.add_patch(FancyBboxPatch((.06,.16),.88,.70,boxstyle="round,pad=0.025",facecolor=PALE,edgecolor=DARK,lw=.9,transform=ax.transAxes))
     ax.text(.5,.67,"Unequal evolutionary depth",transform=ax.transAxes,ha="center",fontsize=12,fontweight="bold")
     ax.text(.5,.50,"is robust in central ordering",transform=ax.transAxes,ha="center",fontsize=10,color=BLUE)
-    ax.text(.5,.34,"but strict tails overlap after coverage matching",transform=ax.transAxes,ha="center",fontsize=8,color=MID)
-    ax.text(.5,.20,"Topology coordinate ≠ calendar time ≠ evolutionary rate",transform=ax.transAxes,ha="center",fontsize=6.7,color=RED)
+    ax.text(.5,.35,"but strict tails overlap\nafter coverage matching",transform=ax.transAxes,ha="center",fontsize=7.6,color=MID)
+    ax.text(.5,.18,"Topology coordinate ≠ calendar time\n≠ evolutionary rate",transform=ax.transAxes,ha="center",fontsize=6.3,color=RED)
     panel(ax,"d")
     fig.suptitle("Figure 2. Repeated histories occupy unequal evolutionary depths",fontsize=11.5)
     return save(fig,out,"figure2_v9_6_unequal_depth")
@@ -282,13 +282,13 @@ def figure3(out,over,ml):
     ax.add_patch(FancyBboxPatch((.08,.20),.84,.63,boxstyle="round,pad=0.03",facecolor=PALE,edgecolor=DARK,lw=1,transform=ax.transAxes))
     ax.text(.5,.64,"0 / 3",transform=ax.transAxes,ha="center",fontsize=28,fontweight="bold",color=RED)
     ax.text(.5,.48,"trait pairs pass the robust\nshared-localization rule",transform=ax.transAxes,ha="center",fontsize=9)
-    ax.text(.5,.30,"No one synchronized\nwhole-capitulum history required",transform=ax.transAxes,ha="center",fontsize=7.5,color=MID)
+    ax.text(.5,.30,"No one synchronized\nwhole-capitulum history\nis required",transform=ax.transAxes,ha="center",fontsize=7.0,color=MID)
     panel(ax,"b")
     fig.suptitle("Figure 3. Component changes do not repeatedly synchronize on the same branches",fontsize=11.5)
     return save(fig,out,"figure3_v9_6_shared_localization")
 
 def figure4(out,common,azami,tr,held_contract,held_doc):
-    fig,axs=plt.subplots(2,2,figsize=(8.4,7.0))
+    fig,axs=plt.subplots(2,2,figsize=(9.0,7.0))
     fig.subplots_adjust(left=.11,right=.98,top=.91,bottom=.10,hspace=.50,wspace=.38)
 
     ax=axs[0,0]
@@ -297,7 +297,7 @@ def figure4(out,common,azami,tr,held_contract,held_doc):
            parse_fraction(common["primary"]["phyllary"]["omnibus_nine_environment_rank"])[2],
            parse_fraction(common["primary"]["stickiness"]["omnibus_nine_environment_rank"])[2]]
     bars=ax.bar(range(3),ranks,color=[BLUE,LIGHT,PURPLE],edgecolor=[BLUE,MID,PURPLE],width=.62)
-    ns=[17,4,12]; states=["5D/12U","1 App/3 Asc","6 sticky/6 non"]
+    ns=[17,4,12]; states=["5D/12U","1 App/3 Asc","6 S/6 N"]
     for b,v,n,st in zip(bars,ranks,ns,states):
         ax.text(b.get_x()+b.get_width()/2,v+3,f"{v:.1f}%\nn={n}; {st}",ha="center",fontsize=6.4)
     ax.set_xticks(range(3),traits); ax.set_ylim(0,112)
@@ -319,16 +319,16 @@ def figure4(out,common,azami,tr,held_contract,held_doc):
         (1,1):("+","β=+0.017; q=.048","warmer → more down",BLUE),
         (1,2):("−","β=−0.0076; q=.183","not FDR-supported",ORANGE),
         (2,0):("·","not focal","n/a",LIGHT),
-        (2,1):("−","D associated lower BIO1","opposite within-taxon",ORANGE),
-        (2,2):("+","D associated higher BIO15","transition vector",BLUE),
+        (2,1):("−","D associated\nlower BIO1","opposite within-taxon",ORANGE),
+        (2,2):("+","D associated\nhigher BIO15","transition vector",BLUE),
     }
     for i in range(3):
         for j in range(3):
             sym,line1,line2,col=cells[(i,j)]
             ax.add_patch(Rectangle((j+.08,1.98-i),.84,.70,facecolor=col,alpha=.18 if col!=LIGHT else .55,edgecolor=col if col!=LIGHT else MID,lw=.8))
             ax.text(j+.5,2.49-i,sym,ha="center",va="center",fontsize=14,fontweight="bold",color=DARK)
-            ax.text(j+.5,2.27-i,line1,ha="center",va="center",fontsize=5.8)
-            ax.text(j+.5,2.10-i,line2,ha="center",va="center",fontsize=5.3,color=MID)
+            ax.text(j+.5,2.28-i,line1,ha="center",va="center",fontsize=5.4,linespacing=0.95)
+            ax.text(j+.5,2.07-i,line2,ha="center",va="center",fontsize=5.1,color=MID)
     ax.set_title("Orientation–environment mapping changes with scale",pad=9)
     panel(ax,"b")
 
