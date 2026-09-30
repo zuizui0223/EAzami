@@ -148,8 +148,8 @@ def validate(hist,depth,cov,common,azami,tr,over,ml,held_contract,held_doc,seed,
     assert held_contract["state_counts_before_occurrence"]=={"downward_or_nodding":3,"upward_or_erect":10}
     assert "downward/nodding: **0 taxa**" in held_doc
     assert "upward/erect: **1 taxon**" in held_doc
-    assert "Cirsium vulgare" in held_doc and "16 thinned" in held_doc
-    assert "No BIO1/BIO15 extraction" in held_doc or "BIO1/BIO15" in held_doc
+    assert "Cirsium vulgare" in held_doc and "16 deterministic 0.1-degree thinned records" in held_doc
+    assert "BIO1 and BIO15 are **not extracted**" in held_doc
 
 def figure1(out,hist,seed,ext):
     rows=sorted(seed+ext,key=lambda r:int(r["paper_japan_member_id"].split("_")[1]))
