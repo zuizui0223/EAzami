@@ -5,7 +5,7 @@ on:
     paths:
       - 'docs/chapter2/MANUSCRIPT_JEB_V6_FINAL.md'
       - 'docs/chapter2/JEB_QUESTION_RESULT_FIGURE_MAP_V6.md'
-      - 'docs/chapter2/JEB_SUPPORTING_INFORMATION_V4.md'
+      - 'docs/chapter2/JEB_SUPPORTING_INFORMATION_V6_ARCHIVE.md'
       - 'docs/chapter2/JEB_TITLE_PAGE_TEMPLATE_V3.md'
       - 'docs/chapter2/JEB_COVER_LETTER_TEMPLATE_V3.md'
       - 'analysis/make_chapter2_jeb_figures_v6.py'
