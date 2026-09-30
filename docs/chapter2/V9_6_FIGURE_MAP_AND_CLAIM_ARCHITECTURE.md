@@ -35,11 +35,17 @@ Panel B: orientation cross-scale matrix:
 - Azami within-taxon BIO15: beta -0.0076180, q 0.18310;
 - EAzami transition-level direction: BIO15 up / BIO1 down.
 
-Panel C: transition-level finite-map ranks plus external confirmation ceiling:
+Panel C: transition-level finite-map ranks:
 - n>=5: 16/792;
 - n>=3: 19/1716;
 - n>=10: 4/126;
-- held-out V2 after strict QC: D=0, U=1; environment unopened.
+- keep the 5% line labelled as the frozen finite-map decision boundary, not a biological-replicate P-value threshold.
+
+Panel D: external confirmation ceiling:
+- frozen V2 candidate panel: 13 taxa (3 D / 10 U);
+- after strict GBIF QC: D=0, U=1;
+- only *C. vulgare* remains (16 thinned records);
+- BIO1/BIO15 environment unopened.
 
 ## Claim hierarchy
 
