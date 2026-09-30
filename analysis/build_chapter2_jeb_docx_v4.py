@@ -2,7 +2,7 @@
 """Build the active double-anonymous JEB V6 package.
 
 V5 and earlier builders remain frozen audit routes. This builder reads only the
-V6 final manuscript, V6 figures, V4 Supporting Information, and V3 submission
+V6 final manuscript, V6 figures, archived V6 Supporting Information, and V3 submission
 metadata templates.
 """
 from __future__ import annotations
@@ -165,7 +165,7 @@ def build_title_page(output_dir: Path) -> Path:
 def build_supporting(output_dir: Path) -> Path:
     doc = Document()
     legacy.configure_document(doc, running_header="", line_numbers=True)
-    legacy.render_markdown(doc, CH / "JEB_SUPPORTING_INFORMATION_V4.md")
+    legacy.render_markdown(doc, CH / "JEB_SUPPORTING_INFORMATION_V6_ARCHIVE.md")
     path = output_dir / "Chapter2_JEB_Supporting_Information_V4.docx"
     legacy.save_document(doc, path)
     return path
