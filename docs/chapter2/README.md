@@ -101,3 +101,12 @@ Historical audit anchors retained for legacy validators:
 - JPN29-excluded sensitivity P = **0.1959**.
 
 These historical files and labels are preserved for provenance only.
+
+
+### Frozen V6 routing tuple
+
+The following three filenames are retained together only so the historical space-time closure validator can locate its archived V6 route. They are not active entry points:
+
+- `chapter2_differentiation_time_axis_contract_v1.json`
+- `MANUSCRIPT_JEB_V6_REFRAME_OUTLINE.md`
+- `HISTORICAL_DIFFERENTIATION_TRIGGER_RESULT_V1.md`
