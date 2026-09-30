@@ -134,3 +134,13 @@ Earlier packages remain **audit snapshots** in Git history. The following exact 
 - `MANUSCRIPT_JEB_V3.md`.
 
 They are not the active scientific route.
+
+
+### Additional frozen routing aliases
+
+The following strings are retained verbatim for historical test compatibility only; they do not define the current repository mainline:
+
+- `Chapter 1: present-day space/environment`
+- `Chapter 2: evolutionary time/history`
+- `Chapter 3: own RAD-seq + linked phenotype/function`
+- `Present-state v3/v4 covariance generators`
