@@ -10,7 +10,7 @@ EVID = ROOT / "data" / "evidence"
 CH = ROOT / "docs" / "chapter2"
 MANUSCRIPT = CH / "MANUSCRIPT_JEB_V6_FINAL.md"
 FIGMAP = CH / "JEB_QUESTION_RESULT_FIGURE_MAP_V6.md"
-SI = CH / "JEB_SUPPORTING_INFORMATION_V4.md"
+SI = CH / "JEB_SUPPORTING_INFORMATION_V6_ARCHIVE.md"
 TITLE = CH / "JEB_TITLE_PAGE_TEMPLATE_V3.md"
 COVER = CH / "JEB_COVER_LETTER_TEMPLATE_V3.md"
 FIGSCRIPT = ROOT / "analysis" / "make_chapter2_jeb_figures_v6.py"
@@ -123,7 +123,7 @@ def main() -> None:
     builder = BUILDER.read_text(encoding="utf-8")
     for source in (
         "MANUSCRIPT_JEB_V6_FINAL.md",
-        "JEB_SUPPORTING_INFORMATION_V4.md",
+        "JEB_SUPPORTING_INFORMATION_V6_ARCHIVE.md",
         "JEB_TITLE_PAGE_TEMPLATE_V3.md",
         "JEB_COVER_LETTER_TEMPLATE_V3.md",
         "figures_v6",
