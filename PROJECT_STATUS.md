@@ -156,3 +156,19 @@ The following phrases are historical aliases only and must not be read as the ac
 - `CHAPTER2_CORE_RESULT_RECOVERY_V1.md`.
 
 They remain solely so the frozen legacy audit validator can reproduce old package checks.
+
+
+### Frozen doctoral-routing aliases
+
+These exact strings are retained for legacy doctoral validators only. The active scientific state above supersedes their old chapter-label wording:
+
+- `Chapter 1 — phenotype × present-day space/environment`
+- `Chapter 2 — phenotype × evolutionary time/history`
+- `Chapter 3 — own RAD-seq × linked phenotype/function`
+- `origin discrimination`
+- `nuclear population genomics`
+- `plastid haplotype`
+- `cytotype`
+- `FDT1 trait-to-function evidence`
+- `Cirsium reproductive-herbivory RR = 2.674`
+- `Chapter 3 causal layer`
