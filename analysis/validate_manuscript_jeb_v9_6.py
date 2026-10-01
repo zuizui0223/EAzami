@@ -131,6 +131,13 @@ def main() -> None:
         "aza3",
     ):
         require(text, token)
+    deletion = load_json(EVID / "chapter2_orientation_transition_regime_single_deletion_result_v1.json")
+    assert deletion["n_deletions"] == 9
+    assert deletion["n_exact_exceptionality_pass"] == 2
+    require(text, "9/9 single-taxon deletions")
+    require(text, "exact finite-map exceptionality persisted in 2/9")
+    forbid(text, "exact finite-map exceptionality persisted in 3/9")
+
     for bad in (
         "external confirmation supports",
         "independent held-out confirmation was successful",
