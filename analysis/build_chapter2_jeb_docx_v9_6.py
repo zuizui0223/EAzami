@@ -230,7 +230,7 @@ def build_title_page(output_dir: Path) -> Path:
     doc = Document()
     legacy.configure_document(doc, running_header="", line_numbers=False)
     blank_identifying_metadata(doc)
-    legacy.render_markdown(doc, source)
+    legacy.render_markdown(doc, source, stop_heading="Submission check")
     path = output_dir / "Chapter2_JEB_Title_Page_V9_6.docx"
     legacy.save_document(doc, path)
     scrub_package(path)
@@ -242,7 +242,7 @@ def build_supporting(output_dir: Path) -> Path:
     doc = Document()
     legacy.configure_document(doc, running_header="Supporting Information", line_numbers=True)
     blank_identifying_metadata(doc)
-    legacy.render_markdown(doc, SI)
+    legacy.render_markdown(doc, SI, stop_heading="Supporting-information audit checklist")
     path = output_dir / "Chapter2_JEB_Supporting_Information_V9_6.docx"
     legacy.save_document(doc, path)
     scrub_package(path)
