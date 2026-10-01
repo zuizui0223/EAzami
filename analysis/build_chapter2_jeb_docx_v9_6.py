@@ -129,9 +129,9 @@ def prepare_main_markdown(output_dir: Path) -> Path:
     # The Markdown source uses a few simple LaTeX delimiters for equations.
     # The lightweight DOCX renderer does not parse LaTeX, so materialize these
     # expressions as publication-readable plain text before rendering.
-    rendered = re.sub(r"\\frac\\{([^{}]+)\\}\\{([^{}]+)\\}", r"(\\1)/(\\2)", rendered)
-    rendered = re.sub(r"\\\\\\((.*?)\\\\\\)", r"\\1", rendered)
-    rendered = rendered.replace("\\\\[", "").replace("\\\\]", "")
+    rendered = re.sub(r"\\frac\{([^{}]+)\}\{([^{}]+)\}", r"(\1)/(\2)", rendered)
+    rendered = re.sub(r"\\\((.*?)\\\)", r"\1", rendered)
+    rendered = rendered.replace("\\[", "").replace("\\]", "")
     rendered = rendered.replace("D=(N-d)/(N-1).", "D = (N - d)/(N - 1).")
     rendered = rendered.replace("D=1", "D = 1")
 
