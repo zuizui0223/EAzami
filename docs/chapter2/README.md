@@ -1,6 +1,6 @@
 # Chapter 2 — repeated mosaic assembly across evolutionary depth and ecological scale
 
-## Active state — 2026-09-30
+## Active state — 2026-10-01
 
 Chapter 2 is an active *Journal of Evolutionary Biology* manuscript.
 
@@ -19,7 +19,7 @@ Active validator:
 V9.6 validation is green:
 
 - abstract: 203 words;
-- main text before References: 4,020 words;
+- main text before References: 4,154 words;
 - keywords: 8.
 
 ## Central result
@@ -78,15 +78,21 @@ The next independent ecological confirmation is prospective aza3 field work:
 
 ## Submission production
 
-Remaining work:
+Completed:
 
-1. Figures 1–4;
-2. Supporting Information synchronization;
-3. anonymous line-numbered JEB DOCX + title page + SI + cover letter;
-4. final author/funding/COI metadata;
-5. immutable archive/DOI.
+- Figures 1–4 generated and visually QA'd;
+- Supporting Information V4 synchronized and validated;
+- anonymous line-numbered JEB main DOCX built with four figures and alt text;
+- separate title page, SI and cover letter built;
+- final workflow artifact passed automated package validation and full-page visual QA (22 + 2 + 15 + 1 pages).
 
-No further opportunistic public climate/proxy rescue is active.
+Remaining author-controlled inputs:
+
+1. author list, affiliations, corresponding-author details and ORCID;
+2. acknowledgements, funding and conflict-of-interest statements;
+3. final immutable archive URL, exact submission commit and DOI/accession.
+
+No further opportunistic public climate/proxy rescue or document-production development is active.
 
 ## Frozen legacy audit route
 
