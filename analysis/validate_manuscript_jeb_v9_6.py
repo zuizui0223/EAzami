@@ -132,11 +132,15 @@ def main() -> None:
     ):
         require(text, token)
     deletion = load_json(EVID / "chapter2_orientation_transition_regime_single_deletion_result_v1.json")
+    bidir_deletion = load_json(EVID / "chapter2_orientation_transition_directionality_single_deletion_result_v1.json")
     assert deletion["n_deletions"] == 9
     assert deletion["n_exact_exceptionality_pass"] == 2
-    require(text, "9/9 single-taxon deletions")
-    require(text, "exact finite-map exceptionality persisted in 2/9")
-    forbid(text, "exact finite-map exceptionality persisted in 3/9")
+    assert bidir_deletion["n_deletions"] == 9
+    assert bidir_deletion["n_exact_exceptionality_pass"] == 3
+    require(text, "U→D composite direction in 9/9 panels")
+    require(text, "exact ≤0.05 finite-map rank survived 2/9")
+    require(text, "both forward and reverse alignments remained positive in 9/9 deletion panels")
+    require(text, "exact ≤0.05 bidirectional-floor rank survived 3/9")
 
     for bad in (
         "external confirmation supports",
