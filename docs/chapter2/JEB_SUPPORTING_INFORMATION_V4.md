@@ -1,224 +1,455 @@
-# Supporting Information for Chapter 2 JEB V6
+# Supporting Information for Chapter 2 JEB V9.6
 
 ## Article
 
-**Repeated capitulum differentiation at unequal evolutionary depths without a recurring coarse historical trigger in a young thistle radiation**
+**Repeated reassembly of a complex reproductive phenotype across evolutionary depths and ecological scales in a young thistle radiation**
 
-Status: **ACTIVE V6 SUPPORTING INFORMATION**
+Status: **ACTIVE V9.6 SUPPORTING INFORMATION**
 
-This Supporting Information preserves the historical-differentiation evidence hierarchy, admission decisions, negative and unresolved results, full claim boundaries and the distinction between trait-transition tests and broader lineage-differentiation context.
+This Supporting Information preserves the uncertainty, negative results and resolution ceilings behind the active four-figure manuscript without reopening exploratory analysis.
 
-## Figure S1 — Harmonized Japan38 nuclear scaffold and admission boundaries
+The evidence order is:
 
-Use the accepted Comp1061-compatible phylogram. Branch lengths are substitutions per site and must not be labelled absolute time.
+`repeated change → unequal evolutionary depth → unsynchronized branch localization → scale-conditioned ecology → causal handoff`.
 
-Admission notes:
-- 39 ingroup biological samples represent 38 paper concepts;
-- JPN20 retains two biological tips and is not forcibly collapsed;
-- JPN31 remains excluded from primary trait history because the phenotype-tip identity conflict is unresolved;
-- the scaffold is the harmonized common-locus reference, not the only East-Asian nuclear evidence.
+Historical counts, relative depth, branch localization, static ecology, transition-conditioned ecology and causal mechanism are treated as distinct estimands.
 
-## Table S1 — Discrete trait history summary
+---
 
-| Trait | Resolved concepts | ML / UFBoot minimum | Median UFBoot relative-depth envelope | Historical reading |
-|---|---:|---|---|---|
-| orientation | 20 | 6 / 4–6 | 0.795–0.994 | recurrent; internal-to-terminal placements admissible |
-| phyllary posture | 10 | 3 / 3–3 | 0.695–1.000 | recurrent; deeper placements remain admissible |
-| stickiness | 13 | 5 / 5–5 | 0.937–0.954 | recurrent; strongly shallow/terminal-biased |
+# Supplementary Methods S1 — Nuclear scaffold, taxon admission and discrete trait ontology
 
-Minimum counts are lower bounds. Relative lineage depth is topology only and is not event age or rate.
+The historical analysis uses the frozen Japan38 Compositae1061-compatible nuclear scaffold.
 
-## Table S2 — Shared-transition-localization boundary
+- sampled Japanese taxon concepts: 38;
+- concepts in the published dominant Japanese radiation: 36;
+- biological samples in the Japan38 reconstruction: 39;
+- quality-controlled loci: 236;
+- rootable loci: 176;
+- concatenated alignment: 161,654 bp;
+- phylogram branch lengths: substitutions per site.
 
-| Pair | Branch-aware rho | Equal-branch median | Equal-branch q05 | Robust rule |
-|---|---:|---:|---:|---|
-| orientation–phyllary | 0.362 | −0.059 | −0.206 | fail |
-| orientation–stickiness | 0.202 | −0.387 | −0.392 | fail |
-| phyllary–stickiness | 0.084 | 0.184 | −0.073 | fail |
+Branch lengths are not calendar time.
 
-Decision: **0/3** trait pairs pass the robust shared-transition-localization rule.
+JPN20 is represented by two non-monophyletic sequence samples in the compatibility reconstruction and is not silently collapsed. JPN31 remains excluded from primary trait history because the frozen identity/locality conflict prevents a safe phenotype–sequence join.
 
-This rejects a simple synchronized-history model under current coverage. It does not prove genetic, developmental or functional independence.
+Three source-backed capitulum components are analysed as discrete traits:
 
-## Figure S2 — Calendar identifiability funnel
+1. **orientation** — upward/erect versus downward/nodding, with ambiguous/source-conflicting concepts unresolved;
+2. **phyllary posture** — appressed, ascending, spreading or recurved, retaining composite authority descriptions where necessary;
+3. **involucre stickiness** — sticky versus nonsticky/nearly nonsticky.
 
-Show the event-history gate:
+Resolved historical coverage is:
 
-`trait history → change-bearing branch → calendar chronology → palaeolocation → historical environment`.
-
-Current counts:
-- transitions reaching full calendar+palaeolocation+environment gate: **1**;
-- conditional colour branch envelopes: **3**;
-- dated sister contrasts not reconstructed transitions: **4**;
-- dated range processes not linked to trait-transition age: **2**;
-- additional machine-readable dated tree recovered for Japan38 change-bearing branches: **no**.
-
-The one full-gate event is the core-Nipponocirsium erect/upward → nodding/downward orientation transition.
-
-## Table S3 — Orientation chronology contract
-
-| Quantity | Value |
-|---|---|
-| parent central age | 0.79 Ma |
-| parent marginal interval | 0.43–1.18 Ma |
-| child central age | 0.74 Ma |
-| child interval | 0.60–0.87 Ma |
-| admissible chronology pairs | 94 |
-| event-window duration range | 10–580 kyr |
-| palaeolocation scenarios | Taiwan; Ryukyu corridor; southern Japan; broad East-Asian core corridor |
-| region × chronology scenarios | 376 |
-
-The two node constraints come from separate public analyses. The 94 pairs are deterministic uncertainty scenarios, not a joint posterior.
-
-## Table S4 — Orientation historical-climate robust-gate result
-
-Variables: BIO1, BIO4, BIO12, BIO15.
-
-| Estimand | Variables passing robust full chronology × palaeolocation gate |
+| Trait | Resolved concepts |
 |---|---:|
-| signed endpoint direction | 0 |
-| extreme mean environmental level | 0 |
-| extreme absolute endpoint change | 0 |
-| extreme within-window temporal variability | 0 |
+| Orientation | 20 |
+| Phyllary posture | 10 |
+| Stickiness | 13 |
 
-Formal decision: `no_tested_climate_direction_survives_full_chronology_paleolocation_envelope` plus no robust level/change/variability rescue.
+The ontology is taxon-concept level. It is not a same-voucher phenotype dataset and cannot establish individual-level genetic linkage.
 
-### Central-pair tendency retained for transparency
+---
 
-At 0.79→0.74 Ma:
-- BIO1 decreases in 4/4 regions;
-- BIO4 decreases in 4/4;
-- BIO15 decreases in 4/4;
-- BIO12 increases in 3/4.
+# Supplementary Figure S2 / Table S2 — Repeated state change and relative evolutionary depth
 
-For BIO1, central-pair level lies near the lower 5% and temporal SD near the upper 5% across all four regions. This is a sub-threshold tendency because it does not survive the full chronology envelope.
+## S2.1 Minimum-change counts
 
-## Table S5 — Orientation matched-window regional medians
+Unordered Sankoff/parsimony minima were calculated on the maximum-likelihood topology and propagated across 1,000 UFBoot topology realizations.
 
-| Variable | Region | level mean percentile | absolute-change percentile | temporal-SD percentile |
-|---|---|---:|---:|---:|
-| BIO1 | Taiwan | 0.143 | 0.852 | 0.847 |
-| BIO1 | Ryukyu | 0.141 | 0.884 | 0.850 |
-| BIO1 | southern Japan | 0.143 | 0.871 | 0.851 |
-| BIO1 | East-Asian core | 0.141 | 0.878 | 0.849 |
-| BIO4 | Taiwan | 0.850 | 0.617 | 0.823 |
-| BIO4 | Ryukyu | 0.854 | 0.653 | 0.735 |
-| BIO4 | southern Japan | 0.856 | 0.640 | 0.723 |
-| BIO4 | East-Asian core | 0.855 | 0.611 | 0.720 |
-| BIO12 | Taiwan | 0.861 | 0.474 | 0.321 |
-| BIO12 | Ryukyu | 0.855 | 0.482 | 0.239 |
-| BIO12 | southern Japan | 0.489 | 0.582 | 0.474 |
-| BIO12 | East-Asian core | 0.870 | 0.479 | 0.074 |
-| BIO15 | Taiwan | 0.102 | 0.597 | 0.820 |
-| BIO15 | Ryukyu | 0.138 | 0.608 | 0.803 |
-| BIO15 | southern Japan | 0.859 | 0.534 | 0.627 |
-| BIO15 | East-Asian core | 0.094 | 0.553 | 0.547 |
+| Trait | ML minimum | UFBoot minimum range | UFBoot median |
+|---|---:|---:|---:|
+| Orientation | 6 | 4–6 | 5 |
+| Phyllary posture | 3 | 3–3 | 3 |
+| Stickiness | 5 | 5–5 | 5 |
 
-These are descriptive matched-window positions and not posterior probabilities.
+These are lower bounds on required state change, not counts of independent adaptive origins, convergence events or evolutionary rates.
 
-## Figure S3 — Global sea-level chronology coverage
+## S2.2 Relative lineage depth
 
-### Spratt–Lisiecki
-- full-envelope chronology coverage: 16/94;
-- decision: insufficient for a full chronology-envelope test.
+For an edge subtending d descendants among N admitted tips, relative lineage depth is D = (N-d)/(N-1). D=1 is terminal; smaller values permit deeper placement.
 
-### de Boer
-- full-envelope chronology coverage: 94/94;
-- tested metrics: state/mean, SD, range, absolute endpoint change, mean absolute 1-kyr change, maximum absolute 1-kyr change;
-- robust metrics across chronology: 0;
-- formal decision: `no_global_sea_level_metric_survives_full_chronology_gate`.
+Frozen median UFBoot depth envelopes are:
 
-Global sea level is a broad range-reorganization context variable only. It does not reconstruct local Taiwan/Ryukyu/Japan connectivity.
-
-## Figure S4 — Mid-Pleistocene overlap audit
-
-Orientation chronology overlap:
-- 56/94 admissible pairs span exactly 0.800 Ma;
-- 90/94 overlap 0.700–0.900 Ma;
-- 78/94 overlap 0.750–0.850 Ma;
-- 71/94 overlap 0.770–0.830 Ma.
-
-Classification: `broad_mpt_overlap_high_but_not_event_discriminating`.
-
-The overlap is chronology context and is not independent trigger evidence.
-
-## Table S6 — Broader lineage-differentiation climate atlas design
-
-| Design element | Value |
+| Trait | Median relative-depth envelope |
 |---|---|
-| BIOCLIM variables | 17 |
-| dated lineage contexts | 6 |
-| representative groups | Nipponocirsium; Arenicola; Sinocirsium |
-| tested scenario × variable combinations | 15,472 |
-| event-level decision classes | 324 |
-| robust event-level classes | **0** |
-| recurring climate-context candidates | **0** |
+| Orientation | 0.795–0.994 |
+| Phyllary posture | 0.695–1.000 |
+| Stickiness | 0.937–0.954 |
 
-Formal decision: `no_recurring_lineage_differentiation_context_survives_age_region_background_gates`.
+## S2.3 Paired same-topology depth ordering
 
-This is a lineage-diversification context analysis, not a capitulum-transition test.
+| Ordering | Topologies retaining ordering | Fraction |
+|---|---:|---:|
+| Phyllary deeper-permissive than stickiness | 1000/1000 | 1.000 |
+| Phyllary deeper-permissive than orientation | 993/1000 | 0.993 |
+| Orientation deeper-permissive than stickiness | 905/1000 | 0.905 |
+| Complete phyllary < orientation < stickiness | 898/1000 | 0.898 |
 
-### Sub-threshold tendencies
+These fractions quantify topology sensitivity; they are not probabilities, posterior support values or independent biological replicate frequencies.
 
-Nipponocirsium and Sinocirsium show cooler / more temperature-variable tendencies in some univariate summaries. Arenicola lies closer to the matched-background centre. No tendency passes every age, region, background and window gate and none is promoted to the main conclusion.
+## S2.4 Coverage-matched sensitivity
 
-## Table S7 — Multi-lineage global sea-level diagnostic
+Because observed-state coverage differs among traits, a post-result masking sensitivity tested whether the central ordering was merely a missing-data artifact.
 
-Representative dated contexts:
-- Nipponocirsium: 0.74 Ma, interval 0.60–0.87;
-- Arenicola: 0.93 Ma, interval 0.71–1.33;
-- Sinocirsium: 0.44 Ma, interval 0.31–0.66.
+| Comparison | Matched-median ordering | Strict q05 ordering |
+|---|---:|---:|
+| Phyllary < orientation | 195/200 = 97.5% | 21/200 = 10.5% |
+| Phyllary < stickiness, 5/5 mask | 193/200 = 96.5% | 22/200 = 11.0% |
+| Phyllary < stickiness, 6/4 mask | 193/200 = 96.5% | 31/200 = 15.5% |
 
-Seven metrics × three clades = **21 event-metric classes**.
+Reduced coverage does not erase the central phyllary-deeper ordering, but strict deepest tails overlap. The result is not described as coverage-independent.
 
-Results:
-- robust event-metric classes: **0/21**;
-- recurring global sea-level candidates: **0**;
-- decision: `no_recurring_global_sea_level_context_survives_age_background_window_gates`.
+---
 
-## Table S8 — Trait-specific historical endpoint
+# Supplementary Figure S3 / Table S3 — Shared transition localization
 
-| Module | Repeated history | Relative depth | Calendarized trait transition | Historical trigger status |
-|---|---|---|---|---|
-| orientation | yes; 4–6 | mixed internal-to-terminal | one full-gate stem event | climate and global sea-level trigger unresolved; repeated trigger not evaluable |
-| phyllary posture | yes; 3 | relatively deeper | unavailable | not evaluable |
-| stickiness | yes; 5 | shallow/terminal-biased | unavailable; dated range events are not trait ages | not evaluable |
-| flower colour | conditional dated white-lineage branch contexts | not admitted as full repeated discrete history | exact transition timing unresolved | historical radiative trigger not evaluable |
+Two localization diagnostics are retained because branch-length geometry can itself induce apparent overlap:
 
-## Table S9 — V5 evidence retained outside the V6 main spine
+1. a branch-length-aware equal-rates Mk layer, summarized by transition-posterior excess over branch prior;
+2. an equal-branch topology-only sensitivity across the UFBoot ensemble.
 
-The following analyses remain scientifically valid frozen results but are not used to determine the V6 historical conclusion:
-- present-day orientation–environment correspondence;
-- two public-image white–coloured sister comparisons;
-- current RSDS–chroma pair-level/within-taxon analyses;
-- partial coordinated coarse head remodelling.
+| Pair | Branch-aware excess rho | Equal-branch median rho | Equal-branch q05 | Equal-branch fraction >0 | Robust shared-localization rule |
+|---|---:|---:|---:|---:|---|
+| Orientation × phyllary | +0.362 | −0.059 | −0.206 | 34.9% | fail |
+| Orientation × stickiness | +0.202 | −0.387 | −0.392 | 0.9% | fail |
+| Phyllary × stickiness | +0.084 | +0.184 | −0.073 | 78.2% | fail |
 
-These results are retained for audit history and later dissertation synthesis. V6 does not use them to infer historical cause.
+**Zero of three** trait pairs passes the frozen cross-treatment rule requiring robust positive localization.
 
-## Table S10 — Claim boundaries and stop rules
+This constrains a simple synchronized whole-capitulum history. It does not demonstrate complete evolutionary independence, developmental modularity or different selective agents.
 
-| Layer | V6 decision | Prohibited promotion |
+---
+
+# Supplementary Figure S4 / Table S4 — Common nine-variable present-environment comparison
+
+All three historical traits were passed through one trait-blind workflow with the same occurrence/QC logic and the same nine variables:
+
+BIO1, BIO4, BIO12, BIO15, RSDS, VPD, WIND, GSP and NPP.
+
+The primary occurrence gate required at least three thinned occurrences per taxon. State separation was ranked against every admissible finite state-label map preserving observed state counts.
+
+## S4.1 Omnibus results
+
+| Trait | n taxa | State counts | Nine-variable omnibus rank | Interpretation |
+|---|---:|---|---|---|
+| Orientation | 17 | 5 D / 12 U | 2138/6188 = 34.55% | weak static state separation |
+| Phyllary posture | 4 | 1 appressed / 3 ascending | 4/4 = 100% | not identifiable as a trait effect |
+| Stickiness | 12 | 6 sticky / 6 nonsticky | 116/924 = 12.55% | replicated but non-exceptional omnibus |
+
+Phyllary minimum-one-record sensitivity reaches six taxa, but appressed and spreading remain singleton lineages and the omnibus rank is 28/30 = 93.33%. Lowering the record gate does not create biological state replication.
+
+## S4.2 Stickiness exploratory precipitation leads
+
+| Axis | Sticky − nonsticky standardized difference | Exact rank | BH q across 27 rows |
+|---|---:|---:|---:|
+| GSP | +1.2781 | 18/924 = 1.95% | 0.3214 |
+| BIO12 | +1.3110 | 22/924 = 2.38% | 0.3214 |
+| BIO15 | +1.0485 | 70/924 = 7.58% | 0.6818 |
+
+No primary trait × environment row survives q<0.05 across the 27-row family.
+
+The common9 result does not identify one shared abiotic syndrome and does not directly test visitor access, antagonist pressure or arthropod-community mechanisms.
+
+---
+
+# Supplementary Figure S5 / Table S5 — Orientation transition-regime analysis
+
+The transition analysis tests a different estimand from static D/U separation.
+
+The fixed U→D environmental vector is **BIO15 higher + BIO1 lower**.
+
+Present-day taxon niche centroids are combined with CTMC transition probabilities and Brownian environmental reconstruction. The finite-map statistic is ranked among all count-preserving state maps. It is a conditional exact rank, not a P value from biological replicates.
+
+## S5.1 Coverage panels
+
+| Panel | n taxa | State counts | Exact composite rank |
+|---|---:|---|---:|
+| Primary n≥5 | 12 | 7 U / 5 D | 16/792 = 2.02% |
+| Sensitivity n≥3 | 13 | 7 U / 6 D | 19/1716 = 1.11% |
+| Strict n≥10 | 9 | 5 U / 4 D | 4/126 = 3.17% |
+
+In the strict panel:
+
+- BIO15 alone: 7/126 = 5.56%;
+- lower BIO1 alone: 8/126 = 6.35%;
+- composite: 4/126 = 3.17%.
+
+The supported object is the fixed two-axis transition-regime vector, not a unique single-variable driver.
+
+## S5.2 Bidirectional directionality
+
+Under the strict nine-taxon panel:
+
+- U→D forward alignment median = 0.320891;
+- D→U reverse alignment median = 0.339529;
+- both positive on 6/6 accepted topologies;
+- exact bidirectional-floor rank = 3/126 = 2.38%.
+
+This is a post-result directional decomposition of H1, not independent confirmation or evidence of genetic reversibility.
+
+## S5.3 Single-taxon deletion
+
+Deleting each strict-panel taxon once:
+
+- direction remains positive on all six topologies in 9/9 deletion panels;
+- exact ≤0.05 finite-map exceptionality survives only 2/9 deletions.
+
+Direction is not generated by one taxon, while extreme finite-map rank is distributed across the multi-taxon configuration and is deletion-sensitive.
+
+## S5.4 Geography residualization
+
+After residualizing BIO15 and BIO1 against a linear 1 + latitude + longitude model:
+
+- strict n≥10: 5/126 = 3.97%, positive on 6/6 topologies;
+- n≥5: 41/792 = 5.18%, borderline.
+
+This rules out only the simplest linear geographic gradient.
+
+## S5.5 Internal-edge-only scoring
+
+With full CTMC/Brownian reconstruction retained but terminal child edges excluded from the scored statistic:
+
+- strict n≥10: 3/126 = 2.38%;
+- n≥5: 29/792 = 3.66%;
+- both panels remain positive on 6/6 topologies.
+
+## S5.6 Combined geography + terminal-edge stress
+
+Applying both restrictions simultaneously:
+
+- strict n≥10: 3/126 = 2.38%;
+- n≥5: 29/792 = 3.66%;
+- both remain positive on 6/6 topologies.
+
+This was the final declared coarse public-data stress. No further correlated climate predictors or post-result robustness variants are opened to strengthen H1.
+
+Internal environmental values remain Brownian reconstructions from present taxon niche centroids, not observed ancestral environments.
+
+---
+
+# Supplementary Figure S6 / Table S6 — Cross-scale orientation audit with Azami
+
+The Azami image dataset is complementary cross-scale evidence. It is **not eligible as prospective held-out P3** because the orientation endpoint and the same climate universe had already been analysed before the EAzami external-confirmation programme.
+
+Azami orientation is a signed PCA head-axis angle relative to EXIF-oriented image vertical:
+
+- 0° = upward in image coordinates;
+- 90° = horizontal;
+- 180° = downward in image coordinates.
+
+It is not a gravity-referenced inclinometer or peduncle-deflection measurement.
+
+## S6.1 Existing Azami results
+
+### Among taxa
+
+BIO12 standardized beta = +0.304359.
+
+### Within taxa
+
+The frozen within-taxon panel contains 37,196 observations from 199 taxa.
+
+| Axis | Standardized beta | P | FDR q | Additional spatial result | Relation to EAzami transition direction |
+|---|---:|---:|---:|---|---|
+| BIO1 | +0.0171503 | 0.00654 | 0.04753 | beta +0.0265374; permutation P=0.002 | opposite: warmer → more downward in Azami image coordinates, whereas EAzami D is associated with lower BIO1 |
+| BIO12 | +0.0053264 | 0.601 | 0.823 | — | unsupported |
+| BIO15 | −0.0076180 | 0.0455 | 0.183 | — | numerically opposite to EAzami D-associated higher BIO15; not FDR-supported |
+| GSP | +0.0038724 | 0.0712 | 0.217 | — | weak, unsupported |
+
+The cross-scale conclusion is:
+
+> **orientation–environment correspondence is scale- and representation-dependent rather than one repeated coefficient.**
+
+Within-taxon, among-taxon and transition-level estimands are not pooled.
+
+---
+
+# Supplementary Figure S7 / Table S7 — Preregistered external-taxon confirmation ceiling
+
+The external programme was separated from discovery before held-out climate outcomes were opened.
+
+## S7.1 V1
+
+Under the first strict occurrence gate:
+
+- *Cirsium schantarense* — D — 8 thinned records;
+- *C. vlassovianum* — U — 8 thinned records.
+
+This left one lineage per state, below the frozen minimum of two taxa per state, so V1 was not evaluable.
+
+Stickiness V1 retained only *C. setidens* as sticky and no evaluable external nonsticky comparison. No held-out environmental outcome was opened.
+
+## S7.2 Source-complete V2
+
+The final expansion attempt was preregistered as a source-complete census rather than an occurrence-driven rescue.
+
+It recovered:
+
+- 46/46 lower taxa linked from the Flora of China *Cirsium* genus page;
+- 19 printed *Cirsium* concepts in the selected NIBR national checklist lane.
+
+External stickiness remained structurally blocked because the source-complete candidate set had no nonsticky comparison under the frozen ontology.
+
+The final frozen Flora of China orientation panel contained:
+
+- 13 taxa total;
+- 3 downward/nodding;
+- 10 upward/erect.
+
+## S7.3 Strict V2 GBIF gate
+
+Primary rules were exact accepted name, GBIF EXACT match, mainland-China provenance, PRESENT records, coordinates, explicit coordinate uncertainty ≤10 km, frozen issue exclusions, exact-coordinate deduplication, deterministic 0.1-degree thinning, ≥3 thinned records per taxon and ≥2 surviving taxa per state.
+
+Only one taxon passed:
+
+- *Cirsium vulgare* — upward/erect — 16 deterministic 0.1-degree thinned records.
+
+Final state replication was downward/nodding 0 taxa and upward/erect 1 taxon.
+
+Therefore:
+
+> **external-taxon orientation confirmation is not evaluable with current public GBIF metadata.**
+
+BIO1 and BIO15 were not extracted for the held-out V2 panel.
+
+The stop rule is binding. No V3 public taxon rescue, QC relaxation or opportunistic climate-variable search is permitted.
+
+This is an occurrence-metadata resolution ceiling, not an ecological null and not evidence against the Japan–Taiwan discovery result.
+
+---
+
+# Supplementary Figure S8 / Table S8 — Historical environmental-cause boundary
+
+Only one orientation event reaches the full calendar-age + palaeolocation + environment gate: the core-Nipponocirsium erect/upward → nodding/downward transition.
+
+- chronology pairs: 94;
+- palaeolocation scenarios: 4;
+- region × chronology scenarios: 376;
+- central chronology: 0.79–0.74 Ma.
+
+At the central chronology, BIO1, BIO4 and BIO15 decrease in all four regions, while BIO12 increases in three of four. Across the full envelope, no tested climate direction survives as a robust historical trigger.
+
+For the present BIO15-up/BIO1-down regime:
+
+- historical sign matches: 99/376 = 26.3%;
+- Taiwan: 20/94 = 21.3%;
+- Ryukyu corridor: 9/94 = 9.6%;
+- southern Japan: 41/94 = 43.6%;
+- East-Asian core corridor: 29/94 = 30.9%.
+
+At the central chronology, BIO15 moves opposite to the present U→D direction in all four regions.
+
+Broader audits remain negative at the frozen robustness gates:
+
+- 17 BIOCLIM variables;
+- 6 dated lineage contexts;
+- 15,472 scenario × variable combinations;
+- robust event-level climate classes: 0;
+- global sea-level event-metric classes: 21;
+- robust sea-level classes: 0.
+
+This is an identifiability boundary, not evidence that historical climate, local geography, fragmentation, biotic interactions or selection were irrelevant.
+
+---
+
+# Supplementary Figure S9 / Table S9 — Functional plausibility and reproductive-antagonist fitness magnitude
+
+Functional evidence is kept separate from historical comparative estimands.
+
+## S9.1 Reproductive herbivory meta-analysis
+
+The estimand is mean viable/mature seed output under experimentally reduced insect herbivory divided by mean seed output under ambient herbivory.
+
+Nine within-study contrasts are collapsed to four independent data-generation studies before pooling.
+
+Frozen random-effects result:
+
+- independent study clusters: 4;
+- pooled RR = 2.67364;
+- 95% CI = 2.38833–2.99302;
+- equivalent ambient-herbivory loss of potential seed output = 62.6%;
+- 95% interval for loss = 58.1–66.6%;
+- I² = 1.02%;
+- tau² on lnRR scale = 0.000219.
+
+Leave-one-study-out pooled RRs range from 2.6046 to 2.7342.
+
+This establishes that reproductive antagonists can impose a large fecundity cost in directly harmonizable *Cirsium* experiments. It does not identify which capitulum component mediates the cost.
+
+## S9.2 Trait-specific mechanism proximity
+
+**Orientation.** Direct angle manipulation in close Asteraceae and within-genus pollination studies make time-window presentation and abiotic protection plausible. East-Asian *Cirsium* manipulation is not yet available.
+
+**Phyllary / spine architecture.** Close Cardueae evidence supports a possible mechanical-access trade-off. Current EAzami image geometry is not itself a validated botanical defence trait.
+
+**Stickiness.** Direct *Cirsium* exudate studies show context dependence rather than one universal positive defence effect. Sticky morphology is not automatically interpreted as defensive adaptation.
+
+The next test is focal manipulation linked to mediator and final filled-achene endpoints.
+
+---
+
+# Supplementary Table S10 — Claim hierarchy and causal ceiling
+
+| Evidence layer | Supported statement | Prohibited escalation |
 |---|---|---|
-| minimum changes | lower bounds | independent origins / convergence counts |
-| relative lineage depth | topology-only | Ma / event ages / rates |
-| calendar audit | one full-gate trait event | assigning broad radiation age to every change |
-| orientation climate | all robust gates unresolved | historical climate causation / adaptation |
-| orientation sea level | no robust global metric | local land bridge reconstruction |
-| 17-BIOCLIM lineage atlas | 0/324 robust | trait-transition causation |
-| three-clade sea level | 0/21 robust | no palaeogeographic role |
-| final paper | repeated differentiation resolved; recurring tested trigger not identified | adaptation / natural selection / environmental irrelevance |
+| Minimum changes | all three components repeatedly changed | independent origins, convergence, rate |
+| Relative depth | central historical depth differs among components | calendar transition ages |
+| Shared localization | one synchronized branch history is not required | complete genetic/developmental independence |
+| Common9 | no one shared static abiotic syndrome | no ecology for phyllary; universal stickiness law |
+| Orientation transition regime | present niche change aligns with fixed BIO15/BIO1 vector | climatic causation, selection, adaptation |
+| Azami cross-scale | orientation ecology changes with scale/representation | prospective P3; one pooled coefficient |
+| External V2 | public metadata cannot support replicated held-out states | ecological null; failed biological hypothesis |
+| Historical climate | one recurring tested coarse trigger not identified | environment was irrelevant |
+| Functional literature | mechanisms plausible; antagonist fitness cost large | focal historical adaptation established |
 
-## Canonical machine-readable sources
+---
 
-- `data/evidence/chapter2_historical_differentiation_final_summary_v1.json`
-- `data/evidence/chapter2_historical_differentiation_evidence_ledger_v1.csv`
-- `data/evidence/japan38_relative_event_depth_v1.json`
-- `data/evidence/chapter2_orientation_differentiation_environment_v2_summary.json`
-- `data/evidence/chapter2_lineage_differentiation_environment_atlas_v1_summary.json`
-- `data/evidence/chapter2_lineage_differentiation_sealevel_v1.json`
-- `data/evidence/chapter2_orientation_mpt_overlap_audit_v1.json`
-- `data/evidence/chapter2_public_dated_tree_recovery_audit_v2.json`
+# Supplementary Table S11 — Reproducibility and source map
 
-## Final SI conclusion
+Primary machine-readable sources for V9.6:
 
-The public evidence strongly supports repeated capitulum differentiation and unequal evolutionary depth. It does not recover one recurring tested BIOCLIM or global eustatic sea-level trigger after event-timing, regional and matched-background uncertainty are propagated. Missing local palaeogeography, biotic processes and event-specific exposure remain non-identifiable rather than biologically absent.
+- `data/evidence/chapter2_historical_differentiation_final_summary_v1.json`;
+- `data/evidence/chapter2_depth_ordering_robustness_result_v1.json`;
+- `data/evidence/chapter2_depth_coverage_matched_sensitivity_result_v1.json`;
+- `data/evidence/chapter2_time_axis_compute/japan38_latest_module_transition_overlap_v2.json`;
+- `data/evidence/chapter2_time_axis_compute/japan38_latest_module_overlap_topology_sensitivity_v2.json`;
+- `data/evidence/chapter2_three_trait_common9_result_v1.json`;
+- `data/evidence/chapter2_orientation_transition_regime_hypothesis_result_v1.json`;
+- `data/evidence/chapter2_orientation_transition_directionality_result_v1.json`;
+- `data/evidence/chapter2_orientation_transition_regime_single_deletion_result_v1.json`;
+- `data/evidence/chapter2_orientation_transition_regime_geography_residual_result_v1.json`;
+- `data/evidence/chapter2_orientation_transition_regime_internal_edge_result_v1.json`;
+- `data/evidence/chapter2_orientation_transition_regime_combined_stress_result_v1.json`;
+- `data/evidence/azami_orientation_crossscale_validation_audit_v1.json`;
+- `data/evidence/heldout_orientation_occurrence_gate_v2_contract.json`;
+- `docs/chapter2/HELDOUT_ORIENTATION_OCCURRENCE_GATE_V2_RESULT.md`;
+- `data/evidence/cirsium_floral_herbivory_lnrr_meta_v2.json`.
+
+Active manuscript / production sources:
+
+- `docs/chapter2/MANUSCRIPT_JEB_V9_6_SCALE_CONDITIONED_ECOLOGY.md`;
+- `docs/chapter2/V9_6_FIGURE_MAP_AND_CLAIM_ARCHITECTURE.md`;
+- `analysis/make_chapter2_jeb_figures_v9_6.py`;
+- `analysis/validate_manuscript_jeb_v9_6.py`.
+
+---
+
+# Supporting-information audit checklist
+
+- [x] minimum changes are lower bounds, not independent origins;
+- [x] relative lineage depth is not calendar time or evolutionary rate;
+- [x] topology fractions are sensitivity summaries, not probabilities;
+- [x] branch-aware and equal-branch localization are shown separately;
+- [x] common9 retains all negative/resolution-limited outcomes;
+- [x] stickiness precipitation leads retain 27-row multiplicity context;
+- [x] finite-map fractions are conditional exact ranks, not biological-replicate P values;
+- [x] post-result stress tests are not called independent confirmations;
+- [x] Azami among-, within- and EAzami transition-level estimands are not pooled;
+- [x] Azami is not relabelled as prospective P3;
+- [x] V1/V2 external failures are retained and climate remains unopened where the gate failed;
+- [x] public-data rescue is stopped after V2;
+- [x] present ecological correspondence is not called historical cause;
+- [x] historical-cause negative audits do not imply environmental irrelevance;
+- [x] antagonist RR estimates fitness pressure, not trait adaptation;
+- [x] no public-data result establishes selection, adaptation, convergence or a causal mediator;
+- [x] the next independent causal test is prospective aza3 field manipulation.

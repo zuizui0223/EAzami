@@ -1,0 +1,25 @@
+name: Validate Chapter 2 JEB V9.6 Supporting Information
+
+on:
+  pull_request:
+    paths:
+      - "docs/chapter2/JEB_SUPPORTING_INFORMATION_V4.md"
+      - "analysis/validate_jeb_supporting_information_v4.py"
+      - ".github/workflows/validate-jeb-supporting-information-v4.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate SI V4
+        run: |
+          python -m py_compile analysis/validate_jeb_supporting_information_v4.py
+          python analysis/validate_jeb_supporting_information_v4.py
