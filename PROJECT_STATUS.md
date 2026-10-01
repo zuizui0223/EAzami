@@ -1,11 +1,11 @@
 # EAzami current state
 
-Status date: 2026-09-30
+Status date: 2026-10-01
 
 ## Active status
 
 Scientific status: **CHAPTER2_V9_6_SCALE_CONDITIONED_ECOLOGY_FROZEN**  
-Submission status: **SCIENTIFIC_TEXT_VALIDATED — FIGURE/SI/DOCX PRODUCTION NEXT**
+Submission status: **V9.6 PRODUCTION COMPLETE — HUMAN METADATA / ARCHIVE COMPLETION ONLY**
 
 Active manuscript:
 
@@ -22,7 +22,7 @@ Active scientific validator:
 Validation result:
 
 - abstract: 203 words;
-- main text before References: 4,020 words;
+- main text before References: 4,154 words;
 - keywords: 8;
 - historical core: unchanged;
 - ecology: scale- and representation-dependent;
@@ -133,14 +133,27 @@ The next genuinely independent ecology is prospective aza3:
 
 Orientation is first because it is experimentally tractable and already has the clearest comparative signal.
 
+## Production status
+
+Completed and validated:
+
+- four V9.6 main figures generated from frozen evidence;
+- Supporting Information V4 synchronized to the V9.6 claim hierarchy;
+- anonymous main DOCX with continuous line numbering, four embedded figures and alt text;
+- separate title page, Supporting Information and cover letter;
+- metadata/rsid scrub and anonymous-main routing checks;
+- full visual QA of the final workflow artifact: 22 main-manuscript pages, 2 title-page pages, 15 SI pages and 1 cover-letter page.
+
 ## Next repository task
 
-No further broad result hunting.
+No further broad result hunting or document-production development is active.
 
-1. render/freeze the four V9.6 main figures;
-2. synchronize SI to the V9.6 claims;
-3. generate the JEB anonymous line-numbered DOCX package;
-4. finalize submission metadata and immutable archive.
+Remaining inputs require author confirmation rather than analysis:
+
+1. author order, affiliations, corresponding-author contact and ORCID;
+2. acknowledgements, funding and conflict-of-interest wording;
+3. immutable public archive URL, exact submission commit and DOI/accession;
+4. final journal-system metadata entry.
 
 ## Claim boundary
 
