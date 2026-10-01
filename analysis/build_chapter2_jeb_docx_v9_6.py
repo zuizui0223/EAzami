@@ -143,6 +143,7 @@ def prepare_main_markdown(output_dir: Path) -> Path:
 def prepare_title_markdown(output_dir: Path) -> Path:
     main_count, abstract_count = manuscript_counts()
     text = TITLE.read_text(encoding="utf-8")
+    text = text.split("## Submission check", 1)[0].rstrip() + "\n"
     text = text.replace("{{MAIN_WORD_COUNT}}", str(main_count))
     text = text.replace("{{ABSTRACT_WORD_COUNT}}", str(abstract_count))
     path = output_dir / "_render_title_v9_6.md"
@@ -230,7 +231,7 @@ def build_title_page(output_dir: Path) -> Path:
     doc = Document()
     legacy.configure_document(doc, running_header="", line_numbers=False)
     blank_identifying_metadata(doc)
-    legacy.render_markdown(doc, source, stop_heading="Submission check")
+    legacy.render_markdown(doc, source)
     path = output_dir / "Chapter2_JEB_Title_Page_V9_6.docx"
     legacy.save_document(doc, path)
     scrub_package(path)
