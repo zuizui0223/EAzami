@@ -31,6 +31,10 @@ on:
       - ".github/workflows/validate-chapter2-manuscript-v1.yml"
   workflow_dispatch:
 
+concurrency:
+  group: validate-chapter2-manuscript-v1-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
