@@ -51,6 +51,23 @@ def main() -> None:
     if words(body) > 7500:
         raise AssertionError(f"main text exceeds 7500 words: {words(body)}")
 
+    # Current JEB anonymous-main routing.
+    require(text, "## Transparency and reproducibility")
+    require(text, "Generative-AI assistance was used")
+    require(text, "Supporting Information")
+    if text.index("## Transparency and reproducibility") > text.index("# Results"):
+        raise AssertionError("AI/transparency disclosure must remain in Materials and Methods before Results")
+    for forbidden_submission_section in (
+        "# Transparency and data availability",
+        "## Submission-preparation notes",
+        "# Data Availability",
+        "# Acknowledgements",
+        "# Funding",
+        "# Conflict of Interest",
+    ):
+        if forbidden_submission_section in text:
+            raise AssertionError(f"anonymous main retains title-page-only material: {forbidden_submission_section}")
+
     # Historical core must remain unchanged.
     rec = hist["recurrence_and_depth"]
     assert rec["orientation"]["minimum_changes_ufboot_range"] == [4, 6]
