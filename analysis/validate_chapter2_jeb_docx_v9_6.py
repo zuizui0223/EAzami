@@ -111,6 +111,8 @@ def main():
             raise AssertionError(f"title page missing {token!r}")
     if "{{MAIN_WORD_COUNT}}" in title_text or "{{ABSTRACT_WORD_COUNT}}" in title_text:
         raise AssertionError("title page count tokens were not materialized")
+    if "Submission check" in title_text or "Pending:" in title_text:
+        raise AssertionError("internal submission checklist leaked into title page")
     if not re.search(r"Main-text word count before References:\s*\d+",title_text):
         raise AssertionError("title page missing materialized main word count")
     if not re.search(r"Abstract word count:\s*\d+",title_text):
@@ -133,6 +135,8 @@ def main():
             raise AssertionError(f"SI missing {token!r}")
     if "Supplementary Figure S" in si_text:
         raise AssertionError("SI labels non-rendered material as supplementary figures")
+    if "Supporting-information audit checklist" in si_text or "Completed:" in si_text:
+        raise AssertionError("internal SI audit checklist leaked into submission SI")
 
     cover_text,cover_images,cover_ln=inspect_docx(expected["cover"])
     if cover_images or cover_ln:
