@@ -1,6 +1,6 @@
 # EAzami — mosaic capitulum evolution through time and ecological scale
 
-## Active state — 2026-09-30
+## Active state — 2026-10-01
 
 EAzami Chapter 2 is now organized around one positive historical result plus a bounded ecological extension.
 
@@ -24,7 +24,7 @@ The active validator is:
 
 - `analysis/validate_manuscript_jeb_v9_6.py`
 
-V9.6 validation is green: abstract 203 words, main text before References 4,020 words, 8 keywords.
+V9.6 validation is green: abstract 203 words, main text before References 4,154 words, 8 keywords. The four main figures, Supporting Information V4, anonymous line-numbered DOCX, separate title page and cover letter have also passed automated validation and full-page visual QA.
 
 ## Historical core
 
@@ -105,13 +105,21 @@ Until those experiments, EAzami supports historical mosaic reassembly and scale-
 
 ## Submission work remaining
 
-Scientific result hunting is stopped. Remaining Chapter 2 work is production:
+Scientific analysis and production are complete for V9.6. The validated package now contains:
 
-1. build/freeze Figures 1–4 from machine-readable evidence;
-2. synchronize Supporting Information;
-3. generate anonymous line-numbered JEB main DOCX + title page + SI + cover letter;
-4. finalize author/affiliation/funding/COI metadata;
-5. mint the immutable archive/DOI at the exact submission commit.
+- four machine-generated main figures;
+- synchronized Supporting Information V4;
+- anonymous line-numbered main DOCX with four embedded figures and alt text;
+- separate title-page DOCX;
+- separate Supporting Information DOCX;
+- concise cover-letter DOCX.
+
+Only human/archival completion remains:
+
+1. finalize author order, affiliations, corresponding-author details and ORCID;
+2. complete acknowledgements, funding and conflict-of-interest statements;
+3. insert the final immutable archive URL, exact submission commit and DOI/accession;
+4. enter the same metadata in the journal submission system.
 
 ## Claim boundary
 
