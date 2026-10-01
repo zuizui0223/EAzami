@@ -5,7 +5,14 @@ on:
     paths:
       - "README.md"
       - "PROJECT_STATUS.md"
-      - "docs/chapter2/**"
+      - "docs/chapter2/MANUSCRIPT_JEB_V3.md"
+      - "docs/chapter2/JEB_SUPPORTING_INFORMATION_V1.md"
+      - "docs/chapter2/CHAPTER2_CORE_RESULT_RECOVERY_V1.md"
+      - "docs/chapter2/TIME_AXIS_MAINLINE_V3.md"
+      - "docs/chapter2/JEB_SUBMISSION_TARGET_V1.md"
+      - "docs/chapter2/README.md"
+      - "docs/chapter2/figures/**"
+      - "docs/chapter2/submission_package/**"
       - "docs/RESEARCH_PLAN.md"
       - "docs/archive/RESEARCH_PLAN_FLOWER_COLOUR_LEGACY_2026-08-27.md"
       - "data/evidence/chapter2_claim_registry_v1.csv"
@@ -23,6 +30,10 @@ on:
       - "tests/test_make_chapter2_jeb_supplementary_figures_v1.py"
       - ".github/workflows/validate-chapter2-manuscript-v1.yml"
   workflow_dispatch:
+
+concurrency:
+  group: validate-chapter2-manuscript-v1-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read

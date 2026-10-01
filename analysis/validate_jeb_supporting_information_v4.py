@@ -27,6 +27,7 @@ def main():
     tr=load("chapter2_orientation_transition_regime_hypothesis_result_v1.json")
     direction=load("chapter2_orientation_transition_directionality_result_v1.json")
     deletion=load("chapter2_orientation_transition_regime_single_deletion_result_v1.json")
+    bidir_deletion=load("chapter2_orientation_transition_directionality_single_deletion_result_v1.json")
     geo=load("chapter2_orientation_transition_regime_geography_residual_result_v1.json")
     internal=load("chapter2_orientation_transition_regime_internal_edge_result_v1.json")
     combined=load("chapter2_orientation_transition_regime_combined_stress_result_v1.json")
@@ -64,10 +65,11 @@ def main():
     assert tr["n3_sensitivity"]["exact_primary_rank"]["count_at_least_observed"]==19
     assert direction["exact_floor_rank"]["count_at_least_observed"]==3
     assert deletion["n_exact_exceptionality_pass"]==2
+    assert bidir_deletion["n_exact_exceptionality_pass"]==3
     assert geo["strict_n10_primary"]["exact_primary_rank"]["count_at_least_observed"]==5
     assert internal["strict_n10_primary"]["exact_primary_rank"]["count_at_least_observed"]==3
     assert combined["strict_n10_primary"]["exact_primary_rank"]["count_at_least_observed"]==3
-    for t in ("16/792 = 2.02%","19/1716 = 1.11%","4/126 = 3.17%","3/126 = 2.38%","9/9","2/9","5/126 = 3.97%","29/792 = 3.66%"):
+    for t in ("16/792 = 2.02%","19/1716 = 1.11%","4/126 = 3.17%","3/126 = 2.38%","9/9","2/9","3/9","5/126 = 3.97%","29/792 = 3.66%"):
         need(si,t)
 
     assert az["decision"]=="NOT_ELIGIBLE_AS_PROSPECTIVE_P3"

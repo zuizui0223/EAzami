@@ -38,13 +38,7 @@ Thirty-six of the 38 sampled concepts occur within the dominant radiation. We an
 
 For the maximum-likelihood topology and each of 1,000 bootstrap topologies, we calculated unordered parsimony minima. These values are lower bounds on required state change and were not interpreted as counts of independent adaptive origins.
 
-For every globally minimum-cost Sankoff history, relative lineage depth was defined for an edge subtending \(d\) descendants in a tree with \(N\) admitted tips as
-
-\[
-D=\frac{N-d}{N-1}.
-\]
-
-Terminal edges have \(D=1\), whereas smaller values permit deeper placement. Trait depth was compared directly on the same 1,000 bootstrap topologies. Because trait coverage differed, a deterministic masking sensitivity equalized observed-state coverage before repeating paired depth comparisons. The depth analyses were executed under Python 3.11 with Biopython 1.85; bootstrap trees are treated as topology-sensitivity realizations, not independent biological replicates.
+For every globally minimum-cost Sankoff history, relative lineage depth was defined for an edge subtending *d* descendants in a tree with *N* admitted tips as D = (N - d)/(N - 1). Terminal edges have *D* = 1, whereas smaller values permit deeper placement. Trait depth was compared directly on the same 1,000 bootstrap topologies. Because trait coverage differed, a deterministic masking sensitivity equalized observed-state coverage before repeating paired depth comparisons. The depth analyses were executed under Python 3.11 with Biopython 1.85; bootstrap trees are treated as topology-sensitivity realizations, not independent biological replicates.
 
 Shared-transition localization was evaluated with a branch-length-aware equal-rates Mk diagnostic and a topology-only sensitivity. A trait pair passed the robust descriptive rule only when positive localization overlap persisted under both treatments. The Mk layer is used as a diagnostic of transition localization rather than as proof of independent origins or adaptation (Lewis, 2001).
 
@@ -64,7 +58,7 @@ We also ran a prospectively frozen external-taxon confirmation programme. Trait 
 
 Orientation additionally had sufficient state-diverse public coverage for a phylogeny-conditioned transition analysis. After an earlier state comparison identified stable positive BIO15 and negative BIO1 directions, the upward-to-downward composite BIO15 up + BIO1 down was fixed as a **post-result focused hypothesis**, not a preregistered vector.
 
-For each accepted topology, a symmetric two-state CTMC supplied edge transition probabilities and Brownian reconstruction supplied branch environmental differences. A transition-weighted composite statistic was ranked among every count-preserving orientation state map. Coverage sensitivities, single-taxon deletion, latitude/longitude residualization and internal-edge-only scoring were retained. The finite-map fractions are exhaustive conditional ranks, not \(P\) values from independent biological replicates.
+For each accepted topology, a symmetric two-state CTMC supplied edge transition probabilities and Brownian reconstruction supplied branch environmental differences. A transition-weighted composite statistic was ranked among every count-preserving orientation state map. Coverage sensitivities, single-taxon deletion, latitude/longitude residualization and internal-edge-only scoring were retained. The finite-map fractions are exhaustive conditional ranks, not *P* values from independent biological replicates.
 
 A later Japan/Taiwan source-partition diagnostic tested coarse data-source geography only; the two source partitions were not interpreted as biological regions.
 
@@ -76,6 +70,12 @@ A frozen random-effects synthesis summarized mature or viable seed output in fou
 
 Historical climate was retained only as a boundary on causal interpretation of the orientation result. The sole event linkable to bounded chronology and palaeolocation generated 376 chronology-by-region scenarios; broader climate and sea-level audits were treated as sensitivity analyses rather than headline results. Palaeoclimate surfaces came from PALEO-PGEM (Barreto et al., 2023).
 
+## Transparency and reproducibility
+
+All admission rules, negative and not-evaluable outcomes, robustness tests and claim ceilings are retained in versioned machine-readable evidence files and checked by automated validators. Full robustness and resolution-ceiling details are provided in the Supporting Information.
+
+Generative-AI assistance was used for code drafting, manuscript restructuring and editorial revision. All analyses, source boundaries, numerical claims and references were checked against the underlying evidence by the authors, who take responsibility for the final content.
+
 # Results
 
 ## Repeated change occurs within one young radiation
@@ -84,13 +84,7 @@ Thirty-six of 38 sampled Japanese concepts occur in the dominant radiation, yet 
 
 ## Repeated histories are stratified across evolutionary depth
 
-Paired comparison on the same 1,000 bootstrap topologies showed a strong central depth ordering. Phyllary posture was deeper-permissive than stickiness in 1,000/1,000 topologies and deeper-permissive than orientation in 993/1,000. Orientation was deeper-permissive than stickiness in 905/1,000, with seven ties. The complete central ordering
-
-\[
-phyllary < orientation < stickiness
-\]
-
-where smaller values indicate deeper permitted history, occurred in 898/1,000 topologies. Coverage-matched masking retained the central phyllary-deeper pattern against matched medians, while strict tails still overlapped (Figure 2).
+Paired comparison on the same 1,000 bootstrap topologies showed a strong central depth ordering. Phyllary posture was deeper-permissive than stickiness in 1,000/1,000 topologies and deeper-permissive than orientation in 993/1,000. Orientation was deeper-permissive than stickiness in 905/1,000, with seven ties. The complete central ordering, phyllary < orientation < stickiness, where smaller values indicate deeper permitted history, occurred in 898/1,000 topologies. Coverage-matched masking retained the central phyllary-deeper pattern against matched medians, while strict tails still overlapped (Figure 2).
 
 Thus the three traits are not merely recurrent. Their repeated histories occupy different layers of the radiation's topology.
 
@@ -110,7 +104,7 @@ The three historical traits therefore do not collapse onto one common present-da
 
 Orientation was weak as a static common9 state contrast but informative when represented as reconstructed evolutionary change. The fixed upward-to-downward BIO15-up/BIO1-down composite ranked 16/792 (2.02%) for n>=5, 19/1,716 (1.11%) for n>=3 and 4/126 (3.17%) for n>=10. The reverse transition tracked the opposite side of the same strict vector, yielding a bidirectional-floor rank of 3/126 (2.38%).
 
-Positive forward and reverse alignment persisted in 9/9 single-taxon deletions, although exact finite-map exceptionality persisted in 3/9. The result also remained exceptional after latitude/longitude residualization, internal-edge-only scoring and their combination.
+Single-taxon deletion retained the U→D composite direction in 9/9 panels, while its exact ≤0.05 finite-map rank survived 2/9. In the bidirectional decomposition, both forward and reverse alignments remained positive in 9/9 deletion panels and the exact ≤0.05 bidirectional-floor rank survived 3/9. The result also remained exceptional after latitude/longitude residualization, internal-edge-only scoring and their combination.
 
 The Japan/Taiwan source-partition diagnostic did not explain the signal. The source-partition mean component was opposite to the observed direction and non-exceptional (502/792 = 63.38%), whereas the within-partition component remained positive and exceptional (20/792 = 2.53%). Preserving source-partition orientation-state counts retained the within-partition result (10/336 = 2.98%).
 
@@ -182,9 +176,9 @@ The primary contribution is therefore not that capitulum parts have different fu
 
 # Figure legends
 
-**Figure 1. Three capitulum components repeatedly differentiate within one young radiation.** (a) Number of Japan38 concepts with resolved source-backed states for orientation, phyllary posture and involucre stickiness. (b) Minimum unordered state changes across the frozen topology ensemble; the diamond marks the maximum-likelihood-tree value. (c) Bootstrap-median envelopes of the relative-lineage-depth bounds; \(D=1\) is terminal and lower values permit deeper placement. Relative lineage depth is a topology coordinate, not calendar time. **Alt text:** Three aligned panels show unequal trait coverage, repeated minimum state changes for all three traits, and differing relative-depth envelopes, with phyllary extending deepest and stickiness concentrated shallowest.
+**Figure 1. Three capitulum components repeatedly differentiate within one young radiation.** (a) Number of Japan38 concepts with resolved source-backed states for orientation, phyllary posture and involucre stickiness. (b) Minimum unordered state changes across the frozen topology ensemble; the diamond marks the maximum-likelihood-tree value. (c) Bootstrap-median envelopes of the relative-lineage-depth bounds; *D* = 1 is terminal and lower values permit deeper placement. Relative lineage depth is a topology coordinate, not calendar time. **Alt text:** Three aligned panels show unequal trait coverage, repeated minimum state changes for all three traits, and differing relative-depth envelopes, with phyllary extending deepest and stickiness concentrated shallowest.
 
-**Figure 2. Repeated histories are stratified across unequal evolutionary depths.** (a) Paired same-topology differences in lower relative-depth bounds; points show medians and thick intervals show 5th–95th percentiles across 1,000 topology-sensitivity realizations. Negative values mean the first trait is deeper-permissive. (b) Fraction of topologies retaining each central ordering. (c) Coverage-matched sensitivity at \(n=10\), showing that the central phyllary-deeper ordering persists against matched medians while strict tails overlap. **Alt text:** Depth contrasts are strongly negative for phyllary versus both other traits, weaker but mostly negative for orientation versus stickiness, and coverage matching retains the central phyllary-deeper ordering but not strict separation of distribution tails.
+**Figure 2. Repeated histories are stratified across unequal evolutionary depths.** (a) Paired same-topology differences in lower relative-depth bounds; points show medians and thick intervals show 5th–95th percentiles across 1,000 topology-sensitivity realizations. Negative values mean the first trait is deeper-permissive. (b) Fraction of topologies retaining each central ordering. (c) Coverage-matched sensitivity at *n* = 10, showing that the central phyllary-deeper ordering persists against matched medians while strict tails overlap. **Alt text:** Depth contrasts are strongly negative for phyllary versus both other traits, weaker but mostly negative for orientation versus stickiness, and coverage matching retains the central phyllary-deeper ordering but not strict separation of distribution tails.
 
 **Figure 3. Component changes are not repeatedly synchronized on the same branches.** (a) Pairwise transition-localization associations under branch-length-aware and equal-branch topology-only diagnostics. The sign and magnitude change across assumptions. (b) None of the three trait pairs passes the robust shared-localization rule requiring consistent positive localization across both layers. **Alt text:** Three paired bars compare branch-length-aware and topology-only transition associations; no pair remains consistently positive across both diagnostics, summarized as zero of three robust pairs.
 
@@ -239,14 +233,3 @@ West, N. M., & Louda, S. M. (2018). Cumulative herbivory outpaces compensation f
 Willson, M. F., Anderson, P. K., & Thomas, P. A. (1983). Bracteal exudates in two *Cirsium* species as possible deterrents to insect consumers of seeds. *The American Midland Naturalist*, 110, 212–214.
 
 Zelditch, M. L., & Goswami, A. (2021). What does modularity mean? *Evolution & Development*, 23, 377–403. https://doi.org/10.1111/ede.12390
-
-# Transparency and data availability
-
-All numerical claims in the manuscript are linked to versioned machine-readable evidence in the project repository and are checked by an automated manuscript–evidence validator. The public-data analyses use previously published sequence data, public occurrence/environmental data and source-backed botanical trait records; no new field or experimental data are presented here. An immutable archival snapshot will be minted after manuscript, figure and supporting-information synchronization.
-
-Generative-AI assistance was used for code drafting, manuscript restructuring and editorial revision. All analyses, source boundaries, numerical claims and references were checked against the underlying evidence by the authors, who take responsibility for the final content.
-
-## Submission-preparation notes (remove before final manuscript)
-- Initial main-text file must be line-numbered, double-anonymous, and include references plus figures/tables near first citation.
-- The four figure legends above contain required `Alt text:` descriptions; the production DOCX should embed the corresponding rendered figures near first citation.
-- The immutable archive identifier and anonymous review-repository link remain final pre-submission gates.

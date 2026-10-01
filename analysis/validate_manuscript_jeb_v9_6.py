@@ -51,6 +51,23 @@ def main() -> None:
     if words(body) > 7500:
         raise AssertionError(f"main text exceeds 7500 words: {words(body)}")
 
+    # Current JEB anonymous-main routing.
+    require(text, "## Transparency and reproducibility")
+    require(text, "Generative-AI assistance was used")
+    require(text, "Supporting Information")
+    if text.index("## Transparency and reproducibility") > text.index("# Results"):
+        raise AssertionError("AI/transparency disclosure must remain in Materials and Methods before Results")
+    for forbidden_submission_section in (
+        "# Transparency and data availability",
+        "## Submission-preparation notes",
+        "# Data Availability",
+        "# Acknowledgements",
+        "# Funding",
+        "# Conflict of Interest",
+    ):
+        if forbidden_submission_section in text:
+            raise AssertionError(f"anonymous main retains title-page-only material: {forbidden_submission_section}")
+
     # Historical core must remain unchanged.
     rec = hist["recurrence_and_depth"]
     assert rec["orientation"]["minimum_changes_ufboot_range"] == [4, 6]
@@ -114,6 +131,17 @@ def main() -> None:
         "aza3",
     ):
         require(text, token)
+    deletion = load_json(EVID / "chapter2_orientation_transition_regime_single_deletion_result_v1.json")
+    bidir_deletion = load_json(EVID / "chapter2_orientation_transition_directionality_single_deletion_result_v1.json")
+    assert deletion["n_deletions"] == 9
+    assert deletion["n_exact_exceptionality_pass"] == 2
+    assert bidir_deletion["n_deletions"] == 9
+    assert bidir_deletion["n_exact_exceptionality_pass"] == 3
+    require(text, "U→D composite direction in 9/9 panels")
+    require(text, "exact ≤0.05 finite-map rank survived 2/9")
+    require(text, "both forward and reverse alignments remained positive in 9/9 deletion panels")
+    require(text, "exact ≤0.05 bidirectional-floor rank survived 3/9")
+
     for bad in (
         "external confirmation supports",
         "independent held-out confirmation was successful",

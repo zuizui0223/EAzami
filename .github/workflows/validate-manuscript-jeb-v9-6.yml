@@ -9,6 +9,10 @@ on:
       - ".github/workflows/validate-manuscript-jeb-v9-6.yml"
   workflow_dispatch:
 
+concurrency:
+  group: validate-manuscript-jeb-v9-6-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 

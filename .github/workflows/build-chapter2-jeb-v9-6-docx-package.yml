@@ -1,0 +1,60 @@
+name: Build Chapter 2 JEB V9.6 DOCX package
+
+on:
+  pull_request:
+    paths:
+      - "docs/chapter2/MANUSCRIPT_JEB_V9_6_SCALE_CONDITIONED_ECOLOGY.md"
+      - "docs/chapter2/JEB_SUPPORTING_INFORMATION_V4.md"
+      - "docs/chapter2/JEB_TITLE_PAGE_V9_6.md"
+      - "docs/chapter2/JEB_COVER_LETTER_V9_6.md"
+      - "analysis/build_chapter2_jeb_docx_v9_6.py"
+      - "analysis/validate_chapter2_jeb_docx_v9_6.py"
+      - "analysis/make_chapter2_jeb_figures_v9_6.py"
+      - ".github/workflows/build-chapter2-jeb-v9-6-docx-package.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: build-chapter2-jeb-v9-6-docx-package-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install production dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy matplotlib python-docx pillow lxml
+          python -m py_compile analysis/make_chapter2_jeb_figures_v9_6.py
+          python -m py_compile analysis/build_chapter2_jeb_docx_v9_6.py
+          python -m py_compile analysis/validate_chapter2_jeb_docx_v9_6.py
+      - name: Validate manuscript and SI sources
+        run: |
+          python analysis/validate_manuscript_jeb_v9_6.py
+          python analysis/validate_jeb_supporting_information_v4.py
+      - name: Generate four V9.6 main figures
+        run: |
+          mkdir -p /tmp/figures_v9_6
+          python analysis/make_chapter2_jeb_figures_v9_6.py --out /tmp/figures_v9_6
+      - name: Build DOCX package
+        run: |
+          mkdir -p /tmp/submission_package_v9_6
+          python analysis/build_chapter2_jeb_docx_v9_6.py \
+            --figure-dir /tmp/figures_v9_6 \
+            --output-dir /tmp/submission_package_v9_6
+      - name: Validate DOCX package
+        run: python analysis/validate_chapter2_jeb_docx_v9_6.py --package-dir /tmp/submission_package_v9_6
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-jeb-v9-6-docx-package
+          path: /tmp/submission_package_v9_6/*.docx
+          if-no-files-found: error
+          retention-days: 90
