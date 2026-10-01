@@ -8,6 +8,10 @@ on:
       - ".github/workflows/validate-jeb-supporting-information-v4.yml"
   workflow_dispatch:
 
+concurrency:
+  group: validate-jeb-supporting-information-v4-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
