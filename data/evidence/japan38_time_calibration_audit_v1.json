@@ -1,0 +1,41 @@
+{
+  "contract_version": "japan38_time_calibration_audit_v1",
+  "tree_branch_length_unit": "substitutions_per_site",
+  "paper_concepts": 38,
+  "biological_tips": 39,
+  "dominant_radiation_membership_hypothesis": {
+    "source_claim": "36/38 paper concepts in one dominant Japanese radiation",
+    "predeclared_secondary_history_concepts": ["JPN_06", "JPN_15"],
+    "compatibility_tree_monophyletic": false,
+    "extra_concepts_inside_mrca": ["JPN_06", "JPN_15"],
+    "ev01_may_be_used_as_direct_crown_calibration": false,
+    "reason": "EV01 is a reconstructed range/opportunity event, and the published 36/38 membership is not monophyletic on the independent compatibility tree."
+  },
+  "directly_mappable_interval_anchor": {
+    "event_id": "TA01",
+    "endpoint_concepts": ["JPN_15", "JPN_35"],
+    "endpoint_tips": ["J38S015", "J38S036"],
+    "point_age_ma": 2.27,
+    "young_bound_ma": 1.85,
+    "old_bound_ma": 2.69,
+    "mrca_biological_tips": 37,
+    "mrca_paper_concepts": 36,
+    "paper_concepts_outside_mrca": ["JPN_18", "JPN_29"],
+    "eligible_for_sensitivity_calibration": true,
+    "eligible_as_ecological_event_window": false
+  },
+  "other_anchors": {
+    "TA02": "clade membership not frozen at exact Japan38 concept level; chronology context only",
+    "TA03": "clade membership not frozen at exact Japan38 concept level; chronology context only",
+    "TA04": "endpoint taxa absent from Japan38 tree"
+  },
+  "readiness": {
+    "relative_branch_length_history_ready": true,
+    "single_anchor_chronogram_sensitivity_ready": true,
+    "confirmatory_absolute_time_tree_ready": false,
+    "fdt6_event_correspondence_ready": false,
+    "fdt5_absolute_time_disparity_ready": false
+  },
+  "next_allowed_step": "Run TA01-only age-bound x smoothing-model sensitivity as a chronology scaffold; do not promote ecological-event matching unless node-age/topology identifiability improves.",
+  "claim_boundary": "This audit identifies safe calibration mappings only. It does not convert substitutions/site to time and does not treat biogeographic event ages as node ages."
+}
