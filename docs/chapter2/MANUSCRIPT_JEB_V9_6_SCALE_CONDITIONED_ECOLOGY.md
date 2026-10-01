@@ -104,7 +104,7 @@ The three historical traits therefore do not collapse onto one common present-da
 
 Orientation was weak as a static common9 state contrast but informative when represented as reconstructed evolutionary change. The fixed upward-to-downward BIO15-up/BIO1-down composite ranked 16/792 (2.02%) for n>=5, 19/1,716 (1.11%) for n>=3 and 4/126 (3.17%) for n>=10. The reverse transition tracked the opposite side of the same strict vector, yielding a bidirectional-floor rank of 3/126 (2.38%).
 
-Positive forward and reverse alignment persisted in 9/9 single-taxon deletions, although exact finite-map exceptionality persisted in 2/9. The result also remained exceptional after latitude/longitude residualization, internal-edge-only scoring and their combination.
+Single-taxon deletion retained the U→D composite direction in 9/9 panels, while its exact ≤0.05 finite-map rank survived 2/9. In the bidirectional decomposition, both forward and reverse alignments remained positive in 9/9 deletion panels and the exact ≤0.05 bidirectional-floor rank survived 3/9. The result also remained exceptional after latitude/longitude residualization, internal-edge-only scoring and their combination.
 
 The Japan/Taiwan source-partition diagnostic did not explain the signal. The source-partition mean component was opposite to the observed direction and non-exceptional (502/792 = 63.38%), whereas the within-partition component remained positive and exceptional (20/792 = 2.53%). Preserving source-partition orientation-state counts retained the within-partition result (10/336 = 2.98%).
 
