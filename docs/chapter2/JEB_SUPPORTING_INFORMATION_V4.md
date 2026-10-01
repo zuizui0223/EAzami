@@ -105,8 +105,8 @@ Reduced coverage does not erase the central phyllary-deeper ordering, but strict
 
 Two localization diagnostics are retained because branch-length geometry can itself induce apparent overlap:
 
-1. a branch-length-aware equal-rates Mk layer, summarized by transition-posterior excess over branch prior;
-2. an equal-branch topology-only sensitivity across the UFBoot ensemble.
+- a branch-length-aware equal-rates Mk layer, summarized by transition-posterior excess over branch prior;
+- an equal-branch topology-only sensitivity across the UFBoot ensemble.
 
 | Pair | Branch-aware excess rho | Equal-branch median rho | Equal-branch q05 | Equal-branch fraction >0 | Robust shared-localization rule |
 |---|---:|---:|---:|---:|---|
