@@ -50,7 +50,7 @@ The ontology is taxon-concept level. It is not a same-voucher phenotype dataset 
 
 ---
 
-# Supplementary Figure S2 / Table S2 — Repeated state change and relative evolutionary depth
+# Supplementary Section S2 / Table S2 — Repeated state change and relative evolutionary depth
 
 ## S2.1 Minimum-change counts
 
@@ -101,7 +101,7 @@ Reduced coverage does not erase the central phyllary-deeper ordering, but strict
 
 ---
 
-# Supplementary Figure S3 / Table S3 — Shared transition localization
+# Supplementary Section S3 / Table S3 — Shared transition localization
 
 Two localization diagnostics are retained because branch-length geometry can itself induce apparent overlap:
 
@@ -120,7 +120,7 @@ This constrains a simple synchronized whole-capitulum history. It does not demon
 
 ---
 
-# Supplementary Figure S4 / Table S4 — Common nine-variable present-environment comparison
+# Supplementary Section S4 / Table S4 — Common nine-variable present-environment comparison
 
 All three historical traits were passed through one trait-blind workflow with the same occurrence/QC logic and the same nine variables:
 
@@ -152,7 +152,7 @@ The common9 result does not identify one shared abiotic syndrome and does not di
 
 ---
 
-# Supplementary Figure S5 / Table S5 — Orientation transition-regime analysis
+# Supplementary Section S5 / Table S5 — Orientation transition-regime analysis
 
 The transition analysis tests a different estimand from static D/U separation.
 
@@ -227,7 +227,7 @@ Internal environmental values remain Brownian reconstructions from present taxon
 
 ---
 
-# Supplementary Figure S6 / Table S6 — Cross-scale orientation audit with Azami
+# Supplementary Section S6 / Table S6 — Cross-scale orientation audit with Azami
 
 The Azami image dataset is complementary cross-scale evidence. It is **not eligible as prospective held-out P3** because the orientation endpoint and the same climate universe had already been analysed before the EAzami external-confirmation programme.
 
@@ -264,7 +264,7 @@ Within-taxon, among-taxon and transition-level estimands are not pooled.
 
 ---
 
-# Supplementary Figure S7 / Table S7 — Preregistered external-taxon confirmation ceiling
+# Supplementary Section S7 / Table S7 — Preregistered external-taxon confirmation ceiling
 
 The external programme was separated from discovery before held-out climate outcomes were opened.
 
@@ -318,7 +318,7 @@ This is an occurrence-metadata resolution ceiling, not an ecological null and no
 
 ---
 
-# Supplementary Figure S8 / Table S8 — Historical environmental-cause boundary
+# Supplementary Section S8 / Table S8 — Historical environmental-cause boundary
 
 Only one orientation event reaches the full calendar-age + palaeolocation + environment gate: the core-Nipponocirsium erect/upward → nodding/downward transition.
 
@@ -352,7 +352,7 @@ This is an identifiability boundary, not evidence that historical climate, local
 
 ---
 
-# Supplementary Figure S9 / Table S9 — Functional plausibility and reproductive-antagonist fitness magnitude
+# Supplementary Section S9 / Table S9 — Functional plausibility and reproductive-antagonist fitness magnitude
 
 Functional evidence is kept separate from historical comparative estimands.
 
