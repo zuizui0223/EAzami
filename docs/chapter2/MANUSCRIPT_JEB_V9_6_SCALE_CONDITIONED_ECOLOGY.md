@@ -76,6 +76,12 @@ A frozen random-effects synthesis summarized mature or viable seed output in fou
 
 Historical climate was retained only as a boundary on causal interpretation of the orientation result. The sole event linkable to bounded chronology and palaeolocation generated 376 chronology-by-region scenarios; broader climate and sea-level audits were treated as sensitivity analyses rather than headline results. Palaeoclimate surfaces came from PALEO-PGEM (Barreto et al., 2023).
 
+## Transparency and reproducibility
+
+All admission rules, negative and not-evaluable outcomes, robustness tests and claim ceilings are retained in versioned machine-readable evidence files and checked by automated validators. Full robustness and resolution-ceiling details are provided in the Supporting Information.
+
+Generative-AI assistance was used for code drafting, manuscript restructuring and editorial revision. All analyses, source boundaries, numerical claims and references were checked against the underlying evidence by the authors, who take responsibility for the final content.
+
 # Results
 
 ## Repeated change occurs within one young radiation
@@ -239,14 +245,3 @@ West, N. M., & Louda, S. M. (2018). Cumulative herbivory outpaces compensation f
 Willson, M. F., Anderson, P. K., & Thomas, P. A. (1983). Bracteal exudates in two *Cirsium* species as possible deterrents to insect consumers of seeds. *The American Midland Naturalist*, 110, 212–214.
 
 Zelditch, M. L., & Goswami, A. (2021). What does modularity mean? *Evolution & Development*, 23, 377–403. https://doi.org/10.1111/ede.12390
-
-# Transparency and data availability
-
-All numerical claims in the manuscript are linked to versioned machine-readable evidence in the project repository and are checked by an automated manuscript–evidence validator. The public-data analyses use previously published sequence data, public occurrence/environmental data and source-backed botanical trait records; no new field or experimental data are presented here. An immutable archival snapshot will be minted after manuscript, figure and supporting-information synchronization.
-
-Generative-AI assistance was used for code drafting, manuscript restructuring and editorial revision. All analyses, source boundaries, numerical claims and references were checked against the underlying evidence by the authors, who take responsibility for the final content.
-
-## Submission-preparation notes (remove before final manuscript)
-- Initial main-text file must be line-numbered, double-anonymous, and include references plus figures/tables near first citation.
-- The four figure legends above contain required `Alt text:` descriptions; the production DOCX should embed the corresponding rendered figures near first citation.
-- The immutable archive identifier and anonymous review-repository link remain final pre-submission gates.
