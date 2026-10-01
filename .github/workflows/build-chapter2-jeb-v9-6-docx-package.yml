@@ -13,6 +13,10 @@ on:
       - ".github/workflows/build-chapter2-jeb-v9-6-docx-package.yml"
   workflow_dispatch:
 
+concurrency:
+  group: build-chapter2-jeb-v9-6-docx-package-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
