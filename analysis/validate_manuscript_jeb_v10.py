@@ -73,6 +73,9 @@ def main():
     assert hreg["overall"]["h4_match_count"]==99
     assert hreg["n_chronologies_4_of_4_regions"]==6
     assert all(x["BIO15_delta"]<0 and x["BIO1_delta"]<0 for x in hreg["central_0_79_to_0_74_ma"])
+    need(t,"at least 75% of chronology scenarios")
+    need(t,"threshold was frozen before the historical result was opened")
+    need(t,"deterministic sensitivity-grid fractions, not posterior probabilities")
     for x in ("99/376","26.3%","21.3%","9.6%","43.6%","30.9%","6/94","0/324","0/21"):
         need(t,x)
 
