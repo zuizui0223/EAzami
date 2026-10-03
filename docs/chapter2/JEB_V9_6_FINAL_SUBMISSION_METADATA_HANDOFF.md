@@ -22,7 +22,7 @@ Scientific analysis, manuscript text, Figures 1–4, Supporting Information and 
 
 Repeated changes in thistle capitulum orientation, phyllary posture and stickiness occupy different evolutionary depths and rarely localize to the same branches. Orientation–environment relationships also change with biological scale and phenotype representation.
 
-Character count including spaces: 264.
+Character count including spaces: 263.
 
 ## Author identity already evidenced in repository
 
