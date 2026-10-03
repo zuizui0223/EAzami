@@ -84,7 +84,7 @@ Zero of three pairwise trait comparisons passed the robust shared-transition-loc
 
 ## Repeated components map to plausible functional interfaces
 
-The independent functional evidence did not support one common mechanism for all three components (Figure 3). For orientation, experimentally erect *Cremanthodium campanulatum* capitula produced fewer achenes; water and UV-B reduced pollen viability, whereas pollinator preference and meaningful orientation-driven internal thermal differences were not detected (Niu & Sun, 2013). This makes abiotic reproductive exposure, with possible timing effects, the leading current functional domain.
+The independent functional evidence did not support one common mechanism for all three components (Figure 3). For orientation, natural nodding *Cremanthodium campanulatum* capitula had 56.3% achene set versus 15.7% after experimental erection (response ratio ≈3.59); water and UV-B reduced pollen viability, whereas pollinator preference and meaningful orientation-driven internal thermal differences were not detected (Niu & Sun, 2013). This makes abiotic reproductive exposure, with possible timing effects, the leading current functional domain.
 
 For phyllary architecture, removing involucral spines in *Centaurea solstitialis* removed deterrence of illegitimate Lepidoptera and reduced filled seeds by 22%, without increasing legitimate bee/fly visitation frequency (Agrawal et al., 2000). Independent protective-bract manipulation likewise supports an antagonist-access pathway. Mechanical antagonist exclusion is therefore the leading functional prior, although direct focal *Cirsium* phyllary manipulation is absent.
 
