@@ -41,6 +41,9 @@ def main():
     assert depth["complete_lower_bound_ordering"]["count"]==898
     for x in ("four to six","exactly three","exactly five","1,000/1,000","993/1,000","905/1,000","898/1,000","Zero of three"):
         need(t,x)
+    need(t,"A young Cirsium radiation repeatedly rebuilt its reproductive head from functionally distinct components")
+    need(t,"recurrent functional assembly")
+    need(t,"recurrent functional rebuilding of the *Cirsium* capitulum")
 
     orient_cal=load("chapter2_orientation_causal_triangulation_v3.json")
     assert orient_cal["external_mechanism_prior"]["achene_set_percent"]["nodding"]==56.3
