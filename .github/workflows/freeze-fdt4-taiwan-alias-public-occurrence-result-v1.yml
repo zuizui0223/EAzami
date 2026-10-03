@@ -1,0 +1,80 @@
+name: Freeze FDT4 Taiwan alias public-occurrence result v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/freeze_fdt4_taiwan_alias_public_occurrence_result_v1.py"
+      - ".github/workflows/freeze-fdt4-taiwan-alias-public-occurrence-result-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 1
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-taiwan-tbn-alias-sensitivity-v1
+          path: inputs/alias_result
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33246077732
+
+      - name: Freeze compact result
+        run: |
+          set -euo pipefail
+          python analysis/freeze_fdt4_taiwan_alias_public_occurrence_result_v1.py \
+            --artifact-root inputs/alias_result \
+            --source-run 33246077732 \
+            --source-artifact-id 9712888467 \
+            --out-json data/evidence/fdt4_taiwan_alias_public_occurrence_result_v1.json \
+            --out-md docs/chapter2/FDT4_TAIWAN_ALIAS_PUBLIC_OCCURRENCE_RESULT_V1.md
+
+      - name: Validate frozen result
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('data/evidence/fdt4_taiwan_alias_public_occurrence_result_v1.json').read_text())
+          assert p['contract_version']=='fdt4_taiwan_alias_public_occurrence_result_v1'
+          assert p['status']=='FROZEN_SUPPORTING_SENSITIVITY_PRIMARY_UNCHANGED'
+          assert set(p['occurrence_tiers'])=={'alias_native','alias_broad'}
+          for x in p['occurrence_tiers'].values():
+              assert x['n_taxa']>=11
+              assert x['n_U']>0 and x['n_D']>0
+              assert x['bio01']['species_loo_sign_agreement']==1.0
+              assert x['bio15']['species_loo_sign_agreement']==1.0
+          assert p['provenance']['workflow_run_id']==33246077732
+          print('Taiwan alias result freeze PASS')
+          PY
+
+      - name: Commit frozen result to PR branch
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/evidence/fdt4_taiwan_alias_public_occurrence_result_v1.json docs/chapter2/FDT4_TAIWAN_ALIAS_PUBLIC_OCCURRENCE_RESULT_V1.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Freeze Taiwan alias public-occurrence result [skip alias-freeze]"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fdt4-taiwan-alias-public-occurrence-result-v1
+          path: |
+            data/evidence/fdt4_taiwan_alias_public_occurrence_result_v1.json
+            docs/chapter2/FDT4_TAIWAN_ALIAS_PUBLIC_OCCURRENCE_RESULT_V1.md
+          if-no-files-found: error
+          retention-days: 90

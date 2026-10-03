@@ -3,17 +3,18 @@
 
 The primary estimand is deliberately non-causal and modest: whether present-day
 trait states show a stable ecological correspondence after Brownian phylogenetic
-correction, whether that direction survives accepted-topology and species-LOO
-sensitivity, and whether the trait x ecology overlap is evaluable at the frozen
-coverage gate.
+correction, whether that direction survives the frozen candidate-tree fits and
+species-LOO sensitivity, and whether the trait x ecology overlap is evaluable at
+the frozen coverage gate.
 
 Held-out predictive comparisons against a mean-only null and phylogeny-only
 Brownian kriging are retained as transparent supporting diagnostics. They are not
-required for the main ecological-reach classification, especially in the current
-small n=9 orientation panel.
+required for the main ecological-reach classification.
 
-No result reconstructs historical climate or assigns an ecological cause to a
-particular transition.
+This script does not count distinct induced topologies. Panel-matched topology
+robustness must be supplied separately by regenerated UFBoot/public-locus/ASTRAL
+saturation. No result reconstructs historical climate or assigns an ecological
+cause to a particular transition.
 """
 from __future__ import annotations
 
@@ -229,46 +230,67 @@ def main():
     ):
         orientation_status = "tendency_supported"
 
+    if orientation_status == "tendency_supported":
+        primary_interpretation = (
+            "BIO15 crosses the frozen PGLS threshold in this occurrence panel and its direction is stable across the six frozen candidate-tree fits and all species-LOO fits. "
+            "This script does not establish that those six fits represent six distinct induced topologies; panel-matched regenerated-UFBoot/public-locus/ASTRAL saturation is required before topology robustness is claimed. "
+            "Held-out prediction remains a supporting diagnostic and no historical or causal interpretation follows from this status."
+        )
+        chapter2_result = (
+            "In this supplied occurrence panel, orientation reaches the frozen tendency_supported rule for BIO15, whereas phyllary posture and stickiness remain not evaluable. "
+            "Promotion beyond a sensitivity result requires panel-matched topology saturation and does not establish adaptation or historical niche causation."
+        )
+    else:
+        primary_interpretation = (
+            "BIO15 is estimable and directionally stable across the six frozen candidate-tree fits and all species-LOO fits, but the frozen PGLS threshold is not crossed in this occurrence panel, so the correct result class is unresolved. "
+            "This script does not establish distinct-topology robustness; use panel-matched regenerated-UFBoot/public-locus/ASTRAL saturation for that question. "
+            "Held-out prediction remains a supporting diagnostic."
+        )
+        chapter2_result = (
+            "Repeated minimum changes are shared across the three discrete traits, but ecological explanatory reach is asymmetric: orientation has an estimable directional climate correspondence that remains unresolved under the frozen inferential threshold in this supplied panel, whereas phyllary posture and stickiness are not evaluable."
+        )
+
     payload = {
         "contract_version": "chapter2_ecological_explanatory_reach_v1",
-        "estimand": "present-day ecological correspondence, phylogenetic/topological robustness and evaluability; predictive comparison retained as supporting sensitivity; not historical causation",
+        "estimand": "present-day ecological correspondence, frozen candidate-tree-fit and species-LOO robustness, and evaluability; distinct-topology saturation is a separate panel-matched analysis; predictive comparison retained as supporting sensitivity; not historical causation",
         "classification_rule": {
-            "tendency_supported": "state-diverse comparison is estimable, accepted-topology and species-LOO signs are fully stable for the primary axis, and the frozen primary phylogenetic association threshold is crossed",
+            "tendency_supported": "state-diverse comparison is estimable, all six frozen candidate-tree fits and species-LOO signs are stable for the primary axis, and the frozen primary phylogenetic association threshold is crossed",
             "unresolved": "an estimable and directionally stable correspondence exists but the frozen inferential threshold is not crossed",
-            "not_evaluable": "current frozen state x ecology overlap cannot estimate the requested contrast",
+            "not_evaluable": "current state x ecology overlap cannot estimate the requested contrast",
             "predictive_gain_required": False,
+            "distinct_topology_saturation_required_for_topology_robustness_claim": True,
         },
         "orientation": {
             "status": orientation_status,
             "n_taxa": len(taxa),
             "n_U": int((state == 0).sum()),
             "n_D": int((state == 1).sum()),
-            "topology_ensemble": "first six AU-nonrejected optimized Comp1061 topologies; topology 1 is ML within preregistered candidate set",
-            "raw_ufboot_ecology_sign_rate": "not_evaluable: raw Comp1061 UFBoot trees were not preserved in the accepted archived ecological input bundle",
+            "topology_ensemble": "first six AU-nonrejected optimized Comp1061 branch-length trees; these may collapse to fewer induced topologies after pruning, so six-fit agreement is not a topology-diversity count",
+            "raw_ufboot_ecology_sign_rate": "not_computed_by_this_summary_script; use a panel-matched regenerated-UFBoot/public-locus/ASTRAL topology-saturation analysis",
             "prediction_baselines": {
                 "role": "supporting_sensitivity_not_primary_ecological_reach_decision",
                 "null": "training-set mean only; no trait and no phylogenetic covariance",
-                "phylogeny_only": "intercept plus Brownian conditional prediction on the accepted topology",
+                "phylogeny_only": "intercept plus Brownian conditional prediction on the frozen candidate tree",
                 "phylogeny_plus_orientation": "intercept plus U/D orientation and Brownian conditional prediction",
             },
             "axes": axes,
-            "primary_interpretation": "BIO15 and BIO1 directions are stable to accepted-topology and species-LOO perturbation, and the branchwise diagnostic retains the same direction. The frozen primary PGLS and branchwise permutation thresholds are not crossed, so the correct result class is unresolved. Held-out prediction results are retained only as a small-panel supporting diagnostic and do not define this classification.",
+            "primary_interpretation": primary_interpretation,
         },
         "phyllary_posture": {
             "status": "not_evaluable",
             "historical_state_coverage": "10/38 concepts in Chapter 2 history",
             "climate_panel_resolved_taxa_n_ge_min_n": int(len(phyllary)),
             "state_counts": {str(k): int(v) for k, v in phyllary_counts.items()},
-            "reason": "The frozen occurrence-climate assets do not provide enough resolved, state-diverse phyllary taxa at the n>=10 gate for a phylogeny-aware climate comparison. Enemy exclusion, wetness protection and pollinator-access effects require Chapter 3 measurements.",
+            "reason": "The supplied occurrence-climate assets do not provide enough resolved, state-diverse phyllary taxa at the n>=10 gate for a phylogeny-aware climate comparison. Enemy exclusion, wetness protection and pollinator-access effects require Chapter 3 measurements.",
         },
         "stickiness": {
             "status": "not_evaluable",
             "historical_state_coverage": "13/38 concepts in Chapter 2 history",
             "climate_panel_resolved_taxa_n_ge_min_n": int(len(stickiness)),
             "state_counts": {str(k): int(v) for k, v in stickiness_counts.items()},
-            "reason": "The frozen occurrence-climate assets contain no estimable sticky-versus-nonsticky contrast at the n>=10 gate. Climate proxy association, enemy exclusion and production cost therefore cannot be separated with current data.",
+            "reason": "The supplied occurrence-climate assets contain no estimable sticky-versus-nonsticky contrast at the n>=10 gate. Climate proxy association, enemy exclusion and production cost therefore cannot be separated with current data.",
         },
-        "chapter2_result": "Repeated minimum changes are shared across the three discrete traits, but ecological explanatory reach is asymmetric: orientation has a stable directional climate correspondence that remains unresolved under the frozen inferential thresholds, whereas phyllary posture and stickiness are not evaluable with the frozen climate panel.",
+        "chapter2_result": chapter2_result,
         "claim_boundary": "Do not call the orientation pattern adaptation, convergence, historical niche causation or event-specific environmental matching. not_evaluable is a data-resolution result, not evidence of no ecological relation.",
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)

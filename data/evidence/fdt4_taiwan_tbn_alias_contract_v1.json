@@ -1,0 +1,105 @@
+{
+  "contract_version": "fdt4_taiwan_tbn_alias_contract_v1",
+  "status_date": "2026-08-29",
+  "purpose": "Outcome-blind recovery of Taiwan public occurrence records that are hidden from the frozen exact-name TBN audit by current accepted names, omitted rank tokens, or records retained under a parent accepted taxon. This is a supporting sensitivity tier and does not rewrite the frozen GBIF-only or direct-TBN inputs.",
+  "global_filters": {
+    "lat_min": 21.5,
+    "lat_max": 25.6,
+    "lon_min": 119.0,
+    "lon_max": 122.5,
+    "max_coordinate_uncertainty_m": 10000,
+    "spatial_thin_degrees": 0.05,
+    "minimum_environment_complete_cells": 10
+  },
+  "rules": [
+    {
+      "analysis_taxon": "Cirsium japonicum var. albescens",
+      "lookup_uuids": ["4ee2a291-92a0-4d53-a35b-847fc13be52a"],
+      "lookup_queries": ["Cirsium albescens"],
+      "lookup_taxon_names": ["Cirsium albescens"],
+      "allowed_occurrence_names": ["Cirsium albescens", "Cirsium japonicum var. albescens", "Cirsium japonicum albescens"],
+      "lookup_mode": "accepted_name_equivalence",
+      "geographic_guard": {
+        "allowed_counties": ["屏東縣", "Pingtung County"],
+        "fallback_bbox": {"lat_min": 21.7, "lat_max": 22.5, "lon_min": 120.6, "lon_max": 121.1},
+        "basis": "Chang et al. 2026 restricts var. albescens to the Hengchun Peninsula; exact TBN-name records outside Pingtung/Hengchun are not admitted to the alias sensitivity."
+      },
+      "equivalence_basis": "Chang et al. 2026 taxonomic revision treats Cirsium albescens Kitam. as the basionym/synonym corresponding to Cirsium japonicum var. albescens; TBN currently accepts Cirsium albescens.",
+      "evidence_urls": ["https://pmc.ncbi.nlm.nih.gov/articles/PMC13020037/", "https://www.tbn.org.tw/taxa/4ee2a291-92a0-4d53-a35b-847fc13be52a"]
+    },
+    {
+      "analysis_taxon": "Cirsium japonicum var. australe",
+      "lookup_uuids": ["0a7c7573-17d1-4f11-b205-5499c0f4f3ae"],
+      "lookup_queries": ["Cirsium japonicum var. australe", "Cirsium japonicum australe"],
+      "lookup_taxon_names": ["Cirsium japonicum var. australe", "Cirsium japonicum australe"],
+      "allowed_occurrence_names": ["Cirsium japonicum var. australe", "Cirsium japonicum australe"],
+      "lookup_mode": "rank_token_normalization",
+      "equivalence_basis": "TBN exposes the same infraspecific concept while some API/source strings omit the rank token var.",
+      "evidence_urls": ["https://www.tbn.org.tw/taxa/0a7c7573-17d1-4f11-b205-5499c0f4f3ae"]
+    },
+    {
+      "analysis_taxon": "Cirsium japonicum var. fukienense",
+      "lookup_uuids": ["f9c26696-f721-4523-bf07-79b6f84d45d1"],
+      "lookup_queries": ["Cirsium japonicum var. fukienense", "Cirsium japonicum fukienense", "Cirsium japonicum"],
+      "lookup_taxon_names": ["Cirsium japonicum"],
+      "allowed_occurrence_names": ["Cirsium japonicum var. fukienense", "Cirsium japonicum fukienense", "Cirsium japonicum f. fukienense"],
+      "lookup_mode": "original_name_under_parent_taxon",
+      "geographic_guard": {
+        "additional_allowed_counties_outside_global_bbox": ["金門縣", "連江縣", "Kinmen County", "Lienchiang County"],
+        "basis": "Chang & Tseng 2019 and Chang et al. 2026 place Taiwanese var. fukienense in Yangmingshan, Penghu, Kinmen and Matsu; Kinmen/Matsu may fall outside the frozen Taiwan rectangle and are admitted only by explicit county."
+      },
+      "equivalence_basis": "Chang et al. 2026 retains var. fukienense; TBN currently exposes Cirsium japonicum as the accepted parent, so only records whose occurrence-level original/scientific name explicitly contains the fukienense concept are admissible.",
+      "evidence_urls": ["https://pmc.ncbi.nlm.nih.gov/articles/PMC13020037/", "https://www.tbn.org.tw/taxa/f9c26696-f721-4523-bf07-79b6f84d45d1"]
+    },
+    {
+      "analysis_taxon": "Cirsium kawakamii",
+      "lookup_uuids": ["73732bce-00aa-488a-8058-efd6cecd5bb5"],
+      "lookup_queries": ["Cirsium kawakamii"],
+      "lookup_taxon_names": ["Cirsium kawakamii"],
+      "allowed_occurrence_names": ["Cirsium kawakamii"],
+      "lookup_mode": "direct_control",
+      "equivalence_basis": "Exact accepted species control carried through the same alias workflow.",
+      "evidence_urls": []
+    },
+    {
+      "analysis_taxon": "Cirsium morii",
+      "lookup_uuids": ["e59e89e3-f28c-4d63-b218-e135f732e548"],
+      "lookup_queries": ["Cirsium morii"],
+      "lookup_taxon_names": ["Cirsium morii"],
+      "allowed_occurrence_names": ["Cirsium morii"],
+      "lookup_mode": "direct_control",
+      "equivalence_basis": "Exact accepted species control carried through the same alias workflow.",
+      "evidence_urls": []
+    },
+    {
+      "analysis_taxon": "Cirsium pengii",
+      "lookup_uuids": [],
+      "lookup_queries": ["Cirsium pengii"],
+      "lookup_taxon_names": ["Cirsium pengii"],
+      "allowed_occurrence_names": ["Cirsium pengii"],
+      "lookup_mode": "direct_search_fail_closed",
+      "equivalence_basis": "Exact species only; if current TBN taxonomy does not resolve the 2025 taxon, no parent or surrogate records are admitted.",
+      "evidence_urls": []
+    },
+    {
+      "analysis_taxon": "Cirsium tatakaense",
+      "lookup_uuids": ["1bf7f675-a1f3-4aca-be40-4c9846b38ffb"],
+      "lookup_queries": ["Cirsium tatakaense"],
+      "lookup_taxon_names": ["Cirsium tatakaense"],
+      "allowed_occurrence_names": ["Cirsium tatakaense"],
+      "lookup_mode": "direct_control",
+      "equivalence_basis": "Exact accepted species control carried through the same alias workflow.",
+      "evidence_urls": []
+    }
+  ],
+  "prohibited": [
+    "lower the n>=10 gate",
+    "relax the <=10 km coordinate-uncertainty criterion",
+    "reduce the 0.05 degree thinning distance",
+    "admit a parent-taxon occurrence unless an occurrence-level name explicitly matches the focal infraspecific concept",
+    "map Cirsium pengii to a surrogate taxon",
+    "admit an albescens occurrence outside its published Hengchun-Peninsula range",
+    "use mainland-China occurrences for the Taiwan nuclear-tip concepts",
+    "replace the frozen primary ecological classification solely because this sensitivity adds records"
+  ]
+}
