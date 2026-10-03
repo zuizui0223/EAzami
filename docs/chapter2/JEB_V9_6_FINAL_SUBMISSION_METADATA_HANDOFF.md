@@ -47,7 +47,8 @@ Fill these fields before generating the final submission title page:
 - acknowledgements;
 - funding agencies and grant numbers, or explicit no-specific-funding statement;
 - conflict-of-interest declaration;
-- CRediT author contributions if the author team uses them.
+- CRediT contributor roles for every author (required by JEB at submission);
+- submitting-author ORCID iD (required by JEB at submission); other author ORCIDs where available.
 
 ## Archive completion
 
@@ -70,10 +71,30 @@ The journal-system metadata must exactly match the separate title page for:
 - author spelling and order;
 - affiliations;
 - corresponding author;
-- ORCID;
+- ORCID, including the required submitting-author ORCID;
+- CRediT contributor roles;
 - funding;
 - conflicts;
 - Data Availability;
 - article type.
 
 The anonymous main manuscript must remain free of author-identifying metadata.
+
+
+## Current JEB guideline check — 2026-10-03
+
+Verified against the current Oxford Academic JEB Author Guidelines:
+
+- Research Article maximum: 7,500 words;
+- abstract maximum: 250 words;
+- keywords: 4–10;
+- separate identifying title page required for double-anonymous review;
+- anonymous main text must be line-numbered and must exclude author identities, Data Availability, Acknowledgements, Funding and Conflict of Interest;
+- figures should be placed near first mention at initial submission;
+- Supporting Information must be submitted at the same time and cited from the main text;
+- AI assistance must be disclosed in both the cover letter and Methods or Acknowledgements;
+- submitting authors must provide an ORCID iD;
+- JEB uses CRediT contributor roles and requests them at submission;
+- a cover letter is optional and does not need to restate the manuscript's significance.
+
+The V9.6 production route already satisfies all items above except the author-controlled ORCID/CRediT/title-page metadata.
