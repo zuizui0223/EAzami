@@ -112,6 +112,68 @@ The broader historical-cause screen reached the same boundary at coarser resolut
 
 The result is not that environment was irrelevant. Rather, no recurring coarse tested climatic or global eustatic regime is identified as the historical trigger under the admitted uncertainty.
 
+# Discussion
+
+## Repeated evolution reveals assembly history, not adaptation by itself
+
+The three capitulum components repeatedly changed within one young radiation, but recurrence is only the first step of inference. Minimum-change counts establish that the observed diversity cannot be represented by one invariant state inherited through the radiation. They do not establish why the changes occurred.
+
+The stronger historical result is the geometry of those changes. Orientation, phyllary posture and stickiness occupy unequal relative evolutionary depths and fail to show robust repeated transition colocalization. The capitulum is therefore better described as a repeatedly reassembled complex phenotype than as a fixed syndrome undergoing synchronized transformation.
+
+## The repeatedly changing components are plausible functional interfaces
+
+Independent experiments make the recurrence biologically interpretable. Orientation can alter abiotic exposure of reproductive tissues; phyllary architecture can alter antagonist access; sticky exudates can reorganize arthropod access in a context-dependent manner. These mechanisms are sufficiently different that one common ecological driver is not the simplest current model.
+
+The reproductive-herbivory meta-analysis adds a fitness context. Across four independent *Cirsium* experiments, reducing reproductive insect herbivory increased seed production by about 2.7-fold. Thus reproductive antagonists can exert substantial fitness pressure on the capitulum. But this result must not be overextended: it does not show that phyllary posture or stickiness evolved because of antagonists, and it says even less about orientation. It establishes that the proposed access-related mechanisms operate in a fitness-relevant biological arena.
+
+The evidence is strongest for functional plausibility, not focal adaptation. Orientation has a direct manipulation in another Asteraceae plus a focal transition–environment pattern. Phyllary posture has strong structural-manipulation analogs but no focal *Cirsium* experiment. Stickiness has direct within-genus experiments, but their context dependence argues against a universal defence interpretation. This asymmetry is biologically useful because it generates distinct, falsifiable predictions for focal manipulations rather than forcing all three traits into one adaptive syndrome.
+
+## Orientation links evolutionary transitions to ecology
+
+Orientation is the one component for which the current public data connect repeated history to a transition-level ecological pattern. The BIO15-up/BIO1-down composite lies near the extreme tail of count-preserving state maps across three occurrence thresholds, and the direction persists after every single-taxon deletion and after geography and internal-edge stresses.
+
+This does not prove selection. The finite-map analysis asks whether the observed arrangement of states on the tree is unusually concordant with the fixed environmental vector under a constrained counterfactual. It does not estimate a selection coefficient, identify a physiological mediator or show that the reconstructed transitions were caused by climate. Its value is narrower and more useful: it establishes an ecological pattern strong enough to motivate an explicit historical-trigger test.
+
+## Present ecological association does not identify the environment of origin
+
+The historical test provides the most important conceptual result. If the current BIO15-up/BIO1-down regime represented a persistent environmental driver of downward orientation, the same sign combination should recur across a large fraction of admissible origin scenarios for the calendarized U→D event. It does not. Only 26.3% of chronology-by-region scenarios match, and the central chronology fails in all four regions because BIO15 changes in the opposite direction.
+
+The broader historical screens do not rescue a simple alternative. No event-level class among the 17-BIOCLIM lineage-context analysis and no tested global sea-level event-metric class survives the declared robustness gates. We therefore cannot characterize one recurring coarse climatic or eustatic trigger for capitulum formation.
+
+This negative result has a positive interpretation. **The ecology of an evolved trait and the environment of its evolutionary origin are empirically separable.** A trait can currently covary with an ecological regime even if that regime did not generate the original transition. Later ecological sorting, changed selective regimes, exaptation, demographic filtering, local palaeogeography or unmeasured biotic interactions can all produce such decoupling.
+
+## What can be said about adaptation?
+
+The current evidence supports a ladder rather than a binary adaptive/non-adaptive verdict. Recurrent change and mosaic assembly are established. Functional effects are plausible and in some related systems experimentally demonstrated. Orientation additionally shows transition-level ecological structure. What remains unidentified is the historical selective cause of the focal transitions.
+
+Accordingly, the paper does not claim that repeated evolution is too frequent to be accidental, nor that the three traits are adaptations. Instead it identifies where an adaptive explanation becomes testable. For orientation, focal manipulation should connect gravity-referenced angle to wetting/radiation or another mediator and then to pollen function and filled achenes. For phyllary posture, reversible access manipulation should connect architecture to antagonist entry and final seed output while measuring legitimate visitors. For stickiness, neutralization/restoration should quantify local arthropod-guild responses, production costs and filled achenes across populations.
+
+Those experiments would distinguish current functional value from historical origin more directly than another round of coarse public climate screening.
+
+## Broader implication
+
+Complex-organ evolution is often narrated from present function backward: identify what a structure appears to do today, then infer why it evolved. The *Cirsium* capitulum shows why that inference can fail. Its components have repeatedly changed and have credible functional interfaces, yet the best-resolved present ecological association does not recover the environment of the bounded origin event.
+
+A more defensible framework is therefore **assembly → function → current ecological correspondence → historical trigger**, with each arrow tested separately. This preserves the adaptive question while preventing current function from being mistaken for historical cause.
+
+# Conclusion
+
+A young *Cirsium* radiation repeatedly assembled capitulum diversity from orientation, phyllary posture and involucre stickiness, whose changes occupy unequal evolutionary depths and are not repeatedly synchronized on the same branches. Independent manipulations make these components plausible functional interfaces, and reproductive antagonism can impose large seed-output costs in the genus. Orientation further shows a structured transition-level association with precipitation seasonality and temperature.
+
+Yet the same environmental regime fails as a model of the sole bounded historical origin event, and broader climate and sea-level screens identify no recurring coarse trigger. The central result is therefore not that repeated capitulum evolution proves adaptation. It is that **functional ecological association and evolutionary origin can be decoupled**. Understanding how complex reproductive structures evolve requires testing not only what their components do now, but also whether the environments associated with those functions were present when the components originated.
+
+# Figure legends
+
+**Figure 1. Three capitulum components repeatedly change within one young radiation.** Thirty-six of 38 sampled Japanese taxon concepts occur within the dominant radiation. Orientation requires four to six minimum state changes across the topology ensemble, phyllary posture exactly three and involucre stickiness exactly five. **Alt text:** The young Japanese radiation contains repeated state changes in all three capitulum components; counts are lower bounds and are not labelled as adaptive origins.
+
+**Figure 2. Repeated capitulum assembly is historically mosaic.** Paired same-topology relative-depth ordering shows phyllary posture deeper-permissive than stickiness in 1000/1000 topologies, phyllary deeper than orientation in 993/1000 and orientation deeper than stickiness in 905/1000. Zero of three trait pairs passes the robust shared-transition-localization rule. **Alt text:** Depth ordering and branch-localization diagnostics show that the three components repeatedly change at different historical layers and do not share one synchronized branch history.
+
+**Figure 3. Repeated components map to distinct candidate functional interfaces.** Orientation is linked to abiotic reproductive exposure/timing, phyllary architecture to mechanical antagonist access and stickiness to context-dependent arthropod filtering. The *Cirsium* reproductive-herbivory meta-analysis gives RR = 2.674 for seed output under reduced versus ambient insect herbivory, providing fitness-pressure context rather than a trait-specific adaptive effect. **Alt text:** Three functional-interface columns summarize direct manipulation evidence and claim boundaries, with a separate meta-analytic fitness-pressure panel for reproductive herbivory.
+
+**Figure 4. Reconstructed orientation transitions track a present two-axis ecological regime.** The fixed U→D BIO15-up/BIO1-down composite ranks 16/792, 19/1716 and 4/126 across the three occurrence thresholds; the strict bidirectional-floor rank is 3/126. Direction survives all single-taxon deletions and declared geography/internal-edge stresses. **Alt text:** Exact finite-map ranks and robustness summaries show structured transition-level orientation correspondence with higher precipitation seasonality and lower temperature without interpreting the result as selection.
+
+**Figure 5. The present orientation regime does not identify the historical trigger.** The BIO15-up/BIO1-down regime matches 99/376 chronology-by-palaeolocation scenarios for the sole bounded U→D event. At the central 0.79–0.74 Ma chronology BIO15 decreases, rather than increases, in all four regions. Broader diagnostics yield 0/324 robust climate classes and 0/21 robust sea-level classes. **Alt text:** Historical scenario match fractions and central-chronology sign changes show failure of the present ecological regime as a persistent origin model, followed by the broader climate and sea-level identifiability ceiling.
+
 # References
 
 Agrawal, A. A., Rudgers, J. A., Botsford, L. W., Cutler, D., Gorin, J. B., Lundquist, C. J., Spitzer, B. W., & Swann, A. L. (2000). Benefits and constraints on plant defense against herbivores: spines influence the legitimate and illegitimate flower visitors of yellow star thistle, *Centaurea solstitialis* L. (Asteraceae). *The Southwestern Naturalist*, 45, 1–5. https://doi.org/10.2307/3672545
