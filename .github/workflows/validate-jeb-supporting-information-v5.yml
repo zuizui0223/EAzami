@@ -1,0 +1,28 @@
+name: Validate Chapter 2 JEB V10 Supporting Information
+
+on:
+  pull_request:
+    paths:
+      - "docs/chapter2/JEB_SUPPORTING_INFORMATION_V5.md"
+      - "analysis/validate_jeb_supporting_information_v5.py"
+      - ".github/workflows/validate-jeb-supporting-information-v5.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: validate-jeb-si-v5-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: |
+          python -m py_compile analysis/validate_jeb_supporting_information_v5.py
+          python analysis/validate_jeb_supporting_information_v5.py
