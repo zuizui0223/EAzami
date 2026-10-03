@@ -223,3 +223,5 @@ West, N. M., & Louda, S. M. (2018). Cumulative herbivory outpaces compensation f
 Willson, M. F., Anderson, P. K., & Thomas, P. A. (1983). Bracteal exudates in two *Cirsium* species as possible deterrents to insect consumers of seeds. *The American Midland Naturalist*, 110, 212–214.
 
 Zelditch, M. L., & Goswami, A. (2021). What does modularity mean? *Evolution & Development*, 23, 377–403. https://doi.org/10.1111/ede.12390
+Sun, S., & Huang, S.-Q. (2015). Rainwater in cupulate bracts influences seed predation and seed set in *Pedicularis rex*. *AoB PLANTS*. https://doi.org/10.1093/aobpla/plv019
+
