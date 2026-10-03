@@ -1,0 +1,29 @@
+name: Validate Chapter 2 JEB V10 functional assembly
+
+on:
+  pull_request:
+    paths:
+      - "docs/chapter2/MANUSCRIPT_JEB_V10_FUNCTIONAL_ASSEMBLY_ORIGIN_DECOUPLING.md"
+      - "docs/chapter2/V10_FUNCTIONAL_ASSEMBLY_ORIGIN_DECOUPLING_SPINE.md"
+      - "analysis/validate_manuscript_jeb_v10.py"
+      - ".github/workflows/validate-manuscript-jeb-v10.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: validate-manuscript-jeb-v10-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: |
+          python -m py_compile analysis/validate_manuscript_jeb_v10.py
+          python analysis/validate_manuscript_jeb_v10.py
