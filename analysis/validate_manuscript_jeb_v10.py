@@ -42,6 +42,12 @@ def main():
     for x in ("four to six","exactly three","exactly five","1,000/1,000","993/1,000","905/1,000","898/1,000","Zero of three"):
         need(t,x)
 
+    orient_cal=load("chapter2_orientation_causal_triangulation_v3.json")
+    assert orient_cal["external_mechanism_prior"]["achene_set_percent"]["nodding"]==56.3
+    assert orient_cal["external_mechanism_prior"]["achene_set_percent"]["artificial_erect"]==15.7
+    need(t,"56.3% achene set versus 15.7%")
+    need(t,"response ratio ≈3.59")
+
     assert cause["whole_capitulum"]["trait_specific_filter_model"]=="best_current_integrative_model"
     assert cause["orientation"]["leading_domain"]=="abiotic_reproductive_exposure_plus_timing"
     assert cause["phyllary"]["leading_domain"]=="mechanical_antagonist_exclusion"
