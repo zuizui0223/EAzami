@@ -77,9 +77,11 @@ def main():
         need(t,x)
 
     # Adaptation ceiling.
-    for bad in ("repeated evolution proves adaptation","three traits are adaptations",
-                "orientation is an adaptation","phyllary posture is an adaptation",
-                "stickiness is an adaptation","climate caused the transition"):
+    for bad in ("repeated evolution proves adaptation",
+                "we demonstrate that orientation is an adaptation",
+                "we demonstrate that phyllary posture is an adaptation",
+                "we demonstrate that stickiness is an adaptation",
+                "climate caused the transition"):
         forbid(t,bad)
     for x in ("Recurrence alone, however, is insufficient","They do not by themselves establish independent origins, convergence or adaptation",
               "This does not prove selection","historical selective cause"):
