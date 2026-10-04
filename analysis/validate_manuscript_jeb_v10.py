@@ -89,7 +89,7 @@ def main():
                 "we demonstrate that stickiness is an adaptation",
                 "climate caused the transition"):
         forbid(t,bad)
-    for x in ("Recurrence alone, however, is insufficient","They do not by themselves establish independent origins, convergence or adaptation",
+    for x in ("Repeated change alone does not prove adaptation","They do not by themselves establish independent origins, convergence or adaptation",
               "This does not prove selection","historical selective cause"):
         need(t,x)
 
