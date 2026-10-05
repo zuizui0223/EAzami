@@ -76,7 +76,7 @@ def main():
     for bad in (
         "Figure legends","Data Availability Statement","Acknowledgements",
         "Conflict of Interest","[INSERT","github.com/zuizui0223","zuizui0223",
-        "Submission-preparation notes",
+        "Submission-preparation notes","*Cirsium*",
     ):
         if bad.casefold() in main_text.casefold():
             raise AssertionError(f"anonymous main retains forbidden text: {bad}")
@@ -112,6 +112,7 @@ def main():
         "Historical environmental-cause boundary",
         "Reproductive herbivory meta-analysis",
         "A young Cirsium radiation repeatedly rebuilt its reproductive head",
+        "S6.1 V1","S6.2 Source-complete V2","S6.3 Strict V2 GBIF gate",
     ):
         if token not in si_text:
             raise AssertionError(f"SI missing {token!r}")
