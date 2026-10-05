@@ -43,7 +43,8 @@ def main():
         need(t,x)
     need(t,"A young Cirsium radiation repeatedly rebuilt its reproductive head from functionally distinct components")
     need(t,"recurrent functional assembly")
-    need(t,"recurrent functional rebuilding of the** *Cirsium* **capitulum")\n    need(t,"For this orientation event, the present ecological association and the tested coarse environment of its reconstructed origin are empirically separable.")
+    need(t,"recurrent functional rebuilding of the** *Cirsium* **capitulum")
+    need(t,"For this orientation event, the present ecological association and the tested coarse environment of its reconstructed origin are empirically separable.")
 
     orient_cal=load("chapter2_orientation_causal_triangulation_v3.json")
     assert orient_cal["external_mechanism_prior"]["achene_set_percent"]["nodding"]==56.3
