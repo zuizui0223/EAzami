@@ -1,30 +1,37 @@
-# EAzami — mosaic capitulum evolution through time and ecological scale
+# EAzami — recurrent functional rebuilding of the Cirsium capitulum
 
-## Active state — 2026-10-01
+## Active state — 2026-10-05
 
-EAzami Chapter 2 is now organized around one positive historical result plus a bounded ecological extension.
+EAzami Chapter 2 is frozen for *Journal of Evolutionary Biology* submission as V10.
 
 ### Central paper question
 
-> **Was the capitulum repeatedly reorganized as one synchronized phenotype, or were its component traits reassembled at different evolutionary depths and ecological scales?**
+> **How is a complex capitulum repeatedly assembled during a young radiation, are its repeatedly changing components plausible functional traits, and can the environmental trigger of their origin be identified?**
 
 ### Current answer
 
-> **Orientation, phyllary posture and involucre stickiness repeatedly changed within one young Japanese *Cirsium* radiation, but their histories occupy unequal evolutionary depths and do not repeatedly localize to the same branches. Ecological correspondence is likewise non-invariant: the three traits do not share one climatic syndrome, and orientation exposes different environmental structure across static states, within-taxon variation, among-taxon differentiation and reconstructed transitions.**
+> **Orientation, phyllary posture and involucre stickiness repeatedly changed within one young *Cirsium* radiation, but at unequal evolutionary depths and without robust shared transition localization. Independent experiments make the components plausible distinct ecological interfaces. Orientation transitions track a present BIO15-up/BIO1-down regime, yet that regime fails as a model of the sole bounded historical origin event. The supported result is recurrent functional rebuilding; the selective trigger of individual rebuilding events remains unresolved.**
 
 The active manuscript is:
 
-- `docs/chapter2/MANUSCRIPT_JEB_V9_6_SCALE_CONDITIONED_ECOLOGY.md`
+- `docs/chapter2/MANUSCRIPT_JEB_V10_FUNCTIONAL_ASSEMBLY_ORIGIN_DECOUPLING.md`
 
 The active figure/claim architecture is:
 
-- `docs/chapter2/V9_6_FIGURE_MAP_AND_CLAIM_ARCHITECTURE.md`
+- `docs/chapter2/V10_FUNCTIONAL_ASSEMBLY_ORIGIN_DECOUPLING_SPINE.md`
 
 The active validator is:
 
-- `analysis/validate_manuscript_jeb_v9_6.py`
+- `analysis/validate_manuscript_jeb_v10.py`
 
-V9.6 validation is green: abstract 203 words, main text before References 4,154 words, 8 keywords. The four main figures, Supporting Information V4, anonymous line-numbered DOCX, separate title page and cover letter have also passed automated validation and full-page visual QA.
+V10 validation is green:
+
+- abstract: 219 words;
+- main text before References: 3,982 words;
+- keywords: 8;
+- Azami image-paper dependency: none.
+
+The five main figures, Supporting Information V5, anonymous line-numbered DOCX, separate title page and cover letter have passed automated validation and full-page visual QA.
 
 ## Historical core
 
@@ -41,52 +48,50 @@ Within the dominant Japanese radiation:
 
 These are topology-sensitivity summaries, not independent biological replicates or posterior probabilities.
 
-## Ecology
+## Functional interfaces and fitness leverage
 
-### Common static environment
+The current leading mechanism domains are:
 
-The nine-variable common screen does not recover one shared abiotic syndrome:
+- orientation -> abiotic reproductive exposure / timing;
+- phyllary architecture -> mechanical antagonist access;
+- stickiness -> context-dependent arthropod-community filtering.
 
-- orientation: weak static D/U separation;
-- phyllary: public state replication is insufficient;
-- stickiness: precipitation-related leads remain exploratory and none survives the 27-row BH family.
+The pooled *Cirsium* reproductive-herbivory synthesis gives seed-output RR = 2.674 (95% CI 2.388–2.993) under reduced versus ambient insect herbivory, corresponding to an estimated 62.6% loss of potential seed output under ambient herbivory.
 
-### Orientation across scale
+This is fitness-pressure context. It is not a pooled adaptive effect of the three focal traits.
 
-The current ecological synthesis is:
+## Orientation ecology
 
-> **orientation–environment correspondence is scale- and representation-dependent rather than one repeated climate coefficient.**
+The fixed post-result U->D present-niche vector is BIO15 up + BIO1 down.
 
-Evidence layers:
+Exact finite-map ranks:
 
-- Azami among taxa: image presentation angle tracks BIO12 annual precipitation;
-- Azami within taxa: BIO1 is supported, but its sign is opposite to the EAzami transition-level direction;
-- EAzami reconstructed U→D transitions align with BIO15 up + BIO1 down;
-- static East-Asian D/U tip separation is weak.
+- n>=5: 16/792 = 2.02%;
+- n>=3: 19/1716 = 1.11%;
+- n>=10: 4/126 = 3.17%;
+- strict bidirectional floor: 3/126 = 2.38%.
 
-These estimands are not pooled or treated as replications of one coefficient.
+The result is explicitly retained as a post-result focused hypothesis, not an independent preregistered confirmation.
 
-## Public-data confirmation ceiling
+## Historical-origin boundary
 
-The preregistered external confirmation programme is closed.
+The sole event with bounded chronology and palaeolocation does not preserve the current orientation regime:
 
-- V1: strict occurrence QC left one D and one U lineage -> not evaluable.
-- Source-complete V2: 46/46 Flora of China taxa were censused and a frozen 13-taxon orientation panel was formed.
-- Strict V2 GBIF QC retained only *Cirsium vulgare* (U; 16 thinned records), leaving D=0 / U=1.
-- BIO1/BIO15 were therefore never opened for held-out V2.
-- Stickiness external confirmation was already blocked by lack of a source-complete external nonsticky comparison.
+- 99/376 scenarios match;
+- only 6/94 chronologies match in all four regions;
+- at 0.79–0.74 Ma, BIO15 moves opposite to the present expectation in all four regions;
+- robust broader climate classes: 0/324;
+- robust global sea-level classes: 0/21.
 
-This is a public occurrence-metadata resolution ceiling, not an ecological null.
+Therefore the V10 claim is event-specific:
 
-No new public taxon rescue panel, QC relaxation or opportunistic climate-variable search is active.
+> **For this orientation event, the present ecological association and the tested coarse environment of its reconstructed origin are empirically separable.**
 
-## Historical-cause boundary
+The result does not show that historical environment was irrelevant.
 
-Repeated history is much better resolved than historical cause.
+## Azami separation
 
-The single calendar+palaeolocation-evaluable orientation event and the broader public lineage-context audits do not identify one recurring tested climatic or global eustatic trigger after uncertainty propagation.
-
-This does not imply that climate, local geography, biotic interactions or selection were irrelevant.
+The separate Azami image-angle dataset is excluded from the V10 manuscript, figures, SI and submission materials. V10 is therefore standalone and does not depend on the submission status of the Azami paper.
 
 ## Causal handoff
 
@@ -101,23 +106,25 @@ Priority order:
 3. stickiness neutralization/restoration;
 4. colour visible/UV/pigment pathway.
 
-Until those experiments, EAzami supports historical mosaic reassembly and scale-conditioned ecological correspondence, not adaptation.
+Until those experiments, EAzami supports recurrent mosaic rebuilding plus plausible functional interfaces and transition-level ecological structure, not demonstrated adaptation.
 
 ## Submission work remaining
 
-Scientific analysis and production are complete for V9.6. The validated package now contains:
+Scientific analysis and V10 production are complete. The validated package contains:
 
-- four machine-generated main figures;
-- synchronized Supporting Information V4;
-- anonymous line-numbered main DOCX with four embedded figures and alt text;
+- five machine-generated main figures;
+- synchronized Supporting Information V5;
+- anonymous line-numbered main DOCX with five embedded figures and alt text;
 - separate title-page DOCX;
 - separate Supporting Information DOCX;
-- concise cover-letter DOCX.
+- cover-letter DOCX.
+
+Full visual QA passed on 22 + 2 + 15 + 2 pages.
 
 Only human/archival completion remains:
 
 1. finalize author order, affiliations, corresponding-author details and ORCID;
-2. complete acknowledgements, funding and conflict-of-interest statements;
+2. complete acknowledgements, funding, conflict-of-interest and CRediT statements;
 3. insert the final immutable archive URL, exact submission commit and DOI/accession;
 4. enter the same metadata in the journal submission system.
 
@@ -129,9 +136,10 @@ Do not claim:
 - relative lineage depth = calendar time or evolutionary rate;
 - 0/3 shared localization = complete genetic/developmental independence;
 - transition–niche tracking = climate causation, selection or adaptation;
+- the sole historical orientation event generalizes to all trait origins;
 - external public confirmation succeeded;
-- Azami is prospective held-out P3;
-- one universal stickiness defence or one universal orientation–climate rule.
+- one universal stickiness defence;
+- one recurring coarse historical environmental trigger.
 
 ## Legacy audit compatibility
 
@@ -142,7 +150,6 @@ Earlier packages remain **audit snapshots** in Git history. The following exact 
 - `MANUSCRIPT_JEB_V3.md`.
 
 They are not the active scientific route.
-
 
 ### Additional frozen routing aliases
 
