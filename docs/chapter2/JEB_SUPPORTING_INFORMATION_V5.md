@@ -2,11 +2,11 @@
 
 ## Article
 
-**Recurrent functional assembly of a complex reproductive head does not reveal its historical environmental trigger in a young thistle radiation**
+**A young Cirsium radiation repeatedly rebuilt its reproductive head from functionally distinct components**
 
 Status: **ACTIVE V10 SUPPORTING INFORMATION**
 
-This Supporting Information preserves the uncertainty, negative results and resolution ceilings behind the active four-figure manuscript without reopening exploratory analysis.
+This Supporting Information preserves the uncertainty, negative results and resolution ceilings behind the active five-figure manuscript without reopening exploratory analysis.
 
 The evidence order is:
 
@@ -324,7 +324,7 @@ This is an identifiability boundary, not evidence that historical climate, local
 
 Functional evidence is kept separate from historical comparative estimands.
 
-## S9.1 Reproductive herbivory meta-analysis
+## S8.1 Reproductive herbivory meta-analysis
 
 The estimand is mean viable/mature seed output under experimentally reduced insect herbivory divided by mean seed output under ambient herbivory.
 
@@ -344,7 +344,7 @@ Leave-one-study-out pooled RRs range from 2.6046 to 2.7342.
 
 This establishes that reproductive antagonists can impose a large fecundity cost in directly harmonizable *Cirsium* experiments. It does not identify which capitulum component mediates the cost.
 
-## S9.2 Trait-specific mechanism proximity
+## S8.2 Trait-specific mechanism proximity
 
 **Orientation.** Direct angle manipulation in close Asteraceae and within-genus pollination studies make time-window presentation and abiotic protection plausible. East-Asian *Cirsium* manipulation is not yet available.
 
@@ -371,7 +371,7 @@ The next test is focal manipulation linked to mediator and final filled-achene e
 
 ---
 
-# Supplementary Table S9 — Adaptation inference ladder
+# Supplementary Table S10 — Adaptation inference ladder
 
 | Level | Current status | What it does not establish |
 |---|---|---|
@@ -384,7 +384,7 @@ The next test is focal manipulation linked to mediator and final filled-achene e
 
 The manuscript therefore treats adaptation as a testable next step rather than a conclusion from recurrence.
 
-# Supplementary Table S10 — Reproducibility and source map
+# Supplementary Table S11 — Reproducibility and source map
 
 Primary machine-readable sources for V10:
 
@@ -406,10 +406,12 @@ Primary machine-readable sources for V10:
 
 Active manuscript / production sources:
 
-- `docs/chapter2/MANUSCRIPT_JEB_V9_6_SCALE_CONDITIONED_ECOLOGY.md`;
-- `docs/chapter2/V9_6_FIGURE_MAP_AND_CLAIM_ARCHITECTURE.md`;
-- `analysis/make_chapter2_jeb_figures_v9_6.py`;
-- `analysis/validate_manuscript_jeb_v9_6.py`.
+- `docs/chapter2/MANUSCRIPT_JEB_V10_FUNCTIONAL_ASSEMBLY_ORIGIN_DECOUPLING.md`;
+- `docs/chapter2/V10_FUNCTIONAL_ASSEMBLY_ORIGIN_DECOUPLING_SPINE.md`;
+- `analysis/make_chapter2_jeb_figures145_v7_v3.py` and `analysis/make_chapter2_jeb_figure2_v7.py` for the frozen historical Figures 1–2;
+- `analysis/make_chapter2_jeb_figures_v10_new.py` for Figures 3–5;
+- `analysis/build_chapter2_jeb_docx_v10.py`;
+- `analysis/validate_manuscript_jeb_v10.py` and `analysis/validate_chapter2_jeb_docx_v10.py`.
 
 ---
 
