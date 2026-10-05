@@ -236,7 +236,7 @@ Internal environmental values remain Brownian reconstructions from present taxon
 
 The external programme was separated from discovery before held-out climate outcomes were opened.
 
-## S7.1 V1
+## S6.1 V1
 
 Under the first strict occurrence gate:
 
@@ -247,7 +247,7 @@ This left one lineage per state, below the frozen minimum of two taxa per state,
 
 Stickiness V1 retained only *C. setidens* as sticky and no evaluable external nonsticky comparison. No held-out environmental outcome was opened.
 
-## S7.2 Source-complete V2
+## S6.2 Source-complete V2
 
 The final expansion attempt was preregistered as a source-complete census rather than an occurrence-driven rescue.
 
@@ -264,7 +264,7 @@ The final frozen Flora of China orientation panel contained:
 - 3 downward/nodding;
 - 10 upward/erect.
 
-## S7.3 Strict V2 GBIF gate
+## S6.3 Strict V2 GBIF gate
 
 Primary rules were exact accepted name, GBIF EXACT match, mainland-China provenance, PRESENT records, coordinates, explicit coordinate uncertainty ≤10 km, frozen issue exclusions, exact-coordinate deduplication, deterministic 0.1-degree thinning, ≥3 thinned records per taxon and ≥2 surviving taxa per state.
 
