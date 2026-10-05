@@ -140,7 +140,7 @@ The historical test provides the most important conceptual result. If the curren
 
 The broader historical screens do not rescue a simple alternative. No event-level class among the 17-BIOCLIM lineage-context analysis and no tested global sea-level event-metric class survives the declared robustness gates. We therefore cannot characterize one recurring coarse climatic or eustatic trigger for capitulum formation.
 
-This negative result has a positive interpretation. **The ecology of an evolved trait and the environment of its evolutionary origin are empirically separable.** A trait can currently covary with an ecological regime even if that regime did not generate the original transition. Later ecological sorting, changed selective regimes, exaptation, demographic filtering, local palaeogeography or unmeasured biotic interactions can all produce such decoupling.
+This negative result has a positive interpretation. **For this orientation event, the present ecological association and the tested coarse environment of its reconstructed origin are empirically separable.** A trait can currently covary with an ecological regime even if that regime did not generate the original transition. Later ecological sorting, changed selective regimes, exaptation, demographic filtering, local palaeogeography or unmeasured biotic interactions can all produce such decoupling.
 
 ## What can be said about adaptation?
 
@@ -160,7 +160,7 @@ Orientation shows that at least one component of this rebuilding is ecologically
 
 A young *Cirsium* radiation did not inherit one fixed capitulum design. It repeatedly rebuilt the reproductive head by changing orientation, phyllary posture and involucre stickiness at different evolutionary depths and on different branches. Independent experiments indicate that these components can mediate different ecological interactions—reproductive exposure, antagonist access and arthropod filtering—and reproductive antagonists can impose large seed-output costs in the genus.
 
-Orientation provides the clearest ecological example: its reconstructed transitions track a repeatable present environmental regime. The historical trigger of that transition remains unresolved because the same coarse regime is not recovered at the bounded origin event. The central biological result is therefore **recurrent functional rebuilding of the *Cirsium* capitulum**, with the selective causes of individual rebuilding events now available as explicit experimental hypotheses.
+Orientation provides the clearest ecological example: its reconstructed transitions track a repeatable present environmental regime. The historical trigger of that transition remains unresolved because the same coarse regime is not recovered at the bounded origin event. The central biological result is therefore **recurrent functional rebuilding of the** *Cirsium* **capitulum**, with the selective causes of individual rebuilding events now available as explicit experimental hypotheses.
 
 # Figure legends
 
