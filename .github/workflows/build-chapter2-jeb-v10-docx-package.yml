@@ -1,0 +1,75 @@
+name: Build Chapter 2 JEB V10 DOCX package
+
+on:
+  pull_request:
+    paths:
+      - "docs/chapter2/MANUSCRIPT_JEB_V10_FUNCTIONAL_ASSEMBLY_ORIGIN_DECOUPLING.md"
+      - "docs/chapter2/V10_FUNCTIONAL_ASSEMBLY_ORIGIN_DECOUPLING_SPINE.md"
+      - "docs/chapter2/JEB_SUPPORTING_INFORMATION_V5.md"
+      - "docs/chapter2/JEB_TITLE_PAGE_V10.md"
+      - "docs/chapter2/JEB_COVER_LETTER_V10.md"
+      - "analysis/build_chapter2_jeb_docx_v10.py"
+      - "analysis/validate_chapter2_jeb_docx_v10.py"
+      - "analysis/validate_manuscript_jeb_v10.py"
+      - "analysis/make_chapter2_jeb_figures145_v7_v3.py"
+      - "analysis/make_chapter2_jeb_figure2_v7.py"
+      - "analysis/make_chapter2_jeb_figures_v10_new.py"
+      - ".github/workflows/build-chapter2-jeb-v10-docx-package.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: build-chapter2-jeb-v10-docx-package-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install production dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy matplotlib python-docx pillow lxml
+          python -m py_compile analysis/make_chapter2_jeb_figures145_v7_v3.py
+          python -m py_compile analysis/make_chapter2_jeb_figure2_v7.py
+          python -m py_compile analysis/make_chapter2_jeb_figures_v10_new.py
+          python -m py_compile analysis/build_chapter2_jeb_docx_v10.py
+          python -m py_compile analysis/validate_chapter2_jeb_docx_v10.py
+      - name: Validate V10 scientific and SI sources
+        run: |
+          python analysis/validate_manuscript_jeb_v10.py
+          python analysis/validate_jeb_supporting_information_v5.py
+      - name: Generate frozen V10 figures 1-5
+        run: |
+          mkdir -p /tmp/figures_v10
+          python analysis/make_chapter2_jeb_figures145_v7_v3.py --output-dir /tmp/figures_v10
+          python analysis/make_chapter2_jeb_figure2_v7.py --output-dir /tmp/figures_v10
+          python analysis/make_chapter2_jeb_figures_v10_new.py --out /tmp/figures_v10
+          for f in             figure1_v7_diversity_context.png             figure2_v7_mosaic_depth.png             figure3_v10_functional_interfaces.png             figure4_v10_orientation_transition_regime.png             figure5_v10_origin_trigger_falsification.png; do
+            test -s "/tmp/figures_v10/$f"
+          done
+      - name: Build V10 submission DOCX package
+        run: |
+          mkdir -p /tmp/submission_package_v10
+          python analysis/build_chapter2_jeb_docx_v10.py             --figure-dir /tmp/figures_v10             --output-dir /tmp/submission_package_v10
+      - name: Validate V10 DOCX package
+        run: python analysis/validate_chapter2_jeb_docx_v10.py --package-dir /tmp/submission_package_v10
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-jeb-v10-docx-package
+          path: /tmp/submission_package_v10/*.docx
+          if-no-files-found: error
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter2-jeb-v10-figures
+          path: /tmp/figures_v10/
+          if-no-files-found: error
+          retention-days: 90
