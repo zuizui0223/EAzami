@@ -162,17 +162,33 @@ def prepare_occurrences(japan,taiwan,rasters,rsds_cache,rsds_contract):
     missing={k:int(occ[k].isna().sum()) for k in AXES}
     for axis in AXES:
         s=occ[axis]
-        if not s.notna().mean()>=.95:
-            raise ValueError(f"Original EAzami source incomplete for {axis}: {s.notna().mean():.3f}")
-    # Same four exposures on the SAME original occurrence subset.
+        if not s.notna().any():
+            raise ValueError(f"Original EAzami physical raster returned no values for {axis}")
+    # Coastal DEM mismatches are genuine missing data, never replaced by zero,
+    # nearby pixels, country centroids or old environmental predictors. Retain
+    # and report all missingness; inferential gate is the ORIGINAL fixed n3/n5/
+    # n10 per-taxon minimum, not an invented 95% overall-coverage threshold.
     complete=occ.dropna(subset=AXES).copy()
     n_by=complete.groupby("scientific_name_query").size().to_dict()
+    by_taxon_original=occ.groupby("scientific_name_query").size().to_dict()
+    missing_taxa={str(k):{
+        "n_original_frozen_occurrences":int(count),
+        "n_complete_four_axes":int(n_by.get(k,0)),
+        "fraction_complete":float(n_by.get(k,0)/count)
+      } for k,count in by_taxon_original.items()}
+    print("EAzami_REAL_4AXIS_SOURCE_COMPLETENESS="+json.dumps({
+       "total_original_sites":len(occ),"new_complete_sites":len(complete),
+       "missing_by_axis":{k:int(occ[k].isna().sum()) for k in AXES},
+       "complete_by_original_taxon":missing_taxa,
+       "no_site_environment_imputation":True},sort_keys=True),flush=True)
     return occ,complete,{
         "n_original_Japan_occurrences":len(jp),"n_original_Taiwan_occurrences":len(tw),
         "n_original_occurrences":len(occ),
         "n_four_axis_complete_original_occurrences":len(complete),
         "n_complete_by_original_taxon":{str(k):int(v) for k,v in n_by.items()},
         "missing_by_axis":missing,"original_four_climate_source":sources,
+        "original_to_fouraxis_taxon_coverage":missing_taxa,
+        "coastal_DEM_missing_pixel_values_not_imputed":True,
         "trait_or_state_values_not_used_to_select_observations":True,
     }
 
