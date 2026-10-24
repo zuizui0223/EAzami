@@ -1,0 +1,135 @@
+{
+  "version": "real_transcontinental_45tip_176locus_Comp1061_IQTREE_modelFinder_primary_v1",
+  "execution": "2026-10-25",
+  "generated_from_real_DNA": true,
+  "data_source": {
+    "original_Japan38_archived_run": 32806058893,
+    "original_Japan38_alignment_SHA256": "0ca1a0cf1f7a20e9b73f9f6929f937592da93e12846a7b6dde7899239bb004d5",
+    "original_Japan38_molecular_tips": 40,
+    "original_Japan38_Compositae1061_loci": 176,
+    "new_Moreyra2025_target_capture_SRRs": [
+      "SRR30887153",
+      "SRR30887180",
+      "SRR30887231",
+      "SRR30887186",
+      "SRR30887156"
+    ],
+    "five_source_honest_allele_basecalls_bp": 236114,
+    "added_5_all_common_QC_loci": 87,
+    "new_specimen_called_fraction_of_161654bp_range": [
+      0.254,
+      0.317
+    ],
+    "source_J38_40_sequences_exactly_preserved": true,
+    "less_than_130bp_outgroup_loci_masked_for_new_samples": [
+      "At1g26880",
+      "At5g62680"
+    ],
+    "alignment_scope": "176 locus partitions original; 174 source reference mappings; two short saff loci have no added sample basecalls",
+    "total_alignment_nt": 161654,
+    "final_alignment_SHA256": "8759e1b10f20979fd317aa5fbf7cd448f8401e69306c1e71cd344240470b5042"
+  },
+  "phylogenetic_inference": {
+    "software": "IQ-TREE 2.0.7",
+    "model_selection": "ModelFinder BIC",
+    "model": "TIM3+F+R3",
+    "root": "OUTGROUP_saff Carthamus",
+    "tree_tips": 45,
+    "Cirsium_source_tips": 44,
+    "source_Japan38_samples": 39,
+    "source_NorthAmerica_new": 3,
+    "source_WestPalearctic_new": 2,
+    "model_log_likelihood": -369155.7262,
+    "total_tree_length_substitutions_per_site": 0.5404,
+    "SH_aLRT_replicates": 1000,
+    "ultrafast_bootstrap_replicates": 1000,
+    "supported_internal_nodes": 42,
+    "nodes_UFBoot_at_least_95": 24,
+    "median_UFBoot": 99,
+    "nodes_UFBoot_below_70": 6,
+    "newick_SHA256": "191e6a502e23685d95e767580d41a9e1eca82db0495c93d58d34bcc3abedf8f6"
+  },
+  "observed_geographic_clades": {
+    "North_America_three": {
+      "monophyletic": true,
+      "species": [
+        "Cirsium ownbeyi",
+        "Cirsium flodmanii",
+        "Cirsium vinaceum"
+      ],
+      "SH_aLRT": 100,
+      "ultrafast_bootstrap": 100,
+      "head_states": {
+        "U": 2,
+        "D": 1
+      }
+    },
+    "North_America_ownbeyi_vinaceum_sister": {
+      "monophyletic": true,
+      "SH_aLRT": 80.9,
+      "ultrafast_bootstrap": 96,
+      "head_states": [
+        "U",
+        "D"
+      ]
+    },
+    "West_Palearctic_two": {
+      "monophyletic": true,
+      "species": [
+        "Cirsium erisithales",
+        "Cirsium oleraceum"
+      ],
+      "SH_aLRT": 97.8,
+      "ultrafast_bootstrap": 99,
+      "head_states": {
+        "U": 1,
+        "D": 1
+      }
+    },
+    "Japan38_members_on_this_limited_sampling": {
+      "monophyletic_relative_to_the_only_five_external_tips": true,
+      "phylogenomic_global_monomonophyly_claim_allowed": false
+    }
+  },
+  "S1_head_colour_morphological_join": {
+    "original_moreyra_S1_sample_voucher_biosamples": 39,
+    "extra_vouchered_Moreyra_target_capture": 5,
+    "total_source_molecular_ingroup": 44,
+    "head_U_tip_labels": 17,
+    "head_D_tip_labels": 7,
+    "head_unknown_or_polymorphic": 20,
+    "Japanese_NMNS_colour_fixed_pigmented": 5,
+    "Japanese_NMNS_colour_polymorphic": 3,
+    "colour_unresolved": 36,
+    "North_America_original_9_author_trait_categories_crosswalk": 3,
+    "Fitch_minimum_UD_changes_on_this_tree": 6,
+    "is_event_count": false,
+    "same_sequenced_voucher_phenotyped": false
+  },
+  "source40_topology_change": {
+    "original_40tips_in_pilot_preserved": true,
+    "shared40_baseline_nontrivial_unrooted_splits": 37,
+    "shared40_pilot_nontrivial_unrooted_splits": 37,
+    "preserved_splits": 25,
+    "Robinson_Foulds": 24,
+    "normalized_RF": 0.32432432432432434,
+    "interpretation": "This is substantial alternative backbone rearrangement; comparison confounds sample additions, IQ-TREE version 2.0.7 vs 2.4.0, and best model differences TIM3+F+R3 vs TIM3+F+I+R4. Requires matched-model baseline refit before attributing any change specifically to adding five taxa."
+  },
+  "evidence": {
+    "main_run": 40107628828,
+    "main_run_url": "https://github.com/zuizui0223/EAzami/actions/runs/40107628828",
+    "main_artifact_id": 12565941557,
+    "main_artifact_sha256": "e594ba91cbac2bdb2e0f6caac2e80b5eb63fb5e4f5aa4bee6c9199e31c2e00c7",
+    "S1_overlay_run": 40109888113,
+    "S1_overlay_artifact_id": 12566475875,
+    "S1_overlay_artifact_sha256": "319a175d0dacb5c695ca9a58c5dd21255b11919562a4a21ebf34f5897399eaa9"
+  },
+  "limitations": [
+    "Reference-projected BWA consensus is a preliminary orthology approximation, not a full HybPiper paralog/homeolog-aware reassembly of all 45 tips.",
+    "Many missing bases (~68–75%) in five added samples could influence inferred branch lengths and topology; compare alternate source-recovery and missingness masks.",
+    "Original Japan38 40-tip taxon selection and five other genus specimens do not constitute globally representative genus Cirsium sampling. The claim of Japanese monophyly against only these five is not a biological inference about global origin count.",
+    "U/D source states are botanical taxon concepts, not direct photographed sequenced specimens; JPN36 explicit polymorphism is excluded, JPN17 conflict excluded.",
+    "Fitch minimum category steps are lower bounds, not independent gains/losses, trait fitness, historical climate or causal adaptive selection.",
+    "The full Moreyra 294-BioSample/350-locus world nuclear species tree remains unexecuted and unavailable."
+  ]
+}
