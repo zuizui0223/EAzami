@@ -157,8 +157,6 @@ def render(root: Path, out: Path):
     for t in trait_summary:
         shorthand=" | ".join(f"{k}: {val}" for k,val in t["original_author_legend"].items())
         desc.append(f"{t['name']}  [{t['minimum_fitch_changes']} min. steps]:  {shorthand}")
-    for i,(left,right) in enumerate(zip(desc[:5],desc[5:])):
-        pass
     ax.set_yticks([])
     ax.set_xlim(-.05,label_x+5.3)
     ax.set_ylim(-1.3,count+5.1)
