@@ -1,0 +1,77 @@
+{
+  "version": "real_global45_preML_five_continental_Comp1061_empirical_nucleotide_coverage_v1",
+  "source_date": "2026-10-24",
+  "source_scope": "5 distinct Moreyra 2025 BioSamples from North America and Western Palearctic aligned to the original 40-tip Japan38 176 nuclear loci",
+  "original_j38_40tip_176_gene_concatenated_alignment_SHA256": "0ca1a0cf1f7a20e9b73f9f6929f937592da93e12846a7b6dde7899239bb004d5",
+  "source_execution_run_id": 40106147801,
+  "source_40tip_alignment_GHA_run": 32806058893,
+  "source_40tip_alignment_artifact_id": 9557421855,
+  "source_original_40tip_alignment_nt": 161654,
+  "source_40tip_matrix_unchanged": true,
+  "observed_five_biosample_samples": [
+    {
+      "taxon": "Cirsium vinaceum",
+      "SRR": "SRR30887231",
+      "region": "North_America",
+      "U_D": "D",
+      "retained_loci": 88,
+      "confident_bp": 40994,
+      "source_GHA_artifact_id": 12564733381
+    },
+    {
+      "taxon": "Cirsium ownbeyi",
+      "SRR": "SRR30887153",
+      "region": "North_America",
+      "U_D": "U",
+      "retained_loci": 96,
+      "confident_bp": 46401,
+      "source_GHA_artifact_id": 12564832690
+    },
+    {
+      "taxon": "Cirsium flodmanii",
+      "SRR": "SRR30887180",
+      "region": "North_America",
+      "U_D": "U",
+      "retained_loci": 102,
+      "confident_bp": 51171,
+      "source_GHA_artifact_id": 12564798258
+    },
+    {
+      "taxon": "Cirsium erisithales",
+      "SRR": "SRR30887186",
+      "region": "West_Palearctic",
+      "U_D": "D",
+      "retained_loci": 98,
+      "confident_bp": 47954,
+      "source_GHA_artifact_id": 12564667838
+    },
+    {
+      "taxon": "Cirsium oleraceum",
+      "SRR": "SRR30887156",
+      "region": "West_Palearctic",
+      "U_D": "U",
+      "retained_loci": 101,
+      "confident_bp": 49594,
+      "source_GHA_artifact_id": 12565166200
+    }
+  ],
+  "five_way_mutually_retained_loci_40pct_per_sample_threshold": 87,
+  "four_or_more_mutually_retained_loci": 91,
+  "three_or_more_mutually_retained_loci": 97,
+  "source_gene_alignment_n_loci": 176,
+  "original_plus_five_phylogenetic_tips": 45,
+  "source_tips_missing_loci_explicitly_masked_with_N": true,
+  "source_frozen_J38_alignment_identical_to_original": true,
+  "independent_local_full_45tip_matrix_SHA256": "8759e1b10f20979fd317aa5fbf7cd448f8401e69306c1e71cd344240470b5042",
+  "code": "analysis/build_real_global45_comp1061_frozenJ38_bridge_v1.py",
+  "current_result_semantics": {
+    "is_real_sequence_data": true,
+    "includes_north_america_and_europe": true,
+    "trait_state_at_taxon_level_not_same_voucher": true,
+    "gene_mapping": "reference_guided_saff_only_not_full_hybpiper_orthology",
+    "high_dimensional_global_Moreyra_350gene_tree_finished": false,
+    "high_dimensional_global_294tip_tree_finished": false,
+    "base_phylogenetic_tree_unconstrained": true,
+    "no_claim_of_historic_U_D_event_count": true
+  }
+}
