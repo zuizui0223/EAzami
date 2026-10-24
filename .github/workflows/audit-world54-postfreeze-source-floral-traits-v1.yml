@@ -1,0 +1,44 @@
+name: Audit world54 frozen nine S1 and original nine floral characters
+
+on:
+  pull_request:
+    paths:
+      - "analysis/join_world54_nine_moreyra_original_S1_postfreeze_trait_sources_v1.py"
+      - ".github/workflows/audit-world54-postfreeze-source-floral-traits-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-trait-crosswalk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Audit original S1 sample identity and only then exact published nine-trait morphology codes
+        run: |
+          python analysis/join_world54_nine_moreyra_original_S1_postfreeze_trait_sources_v1.py \
+            --outdir .tmp/world54-nine-postfrozen-original-author-phenotypes
+      - name: Confirm no false re-ascertainment of molecular sample selection
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('.tmp/world54-nine-postfrozen-original-author-phenotypes/postfreeze_botanical_source_audit.json')
+          j=json.loads(p.read_text())
+          assert j['source_selection_before_original_author_morphology'] is True
+          assert j['n_new_public_nuclear_biosamples']==9
+          assert sum(j['head_state_after_freeze'].values())==9
+          assert j['same_actual_sequenced_voucher_morphology_measured'] is False
+          assert j['missing_head_states_imputed'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: world54-nine-original-S1-postfreeze-exact-nine-flower-traits-v1
+          path: .tmp/world54-nine-postfrozen-original-author-phenotypes/
+          retention-days: 90
+          if-no-files-found: error
