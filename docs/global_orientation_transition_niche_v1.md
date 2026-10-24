@@ -30,6 +30,34 @@ East-Asian boundary to preserve:
 
 Thus no worldwide transition-effect size, p value or global historical climate interpretation is reported. The Python runner fails closed when inputs are incomplete.
 
+### First executed real-source join gate
+
+The reproducible exact-label source-overlap audit lives at
+analysis/audit_global_nuclear_orientation_source_overlap_v1.py. It compares
+the eight frozen Moreyra 2025 sample reconciliation parts to the **20-tip
+East-Asian authority/literature orientation crosswalk**, **not** to a complete
+worldwide botanical traits dataset.
+
+The current direct-match inventory is:
+
+- 257 linked nuclear-source rows, representing 256 distinct BioSamples and 256 distinct Moreyra tree-code labels after source conflict exclusion;
+- 7 exact tree-code ↔ accepted-taxon label matches;
+- 5 exact labels with source-backed U/D states (U=3; D=2);
+- 2 of the seven label matches explicitly retain unresolved state;
+- 249 source labels are not represented in **this small East-Asian crosswalk**. This is **not evidence that those taxa lack botanical descriptions or cannot be scored worldwide**.
+
+No synonym guesses, extrapolation to global trait prevalence, or pseudo-label imputation were performed.
+The source-overlap audit blocks inference and identifies independent worldwide
+orientation coding and taxonomic reconciliation as the next gating work.
+
+Run directly:
+
+~~~bash
+python analysis/audit_global_nuclear_orientation_source_overlap_v1.py \
+  --outdir results/global_source_overlap_v1
+~~~
+
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
