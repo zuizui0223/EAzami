@@ -6,6 +6,8 @@ on:
       - "analysis/run_global_nuclear_orientation_transition_niche_v1.py"
       - "analysis/audit_global_nuclear_orientation_source_overlap_v1.py"
       - "analysis/audit_global_nuclear_orientation_multisource_v2.py"
+      - "analysis/audit_global_nuclear_294_orientation_join_v3.py"
+      - "tests/test_global_nuclear_294_orientation_join_v3.py"
       - "data/evidence/global_fna_head_orientation_evidence_v1.csv"
       - "tests/test_global_orientation_multisource_join_v2.py"
       - "tests/test_global_orientation_transition_niche_v1.py"
@@ -37,6 +39,8 @@ jobs:
             analysis/run_global_nuclear_orientation_transition_niche_v1.py \
             analysis/audit_global_nuclear_orientation_source_overlap_v1.py \
             analysis/audit_global_nuclear_orientation_multisource_v2.py \
+            analysis/audit_global_nuclear_294_orientation_join_v3.py \
+            tests/test_global_nuclear_294_orientation_join_v3.py \
             tests/test_global_orientation_multisource_join_v2.py \
             tests/test_global_orientation_transition_niche_v1.py
       - name: Run synthetic model and input-integrity tests
@@ -87,5 +91,17 @@ jobs:
         with:
           name: global-u2d-moreyra-multisource-v2
           path: .tmp/global-multisource-v2/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Join source orientation states to all deduplicated nuclear BioSamples
+        run: |
+          python analysis/audit_global_nuclear_294_orientation_join_v3.py \
+            --outdir .tmp/global-nuclear-294-v3
+          python -m unittest discover -s tests -p 'test_global_nuclear_294_orientation_join_v3.py' -v
+      - name: Preserve real 294-sample nuclear ↔ U/D source join
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-nuclear-294-head-orientation-source-join-v3
+          path: .tmp/global-nuclear-294-v3/
           if-no-files-found: error
           retention-days: 90
