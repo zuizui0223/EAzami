@@ -1,0 +1,161 @@
+{
+  "schema": "EAzami_chapter2_original_H1_method_user_BIO18_BIO05_RSDS_DEM_transitions_verified_20261024_v1",
+  "status": "REAL_SOURCE_SIX_TRUE_NUCLEAR_AU_CTMC_U_TO_D_BROWNIAN_COMPLETE_UNEXCEPTIONAL_FOUR_AXIS_JOINT",
+  "source_reproducibility": {
+    "github_actions_run_id": 40068138074,
+    "github_actions_conclusion": "success",
+    "artifact_id": 12550392164,
+    "artifact_name": "eazami-real-original-H1-CTMC-UD-six-nuclear-BIO18-BIO5-RSDS-DEM",
+    "artifact_zip_sha256": "5ae8a01751d1d27223dff7005b27a962c904a4ce5a27825564d1af7b6e0620ca",
+    "original_full_JSON_sha256": "3203e34bc2cd7e86cda618c2cd6ae7c50afdc3a2c5d86b7df578cff2fe85c1f6",
+    "workflow_source_commit": "7839cac873dd78df6472a0e1a426fb78c33c544e",
+    "original_six_tree_git_blob_sha": "d7f8c0b96ee9c257c815db06a5a0aa9fdae4841e"
+  },
+  "original_frozen_H1_reproduced_exactly": {
+    "status": "pass",
+    "strict9_BIO15_score_range": [
+      0.2679067074232189,
+      0.2694168897457225
+    ],
+    "strict9_BIO1_score_range": [
+      -0.1993059297833776,
+      -0.19915108859274677
+    ],
+    "frozen_original_H1_signed_composite_n5_rank": {
+      "at_least_observed": 16,
+      "total_state_maps": 792
+    },
+    "claim": "Original EAzami predeclared BIO15↑+BIO1↓ H1 was NOT refit or modified"
+  },
+  "same_original_EAzami_data_and_4_new_physical_sources": {
+    "original_Japan_GBIF_occurrences": 693,
+    "original_Taiwan_GBIF_occurrences": 55,
+    "n_original_GBIF_occurrences": 748,
+    "n_new_4source_complete": 689,
+    "n_missing_BIO18": 0,
+    "n_missing_BIO05": 0,
+    "n_missing_RSDS": 11,
+    "n_missing_WorldClim_elevation": 53,
+    "coastal_brevicaule_complete_original": [
+      22,
+      35
+    ],
+    "coastal_irumtiense_complete_original": [
+      24,
+      44
+    ],
+    "source_GBIF_coordinates_not_exported": true,
+    "source_climate_codes": [
+      "chelsa_bio18",
+      "chelsa_bio05",
+      "chelsa_rsds_mean",
+      "elevation_m"
+    ]
+  },
+  "method": "original_symmetrical_CTMC_q_ML_by_each_state_assignment_and_tree__exact_edge_JUD_minus_JDU__Brownian_squared_change_environment_on_each_branch__six_AU_accepted_true_multilocus_nuclear_tree_scenarios__full_count_preserving_state_assignment_null",
+  "four_axis_post_result_selection_no_fixed_signed_composite": true,
+  "test_policy": "unsigned Euclidean 4D joint score primary; per-axis absolute two-sided conditional ranks plus maxT familywise; n5 regional state-count-preserving null sensitivity",
+  "new_4axis_panels": [
+    {
+      "key": "n5_primary",
+      "n_taxa": 12,
+      "states": {
+        "U": 7,
+        "D": 5
+      },
+      "four_axis_signed": {
+        "bio18": 0.06246022006007579,
+        "bio05": -0.19643764801862976,
+        "rsds": -0.1546480170498178,
+        "elevation": 0.14298018043468588
+      },
+      "full_maps": 792,
+      "joint_at_least": 171,
+      "two_sided_at_least": {
+        "bio18": 449,
+        "bio05": 73,
+        "rsds": 225,
+        "elevation": 114
+      },
+      "maxT_at_least": {
+        "bio18": 705,
+        "bio05": 176,
+        "rsds": 442,
+        "elevation": 263
+      },
+      "region_count_conditioned": {
+        "full_maps": 336,
+        "joint_at_least": 51,
+        "joint_exact_fraction": 0.15178571428571427
+      },
+      "joint_exact_fraction": 0.2159090909090909
+    },
+    {
+      "key": "n3_sensitivity",
+      "n_taxa": 13,
+      "states": {
+        "U": 7,
+        "D": 6
+      },
+      "four_axis_signed": {
+        "bio18": 0.09372239723152942,
+        "bio05": -0.24574995400961,
+        "rsds": -0.16123879189485976,
+        "elevation": 0.19845795854815895
+      },
+      "full_maps": 1716,
+      "joint_at_least": 146,
+      "two_sided_at_least": {
+        "bio18": 608,
+        "bio05": 53,
+        "rsds": 361,
+        "elevation": 109
+      },
+      "maxT_at_least": {
+        "bio18": 1134,
+        "bio05": 149,
+        "rsds": 740,
+        "elevation": 253
+      },
+      "joint_exact_fraction": 0.08508158508158509
+    },
+    {
+      "key": "n10_strict",
+      "n_taxa": 9,
+      "states": {
+        "U": 5,
+        "D": 4
+      },
+      "four_axis_signed": {
+        "bio18": 0.18822730738721422,
+        "bio05": -0.20303227610511032,
+        "rsds": -0.13116926427879982,
+        "elevation": 0.2502839296460758
+      },
+      "full_maps": 126,
+      "joint_at_least": 28,
+      "two_sided_at_least": {
+        "bio18": 43,
+        "bio05": 25,
+        "rsds": 24,
+        "elevation": 19
+      },
+      "maxT_at_least": {
+        "bio18": 76,
+        "bio05": 63,
+        "rsds": 57,
+        "elevation": 44
+      },
+      "joint_exact_fraction": 0.2222222222222222
+    }
+  ],
+  "interpretation": {
+    "four_axis_main_positive_exceptional_supported": false,
+    "positive_BIO18_S1_photo_cline_reproduced_as_U_to_D_transition_regime": false,
+    "n3_nominal_BIO05_axis_conditional_fraction": 0.030885780885780884,
+    "n3_BIO05_maxT_adjusted_fraction": 0.08682983682983683,
+    "does_not_infer_transition_time_climate_or_adaptation_or_causation": true,
+    "not_S1_S2_continuous_image_angle_or_PGLS": true,
+    "finite_counts_are_not_independent_evolutionary_event_p_values": true
+  }
+}

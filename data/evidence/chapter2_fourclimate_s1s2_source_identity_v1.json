@@ -1,0 +1,20 @@
+{
+  "schema": "EAzami_chapter2_four_new_axes_verified_from_azami_S1S2_pixels_20261024",
+  "role": "Pinned scientific identity of the ORIGINAL S1/S2 CHELSA v2.1 RSDS radiation source cache, not new/reestimated climate",
+  "origin_repo": "zuizui0223/azami",
+  "origin_source_path": "analysis/v4/environment_source_metadata.json",
+  "origin_workflow": ".github/workflows/v4-s1-s2-real-bio18-bio05-rsds-elevation.yml",
+  "origin_RSDS_archive_artifact_id": 12242917323,
+  "origin_RSDS_archive_zip_sha256": "2193bd04b979f6684f7bce7c670074af63072d270a20c4dc2fd0bd5934862df4",
+  "chelsa_rsds_mean": {
+    "source_sha256": "cc1ad14a70a1a940be3d01d918d4c3f7e35db95b86b12af9be5487e1bbc1fc7d"
+  },
+  "BIO5_SOURCE": "CHELSA_bio05_1981-2010_V.2.1.tif",
+  "BIO5_SHA256": "90078d99eeb0b08dd1a115a5ffa60b7c19e5849686854db950283cbac9d3817d",
+  "BIO18_SOURCE": "CHELSA_bio18_1981-2010_V.2.1.tif",
+  "BIO18_SHA256": "68b0b1cb905cdf6972364e947e137f714a68d287f38863b1516161a2a4bbd7ec",
+  "elevation_SOURCE": "WorldClim 2.1 wc2.1_30s_elev.tif (not CHELSA)",
+  "elevation_SHA256": "1d57ce9fd3584cea6a227396bc75ef88522fd5346e8487c17370885c0499716e",
+  "same_data_layer_not_same_camera_image_locations": true,
+  "measurement_note": "EAzami CTMC U/D literature states remain unchanged and source occurrence records are 693 Japan +55 Taiwan; new 4 CHELSA/DEM exposures sampled at these SAME original EAzami occurrence coordinates"
+}
