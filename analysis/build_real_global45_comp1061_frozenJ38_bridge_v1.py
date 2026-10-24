@@ -78,8 +78,10 @@ def reference(alignments,parts):
         if not aligned or any(c not in DNA|{"-"} for c in aligned):
             raise ValueError("published saff root contains unsupported alignment symbols")
         ref=aligned.replace("-","")
+        # A short saff ortholog cannot support unique local mapping.
+        # Preserve its original partition and mark new specimens as missing.
         if len(ref)<130:
-            raise ValueError("short/missing saff ortholog: "+p["locus"])
+            continue
         out.append(SeqRecord(Seq(ref),id=p["locus"],description=""))
     return out
 
@@ -110,9 +112,21 @@ def do_consensus(args):
     out=[]
     genewise=[]
     total_confident=0
-    for ref in reference(alignments,parts):
-        locus=ref.id
-        seq=str(ref.seq)
+    available_ref={r.id:str(r.seq) for r in reference(alignments,parts)}
+    for record in parts:
+        locus=record["locus"]
+        if locus not in available_ref:
+            # Keep this true source partition: insufficient saff reference
+            # for a trustworthy BWA reference-aligned sample.
+            original_aligned=alignments["OUTGROUP_saff"][int(record["start"])-1:int(record["end"])]
+            missing_bases=len(original_aligned.replace("-",""))
+            out.append(SeqRecord(Seq("N"*missing_bases),id=locus,description=""))
+            genewise.append({"locus":locus,"reference_bp":missing_bases,
+                "confident_bases":0,"confident_fraction":0.0,
+                "mean_depth_called":0.0,"admitted":"false",
+                "reason":"short_saff_reference_masked"})
+            continue
+        seq=available_ref[locus]
         cons=["N"]*len(seq)
         d=[]
         for col in bam.pileup(locus,0,len(seq),truncate=True,stepper="samtools",
@@ -145,7 +159,7 @@ def do_consensus(args):
         out.append(SeqRecord(Seq("".join(cons)),id=locus,description=""))
         genewise.append({"locus":locus,"reference_bp":len(seq),"confident_bases":confident,
                          "confident_fraction":round(fraction,6),"mean_depth_called":round(mean_depth,3),
-                         "admitted":str(keep).lower()})
+                         "admitted":str(keep).lower(), "reason":"admitted" if keep else "low_callable_fraction_or_depth"})
     bam.close()
     admitted=[x for x in genewise if x["admitted"]=="true"]
     if len(admitted)<MIN_ADMITTED_LOCI or total_confident<20000:
@@ -197,7 +211,7 @@ def do_combine(args):
         aligned=saff[a:b]
         for run,genes in new.items():
             ref=genes[p["locus"]]
-            if len(ref)!=sum(x!="- " and x!="-" for x in aligned):
+            if len(ref)!=sum(x!="-" for x in aligned):
                 raise ValueError("consensus length not matching reference-space ortholog")
             seq=iter(ref)
             projected="".join("-" if c=="-" else next(seq) for c in aligned)
