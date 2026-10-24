@@ -106,5 +106,7 @@
     "result_artifact_sha256": "8dca04874e31e97a9b1c5d4da615802d5a1f49a222f79166be009abe68eed9e2",
     "code": "analysis/fit_real_world45_multitopology_U_D_mk_v1.py",
     "tests": "tests/test_real_world45_multitopology_U_D_mk_v1.py"
-  }
+  },
+  "phenotype_ascertainment_design_warning": "The five extra Moreyra molecular species added to the Japan38 nuclear tree were explicitly chosen partly to cover U/D contrasts across North America and West Palearctic. An Mk model fitted to this selected 45-tip phylogram cannot be interpreted as an unbiased worldwide character transition-rate estimate or population frequency estimate. The subsequent nine source specimens were selected by geography without inspecting head/colour traits, specifically to reduce this selection bias.",
+  "directional_rate_asymmetry_globally_established": false
 }
