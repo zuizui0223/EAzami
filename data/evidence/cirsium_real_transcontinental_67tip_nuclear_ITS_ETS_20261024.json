@@ -37,13 +37,15 @@
     "Siniscalchi2023_author_nine_trait_source_species_exact_matches": 16,
     "Siniscalchi2023_author_nine_trait_source_tip_matches": 24,
     "independent_Japan_NMNS_Cirsium_lineare_U_exact_source_tip": 1,
-    "head_U_specimens_from_exact_taxon_evidence": 25,
+    "head_U_specimens_from_exact_taxon_evidence": 24,
     "head_D_specimens_from_exact_taxon_evidence": 0,
-    "head_unresolved_specimens": 42,
+    "head_unresolved_specimens": 43,
     "evolutionary_U_to_D_rate_model_estimable": false,
     "diagnostic": "All observed strict-source U/D on this 67-tip rDNA tree are U. Do NOT claim U→D reversal or a global head-orientation climate test.",
     "missing_colour_handling": "Original Siniscalchi CorollaColor source code 2 pools white/pink/purple; all unmatched source taxa retain blank/unknown.",
-    "regional_notes": "C. henryi and C. lineare are East Asian sample taxa with original Kelch source Hubei; several European source species are included but GenBank-only specimens may lack georeferenced voucher locality."
+    "regional_notes": "C. henryi and C. lineare are East Asian sample taxa with original Kelch source Hubei; several European source species are included but GenBank-only specimens may lack georeferenced voucher locality.",
+    "FNA_mixed_head_veto": "Cirsium eatonii assigned U in Siniscalchi trait matrix, but original Flora of North America states erect or nodding; keep unresolved in strict world-rDNA overlay while retaining published numeric code in raw source.",
+    "supplementary_output": "Original nine traits can be mapped by exact taxon to 16/45 Cirsium binomial labels, with 24/67 molecular tips; source head state after C. eatonii veto and adding C. lineare is U24/D0/unresolved43."
   },
   "GitHub_execution": {
     "run_id": 40103021756,
