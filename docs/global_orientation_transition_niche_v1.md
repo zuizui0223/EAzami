@@ -363,6 +363,29 @@ This is a genuine newly inferred broad North America–Eurasia nuclear ribosomal
 - .github/workflows/infer-real-crosscontinent-cirsium-its-ets-v1.yml
 - data/evidence/cirsium_real_transcontinental_67tip_nuclear_ITS_ETS_20261024.json
 
+## Real crosscontinental 45-tip ancestral U/D model completed — October 25, 2026
+
+**New executed result:** The 45-tip 176-Compositae1061-nuclear-locus genuine source phylogram has now been used for explicit ER and ARD two-state Mk ancestral-state inference across three *alternative tree-estimation models*, plus two independent D-tip omission sensitivities. GitHub Actions [run 40114987601](https://github.com/zuizui0223/EAzami/actions/runs/40114987601) passed; source result artifact **12568420241**, SHA256 `bae9309a73f2de78ae5d6a9ddf04fd83eb7435aa4fd0fdef7ad023a1de778f1a`.
+
+Biologically distinct source tips: 39 Japan38 Moreyra + 3 North American Moreyra + 2 West Palearctic Moreyra = **44 ingroup specimens**, with *Carthamus* original nuclear outgroup providing molecular root. Head morphology from independent original botanical sources is **17 U / 7 D / 20 unresolved ingroup**; every unresolved or polymorphic source state enters the likelihood as `[1,1]`, never imputed. Source head shape is taxon-concept evidence, **not sequenced-voucher phenotype**. Source Moreyra S1 contains accession/voucher/BioSample metadata, not the Siniscalchi nine-trait phenotype table.
+
+| True 176-locus molecular model | ModelFinder ML | Fixed GTR ML | FastTree approx ML |
+|---|---:|---:|---:|
+| Fitch minimum U/D state changes | 6 | 5 | 6 |
+| Full 17U/7D panel: ΔAICc (ARD−ER) | −1.894 | −1.885 | −1.893 |
+| *C. erisithales* D treated as missing (cultivation sensitivity): ΔAICc | −3.060 | −3.051 | −3.059 |
+| *C. vinaceum* D treated as missing (North America sensitivity): ΔAICc | **+1.105** | **+1.899** | **+0.608** |
+
+**Positive ecological/evolutionary result with boundary:** Multiple states (U and D) occur across three broad source areas and the real tree requires at least **5–6 categorical state changes**. Two external geographic contrasts (North America and Western Palearctic) appear across all three molecular trees, but they do not give known transition directions.
+
+**Critical falsification:** The apparent weak support for direction-dependent rates **does not survive** the North American D-tip sensitivity; model selection flips from ARD to ER on *every* molecular topology after omitting *C. vinaceum*. Thus we cannot claim robust faster D→U or U→D evolutionary change. The fitted likelihood shows an ingroup root P(U) approximately **0.5** under both models: **ancestral root orientation is not identified** by this 45-tip source panel.
+
+The root, internal ancestral-node posterior, and P(parent U, child D) are **fitted model endpoint states**, not a count or date of real historical transitions. No phenotype-linked rainfall niche was used here and no palaeoclimate/selective cause has been established. The 3 alternative molecular tree models are **not 3 independent dataset replications**, because they share the same 176-locus sequence matrix. The five added specimens have only ~25–32% confident base coverage; true whole-genus 294-tip/350-locus phylogenomics remains a separate uncompleted goal.
+
+**Reproducible source**: `analysis/fit_real_world45_multitopology_U_D_mk_v1.py`, `tests/test_real_world45_multitopology_U_D_mk_v1.py`, `.github/workflows/fit-real-world45-nuclear-Mk-U-D-v1.yml`; compact result receipt `data/evidence/real_world45_176Comp1061_ER_ARD_Mk_ancestral_head_20261025.json`. The execution artifact contains all 18 ER/ARD fits, the explicit continental MRCA and D-terminal edge posteriors, and **source-tip omission reversal visualization**.
+
+Original 40-tip source alignment was left identical. The original *Carthamus* sequence lacks adequate reference length for the exact two original loci `At1g26880` and `At5g62680`; the deployed successful five-readset workflow **masked those loci for the added samples**, rather than inventing replacement bases. **174/176 loci** have usable reference coordinates for the added samples; five-way stringent high-confidence intersection covers **87 loci**.
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
