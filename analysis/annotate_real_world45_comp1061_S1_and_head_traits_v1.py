@@ -235,7 +235,7 @@ def run(args):
             a=[find_y(c) for c in node.clades]
             y[node]=sum(a)/len(a)
             return y[node]
-        ys[tree.find_any(name="OUTGROUP_saff")]=-1
+        y[tree.find_any(name="OUTGROUP_saff")]=-1
         find_y(tree.root)
         for metric in ("cladogram","branch_lengths"):
             xs={}
@@ -274,7 +274,7 @@ def run(args):
                 ax.text(bx,len(tips)+.9,label,rotation=40,fontsize=7,ha="left",va="bottom")
             ax.set_yticks([])
             ax.set_ylim(-2,len(tips)+5)
-            ax.set_xlim(-step,bars[-1]+8*step)
+            ax.set_xlim(-step,bars[-1]+(14 if metric=="cladogram" else 38)*step)
             ax.set_title("REAL 45-tip Cirsium nuclear Compositae1061 | Moreyra S1 sample IDs × source head traits",loc="left",fontsize=11)
             ax.set_xlabel("Topology only — equal branch display" if metric=="cladogram" else "IQ-TREE branch lengths — substitutions per site")
             for spine in ax.spines.values():spine.set_visible(False)
