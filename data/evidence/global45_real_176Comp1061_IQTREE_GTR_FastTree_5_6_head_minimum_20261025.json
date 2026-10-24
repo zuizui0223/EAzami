@@ -1,0 +1,119 @@
+{
+  "version": "real_world45_nuclear_176locus_multi_model_S1_head_QC_v1",
+  "date_utc": "2026-10-25",
+  "primary_ML_run_id": 40107628828,
+  "alternate_GTR_run_id": 40109272675,
+  "alternate_FastTree_run_id": 40109512383,
+  "source_alignment_sha256": "8759e1b10f20979fd317aa5fbf7cd448f8401e69306c1e71cd344240470b5042",
+  "phylogeny_tip_count": 45,
+  "preserved_original_Japan38_samples": 39,
+  "added_moreyra_North_America": 3,
+  "added_moreyra_West_Palearctic": 2,
+  "outgroup": "OUTGROUP_saff",
+  "supported_source_tip_head_counts": {
+    "U": 17,
+    "D": 7,
+    "unresolved": 20
+  },
+  "original_S1_voucher_age_or_accepted_taxon_inference": false,
+  "new_regional_comparative_clades": {
+    "NorthAmerica_3": {
+      "taxa": [
+        "Cirsium ownbeyi",
+        "Cirsium vinaceum",
+        "Cirsium flodmanii"
+      ],
+      "head_states": {
+        "U": 2,
+        "D": 1
+      },
+      "monophyletic_in_all_three": true
+    },
+    "WestPalearctic_2": {
+      "taxa": [
+        "Cirsium oleraceum",
+        "Cirsium erisithales"
+      ],
+      "head_states": {
+        "U": 1,
+        "D": 1
+      },
+      "monophyletic_in_all_three": true
+    }
+  },
+  "molecular_models": [
+    {
+      "name": "IQTREE_2_0_7_ModelFinder_BIC",
+      "model": "TIM3+F+R3",
+      "tip_count": 45,
+      "Tree_SHA256": "191e6a502e23685d95e767580d41a9e1eca82db0495c93d58d34bcc3abedf8f6",
+      "Head_U_D_Fitch_min_steps": 6,
+      "NA_clade_node_support": "SH-aLRT/UFBoot 100/100",
+      "WesternPair_node_support": "SH-aLRT/UFBoot 97.8/99",
+      "n_source_regions": 3
+    },
+    {
+      "name": "IQTREE_2_0_7_fixed",
+      "model": "GTR+F+G4",
+      "tip_count": 45,
+      "Tree_SHA256": "b37f50b1422b016263a78c412c88a600d338bbd399a8255c1fc89b399cdd9a00",
+      "Head_U_D_Fitch_min_steps": 5,
+      "NA_clade_node_support": "SH-aLRT/UFBoot 100/100",
+      "WesternPair_node_support": "SH-aLRT/UFBoot 95.2/99",
+      "n_source_regions": 3
+    },
+    {
+      "name": "FastTree_2_approximate_ML",
+      "model": "GTR+gamma",
+      "tip_count": 45,
+      "Tree_SHA256": "c1bd01900fff5c23825642a41ba0c2a24080ca5537422fcb241477a88ea6b9e2",
+      "Head_U_D_Fitch_min_steps": 6,
+      "NA_clade_node_support": "local SH 1.000",
+      "WesternPair_node_support": "local SH 0.994",
+      "n_source_regions": 3
+    }
+  ],
+  "unrooted_all45_RF": [
+    {
+      "models": [
+        "IQTREE_ModelFinder",
+        "IQTREE_fixed_GTR"
+      ],
+      "RF": 20,
+      "max_binary": 84,
+      "shared_splits": 32
+    },
+    {
+      "models": [
+        "IQTREE_ModelFinder",
+        "FastTree_approximate_ML"
+      ],
+      "RF": 26,
+      "max_binary": 84,
+      "shared_splits": 29
+    },
+    {
+      "models": [
+        "IQTREE_fixed_GTR",
+        "FastTree_approximate_ML"
+      ],
+      "RF": 30,
+      "max_binary": 84,
+      "shared_splits": 27
+    }
+  ],
+  "main_hypothesis_result": {
+    "source_U_D_visible_in_two_outside_Japan_phylogenetic_species_contrasts": true,
+    "minimum_Fitch_transitions_across_three_models": [
+      5,
+      6
+    ],
+    "exact_independent_origin_count_identified": false,
+    "transition_direction_U_to_D_identified": false,
+    "time_calibrated_U_D_event": false,
+    "climate_regime_trigger_identified": false
+  },
+  "source_reference_warning": "The original 40 Japan38 scaffold topology changes across models/version, so root and shallow positions are not invariant. Do not infer Japanese global monophyly from adding only five other-world taxa.",
+  "sampling_limitation": "Only five added source taxa (3 NA, 2 Europe), where single specimen high-quality ACGT coverage is approx 25–32% of whole original 161654bp alignment; a full 294-BioSample 350-nuclear-gene world species tree is not completed.",
+  "total_world_nuclear_tree_full_Moreyra2025_294tip_completed": false
+}
