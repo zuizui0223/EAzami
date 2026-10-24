@@ -15,7 +15,7 @@
   "worldwide_branch_length_nuclear_ensemble_ready": false,
   "worldwide_tip_orientation_climate_join_ready": false,
   "historical_branch_climate_ready": false,
-  "current_allowed_verification": "synthetic_CTMC_numerics_plus_real_public_nuclear_source_join_and_climate_blind_GBIF_point_coverage",
+  "current_allowed_verification": "real_north_america_63tip_published_nuclear_tree_all9_traits_and_exploratory_U2D_modern_climate_plus_global_source_GBIF_QC",
   "no_global_effect_or_p_value_claim_allowed": true,
   "missing_inputs": [
     "audited globally inclusive nuclear tree ensemble with branch lengths and rooting provenance",
@@ -75,5 +75,39 @@
     },
     "taxon_name_review_and_same_voucher_gate_complete": false,
     "public_full_294_nuclear_tree_completed": false
+  },
+  "independent_real_published_north_america_nuclear_case": {
+    "source_article": "https://doi.org/10.1086/724310",
+    "source_git_commit": "c925d4af86160064448f794a9715f70b917a2786",
+    "verified_nuclear_tree_tips": 63,
+    "all_nine_published_morphology_characters_joined": true,
+    "exact_tip_trait_coverage": 63,
+    "fixed_tree_Fitch_HeadPosition_minimum_changes": 4,
+    "fixed_tree_Fitch_CorollaColor_minimum_changes": 12,
+    "orientation_EastAsian_fixed_vector_test": {
+      "model_ingroup_tips": 62,
+      "U": 57,
+      "D": 5,
+      "composite": 0.4047653693770064,
+      "p_one_sided_fixed_count_mc999": 0.016,
+      "mixed_head_exclusion_ingroup_tips": 60,
+      "mixed_head_exclusion_U": 55,
+      "mixed_head_exclusion_D": 5,
+      "sensitivity_composite": 0.3963238706731478,
+      "sensitivity_p_one_sided_fixed_count_mc999": 0.022,
+      "signed_modern_branchwise_BIO15": 0.6370187227738364,
+      "signed_modern_branchwise_BIO1": 0.06459404782191848,
+      "temperature_component_matches_expected_negative_direction": false,
+      "caveat": "Source present-day environment means and simple fixed-tip-count null; not historical climate or full phylogenetic/spatial null."
+    },
+    "initial_model_workflow_run": 40100026609,
+    "initial_model_artifact_id": 12562755175,
+    "full_nine_trait_workflow_run": 40100757609,
+    "full_nine_trait_artifact_id": 12562219896,
+    "source_receipts": [
+      "data/evidence/independent_north_america_2023_real_nuclear_u2d_result_20261024.json",
+      "data/evidence/independent_na_nuclear_nine_trait_parsimony_20261024.json"
+    ],
+    "does_not_complete_worldwide_294_tip_moreyra_tree": true
   }
 }
