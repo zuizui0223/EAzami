@@ -1,0 +1,82 @@
+name: Fit real world45 nuclear multi-topology ancestral head U/D Mk
+
+on:
+  pull_request:
+    paths:
+      - "analysis/fit_real_world45_multitopology_U_D_mk_v1.py"
+      - "tests/test_real_world45_multitopology_U_D_mk_v1.py"
+      - ".github/workflows/fit-real-world45-nuclear-Mk-U-D-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-empirical-Mk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install numeric model and molecular tree packages
+        run: |
+          python -m pip install --disable-pip-version-check numpy scipy biopython matplotlib
+          python -m pip check
+      - name: Reuse three source-frozen original real 45-tip 176-nuclear-locus molecular trees and S1 morphology join
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/real45M/primary .tmp/real45M/fixed .tmp/real45M/fast .tmp/realworld45-Mk-source
+          gh run download 40107628828 --repo zuizui0223/EAzami \
+            --name real-crosscontinental-45tip-176Comp1061-nuclear-ML-phylogeny-v1 \
+            --dir .tmp/real45M/primary
+          gh run download 40109272675 --repo zuizui0223/EAzami \
+            --name real-global45-176loci-independent-fixed-GTR-ML-phylogram-v1 \
+            --dir .tmp/real45M/fixed
+          gh run download 40109512383 --repo zuizui0223/EAzami \
+            --name real-global45-176locus-FastTree-approxML-SH-v1 \
+            --dir .tmp/real45M/fast
+          gh run download 40110754870 --repo zuizui0223/EAzami \
+            --name real-world45-176gene-nuclear-head-colour-multitrait-topology-audit-v1 \
+            --dir .tmp/realworld45-Mk-source
+      - name: Verify numerics and original source tip-state counts (U17 D7 unresolved20)
+        run: |
+          python -m py_compile analysis/fit_real_world45_multitopology_U_D_mk_v1.py
+          python -m unittest discover -s tests -p 'test_real_world45_multitopology_U_D_mk_v1.py' -v
+      - name: Fit both ER and ARD Mk models to actual source phenotype with unresolved species integrated
+        run: |
+          python analysis/fit_real_world45_multitopology_U_D_mk_v1.py \
+            --primary .tmp/real45M/primary/world45_176loci_ML.treefile \
+            --fixed .tmp/real45M/fixed/world45_fixed_GTR_F_G4.treefile \
+            --fasttree .tmp/real45M/fast/world45_176loci_FastTree_GTR_gamma.treefile \
+            --traits .tmp/realworld45-Mk-source/real_nuclear45_source_traits_v1.csv \
+            --outdir .tmp/real45M/results
+      - name: Verify no invented event count, missing-state imputation, or historical climate inference
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          folder=Path(".tmp/real45M/results")
+          j=json.loads((folder/"real_world45_Mk_multitopology_result.json").read_text())
+          assert j["inference_panel"]["n_source_molecular_ingroup"]==44
+          assert (j["inference_panel"]["U"],j["inference_panel"]["D"],j["inference_panel"]["source_unresolved"])==(17,7,20)
+          assert j["inference_panel"]["multiple_missing_trait_states_not_imputed"] is True
+          assert j["inference_panel"]["observed_state_is_same_sequenced_voucher"] is False
+          assert len(j["model_comparison"]["delta_AICc_ARD_minus_ER_by_topology"])==3
+          assert "exact number of U->D evolutionary events or their calendar times" in j["not_estimated"]
+          with (folder/"fitted_mk_ER_vs_ARD_by_tree_and_source_sensitivity.csv").open() as handle:
+            fits=list(csv.DictReader(handle))
+          assert len(fits)==18
+          assert (folder/"world45_real_nuclear_U_D_Mk_model_and_root_sensitivity.png").stat().st_size>10000
+          print("ACTUAL SOURCE PHYLOGENETIC INFERENCE COMPLETE; HISTORICAL EVENT COUNT NOT IDENTIFIED")
+          PY
+      - name: Archive real 45-tip Mk MLEs, root/terminal/region posteriors and plot
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-world45-176nuclear-source-U-D-Mk-ER-ARD-three-topologies-v1
+          path: .tmp/real45M/results/
+          retention-days: 90
+          if-no-files-found: error
