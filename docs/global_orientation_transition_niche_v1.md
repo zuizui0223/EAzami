@@ -330,6 +330,39 @@ dataset reused above is Siniscalchi et al. (2023)'s separate published
 `traits.csv` with its own R codebook. The two sources are never
 silently treated as one specimen phenotype table.
 
+## Newly inferred REAL transcontinental nuclear Cirsium tree (24 October 2026)
+
+Result now exists: new 67-tip source-voucher nuclear ITS+ETS ML phylogram fitted directly from GenBank nucleotide sequences, NOT grafted from previously made regional trees.
+
+- Primary accession source: Slotta, Horvath & Foley (2012), Plants DOI 10.3390/plants1020061, Table 1, EuropePMC PMC4844267 full-text XML (source SHA256 cbae6a078071f0fa57f0525a260b566e0ab1343494a6850ac8b7423110ec05b0).
+- Source DNA pairs: 73 specimens with both ITS and ETS from the SAME original publication row; 143 GenBank accessions queried, 141 sequences recovered.
+- Molecular QC admitted **67 specimens** = 65 Cirsium + 2 Carduus outgroup; **46** source genus/species binomials overall (45 Cirsium). Exclusions: four mismatched GenBank descriptions, one cross-species accession conflict, one missing nucleotide sequence pair. No missing sequences were fabricated.
+- Real alignment: ITS **759 bp**, ETS **614 bp**, concatenated **1,373 bp**, **309 variable sites**. Separately MAFFT aligned then inferred with partitioned IQ-TREE 2 ModelFinder, 1000 SH-aLRT and 1000 UFBoot. Rooted with source Carduus nutans. Branches in substitutions/site, not Ma.
+- Frozen real Newick SHA256 **f8a38a71c68ba3cc4c12789f4a29e44dc27ae926c5da8938ff56ccc8841ad837**.
+- Execution and nucleotide data artifact: https://github.com/zuizui0223/EAzami/actions/runs/40103021756/artifacts/12563577567 (SHA256 bc70b79fa13bd774e73f17ff88d12d798b0861be395271ea4f7b7c5a3375841b). All original FASTA, specimen/QC receipts, MAFFT alignments, IQ-TREE input, output, likelihood reports and Newick included.
+
+The sampled genetic lineages include East Asian C. henryi and C. lineare, western Eurasian C. canum, C. monspessulanum, C. palustre, C. spinosissimum and C. tymphaeum, and many North American and Mexican taxa. Native-range/source-geography is NOT proof of the individual GenBank voucher locality.
+
+### Nine morphological variables and Moreyra S1 distinction
+
+Moreyra 2025 supplementary S1 contains sampling, accession and voucher variables, not the nine morphological traits. Siniscalchi 2023 original nine-character matrix matches 16 of the 45 Cirsium binomial concepts (24 ITS/ETS specimen tips) by exact taxon spelling. One extra C. lineare U state is supported by independent NMNS morphology. The remainder must remain missing. A species with multiple molecular accessions represents one taxon-level trait claim, not independent origins.
+
+**Critical negative coverage gate:** Current source-backed U/D overlap with the 67-tip nuclear tree contains NO resolved D-labelled specimen. Accordingly, a U→D transition-rate or historical climatic trigger analysis on this molecular tree is NOT estimable without more independent source phenotyping. Missing taxa must not be coded U or D by association.
+
+Siniscalchi CorollaColor code 2 combines white/pink/purple. This cannot establish a white-flower origin or pigment pathway regain.
+
+### Scientific limit
+
+This is a genuine newly inferred broad North America–Eurasia nuclear ribosomal tree but ITS and ETS are physically linked multicopy loci, NOT Moreyra 2025's final 350 independent low-copy Compositae1061 genes. The full worldwide 294-BioSample/295-SRR target-capture tree remains unexecuted. Uncertainty from low genetic differentiation, hybridization and source taxon labels should be retained.
+
+### Reproduction
+
+- analysis/audit_slotta2012_nuclear_ITS_ETS_source_vouchers_v1.py
+- analysis/recover_slotta2012_crosscontinent_nuclear_ITS_ETS_v1.py
+- analysis/infer_slotta2012_crosscontinent_nuclear_ITS_ETS_ML_v1.py
+- .github/workflows/infer-real-crosscontinent-cirsium-its-ets-v1.yml
+- data/evidence/cirsium_real_transcontinental_67tip_nuclear_ITS_ETS_20261024.json
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
