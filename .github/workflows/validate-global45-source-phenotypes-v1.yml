@@ -1,0 +1,43 @@
+name: Validate real worldwide45 original Moreyra S1 source traits before phylogeny
+
+on:
+  pull_request:
+    paths:
+      - "analysis/annotate_real_world45_comp1061_S1_and_head_traits_v1.py"
+      - "tests/test_real_world45_Comp1061_source_S1_traits_v1.py"
+      - ".github/workflows/validate-global45-source-phenotypes-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-44-ingroup-S1-traits:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install original nuclear tree and figure parser
+        run: |
+          python -m pip install --disable-pip-version-check biopython
+      - name: Recover frozen 39 Japan38 molecular sample manifest and pinned author nine traits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/j38 .tmp/source
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 --dir .tmp/j38
+          curl -fL --retry 3 \
+            "https://raw.githubusercontent.com/carol-siniscalchi/cirsium/c925d4af86160064448f794a9715f70b917a2786/traits/traits.csv" \
+            -o .tmp/source/siniscalchi_original_traits.csv
+      - name: Validate 39 Japan38 S1 specimens and 5 frozen Moreyra worldwide source specimens
+        env:
+          EAzami_J38_SRC: .tmp/j38
+          EAzami_NA_TRAITS: .tmp/source/siniscalchi_original_traits.csv
+        run: |
+          python -m py_compile analysis/annotate_real_world45_comp1061_S1_and_head_traits_v1.py
+          python -m unittest discover -s tests -p 'test_real_world45_Comp1061_source_S1_traits_v1.py' -v
