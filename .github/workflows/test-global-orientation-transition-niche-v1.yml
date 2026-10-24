@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "analysis/run_global_nuclear_orientation_transition_niche_v1.py"
+      - "analysis/audit_global_nuclear_orientation_source_overlap_v1.py"
       - "tests/test_global_orientation_transition_niche_v1.py"
       - "docs/global_orientation_transition_niche_v1.md"
       - "data/contracts/global_orientation_transition_niche_readiness_v1.json"
@@ -31,6 +32,7 @@ jobs:
           python -m py_compile \
             analysis/run_chapter2_orientation_transition_regime_hypothesis_v1.py \
             analysis/run_global_nuclear_orientation_transition_niche_v1.py \
+            analysis/audit_global_nuclear_orientation_source_overlap_v1.py \
             tests/test_global_orientation_transition_niche_v1.py
       - name: Run synthetic model and input-integrity tests
         run: python -m unittest discover -s tests -p 'test_global_orientation_transition_niche_v1.py' -v
@@ -45,3 +47,28 @@ jobs:
           assert j['historical_branch_climate_ready'] is False
           print("Only synthetic verification is authorized until independent global inputs pass the gates")
           PY
+      - name: Execute real-source coverage gate (NOT global transition inference)
+        run: |
+          python analysis/audit_global_nuclear_orientation_source_overlap_v1.py \
+            --outdir .tmp/global-source-overlap
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('.tmp/global-source-overlap/report.json').read_text())
+          assert x['moreyra_linked_cirsium_rows']==257
+          assert x['moreyra_distinct_biosamples']==256
+          assert x['moreyra_distinct_tree_codes']==256
+          assert x['east_asia_orientation_crosswalk_rows']==20
+          assert x['exact_label_hits']==7
+          assert x['exact_source_label_resolved_U_D']==5
+          assert (x['resolved_U'], x['resolved_D'])==(3,2)
+          assert x['can_execute_global_nuclear_U_D_climate_analysis'] is False
+          print('Exact nuclear-tip/orientation evidence audit: source overlap only, real global test BLOCKED')
+          PY
+      - name: Retain observed source coverage evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-u2d-moreyra-source-overlap-v1
+          path: .tmp/global-source-overlap/
+          if-no-files-found: error
+          retention-days: 90
