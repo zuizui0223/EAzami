@@ -35,7 +35,7 @@ class FrozenWorldwideOrientationGBIFGate(unittest.TestCase):
         data=[
             make(1),
             make(2,lat=34.0,lon=-105.0,uncertainty=1000),
-            make(3,lat=34.02,lon=-105.02,uncertainty=100),
+            make(3,lat=34.02,lon=-104.98,uncertainty=100),
             make(4,name="Cirsium ownbeyi",lat=35.0,lon=-100.0),
             make(5,lat=36.0,lon=-102.0,uncertainty=15000),
             make(6,lat=36.1,lon=-102.1,uncertainty=None),
