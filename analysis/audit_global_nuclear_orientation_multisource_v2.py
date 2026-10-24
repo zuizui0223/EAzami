@@ -23,6 +23,7 @@ NMNS_EXT1 = ROOT / "data/evidence/japan38_nmns_capitulum_trait_seed_extension_v1
 NMNS_EXT2 = ROOT / "data/evidence/japan38_nmns_capitulum_trait_seed_extension_v2.csv"
 HELDOUT_FOC = ROOT / "data/evidence/heldout_east_asia_orientation_candidate_panel_v2.csv"
 HELDOUT_AUDIT = ROOT / "data/evidence/heldout_east_asia_trait_state_audit_v1.csv"
+FNA = ROOT / "data/evidence/global_fna_head_orientation_evidence_v1.csv"
 
 NO_STATE = {"", "unknown", "not_codable"}
 UNCERTAIN = {"?", "ambiguous", "source_conflict_index_downward_detail_erect"}
@@ -118,6 +119,17 @@ def load_sources(root: Path = ROOT):
         append(row["analysis_taxon"], row["orientation_state"], lane,
                row["source_url"], row["source_basis"] + " " + row["claim_boundary"],
                HELDOUT_AUDIT, row.get("orientation_pool_status", ""))
+    # New geographic evidence is deliberately external to the East-Asian
+    # hypothesis selection cohort. Mixed heads stay explicitly ambiguous.
+    for row in read_csv(root / FNA.relative_to(ROOT)):
+        if row["source_lane"] != "Flora_of_North_America" or row["source_scope"] != "North_America":
+            raise ValueError("FNA source scope drift")
+        if "Heads" not in row["source_basis"]:
+            raise ValueError("FNA clause does not explicitly describe heads")
+        append(row["analysis_taxon"], row["orientation_state"],
+               "independent_fna_north_america", row["source_url"],
+               row["source_basis"] + " " + row["admission_note"],
+               FNA, row["source_authority"])
     return molecular, evidence
 
 
@@ -185,7 +197,7 @@ def run(root: Path = ROOT):
         "moreyra_distinct_biosamples": len({r["biosample"] for r in molecular}),
         "moreyra_tree_code_labels": len(grouped),
         "source_tables": [str(x.relative_to(ROOT)) for x in
-                          (CROSSWALK, NMNS, NMNS_EXT1, NMNS_EXT2, HELDOUT_FOC, HELDOUT_AUDIT)],
+                          (CROSSWALK, NMNS, NMNS_EXT1, NMNS_EXT2, HELDOUT_FOC, HELDOUT_AUDIT, FNA)],
         "source_backed_exact_name_overlaps": sum(x["n_source_records"] > 0 for x in out),
         "candidate_resolved_orientation_labels": len(candidates),
         "candidate_U": states.get("U", 0),
