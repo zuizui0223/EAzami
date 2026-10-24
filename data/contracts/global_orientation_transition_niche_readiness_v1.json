@@ -15,7 +15,7 @@
   "worldwide_branch_length_nuclear_ensemble_ready": false,
   "worldwide_tip_orientation_climate_join_ready": false,
   "historical_branch_climate_ready": false,
-  "current_allowed_verification": "synthetic_model_contract_only",
+  "current_allowed_verification": "synthetic_CTMC_numerics_plus_real_public_nuclear_source_join_and_climate_blind_GBIF_point_coverage",
   "no_global_effect_or_p_value_claim_allowed": true,
   "missing_inputs": [
     "audited globally inclusive nuclear tree ensemble with branch lengths and rooting provenance",
@@ -29,5 +29,51 @@
       "bio1": "decrease"
     }
   },
-  "note": "Never substitute Azami grafted trees or tip present climate differences for independent molecular branches or historical paleoclimate."
+  "note": "Never substitute Azami grafted trees or tip present climate differences for independent molecular branches or historical paleoclimate. The source metadata and GBIF gate are real and audited, but are not global molecular topology or climate effect results.",
+  "empirical_source_readiness": {
+    "public_nuclear_biosamples": 294,
+    "unique_public_SRRs": 295,
+    "source_taxon_labels": 270,
+    "source_name_clean_initial_taxa": 35,
+    "initial_taxon_orientation_states": {
+      "U": 24,
+      "D": 11
+    },
+    "initial_nuclear_biosamples": 46,
+    "trait_blind_geographic_anchor_biosamples": 48,
+    "priority_intake_biosamples": 94,
+    "priority_manifest_file": "analysis/build_global_orientation_nuclear_priority_intake_v1.py",
+    "priority_intake_run": 40095299391,
+    "priority_intake_artifact_id": 12560119979,
+    "frozen_name_state_sha256": "6ebc890a28c622509292ef6adaa528864504aae9383b694252bda7037696d4f1",
+    "gbif_gate": {
+      "verified_UTC": "2026-10-24",
+      "audit_run": 40095787620,
+      "audit_artifact_id": 12560318301,
+      "audit_artifact_digest": "sha256:800cca0bff1781ccacd0c53c62740a7d3ac10f730b6df49b0ca3b1795bdbb933",
+      "source_names_queried": 35,
+      "gbif_exact_name_matches": 33,
+      "coordinate_records_fetched": 9592,
+      "original_source_names_matched": 8550,
+      "spatially_thinned_qc_points": 1011,
+      "taxa_with_min5_cells": 26,
+      "taxa_with_min5_cells_and_complete_source_enumeration": 16,
+      "truncated_taxa": 11,
+      "native_range_filter_complete": false,
+      "climate_extracted": false
+    },
+    "western_prospective_extension": {
+      "sources": 3,
+      "source_name_clean": 2,
+      "states_source_name_clean": {
+        "U": 1,
+        "D": 1
+      },
+      "source_name_review_holds": 1,
+      "adds_to_frozen_35": false,
+      "source_audit_run": 40096368252
+    },
+    "taxon_name_review_and_same_voucher_gate_complete": false,
+    "public_full_294_nuclear_tree_completed": false
+  }
 }
