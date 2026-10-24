@@ -1,9 +1,7 @@
 name: Real crosscontinent Cirsium 45-tip 176-nuclear-locus ML
 
 on:
-  # The frozen five real public FASTQ sources, BWA consensus and 45-tip ML tree
-  # were successfully executed in run 40106147801 on 2026-10-24.
-  # Avoid refetching 2.80GB NGS reads on every unrelated PR documentation edit.
+  # 2026-10-25 completed real source artefacts are immutable. Explicit reruns only.
   workflow_dispatch:
 
 permissions:
