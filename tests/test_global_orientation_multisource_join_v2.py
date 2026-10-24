@@ -24,10 +24,10 @@ class WorldwideNuclearU2DEvidenceJoin(unittest.TestCase):
         self.assertEqual(x["moreyra_linked_cirsium_source_rows"], 257)
         self.assertEqual(x["moreyra_distinct_biosamples"], 256)
         self.assertEqual(x["moreyra_tree_code_labels"], 256)
-        self.assertEqual(x["source_backed_exact_name_overlaps"], 35)
-        self.assertEqual(x["candidate_resolved_orientation_labels"], 26)
-        self.assertEqual(x["candidate_U"], 20)
-        self.assertEqual(x["candidate_D"], 6)
+        self.assertEqual(x["source_backed_exact_name_overlaps"], 41)
+        self.assertEqual(x["candidate_resolved_orientation_labels"], 30)
+        self.assertEqual(x["candidate_U"], 23)
+        self.assertEqual(x["candidate_D"], 7)
 
     def test_ambiguous_source_veto_not_forced(self):
         for taxon in ("Cirsium maritimum", "Cirsium japonicum", "Cirsium fanjingshanense"):
@@ -62,6 +62,23 @@ class WorldwideNuclearU2DEvidenceJoin(unittest.TestCase):
         self.assertEqual(self.by_name["Cirsium lidjiangense"]["orientation_U_D_or_unresolved"], "D")
         self.assertEqual(self.by_name["Cirsium aduncum 1"]["status"], "unassessed_by_available_evidence")
         self.assertEqual(self.by_name["Cirsium aduncum 2"]["status"], "unassessed_by_available_evidence")
+
+    def test_north_american_flora_explicit_heads_are_independent_candidates(self):
+        for taxon, expected in (
+            ("Cirsium vinaceum", "D"),
+            ("Cirsium ownbeyi", "U"),
+            ("Cirsium flodmanii", "U"),
+            ("Cirsium longistylum", "U"),
+        ):
+            row = self.by_name[taxon]
+            self.assertEqual(row["orientation_U_D_or_unresolved"], expected)
+            self.assertEqual(row["status"], "exact_name_evidence_candidate")
+            self.assertIn("independent_fna_north_america", row["source_lanes"])
+            self.assertIn("flora_id=1", row["source_urls"])
+        for taxon in ("Cirsium eatonii", "Cirsium joannae"):
+            row = self.by_name[taxon]
+            self.assertEqual(row["status"], "explicit_ambiguous_or_conflict_veto")
+            self.assertEqual(row["orientation_U_D_or_unresolved"], "")
 
     def test_no_voucher_claim_and_world_model_still_blocked(self):
         for row in self.rows:
