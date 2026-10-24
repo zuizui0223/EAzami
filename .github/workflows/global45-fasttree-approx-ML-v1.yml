@@ -1,0 +1,88 @@
+name: FastTree preliminary 45-tip real Cirsium 176-locus transcontinental topology
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/global45-fasttree-approx-ML-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  quick-independent-molecular-topology:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install fast approximate likelihood tree tool and source verifier
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fasttree
+          python -m pip install --disable-pip-version-check biopython
+          command -v FastTree
+      - name: Materialize the same five QC'd original target capture samples, not model guesses
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/J38 .tmp/new_5
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 \
+            --dir .tmp/J38
+          gh run download 40107628828 --repo zuizui0223/EAzami \
+            --pattern "real-global45-*-176locus-consensus-v1" \
+            --dir .tmp/new_5
+          python analysis/build_real_global45_comp1061_frozenJ38_bridge_v1.py combine \
+            --j38-source-dir .tmp/J38 \
+            --new-tip-dirs .tmp/new_5/real-global45-*-176locus-consensus-v1 \
+            --outdir .tmp/pilot_45
+      - name: Infer crosscontinental actual-nucleotide approximate ML topology with local SH support
+        run: |
+          set -euo pipefail
+          FastTree -nt -gtr -gamma -boot 1000 \
+            .tmp/pilot_45/global45_original40_plus5real_Comp1061_176loci.fasta \
+            > .tmp/pilot_45/world45_176loci_FastTree_GTR_gamma.treefile \
+            2> .tmp/pilot_45/world45_176loci_FastTree_GTR_gamma.log
+          test -s .tmp/pilot_45/world45_176loci_FastTree_GTR_gamma.treefile
+      - name: Provenance-check all five new tips and preserve provisional phylogeny boundary
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          from Bio import Phylo
+          folder=Path('.tmp/pilot_45')
+          baseline=json.loads((folder/'aligned_source_Acceptance.json').read_text())
+          p=folder/'world45_176loci_FastTree_GTR_gamma.treefile'
+          phy=Phylo.read(p,'newick')
+          tips={x.name for x in phy.get_terminals()}
+          assert len(tips)==45 and 'OUTGROUP_saff' in tips
+          assert set(baseline['all_new_sample_tips'])<=tips
+          report={
+            'version':'real_global45_176locus_FastTree2_approx_ML_v1',
+            'genuine_public_nuclear_DNA_sequences_used':True,
+            'method':'FastTree approximate ML GTR+gamma with 1000 local SH resamples; NOT IQTREE confidence',
+            'source_original_japan38_nuclear_tips':40,
+            'source_moreyra_new_NA_European_tips':5,
+            'n_total_molecular_tips':45,
+            'nuclear_loci_from_original_frozen_Japan38':176,
+            'new_nuclear_specimen_min_called_percent':'25% from source QC',
+            'original_matrix_unchanged':True,
+            'tree_newick_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),
+            'not_the_294tip_Moreyra_2025_full_world_tree':True,
+            'ML_IQTREE_is_still_the_definitive_45tip_pilot':False,
+            'role':'early method sensitivity and source-provenance placement diagnostic'
+          }
+          (folder/'fasttree_empirical_source_receipt.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Retain new real 45-tip approximate ML tree and identical nucleotide alignment
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-global45-176locus-FastTree-approxML-SH-v1
+          path: .tmp/pilot_45/
+          if-no-files-found: error
+          retention-days: 90
