@@ -1,0 +1,31 @@
+name: Validate world54 nine trait-blind Moreyra FASTQ sources
+
+on:
+  pull_request:
+    paths:
+      - "analysis/probe_world54_next9_traitblind_ena_FASTQ_v1.py"
+      - ".github/workflows/probe-world54-blind-nine-realreads-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-nine-real-source-SRRs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify source-selected new SRA runs without looking at floral states
+        run: |
+          python analysis/probe_world54_next9_traitblind_ena_FASTQ_v1.py \
+            --output .tmp/world54-ENA-nine-original-sample-fastq.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: world54-nine-traitblind-SRA-ENA-source-QC-v1
+          path: .tmp/world54-ENA-nine-original-sample-fastq.json
+          if-no-files-found: error
+          retention-days: 90
