@@ -137,6 +137,15 @@ def build(anchor_per_area: int = 12):
     # Use this only as a prioritized input-acquisition list; tree must be
     # inferred de novo with proper outgroups, aligned loci and QC.
     missing_climate = sorted({r["analysis_taxon_label"] for r in priority})
+    frozen_name_state_lines = sorted({
+        r["analysis_taxon_label"] + "\t" + r["orientation_candidate"]
+        for r in priority
+    })
+    if len(frozen_name_state_lines) != 35:
+        raise ValueError("unexpected cohort identity after name-state fingerprint")
+    cohort_sha = hashlib.sha256(
+        ("\n".join(frozen_name_state_lines) + "\n").encode("utf-8")
+    ).hexdigest()
     summary = {
         "contract_version": "global_orientation_nuclear_priority_intake_v1",
         "primary_full_nuclear_biosamples": 294,
@@ -148,6 +157,7 @@ def build(anchor_per_area: int = 12):
         "priority_D": sum(x["orientation_state_candidate"] == "D" for x in taxa
                           if x["analysis_taxon_label"] in strict_taxa),
         "priority_biosamples": len(priority),
+        "frozen_priority_name_state_sha256": cohort_sha,
         "background_trait_blind_biosamples": len(selected),
         "background_area_counts": dict(sorted(Counter(x["broad_area"] for x in selected).items())),
         "pilot_total_biosamples": len(wave),
@@ -219,7 +229,7 @@ def main():
         json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
     print(json.dumps({k: summary[k] for k in (
-        "priority_source_taxon_labels", "priority_biosamples", "background_trait_blind_biosamples",
+        "priority_source_taxon_labels", "priority_biosamples", "frozen_priority_name_state_sha256", "background_trait_blind_biosamples",
         "pilot_total_biosamples", "priority_U", "priority_D", "priority_area_counts_by_taxon",
         "nuclear_tree_inferred")}, indent=2, ensure_ascii=False))
 
