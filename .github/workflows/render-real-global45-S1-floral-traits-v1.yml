@@ -1,9 +1,7 @@
 name: Map real 45-tip world nuclear tree to Moreyra S1 and floral traits
 
 on:
-  pull_request:
-    paths:
-      - ".github/workflows/render-real-global45-S1-floral-traits-v1.yml"
+  # 2026-10-25 completed real source artefacts are immutable. Explicit reruns only.
   workflow_dispatch:
 
 permissions:
