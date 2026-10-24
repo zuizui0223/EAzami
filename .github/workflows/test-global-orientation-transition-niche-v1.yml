@@ -6,6 +6,7 @@ on:
       - "analysis/run_global_nuclear_orientation_transition_niche_v1.py"
       - "analysis/audit_global_nuclear_orientation_source_overlap_v1.py"
       - "analysis/audit_global_nuclear_orientation_multisource_v2.py"
+      - "data/evidence/global_fna_head_orientation_evidence_v1.csv"
       - "tests/test_global_orientation_multisource_join_v2.py"
       - "tests/test_global_orientation_transition_niche_v1.py"
       - "docs/global_orientation_transition_niche_v1.md"
