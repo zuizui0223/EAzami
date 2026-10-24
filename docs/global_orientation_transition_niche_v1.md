@@ -229,6 +229,42 @@ gates, the pre-climate name-clean evidence roster could expand
 to 37 taxon labels (25 U, 12 D); that is NOT yet an accepted inference
 cohort or a new historical transition.
 
+## Completed independent North American REAL nuclear-tree + U/D × niche analysis (2026-10-24)
+
+**Successful primary execution:** GitHub Actions [run 40100026609](https://github.com/zuizui0223/EAzami/actions/runs/40100026609), artifact [12562755175](https://github.com/zuizui0223/EAzami/actions/runs/40100026609/artifacts/12562755175), ZIP SHA256 `86f3c9d329a8394a4f9080b3cf3f304eaba2d84c606fc39821a8306d8f39f8f4`.
+
+**Original independent nuclear and botanical data:** Siniscalchi, Ackerfield & Folk (2023), *International Journal of Plant Sciences*, DOI [10.1086/724310](https://doi.org/10.1086/724310). We accessed the authors' original [data repository](https://github.com/carol-siniscalchi/cirsium) at immutable commit `c925d4af86160064448f794a9715f70b917a2786` and validated the Git object hashes of their published **63-tip calibrated Compositae1061 nuclear tree**, complete `traits.csv`, original R morphology coding key and source BIOCLIM environment table. All 63 tip names join exactly.
+
+The original trait categories contain 58 erect and 5 pendent heads; four **minimum** Fitch steps for orientation and 12 for the four-level corolla-colour character. Flower colour's main source class (code 2; 50 tips) **merges white, pink and purple** and cannot establish white-loss or colour-regain counts.
+
+After holding out source outgroup *C. vulgare*, we ran the unchanged prespecified East-Asian `+BIO15/-BIO1` axis against published North American nuclear topology and source-specific taxon climate centroids, using conditional Mk exact **edge endpoint** joint probabilities and Brownian reconstruction of **modern** niche means. A second fit excluded *C. eatonii* and *C. joannae*, which Flora of North America explicitly describes as **erect or nodding** despite the original authors' single upright labels.
+
+| True empirical model outcome | Published author code | Ambiguous two taxa excluded |
+| --- | ---: | ---: |
+| Independently published NA nuclear tree tips for source regression | 62 | 60 |
+| State counts | U 57, D 5 | U 55, D 5 |
+| Signed reconstructed contemporary BIO15 axis | +0.6370 | +0.6199 |
+| Signed reconstructed contemporary BIO1 axis | **+0.0646** | **+0.0594** |
+| Fixed +BIO15/-BIO1 composite | **+0.4048** | **+0.3963** |
+| 999 global fixed-count tip-map null tests, one-sided p | **0.016** | **0.022** |
+| Symmetric Mk q per calibration Myr (model-conditional) | 0.05361 | 0.05545 |
+
+**Interpretation:** The preregistered **composite direction** is positive in this geographically independent nuclear dataset and stays positive after excluding the two mixed-head species. The independently reconstructed **BIO1 component does not show the expected negative branchwise sign**: it is slightly positive. This is therefore mainly a **precipitation-seasonality-linked** component association, not robust confirmation of a historical cooler-when-nodding directional mechanism. In simple original author source means (nonphylogenetic), D taxa have higher BIO15 (55.20 vs 39.54) and lower BIO1 (68.22 vs 76.40, as stored in the source's units). These different estimands must not be collapsed.
+
+The reported one-sided p-values are 999 **fixed-D-count tip-label** Monte Carlo permutations within North America: this null is **not a full phylogenetic+spatial process-based null**. Five D tips, taxonomic/morphological context, external data coding, published molecular dating uncertainties and historical geography limit claims. No climate at a transition event was measured, and `P(parent U, child D)` is not probability of a specific dated state-change event.
+
+The 63-tip annotated figure combines the **original molecular tree** with original source head position, corolla colour, glutinous ridge and phyllary position, labelled with the exact author categories. It is a separate validated North American tree **not a manually grafted world tree**. Moreyra et al. (2025)'s exact full-world 350-nuclear-locus Newick remains unrecovered and EAzami's 294-sample nuclear inference remains unexecuted.
+
+**Reproducibility:**
+
+- `analysis/run_siniscalchi_2023_real_nuclear_traits_v1.py`
+- `analysis/run_global_nuclear_orientation_transition_niche_v1.py` (now also explicitly accepts calibrated-Myr branch lengths)
+- `analysis/summarize_siniscalchi_2023_independent_na_u2d_v1.py`
+- `tests/test_siniscalchi_2023_real_nuclear_traits_v1.py`
+- `.github/workflows/real-siniscalchi-nuclear-u2d-v1.yml`
+- `data/evidence/independent_north_america_2023_real_nuclear_u2d_result_20261024.json`
+
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
