@@ -173,11 +173,11 @@ def plot(tree,table,outdir):
             "West_Palearctic":"#B28CC4","outgroup":"#818B94"}
     for t in tips:
         r=look[t.name];yy=y[t]
-        for col,palette in ((mx+.1,region.get(r["geographic_panel"],"#bbb")),
-                            (mx+.3,head[r["head_orientation"]])):
-            ax.add_patch(Rectangle((col,yy-.36),.14,.72,facecolor=palette,edgecolor="white",lw=.3))
-        ax.text(mx+.53,yy,r["source_taxon"]+"   ["+t.name+"]",va="center",fontsize=7)
-    ax.set_xlim(-.05,mx+3.7);ax.set_ylim(-1.2,len(tips)+2.0)
+        for col,palette in ((mx*1.05,region.get(r["geographic_panel"],"#bbb")),
+                            (mx*1.27,head[r["head_orientation"]])):
+            ax.add_patch(Rectangle((col,yy-.36),mx*.15,.72,facecolor=palette,edgecolor="white",lw=.3))
+        ax.text(mx*1.52,yy,r["source_taxon"]+"   ["+t.name+"]",va="center",fontsize=7)
+    ax.set_xlim(-mx*.02,mx*3.65);ax.set_ylim(-1.2,len(tips)+2.0)
     ax.set_title("Empirical 45-tip 176-locus Compositae1061 nuclear pilot | U/D source annotation",loc="left",pad=14)
     ax.set_xlabel("IQ-TREE branch lengths, substitutions/site; NOT phylogenetic divergence times")
     ax.set_yticks([])
