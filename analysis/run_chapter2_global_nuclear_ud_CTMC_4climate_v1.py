@@ -389,7 +389,8 @@ def execute(args):
             summary[label]=scope
             continue
         tr,delta,tipstates=assembly
-        null=monte_carlo_null(tr,delta,tipstates,draws=args.draws,seed=SEED+min_obs)
+        n_draws=args.draws if label=="n5_primary" else max(999,min(args.draws,999))
+        null=monte_carlo_null(tr,delta,tipstates,draws=n_draws,seed=SEED+min_obs)
         summary[label]={**scope,"branch_regime_CTMC_Brownian_conditioned_null":null}
     if "n5_primary" not in summary or summary["n5_primary"]["status"].startswith("BLOCKED"):
         result={"schema":"EAzami_NA63_TRUE_NUCLEAR_AUTHOR_UD_FOUR_ENVIRONMENTS_INITIAL_GBIF_SOURCE_GATE_v1",
