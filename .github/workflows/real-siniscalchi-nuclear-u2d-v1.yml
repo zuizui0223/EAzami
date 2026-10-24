@@ -1,0 +1,90 @@
+name: Real North American Cirsium nuclear tree and U/D climate replication
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_siniscalchi_2023_real_nuclear_traits_v1.py"
+      - "analysis/summarize_siniscalchi_2023_independent_na_u2d_v1.py"
+      - "analysis/run_global_nuclear_orientation_transition_niche_v1.py"
+      - "tests/test_siniscalchi_2023_real_nuclear_traits_v1.py"
+      - ".github/workflows/real-siniscalchi-nuclear-u2d-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  real-published-independent-tree:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install documented inference and plotting runtime
+        run: |
+          python -m pip install --disable-pip-version-check numpy scipy pandas biopython matplotlib
+          python -m pip check
+      - name: Syntax and legacy estimator regression
+        run: |
+          python -m py_compile \
+            analysis/run_siniscalchi_2023_real_nuclear_traits_v1.py \
+            analysis/summarize_siniscalchi_2023_independent_na_u2d_v1.py \
+            analysis/run_global_nuclear_orientation_transition_niche_v1.py \
+            tests/test_siniscalchi_2023_real_nuclear_traits_v1.py
+          python -m unittest discover -s tests -p 'test_global_orientation_transition_niche_v1.py' -v
+      - name: Retrieve/authenticate independent published nuclear tree, all head and corolla traits and environmental data
+        run: |
+          python analysis/run_siniscalchi_2023_real_nuclear_traits_v1.py \
+            --asset-dir .tmp/siniscalchi-source-2023 \
+            --outdir .tmp/north-america-nuclear-2023
+          python -m unittest discover -s tests -p 'test_siniscalchi_2023_real_nuclear_traits_v1.py' -v
+      - name: Fit real 62-tip primary NA ER Mk × reconstructed modern-niche test
+        run: |
+          python analysis/run_global_nuclear_orientation_transition_niche_v1.py \
+            --trees .tmp/north-america-nuclear-2023/siniscalchi_2023_north_american_nuclear_tree.nwk \
+            --tip-table .tmp/north-america-nuclear-2023/na_full_author_trait_climate_join.csv \
+            --outgroup Cirsium_vulgare \
+            --branch-length-unit calibrated_Myr \
+            --permutation-strata global --permutations 999 --min-taxa 20 \
+            --seed 2317 \
+            --outdir .tmp/north-america-nuclear-2023/author_coding
+      - name: Fit conservative NA ER Mk model excluding FNA-documented mixed head species
+        run: |
+          python analysis/run_global_nuclear_orientation_transition_niche_v1.py \
+            --trees .tmp/north-america-nuclear-2023/siniscalchi_2023_north_american_nuclear_tree.nwk \
+            --tip-table .tmp/north-america-nuclear-2023/na_mixed_head_sensitivity_trait_climate_join.csv \
+            --outgroup Cirsium_vulgare \
+            --branch-length-unit calibrated_Myr \
+            --permutation-strata global --permutations 999 --min-taxa 20 \
+            --seed 2317 \
+            --outdir .tmp/north-america-nuclear-2023/mixed_head_excluded
+      - name: Freeze empirical results with explicit scientific boundary
+        run: |
+          python analysis/summarize_siniscalchi_2023_independent_na_u2d_v1.py \
+            --source-manifest .tmp/north-america-nuclear-2023/source_manifest.json \
+            --author-model .tmp/north-america-nuclear-2023/author_coding \
+            --author-tips .tmp/north-america-nuclear-2023/na_full_author_trait_climate_join.csv \
+            --conservative-model .tmp/north-america-nuclear-2023/mixed_head_excluded \
+            --conservative-tips .tmp/north-america-nuclear-2023/na_mixed_head_sensitivity_trait_climate_join.csv \
+            --output .tmp/north-america-nuclear-2023/independent_na_u2d_ecology_result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path(".tmp/north-america-nuclear-2023")
+          j=json.loads((root/"independent_na_u2d_ecology_result.json").read_text())
+          assert j["analyses"]["author_coding"]["observed_states"]=={"U":57,"D":5}
+          assert j["analyses"]["mixed_head_excluded"]["observed_states"]=={"U":55,"D":5}
+          assert j["source_git_commit"]=="c925d4af86160064448f794a9715f70b917a2786"
+          assert (root/"independent_north_america_nuclear_trait_map.png").stat().st_size>10000
+          assert (root/"independent_north_america_nuclear_trait_map.svg").stat().st_size>10000
+          print("REAL, INDEPENDENT NA NUCLEAR DATA ANALYSIS — NOT A WORLD PHYLOGENY")
+          PY
+      - name: Retain real molecular tree, trait table, phylogenetic figure and inferential CSVs
+        uses: actions/upload-artifact@v4
+        with:
+          name: independent-NA-63tip-nuclear-head-colour-climate-real-v1
+          path: .tmp/north-america-nuclear-2023/
+          if-no-files-found: error
+          retention-days: 90
