@@ -265,6 +265,47 @@ The 63-tip annotated figure combines the **original molecular tree** with origin
 - `data/evidence/independent_north_america_2023_real_nuclear_u2d_result_20261024.json`
 
 
+## Completed all-nine-character phylogram (original North American source)
+
+All nine original categorical traits from Siniscalchi et al. (2023) have now
+been mapped to **the same real 63-tip published calibrated nuclear tree**.
+This reuses the previously authenticated original tree/trait tables and
+author-published numeric codebook without adding placements or guessing
+additional taxon states.
+
+GitHub Actions [run 40100757609](https://github.com/zuizui0223/EAzami/actions/runs/40100757609) passed all source/state/figure tests. The
+[complete nine-trait figure artifact](https://github.com/zuizui0223/EAzami/actions/runs/40100757609/artifacts/12562219896)
+contains zoomable SVG, PNG, exact original numeric code legend and audit JSON.
+
+| Original author's trait (character) | Source states | Fitch minimum steps |
+| --- | --- | ---: |
+| CorollaThroat | 0/1 | 4 |
+| CorollaColor | red / red-purple / **white-pink-purple combined** / yellow | **12** |
+| Duration | perennial / biennial | 14 |
+| GlutinousRidge | absent / present | 11 |
+| Habit | caulescent / acaulescent | 3 |
+| HeadPosition | U erect / D pendent | **4** |
+| InnerPhyllaryColor | green / purple / red / pink | 12 |
+| OuterPhyllaryPosition | ascending / spreading / reflexed | 14 |
+| StyleBranchColor | red / reddish-purple / white-pink-purple combined / yellow | 10 |
+
+These are **lower bounds** on category transitions **on one source tree**;
+they cannot estimate exact historical transition numbers, dates or directions.
+Their differences support the decision to model **separate morphological
+components**, not to force the whole capitulum into one evolutionary state.
+All categorical codes are linked to the original authors' R legend.
+
+Reproducibility:
+
+- `analysis/render_siniscalchi_2023_nine_traits_v1.py`
+- `tests/test_siniscalchi_2023_nine_traits_v1.py`
+- `.github/workflows/render-siniscalchi-2023-nine-trait-tree-v1.yml`
+- `data/evidence/independent_na_nuclear_nine_trait_parsimony_20261024.json`
+
+The complete 350-locus Moreyra 2025 worldwide nuclear Newick is **still
+not available in EAzami**. Do not merge dated North American and undated
+Japanese/East-Asian trees by hand into a false worldwide molecular tree.
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
