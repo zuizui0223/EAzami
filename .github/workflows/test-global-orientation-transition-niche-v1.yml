@@ -5,6 +5,8 @@ on:
     paths:
       - "analysis/run_global_nuclear_orientation_transition_niche_v1.py"
       - "analysis/audit_global_nuclear_orientation_source_overlap_v1.py"
+      - "analysis/audit_global_nuclear_orientation_multisource_v2.py"
+      - "tests/test_global_orientation_multisource_join_v2.py"
       - "tests/test_global_orientation_transition_niche_v1.py"
       - "docs/global_orientation_transition_niche_v1.md"
       - "data/contracts/global_orientation_transition_niche_readiness_v1.json"
@@ -33,6 +35,8 @@ jobs:
             analysis/run_chapter2_orientation_transition_regime_hypothesis_v1.py \
             analysis/run_global_nuclear_orientation_transition_niche_v1.py \
             analysis/audit_global_nuclear_orientation_source_overlap_v1.py \
+            analysis/audit_global_nuclear_orientation_multisource_v2.py \
+            tests/test_global_orientation_multisource_join_v2.py \
             tests/test_global_orientation_transition_niche_v1.py
       - name: Run synthetic model and input-integrity tests
         run: python -m unittest discover -s tests -p 'test_global_orientation_transition_niche_v1.py' -v
@@ -70,5 +74,17 @@ jobs:
         with:
           name: global-u2d-moreyra-source-overlap-v1
           path: .tmp/global-source-overlap/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Audit independent botanical U/D sources against real global nuclear inventory
+        run: |
+          python analysis/audit_global_nuclear_orientation_multisource_v2.py \
+            --outdir .tmp/global-multisource-v2
+          python -m unittest discover -s tests -p 'test_global_orientation_multisource_join_v2.py' -v
+      - name: Preserve multisource U/D source audit (NOT phylogeny)
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-u2d-moreyra-multisource-v2
+          path: .tmp/global-multisource-v2/
           if-no-files-found: error
           retention-days: 90
