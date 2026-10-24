@@ -279,20 +279,28 @@ def run(args):
         total += 1
         perm_scores.append({"iteration": total, "composite_median": statistic})
     p_value = extreme / total if exact else (extreme + 1) / (total + 1)
+    if getattr(args, "branch_length_unit", "substitutions_per_site") == "calibrated_Myr":
+        for topo in observed["per_tree"]:
+            qval = topo.pop("q_symmetric_per_substitution_length")
+            topo["q_symmetric_per_Myr_conditional_on_published_chronogram"] = qval
     summary = {
         "contract_version": "global_nuclear_orientation_transition_niche_v1",
         "status": "completed_present_niche_reconstruction_only",
         "claim_scope": "exploratory_global_candidate_until_nuclear_tree_and_worldwide_source_coverage_audited",
         "not_estimated": [
             "historical_climate_on_transition_branch", "transition_age", "causation",
-            "evolutionary_rate_per_Myr", "selection", "fitness", "adaptation",
+            *([] if getattr(args, "branch_length_unit", "substitutions_per_site") == "calibrated_Myr" else ["evolutionary_rate_per_Myr"]), "selection", "fitness", "adaptation",
             "multiple_hidden_CTMC_changes_along_an_edge"
         ],
         "model": {
             "discrete": "ER symmetric 2-state CTMC; equal 0.5 root prior; endpoint joint posterior, not stochastic-map event count",
             "continuous": "Brownian squared-change reconstruction of standardized present-day taxon niche centroids",
             "statistic": "sum[(P(parent U,child D)-P(parent D,child U))*delta(zBIO15-zBIO1)] / (sqrt(2)*sum endpoint discordance)",
-            "branch_length_unit": "input phylogram substitutions/site, not calendar time",
+            "branch_length_unit": (
+                "published calibrated chronogram; million years (Ma), conditional on source dating"
+                if getattr(args, "branch_length_unit", "substitutions_per_site") == "calibrated_Myr"
+                else "input phylogram substitutions/site, not calendar time"
+            ),
             "fixed_vector": {"bio15": 1, "bio1": -1},
         },
         "input_sha256": {"trees": digest(args.trees), "tip_table": digest(args.tip_table)},
@@ -335,6 +343,7 @@ def make_parser():
     parser.add_argument("--exact-limit", type=int, default=3000)
     parser.add_argument("--min-taxa", type=int, default=20)
     parser.add_argument("--seed", type=int, default=2317)
+    parser.add_argument("--branch-length-unit", choices=("substitutions_per_site", "calibrated_Myr"), default="substitutions_per_site")
     parser.add_argument("--outdir", type=Path, required=True)
     return parser
 
