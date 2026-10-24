@@ -159,6 +159,76 @@ analysis/audit_global_orientation_gbif_point_coverage_v1.py implements a **clima
 
 No native-versus-introduced range filtering, historical branch climate, CHELSA extraction or climate-associated inference is performed by this gate. Those stages remain blocked until accepted-taxonomy, source balance and global nuclear phylogeny are validated.
 
+## Executed global GBIF point-coverage snapshot
+
+The 35-taxon input list was frozen by the SHA256 fingerprint
+6ebc890a28c622509292ef6adaa528864504aae9383b694252bda7037696d4f1
+*before* the October 24 live GBIF query. The real query was executed
+successfully in GitHub Actions run 40095787620 (artifact 12560318301;
+sha256:800cca0bff1781ccacd0c53c62740a7d3ac10f730b6df49b0ca3b1795bdbb933).
+
+The source-only results are:
+
+| Criterion | Observed |
+| --- | ---: |
+| Source names submitted | 35 (U=24, D=11) |
+| Exact GBIF name matches | 33 |
+| Coordinate-bearing records fetched before cap | 9,592 |
+| Records with original scientificName matching source | 8,550 |
+| QC + exact-coordinate and 0.1-degree thinned source records | 1,011 |
+| >=5 distinct grid cells, including censored searches | 26 taxa (19 U, 7 D) |
+| >=5 grid cells with the source result completely enumerated | 16 taxa (11 U, 5 D) |
+| Searches truncated at first 500 records | 11 taxa |
+
+The frozen reproducibility receipts are:
+
+- data/evidence/global_orientation_35taxon_gbif_source_gate_receipt_20261024.json
+- analysis/audit_global_orientation_gbif_point_coverage_v1.py
+- tests/test_global_orientation_gbif_point_coverage_v1.py
+
+The GitHub Action retains the 35-taxon by-source QC CSV and 1,011
+source-exact coordinate cells as a time-limited archived artifact.
+The observed summary and per-taxon counts are also committed to the
+repository, so the result is not silently replaced by new GBIF records.
+
+**These are not native-range-filtered, taxon-balanced climate centroids.**
+Eleven queries are right-censored for occurrence retrieval, two taxon
+keys were not exact, and the available source records reflect observer
+effort, species prevalence, invasions and uneven geographic coverage.
+No new climate coefficient, climate response, or evolutionary result
+may be claimed from this coverage gate.
+
+## Prospective independent Western Palearctic extension (separate v2 cohort)
+
+A separate botanically source-backed extension was frozen **without
+editing the original 35 taxa or opening their new climate outcomes**:
+
+- *Cirsium erisithales*: nodding heads (**D**), World Flora Online
+  morphological account; Moreyra exact taxon label, but the nuclear
+  plant was documented from a botanical garden.
+- *C. oleraceum*: erect heads (**U**), Austrian Burgenland Flora;
+  Moreyra exact taxon name.
+- *C. eriophorum*: erect heads (**U**), Tofts (1999), *Journal of Ecology*;
+  molecular source's submitted scientific-name discrepancy requires
+  manual taxonomic review. The British morphological account also
+  cannot automatically validate the sequenced Spanish voucher.
+
+Source and executed validator:
+
+- data/evidence/global_west_palearctic_head_orientation_external_v2.csv
+- analysis/audit_global_west_palearctic_orientation_extension_v2.py
+- tests/test_global_west_palearctic_orientation_extension_v2.py
+- GitHub Actions run 40096368252 (success)
+
+Of three exact Moreyra tree-code matches, **two** pass the current
+source-name-review screen (one U, one D) and one remains held. These
+are *prospective independent external-source records*, not a
+posthoc change to the October 24 35-taxon GBIF cohort. If the
+additional two pass all subsequent orthology, taxonomy and sampling
+gates, the pre-climate name-clean evidence roster could expand
+to 37 taxon labels (25 U, 12 D); that is NOT yet an accepted inference
+cohort or a new historical transition.
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
