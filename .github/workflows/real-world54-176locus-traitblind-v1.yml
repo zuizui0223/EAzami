@@ -1,0 +1,158 @@
+name: Execute real world54 176-locus trait-blind geographic expansion
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_real_world54_176locus_traitblind_extension_v1.py"
+      - ".github/workflows/real-world54-176locus-traitblind-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  nine-public-moreyra-nuclear-read-assemblies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 85
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        run: [
+          SRR25265699, SRR25265707, SRR25265683,
+          SRR30887242, SRR25265555, SRR30887218,
+          SRR30887183, SRR25265705, SRR30887251
+        ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install original-source nuclear read mapper and biological reference programs
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq bwa samtools
+          python -m pip install --disable-pip-version-check biopython pysam
+      - name: Recover SHA-verified frozen 40-source-tip real 176-locus alignment and 174-mappable reference
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/J38
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 --dir .tmp/J38
+          python analysis/build_real_world54_176locus_traitblind_extension_v1.py prepare \
+            --j38-source-dir .tmp/J38 --outdir .tmp/realref
+          bwa index .tmp/realref/reference_174_saff_source_loci.fasta
+      - name: Recover original ENA checksum/size verification receipt (species selected before morphology)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/ENA
+          gh run download 40115716054 --repo zuizui0223/EAzami \
+            --name world54-nine-traitblind-SRA-ENA-source-QC-v1 --dir .tmp/ENA
+          test -s .tmp/ENA/world54-ENA-nine-original-sample-fastq.json
+      - name: Download actual paired NGS for one frozen traitblind sample, verify original FASTQ MD5
+        run: |
+          python analysis/build_real_world54_176locus_traitblind_extension_v1.py fetch \
+            --run ${{ matrix.run }} \
+            --ena-receipt .tmp/ENA/world54-ENA-nine-original-sample-fastq.json \
+            --outdir .tmp/FASTQ
+      - name: BWA map true source reads against exact unchanged source nuclear locus coordinates
+        run: |
+          set -euo pipefail
+          bwa mem -t 2 .tmp/realref/reference_174_saff_source_loci.fasta \
+            .tmp/FASTQ/R1.fastq.gz .tmp/FASTQ/R2.fastq.gz \
+            | samtools sort -@ 2 -m 600M -o .tmp/source_real_molecular.bam -
+          samtools index .tmp/source_real_molecular.bam
+          samtools flagstat .tmp/source_real_molecular.bam > .tmp/read_mapping_flagstat.txt
+          cat .tmp/read_mapping_flagstat.txt
+      - name: Call new source bases and mask all missing, mixed or low-quality calls (not parent template imputation)
+        run: |
+          python analysis/build_real_world54_176locus_traitblind_extension_v1.py consensus \
+            --j38-source-dir .tmp/J38 --bam .tmp/source_real_molecular.bam \
+            --run ${{ matrix.run }} \
+            --outdir .tmp/strict_real_new_sample/${{ matrix.run }}
+          cp .tmp/read_mapping_flagstat.txt .tmp/strict_real_new_sample/${{ matrix.run }}/
+          cp .tmp/FASTQ/frozen_source_read_MD5_QC.json .tmp/strict_real_new_sample/${{ matrix.run }}/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-world54-${{ matrix.run }}-176locus-traitblind-consensus-v1
+          path: .tmp/strict_real_new_sample/${{ matrix.run }}/
+          if-no-files-found: error
+          retention-days: 90
+
+  infer-real-world54-nuclear-species-phylogram:
+    runs-on: ubuntu-latest
+    timeout-minutes: 95
+    needs: nine-public-moreyra-nuclear-read-assemblies
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install validated empirical molecular phylogeny stack
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq iqtree
+          python -m pip install --disable-pip-version-check biopython
+      - name: Restore original 40 and independent completed 45 nuclear source matrices by source artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/J38 .tmp/real45
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 --dir .tmp/J38
+          gh run download 40107628828 --repo zuizui0223/EAzami \
+            --name real-crosscontinental-45tip-176Comp1061-nuclear-ML-phylogeny-v1 \
+            --dir .tmp/real45
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: real-world54-*-176locus-traitblind-consensus-v1
+          path: .tmp/newnine/
+      - name: Combine exact real 45-tip source alignment with 9 newly read-recovered source tips on original aligned 176 loci
+        run: |
+          python analysis/build_real_world54_176locus_traitblind_extension_v1.py combine \
+            --j38-source-dir .tmp/J38 \
+            --original45-dir .tmp/real45 \
+            --new-consensus-dirs .tmp/newnine/real-world54-*-176locus-traitblind-consensus-v1 \
+            --outdir .tmp/real54
+      - name: Infer a new unconstrained 54-tip real nuclear maximum likelihood tree, with 1000 source bootstraps
+        run: |
+          set -euo pipefail
+          iqtree2 \
+            -s .tmp/real54/real_world54_176Comp1061_traitblind_9added.fasta \
+            -m MFP -B 1000 --alrt 1000 -T 2 -seed 20261025 \
+            -o OUTGROUP_saff --prefix .tmp/real54/world54_176Comp1061_9blind_ML
+          test -s .tmp/real54/world54_176Comp1061_9blind_ML.treefile
+      - name: Verify real molecular tree is actual 54 tips, not synthetic graft or fake trait inference
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          from Bio import Phylo
+          d=Path('.tmp/real54')
+          receipt=json.loads((d/'source_nuclear54_alignment_QC.json').read_text())
+          assert receipt['n_original_tips']==45 and receipt['n_new_independent_BioSamples']==9
+          assert receipt['all_45_current_sequences_frozen'] is True
+          p=d/'world54_176Comp1061_9blind_ML.treefile'
+          tree=Phylo.read(p,'newick')
+          tips=[x.name for x in tree.get_terminals()]
+          assert len(tips)==len(set(tips))==54 and 'OUTGROUP_saff' in tips
+          assert receipt['loci_original']==176 and receipt['alignment_length_bp']==161654
+          receipt.update({'tree_newly_fit_on_54_real_nuclear_tips':True,
+              'result_newick_SHA256':hashlib.sha256(p.read_bytes()).hexdigest(),
+              'scope':'54 original-plus-traitblind nonindependent molecular samples, not 294-tip globally complete phylogenomic tree',
+              'historic_U_D_rate_or_pollinator_selection_established':False,
+              'original_source_phenotypes_used_in_inference':False})
+          (d/'real_54_nuclear_inference_receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print(json.dumps({'real_tip_count':54,'source_nuclear_loci':176,
+                            'new_region_balanced_nuclear_samples':9,
+                            'Newick_SHA256':receipt['result_newick_SHA256']},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-world54-176Comp1061-actual-Moreyra-NA-Europe-Asia-ML-v1
+          path: .tmp/real54/
+          if-no-files-found: error
+          retention-days: 90
