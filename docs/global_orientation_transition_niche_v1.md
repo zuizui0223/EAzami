@@ -306,6 +306,30 @@ The complete 350-locus Moreyra 2025 worldwide nuclear Newick is **still
 not available in EAzami**. Do not merge dated North American and undated
 Japanese/East-Asian trees by hand into a false worldwide molecular tree.
 
+### Branch-level caution: the five North American pendent taxa differ
+
+Named molecular-tip endpoint posterior diagnostics from the **executed**
+North American source tree are frozen in
+`data/evidence/independent_na_nuclear_five_D_edge_diagnostics_20261024.json`.
+The five original D-labelled terminal tips have high fitted
+`P(parent U, child D)` (0.965–1.000), but their **reconstructed
+present-day BIO15** branch deltas are **positive in three** taxa and
+**negative in two**. The corresponding BIO1 deltas are positive in two,
+negative in three. Consequently the net positive BIO15 composite is
+not an invariant rain-seasonality response at every D tip.
+
+Named-tip posterior probabilities are conditional *endpoint state*
+distributions under fitted ER Mk, **not proof that exactly five distinct
+historical U→D changes occurred on their terminal branches**. Fitch
+parsimony's four-step minimum is a different estimand.
+
+**S1 clarification:** Moreyra et al. (2025) Supplementary Table S1
+contains nuclear sample/voucher/BioSample provenance; it does **not**
+supply the nine categorical head/flower phenotypes. The full nine-trait
+dataset reused above is Siniscalchi et al. (2023)'s separate published
+`traits.csv` with its own R codebook. The two sources are never
+silently treated as one specimen phenotype table.
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
