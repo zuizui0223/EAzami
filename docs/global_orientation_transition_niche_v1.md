@@ -126,6 +126,39 @@ Any eventual global sign must be assessed against regional/phylogenetic
 sampling nulls and withheld-area sensitivity, and should be considered
 exploratory if the state support comes predominantly from East Asia.
 
+## Prioritized source read acquisition and geography (October 24, 2026)
+
+A reproducible reduced **read-acquisition** manifest now exists at:
+
+- analysis/build_global_orientation_nuclear_priority_intake_v1.py
+- tests/test_global_orientation_nuclear_priority_intake_v1.py
+
+Executed on the real 294-BioSample Moreyra+Chang panel, it retains 35 nuclear-source-name-clean U/D labels (24 U, 11 D), covering **46 molecular BioSamples**, and adds **48 taxon-distinct, trait-blind geographic anchor BioSamples** (12 each for four source-locality buckets). The **94-sample wave** retains the stable IDs used by the original full 294-panel builder: JOG0001..JOG0294 numbering is never reassigned by subsetting.
+
+The source-only analysis detects a critical geographic caveat:
+
+- 23 of the 35 source-name-clean U/D labels were assigned to East/Northeast Asia from the available source locality;
+- 4 were assigned to North America;
+- 8 retained **Other/unresolved** because the original country/locality text did not satisfy the strict geography parser;
+- zero clean labels were classified as West Palearctic by the recorded locality parser.
+
+The 48 trait-blind anchor specimens broaden *molecular placement coverage* but do not provide U/D phenotypes. They cannot repair the state-replication gap in Western Palearctic taxa or establish global generality. The East-Asian discovery sample remains the dominant region and is **not** an independent worldwide replication. Unresolved geography is not evidence that specimens are biologically outside East Asia.
+
+The workflow persists:
+
+- full 294-JOG-ID BioSample lookup with accession/run provenance;
+- 94-BioSample priority-wave TSV for staged read acquisition;
+- explicitly **unresolved** 294-tip future trait/climate join skeleton;
+- SHA256 fingerprint over 35 taxon-name/U-D source pairs fixed **before opening climate**.
+
+**No FASTQ was downloaded by the pilot builder and no tree was inferred.** This prioritized manifest can feed the existing HPC pipeline when compute/storage capacity is provisioned. Any reduced-tree screen must be rooted, locus-QC'd and checked for missing geographic lineage context; a 94-tip topology cannot be treated as the published 294-tip global nuclear tree.
+
+## Independent global GBIF point-coverage gate
+
+analysis/audit_global_orientation_gbif_point_coverage_v1.py implements a **climate-blind**, source-exact GBIF occurrence preflight for the 35-label frozen cohort. The script checks GBIF name matches and source scientificName identity, coordinate accuracy <=10 km, invalid geospatial issue flags, duplicate exact coordinates, and 0.1-degree spatial thinning. It labels incompletely paginated requests as censored. The first 500 records per taxon provide bounded **coverage information**, not necessarily full realized niches. Retained points preserve GBIF occurrence IDs, dataset IDs and license fields.
+
+No native-versus-introduced range filtering, historical branch climate, CHELSA extraction or climate-associated inference is performed by this gate. Those stages remain blocked until accepted-taxonomy, source balance and global nuclear phylogeny are validated.
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
