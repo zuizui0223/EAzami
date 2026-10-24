@@ -1,0 +1,61 @@
+name: Audit world U-to-D GBIF point support v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_global_orientation_gbif_point_coverage_v1.py"
+      - "tests/test_global_orientation_gbif_point_coverage_v1.py"
+      - "analysis/build_global_orientation_nuclear_priority_intake_v1.py"
+      - "data/evidence/global_fna_head_orientation_evidence_v1.csv"
+      - ".github/workflows/audit-global-orientation-gbif-point-coverage-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  climate-blind-world-coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check source-only code without opening ecology
+        run: |
+          python -m py_compile \
+            analysis/audit_global_orientation_gbif_point_coverage_v1.py \
+            analysis/build_global_orientation_nuclear_priority_intake_v1.py \
+            tests/test_global_orientation_gbif_point_coverage_v1.py
+          python -m unittest discover -s tests -p 'test_global_orientation_gbif_point_coverage_v1.py' -v
+      - name: Query source-exact GBIF public occurrences for frozen 35 taxa
+        run: |
+          python analysis/audit_global_orientation_gbif_point_coverage_v1.py \
+            --max-records-per-taxon 500 \
+            --outdir .tmp/world-u2d-gbif-points-v1
+      - name: Verify 35-taxon source coverage and prevent climate overclaim
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path('.tmp/world-u2d-gbif-points-v1')
+          a=json.loads((root/'result.json').read_text(encoding='utf-8'))
+          with (root/'gbif_source_match_and_qc_by_taxon.csv').open(encoding='utf-8') as h:
+              rows=list(csv.DictReader(h))
+          assert a['n_taxa_requested']==35 and len(rows)==35
+          assert a['source_state_counts']=={'U':24,'D':11}
+          assert len(a['cohort_name_state_sha256'])==64
+          assert a['native_range_qc_complete'] is False
+          assert a['bio15_bio1_extracted'] is False
+          assert a['world_nuclear_tree_estimated'] is False
+          assert a['transition_climate_test_executed'] is False
+          print('REAL WORLDWIDE POINT COVERAGE ONLY; NOT PHYLOGENY NOR CLIMATE:', a['n_geocell_min5_taxa'])
+          PY
+      - name: Archive reproducible GBIF snapshot (with attribution/provenance)
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-u2d-35taxon-source-exact-gbif-coverage-v1
+          path: .tmp/world-u2d-gbif-points-v1/
+          if-no-files-found: error
+          retention-days: 90
