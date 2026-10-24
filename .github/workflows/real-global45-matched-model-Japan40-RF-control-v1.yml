@@ -1,9 +1,7 @@
 name: Matched-IQTREE version and model RF control for world45 versus source Japan38
 
 on:
-  pull_request:
-    paths:
-      - ".github/workflows/real-global45-matched-model-Japan40-RF-control-v1.yml"
+  # 2026-10-25 completed real source artefacts are immutable. Explicit reruns only.
   workflow_dispatch:
 
 permissions:
