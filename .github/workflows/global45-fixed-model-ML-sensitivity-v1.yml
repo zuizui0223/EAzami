@@ -1,9 +1,7 @@
 name: Infer fast fixed-model real 45-tip 176-locus crosscontinent tree sensitivity
 
 on:
-  pull_request:
-    paths:
-      - ".github/workflows/global45-fixed-model-ML-sensitivity-v1.yml"
+  # 2026-10-25 completed real source artefacts are immutable. Explicit reruns only.
   workflow_dispatch:
 
 permissions:
