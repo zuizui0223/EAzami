@@ -1,0 +1,65 @@
+name: Infer real cross-continental Cirsium nuclear ITS ETS tree v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_slotta2012_nuclear_ITS_ETS_source_vouchers_v1.py"
+      - "analysis/recover_slotta2012_crosscontinent_nuclear_ITS_ETS_v1.py"
+      - "analysis/infer_slotta2012_crosscontinent_nuclear_ITS_ETS_ML_v1.py"
+      - ".github/workflows/infer-real-crosscontinent-cirsium-its-ets-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  infer-new-real-nuclear-ML:
+    runs-on: ubuntu-latest
+    timeout-minutes: 43
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install published nuclear phylogeny inference tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq mafft iqtree
+          python -m pip install --disable-pip-version-check biopython
+          command -v mafft
+          command -v iqtree2 || command -v iqtree3 || command -v iqtree
+      - name: Verify originally published same-specimen ITS and ETS accessions and retrieve original FASTA
+        run: |
+          python analysis/recover_slotta2012_crosscontinent_nuclear_ITS_ETS_v1.py \
+            --outdir .tmp/real-global-nuclear/sequence_source
+      - name: Independently align ITS and ETS and infer new phylogenetic tree from nucleotides
+        run: |
+          python analysis/infer_slotta2012_crosscontinent_nuclear_ITS_ETS_ML_v1.py \
+            --sequence-dir .tmp/real-global-nuclear/sequence_source \
+            --outdir .tmp/real-global-nuclear/phylogeny \
+            --threads 2 \
+            --bootstrap 1000
+      - name: Verify nuclear tree and no false global high-dimensional claim
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path(".tmp/real-global-nuclear")
+          source=json.loads((root/"sequence_source/source_sequence_audit.json").read_text())
+          tree=json.loads((root/"phylogeny/nuclear_phylogram_receipt.json").read_text())
+          assert source["admitted_specimen_tips"] >= 35
+          assert tree["n_phylogram_tips"] == source["admitted_specimen_tips"]
+          assert tree["alignment_total_bp"] > 600
+          assert tree["published_Moreyra_final_350_locus_world_nuclear_tree"] is False
+          assert tree["this_is_full_294_tip_Cirsium_tree"] is False
+          assert tree["branch_lengths_in_substitutions_per_site"] is True
+          assert tree["rooted_tree_in_absolute_time_Ma"] is False
+          print("NEW EMPIRICAL TRANS-CONTINENTAL ITS/ETS NUCLEAR TREE",tree["n_phylogram_tips"],tree["alignment_total_bp"])
+          PY
+      - name: Preserve original sequences, paired-voucher QC, alignments and new inferred tree
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-crosscontinental-cirsium-nuclear-ITS-ETS-specimen-tree-v1
+          path: .tmp/real-global-nuclear/
+          retention-days: 90
+          if-no-files-found: error
