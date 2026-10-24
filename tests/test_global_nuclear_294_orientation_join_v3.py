@@ -23,6 +23,11 @@ class Nuclear294HeadOrientationJoinTest(unittest.TestCase):
         self.assertEqual(r["n_public_run_accessions"], 295)
         self.assertEqual(r["n_source_taxon_labels"], 270)
         self.assertEqual(r["builder_contract"]["Chang_cross_paper_shared_samples"], 8)
+        self.assertEqual(r["candidate_distinct_taxon_states"], {"U":29,"D":13})
+        self.assertEqual(r["candidate_distinct_taxon_states_without_any_source_name_review"], {"U":24,"D":11})
+        self.assertEqual(r["candidate_sample_states"], {"U":40,"D":21})
+        self.assertEqual(r["candidate_sample_states_without_source_name_review"], {"U":30,"D":16})
+        self.assertEqual(r["candidate_sample_inference_gates"]["hold_source_taxon_name_conflict"], 15)
         self.assertEqual(len({r["biosample"] for r in self.samples}), 294)
         self.assertEqual(len({r["panel_id"] for r in self.samples}), 294)
 
