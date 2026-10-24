@@ -107,7 +107,7 @@ def read_tree_ensemble(path: Path, expected_tips: set[str], outgroup: str, keep:
         if set(names) != expected_tips | {outgroup}:
             raise ValueError(
                 "tree/metadata mismatch at tree " + str(i) +
-                ": missing " + repr(sorted(expected_tips | {outgroup} - set(names))[:8]) +
+                ": missing " + repr(sorted((expected_tips | {outgroup}) - set(names))[:8]) +
                 ", extra " + repr(sorted(set(names) - expected_tips - {outgroup})[:8])
             )
         if tree.count_terminals() < 5:
@@ -135,10 +135,8 @@ def read_tree_ensemble(path: Path, expected_tips: set[str], outgroup: str, keep:
     return trees
 
 
-def branch_statistics(tree, states, climate15, climate1, index):
+def branch_statistics(tree, states, d15, d1, index):
     nodes, children, parents, root, tips, post, pre = tree_structure(tree)
-    _, d15 = brownian_internal_values(tree, climate15)
-    _, d1 = brownian_internal_values(tree, climate1)
     q = fit_symmetric_q(tree, states)
     likelihood, joints = ctmc_likelihood_and_edge_joint(tree, states, q, need_joint=True)
     if joints is None:
@@ -184,10 +182,10 @@ def branch_statistics(tree, states, climate15, climate1, index):
     }, rows
 
 
-def summarise(assets, states, climate15, climate1, keep_edges=False):
+def summarise(precomputed, states, keep_edges=False):
     scores, edges = [], []
-    for i, tree in enumerate(assets, 1):
-        item, erows = branch_statistics(tree, states, climate15, climate1, i)
+    for i, (tree, d15, d1) in enumerate(precomputed, 1):
+        item, erows = branch_statistics(tree, states, d15, d1, i)
         scores.append(item)
         if keep_edges:
             edges.extend(erows)
@@ -249,7 +247,14 @@ def run(args):
     vals1 = zscore([float(r["bio1"]) for r in included])
     climate15 = {r["tip_id"]: float(v) for r, v in zip(included, vals15)}
     climate1 = {r["tip_id"]: float(v) for r, v in zip(included, vals1)}
-    observed, edges = summarise(trees, states, climate15, climate1, keep_edges=True)
+    # Brownian internal-node inference is expensive for ~300 global taxa;
+    # fix it ONCE per topology and reuse edge deltas across all null maps.
+    precomputed = []
+    for tree in trees:
+        _, d15 = brownian_internal_values(tree, climate15)
+        _, d1 = brownian_internal_values(tree, climate1)
+        precomputed.append((tree, d15, d1))
+    observed, edges = summarise(precomputed, states, keep_edges=True)
     groups = permutation_groups(included, args.permutation_strata)
     possible = unique_map_count(states, groups)
     if possible < 2:
@@ -268,7 +273,7 @@ def run(args):
     extreme = 0
     total = 0
     for mapping in maps:
-        score, _ = summarise(trees, mapping, climate15, climate1)
+        score, _ = summarise(precomputed, mapping)
         statistic = score["median_composite"]
         extreme += statistic >= observed["median_composite"] - 1e-12
         total += 1
