@@ -8,13 +8,18 @@ import math
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "analysis"))
 
+import run_global_nuclear_orientation_transition_niche_v1 as runner  # noqa: E402
 from run_global_nuclear_orientation_transition_niche_v1 import (  # noqa: E402
     FIELDS, load_tip_table, read_tree_ensemble, run,
+)
+from run_chapter2_orientation_transition_regime_hypothesis_v1 import (  # noqa: E402
+    branchwise_stats, brownian_internal_values,
 )
 
 TREE1 = "(((A:0.2,B:0.2):0.2,(C:0.15,D:0.15):0.25):0.3,(E:0.2,F:0.2):0.5,OUT:0.4);"
@@ -125,6 +130,30 @@ class GlobalOrientationWorkflowTest(unittest.TestCase):
         self.put_rows(rows)
         with self.assertRaisesRegex(ValueError, "orientation_state must be"):
             run(self.args())
+
+    def test_reproduces_frozen_east_asian_branchwise_formula(self):
+        from run_global_nuclear_orientation_transition_niche_v1 import zscore
+        rows = sample_rows()
+        states = {r["tip_id"]: int(r["orientation_state"] == "D") for r in rows}
+        vals15 = zscore([float(r["bio15"]) for r in rows])
+        vals1 = zscore([float(r["bio1"]) for r in rows])
+        climate15 = {r["tip_id"]: float(v) for r, v in zip(rows, vals15)}
+        climate1 = {r["tip_id"]: float(v) for r, v in zip(rows, vals1)}
+        trees = read_tree_ensemble(self.trees, {r["tip_id"] for r in rows}, "OUT", set(states))
+        for i, tree in enumerate(trees, 1):
+            _, d15 = brownian_internal_values(tree, climate15)
+            _, d1 = brownian_internal_values(tree, climate1)
+            original = branchwise_stats(tree, states, d15, d1)
+            current, _ = runner.branch_statistics(tree, states, d15, d1, i)
+            for key in ("q", "bio15", "bio1", "composite"):
+                new_key = "q_symmetric_per_substitution_length" if key == "q" else key
+                self.assertAlmostEqual(original[key], current[new_key], places=10)
+
+    def test_climate_is_reconstructed_once_per_tree_not_once_per_null_map(self):
+        with patch.object(runner, "brownian_internal_values", wraps=brownian_internal_values) as mocked:
+            result = run(self.args(outdir="out_cached"))
+            self.assertEqual(result["null"]["draws"], 9)
+            self.assertEqual(mocked.call_count, 4)
 
     def test_brownian_unit_is_not_palaeo_exposure(self):
         result = run(self.args())
