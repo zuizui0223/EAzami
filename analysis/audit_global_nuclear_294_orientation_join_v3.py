@@ -122,6 +122,10 @@ def rebuild_panel_and_join(root: Path = ROOT):
             ),
         })
 
+    strict_samples = [x for x in sample_rows if x["inference_gate"] == "exact_name_U_D_candidate_not_same_voucher"]
+    strict_taxa = [x for x in taxon_rows if x["orientation_state_candidate"] and x["source_label_taxonomic_review_hold"] == "false"]
+    strict_sample_state = Counter(x["orientation_state_candidate"] for x in strict_samples)
+    strict_taxon_state = Counter(x["orientation_state_candidate"] for x in strict_taxa)
     sample_state = Counter(x["orientation_state_candidate"] for x in sample_rows)
     taxon_state = Counter(x["orientation_state_candidate"] for x in taxon_rows)
     inference = Counter(x["inference_gate"] for x in sample_rows)
@@ -136,6 +140,8 @@ def rebuild_panel_and_join(root: Path = ROOT):
         "n_source_taxon_labels": len(taxon_rows),
         "n_duplicated_taxon_labels": sum(x["n_biosamples"] > 1 for x in taxon_rows),
         "candidate_sample_states": {"U": sample_state.get("U", 0), "D": sample_state.get("D", 0)},
+        "candidate_sample_states_without_source_name_review": {"U": strict_sample_state.get("U", 0), "D": strict_sample_state.get("D", 0)},
+        "candidate_distinct_taxon_states_without_any_source_name_review": {"U": strict_taxon_state.get("U", 0), "D": strict_taxon_state.get("D", 0)},
         "candidate_distinct_taxon_states": {"U": taxon_state.get("U", 0), "D": taxon_state.get("D", 0)},
         "candidate_sample_inference_gates": dict(sorted(inference.items())),
         "name_review_required_candidate_samples": sum(
@@ -180,6 +186,8 @@ def main():
         "n_biosamples":summary["n_biosamples"],
         "n_source_taxon_labels":summary["n_source_taxon_labels"],
         "candidate_sample_states":summary["candidate_sample_states"],
+        "candidate_sample_states_without_source_name_review":summary["candidate_sample_states_without_source_name_review"],
+        "candidate_distinct_taxon_states_without_any_source_name_review":summary["candidate_distinct_taxon_states_without_any_source_name_review"],
         "candidate_distinct_taxon_states":summary["candidate_distinct_taxon_states"],
         "candidate_sample_inference_gates":summary["candidate_sample_inference_gates"],
         "global_nuclear_tree_executed":summary["global_nuclear_tree_executed"],
