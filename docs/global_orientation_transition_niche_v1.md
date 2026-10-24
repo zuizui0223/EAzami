@@ -58,6 +58,74 @@ python analysis/audit_global_nuclear_orientation_source_overlap_v1.py \
 ~~~
 
 
+
+## Frozen cross-study source-join progression (2026-10-24)
+
+These are real molecular-source ↔ independently documented botanical-state
+**coverage counts**, not CTMC reconstructions or statistically independent
+biological replicate counts:
+
+| Audit | Source molecular units | Exact evidence-name matches | Candidate U/D | Source-name holds |
+| --- | ---: | ---: | ---: | ---: |
+| Initial 20-tip East Asian source crosswalk | 256 Moreyra labels | 7 | 5 (3 U, 2 D) | Not separated |
+| Multi-Flora world source census | 256 Moreyra labels | 41 | 30 (23 U, 7 D) | Not all resolved |
+| Unified Moreyra+Chang public nuclear panel | 294 BioSamples, 270 source taxon labels | Taxon-specific from six-plus-one frozen tables | 42 labels (29 U, 13 D), covering 61 samples | 15 sample name-review holds |
+| Unified panel, names not flagged by molecular source audit | 294 original BioSamples retained | Same exact source evidence | **35 labels** (24 U, 11 D), covering **46 samples** (30 U, 16 D) | 0 among this subset |
+
+Scripts and reproducible source files:
+
+- analysis/audit_global_nuclear_orientation_multisource_v2.py
+- analysis/audit_global_nuclear_294_orientation_join_v3.py
+- data/evidence/global_fna_head_orientation_evidence_v1.csv
+- tests/test_global_orientation_multisource_join_v2.py
+- tests/test_global_nuclear_294_orientation_join_v3.py
+
+The North American Flora of North America source extension is explicit about
+the flowering heads: *Cirsium vinaceum* has nodding heads; *C. ownbeyi*,
+*C. flodmanii*, and *C. longistylum* have erect heads. *C. eatonii*
+and *C. joannae* explicitly include **erect or nodding** heads and remain
+ambiguous. The wording of stems or phyllary spines is never substituted for
+head orientation. The exact FNA treatment URLs and short source clauses are
+in the six-row evidence CSV. These records improve geographic coverage;
+they do not establish worldwide representativeness.
+
+The 294-BioSample manifest comes from the existing validated
+build_japan_origin_global_public_panel_v2.py and preserves all
+**eight cross-paper reused Chang BioSamples as single samples**.
+Source-identified multiple BioSamples for the same botanical label
+must not be counted as independent evolutionary origins. Nuclear-tree tips
+and accepted taxon concepts remain different scientific units; no
+one-to-one phylogenetic phenotype matching is claimed simply from
+taxon-name agreement.
+
+After name-review filtering, **35** botanical taxon label candidates remain;
+they still require accepted-taxonomy decisions, independent U/D
+trait-state validation, environmental occurrence provenance, source-sampling
+balance and an independent branch-length-bearing global nuclear tree.
+All 294 molecular records retain explicit provenance and exclusion status,
+including the 15 name-review sample holds. Source name-review "false"
+does **not** mean same-voucher phenotype or validated accepted taxonomy.
+
+### Verified CI receipts
+
+- Source join to 256 Moreyra labels: GitHub Actions run 40086814643 (success).
+- Global 294-BioSample deduplicated source join: GitHub Actions runs
+  40087087446 and 40087285065 (success).
+- Result artifacts include a 294-row per-BioSample CSV, 270-row
+  per-label CSV and JSON count/limitation receipts. These are
+  **candidate metadata only**.
+
+### Next empirical gate
+
+The primary blocker has moved from "no machine-readable phenotypes at all"
+to the **global nuclear-tree input** and independent, geographically
+representative **nuclear tip ↔ accepted taxon ↔ U/D ↔ BIO15/BIO1** join.
+In particular, no source here licenses grafting a synthetic global nuclear
+tree or extrapolating the East-Asian CTMC statistic to worldwide lineages.
+Any eventual global sign must be assessed against regional/phylogenetic
+sampling nulls and withheld-area sensitivity, and should be considered
+exploratory if the state support comes predominantly from East Asia.
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
