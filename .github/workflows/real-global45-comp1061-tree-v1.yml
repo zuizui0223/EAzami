@@ -1,0 +1,138 @@
+name: Real crosscontinent Cirsium 45-tip 176-nuclear-locus ML
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_real_global45_comp1061_frozenJ38_bridge_v1.py"
+      - "analysis/fetch_ena_global45_one_run_v1.py"
+      - ".github/workflows/real-global45-comp1061-tree-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-five-public-srr-consensus:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        run: [SRR30887231, SRR30887180, SRR30887153, SRR30887186, SRR30887156]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install real FASTQ aligner and source-voucher consensus packages
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq bwa samtools
+          python -m pip install --disable-pip-version-check biopython pysam
+      - name: Recover original frozen published 176-locus Japan38 source matrix
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/j38
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 --dir .tmp/j38
+          python analysis/build_real_global45_comp1061_frozenJ38_bridge_v1.py prepare \
+            --j38-source-dir .tmp/j38 --outdir .tmp/source_ref
+          bwa index .tmp/source_ref/reference_176_saff_Comp1061.fasta
+      - name: Fetch exact frozen source public paired NGS reads and check both original MD5s
+        run: |
+          python analysis/fetch_ena_global45_one_run_v1.py \
+            --run ${{ matrix.run }} --outdir .tmp/raw
+      - name: Map actual nuclear paired reads to 176 independently reconstructed locus reference
+        run: |
+          set -euo pipefail
+          bwa mem -t 2 .tmp/source_ref/reference_176_saff_Comp1061.fasta \
+            .tmp/raw/R1.fastq.gz .tmp/raw/R2.fastq.gz \
+            | samtools sort -@ 2 -m 600M -o .tmp/real.bam -
+          samtools index .tmp/real.bam
+          samtools flagstat .tmp/real.bam > .tmp/mapping_flagstat.txt
+          cat .tmp/mapping_flagstat.txt
+      - name: Mask every uncovered nuclear site; retain only independently recovered source bases
+        run: |
+          python analysis/build_real_global45_comp1061_frozenJ38_bridge_v1.py consensus \
+            --j38-source-dir .tmp/j38 --bam .tmp/real.bam \
+            --run ${{ matrix.run }} --outdir .tmp/recovered/${{ matrix.run }}
+          cp .tmp/mapping_flagstat.txt .tmp/recovered/${{ matrix.run }}/
+          cp .tmp/raw/fastq_source_verification.json .tmp/recovered/${{ matrix.run }}/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-global45-${{ matrix.run }}-176locus-consensus-v1
+          path: .tmp/recovered/${{ matrix.run }}/
+          retention-days: 90
+          if-no-files-found: error
+
+  real-45tip-multilocus-ML:
+    needs: real-five-public-srr-consensus
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install empirical nuclear tree software
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq iqtree
+          python -m pip install --disable-pip-version-check biopython
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: real-global45-*-176locus-consensus-v1
+          path: .tmp/added
+      - name: Recover original frozen Japan38 source matrix by independently verified SHA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/j38
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 --dir .tmp/j38
+      - name: Combine real 40 original and 5 added Compositae1061 sample loci
+        run: |
+          python analysis/build_real_global45_comp1061_frozenJ38_bridge_v1.py combine \
+            --j38-source-dir .tmp/j38 \
+            --new-tip-dirs .tmp/added/real-global45-*-176locus-consensus-v1 \
+            --outdir .tmp/results
+      - name: Newly fit full 45-tip real nuclear ML phylogeny rather than grafting regional trees
+        run: |
+          set -euo pipefail
+          EXE=$(command -v iqtree2 || command -v iqtree3 || command -v iqtree)
+          "$EXE" -s .tmp/results/global45_original40_plus5real_Comp1061_176loci.fasta \
+            -m MFP -B 1000 --alrt 1000 -T 2 -seed 20261024 \
+            -o OUTGROUP_saff --prefix .tmp/results/world45_176loci_ML
+          test -s .tmp/results/world45_176loci_ML.treefile
+      - name: Verify actual inferred tree has 45 unique source tips, 176 real nuclear loci
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          from Bio import Phylo
+          d=Path('.tmp/results')
+          j=json.loads((d/'aligned_source_Acceptance.json').read_text())
+          tree=d/'world45_176loci_ML.treefile'
+          t=Phylo.read(tree,'newick')
+          names=[tip.name for tip in t.get_terminals()]
+          assert len(names)==len(set(names))==45
+          assert set(j['all_new_sample_tips'])<=set(names)
+          assert j['original_matrix_unchanged'] and j['nuclear_loci']==176
+          j['nuclear_ML_tree_inferred']=True
+          j['nuclear_ML_tree_sha256']=hashlib.sha256(tree.read_bytes()).hexdigest()
+          j['publication_status']='provisional_real_crosscontinent_176locus_reference_projected_ML'
+          j['palaeoclimate_or_294_tip_claim_allowed']=False
+          (d/'verified_empirical_world45_176loci_result.json').write_text(json.dumps(j,indent=2)+'\n')
+          print(json.dumps({'n_phylogeny_tips':45,'nuclear_loci':176,
+                            'new_moreyra_source_samples':len(j['all_new_sample_tips']),
+                            'tree_sha256':j['nuclear_ML_tree_sha256']},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-crosscontinental-45tip-176Comp1061-nuclear-ML-phylogeny-v1
+          path: .tmp/results/
+          retention-days: 90
+          if-no-files-found: error
