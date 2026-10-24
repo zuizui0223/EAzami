@@ -438,6 +438,44 @@ def plot(results, output_dir):
     fig.savefig(output_dir/"world45_real_nuclear_U_D_Mk_model_and_root_sensitivity.png",dpi=190,bbox_inches="tight")
     plt.close(fig)
 
+    # All leave-one-regional-D-out results must be shown, not only the primary
+    # model that appears to favor asymmetric rates on every molecular tree.
+    panels = [
+        ("all_source_states", "All observed U/D states"),
+        ("omit_West_Palearctic_cultivated_D", "West-Palearctic D set unknown"),
+        ("omit_North_American_D", "North-American D set unknown"),
+    ]
+    fig, ax = plt.subplots(figsize=(9.2, 4.4))
+    colors = {"ModelFinder_TIM3_F_R3": "#457F9A",
+              "Fixed_GTR_F_G4": "#A67349",
+              "FastTree_GTR_gamma": "#74927B"}
+    offsets = {"ModelFinder_TIM3_F_R3": -.18,
+               "Fixed_GTR_F_G4": 0.,
+               "FastTree_GTR_gamma": .18}
+    for j, (panel, label) in enumerate(panels):
+        for source_name in colors:
+            item = next(x for x in results if x["trait_panel"] == panel
+                        and x["molecular_topology"] == source_name and x["Mk_model"] == "ER")
+            value = float(item["delta_AICc_ARD_minus_ER"])
+            ax.plot(value, j+offsets[source_name], "o", ms=8,
+                    color=colors[source_name],
+                    label=source_name.replace("_"," ") if j==0 else None)
+    ax.axvline(0,color="#394C59",lw=1.1,linestyle="--")
+    ax.set_yticks(range(3),[s[1] for s in panels])
+    ax.set_ylim(2.55,-.45)
+    ax.set_xlim(-3.6,2.5)
+    ax.set_xlabel("ARD AICc minus ER AICc    ← ARD favored    |    ER favored →")
+    ax.set_title("Single regional D taxon determines apparent asymmetric Mk preference",
+                 loc="left", fontsize=10)
+    ax.grid(axis="x",color="#B0B7BF",alpha=.2)
+    ax.legend(frameon=False,loc="lower left",fontsize=8)
+    for spine in ("top","right"):
+        ax.spines[spine].set_visible(False)
+    fig.tight_layout()
+    fig.savefig(output_dir/"world45_real_nuclear_ARD_vs_ER_holdout_falsification.png",
+                dpi=200,bbox_inches="tight")
+    plt.close(fig)
+
 
 def main():
     p=argparse.ArgumentParser()
