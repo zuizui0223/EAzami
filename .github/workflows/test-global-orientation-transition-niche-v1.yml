@@ -7,6 +7,8 @@ on:
       - "analysis/audit_global_nuclear_orientation_source_overlap_v1.py"
       - "analysis/audit_global_nuclear_orientation_multisource_v2.py"
       - "analysis/audit_global_nuclear_294_orientation_join_v3.py"
+      - "analysis/build_global_orientation_nuclear_priority_intake_v1.py"
+      - "tests/test_global_orientation_nuclear_priority_intake_v1.py"
       - "tests/test_global_nuclear_294_orientation_join_v3.py"
       - "data/evidence/global_fna_head_orientation_evidence_v1.csv"
       - "tests/test_global_orientation_multisource_join_v2.py"
@@ -40,6 +42,8 @@ jobs:
             analysis/audit_global_nuclear_orientation_source_overlap_v1.py \
             analysis/audit_global_nuclear_orientation_multisource_v2.py \
             analysis/audit_global_nuclear_294_orientation_join_v3.py \
+            analysis/build_global_orientation_nuclear_priority_intake_v1.py \
+            tests/test_global_orientation_nuclear_priority_intake_v1.py \
             tests/test_global_nuclear_294_orientation_join_v3.py \
             tests/test_global_orientation_multisource_join_v2.py \
             tests/test_global_orientation_transition_niche_v1.py
@@ -103,5 +107,17 @@ jobs:
         with:
           name: global-nuclear-294-head-orientation-source-join-v3
           path: .tmp/global-nuclear-294-v3/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Build real reduced nuclear intake wave and globally stable JOG IDs
+        run: |
+          python analysis/build_global_orientation_nuclear_priority_intake_v1.py \
+            --outdir .tmp/global-orientation-priority-intake-v1
+          python -m unittest discover -s tests -p 'test_global_orientation_nuclear_priority_intake_v1.py' -v
+      - name: Preserve read-intake manifest (not an inferred nuclear tree)
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-orientation-35-source-taxa-priority-intake-v1
+          path: .tmp/global-orientation-priority-intake-v1/
           if-no-files-found: error
           retention-days: 90
