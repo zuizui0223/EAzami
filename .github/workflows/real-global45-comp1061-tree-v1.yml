@@ -1,11 +1,9 @@
 name: Real crosscontinent Cirsium 45-tip 176-nuclear-locus ML
 
 on:
-  pull_request:
-    paths:
-      - "analysis/build_real_global45_comp1061_frozenJ38_bridge_v1.py"
-      - "analysis/fetch_ena_global45_one_run_v1.py"
-      - ".github/workflows/real-global45-comp1061-tree-v1.yml"
+  # The frozen five real public FASTQ sources, BWA consensus and 45-tip ML tree
+  # were successfully executed in run 40106147801 on 2026-10-24.
+  # Avoid refetching 2.80GB NGS reads on every unrelated PR documentation edit.
   workflow_dispatch:
 
 permissions:
