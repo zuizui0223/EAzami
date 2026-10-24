@@ -1,0 +1,46 @@
+name: Render real 63-tip North American nuclear nine-trait tree
+
+on:
+  pull_request:
+    paths:
+      - "analysis/render_siniscalchi_2023_nine_traits_v1.py"
+      - "tests/test_siniscalchi_2023_nine_traits_v1.py"
+      - "analysis/run_siniscalchi_2023_real_nuclear_traits_v1.py"
+      - ".github/workflows/render-siniscalchi-2023-nine-trait-tree-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-verified-nine-character-map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install tree and figure runtime
+        run: |
+          python -m pip install --disable-pip-version-check numpy biopython matplotlib
+      - name: Pin real nuclear tree and all published morphological source rows
+        run: |
+          python analysis/run_siniscalchi_2023_real_nuclear_traits_v1.py \
+            --asset-dir .tmp/north-america-nine-authsource \
+            --outdir .tmp/north-america-nine-source \
+            --skip-figure
+      - name: Render and verify all nine original morphological trait axes
+        run: |
+          python -m py_compile analysis/render_siniscalchi_2023_nine_traits_v1.py
+          python analysis/render_siniscalchi_2023_nine_traits_v1.py \
+            --source-dir .tmp/north-america-nine-source \
+            --outdir .tmp/north-america-nine-figure
+          python -m unittest discover -s tests -p 'test_siniscalchi_2023_nine_traits_v1.py' -v
+      - name: Retain actual nine-trait nuclear phylogram, source legend and counts
+        uses: actions/upload-artifact@v4
+        with:
+          name: siniscalchi-2023-north-america-63-tip-all-nine-nuclear-trait-map-v1
+          path: .tmp/north-america-nine-figure/
+          if-no-files-found: error
+          retention-days: 90
