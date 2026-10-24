@@ -8,6 +8,9 @@ on:
       - "analysis/audit_global_nuclear_orientation_multisource_v2.py"
       - "analysis/audit_global_nuclear_294_orientation_join_v3.py"
       - "analysis/build_global_orientation_nuclear_priority_intake_v1.py"
+      - "analysis/audit_global_west_palearctic_orientation_extension_v2.py"
+      - "data/evidence/global_west_palearctic_head_orientation_external_v2.csv"
+      - "tests/test_global_west_palearctic_orientation_extension_v2.py"
       - "tests/test_global_orientation_nuclear_priority_intake_v1.py"
       - "tests/test_global_nuclear_294_orientation_join_v3.py"
       - "data/evidence/global_fna_head_orientation_evidence_v1.csv"
@@ -43,6 +46,8 @@ jobs:
             analysis/audit_global_nuclear_orientation_multisource_v2.py \
             analysis/audit_global_nuclear_294_orientation_join_v3.py \
             analysis/build_global_orientation_nuclear_priority_intake_v1.py \
+            analysis/audit_global_west_palearctic_orientation_extension_v2.py \
+            tests/test_global_west_palearctic_orientation_extension_v2.py \
             tests/test_global_orientation_nuclear_priority_intake_v1.py \
             tests/test_global_nuclear_294_orientation_join_v3.py \
             tests/test_global_orientation_multisource_join_v2.py \
@@ -119,5 +124,17 @@ jobs:
         with:
           name: global-orientation-35-source-taxa-priority-intake-v1
           path: .tmp/global-orientation-priority-intake-v1/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Audit prospective Western Palearctic U/D sources (outside frozen 35)
+        run: |
+          python analysis/audit_global_west_palearctic_orientation_extension_v2.py \
+            --outdir .tmp/global-west-palearctic-orientation-v2
+          python -m unittest discover -s tests -p 'test_global_west_palearctic_orientation_extension_v2.py' -v
+      - name: Preserve separate Western U/D discovery receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-u2d-western-independent-source-v2
+          path: .tmp/global-west-palearctic-orientation-v2/
           if-no-files-found: error
           retention-days: 90
