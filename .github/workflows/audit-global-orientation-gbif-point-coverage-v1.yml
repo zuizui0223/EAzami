@@ -1,13 +1,8 @@
 name: Audit world U-to-D GBIF point support v1
 
 on:
-  pull_request:
-    paths:
-      - "analysis/audit_global_orientation_gbif_point_coverage_v1.py"
-      - "tests/test_global_orientation_gbif_point_coverage_v1.py"
-      - "analysis/build_global_orientation_nuclear_priority_intake_v1.py"
-      - "data/evidence/global_fna_head_orientation_evidence_v1.csv"
-      - ".github/workflows/audit-global-orientation-gbif-point-coverage-v1.yml"
+  # Explicit reruns only. The 35-taxon October 24 snapshot is already archived;
+  # new PR commits must not repeatedly hammer GBIF or mutate the frozen snapshot.
   workflow_dispatch:
 
 permissions:
