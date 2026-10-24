@@ -1,9 +1,7 @@
 name: FastTree preliminary 45-tip real Cirsium 176-locus transcontinental topology
 
 on:
-  pull_request:
-    paths:
-      - ".github/workflows/global45-fasttree-approx-ML-v1.yml"
+  # 2026-10-25 completed real source artefacts are immutable. Explicit reruns only.
   workflow_dispatch:
 
 permissions:
