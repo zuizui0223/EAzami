@@ -1,0 +1,66 @@
+{
+  "version": "Cirsium_real_transcontinental_nuclear_ITS_ETS_source_tree_20261024_v1",
+  "source_paper": {
+    "author": "Slotta, Horvath & Foley",
+    "year": 2012,
+    "doi": "10.3390/plants1020061",
+    "fulltext": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4844267/fullTextXML",
+    "source_SHA256": "cbae6a078071f0fa57f0525a260b566e0ab1343494a6850ac8b7423110ec05b0"
+  },
+  "molecular_inference": {
+    "genome_type": "nuclear ribosomal ITS and ETS, linked multicopy rDNA (not 350 independent low-copy genes)",
+    "analysis": "EAzami independent real NCBI-GenBank FASTA recovery; MAFFT per locus; IQ-TREE2 partitioned maximum likelihood, ModelFinder, UFBoot 1000, SH-aLRT 1000",
+    "original_published_specimen_ITS_ETS_accession_pairs": 73,
+    "distinct_genbank_accessions_queried": 143,
+    "retrieved_sequences": 141,
+    "sample_QC_status": {
+      "admitted": 67,
+      "NCBI_header_source_taxon_mismatch": 4,
+      "cross_species_accession_conflict": 1,
+      "missing_NCBI_nuclear_sequence": 1
+    },
+    "inferred_tree_tips": 67,
+    "Cirsium_tips": 65,
+    "Carduus_outgroup_tips": 2,
+    "source_species_binomial_concepts": 46,
+    "Cirsium_species_binomial_concepts": 45,
+    "alignment_nuclear_ITS_bp": 759,
+    "alignment_nuclear_ETS_bp": 614,
+    "total_concatenated_bp": 1373,
+    "variable_alignment_positions": 309,
+    "phylogram_has_real_branch_lengths": true,
+    "branch_unit": "substitutions/site, not Ma",
+    "declared_root_tip": "SLO071_Carduus_nutans",
+    "IQTREE_output_SHA256": "f8a38a71c68ba3cc4c12789f4a29e44dc27ae926c5da8938ff56ccc8841ad837"
+  },
+  "original_shape_overlay": {
+    "Siniscalchi2023_author_nine_trait_source_species_exact_matches": 16,
+    "Siniscalchi2023_author_nine_trait_source_tip_matches": 24,
+    "independent_Japan_NMNS_Cirsium_lineare_U_exact_source_tip": 1,
+    "head_U_specimens_from_exact_taxon_evidence": 25,
+    "head_D_specimens_from_exact_taxon_evidence": 0,
+    "head_unresolved_specimens": 42,
+    "evolutionary_U_to_D_rate_model_estimable": false,
+    "diagnostic": "All observed strict-source U/D on this 67-tip rDNA tree are U. Do NOT claim U→D reversal or a global head-orientation climate test.",
+    "missing_colour_handling": "Original Siniscalchi CorollaColor source code 2 pools white/pink/purple; all unmatched source taxa retain blank/unknown.",
+    "regional_notes": "C. henryi and C. lineare are East Asian sample taxa with original Kelch source Hubei; several European source species are included but GenBank-only specimens may lack georeferenced voucher locality."
+  },
+  "GitHub_execution": {
+    "run_id": 40103021756,
+    "url": "https://github.com/zuizui0223/EAzami/actions/runs/40103021756",
+    "artifact_id": 12563577567,
+    "artifact_digest": "sha256:bc70b79fa13bd774e73f17ff88d12d798b0861be395271ea4f7b7c5a3375841b",
+    "key_workflow": ".github/workflows/infer-real-crosscontinent-cirsium-its-ets-v1.yml",
+    "accession_script": "analysis/recover_slotta2012_crosscontinent_nuclear_ITS_ETS_v1.py",
+    "phylogenetic_script": "analysis/infer_slotta2012_crosscontinent_nuclear_ITS_ETS_ML_v1.py",
+    "original_source_audit": "analysis/audit_slotta2012_nuclear_ITS_ETS_source_vouchers_v1.py"
+  },
+  "boundaries": {
+    "full_294_tip_350_gene_Moreyra2025_tree_completed": false,
+    "genuine_transcontinental_nuclear_rDNA_tree_completed": true,
+    "original_Moreyra_2025_350_retain_locus_list_recovered": false,
+    "historical_climate_on_transition_branch_measured": false,
+    "genetic_effectiveness": "Low-resolution nrDNA ITS/ETS must be sensitivity-checked against true multi-locus nuclear phylogenomics.",
+    "nonindependent_species_specimens": "Multiple individuals per taxon are not independent evolutionary origins."
+  }
+}
