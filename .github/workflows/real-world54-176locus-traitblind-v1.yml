@@ -1,10 +1,9 @@
 name: Execute real world54 176-locus trait-blind geographic expansion
 
 on:
-  pull_request:
-    paths:
-      - "analysis/build_real_world54_176locus_traitblind_extension_v1.py"
-      - ".github/workflows/real-world54-176locus-traitblind-v1.yml"
+  # The 2026-10-25 9-run 3.88-GB original Moreyra source acquisition is
+  # an explicitly versioned compute run, not a job to repeat at each PR edit.
+  # Preserve original CI execution logs/artifacts and only rerun on dispatch.
   workflow_dispatch:
 
 permissions:
