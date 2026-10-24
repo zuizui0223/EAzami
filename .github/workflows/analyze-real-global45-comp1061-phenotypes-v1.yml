@@ -1,0 +1,70 @@
+name: Analyze real 45tip nuclear tree with source-verified morphology
+
+on:
+  pull_request:
+    paths:
+      - "analysis/map_global45_real_nuclear_U_D_and_source9_traits_v1.py"
+      - "analysis/audit_real_global45_comp1061_original_japan_topology_v1.py"
+      - ".github/workflows/analyze-real-global45-comp1061-phenotypes-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  molecular-tree-source-phenotype-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install molecular topology analysis and figure runtime
+        run: |
+          python -m pip install --disable-pip-version-check biopython matplotlib numpy
+      - name: Recover already executed and accepted 45-tip 176-nuclear-locus ML tree (no FASTQ repeat)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/real-global45-source-tree
+          gh run download 40106147801 --repo zuizui0223/EAzami \
+            --name real-crosscontinental-45tip-176Comp1061-nuclear-ML-phylogeny-v1 \
+            --dir .tmp/real-global45-source-tree
+          test -s .tmp/real-global45-source-tree/world45_176loci_ML.treefile
+          test -s .tmp/real-global45-source-tree/verified_empirical_world45_176loci_result.json
+      - name: Freeze exact molecular-tip identity to Japan38 and five foreign source names; build S1 and nine-trait external crosswalk
+        run: |
+          python analysis/map_global45_real_nuclear_U_D_and_source9_traits_v1.py \
+            --tree .tmp/real-global45-source-tree/world45_176loci_ML.treefile \
+            --outdir .tmp/real-global45-phenotype-figures
+          python analysis/audit_real_global45_comp1061_original_japan_topology_v1.py \
+            --real-45-tree .tmp/real-global45-source-tree/world45_176loci_ML.treefile \
+            --output .tmp/real-global45-phenotype-figures/real_global45_vs_original_Japan38_RF_and_placements.json
+      - name: Enforce U/D state discovery not ancestral state overclaim
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          d=Path(".tmp/real-global45-phenotype-figures")
+          x=json.loads((d/"real_nuclear45_trait_audit.json").read_text())
+          t=json.loads((d/"real_global45_vs_original_Japan38_RF_and_placements.json").read_text())
+          assert x["source_tip_count"]==45 and x["n_source_U"]>=4 and x["n_source_D"]>=2
+          assert sum(x[k] for k in ("n_source_U","n_source_D","n_unknown"))==45
+          assert t["n_original_tip_names"]==40 and t["n_new_real_worldwide_tip_names"]==5
+          assert t["n_total_tree_tip_names"]==45
+          assert (d/"real_nuclear45_U_D_source_map.png").stat().st_size > 5000
+          assert (d/"real_nuclear45_U_D_source_map.svg").stat().st_size > 5000
+          print(json.dumps({"actual_nuclear_tree_45":x["source_tip_count"],
+              "U":x["n_source_U"],"D":x["n_source_D"],"unresolved":x["n_unknown"],
+              "parsimony_minimum_changes":x["Fitch_minimum_U_D_changes_on_real_new_tree"],
+              "japan38_restricted_RF_distance":t["RF_distance_sum_symmetric_split_diff"]},indent=2))
+          PY
+      - name: Archive figure and all morphology taxon-source joins plus topology audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-world45-176gene-nuclear-head-colour-multitrait-topology-audit-v1
+          path: .tmp/real-global45-phenotype-figures/
+          if-no-files-found: error
+          retention-days: 90
