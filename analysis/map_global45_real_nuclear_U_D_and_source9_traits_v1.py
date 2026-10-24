@@ -100,13 +100,14 @@ def source_table(tree_path):
         expected=r["head_state_source_only"]
         if original and ("U" if original["HeadPosition"]=="0" else "D")!=expected:
             raise ValueError("mismatch FNA and original source head state")
-        color={
-            "Cirsium vinaceum":"rose-purple",
-            "Cirsium flodmanii":"purple_with_white_form",
-            "Cirsium ownbeyi":"white_to_pink-purple",
-            "Cirsium erisithales":"pale_yellow",
-            "Cirsium oleraceum":"pale_yellow-green",
-        }[r["source_taxon"]]
+        # Exact, independently pinned Siniscalchi source categorical colour;
+        # no unverified new Europe/NA descriptions or imputed pigments.
+        colour_codebook={
+            "0":"red","1":"reddish-purple",
+            "2":"white/pink/purple_combined_NOT_a_fixed_white_state",
+            "3":"yellow",
+        }
+        color=colour_codebook.get(original.get("CorollaColor",""),"unknown")
         out.append({
             "tip_id":tip,"source_taxon":r["source_taxon"],
             "geographic_panel":r["region"],
@@ -118,7 +119,7 @@ def source_table(tree_path):
             "glutinous_source_category":"unknown",
             "flower_colour_source_category":color,
             "flower_colour_C_W_P_code":"?",
-            "colour_source_url":r["head_morphology_url"],
+            "colour_source_url":NA_URL if original else "",
             "strict_original_9trait_source_same_study":str(bool(original)).lower(),
             **{k:original.get(k,"") for k in NINE}
         })
