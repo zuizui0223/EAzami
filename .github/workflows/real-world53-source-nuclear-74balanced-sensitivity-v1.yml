@@ -1,0 +1,108 @@
+name: Verify world53 full176 vs 74 all-region-covered real nuclear gene trees
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_real_world53_nuclear_74balanced_loci_v1.py"
+      - "analysis/audit_real_world53_nuclear_176_vs_balanced74_gene_tree_v1.py"
+      - ".github/workflows/real-world53-source-nuclear-74balanced-sensitivity-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-source-nuclear-occupancy-controlled-tree:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install exact same IQTREE 2 nucleotide ML model and source tree statistics
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq iqtree
+          python -m pip install --disable-pip-version-check numpy scipy biopython matplotlib
+          python -m py_compile analysis/build_real_world53_nuclear_74balanced_loci_v1.py
+          python -m py_compile analysis/audit_real_world53_nuclear_176_vs_balanced74_gene_tree_v1.py
+          iqtree2 --version
+      - name: Restore actual original 53-tip, 176-gene DNA, original 176 source partitions and original nine-trait S1 phenotypes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/original53 .tmp/originalJ38 .tmp/sourcePhenotypes
+          gh run download 40148735969 --repo zuizui0223/EAzami \
+            --name real-world53-176Comp1061-8QCpass-traitblind-ML-tree-v1 \
+            --dir .tmp/original53
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 \
+            --dir .tmp/originalJ38
+          gh run download 40150037475 --repo zuizui0223/EAzami \
+            --name world53-real-176nuclear-S1-original-nine-flowers-and-Mk-models-v1 \
+            --dir .tmp/sourcePhenotypes
+          test -s .tmp/original53/real_world53_176Comp1061_QC8_geography_first.fasta
+          test -s .tmp/originalJ38/tree_result/partitions.csv
+          test -s .tmp/sourcePhenotypes/world53_original_S1_vouchers_head_nine_trait_rows.csv
+      - name: Blind original-locus selection using base-call coverage only, require all 13 external specimen nuclei
+        run: |
+          python analysis/build_real_world53_nuclear_74balanced_loci_v1.py \
+            --source-alignment .tmp/original53/real_world53_176Comp1061_QC8_geography_first.fasta \
+            --original-partitions .tmp/originalJ38/tree_result/partitions.csv \
+            --outdir .tmp/realBalanced74
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from Bio import SeqIO
+          d=Path(".tmp/realBalanced74")
+          m=json.loads((d/"source74_nuclear_locus_occupancy_contract.json").read_text())
+          assert m["retained_loci"]==74 and m["retained_aligned_bp"]==61240
+          assert m["NA_sample_count"]==6 and m["West_sample_count"]==5
+          assert m["continental_AS_sample_count"]==2
+          assert not m["trait_source_or_taxonomic_orientation_used_to_select_loci"]
+          s=list(SeqIO.parse(d/"world53_74_all13ge40pct_nuclear_loci.fasta","fasta"))
+          assert len(s)==53 and all(len(t.seq)==61240 for t in s)
+          print("FREEZE: real 74 source loci with all 13 external specimens >=40% ACGT; morphology never consulted")
+          PY
+      - name: Infer de-novo 53-tip empirical nuclear ML tree using same TIM3+F+R3 substitution model as full176
+        run: |
+          set -euo pipefail
+          iqtree2 -s .tmp/realBalanced74/world53_74_all13ge40pct_nuclear_loci.fasta \
+            -m 'TIM3+F+R3' -B 1000 --alrt 1000 -T 2 -seed 20261025 \
+            -o OUTGROUP_saff \
+            --prefix .tmp/realBalanced74/world53_74source_loci_TIM3F_R3_ML
+          test -s .tmp/realBalanced74/world53_74source_loci_TIM3F_R3_ML.treefile
+      - name: Report real all176 vs occupancy-balanced74 RF, geographic phylogeny and uncertain S1 head rates
+        run: |
+          python analysis/audit_real_world53_nuclear_176_vs_balanced74_gene_tree_v1.py \
+            --full-tree .tmp/original53/world53_real_176Comp1061_ML.treefile \
+            --balanced-tree .tmp/realBalanced74/world53_74source_loci_TIM3F_R3_ML.treefile \
+            --traits .tmp/sourcePhenotypes/world53_original_S1_vouchers_head_nine_trait_rows.csv \
+            --balanced-contract .tmp/realBalanced74/source74_nuclear_locus_occupancy_contract.json \
+            --outdir .tmp/realBalanced74
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from Bio import Phylo
+          d=Path(".tmp/realBalanced74")
+          j=json.loads((d/"world53_all176_vs_matched74_molecular_and_U_D_topology_result.json").read_text())
+          assert j["same_53_source_molecular_tips_in_both"]
+          assert j["same_IQTREE_substitution_model_TIM3_F_R3"]
+          assert j["only_high_occupancy_74_gene_subset_changes"]
+          assert j["balanced_nuclear_loci"]==74 and j["balanced_alignment_columns"]==61240
+          assert len(j["two_real_same_SRA_derived_ML_trees"])==2
+          assert all(x["head_taxon_source_counts"]=={"U":19,"D":9,"?":24} for x in j["two_real_same_SRA_derived_ML_trees"])
+          assert all(x["Fitch_head_minimum_steps"]>=0 for x in j["two_real_same_SRA_derived_ML_trees"])
+          t=Phylo.read(d/"world53_74source_loci_TIM3F_R3_ML.treefile","newick")
+          assert len({x.name for x in t.get_terminals()})==53
+          print("TRUE EMPIRICAL 53 NUCLEAR TREE + OCCUPANCY SENSITIVITY COMPLETED; NO HISTORICAL EVENT COUNT CLAIM")
+          PY
+      - name: Preserve full source-selected 74 nuclear alignments, locus audit, 53-tip newick and scientific comparison
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-world53-74-all13-external-covered-nuclear-IQTREE-sensitivity-v1
+          path: .tmp/realBalanced74/
+          retention-days: 90
+          if-no-files-found: error
