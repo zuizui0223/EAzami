@@ -1,11 +1,10 @@
 name: EAzami real world53 U-D taxon-blocked evolutionary transition analysis
 
 on:
-  pull_request:
-    paths:
-      - "analysis/run_real_world53_EAzami_transition_signal_Mk_reward_v1.py"
-      - "tests/test_real_world53_EAzami_transition_signal_Mk_reward_v1.py"
-      - ".github/workflows/run-world53-EAzami-UD-Mk-transition-diagnostic-v1.yml"
+  # Original morphology-blind 20,000 permutations, three real nuclear
+  # topologies and full 18 fitted Mk model outcomes were completed at
+  # workflow run 40158714439. Do not recalculate unchanging source data
+  # for every unrelated PR documentation update.
   workflow_dispatch:
 
 permissions:
