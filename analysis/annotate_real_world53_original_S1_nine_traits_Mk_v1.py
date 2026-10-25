@@ -69,6 +69,11 @@ def build_rows(old_path,new_path,manifest_path,tree):
     jap={r["tip_id"]:r for r in j38}
     if len(jap)!=39:
         raise ValueError("duplicate original molecular Japanese accession")
+    original_five=read_csv(Path(__file__).resolve().parents[1]/
+        "data/evidence/global_5taxa_comp1061_real_target_capture_bridge_v1.csv")
+    old_external={"GLB_"+r["SRR"]+"_"+r["source_taxon"].replace(" ","_"):r for r in original_five}
+    if len(original_five)!=5 or len(old_external)!=5:
+        raise ValueError("five original North American and European S1 accession/voucher records drift")
     oldkeys={r["tip_id"] for r in old}
     if len(oldkeys)!=45 or OUTGROUP not in oldkeys:
         raise ValueError("source 45-tip phylogeny character table drift")
@@ -98,10 +103,14 @@ def build_rows(old_path,new_path,manifest_path,tree):
             d["source_run"]=jap[tip]["run_accessions"]
             d["source_voucher"]=jap[tip]["voucher"]
         elif tip.startswith("GLB_"):
-            # Original five exact source identities should be looked up from
-            # the frozen named taxon+SRR given in the tip itself. The 45-tip
-            # source data do not pretend to have raw voucher metadata.
-            d["source_run"]=tip.split("_")[1]
+            if tip not in old_external:
+                raise ValueError("extra global public nuclear tip lacks original Moreyra S1 accession identity")
+            rec=old_external[tip]
+            if rec["source_taxon"]!=r["source_taxon"]:
+                raise ValueError("original first-five botanical source taxon disagrees with nuclear tree")
+            d["source_biosample"]=rec["biosample"]
+            d["source_run"]=rec["SRR"]
+            d["source_voucher"]=rec["source_locality"]
         else:
             if tip!=OUTGROUP:
                 raise ValueError("neither Japan38 nor public NA/EU source tip "+tip)
