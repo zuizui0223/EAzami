@@ -1,6 +1,6 @@
 {
   "contract_version": "global_orientation_transition_niche_readiness_v1",
-  "status_date": "2026-10-24",
+  "status_date": "2026-10-25",
   "scope": "worldwide nuclear phylogeny U->D orientation endpoint posterior x branchwise reconstructed modern climate niche",
   "independent_from_frozen_manuscripts": [
     "EAzami Chapter 2 JEB V10",
@@ -15,7 +15,7 @@
   "worldwide_branch_length_nuclear_ensemble_ready": false,
   "worldwide_tip_orientation_climate_join_ready": false,
   "historical_branch_climate_ready": false,
-  "current_allowed_verification": "real_north_america_63tip_published_nuclear_tree_all9_traits_and_exploratory_U2D_modern_climate_plus_global_source_GBIF_QC",
+  "current_allowed_verification": "original-dna 53tip crosscontinental preliminary 176/74 Comp1061 nuclear ML trees; source S1 U/D Mk ER/ARD and geography/taxon-blocked 20k placement signal, NOT accepted 294tip full-world phylogeny or historical climate transition",
   "no_global_effect_or_p_value_claim_allowed": true,
   "missing_inputs": [
     "audited globally inclusive nuclear tree ensemble with branch lengths and rooting provenance",
@@ -109,5 +109,44 @@
       "data/evidence/independent_na_nuclear_nine_trait_parsimony_20261024.json"
     ],
     "does_not_complete_worldwide_294_tip_moreyra_tree": true
+  },
+  "empirical_world53_nuclear_U_D_transition_20261025": {
+    "original_real_Moreyra_2025_S1_nuclear_molecular_tips": 53,
+    "Cirsium_ingroup_molecular_individuals": 52,
+    "original_comp1061_full_loci": 176,
+    "original_comp1061_geographically_balanced_loci": 74,
+    "source_Cirsium_U_phenotype_tips": 19,
+    "source_Cirsium_D_phenotype_tips": 9,
+    "source_Cirsium_unresolved_phenotype_tips": 24,
+    "original_distinct_source_taxon_concepts_with_U_D": 27,
+    "three_empirical_tree_source_SHA256": [
+      "5828ccd9f4f0b083f804f87bfa7407a20ad5eb52647e92eb5a26e812bd6807a7",
+      "57483eb8f1232631a8160e7dfe8e9427a1a85f20a8957e5d23ea65bca08e5e64",
+      "75f0b2087228c190d2d9ca928928eaf603cfe49cdd2a791ab1a72bcf82976cc5"
+    ],
+    "observed_Fitch_min_steps_by_tree": {
+      "IQTREE176": 9,
+      "IQTREE74": 8,
+      "FastTree176": 8
+    },
+    "original_source_state_taxon_block_geo_stratified_20000_permutation_clustering_p": {
+      "IQTREE176": 1,
+      "IQTREE74": 0.8598570071496425,
+      "FastTree176": 0.8408079596020199
+    },
+    "inferred_ancestral_U_root_U_probability_by_default_ER": {
+      "IQTREE176": 0.5004629990217996,
+      "IQTREE74": 0.5002657480735229,
+      "FastTree176": 0.5009797973221203
+    },
+    "root_prior_sensitivity_demonstrates_nonidentifiable_ancestral_state": true,
+    "rate_saturated_ER_and_ARD_Mk_hidden_jump_expectations_not_biological_origin_counts": true,
+    "original_declared_east_asia_plus_BIO15_minus_BIO1_hypothesis_globally_tested": false,
+    "source_exact_53tip_native_range_filtered_BIO1_BIO15_complete": false,
+    "full_294tip_original_Moreyra_350locus_tree_completed": false,
+    "source_technique": "reference-projected 176 nuclear loci for added samples, original Japan 40 tip matrix unchanged",
+    "material_source_test": "data/evidence/real_world53_EAzami_U_D_taxonblock_Mk_hidden_jumps_20261025.json",
+    "reproduced_run": 40158714439,
+    "original_execution_artifact_id": 12585643654
   }
 }
