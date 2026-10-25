@@ -1,11 +1,12 @@
 name: Corrected 52 unique nuclear BioSample EAzami U-D transitions and taxon-block null
 
 on:
-  pull_request:
-    paths:
-      - "analysis/run_real_world52_corrected_EAzami_U_D_transitions_v1.py"
-      - "tests/test_real_world52_corrected_EAzami_U_D_transitions_v1.py"
-      - ".github/workflows/run-real-world52-EAzami-corrected-transition-v1.yml"
+  # Full 20,000 original-study taxon-block label permutations and real-source
+  # Mk posterior histories were successfully executed and archived in
+  # run 40160913962, artifact 12586557465; the source and statistics are
+  # permanently frozen in data/evidence/. Explicit scientific reruns only:
+  # pull_request path filters match files anywhere in the entire PR diff and
+  # would otherwise repeat expensive numerical models on unrelated commits.
   workflow_dispatch:
 
 permissions:
