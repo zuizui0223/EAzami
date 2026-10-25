@@ -1,0 +1,52 @@
+name: Validate permanent EAzami world53 U D transition and source taxonomy
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/real_world53_EAzami_U_D_taxonblock_Mk_hidden_jumps_20261025.json"
+      - "data/contracts/global_orientation_transition_niche_readiness_v1.json"
+      - "tests/test_real_world53_EAzami_transition_signal_Mk_reward_v1.py"
+      - ".github/workflows/validate-real-world53-EAzami-UD-source-inference-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  immutable-empirical-result-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enforce 53 real source molecular tips, 27 observed biological taxon concepts and conservative global claims
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          d=Path("data/evidence")
+          j=json.loads((d/"real_world53_EAzami_U_D_taxonblock_Mk_hidden_jumps_20261025.json").read_text())
+          ready=json.loads((Path("data/contracts")/"global_orientation_transition_niche_readiness_v1.json").read_text())
+          s=j["source"]
+          assert s["maximum_completed_multi_locus_crosscontinental_phylogram_molecular_tips"]==53
+          assert s["original_source_ingroup_individuals"]==52
+          assert s["original_species_or_infraspecific_taxa_with_head_evidence"]==27
+          assert s["observed_tip_states"]=={"U":19,"D":9,"unknown":24}
+          for label,expect in [
+             ("IQTREE_176","5828ccd9f4f0b083f804f87bfa7407a20ad5eb52647e92eb5a26e812bd6807a7"),
+             ("IQTREE_74","57483eb8f1232631a8160e7dfe8e9427a1a85f20a8957e5d23ea65bca08e5e64")]:
+              path= d / ("real_world53_176Comp1061_IQTREE_ModelFinder_UFBoot_SHaLRT_20261025.nwk" if label=="IQTREE_176"
+                         else "real_world53_74loci_all13ge40pct_IQTREE_TIM3_F_R3_ML_20261025.nwk")
+              assert hashlib.sha256(path.read_bytes()).hexdigest()==expect
+          null=j["morphology_blind_null"]
+          assert null["n_permutations"]==20000
+          assert null["fixed_counts"]=={"Japan":{"U":14,"D":5},"North_America":{"U":4,"D":2},"West_Palearctic":{"U":1,"D":1}}
+          assert all(x["one_sided_p_fewer_steps_phylogenetic_clustering"]>0.8 for x in null["results"].values())
+          assert j["original_state_taxon_assignment_gate"]["number_unresolved_nuclear_tip_states_preserved"]==24
+          assert j["Mk_CTMC_history"]["infer_root_U_from_data"] is False
+          assert j["Mk_CTMC_history"]["claim_historical_event_origin_count"] is False
+          assert j["ecological_next_gate"]["original_declared_east_asia_plus_BIO15_minus_BIO1_hypothesis_globally_tested"] is False
+          assert ready["worldwide_branch_length_nuclear_ensemble_ready"] is False
+          assert ready["empirical_world53_nuclear_U_D_transition_20261025"]["original_distinct_source_taxon_concepts_with_U_D"]==27
+          assert ready["empirical_world53_nuclear_U_D_transition_20261025"]["full_294tip_original_Moreyra_350locus_tree_completed"] is False
+          print("ORIGINAL nuclear source Newick, phenotype-grain guard, real 20k permutation outcomes, Mk nonidentifiability, and global scientific claim boundary verified")
+          PY
