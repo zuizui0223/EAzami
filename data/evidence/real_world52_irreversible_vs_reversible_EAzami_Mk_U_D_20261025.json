@@ -127,6 +127,10 @@
       "world52_irreversibility_vs_reversible_real_AICc_sensitivity.csv",
       "world52_irreversible_vs_reversible_nuclear_Mk_AICc.png",
       "world52_irreversible_vs_reversible_nuclear_Mk_AICc.svg"
-    ]
+    ],
+    "latest_revalidated_workflow_run": "https://github.com/zuizui0223/EAzami/actions/runs/40163625099",
+    "latest_revalidated_artifact_id": 12587507253,
+    "latest_revalidated_artifact_sha256": "af02887eceeb6f8d7229dd3fc41679886766ba771b54584546069a774dc05f73",
+    "latest_code_quality": "exact original var. taxon-concept rank retention revalidated; all seven regression tests and 60 actual model fits passed"
   }
 }
