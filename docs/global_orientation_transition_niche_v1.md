@@ -421,6 +421,41 @@ Run [40150037475](https://github.com/zuizui0223/EAzami/actions/runs/40150037475)
 
 **Persistent scientific receipt**: `data/evidence/world53_real_176Comp1061_ML_S1_nine_traits_topology_Mk_results_20261025.json` and permanently committed Newick. These are **pilot nuclear reference-projected** analyses with high missingness in the new specimens. The 294 independent biological samples / 350 published final nuclear loci of Moreyra et al. (2025) are still NOT jointly reconstructed as a complete global accepted topology. No U→D event age, distinct origin count, historic climate at origin, fitness or ecological adaptation has been inferred.
 
+## Completed morphology-blind, all-external-samples-covered 74-gene nuclear sensitivity (2026-10-25)
+
+**New actual original-DNA refit:** The genuine 53-tip/176-Compositae1061-gene high-missingness phylogram was subjected to a prespecified **genomic occupancy-only** locus-selection test: select a whole original aligned locus only if **all 13 molecular samples outside Japan** (6 North American, 5 western Palearctic, 2 continental eastern/central Asian) each carry at least **40% unambiguous ACGT characters**. The selection DID NOT consult floral head/colour states, latitude, climate, tree topology or informative site variation.
+
+- Selection source: exact SHA-pinned authentic world53 53-tip full alignment `9179394190a3ab499a122439bca9c8bbe74e205a315440e4f7442b5ee225b237` and original 176 nuclear locus partition table SHA `30e6e5703a76b4065c3903c04b43179fb538d280539df66c7bf64706962a128e`.
+- Selection result: **74 entire original nuclear loci**, **61,240 aligned bp** in precisely the same **53 real molecular individuals**, including original *Carthamus* outgroup. The selected sample-character FASTA SHA is `e8a60205d17cf1907fd8c31a999aa16a1d004cb87e5296bf8b02ea51ebd78bdc`. Gene names, new/old alignment positions and all 176 original source-coverage values are archived.
+- Actual independent ML fitting to selected real nucleotide subset: IQ-TREE 2 `TIM3+F+R3`, same winning source model as original full176, 1000 UFBoot and 1000 SH-aLRT. GitHub Actions **[run 40151213259](https://github.com/zuizui0223/EAzami/actions/runs/40151213259)** finished **successfully**; full original source alignment / numerical QC / new ML topology / original source-phenotype model and branch support in artifact **12582996013**, ZIP SHA256 `4bfbe6035e77860580511c1f636579a7a24d216e6fad022324cd5ea783341bdd`.
+- **Permanently committed actual empirical Newick:** `data/evidence/real_world53_74loci_all13ge40pct_IQTREE_TIM3_F_R3_ML_20261025.nwk`, original CI source Newick SHA256 `57483eb8f1232631a8160e7dfe8e9427a1a85f20a8957e5d23ea65bca08e5e64`, authenticated **exact Git blob SHA1 `4651901ab5605bb373200040259d999e65d32585`**.
+
+| Genuine matched-source nuclear property | All 176 originally available genes | All 13 external-source-covered 74 genes |
+| --- | ---: | ---: |
+| Source molecular individual tips | 53 | 53 |
+| Original nuclear gene alignments | 176 | 74 |
+| Aligned bp | 161,654 | 61,240 |
+| North-American six Moreyra samples, exclusive clade | YES, IQ-TREE 100/100 | **YES, IQ-TREE 100/100** |
+| Western Palearctic five molecular tips, exclusive clade | No | No |
+| Two same-labelled *C. kamtschaticum* molecular individuals, exclusive sister pair | No | No |
+| Minimum Fitch U/D category steps, 19U / 9D / 24 unknown | 9 | 8 |
+| AICc(ARD) minus AICc(ER) under same source categories | −1.029 | −1.107 |
+| Root P(U), symmetric ER Mk | 0.50046 | 0.50027 |
+
+**Topological turnover remains high:** the two 53-tip IQ-TREE phylograms, with exactly the same source 53 specimens, software, winning TIM3+F+R3 nucleotide model and character phenotypes, have **unrooted RF=48/100**, with 26 shared of 50 nontrivial splits. The only experimental change was which genuine original nuclear gene alignments met stringent joint across-region coverage. Thus parts of global and Japanese apparent lineage placement remain strongly dependent on marker occupancy. The result does NOT establish a true historical topology for west Palearctic origins, recurrent D/white flowers, polyploid reticulation or regional climate selection.
+
+**Ecological interpretation:** The six North American samples form a stable group against full176, high-occupancy74, and the earlier full176 FastTree approximate ML; this is a reproducible but limited **regional molecular pattern** within the selected Cirsium source sampling. The western five are non-exclusive regardless of the filter. *C. kamtschaticum* pair is not exclusive, but per-gene genetic distances and source-name/orthology audits are required before an introgression/polyploidy interpretation. Nineteen U, nine D and 24 missing head states are merely original **species-level botanical references**, not directly phenotyped sequenced vouchers or 28 independent documented evolutionary origins.
+
+**Next original molecular task:** expand beyond reference-mapped, missing-locus-stratified specimens toward independently reviewed low-copy nuclear orthology (HybPiper paralogs and/or alternative Cirsium-reference mapping) and broader global taxon coverage. Neither this 53-tip 74-gene QC subset nor the full176 analysis is the still-unavailable validated Moreyra et al. 2025 **294 public-BioSample, final 350-nuclear-gene worldwide species tree**.
+
+Reproduction / durable original-source receipts:
+
+- `analysis/build_real_world53_nuclear_74balanced_loci_v1.py`
+- `analysis/audit_real_world53_nuclear_176_vs_balanced74_gene_tree_v1.py`
+- `.github/workflows/real-world53-source-nuclear-74balanced-sensitivity-v1.yml` (now explicit dispatch only after successful first immutable source run)
+- `data/evidence/world53_176vs74_source_coverage_nuclear_S1_phylogeny_20261025.json`
+- `.github/workflows/validate-world53-74covered-nuclear-S1-v1.yml`
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
