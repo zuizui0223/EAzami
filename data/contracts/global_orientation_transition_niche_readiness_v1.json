@@ -15,7 +15,7 @@
   "worldwide_branch_length_nuclear_ensemble_ready": false,
   "worldwide_tip_orientation_climate_join_ready": false,
   "historical_branch_climate_ready": false,
-  "current_allowed_verification": "empirical_real_world52_176_75_73_original_source_ER_ARD_and_irreversible_U_D_Circium_trait_model_statistics_conditional_on_Mk;full_294_phylogeny_and_historical_regime_not_ready",
+  "current_allowed_verification": "real_corrected_world52_51unique_Cirsium_176_75_73_original_nuclear_ER_ARD_oneway_and_IID_adequacy;75original_genes_NA_vs_West_source_geographic_consistency;294_BioSample_final350_tree_not_completed",
   "no_global_effect_or_p_value_claim_allowed": true,
   "missing_inputs": [
     "audited globally inclusive nuclear tree ensemble with branch lengths and rooting provenance",
@@ -241,5 +241,68 @@
     "real_CI_workflow": "https://github.com/zuizui0223/EAzami/actions/runs/40163448875",
     "original_artifact_id": 12587437130,
     "original_result_receipt": "data/evidence/real_world52_irreversible_vs_reversible_EAzami_Mk_U_D_20261025.json"
+  },
+  "independent_corrected_world52_Mk_saturation_IID_benchmark": {
+    "source_executed_20261025": true,
+    "unique_Cirsium_original_Moreyra_S1_BioSamples": 51,
+    "molecular_source_tips_with_Carthamus": 52,
+    "original_nuclear_loci": [
+      176,
+      75,
+      73
+    ],
+    "original_scored_source_taxon_concepts": 27,
+    "source_observed_U_D_unknown": {
+      "U": 19,
+      "D": 8,
+      "unknown": 24
+    },
+    "source_IID_frequency_D": 0.2962962962962963,
+    "one_parameter_IID_AICc": 34.97544488903165,
+    "reversible_ARD_AICc_by_gene_panel": {
+      "full176": 37.29178916200412,
+      "all12covered75": 37.30574447361086,
+      "technical73": 37.30458853474593
+    },
+    "ARD_minus_IID_AICc_by_gene_panel": [
+      2.316344272972472,
+      2.3302995845792083,
+      2.3291436457142822
+    ],
+    "ARD_fitted_stationary_D_frequency_range": [
+      0.2969486842563111,
+      0.29760149993286167
+    ],
+    "prop_original_ingroup_edges_with_lt10percent_state_memory_range": [
+      0.69,
+      0.73
+    ],
+    "saturation_not_independent_origin_count": true,
+    "phylogenetically_independent_IID_model_proved_true": false,
+    "phylogenetically_calibrated_P_value_available": false,
+    "original_source_run": 40166523396,
+    "original_source_artifact_id": 12588218350,
+    "durable_receipt": "data/evidence/real_world52_corrected_EAzami_Mk_vs_IID_rate_saturation_20261025.json"
+  },
+  "corrected_world52_all75_original_nuclear_gene_geographic_support": {
+    "molecular_source_6_NA_5_western_Moreyra_BioSamples": 11,
+    "original_nuclear_loci": 75,
+    "genes_with_NA_internal_distance_lower_than_NA_to_West": 75,
+    "two_original_technical_discrepancy_genes": [
+      "At1g02170",
+      "At3g04400"
+    ],
+    "technically_screened_loci": 73,
+    "technically_screened_same_effect_loci": 73,
+    "original75_mean_p_distance_within_NA": 0.0016762992881811252,
+    "original75_mean_p_distance_NA_West": 0.013375035962623105,
+    "original75_source_label_exchange_exact_rank": "1/462",
+    "original_source_gene_tree_concordance_inferred": false,
+    "geographic_tip_sampling_randomized": false,
+    "ecological_fitness_or_orientation_adaptation_tested": false,
+    "original_Moreyra_294_350_tree_completed": false,
+    "original_execution_run": 40166913063,
+    "original_artifact_id": 12588693032,
+    "durable_receipt": "data/evidence/real_world52_corrected_75_73_gene_NA_West_nuclear_concordance_20261025.json"
   }
 }
