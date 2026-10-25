@@ -15,7 +15,7 @@
   "worldwide_branch_length_nuclear_ensemble_ready": false,
   "worldwide_tip_orientation_climate_join_ready": false,
   "historical_branch_climate_ready": false,
-  "current_allowed_verification": "newly_reinferred_world52_real_source_Mk_U_D_176_75_73_loci_unique_biosamples_taxonblock20k_null_and_history_saturation;not_full_294",
+  "current_allowed_verification": "empirical_real_world52_176_75_73_original_source_ER_ARD_and_irreversible_U_D_Circium_trait_model_statistics_conditional_on_Mk;full_294_phylogeny_and_historical_regime_not_ready",
   "no_global_effect_or_p_value_claim_allowed": true,
   "missing_inputs": [
     "audited globally inclusive nuclear tree ensemble with branch lengths and rooting provenance",
@@ -200,5 +200,46 @@
     "original_current_CI_success_run_id": 40160913962,
     "result_receipt": "data/evidence/real_world52_corrected_176_75_73_nuclear_EAzami_Mk_U_D_transition_20261025.json",
     "source_retracted_53tip_note": "data/evidence/world53_same_SRR_pseudoreplication_retraction_and52_unique_20261025.json"
+  },
+  "empirical_world52_irreversible_vs_reversible_orientation_mk": {
+    "corrected_source_unique_Cirsium_BioSamples": 51,
+    "actual_nuclear_phylogram_tips_with_Carthamus_outgroup": 52,
+    "original_three_gene_panels": [
+      176,
+      75,
+      73
+    ],
+    "scored_original_source_U_D_unknown": {
+      "U": 19,
+      "D": 8,
+      "unknown": 24
+    },
+    "compared_homogeneous_Mk_processes": [
+      "U_to_D_only",
+      "D_to_U_only",
+      "symmetric_reversible_ER",
+      "asymmetric_reversible_ARD"
+    ],
+    "original_source_Moreyra_S1_accessions_are_not_observed_sequenced_voucher_flower_heads": true,
+    "original_source_root_prior_U_primary": 0.5,
+    "source_root_prior_U_sensitivity": [
+      0.1,
+      0.9
+    ],
+    "EAzami_actual_model_likelihood_fits": 60,
+    "original_ER_ARD_loglikelihood_reproduced": true,
+    "delta_AICc_best_irreversible_minus_best_reversible_primary": {
+      "full176": 5.954952885541481,
+      "high_occupancy75": 6.503661741330923,
+      "pipeline_qc73": 7.135006575655673
+    },
+    "source_NA_D_omission_weakens_AICc_difference": true,
+    "source_DU_actual_independent_events_observed": false,
+    "source_root_state_identified": false,
+    "source_saturated_transition_rates_not_calendar_date_events": true,
+    "original_user_world294_350genes_complete": false,
+    "real_CI_workflow": "https://github.com/zuizui0223/EAzami/actions/runs/40163448875",
+    "original_artifact_id": 12587437130,
+    "original_result_receipt": "data/evidence/real_world52_irreversible_vs_reversible_EAzami_Mk_U_D_20261025.json"
   }
 }
