@@ -1,7 +1,9 @@
 name: Correct real worldwide Cirsium nuclear same-SRR duplication to 52 original individuals
 
 on:
-  pull_request:
+  push:
+    branches:
+      - feature/global-u2d-nuclear-climate-v1
     paths:
       - "analysis/rebuild_world52_unique_biosample_original176_and75_v1.py"
       - ".github/workflows/run-real-world52-unique-S1-176vs75-v1.yml"
