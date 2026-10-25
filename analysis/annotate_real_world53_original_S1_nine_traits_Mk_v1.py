@@ -216,8 +216,17 @@ def fitted_models(tree,rows):
 
 
 def draw(tree,traits,output):
+    # The authentic Carthamus outgroup provides rooting, but its long
+    # molecular branch compresses the 52 Cirsium focal tips to an unreadable
+    # strip. Plot an INGROUP ZOOM on an unchanged rooted tree copy, retaining
+    # the full original 53-tip Newick separately in the source artifact.
+    tree=copy.deepcopy(tree)
+    tree.root_with_outgroup({"name":OUTGROUP})
+    tree.prune(OUTGROUP)
     nodes=list(tree.find_clades())
     tips=tree.get_terminals()
+    if len(tips)!=52:
+        raise ValueError("ingroup zoom unexpectedly removed an actual Cirsium specimen")
     source={r["tip_id"]:r for r in traits}
     xpos={x:float(tree.distance(x)) for x in nodes}
     ypos={tip:len(tips)-i-1 for i,tip in enumerate(tips)}
@@ -232,7 +241,7 @@ def draw(tree,traits,output):
     x0=maxlen+step
     tracks=["head_orientation","Japanese_taxon_colour_code"]+list(NINE)
     xx=[x0+i*step*.75 for i in range(len(tracks))]
-    fig,ax=plt.subplots(figsize=(19,16.3))
+    fig,ax=plt.subplots(figsize=(19,17.2))
     fig.patch.set_facecolor("white")
     for nd in nodes:
         if nd.is_terminal():continue
@@ -253,7 +262,7 @@ def draw(tree,traits,output):
                                    facecolor=col,edgecolor="white",linewidth=.25))
         color=REGION.get(r["region"],"#404A56")
         ax.text(xx[-1]+step*.9,yy,r["source_taxon"],
-                fontsize=5.9,color=color,va="center",ha="left")
+                fontsize=7.0,color=color,va="center",ha="left")
     labels=["U / D", "JPN colour"]+[{"CorollaThroat":"Throat","CorollaColor":"Corolla colour",
         "GlutinousRidge":"Sticky","InnerPhyllaryColor":"Inner bracts",
         "OuterPhyllaryPosition":"Outer bracts","StyleBranchColor":"Style colour",
@@ -262,13 +271,13 @@ def draw(tree,traits,output):
         ax.text(xx[i]+step*.2,len(tips)+.7,label,fontsize=7,rotation=60,
                 ha="left",va="bottom",color="#41505E")
     ax.set_yticks([])
-    ax.set_xlim(-.03,xx[-1]+maxlen*.65+step)
+    ax.set_xlim(-maxlen*.025,xx[-1]+maxlen*1.5+step)
     ax.set_ylim(-1.1,len(tips)+5)
-    ax.set_xlabel("Source-preserving real nuclear ML branch length (substitutions/site; NOT time)",fontsize=9)
-    ax.set_title("EAzami: empirical crosscontinental 53-tip / 176-locus nuclear tree + S1 / original flower traits",
+    ax.set_xlabel("Original IQ-TREE nuclear branch length (substitutions/site, not Ma)",fontsize=9)
+    ax.set_title("Cirsium ingroup: 52 specimens from a REAL crosscontinental 53-tip / 176-locus nuclear tree",
                  fontsize=12,weight="semibold",loc="left",pad=26)
     ax.text(.003,1.004,
-      "8 new source DNA specimens passed frozen 70-locus QC; C. fargesii (63 loci) excluded. Grey = unphenotyped, not erect.",
+      "Rooted with Carthamus (outgroup branch omitted for ingroup-scale clarity) | Head: blue U, orange D, grey unknown",
       transform=ax.transAxes,fontsize=8,color="#65717B",ha="left")
     for spine in ax.spines.values():spine.set_visible(False)
     ax.grid(axis="x",alpha=.15)
