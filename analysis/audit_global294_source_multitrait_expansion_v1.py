@@ -25,6 +25,10 @@ from select_real_world45_traitblind_moreyra_next9_v1 import region
 NINE=("CorollaThroat","CorollaColor","Duration","GlutinousRidge",
       "Habit","HeadPosition","InnerPhyllaryColor","OuterPhyllaryPosition",
       "StyleBranchColor")
+# Flora of North America independently documents these as erect OR nodding.
+# Original single-valued author code 0 must remain visible in original matrix,
+# but is NOT a verified fixed upright taxon state in a global U/D evolution fit.
+FNA_EXPLICIT_MIXED_HEAD={"Cirsium eatonii","Cirsium joannae"}
 
 
 def source_region(row):
@@ -67,8 +71,11 @@ def run(assets:Path,outdir:Path):
         earlier_head=r["orientation_state_candidate"] if r["orientation_state_candidate"] in {"U","D"} else ""
         mismatch=bool(ext_head and earlier_head and ext_head!=earlier_head)
         name_review=r["name_review_required"]!="false"
+        ambiguous_head=original_label in FNA_EXPLICIT_MIXED_HEAD
         admitted=""
-        if name_review or mismatch:
+        if ambiguous_head:
+            gate="hold_FNA_explicit_erect_OR_nodding_taxon_state"
+        elif name_review or mismatch:
             gate="hold_original_nuclear_taxon_name_or_morphological_conflict"
         elif ext_head:
             admitted=ext_head
@@ -95,6 +102,7 @@ def run(assets:Path,outdir:Path):
             "existing_strict_U_D_evidence_candidate":earlier_head,
             "new_author_head_U_D":ext_head,
             "conflicting_original_botanical_head_source":str(mismatch).lower(),
+            "source_FNA_explicit_both_U_and_D":str(ambiguous_head).lower(),
             "admitted_U_D_source_taxon_level":admitted,
             "head_source_status":gate,
             "colour_code_2_means_white_pink_purple_not_fixed_white":str(bool(matched and matched["CorollaColor"]=="2")).lower(),
@@ -161,6 +169,7 @@ def run(assets:Path,outdir:Path):
         "global_climate_BIO18_extracted_and_native_filtered_for_all":False,
         "is_sufficient_for_global_multivariate_phylogenetic_analysis":False,
         "n_taxon_morphology_gaps_to_fill":270-matched_nine,
+        "fixed_global_U_D_exclusion_of_mixed_source_taxa":sorted(FNA_EXPLICIT_MIXED_HEAD),
         "n_taxon_orientation_gaps_to_fill":states_taxa.get("?",0),
         "study_target":"Now have exact real worldwide DNA-source roster for selecting independent phenotype extraction across 270 source taxon concepts and 294 distinct molecular individuals, not a false global 294-tip species tree",
         "phenotype_collection_rule":"All nine original published source character categories, plus new continuous photograph-measured traits (chroma, capitulum angle, phyllary curvature, gland density/adhesion) require reviewed taxon/voucher source and observed photos; never fill by genus or from same-genus relatives",
