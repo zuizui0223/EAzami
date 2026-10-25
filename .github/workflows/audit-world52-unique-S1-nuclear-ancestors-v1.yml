@@ -1,0 +1,75 @@
+name: Recompute true 52 unique-BioSample Cirsium S1 ancestors on 176 and 75 nuclear loci
+
+on:
+  push:
+    branches:
+      - feature/global-u2d-nuclear-climate-v1
+    paths:
+      - "analysis/audit_world52_unique_biosample_S1_Mk_176vs75_v1.py"
+      - ".github/workflows/audit-world52-unique-S1-nuclear-ancestors-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  recalibrate-real-original-unique-52tip-ancestral-states:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install exact original Cirsium Markov evolutionary likelihood estimator and phylogram readers
+        run: |
+          python -m pip install --disable-pip-version-check biopython numpy scipy matplotlib
+          python -m py_compile analysis/audit_world52_unique_biosample_S1_Mk_176vs75_v1.py
+      - name: Fetch 52 distinct molecular tips from two independently fitted genuine nucleotide IQTREE phylograms and source-S1 original accession ledger
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/true52/input .tmp/true52/full176 .tmp/true52/75covered
+          gh run download 40153095510 --repo zuizui0223/EAzami \
+            --name world52-real-unique-biosample-176and75-nuclear-inputs-v1 \
+            --dir .tmp/true52/input
+          gh run download 40153095510 --repo zuizui0223/EAzami \
+            --name real-world52-51uniqueBioSamples-originalfull176-IQTREE-1000boot-v1 \
+            --dir .tmp/true52/full176
+          gh run download 40153095510 --repo zuizui0223/EAzami \
+            --name real-world52-51uniqueBioSamples-originalunique12_75-IQTREE-1000boot-v1 \
+            --dir .tmp/true52/75covered
+      - name: Fit actual U-D ancestral Mk ER and ARD with full missing-data marginalization; compare source regions and phylogenetic RF
+        run: |
+          python analysis/audit_world52_unique_biosample_S1_Mk_176vs75_v1.py \
+            --full176-tree .tmp/true52/full176/world52_176Comp1061_full176_ML.treefile \
+            --balanced75-tree .tmp/true52/75covered/world52_176Comp1061_unique12_75_ML.treefile \
+            --traits .tmp/true52/input/world52_source_S1_unique_BioSample_9traits.csv \
+            --collision-receipt .tmp/true52/input/world52_unique_BioSamples_source_collision_QC.json \
+            --source-input-dir .tmp/true52/input \
+            --outdir .tmp/true52/phylo_analysis
+      - name: Assert 51 genuinely unique public nuclear Cirsium BioSamples and correct genetic source collection geography
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=Path(".tmp/true52/phylo_analysis")
+          j=json.loads((d/"world52_unique_BioSample_176_vs75_nuclear_S1_phylogenetic_audit.json").read_text())
+          assert j["n_Cirsium_unique_BioSamples"]==51
+          assert j["n_total_molecular_tips"]==52
+          assert j["all_source_Cirsium_individuals_unique_BioSample"] is True
+          assert j["same_SRR_duplicated"] is False
+          assert len(j["model_analyses"])==2
+          assert all(x["n_total_source_flower_head_assignments"]=={"U":19,"D":8,"unknown":24} for x in j["model_analyses"])
+          assert "J38S038" in j["original_J38_voucher_fields_without_literally_Japan_or_Honshu_or_Hokkaido"]
+          assert j["all52tip_unrooted_Robinson_Foulds"]>=0
+          assert all(len(x["model_sensitivities"])==6 for x in j["model_analyses"])
+          print("REAL ORIGINAL SOURCE 52-tip U-D MODEL CORRECTED, GENETIC AND GEOGRAPHIC PSEUDOREPLICATION REJECTED")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-world52-176vs75-uniqueBioSample-Cirsium-S1-Mk-topology-v1
+          path: .tmp/true52/phylo_analysis/
+          retention-days: 90
+          if-no-files-found: error
