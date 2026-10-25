@@ -1,0 +1,90 @@
+name: Real world52 nuclear EAzami irreversible U-D vs reversible Mk four-model test
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_real_world52_irreversible_vs_reversible_U_D_Mk_v1.py"
+      - "tests/test_real_world52_irreversible_vs_reversible_U_D_Mk_v1.py"
+      - ".github/workflows/fit-real-world52-directional-irreversible-Mk-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-nuclear-source-four-Mk-processes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install source Markov likelihood and phylogenetic plotting runtime
+        run: |
+          python -m pip install --disable-pip-version-check numpy scipy biopython matplotlib
+          python -m pip check
+          python -m py_compile analysis/run_real_world52_irreversible_vs_reversible_U_D_Mk_v1.py
+      - name: Recover original molecular 51-unique-BioSample three nuclear trees and corrected original S1 botanical source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/EAzami52/source .tmp/EAzami52/full .tmp/EAzami52/covered .tmp/EAzami52/technical .tmp/EAzami52/reference
+          gh run download 40153095510 --repo zuizui0223/EAzami \
+            --name world52-real-unique-biosample-176and75-nuclear-inputs-v1 \
+            --dir .tmp/EAzami52/source
+          gh run download 40153095510 --repo zuizui0223/EAzami \
+            --name real-world52-51uniqueBioSamples-originalfull176-IQTREE-1000boot-v1 \
+            --dir .tmp/EAzami52/full
+          gh run download 40153095510 --repo zuizui0223/EAzami \
+            --name real-world52-51uniqueBioSamples-originalunique12_75-IQTREE-1000boot-v1 \
+            --dir .tmp/EAzami52/covered
+          gh run download 40153668286 --repo zuizui0223/EAzami \
+            --name real-world52-73-original-nuclear-loci-after-same-SRR-pipeline-disagreement-screen-v1 \
+            --dir .tmp/EAzami52/technical
+          gh run download 40160913962 --repo zuizui0223/EAzami \
+            --name real-world52-176-75-73-nuclear-EAzami-corrected-UD-Markov-and-20k-null-v1 \
+            --dir .tmp/EAzami52/reference
+          test -s .tmp/EAzami52/source/world52_source_S1_unique_BioSample_9traits.csv
+          test -s .tmp/EAzami52/reference/world52_directional_U_D_ER_ARD_source_Mk_fits.csv
+      - name: Regression-test physically absorbing irreversible states and real corrected sample IDs
+        run: |
+          python -m unittest discover -s tests -p 'test_real_world52_irreversible_vs_reversible_U_D_Mk_v1.py' -v
+      - name: Fit REAL rooted 52-tip nuclear tree under two irreversible and two reversible U-D processes, prior/region holdout sensitivities
+        run: |
+          python analysis/run_real_world52_irreversible_vs_reversible_U_D_Mk_v1.py \
+            --full176 .tmp/EAzami52/full/world52_176Comp1061_full176_ML.treefile \
+            --high-occupancy75 .tmp/EAzami52/covered/world52_176Comp1061_unique12_75_ML.treefile \
+            --pipeline-qc73 .tmp/EAzami52/technical/real_world52_73_gene_QC_TM3_ML.treefile \
+            --traits .tmp/EAzami52/source/world52_source_S1_unique_BioSample_9traits.csv \
+            --original-corrected-Mk-reference .tmp/EAzami52/reference/world52_directional_U_D_ER_ARD_source_Mk_fits.csv \
+            --outdir .tmp/EAzami52/directional-models
+      - name: Confirm model comparisons use same original DNA, original morphology, root priors and truthful limitations
+        run: |
+          python - <<'PY'
+          import csv,json,math
+          from pathlib import Path
+          p=Path('.tmp/EAzami52/directional-models')
+          j=json.loads((p/'world52_directional_irreversibility_real_nuclear_S1_contract.json').read_text())
+          fits=list(csv.DictReader((p/'world52_four_directional_CTMC_real_model_fits.csv').open()))
+          combos=list(csv.DictReader((p/'world52_irreversibility_vs_reversible_real_AICc_sensitivity.csv').open()))
+          assert len(fits)==60 and len(combos)==15
+          assert j['original_unique_biosample_source']==51
+          assert j['molecular_tree_tips_with_original_outgroup']==52
+          assert j['original_source_morphology']=={'U':19,'D':8,'unknown':24}
+          assert j['root_prior_same_for_all_four_processes_per_comparison']
+          assert j['reversible_likelihood_AICc_crosschecked_against_original_Mk_run']
+          assert len(j['main_PU0p5_all_source_model_results'])==3
+          assert all(x['delta_best_irreversible_minus_best_reversible']>0 for x in j['main_PU0p5_all_source_model_results'])
+          assert all(math.isfinite(float(x['AICc'])) for x in fits)
+          for suffix in ('png','svg'):
+            assert (p/f'world52_irreversible_vs_reversible_nuclear_Mk_AICc.{suffix}').stat().st_size>12000
+          print('REAL SOURCE UNIQUE-52 NUCLEAR DIRECTIONAL/ONE-WAY VS REVERSIBLE MODELS SUCCESS; ADAPTIVE ORIGINS NOT INFERRED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-world52-176-75-73-nuclear-S1-irrev-vs-reversible-Mk-v1
+          path: .tmp/EAzami52/directional-models/
+          if-no-files-found: error
+          retention-days: 90
