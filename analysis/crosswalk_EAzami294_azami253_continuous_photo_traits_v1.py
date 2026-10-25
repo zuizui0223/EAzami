@@ -73,8 +73,15 @@ def namescores():
             raise ValueError("unexpected photographic trait source taxon/definition")
         if name in grouped[scope]:
             raise ValueError("duplicated original image taxon in morphospace scope")
-        if any(not math.isfinite(float(row[x])) for x in ENDPOINTS):
+        # The original 2-endpoint armature module has only PC1 and PC2.
+        # Its genuinely absent PC3 is a dimension that does not exist,
+        # NOT a missing biological phenotype to replace by zero or mean.
+        valid_pc=[pc for pc in ENDPOINTS
+                  if pc!="PC3" or scope!="module:armature"]
+        if any(not math.isfinite(float(row[x])) for x in valid_pc):
             raise ValueError("invalid actual original continuous photo-derived PCA trait coordinate")
+        if scope=="module:armature" and row["PC3"]!="":
+            raise ValueError("source armature has exactly two orthogonal PCA axes")
         grouped[scope][name]=row
     actual={k:len(v) for k,v in grouped.items()}
     if actual!=PHOTO_SCOPES:
