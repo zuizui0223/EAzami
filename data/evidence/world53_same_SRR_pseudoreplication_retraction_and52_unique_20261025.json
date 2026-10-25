@@ -1,0 +1,79 @@
+{
+  "contract_version": "eazami_world53_duplicate_molecular_sample_SRR30887251_audit_correction_v1",
+  "detected_date": "2026-10-25",
+  "severity": "critical: one biological sample treated as two phylogenetic tips; prior Kamchatkan cross-region comparison invalid",
+  "original_earlier_tree_run": "https://github.com/zuizui0223/EAzami/actions/runs/40148735969",
+  "source_true_biosample": "SAMN44017865",
+  "source_true_SRR": "SRR30887251",
+  "original_biosample_source_tip": "J38S038",
+  "mistakenly_new_independent_source_tip": "GLB2_SRR30887251_Cirsium_kamtschaticum",
+  "original_paper_taxon_label": "Cirsium kamtschaticum Ledeb. ex DC.",
+  "source_voucher_locality": "Siberia: Chukotka & Kamchatka, 06.08.2017, Ivanova M., Tikhomirov N., Kopylov-Guskov Y., Volkova P. (MW0162816)",
+  "original_paper_Japan38_sample_is_physically_Japan_collected": false,
+  "original_Japan38_scope": "39 molecular individuals in paper study subset, not 39 guaranteed physically Japanese collection localities; review source voucher geography before regional or phylogeographic claims",
+  "biological_independent_Kamchatkan_molecular_individuals": 1,
+  "pipeline_difference_genomewide_aligned_original176": {
+    "original_j38_confident_bp": 79062,
+    "reprocessed_reference_mapped_confident_bp": 50173,
+    "biallelic_overlap_ACGT_sites": 46971,
+    "allele_disagreement_sites": 282,
+    "disagreement_fraction": 0.006003704413361436,
+    "interpretation": "difference between TWO computational pipelines processing SAME biological accession, not evolutionary divergence",
+    "conspicuous_loci": [
+      {
+        "locus": "At1g02170",
+        "both_called_sites": 466,
+        "discordant_site_count": 74,
+        "discordant_fraction": 0.15879828326180256
+      },
+      {
+        "locus": "At3g04400",
+        "both_called_sites": 511,
+        "discordant_site_count": 33,
+        "discordant_fraction": 0.06457925636007827
+      }
+    ],
+    "paralog_or_homeolog_identity_diagnosed": false,
+    "interpretation_limit": "gene-level unusual differences warrant orthology/copy-number/alignment review; cannot infer sample-level hybridization, recurrent floral trait origin, within-species geographic genetic divergence"
+  },
+  "source_provenance_verified": [
+    "The 53-tip real 176-nuclear-locus source S1 voucher crosswalk contains BOTH tips with same BioSample SAMN44017865 and same SRR30887251.",
+    "The source original J38S038 alignment contains more called ACGT bases than the reprocessed GLB2 copy.",
+    "Exactly ONE repeated original biological BioSample among 52 Cirsium original tip labels was observed; original molecular outgroup is separate.",
+    "The duplicated tip is removed completely before *new* ML tree fitting, not merely pruned after tree inference.",
+    "Independent 75 source genes are selected after de-duplication based on 40% ACGT across each of 12 unique external BioSamples, not on U/D or colour."
+  ],
+  "revised_correct_sample_counts": {
+    "original_reported_individual_molecular_tips": 53,
+    "original_true_distinct_molecular_BioSamples_Cirsium": 51,
+    "true_distinct_Cirsium_tip_count_in_new_tree": 51,
+    "molecular_Carthamus_outgroup": 1,
+    "total_new_molecular_tips": 52,
+    "original54_intake_planned": 9,
+    "QC_passed_new_nuclear_run_accessions": 8,
+    "of_eight_already_present_in_original39_Japan38": 1,
+    "added_truly_distinct_public_SRA_BioSamples": 7,
+    "phenotyped_original_species_source_U": 19,
+    "phenotyped_original_species_source_D": 8,
+    "unscored_head_state": 24,
+    "external_molecular_BioSamples_North_America": 6,
+    "external_molecular_BioSamples_West_Palearctic": 5,
+    "external_molecular_BioSamples_continental_Asia": 1,
+    "high_occupancy_original_nuclear_gene_count": 75,
+    "selected_align_bp": 62810
+  },
+  "successful_reconstruction_input_job": "https://github.com/zuizui0223/EAzami/actions/runs/40153095510",
+  "successfully_frozen_52tip_input_artifact": 12582579691,
+  "corrected_52tip_original176_fasta_SHA256": "1ffe61acfd31580b3468908f326b76983647ddb274eb0ef7412b60adbac85601",
+  "corrected_52tip_geography_75_fasta_SHA256": "61dbdf36e61120606e2465d65478e499c6fbdd24cca1504b001bc5df26627e83",
+  "corrected_input_matrices_source_verified": true,
+  "corrected_QC_ancestral_rates_not_yet_interpreted": true,
+  "historical_source53_conclusions_superseded": [
+    "two independent C. kamtschaticum molecular individuals or population divergences",
+    "53 unique genetic BioSamples",
+    "the extra C. kamtschaticum source sample independently corroborates a D state evolution",
+    "the apparent split of two C. kamtschaticum tips is a real species/genealogical split",
+    "Japanese sample versus Siberian sample contrast from these two source labels"
+  ],
+  "still_not_completed": "Full Moreyra 2025 294 unique BioSamples and originally selected 350 nuclear loci species tree"
+}
