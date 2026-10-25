@@ -102,7 +102,7 @@ def source_panel(path: Path):
         bins[reg].append(name)
     if len(bins) != 3:
         raise ValueError("expected source-informed Japan/NorthAmerica/WestPalearctic state bins")
-    if Counter({r["region"] for r in original.values()}) and original[EXTERNAL_DUPLICATE]["head_orientation"]!="D":
+    if original[EXTERNAL_DUPLICATE]["head_orientation"]!="D":
         raise ValueError("C. kamtschaticum original replicates lost")
     for label in ("Cirsium nipponicum var. incomptum","Cirsium nipponicum var. yoshinoi"):
         matches = [r for r in original.values() if concept(r["source_taxon"])==label]
@@ -127,7 +127,7 @@ def ingest_tree(path: Path, tree_name: str, original: dict):
 
 def compiled_fitch(tree, original):
     """Fast deterministic Fitch step scorer for 20k taxon-block permutations."""
-    nodes, kids, _, _, _, post = build_layout(tree)
+    nodes, kids, _, _, post = build_layout(tree)
     terminal = {}
     for idx, nd in enumerate(nodes):
         if nd.is_terminal():
@@ -187,7 +187,7 @@ def exact_markov_rewards(tree, fit):
         block[2:,2:]=Q
         block[:2,2:]=R
         return expm(block*time)[:2,2:]
-    nodes, kids, _, _, _, _=build_layout(tree)
+    nodes, kids, _, _, _=build_layout(tree)
     endpoint = fit["post"]["edge_joint"]
     rows=[]
     totalUD=totalDU=0.
