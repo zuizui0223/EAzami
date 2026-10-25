@@ -552,6 +552,26 @@ The ingroup root state also contains almost no identifying information: holding 
 - CI `.github/workflows/run-world53-EAzami-UD-Mk-transition-diagnostic-v1.yml`.
 - Durable committed source-backed summary `data/evidence/real_world53_EAzami_U_D_taxonblock_Mk_hidden_jumps_20261025.json`.
 
+## Executed corrected 52-tip U/D **irreversible versus reversible** Mk test (2026-10-25)
+
+**Actual independent model refit, 60 likelihood optimizations, successful CI [40163448875](https://github.com/zuizui0223/EAzami/actions/runs/40163448875)**: first correct original BioSample duplicate `J38S038` / `GLB2_SRR30887251_Cirsium_kamtschaticum` (both SAMN44017865). Use **51 unique Cirsium BioSamples plus original Carthamus outgroup** from three newly fitted real nuclear trees (original **176 genes**, geography-coverage **75 genes**, same-SRR technical disagreement-screen **73 genes**). Use exactly source-verified 19 U / 8 D / 24 missing head states, 27 botanically phenotyped named taxon concepts. Moreyra original S1 supplies molecular-voucher identifiers, **not** the nine original Siniscalchi floral characters.
+
+The new fit explicitly compares the four models **U→D only** (`qDU=0`), **D→U only** (`qUD=0`), reversible **ER** (`qUD=qDU>0`) and reversible **ARD** (`qUD,qDU>0` independent). The true nuclear root is provided by Carthamus but its phenotype is not assigned; ingroup root *prior* P(U)=0.5 for **all** four models. Previous real ER/ARD log-likelihoods and taxon-level AICc are numerically reproduced (≤0.015).
+
+| Real original nuclear source tree | U→D only AICc | D→U only AICc | reversible ER AICc | reversible ARD AICc | ΔAICc U→D only versus ARD |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Full **176 loci** | 43.247 | 56.766 | 39.274 | **37.292** | **+5.955** |
+| All-12-external covered **75 loci** | 43.809 | 56.323 | 39.350 | **37.306** | **+6.504** |
+| Technical-suspect-gene-screened **73 loci** | 44.440 | 58.565 | 38.908 | **37.305** | **+7.135** |
+
+**Interpretation:** Given the present tree/source states and homogeneous CTMC, **a strictly irreversible one-way U→D-only model fits less well than a two-way reversible model**, consistently across the three molecular marker panels. The opposing D→U-only one-way model fits even worse. This gives a concrete **statistical constraint on simplistic models of head direction**, but neither establishes a directly observed D→U regain nor a known ancestral state. The reversible Mk rates are highly saturated; the earlier conditional Markov hidden-jump numbers (tens or hundreds) do not represent historic independent origins.
+
+**Prespecified source and root sensitivity:** changing fixed root P(U) to 0.1 or 0.9 still favors the reversible model. At P(U)=0.9, the best irreversible-minus-reversible ΔAICc is +4.779 to +5.959; at P(U)=0.1 it is +9.174 to +10.354. Masking the initially selected North American D taxon *C. vinaceum* reduces this ΔAICc to **+2.974 to +4.405**, weakening the distinction. Masking the cultivated Western D source *C. erisithales* leaves a +5.327 to +6.731 difference. Therefore the result remains sensitive to source taxon ascertainment.
+
+**Scope:** All three models reuse the same 51 actual molecular BioSamples; 24 state unknowns were *integrated* ([1,1] emissions), not assigned a convenient ancestral U. The ~27 scored species/taxon concepts are phylogenetically related; source-label AICc is descriptive rather than formal corrected significance. No event ages, unambiguous U→D or D→U transition count, paleoclimate/modern climate causal effect, pollinator fitness, gene pathway regain, or complete Moreyra original 294-BioSample final 350-gene world species tree is inferred.
+
+**Artifact and reproducibility:** [run 40163448875](https://github.com/zuizui0223/EAzami/actions/runs/40163448875), artifact **12587437130**, SHA256 `454a35c56134bde308bd6e09894c5466c9ae445c924fe55360d33f7d360fe6d6`. Original inputs/authenticated implementation: `analysis/run_real_world52_irreversible_vs_reversible_U_D_Mk_v1.py`, `tests/test_real_world52_irreversible_vs_reversible_U_D_Mk_v1.py`; full machine-readable receipt `data/evidence/real_world52_irreversible_vs_reversible_EAzami_Mk_U_D_20261025.json`.
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
