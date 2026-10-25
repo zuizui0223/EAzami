@@ -1,5 +1,33 @@
 # Global nuclear U→D × branchwise climate workflow v1
 
+> **SOURCE-ID ERRATUM / 2026-10-25 — THIS OVERRIDES EARLIER WORLD53 CLAIMS.**
+> The apparent two *Cirsium kamtschaticum* populations `J38S038` and
+> `GLB2_SRR30887251_Cirsium_kamtschaticum` are the **same original**
+> `SAMN44017865` **BioSample** and `SRR30887251` **molecular run**.
+> The original Japanese taxonomic study panel included a **Siberian
+> Chukotka/Kamchatka original voucher**, not a second physically Japan-sampled
+> *C. kamtschaticum* individual. Two computational read-processing pipelines
+> yielded 282 different calls in 46,971 jointly called ACGT positions
+> (0.600%), with technical-locus discrepancy up to 74/466 (15.88%)
+> in At1g02170. **This is computational pipeline mismatch, not population
+> differentiation, reticulation or multiple independent floral origins.**
+> Prior 53-tip and same-species-non-sister topology statements are
+> **superseded for inference**; original source sequences and logs remain
+> archived as transparent historical audit material.
+>
+> The corrected intake freezes **52 molecular tips** = **51 unique Cirsium
+> BioSamples + 1 Carthamus outgroup**, 19 observed U / 8 D / 24 unresolved
+> taxon-level head states. The original higher-coverage `J38S038`
+> alignment was retained. Under a 40% per-gene ACGT gate on the **12
+> unique external samples**, **75 original nuclear loci / 62,810 bp**
+> are eligible, selected without reference to flower heads or tree topology.
+> **No global 294-tip 350-gene world species tree is complete.**
+>
+> Frozen evidence: `data/evidence/world53_same_SRR_pseudoreplication_retraction_and52_unique_20261025.json`
+> and `analysis/rebuild_world52_unique_biosample_original176_and75_v1.py`.
+> The corrected original 52-tip IQ-TREE and original Moreyra S1 model results
+> supersede numerical results attributed to the old 53-tip panel when available.
+
 **Status:** executable **synthetic-tested methods**, not a global empirical result. Separate from the frozen EAzami Chapter 2 JEB V10 manuscript and Azami Chapter 1 GEB v3.
 
 ## Target
