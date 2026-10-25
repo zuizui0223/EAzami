@@ -132,7 +132,7 @@ def compiled_fitch(tree, original):
     for idx, nd in enumerate(nodes):
         if nd.is_terminal():
             terminal[idx] = concept(original[nd.name]["source_taxon"])
-    if len(terminal) != len(original) or len(terminal) != len({n for n in terminal}):
+    if len(terminal) != len(tree.get_terminals()) or len(terminal) > len(original):
         raise ValueError("source terminal tip count changed")
     k = len(nodes)
     return {"post":post, "terminal":terminal,
