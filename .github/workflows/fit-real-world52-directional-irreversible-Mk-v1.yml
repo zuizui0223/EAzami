@@ -1,11 +1,10 @@
 name: Real world52 nuclear EAzami irreversible U-D vs reversible Mk four-model test
 
 on:
-  pull_request:
-    paths:
-      - "analysis/run_real_world52_irreversible_vs_reversible_U_D_Mk_v1.py"
-      - "tests/test_real_world52_irreversible_vs_reversible_U_D_Mk_v1.py"
-      - ".github/workflows/fit-real-world52-directional-irreversible-Mk-v1.yml"
+  # The genuine 51-unique-BioSample 60-fit original source-model snapshot
+  # was successfully executed in run 40163625099, artifact 12587507253.
+  # Do not refit the same nuclear Markov data on unrelated PR updates.
+  # Explicit method or source-data changes can be rerun by dispatch.
   workflow_dispatch:
 
 permissions:
