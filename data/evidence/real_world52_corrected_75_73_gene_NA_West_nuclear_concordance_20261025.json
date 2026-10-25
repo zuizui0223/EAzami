@@ -1,0 +1,71 @@
+{
+  "version": "EAzami_corrected52_souce75_and_technical73_genewise_original_nuclear_geographic_concordance_v1",
+  "source_date": "2026-10-25",
+  "molecular_data": {
+    "study": "Moreyra et al. (2025), original S1 nuclear sampling, uniquely indexed source BioSamples",
+    "true_unique_Cirsium_BioSamples": 51,
+    "Carthamus_molecular_outgroup": 1,
+    "original_source_75_Comp1061_gene_coordinate_file_sha256": "5cfdae7495400101eace90c84e47794c151043589ca0b5943ff5d76a915a5541",
+    "source_52tip_75nuclear_fasta_sha256": "61dbdf36e61120606e2465d65478e499c6fbdd24cca1504b001bc5df26627e83",
+    "fixed_molecular_NA_samples": 6,
+    "fixed_molecular_WestPalearctic_samples": 5,
+    "original_blind_gene_selection": "all 12 external sources >=40% ACGT across original locus before looking at head U/D and phylogenetic trees",
+    "within_NA_real_molecular_pair_count": 15,
+    "between_NA_and_West_molecular_pair_count": 30,
+    "minimum_unambiguous_pairwise_overlap_bp": 150,
+    "technical_source_disagreement_genes": [
+      "At1g02170",
+      "At3g04400"
+    ],
+    "gene_loci_unambiguously_low_copy_and_homeolog_free_confirmed": false
+  },
+  "execution": {
+    "run": "https://github.com/zuizui0223/EAzami/actions/runs/40166913063",
+    "artifact_id": 12588693032,
+    "artifact_zip_sha256": "93f763d4551bf3b2f7b72e9c26a37aba1834129014cce8823782d21b29f2e53e",
+    "code": "analysis/audit_world52_75gene_original_NA_West_genetic_concordance_v1.py",
+    "tests": "tests/test_world52_75gene_original_NA_West_genetic_concordance_v1.py",
+    "workflow": ".github/workflows/audit-world52-real75gene-geography-concordance-v1.yml"
+  },
+  "full75_original_source_loci": {
+    "all_genes_with_between_NA_West_pdist_greater_than_within_NA_pdist": 75,
+    "total_inspected_whole_nuclear_loci": 75,
+    "mean_within_NA_p_distance": 0.0016762992881811252,
+    "mean_between_NA_West_p_distance": 0.013375035962623105,
+    "mean_between_minus_within_gene_p_distance": 0.011698736674441977,
+    "descriptive_ratio_mean_between_vs_within": 7.978906903394165,
+    "median_whole_gene_difference": 0.010351374060844331,
+    "exact_genetic_source_region_label_partitions": 462,
+    "one_sided_exchangeability_rank_at_least_as_extreme": 1,
+    "exact_one_sided_source_label_null": 0.0021645021645021645,
+    "source_gene_resampling_95pct_interval_differences": [
+      0.010203996782545029,
+      0.013392392060332985
+    ]
+  },
+  "technical_original73_sensitivity": {
+    "original_technical2_loci_removed": [
+      "At1g02170",
+      "At3g04400"
+    ],
+    "genes_with_same_positive_na_within_minus_external_contrast": 73,
+    "source_selected_loci": 73,
+    "mean_within_NA_p_distance": 0.0016653386089683436,
+    "mean_between_NA_West_p_distance": 0.013334275870444556,
+    "mean_between_minus_within_gene_p_distance": 0.011668937261476213,
+    "descriptive_ratio_between_over_within": 8.006945733819848,
+    "exact_one_sided_label_exchangeability_p": 0.0021645021645021645,
+    "genetic_source_regions_are_not_randomized_climate_history": true
+  },
+  "supported_molecular_ecological_position": "The 6 frozen North American target-capture source molecules are consistently more similar to one another than to the 5 Western Palearctic source molecules within every complete original nuclear gene with audited pair overlap; the split is not a 1–2 outlier-locus artifact. It is SOURCE molecular geographic structuring, not evidence of any U/D trait adaptation.",
+  "unestablished_claims": [
+    "The 75 loci are 75 independently verified orthologous gene trees supporting a particular species-tree split; they are p-distance contrasts on original nuclear alignments with potential paralog/homeolog and mapping uncertainty",
+    "The source 6 North American and 5 European samples constitute population-randomized representatives of their continents or a general worldwide species-tree contrast",
+    "The exchangeability-label exact 1/462 p-value is a phylogenetically adjusted, spatially adjusted or causal ecological p-value",
+    "Any phylogenetic distance caused U/D direction, flower colour, pollinator attraction or environmental adaptation",
+    "Reversible Mk U-D model indicates actual repeated independent D-to-U gains, event ages or historical precipitation BIO15 cause",
+    "Complete 294 unique BioSample originally selected Moreyra 350-nuclear-locus world phylogeny has been reconstructed"
+  ],
+  "source_morphology_scope": "Original Moreyra S1 = BioSample/sample voucher/reads; Siniscalchi's nine traits and independent botanical head descriptions are separate sources, not quantified phenotypes on sequenced molecular vouchers",
+  "sample_error_previous52_corrected": "53-tip pilot contained twice SAMN44017865/SRR30887251; this analysis uses corrected 51 unique Cirsium molecular BioSamples"
+}
