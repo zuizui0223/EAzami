@@ -1,0 +1,70 @@
+name: Actual EAzami 294 nuclear samples x azami 253 photo taxon continuous 5-module overlap
+
+on:
+  pull_request:
+    paths:
+      - "analysis/crosswalk_EAzami294_azami253_continuous_photo_traits_v1.py"
+      - ".github/workflows/crosswalk-EAzami294-azami253-original-continuous-traits-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  source-verified-original-photo-x-nuclear:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify frozen public original azami source and 53-tip EAzami nuclear crosswalk library
+        run: |
+          python -m py_compile analysis/crosswalk_EAzami294_azami253_continuous_photo_traits_v1.py
+      - name: Recover original source-verified 53-tip molecular S1 and nine trait sample names without recomputing DNA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/genuine-molecular53-photo-intake
+          gh run download 40150037475 --repo zuizui0223/EAzami \
+            --name world53-real-176nuclear-S1-original-nine-flowers-and-Mk-models-v1 \
+            --dir .tmp/genuine-molecular53-photo-intake
+          test -s .tmp/genuine-molecular53-photo-intake/world53_original_S1_vouchers_head_nine_trait_rows.csv
+      - name: Authenticate original 253-taxon image-derived continuous floral trait data; crossmatch world294 S1 and actual53 tree without synonym/trait imputation
+        run: |
+          python analysis/crosswalk_EAzami294_azami253_continuous_photo_traits_v1.py \
+            --world53-traits .tmp/genuine-molecular53-photo-intake/world53_original_S1_vouchers_head_nine_trait_rows.csv \
+            --outdir .tmp/EAzami-original-294-source-azami-photo-continuous-bridge
+      - name: Require image and DNA source cohorts remain independent, and quantify all trait photo-complete cohorts
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          d=Path(".tmp/EAzami-original-294-source-azami-photo-continuous-bridge")
+          m=json.loads((d/"EAzami_azami_source_photo_nuclear_continuous_trait_bridge.json").read_text())
+          assert m["n_Moreyra_Chang_public_genetic_individuals"]==294
+          assert m["n_independent_original_genetic_taxon_labels"]==270
+          assert m["n_world53_source_tips_in_crosswalk"]==53
+          assert m["original_azami_image_trait_module_taxon_counts"]["module:colour"]==253
+          assert m["original_azami_image_trait_module_taxon_counts"]["module:shape"]==253
+          assert m["original_azami_image_trait_module_taxon_counts"]["module:involucre_architecture"]==127
+          assert m["not_same_genetic_voucher_as_photographic_measurement"] is True
+          assert m["global_294tip_350gene_species_phylogeny_not_inferred"] is True
+          assert m["exact_taxon_spelling_no_synonym_transfer"] is True
+          for name,expected in [
+            ("actual_global294_nuclear_biosample_azami_continuous_photo_PC_5modules.csv",294),
+            ("actual_global270_taxon_azami_continuous_photo_PC_5modules.csv",270),
+            ("actual_world53_nuclear_tip_azami_continuous_photo_PC_5modules.csv",53),
+          ]:
+            with (d/name).open() as h:
+              assert len(list(csv.DictReader(h)))==expected
+          print("ACTUAL EAzami 294 DNA SOURCE x azami 253 PHOTO TAXON MULTIMORPHOSPACE COVERAGE: PASSED")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: actual-EAzami294-azami253-original-continuous-photo-multitrait-nuclear-bridge-v1
+          path: .tmp/EAzami-original-294-source-azami-photo-continuous-bridge/
+          if-no-files-found: error
+          retention-days: 90
