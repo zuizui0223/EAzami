@@ -47,7 +47,8 @@ jobs:
             rows=list(csv.DictReader(h))
           assert len(rows)==684
           assert {r["character"] for r in rows}=={"CorollaThroat","CorollaColor","Duration","GlutinousRidge","Habit","HeadPosition","InnerPhyllaryColor","OuterPhyllaryPosition","StyleBranchColor"}
-          assert all(0 <= float(r["BH_q_all_9traits_x_37environment_axes"]) <= 1 for r in rows)
+          assert all((math.isnan(float(r["BH_q_all_9traits_x_37environment_axes"])) if r["environment_axis"]=="DR" else 0 <= float(r["BH_q_all_9traits_x_37environment_axes"]) <= 1) for r in rows)
+          assert sum(r["environment_axis"]=="DR" for r in rows)==18
           assert all(math.isfinite(float(r["Fstat"])) for r in rows)
           print("SUCCESS: 62 real original nuclear species, 9 morphology traits, 37 original environment axes + DR separately; q across 333 tests")
           PY
