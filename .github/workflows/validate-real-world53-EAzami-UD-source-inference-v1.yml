@@ -44,7 +44,8 @@ jobs:
           assert j["original_state_taxon_assignment_gate"]["number_unresolved_nuclear_tip_states_preserved"]==24
           assert j["Mk_CTMC_history"]["infer_root_U_from_data"] is False
           assert j["Mk_CTMC_history"]["claim_historical_event_origin_count"] is False
-          assert j["ecological_next_gate"]["original_declared_east_asia_plus_BIO15_minus_BIO1_hypothesis_globally_tested"] is False
+          assert j["ecological_next_gate"]["matched_worldwide_BIO1_BIO15_source_tip_centroids_complete"] is False
+          assert j["ecological_next_gate"]["phylogenetic_hypothesis_globally_testable"] is False
           assert ready["worldwide_branch_length_nuclear_ensemble_ready"] is False
           assert ready["empirical_world53_nuclear_U_D_transition_20261025"]["original_distinct_source_taxon_concepts_with_U_D"]==27
           assert ready["empirical_world53_nuclear_U_D_transition_20261025"]["full_294tip_original_Moreyra_350locus_tree_completed"] is False
