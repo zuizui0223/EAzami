@@ -176,7 +176,7 @@ def compare(*,full_tree,subset_tree,source_traits,collision_receipt,source_input
     a,b=trees.values()
     A,B=unrooted_splits(a,base),unrooted_splits(b,base)
     rf=len(A.symmetric_difference(B))
-    if len(A)!=len(B)!=49:
+    if len(A)!=49 or len(B)!=49:
         raise ValueError("some source molecular tree is unresolved or unexpected split count")
     source_only_j38_vouchers={
        k:v["source_voucher"] for k,v in row_by_tip.items()
