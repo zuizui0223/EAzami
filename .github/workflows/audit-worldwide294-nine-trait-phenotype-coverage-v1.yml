@@ -1,0 +1,61 @@
+name: Empirical worldwide 294 BioSample nine-trait ecological data coverage
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_global294_source_multitrait_expansion_v1.py"
+      - ".github/workflows/audit-worldwide294-nine-trait-phenotype-coverage-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  actual-worldwide-nuclear-sample-to-nine-floral-source-gaps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate executed DNA-source original 294 registry without rerunning nucleotide downloads
+        run: |
+          python -m pip install --disable-pip-version-check biopython
+          python -m py_compile analysis/audit_global294_source_multitrait_expansion_v1.py
+      - name: Query pinned original nine-character source and crosswalk all 294 real nuclear BioSamples without name imputation
+        run: |
+          python analysis/audit_global294_source_multitrait_expansion_v1.py \
+            --asset-dir .tmp/original-northamerica-nine-character-author-verified \
+            --outdir .tmp/empirical-world294-nine-character-coverage
+      - name: Check all molecular individuals, species-level trait provenance and hidden category mixed-colour gate
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          d=Path(".tmp/empirical-world294-nine-character-coverage")
+          j=json.loads((d/"worldwide_294_nuclear_multitrait_coverage_receipt.json").read_text())
+          assert j["molecular_S1_current_source_BioSamples"]==294
+          assert j["molecular_S1_current_source_SRRs"]==295
+          assert j["molecular_S1_source_taxon_labels"]==270
+          assert j["unique_294source_taxon_labels_with_all_9_original_Siniscalchi_categories"]>0
+          assert j["global_climate_BIO18_extracted_and_native_filtered_for_all"] is False
+          assert j["all_294_nuclear_tree_real_inferred"] is False
+          with (d/"all_294_real_nuclear_source_biosample_exact_9trait_expansion.csv").open() as h:
+            x=list(csv.DictReader(h))
+          with (d/"all_270_source_taxon_label_nine_trait_and_UD_coverage.csv").open() as h:
+            y=list(csv.DictReader(h))
+          assert len(x)==294 and len(y)==270
+          assert len({r["biosample"] for r in x})==294
+          assert len({r["source_taxon_label"] for r in y})==270
+          assert all(r["source_BIO18_climate_for_this_molecular_biosample"]=="NOT_EXTRACTED" for r in x)
+          assert all(r["same_sequenced_voucher_head_or_colour_measured"]=="false" for r in x)
+          assert all(not(r["HeadPosition"] and not r["CorollaColor"]) for r in x)
+          print("WORLDWIDE 294 DNA-ONLY SOURCE BIOLOGICAL INDIVIDUALS × FULL NINE MORPHOLOGY COVERAGE AUDIT PASSED")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-worldwide-294nuclear-270taxon-exact-nine-floral-trait-coverage-v1
+          path: .tmp/empirical-world294-nine-character-coverage/
+          retention-days: 90
+          if-no-files-found: error
