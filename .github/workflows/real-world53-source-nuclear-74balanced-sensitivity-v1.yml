@@ -1,11 +1,9 @@
 name: Verify world53 full176 vs 74 all-region-covered real nuclear gene trees
 
 on:
-  pull_request:
-    paths:
-      - "analysis/build_real_world53_nuclear_74balanced_loci_v1.py"
-      - "analysis/audit_real_world53_nuclear_176_vs_balanced74_gene_tree_v1.py"
-      - ".github/workflows/real-world53-source-nuclear-74balanced-sensitivity-v1.yml"
+  # Empirical 53-tip, 74-locus IQ-TREE model-conditional result is archived
+  # on run 40151213259 and in permanent GitHub source receipts.
+  # Rerun explicit genomic sensitivity only when source inputs/methods change.
   workflow_dispatch:
 
 permissions:
