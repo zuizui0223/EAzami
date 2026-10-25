@@ -54,7 +54,7 @@ class OneWayMkReal52(unittest.TestCase):
 
     def test_taxon_concept_keeps_variety_not_just_species(self):
         self.assertEqual(m.taxon_concept("Cirsium fontinale var. campylon"),
-                         "Cirsium fontinale campylon")
+                         "Cirsium fontinale var. campylon")
         self.assertEqual(m.taxon_concept("Cirsium alpicola Nakai"),
                          "Cirsium alpicola")
 
