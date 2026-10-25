@@ -26,9 +26,11 @@ Independent genome-wide evidence reinforces the *need to treat species-tip compr
 
 Retain the Japan-local lightness replication as a bounded negative result. The seven-concept source-balanced panel does not reproduce the preregistered anti-phylogenetic direction. It must not be used to infer that colour is generally conserved or labile in the Japanese radiation.
 
-## Supplementary Figure S5 — Ecological topology and LOO sensitivity
+## Supplementary Figure S5 — Ecological topology, public-phylogeny saturation and LOO sensitivity
 
-Display the full four-axis orientation screen across the six AU-nonrejected optimized topologies and species leave-one-out fits. BIO15 and BIO1 are the focal axes in the main text. BIO4 and BIO12 remain sensitivity axes and are not promoted by outcome inspection.
+Display the full four-axis orientation screen from the frozen branch-length analysis together with species leave-one-out fits. BIO15 and BIO1 are the focal axes in the main text. BIO4 and BIO12 remain sensitivity axes and are not promoted by outcome inspection.
+
+The six AU-nonrejected optimized Comp1061 trees should **not** be presented as six distinct ecology-panel topologies: after pruning to the n=9 primary ecology panel, all six accepted trees—and all nine optimized candidates—induce the same topology. Genuine topology sensitivity is instead supplied by the regenerated 1,000-tree full20 UFBoot ensemble, the 153 public Comp1061 locus trees, the ASTRAL tree reconstructed from those loci and the overlapping Chang et al. 2026 ASTRAL topology.
 
 ## Table S1 — Tree, concept and phenotype admission exceptions
 
@@ -55,7 +57,7 @@ The previously quoted localization fractions 0.201, 0.754, 0.67 and 0.40 reprodu
 ## Table S3 — Discrete transition-overlap sensitivity
 
 | Pair | Branch-aware rho | Equal-branch median | q05 | Cross-treatment rule |
-| --- | ---: | ---: | ---: | --- |
+| --- | ---: | ---: | --- |
 | orientation–phyllary | 0.362 | −0.059 | −0.206 | fail |
 | orientation–stickiness | 0.202 | −0.387 | −0.392 | fail |
 | phyllary–stickiness | 0.084 | 0.184 | −0.073 | fail |
@@ -64,16 +66,28 @@ Zero of three trait pairs supplies a consistently positive shared-transition-loc
 
 ## Table S4 — Orientation ecological correspondence
 
-Primary panel: nine taxa, U=5 and D=4, each with at least ten independent thinned environment-complete occurrence records. Values below are standardized D-minus-U effects across the six accepted optimized topologies.
+Primary panel: nine taxa, U=5 and D=4, each with at least ten independent thinned environment-complete occurrence records. Values below are standardized D-minus-U effects across the six AU-nonrejected optimized branch-length trees. These six fits remain the frozen primary effect estimates, but the six trees induce one topology after pruning to the ecology taxa and therefore do not by themselves establish topology robustness.
 
-| Climate axis | Effect range | P range | Accepted-topology sign agreement | Species-LOO sign agreement | Main role |
+| Climate axis | Effect range | P range | Frozen six-tree sign agreement | Species-LOO sign agreement | Main role |
 | --- | ---: | ---: | ---: | ---: | --- |
 | CHELSA BIO15 precipitation seasonality | +1.320 to +1.330 SD | 0.05054–0.05239 | 6/6 | 54/54 | primary ecological lead |
 | CHELSA BIO1 annual mean temperature | −0.975 to −0.967 SD | 0.09604–0.09793 | 6/6 | 54/54 | secondary ecological lead |
 
-The branchwise diagnostic retains the same directions on all six topologies. For BIO15 the transition-weighted shift is +0.268 SD with permutation P=0.094–0.124. For BIO1 it is −0.199 SD with permutation P=0.108–0.136.
+The branchwise diagnostic retains the same directions on all six frozen branch-length trees. For BIO15 the transition-weighted shift is +0.268 SD with permutation P=0.094–0.124. For BIO1 it is −0.199 SD with permutation P=0.108–0.136.
 
-The archived ecological input bundle does not retain raw Comp1061 UFBoot trees, so an ecology-specific raw-bootstrap sign rate is `not_evaluable`. The six accepted AU topologies are not used as a substitute for 1,000 raw bootstrap trees.
+### Table S4b — Exhaustive public phylogeny sensitivity for orientation climate direction
+
+| Layer | Ecology-panel topology diversity / coverage | BIO1 expected-direction agreement | BIO15 expected-direction agreement | Interpretation |
+| --- | --- | ---: | ---: | --- |
+| 9 optimized candidates | 1 induced topology on n=9 and n=11 panels | 9/9 fits | 9/9 fits | not a substantive ecology topology ensemble after pruning |
+| regenerated concatenated UFBoot | 1,000 trees; 14 induced n=9 topologies and 21 induced n=11 topologies | 1,000/1,000 | 1,000/1,000 | topology-only; raw `.ufboot` has no fitted branch lengths |
+| public Comp1061 locus trees | 153 total; 149 contain each complete ecology panel; 150–153 induced signatures | 149/149 complete-panel topology-only fits | 149/149 | genuine high-discordance topology stress test |
+| ASTRAL from 153 public loci | one coalescent species topology | expected sign retained | expected sign retained | branches equalized for ecology sensitivity |
+| Chang et al. 2026 ASTRAL overlap | smaller independent taxon overlap | negative | positive | direction concordant; threshold unresolved |
+
+The public locus trees are strongly discordant: across 18 internal branches, median gCF is 7.545% (range 0.65–40.79%) and median sCF is 46.92% (33.34–89.51%). Thus the invariant topology-only sign is not a consequence of near-identical gene trees.
+
+Using the fitted branch lengths of individual short locus trees as species-level Brownian covariance matrices lowers expected-sign agreement to about 77–85%. This is retained only as a **covariance-geometry stress test**. It is not interpreted as independent ecological replication or as evidence that 15–23% of loci biologically support the opposite climate relationship.
 
 ## Table S5 — Predictive diagnostic retained as sensitivity, not the main ecological decision
 
@@ -96,7 +110,7 @@ This diagnostic is retained for transparency but is **not required to define eco
 
 | Trait | Historical coverage | Frozen climate overlap | Evaluation | Reason |
 | --- | --- | --- | --- | --- |
-| orientation | 20 resolved concepts | 9 state-diverse taxa at n≥10 | `unresolved` | BIO15/BIO1 directions are large and stable to all six accepted topologies and all species-LOO fits, but frozen PGLS/branchwise thresholds are not crossed |
+| orientation | 20 resolved concepts | 9 state-diverse taxa at n≥10 | `unresolved` | BIO15/BIO1 directions are large and species-LOO stable; independent public UFBoot/locus-tree/ASTRAL topology sensitivities retain both signs, but frozen PGLS/branchwise thresholds are not crossed |
 | phyllary posture | 10 resolved concepts | 2 unambiguous n≥10 taxa, both ascending | `not_evaluable` | no state-diverse phylogeny-aware climate contrast is estimable |
 | stickiness | 13 resolved concepts | 2 evaluable n≥10 taxa, both nonsticky | `not_evaluable` | no sticky/nonsticky climate contrast is estimable |
 
@@ -167,6 +181,8 @@ These are Chapter 3 mechanism discriminators, not historical causes inferred by 
 - `data/evidence/chapter2_ecological_explanatory_reach_v1.json`
 - `data/evidence/fdt4_eastasia_pgls_recovered_diagnostic_v1.json`
 - `data/evidence/fdt4_branchwise_niche_transition_concordance_v1.json`
+- `data/evidence/fdt4_orientation_phylogeny_saturation_summary_v1.json`
+- `data/evidence/fdt4_taiwan_tbn_alias_contract_v1.json`
 - `data/evidence/hmm2_population_aware_transition_test_v1.json`
 - `data/evidence/chapter2_eazami_native_continuous_history_diagnostic_v1.json`
 - `data/evidence/japan38_cytotype_trait_overlap_v1.json`
@@ -177,8 +193,10 @@ These are Chapter 3 mechanism discriminators, not historical causes inferred by 
 - [x] minimum change, relative lineage-depth and ecological reach are reported as distinct estimands;
 - [x] ecological correspondence is not made dependent on predictive model competition;
 - [x] predictive diagnostics are retained transparently in Supporting Information;
-- [x] species LOO and accepted-topology sign stability are explicit;
-- [x] raw ecological UFBoot sign rate is marked `not_evaluable` rather than substituted;
+- [x] species LOO stability is explicit and is not conflated with topology sensitivity;
+- [x] the six AU-nonrejected trees are explicitly marked as one induced topology on the ecology panel;
+- [x] ecology topology sensitivity is evaluated with regenerated UFBoot, public locus trees and ASTRAL rather than substituted from the six AU trees;
+- [x] raw UFBoot branch-aware PGLS is prohibited because the regenerated `.ufboot` trees lack fitted branch lengths;
 - [x] phyllary and stickiness `not_evaluable` states are not reported as zero effects;
 - [x] the independent nuclear evidence landscape is distinguished from the harmonized full-panel scaffold;
 - [x] pre-2025 Japanese/Korean nuclear resources are not silently omitted;

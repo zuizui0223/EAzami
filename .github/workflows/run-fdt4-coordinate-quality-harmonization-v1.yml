@@ -1,0 +1,163 @@
+name: Run FDT4 coordinate-quality harmonization v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_fdt4_orientation_phylogeny_saturation_v1.py"
+      - "analysis/summarize_chapter2_ecological_explanatory_reach_v1.py"
+      - "data/evidence/chang2026_orientation_alias_overlap_pruned_topology_v1.nwk"
+      - ".github/workflows/run-fdt4-coordinate-quality-harmonization-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  strict_coordinate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas scipy biopython
+          python -m pip check
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-japan-orientation-niche-v1
+          path: inputs/japan
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32716015605
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-taiwan-orientation-niche-v1
+          path: inputs/taiwan
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33225237163
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-taiwan-tbn-alias-sensitivity-v1
+          path: inputs/tbn_alias
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33246077732
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-alt-topology-au-32614839764
+          path: inputs/au
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614839764
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-topology-concordance-32614242600
+          path: inputs/concordance
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614242600
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-orientation-phylogeny-saturation-v1
+          path: inputs/phylo_saturation
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33245270887
+
+      - name: Build globally strict <=10 km occurrence layers
+        run: |
+          mkdir -p output/strict
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+
+          def strict(src,dst):
+              d=pd.read_csv(src)
+              u=pd.to_numeric(d['coordinate_uncertainty_m'],errors='coerce')
+              q=d.loc[u.notna() & (u<=10000)].copy()
+              q.to_csv(dst,index=False)
+              return d,q
+
+          j0,j=strict('inputs/japan/focal_occurrences_environment_complete.csv','output/strict/japan_strict_environment_complete.csv')
+          t0,t=strict('inputs/taiwan/focal_occurrences_environment_complete.csv','output/strict/taiwan_strict_environment_complete.csv')
+          b=pd.read_csv('inputs/tbn_alias/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv')
+          bu=pd.to_numeric(b['coordinate_uncertainty_m'],errors='coerce')
+          assert bu.notna().all() and (bu<=10000).all(), 'TBN broad layer is not uniformly <=10 km'
+          b.to_csv('output/strict/tbn_broad_strict_environment_complete.csv',index=False)
+
+          def counts(d): return {str(k):int(v) for k,v in d.groupby('scientific_name_query').size().items()}
+          payload={
+            'contract_version':'fdt4_coordinate_quality_harmonization_v1',
+            'rule':'all admitted GBIF/TBN occurrence cells must have explicit coordinate_uncertainty_m <= 10000; no missing-uncertainty fallback',
+            'spatial_thin_degrees':'inherited 0.05 from source artifacts',
+            'min_cells_per_taxon':10,
+            'japan_original_counts':counts(j0),'japan_strict_counts':counts(j),
+            'taiwan_original_counts':counts(t0),'taiwan_strict_counts':counts(t),
+            'tbn_broad_strict_counts':counts(b),
+            'claim_boundary':'This is a coordinate-quality harmonization sensitivity. It does not retrospectively invalidate the frozen fallback panel; it asks whether the ecological direction survives a single stricter occurrence-quality rule across regions.'
+          }
+          Path('output/strict/fdt4_coordinate_quality_harmonization_v1.json').write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n')
+          print(json.dumps(payload,indent=2,ensure_ascii=False))
+          PY
+
+      - name: Run strict-panel PGLS and LOO classification
+        run: |
+          python analysis/summarize_chapter2_ecological_explanatory_reach_v1.py \
+            --occurrences \
+              output/strict/japan_strict_environment_complete.csv \
+              output/strict/taiwan_strict_environment_complete.csv \
+              output/strict/tbn_broad_strict_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --au-trees inputs/au/au.trees --min-n 10 --topologies 6 \
+            --out output/strict/chapter2_ecological_reach_strict_coordinate_v1.json
+
+      - name: Saturate strict panel across public phylogenies
+        run: |
+          mkdir -p output/strict/topology_saturation
+          python analysis/run_fdt4_orientation_phylogeny_saturation_v1.py \
+            --japan-occ output/strict/japan_strict_environment_complete.csv \
+            --taiwan-gbif output/strict/taiwan_strict_environment_complete.csv \
+            --tbn-native output/strict/tbn_broad_strict_environment_complete.csv \
+            --tbn-broad output/strict/tbn_broad_strict_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --au-trees inputs/au/au.trees --accepted-count 6 \
+            --ufboot-trees inputs/phylo_saturation/full20_bootstrap/full20_comp1061.ufboot \
+            --gene-trees inputs/concordance/sensitivity/loci.treefile \
+            --extra-tree astral153_from_public_loci inputs/phylo_saturation/astral153/astral153.tre \
+            --extra-tree chang2026_astral_alias_overlap data/evidence/chang2026_orientation_alias_overlap_pruned_topology_v1.nwk \
+            --min-n 10 --out-dir output/strict/topology_saturation
+
+      - name: Fail closed on strict panel structure
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          e=json.loads(Path('output/strict/chapter2_ecological_reach_strict_coordinate_v1.json').read_text())
+          p=json.loads(Path('output/strict/topology_saturation/fdt4_orientation_phylogeny_saturation_v1.json').read_text())
+          assert e['orientation']['n_taxa'] >= 6
+          assert e['orientation']['n_U'] >= 2 and e['orientation']['n_D'] >= 2
+          assert p['panels']['broad_non_gbif_tbn']['n_taxa']==e['orientation']['n_taxa']
+          assert p['ensemble_sizes']['concatenated_ufboot']==1000
+          assert p['ensemble_sizes']['public_locus_trees']==153
+          print('strict_n',e['orientation']['n_taxa'],'U',e['orientation']['n_U'],'D',e['orientation']['n_D'])
+          print('BIO15',e['orientation']['axes']['chelsa_bio15'])
+          print('BIO1',e['orientation']['axes']['chelsa_bio01'])
+          print('FDT4 strict coordinate harmonization PASS')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fdt4-coordinate-quality-harmonization-v1
+          path: output/strict
+          if-no-files-found: error
+          retention-days: 90

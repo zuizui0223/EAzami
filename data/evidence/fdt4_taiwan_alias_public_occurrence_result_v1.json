@@ -1,0 +1,362 @@
+{
+  "contract_version": "fdt4_taiwan_alias_public_occurrence_result_v1",
+  "status": "FROZEN_SUPPORTING_SENSITIVITY_PRIMARY_UNCHANGED",
+  "provenance": {
+    "workflow_run_id": 33246077732,
+    "artifact_id": 9712888467,
+    "artifact_json_files_scanned": 7
+  },
+  "occurrence_tiers": {
+    "alias_native": {
+      "source_path": "inputs/alias_result/chapter2_ecological_reach_alias_native.json",
+      "status": "unresolved",
+      "n_taxa": 11,
+      "n_U": 6,
+      "n_D": 5,
+      "bio01": {
+        "beta_D_minus_U_sd_range": [
+          -0.999342434201576,
+          -0.9922590164265692
+        ],
+        "p_range": [
+          0.049849081244273646,
+          0.05065297291988684
+        ],
+        "accepted_species_tree_sign_agreement": 1.0,
+        "species_loo_sign_agreement": 1.0,
+        "species_loo_evaluations": 66
+      },
+      "bio12": {
+        "beta_D_minus_U_sd_range": [
+          0.5882778715600078,
+          0.5982126777430541
+        ],
+        "p_range": [
+          0.2853178409729945,
+          0.28837122540070487
+        ],
+        "accepted_species_tree_sign_agreement": 1.0,
+        "species_loo_sign_agreement": 1.0,
+        "species_loo_evaluations": 66
+      },
+      "bio15": {
+        "beta_D_minus_U_sd_range": [
+          1.0935586691726322,
+          1.1000825211157914
+        ],
+        "p_range": [
+          0.0491532798040714,
+          0.05133284124848173
+        ],
+        "accepted_species_tree_sign_agreement": 1.0,
+        "species_loo_sign_agreement": 1.0,
+        "species_loo_evaluations": 66
+      }
+    },
+    "alias_broad": {
+      "source_path": "inputs/alias_result/chapter2_ecological_reach_alias_broad.json",
+      "status": "tendency_supported",
+      "n_taxa": 12,
+      "n_U": 6,
+      "n_D": 6,
+      "bio01": {
+        "beta_D_minus_U_sd_range": [
+          -0.27650327905601385,
+          -0.274469309430046
+        ],
+        "p_range": [
+          0.5038899470370274,
+          0.5077385286300679
+        ],
+        "accepted_species_tree_sign_agreement": 1.0,
+        "species_loo_sign_agreement": 1.0,
+        "species_loo_evaluations": 72
+      },
+      "bio12": {
+        "beta_D_minus_U_sd_range": [
+          -0.4356615045298911,
+          -0.43402250378099577
+        ],
+        "p_range": [
+          0.4257006890944066,
+          0.4266187298377381
+        ],
+        "accepted_species_tree_sign_agreement": 1.0,
+        "species_loo_sign_agreement": 0.8333333333333334,
+        "species_loo_evaluations": 72
+      },
+      "bio15": {
+        "beta_D_minus_U_sd_range": [
+          1.063332028838624,
+          1.0669955585979067
+        ],
+        "p_range": [
+          0.012489317828813492,
+          0.012948460388517397
+        ],
+        "accepted_species_tree_sign_agreement": 1.0,
+        "species_loo_sign_agreement": 1.0,
+        "species_loo_evaluations": 72
+      }
+    }
+  },
+  "topology_saturation": {
+    "source_path": "inputs/alias_result/topology_saturation_alias_broad/fdt4_orientation_phylogeny_saturation_v1.json",
+    "panels": {
+      "gbif": {
+        "n_taxa": 9,
+        "n_U": 5,
+        "n_D": 4,
+        "taxa": [
+          "Cirsium alpicola",
+          "Cirsium brevicaule",
+          "Cirsium irumtiense",
+          "Cirsium japonicum var. australe",
+          "Cirsium japonicum var. japonicum",
+          "Cirsium kamtschaticum",
+          "Cirsium kawakamii",
+          "Cirsium suffultum",
+          "Cirsium yezoense"
+        ]
+      },
+      "native_tbn": {
+        "n_taxa": 11,
+        "n_U": 6,
+        "n_D": 5,
+        "taxa": [
+          "Cirsium alpicola",
+          "Cirsium brevicaule",
+          "Cirsium irumtiense",
+          "Cirsium japonicum var. australe",
+          "Cirsium japonicum var. japonicum",
+          "Cirsium kamtschaticum",
+          "Cirsium kawakamii",
+          "Cirsium morii",
+          "Cirsium suffultum",
+          "Cirsium tatakaense",
+          "Cirsium yezoense"
+        ]
+      },
+      "broad_non_gbif_tbn": {
+        "n_taxa": 12,
+        "n_U": 6,
+        "n_D": 6,
+        "taxa": [
+          "Cirsium alpicola",
+          "Cirsium brevicaule",
+          "Cirsium irumtiense",
+          "Cirsium japonicum var. australe",
+          "Cirsium japonicum var. fukienense",
+          "Cirsium japonicum var. japonicum",
+          "Cirsium kamtschaticum",
+          "Cirsium kawakamii",
+          "Cirsium morii",
+          "Cirsium suffultum",
+          "Cirsium tatakaense",
+          "Cirsium yezoense"
+        ]
+      }
+    },
+    "ensemble_sizes": {
+      "au_candidates": 9,
+      "au_nonrejected": 6,
+      "concatenated_ufboot": 1000,
+      "public_locus_trees": 153,
+      "extra_topologies": [
+        "astral153_from_public_loci",
+        "chang2026_astral_alias_overlap"
+      ]
+    },
+    "topology_diversity": {
+      "au_candidates": {
+        "gbif": {
+          "trees_with_estimable_signature": 9,
+          "unique_induced_topologies": 1,
+          "largest_topology_frequency": 9
+        },
+        "native_tbn": {
+          "trees_with_estimable_signature": 9,
+          "unique_induced_topologies": 1,
+          "largest_topology_frequency": 9
+        },
+        "broad_non_gbif_tbn": {
+          "trees_with_estimable_signature": 9,
+          "unique_induced_topologies": 1,
+          "largest_topology_frequency": 9
+        }
+      },
+      "concatenated_ufboot": {
+        "gbif": {
+          "trees_with_estimable_signature": 1000,
+          "unique_induced_topologies": 14,
+          "largest_topology_frequency": 696
+        },
+        "native_tbn": {
+          "trees_with_estimable_signature": 1000,
+          "unique_induced_topologies": 21,
+          "largest_topology_frequency": 666
+        },
+        "broad_non_gbif_tbn": {
+          "trees_with_estimable_signature": 1000,
+          "unique_induced_topologies": 27,
+          "largest_topology_frequency": 659
+        }
+      },
+      "locus_tree_complete": {
+        "gbif": {
+          "trees_with_estimable_signature": 153,
+          "unique_induced_topologies": 150,
+          "largest_topology_frequency": 2
+        },
+        "native_tbn": {
+          "trees_with_estimable_signature": 153,
+          "unique_induced_topologies": 153,
+          "largest_topology_frequency": 1
+        },
+        "broad_non_gbif_tbn": {
+          "trees_with_estimable_signature": 153,
+          "unique_induced_topologies": 153,
+          "largest_topology_frequency": 1
+        }
+      },
+      "locus_tree_estimable": {
+        "gbif": {
+          "trees_with_estimable_signature": 153,
+          "unique_induced_topologies": 150,
+          "largest_topology_frequency": 2
+        },
+        "native_tbn": {
+          "trees_with_estimable_signature": 153,
+          "unique_induced_topologies": 153,
+          "largest_topology_frequency": 1
+        },
+        "broad_non_gbif_tbn": {
+          "trees_with_estimable_signature": 153,
+          "unique_induced_topologies": 153,
+          "largest_topology_frequency": 1
+        }
+      },
+      "astral153_from_public_loci": {
+        "gbif": {
+          "trees_with_estimable_signature": 1,
+          "unique_induced_topologies": 1,
+          "largest_topology_frequency": 1
+        },
+        "native_tbn": {
+          "trees_with_estimable_signature": 1,
+          "unique_induced_topologies": 1,
+          "largest_topology_frequency": 1
+        },
+        "broad_non_gbif_tbn": {
+          "trees_with_estimable_signature": 1,
+          "unique_induced_topologies": 1,
+          "largest_topology_frequency": 1
+        }
+      },
+      "chang2026_astral_alias_overlap": {
+        "native_tbn": {
+          "trees_with_estimable_signature": 1,
+          "unique_induced_topologies": 1,
+          "largest_topology_frequency": 1
+        },
+        "broad_non_gbif_tbn": {
+          "trees_with_estimable_signature": 1,
+          "unique_induced_topologies": 1,
+          "largest_topology_frequency": 1
+        }
+      }
+    },
+    "ufboot_branch_length_status": "absent_in_raw_iqtree_ufboot; topology-only equal-branch sensitivity is admissible; branch-aware UFBoot PGLS prohibited",
+    "sign_rates": {
+      "concatenated_ufboot": {
+        "gbif": {
+          "equal": {
+            "chelsa_bio01": 1.0,
+            "chelsa_bio15": 1.0
+          }
+        },
+        "native_tbn": {
+          "equal": {
+            "chelsa_bio01": 1.0,
+            "chelsa_bio15": 1.0
+          }
+        },
+        "broad_non_gbif_tbn": {
+          "equal": {
+            "chelsa_bio01": 0.803,
+            "chelsa_bio15": 1.0
+          }
+        }
+      },
+      "locus_tree_complete": {
+        "gbif": {
+          "branch": {
+            "chelsa_bio01": 0.7718120805369127,
+            "chelsa_bio15": 0.8187919463087249
+          },
+          "equal": {
+            "chelsa_bio01": 1.0,
+            "chelsa_bio15": 1.0
+          }
+        },
+        "native_tbn": {
+          "branch": {
+            "chelsa_bio01": 0.8120805369127517,
+            "chelsa_bio15": 0.8456375838926175
+          },
+          "equal": {
+            "chelsa_bio01": 1.0,
+            "chelsa_bio15": 1.0
+          }
+        },
+        "broad_non_gbif_tbn": {
+          "branch": {
+            "chelsa_bio01": 0.5906040268456376,
+            "chelsa_bio15": 0.9328859060402684
+          },
+          "equal": {
+            "chelsa_bio01": 0.9395973154362416,
+            "chelsa_bio15": 1.0
+          }
+        }
+      },
+      "astral153_from_public_loci": {
+        "gbif": {
+          "equal": {
+            "chelsa_bio01": 1.0,
+            "chelsa_bio15": 1.0
+          }
+        },
+        "native_tbn": {
+          "equal": {
+            "chelsa_bio01": 1.0,
+            "chelsa_bio15": 1.0
+          }
+        },
+        "broad_non_gbif_tbn": {
+          "equal": {
+            "chelsa_bio01": 1.0,
+            "chelsa_bio15": 1.0
+          }
+        }
+      },
+      "chang2026_astral_alias_overlap": {
+        "gbif": {},
+        "native_tbn": {
+          "equal": {
+            "chelsa_bio01": 1.0,
+            "chelsa_bio15": 1.0
+          }
+        },
+        "broad_non_gbif_tbn": {
+          "equal": {
+            "chelsa_bio01": 1.0,
+            "chelsa_bio15": 1.0
+          }
+        }
+      }
+    }
+  },
+  "decision": "Taxonomic-alias recovery is an admissible public-data sensitivity, not an outcome-selected primary replacement. BIO12, BIO15 and BIO1 are reported separately, and panel-matched topology saturation is retained as a robustness layer rather than counted as independent ecological replication.",
+  "claim_boundary": "Present-day correspondence only; no adaptation, fitness effect, historical climate causation or independent convergence is established."
+}

@@ -1,0 +1,223 @@
+name: Run FDT4 TBIA occurrence saturation v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_fdt4_tbia_occurrence_expansion_v1.py"
+      - "analysis/build_fdt4_tbia_sensitivity_v1.py"
+      - "analysis/run_fdt4_orientation_phylogeny_saturation_v1.py"
+      - "data/evidence/fdt4_taiwan_tbn_alias_contract_v1.json"
+      - "data/evidence/chang2026_orientation_alias_overlap_pruned_topology_v1.nwk"
+      - ".github/workflows/run-fdt4-tbia-occurrence-saturation-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  tbia_saturation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas requests scikit-learn rasterio scipy biopython
+          python -m pip check
+          python -m py_compile analysis/audit_fdt4_tbia_occurrence_expansion_v1.py analysis/build_fdt4_tbia_sensitivity_v1.py analysis/run_fdt4_orientation_phylogeny_saturation_v1.py
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-japan-orientation-niche-v1
+          path: inputs/japan
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32716015605
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-taiwan-orientation-niche-v1
+          path: inputs/taiwan
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33225237163
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-taiwan-tbn-alias-sensitivity-v1
+          path: inputs/tbn_alias
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33246077732
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-alt-topology-au-32614839764
+          path: inputs/au
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614839764
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-topology-concordance-32614242600
+          path: inputs/concordance
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614242600
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-orientation-phylogeny-saturation-v1
+          path: inputs/phylo_saturation
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33245270887
+
+      - name: Audit TBIA independent public occurrences
+        id: tbia_audit
+        shell: bash
+        run: |
+          set +e
+          mkdir -p output/tbia_audit
+          python analysis/audit_fdt4_tbia_occurrence_expansion_v1.py \
+            --alias-contract data/evidence/fdt4_taiwan_tbn_alias_contract_v1.json \
+            --existing-occurrences \
+              inputs/taiwan/focal_occurrences_environment_complete.csv \
+              inputs/tbn_alias/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv \
+            --out-dir output/tbia_audit \
+            > output/tbia_audit/run.log 2>&1
+          rc=$?
+          if [ "$rc" -eq 0 ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+            cat output/tbia_audit/run.log
+            exit 0
+          fi
+          if grep -q "TBIA production occurrence API positive-control probe failed" output/tbia_audit/run.log; then
+            cat output/tbia_audit/run.log
+            python - <<'PY'
+          import json,re
+          from pathlib import Path
+          log=Path('output/tbia_audit/run.log').read_text(errors='replace')
+          m=re.search(r'positive-control probe failed: (\[.*\])',log)
+          probes=[]
+          if m:
+              try: probes=json.loads(m.group(1))
+              except Exception: pass
+          payload={
+              'contract_version':'fdt4_tbia_occurrence_expansion_v1',
+              'status':'not_retrievable_public_production_api',
+              'status_date':'2026-08-30',
+              'documented_api':'https://tbiadata.tw/api/v1/occurrence',
+              'positive_control':'name=小白鷺',
+              'probes':probes,
+              'interpretation':'The documented production Occurrence API did not return JSON even for its documented positive-control query. TBIA is therefore not treated as a zero-record source and no TBIA occurrence is admitted to the ecological analysis.',
+              'claim_boundary':'Do not substitute the dev host, scrape the interactive portal, or label the seven focal taxa as absent from TBIA.'
+          }
+          Path('output/tbia_audit/fdt4_tbia_occurrence_expansion_v1.json').write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n')
+          PY
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          cat output/tbia_audit/run.log
+          exit "$rc"
+
+      - name: Build TBIA CHELSA sensitivity tiers
+        if: steps.tbia_audit.outputs.available == 'true'
+        env:
+          GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+          CPL_VSIL_CURL_ALLOWED_EXTENSIONS: .tif,.tiff
+          GDAL_HTTP_TIMEOUT: "120"
+          GDAL_HTTP_MAX_RETRY: "4"
+          GDAL_HTTP_RETRY_DELAY: "3"
+        run: |
+          mkdir -p output/tbia_sensitivity
+          python analysis/build_fdt4_tbia_sensitivity_v1.py \
+            --niche-config data/evidence/fdt4_taiwan_orientation_niche_config_v1.json \
+            --audit output/tbia_audit/tbia_independent_new_cells_candidates.csv \
+            --out-dir output/tbia_sensitivity
+
+      - name: Run open-reusable TBIA ecological sensitivity
+        if: steps.tbia_audit.outputs.available == 'true'
+        run: |
+          mkdir -p output/pgls_open
+          python analysis/run_fdt4_orientation_niche_pgls_v1.py \
+            --occurrences inputs/japan/focal_occurrences_environment_complete.csv inputs/taiwan/focal_occurrences_environment_complete.csv inputs/tbn_alias/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv output/tbia_sensitivity/tbia_open_reusable_additions_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --au-trees inputs/au/au.trees --nonrejected-count 6 --min-n 10 --out-dir output/pgls_open
+          python analysis/summarize_chapter2_ecological_explanatory_reach_v1.py \
+            --occurrences inputs/japan/focal_occurrences_environment_complete.csv inputs/taiwan/focal_occurrences_environment_complete.csv inputs/tbn_alias/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv output/tbia_sensitivity/tbia_open_reusable_additions_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --au-trees inputs/au/au.trees --min-n 10 --topologies 6 --out output/chapter2_ecological_reach_tbia_open.json
+
+      - name: Run all-independent-public TBIA ecological sensitivity
+        if: steps.tbia_audit.outputs.available == 'true'
+        run: |
+          mkdir -p output/pgls_all
+          python analysis/run_fdt4_orientation_niche_pgls_v1.py \
+            --occurrences inputs/japan/focal_occurrences_environment_complete.csv inputs/taiwan/focal_occurrences_environment_complete.csv inputs/tbn_alias/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv output/tbia_sensitivity/tbia_all_independent_public_additions_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --au-trees inputs/au/au.trees --nonrejected-count 6 --min-n 10 --out-dir output/pgls_all
+          python analysis/summarize_chapter2_ecological_explanatory_reach_v1.py \
+            --occurrences inputs/japan/focal_occurrences_environment_complete.csv inputs/taiwan/focal_occurrences_environment_complete.csv inputs/tbn_alias/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv output/tbia_sensitivity/tbia_all_independent_public_additions_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --trait-seed data/evidence/japan38_nmns_capitulum_trait_seed_v1.csv \
+            --au-trees inputs/au/au.trees --min-n 10 --topologies 6 --out output/chapter2_ecological_reach_tbia_all.json
+
+      - name: Build panel-matched TBIA union
+        if: steps.tbia_audit.outputs.available == 'true'
+        run: |
+          python - <<'PY'
+          import pandas as pd
+          a=pd.read_csv('inputs/tbn_alias/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv')
+          b=pd.read_csv('output/tbia_sensitivity/tbia_all_independent_public_additions_environment_complete.csv')
+          pd.concat([a,b],ignore_index=True).to_csv('output/tbia_sensitivity/broad_tbn_plus_tbia_environment_complete.csv',index=False)
+          PY
+
+      - name: Saturate final TBIA panel across public phylogenies
+        if: steps.tbia_audit.outputs.available == 'true'
+        run: |
+          mkdir -p output/topology_saturation_tbia
+          python analysis/run_fdt4_orientation_phylogeny_saturation_v1.py \
+            --japan-occ inputs/japan/focal_occurrences_environment_complete.csv \
+            --taiwan-gbif inputs/taiwan/focal_occurrences_environment_complete.csv \
+            --tbn-native inputs/tbn_alias/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv \
+            --tbn-broad output/tbia_sensitivity/broad_tbn_plus_tbia_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --au-trees inputs/au/au.trees --accepted-count 6 \
+            --ufboot-trees inputs/phylo_saturation/full20_bootstrap/full20_comp1061.ufboot \
+            --gene-trees inputs/concordance/sensitivity/loci.treefile \
+            --extra-tree astral153_from_public_loci inputs/phylo_saturation/astral153/astral153.tre \
+            --extra-tree chang2026_astral_alias_overlap data/evidence/chang2026_orientation_alias_overlap_pruned_topology_v1.nwk \
+            --min-n 10 --out-dir output/topology_saturation_tbia
+
+      - name: Validate TBIA boundary or saturation result
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('output/tbia_audit/fdt4_tbia_occurrence_expansion_v1.json').read_text())
+          if a.get('status')=='not_retrievable_public_production_api':
+              assert a['positive_control']=='name=小白鷺'
+              assert len(a.get('probes',[])) >= 4
+              assert all(int(x.get('status_code',0))==404 for x in a['probes'] if 'status_code' in x)
+              print('TBIA boundary PASS: documented production Occurrence API not retrievable; no zero-record claim made')
+          else:
+              s=json.loads(Path('output/tbia_sensitivity/fdt4_tbia_sensitivity_manifest_v1.json').read_text())
+              assert a['filters']['gbif_tbn_mirrors_excluded'] is True
+              assert a['filters']['existing_cells_excluded'] is True
+              assert set(s['tiers'])=={'open_reusable','all_independent_public'}
+              p=json.loads(Path('output/topology_saturation_tbia/fdt4_orientation_phylogeny_saturation_v1.json').read_text())
+              assert p['ensemble_sizes']['concatenated_ufboot']==1000
+              assert p['ensemble_sizes']['public_locus_trees']==153
+              print('TBIA cross-source saturation PASS')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fdt4-tbia-occurrence-saturation-v1
+          path: output
+          if-no-files-found: error
+          retention-days: 90

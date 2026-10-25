@@ -1,0 +1,367 @@
+{
+  "contract_version": "tbia_occurrence_api_discovery_v1",
+  "status": "NO_OPENAPI_OCCURRENCE_SPEC_FOUND_MANUAL_ENDPOINT_CONTRACT_REQUIRED",
+  "allowed_hosts": [
+    "tbia.org.tw",
+    "tbia.github.io"
+  ],
+  "seed_urls": [
+    "https://api.tbia.org.tw/",
+    "https://portal.tbia.org.tw/",
+    "https://www.tbia.org.tw/",
+    "https://tbia.github.io/"
+  ],
+  "pages_attempted": 49,
+  "successful_pages": 2,
+  "occurrence_specs": [],
+  "pages": [
+    {
+      "requested_url": "https://api.tbia.org.tw/",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='api.tbia.org.tw', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"HTTPSConnection(host='api.tbia.org.tw', port=443): Failed to resolve 'api.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://api.tbia.org.tw/openapi.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='api.tbia.org.tw', port=443): Max retries exceeded with url: /openapi.json (Caused by NameResolutionError(\"HTTPSConnection(host='api.tbia.org.tw', port=443): Failed to resolve 'api.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://api.tbia.org.tw/swagger.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='api.tbia.org.tw', port=443): Max retries exceeded with url: /swagger.json (Caused by NameResolutionError(\"HTTPSConnection(host='api.tbia.org.tw', port=443): Failed to resolve 'api.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://api.tbia.org.tw/api-docs",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='api.tbia.org.tw', port=443): Max retries exceeded with url: /api-docs (Caused by NameResolutionError(\"HTTPSConnection(host='api.tbia.org.tw', port=443): Failed to resolve 'api.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://api.tbia.org.tw/docs",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='api.tbia.org.tw', port=443): Max retries exceeded with url: /docs (Caused by NameResolutionError(\"HTTPSConnection(host='api.tbia.org.tw', port=443): Failed to resolve 'api.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://api.tbia.org.tw/redoc",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='api.tbia.org.tw', port=443): Max retries exceeded with url: /redoc (Caused by NameResolutionError(\"HTTPSConnection(host='api.tbia.org.tw', port=443): Failed to resolve 'api.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://api.tbia.org.tw/v1/openapi.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='api.tbia.org.tw', port=443): Max retries exceeded with url: /v1/openapi.json (Caused by NameResolutionError(\"HTTPSConnection(host='api.tbia.org.tw', port=443): Failed to resolve 'api.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://api.tbia.org.tw/v1/swagger.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='api.tbia.org.tw', port=443): Max retries exceeded with url: /v1/swagger.json (Caused by NameResolutionError(\"HTTPSConnection(host='api.tbia.org.tw', port=443): Failed to resolve 'api.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://api.tbia.org.tw/api/openapi.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='api.tbia.org.tw', port=443): Max retries exceeded with url: /api/openapi.json (Caused by NameResolutionError(\"HTTPSConnection(host='api.tbia.org.tw', port=443): Failed to resolve 'api.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://api.tbia.org.tw/api/swagger.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='api.tbia.org.tw', port=443): Max retries exceeded with url: /api/swagger.json (Caused by NameResolutionError(\"HTTPSConnection(host='api.tbia.org.tw', port=443): Failed to resolve 'api.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://api.tbia.org.tw/robots.txt",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='api.tbia.org.tw', port=443): Max retries exceeded with url: /robots.txt (Caused by NameResolutionError(\"HTTPSConnection(host='api.tbia.org.tw', port=443): Failed to resolve 'api.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://api.tbia.org.tw/sitemap.xml",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='api.tbia.org.tw', port=443): Max retries exceeded with url: /sitemap.xml (Caused by NameResolutionError(\"HTTPSConnection(host='api.tbia.org.tw', port=443): Failed to resolve 'api.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://portal.tbia.org.tw/",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='portal.tbia.org.tw', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"HTTPSConnection(host='portal.tbia.org.tw', port=443): Failed to resolve 'portal.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://portal.tbia.org.tw/openapi.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='portal.tbia.org.tw', port=443): Max retries exceeded with url: /openapi.json (Caused by NameResolutionError(\"HTTPSConnection(host='portal.tbia.org.tw', port=443): Failed to resolve 'portal.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://portal.tbia.org.tw/swagger.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='portal.tbia.org.tw', port=443): Max retries exceeded with url: /swagger.json (Caused by NameResolutionError(\"HTTPSConnection(host='portal.tbia.org.tw', port=443): Failed to resolve 'portal.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://portal.tbia.org.tw/api-docs",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='portal.tbia.org.tw', port=443): Max retries exceeded with url: /api-docs (Caused by NameResolutionError(\"HTTPSConnection(host='portal.tbia.org.tw', port=443): Failed to resolve 'portal.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://portal.tbia.org.tw/docs",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='portal.tbia.org.tw', port=443): Max retries exceeded with url: /docs (Caused by NameResolutionError(\"HTTPSConnection(host='portal.tbia.org.tw', port=443): Failed to resolve 'portal.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://portal.tbia.org.tw/redoc",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='portal.tbia.org.tw', port=443): Max retries exceeded with url: /redoc (Caused by NameResolutionError(\"HTTPSConnection(host='portal.tbia.org.tw', port=443): Failed to resolve 'portal.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://portal.tbia.org.tw/v1/openapi.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='portal.tbia.org.tw', port=443): Max retries exceeded with url: /v1/openapi.json (Caused by NameResolutionError(\"HTTPSConnection(host='portal.tbia.org.tw', port=443): Failed to resolve 'portal.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://portal.tbia.org.tw/v1/swagger.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='portal.tbia.org.tw', port=443): Max retries exceeded with url: /v1/swagger.json (Caused by NameResolutionError(\"HTTPSConnection(host='portal.tbia.org.tw', port=443): Failed to resolve 'portal.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://portal.tbia.org.tw/api/openapi.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='portal.tbia.org.tw', port=443): Max retries exceeded with url: /api/openapi.json (Caused by NameResolutionError(\"HTTPSConnection(host='portal.tbia.org.tw', port=443): Failed to resolve 'portal.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://portal.tbia.org.tw/api/swagger.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='portal.tbia.org.tw', port=443): Max retries exceeded with url: /api/swagger.json (Caused by NameResolutionError(\"HTTPSConnection(host='portal.tbia.org.tw', port=443): Failed to resolve 'portal.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://portal.tbia.org.tw/robots.txt",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='portal.tbia.org.tw', port=443): Max retries exceeded with url: /robots.txt (Caused by NameResolutionError(\"HTTPSConnection(host='portal.tbia.org.tw', port=443): Failed to resolve 'portal.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://portal.tbia.org.tw/sitemap.xml",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='portal.tbia.org.tw', port=443): Max retries exceeded with url: /sitemap.xml (Caused by NameResolutionError(\"HTTPSConnection(host='portal.tbia.org.tw', port=443): Failed to resolve 'portal.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://www.tbia.org.tw/",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='www.tbia.org.tw', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"HTTPSConnection(host='www.tbia.org.tw', port=443): Failed to resolve 'www.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://www.tbia.org.tw/openapi.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='www.tbia.org.tw', port=443): Max retries exceeded with url: /openapi.json (Caused by NameResolutionError(\"HTTPSConnection(host='www.tbia.org.tw', port=443): Failed to resolve 'www.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://www.tbia.org.tw/swagger.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='www.tbia.org.tw', port=443): Max retries exceeded with url: /swagger.json (Caused by NameResolutionError(\"HTTPSConnection(host='www.tbia.org.tw', port=443): Failed to resolve 'www.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://www.tbia.org.tw/api-docs",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='www.tbia.org.tw', port=443): Max retries exceeded with url: /api-docs (Caused by NameResolutionError(\"HTTPSConnection(host='www.tbia.org.tw', port=443): Failed to resolve 'www.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://www.tbia.org.tw/docs",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='www.tbia.org.tw', port=443): Max retries exceeded with url: /docs (Caused by NameResolutionError(\"HTTPSConnection(host='www.tbia.org.tw', port=443): Failed to resolve 'www.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://www.tbia.org.tw/redoc",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='www.tbia.org.tw', port=443): Max retries exceeded with url: /redoc (Caused by NameResolutionError(\"HTTPSConnection(host='www.tbia.org.tw', port=443): Failed to resolve 'www.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://www.tbia.org.tw/v1/openapi.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='www.tbia.org.tw', port=443): Max retries exceeded with url: /v1/openapi.json (Caused by NameResolutionError(\"HTTPSConnection(host='www.tbia.org.tw', port=443): Failed to resolve 'www.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://www.tbia.org.tw/v1/swagger.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='www.tbia.org.tw', port=443): Max retries exceeded with url: /v1/swagger.json (Caused by NameResolutionError(\"HTTPSConnection(host='www.tbia.org.tw', port=443): Failed to resolve 'www.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://www.tbia.org.tw/api/openapi.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='www.tbia.org.tw', port=443): Max retries exceeded with url: /api/openapi.json (Caused by NameResolutionError(\"HTTPSConnection(host='www.tbia.org.tw', port=443): Failed to resolve 'www.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://www.tbia.org.tw/api/swagger.json",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='www.tbia.org.tw', port=443): Max retries exceeded with url: /api/swagger.json (Caused by NameResolutionError(\"HTTPSConnection(host='www.tbia.org.tw', port=443): Failed to resolve 'www.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://www.tbia.org.tw/robots.txt",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='www.tbia.org.tw', port=443): Max retries exceeded with url: /robots.txt (Caused by NameResolutionError(\"HTTPSConnection(host='www.tbia.org.tw', port=443): Failed to resolve 'www.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://www.tbia.org.tw/sitemap.xml",
+      "final_url": "",
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='www.tbia.org.tw', port=443): Max retries exceeded with url: /sitemap.xml (Caused by NameResolutionError(\"HTTPSConnection(host='www.tbia.org.tw', port=443): Failed to resolve 'www.tbia.org.tw' ([Errno -2] Name or service not known)\"))"
+    },
+    {
+      "requested_url": "https://tbia.github.io/",
+      "final_url": "https://tbia.github.io/",
+      "status": 404,
+      "content_type": "text/html",
+      "bytes_read": 9115,
+      "etag": "W/\"6a8feae0-239b\"",
+      "last_modified": "",
+      "title": "Site not found · GitHub Pages"
+    },
+    {
+      "requested_url": "https://tbia.github.io/openapi.json",
+      "final_url": "https://tbia.github.io/openapi.json",
+      "status": 404,
+      "content_type": "text/html",
+      "bytes_read": 9115,
+      "etag": "W/\"6a8feae0-239b\"",
+      "last_modified": "",
+      "title": "Site not found · GitHub Pages"
+    },
+    {
+      "requested_url": "https://tbia.github.io/swagger.json",
+      "final_url": "https://tbia.github.io/swagger.json",
+      "status": 404,
+      "content_type": "text/html",
+      "bytes_read": 9115,
+      "etag": "W/\"6a8feae0-239b\"",
+      "last_modified": "",
+      "title": "Site not found · GitHub Pages"
+    },
+    {
+      "requested_url": "https://tbia.github.io/api-docs",
+      "final_url": "https://tbia.github.io/api-docs",
+      "status": 404,
+      "content_type": "text/html",
+      "bytes_read": 9115,
+      "etag": "W/\"6a8feae0-239b\"",
+      "last_modified": "",
+      "title": "Site not found · GitHub Pages"
+    },
+    {
+      "requested_url": "https://tbia.github.io/docs",
+      "final_url": "https://docs.tbiadata.tw",
+      "status": 200,
+      "content_type": "text/html",
+      "bytes_read": 18334,
+      "etag": "W/\"6a6c3a11-479e\"",
+      "last_modified": "Fri, 31 Jul 2026 06:00:49 GMT",
+      "title": "TBIA Documentations 公開文件"
+    },
+    {
+      "requested_url": "https://tbia.github.io/redoc",
+      "final_url": "https://tbia.github.io/redoc",
+      "status": 404,
+      "content_type": "text/html",
+      "bytes_read": 9115,
+      "etag": "W/\"6a8feae0-239b\"",
+      "last_modified": "",
+      "title": "Site not found · GitHub Pages"
+    },
+    {
+      "requested_url": "https://tbia.github.io/v1/openapi.json",
+      "final_url": "https://tbia.github.io/v1/openapi.json",
+      "status": 404,
+      "content_type": "text/html",
+      "bytes_read": 9115,
+      "etag": "W/\"6a8feae0-239b\"",
+      "last_modified": "",
+      "title": "Site not found · GitHub Pages"
+    },
+    {
+      "requested_url": "https://tbia.github.io/v1/swagger.json",
+      "final_url": "https://tbia.github.io/v1/swagger.json",
+      "status": 404,
+      "content_type": "text/html",
+      "bytes_read": 9115,
+      "etag": "W/\"6a8feae0-239b\"",
+      "last_modified": "",
+      "title": "Site not found · GitHub Pages"
+    },
+    {
+      "requested_url": "https://tbia.github.io/api/openapi.json",
+      "final_url": "https://tbia.github.io/api/openapi.json",
+      "status": 404,
+      "content_type": "text/html",
+      "bytes_read": 9115,
+      "etag": "W/\"6a8feae0-239b\"",
+      "last_modified": "",
+      "title": "Site not found · GitHub Pages"
+    },
+    {
+      "requested_url": "https://tbia.github.io/api/swagger.json",
+      "final_url": "https://tbia.github.io/api/swagger.json",
+      "status": 404,
+      "content_type": "text/html",
+      "bytes_read": 9115,
+      "etag": "W/\"6a8feae0-239b\"",
+      "last_modified": "",
+      "title": "Site not found · GitHub Pages"
+    },
+    {
+      "requested_url": "https://tbia.github.io/robots.txt",
+      "final_url": "https://tbia.github.io/robots.txt",
+      "status": 404,
+      "content_type": "text/html",
+      "bytes_read": 9115,
+      "etag": "W/\"6a8feae0-239b\"",
+      "last_modified": "",
+      "title": "Site not found · GitHub Pages"
+    },
+    {
+      "requested_url": "https://tbia.github.io/sitemap.xml",
+      "final_url": "https://tbia.github.io/sitemap.xml",
+      "status": 404,
+      "content_type": "text/html",
+      "bytes_read": 9115,
+      "etag": "W/\"6a8feae0-239b\"",
+      "last_modified": "",
+      "title": "Site not found · GitHub Pages"
+    },
+    {
+      "requested_url": "https://tbia.github.io/docs/biodiversity_data_standard/",
+      "final_url": "https://docs.tbiadata.tw/biodiversity_data_standard/",
+      "status": 200,
+      "content_type": "text/html",
+      "bytes_read": 78688,
+      "etag": "W/\"6a6c3a11-13360\"",
+      "last_modified": "Fri, 31 Jul 2026 06:00:49 GMT",
+      "title": "生物多樣性領域資料標準 - TBIA Documentations 公開文件"
+    }
+  ],
+  "next_gate": "Freeze an explicit endpoint, query schema, pagination rule, licence/source fields and taxon-name guard before downloading TBIA occurrence records.",
+  "claim_boundary": "API discovery only; no record is admitted and no ecological result is changed."
+}

@@ -1,0 +1,108 @@
+name: Run FDT4 orientation covariance sensitivity v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_fdt4_orientation_covariance_sensitivity_v1.py"
+      - ".github/workflows/run-fdt4-orientation-covariance-sensitivity-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  covariance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas scipy biopython
+          python -m pip check
+          python -m py_compile analysis/run_fdt4_orientation_covariance_sensitivity_v1.py
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-japan-orientation-niche-v1
+          path: inputs/japan
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32716015605
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-taiwan-orientation-niche-v1
+          path: inputs/taiwan
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33225237163
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-taiwan-tbn-alias-sensitivity-v1
+          path: inputs/tbn_alias
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33246077732
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-coordinate-quality-harmonization-v1
+          path: inputs/strict
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33280192246
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-alt-topology-au-32614839764
+          path: inputs/au
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614839764
+
+      - name: Run broad n12 covariance profile
+        run: |
+          mkdir -p output/broad12
+          python analysis/run_fdt4_orientation_covariance_sensitivity_v1.py \
+            --occurrences inputs/japan/focal_occurrences_environment_complete.csv inputs/taiwan/focal_occurrences_environment_complete.csv inputs/tbn_alias/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --trees inputs/au/au.trees --min-n 10 --out-dir output/broad12
+
+      - name: Run strict n8 covariance profile
+        run: |
+          mkdir -p output/strict8
+          python analysis/run_fdt4_orientation_covariance_sensitivity_v1.py \
+            --occurrences inputs/strict/japan_strict_environment_complete.csv inputs/strict/taiwan_strict_environment_complete.csv inputs/strict/tbn_broad_strict_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --trees inputs/au/au.trees --min-n 10 --out-dir output/strict8
+
+      - name: Fail closed on covariance envelope
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          b=json.loads(Path('output/broad12/fdt4_orientation_covariance_sensitivity_v1.json').read_text())
+          s=json.loads(Path('output/strict8/fdt4_orientation_covariance_sensitivity_v1.json').read_text())
+          assert (b['n_taxa'],b['n_U'],b['n_D'])==(12,6,6)
+          assert (s['n_taxa'],s['n_U'],s['n_D'])==(8,3,5)
+          for x in (b,s):
+              assert x['trees']==9 and x['lambda_grid']==[0.0,0.25,0.5,0.75,1.0]
+              assert x['axes']['chelsa_bio15']['expected_sign_rate']==1.0
+              assert x['axes']['chelsa_bio01']['expected_sign_rate']==1.0
+          assert b['axes']['chelsa_bio15']['all_fixed_grid_p_lt_0_05'] is True
+          assert s['axes']['chelsa_bio15']['all_fixed_grid_p_lt_0_05'] is False
+          print('broad12_BIO15',b['axes']['chelsa_bio15'])
+          print('strict8_BIO15',s['axes']['chelsa_bio15'])
+          print('broad12_BIO1',b['axes']['chelsa_bio01'])
+          print('strict8_BIO1',s['axes']['chelsa_bio01'])
+          print('FDT4 covariance sensitivity PASS')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fdt4-orientation-covariance-sensitivity-v1
+          path: output
+          if-no-files-found: error
+          retention-days: 90

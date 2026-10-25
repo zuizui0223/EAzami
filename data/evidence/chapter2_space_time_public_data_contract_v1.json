@@ -1,0 +1,90 @@
+{
+  "contract_version": "chapter2_space_time_public_data_contract_v1",
+  "status_date": "2026-08-30",
+  "purpose": "Close Chapter 2 as a public-data study linking Azami-scale spatial breadth to EAzami-scale phylogenetic depth without conflating association, historical correspondence and adaptation.",
+  "programme_roles": {
+    "Azami": "breadth: broad present-day spatial diversity and trait-environment structure from public images, occurrences and environmental layers",
+    "EAzami": "depth: topology-conditioned minimum histories, relative event-depth and phylogeny-aware ecological correspondence from public phylogenomic and occurrence data",
+    "Chapter_2_joint_estimand": "whether independently estimated spatial and phylogenetic-temporal patterns point in compatible ecological directions, and exactly where current public-data explanation stops"
+  },
+  "primary_trait_environment_questions": [
+    {
+      "question_id": "ST_ORIENTATION_PRECIPITATION",
+      "trait": "capitulum orientation",
+      "spatial_candidate": "orientation versus precipitation amount / wetness in Azami",
+      "temporal_candidate": "orientation versus CHELSA BIO15 precipitation seasonality in EAzami",
+      "required_disambiguation": [
+        "estimate BIO12 annual precipitation and BIO15 precipitation seasonality on the same EAzami panels",
+        "fit BIO15 adjusted for BIO12 and BIO12 adjusted for BIO15",
+        "repeat across concatenated UFBoot topologies, complete public locus-tree topologies, ASTRAL and occurrence-source panels",
+        "do not call amount and seasonality replications unless their estimands and signs are explicitly aligned"
+      ]
+    },
+    {
+      "question_id": "ST_COLOUR_SOLAR",
+      "trait": "flower colour / pigment / lightness",
+      "spatial_candidate": "public-image colour versus solar exposure in Azami",
+      "temporal_candidate": "phylogeny-aware colour versus flowering-season solar exposure in EAzami",
+      "required_disambiguation": [
+        "separate CIELAB lightness, chroma and pigment direction rather than treating colour as one category",
+        "prefer flowering-season shortwave radiation and UV exposure to annual means",
+        "retain image source, camera/background and within-taxon colour variation controls",
+        "do not discretize sparse colour data to manufacture a fourth completed history"
+      ]
+    }
+  ],
+  "environment_hierarchy": {
+    "orientation": [
+      "BIO12 annual precipitation amount",
+      "BIO15 precipitation seasonality",
+      "flowering-season precipitation amount",
+      "wettest-month / wettest-quarter precipitation",
+      "rain-event intensity or wet-day frequency where public data are reproducibly joinable",
+      "wind exposure as a modifier of rain interception"
+    ],
+    "colour": [
+      "flowering-season surface downwelling shortwave radiation",
+      "UV-B or biologically effective UV where a public source and licence are reproducible",
+      "flowering-season temperature",
+      "elevation and cloudiness as correlated exposure axes"
+    ]
+  },
+  "cross_scale_classes": {
+    "multiscale_concordant": "same trait, commensurable environmental estimand and direction are retained in both spatial and phylogeny-aware analyses",
+    "domain_concordant_axis_distinct": "both analyses implicate the same broad ecological domain but use non-equivalent axes such as precipitation amount versus seasonality",
+    "scale_specific": "a supported relationship occurs at only one scale despite evaluability at both",
+    "unresolved": "directions are estimable but uncertainty, source definition or covariance geometry prevents a stable classification",
+    "not_evaluable": "the required trait x environment x phylogeny overlap is absent"
+  },
+  "adaptation_claim_ladder": [
+    {
+      "level": 1,
+      "name": "spatial correspondence",
+      "allowed": "present-day trait-environment association"
+    },
+    {
+      "level": 2,
+      "name": "multiscale ecological correspondence",
+      "allowed": "compatible spatial and phylogeny-aware directions; consistent with adaptive differentiation"
+    },
+    {
+      "level": 3,
+      "name": "event-specific ecological correspondence",
+      "allowed": "repeated transition-bearing lineages align with independently reconstructed exposure shifts, with uncertainty propagated"
+    },
+    {
+      "level": 4,
+      "name": "adaptive function",
+      "allowed": "requires independent functional or fitness evidence and is outside a public comparative analysis alone"
+    }
+  ],
+  "public_data_saturation_definition": "All currently machine-reusable, source-auditable datasets in the frozen registry are queried under outcome-independent taxonomic, coordinate, thinning, phenology and trait-quality rules. This is not a literal claim that every webpage or unpublished observation has been exhausted.",
+  "claim_boundaries": [
+    "A spatial Azami coefficient and a phylogenetic EAzami coefficient are not pooled as statistical replicates.",
+    "BIO12 amount and BIO15 seasonality are related precipitation dimensions but not the same estimand.",
+    "Concordance across scales can motivate adaptive hypotheses but does not by itself establish selection or fitness benefit.",
+    "Present-day niche centroids are not ancestral environments or dated transition events.",
+    "Sparse taxon-level colour summaries must retain within-taxon variation and source uncertainty.",
+    "A significant sensitivity tier cannot replace the frozen primary solely because it crosses P<0.05."
+  ]
+}

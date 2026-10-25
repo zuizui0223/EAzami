@@ -1,0 +1,132 @@
+name: Run FDT4 coverage-gate sensitivity v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_fdt4_orientation_phylogeny_saturation_v1.py"
+      - ".github/workflows/run-fdt4-coverage-gate-sensitivity-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  coverage_gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas scipy biopython
+          python -m pip check
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-japan-orientation-niche-v1
+          path: inputs/japan
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32716015605
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-taiwan-orientation-niche-v1
+          path: inputs/taiwan
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33225237163
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-taiwan-tbn-alias-sensitivity-v1
+          path: inputs/tbn_alias
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33246077732
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-alt-topology-au-32614839764
+          path: inputs/au
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614839764
+      - uses: actions/download-artifact@v4
+        with:
+          name: comp1061-topology-concordance-32614242600
+          path: inputs/concordance
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 32614242600
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdt4-orientation-phylogeny-saturation-v1
+          path: inputs/phylo
+          github-token: ${{ github.token }}
+          repository: zuizui0223/EAzami
+          run-id: 33245270887
+
+      - name: Run n>=5 public topology saturation
+        run: |
+          mkdir -p output/min5
+          python analysis/run_fdt4_orientation_phylogeny_saturation_v1.py \
+            --japan-occ inputs/japan/focal_occurrences_environment_complete.csv \
+            --taiwan-gbif inputs/taiwan/focal_occurrences_environment_complete.csv \
+            --tbn-native inputs/tbn_alias/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv \
+            --tbn-broad inputs/tbn_alias/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --au-trees inputs/au/au.trees --accepted-count 6 \
+            --ufboot-trees inputs/phylo/full20_bootstrap/full20_comp1061.ufboot \
+            --gene-trees inputs/concordance/sensitivity/loci.treefile \
+            --extra-tree astral153_from_public_loci inputs/phylo/astral153/astral153.tre \
+            --extra-tree chang2026_astral_alias_overlap data/evidence/chang2026_orientation_alias_overlap_pruned_topology_v1.nwk \
+            --min-n 5 --out-dir output/min5
+
+      - name: Run n>=2 public topology saturation
+        run: |
+          mkdir -p output/min2
+          python analysis/run_fdt4_orientation_phylogeny_saturation_v1.py \
+            --japan-occ inputs/japan/focal_occurrences_environment_complete.csv \
+            --taiwan-gbif inputs/taiwan/focal_occurrences_environment_complete.csv \
+            --tbn-native inputs/tbn_alias/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv \
+            --tbn-broad inputs/tbn_alias/alias_sensitivity/broad_direct_plus_alias_environment_complete.csv \
+            --orientation data/evidence/orientation_comp1061_20tip_source_crosswalk_v1.csv \
+            --au-trees inputs/au/au.trees --accepted-count 6 \
+            --ufboot-trees inputs/phylo/full20_bootstrap/full20_comp1061.ufboot \
+            --gene-trees inputs/concordance/sensitivity/loci.treefile \
+            --extra-tree astral153_from_public_loci inputs/phylo/astral153/astral153.tre \
+            --extra-tree chang2026_astral_alias_overlap data/evidence/chang2026_orientation_alias_overlap_pruned_topology_v1.nwk \
+            --min-n 2 --out-dir output/min2
+
+      - name: Freeze coverage-gate interpretation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('output/min5/fdt4_orientation_phylogeny_saturation_v1.json').read_text())
+          b=json.loads(Path('output/min2/fdt4_orientation_phylogeny_saturation_v1.json').read_text())
+          p5=a['panels']['broad_non_gbif_tbn']; p2=b['panels']['broad_non_gbif_tbn']
+          u5=a['layers']['concatenated_ufboot']['broad_non_gbif_tbn']['equal']
+          u2=b['layers']['concatenated_ufboot']['broad_non_gbif_tbn']['equal']
+          assert p5['n_taxa']>=13 and p2['n_taxa']>=16
+          assert u5['chelsa_bio15']['expected_sign_rate']==1.0
+          assert u2['chelsa_bio15']['expected_sign_rate'] < 0.9
+          payload={
+            'contract_version':'fdt4_coverage_gate_sensitivity_v1',
+            'min5':{'panel':p5,'ufboot':u5},
+            'min2':{'panel':p2,'ufboot':u2},
+            'interpretation':'Relaxing the taxon-centroid coverage gate admits additional sparse taxa but eventually reduces BIO15 topology-sign stability. The n>=10 gate is therefore retained as a reliability guard rather than relaxed to harvest more taxon concepts.',
+            'claim_boundary':'This stress test does not prove n=10 is uniquely optimal. It shows that low-count centroid inclusion is not a monotonic route to stronger ecological support.'
+          }
+          Path('output/fdt4_coverage_gate_sensitivity_v1.json').write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n')
+          print(json.dumps(payload,indent=2,ensure_ascii=False))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fdt4-coverage-gate-sensitivity-v1
+          path: output
+          if-no-files-found: error
+          retention-days: 90
