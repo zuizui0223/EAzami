@@ -1,11 +1,9 @@
 name: Audit real world52 75 nuclear gene geographic concordance
 
 on:
-  pull_request:
-    paths:
-      - "analysis/audit_world52_75gene_original_NA_West_genetic_concordance_v1.py"
-      - "tests/test_world52_75gene_original_NA_West_genetic_concordance_v1.py"
-      - ".github/workflows/audit-world52-real75gene-geography-concordance-v1.yml"
+  # Source original corrected 52-tip results and their exact input hashes are
+  # archived in successful Actions runs; execute explicit scientific reruns only,
+  # not redundant source downloads on every unrelated PR edit.
   workflow_dispatch:
 
 permissions:
