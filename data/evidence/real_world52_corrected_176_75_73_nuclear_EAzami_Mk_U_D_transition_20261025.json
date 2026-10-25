@@ -1,0 +1,130 @@
+{
+  "version": "EAzami_corrected_world52_unique_BioSample_176_75_73_source_Mk_U_D_v1",
+  "date": "2026-10-25",
+  "genetic_source": "Original Moreyra2025 public molecular run/voucher ledger; 51 UNIQUE Cirsium BioSamples, one Carthamus molecular outgroup",
+  "supersedes": {
+    "corrected_error": "Earlier global53 pilot contained J38S038 and GLB2_SRR30887251 both from the SAME original BioSample SAMN44017865/SRR30887251.",
+    "original_Kamchatka_population_divergence_claim_allowed": false,
+    "older_original53_directional_expected_counts_valid_as_biological_inference": false,
+    "new_permanently_source_validated_phylograms": [
+      "data/evidence/real_world52_176Comp1061_51uniqueBioSamples_IQTREE_TIM3F_R3_20261025.nwk",
+      "data/evidence/real_world52_75Comp1061_12uniqueExternal_ge40pct_IQTREE_TIM3F_R3_20261025.nwk",
+      "data/evidence/real_world52_73Comp1061_hardSameSRRtechnicalScreen_IQTREE_TIM3F_R3_20261025.nwk"
+    ]
+  },
+  "source_morphological_states": {
+    "unique_Cirsium_BioSamples": 51,
+    "genome_source_tips_with_Carthamus_outgroup": 52,
+    "original_species_or_variety_head_concepts_observed": 27,
+    "U": 19,
+    "D": 8,
+    "unknown": 24,
+    "original_botanical_source_evidence_not_same_sequenced_voucher": true,
+    "infraspecific_Cirsium_nipponicum_unmeasured_varieties_not_assigned_species_state": true,
+    "original_39_paper_members_are_not_all_physically_Japanese_collection": true
+  },
+  "phylogenetic_study_stratum_null": {
+    "method": "20,000 predeclared seed2317 morphology-label permutations across 27 distinct named taxon concepts, retaining number U and D in original J38 paper cohort, North America, and West Palearctic. Original J38 paper cohort is NOT synonymous with physically collected in Japan.",
+    "strata_original_state_counts": {
+      "Japan38_paper_taxonomic_panel": {
+        "U": 14,
+        "D": 5
+      },
+      "North_America": {
+        "U": 4,
+        "D": 2
+      },
+      "West_Palearctic": {
+        "U": 1,
+        "D": 1
+      }
+    },
+    "comparisons": {
+      "IQTREE_full176": {
+        "Fitch_lower_bound": 8,
+        "study_stratum_null_mean": 7.47285,
+        "p_one_sided_clustering": 1,
+        "p_one_sided_overdispersion": 0.5806209689515525
+      },
+      "IQTREE_12_external_covered75": {
+        "Fitch_lower_bound": 7,
+        "study_stratum_null_mean": 7.4316,
+        "p_one_sided_clustering": 0.4458277086145693,
+        "p_one_sided_overdispersion": 0.8899555022248887
+      },
+      "IQTREE_technical_qc73": {
+        "Fitch_lower_bound": 8,
+        "study_stratum_null_mean": 7.436,
+        "p_one_sided_clustering": 1,
+        "p_one_sided_overdispersion": 0.5487725613719314
+      }
+    },
+    "conclusion": "No detected source-panel taxon-block phylogenetic clustering of U/D. This is conditional label permutation, not a corrected geographic/spatial evolutionary null or proof against selection."
+  },
+  "continuous_time_Mk": {
+    "assumed_root_prior_U": 0.5,
+    "unknown_source_tips_marginalized": 24,
+    "branch_length_unit": "substitutions/site, no fossil time calibration",
+    "model_comparison_and_true_conditional_Markov_rewards": {
+      "IQTREE_full176": {
+        "newick_sha256": "ef4a93f8b39dfda19180903f5e39b57a8a34eda293060a57ab30fea46b377fb3",
+        "ER_AICc": 39.27432012903741,
+        "ARD_AICc": 37.291789162003944,
+        "ARD_minus_ER_AICc": -1.982530967033469,
+        "ER_qUD_per_substitution": 568.7576425370412,
+        "ARD_qUD_per_substitution": 702.2493308939867,
+        "ARD_qDU_per_substitution": 1657.4474821360432,
+        "expected_conditional_ER_jumps_U_to_D": 101.61472468229172,
+        "expected_conditional_ER_jumps_D_to_U": 105.06197236529931,
+        "expected_conditional_ARD_jumps_U_to_D": 179.22075628137276,
+        "expected_conditional_ARD_jumps_D_to_U": 179.29129409159953,
+        "root_PU_ER": 0.5002051648583462,
+        "root_PU_under_fixed_ER_q_prior_U0p1": 0.10007388360231471,
+        "root_PU_under_fixed_ER_q_prior_U0p9": 0.9000738351116121
+      },
+      "IQTREE_high_occupancy75": {
+        "newick_sha256": "58296516b78f3b4200e015fa7503ef11035af7cd58940fe26e6be39c518b894b",
+        "ER_AICc": 39.35022353338014,
+        "ARD_AICc": 37.30574447361104,
+        "ARD_minus_ER_AICc": -2.0444790597690954,
+        "expected_conditional_ER_jumps_U_to_D": 95.17962995128137,
+        "expected_conditional_ARD_jumps_U_to_D": 190.47226332180784,
+        "root_PU_ER": 0.5001429775211231
+      },
+      "IQTREE_technical_qc73": {
+        "newick_sha256": "3830972a1b747684a69e90fa7bc1b1a22102e703b6db1f4d5411cee3260423b5",
+        "ER_AICc": 38.907999204117445,
+        "ARD_AICc": 37.30458853474571,
+        "ARD_minus_ER_AICc": -1.6034106693717334,
+        "expected_conditional_ER_jumps_U_to_D": 26.19241706546396,
+        "expected_conditional_ARD_jumps_U_to_D": 162.4904974728132,
+        "root_PU_ER": 0.5138088127790641
+      }
+    },
+    "posterior_history_jumps_are_observed_independent_origins": false,
+    "inferred_root_state_U_or_D_from_data": false,
+    "differential_directional_rate_selection_established": false,
+    "historical_climatic_exposure_during_transitions_observed": false
+  },
+  "original_nuclear_QC": {
+    "full_original_Comp1061_loci": 176,
+    "blind_high_occupancy_genes_after_corrected_sample_dedup": 75,
+    "technical_same_SRR_processing_discrepant_loci_excluded_for73": [
+      "At1g02170",
+      "At3g04400"
+    ],
+    "technical_discrepancy_not_proven_paralog_or_homeolog": true,
+    "source_phylogenetic_data_not_an_accepted_294tip_350nuclear_gene_world_tree": true
+  },
+  "reproducibility": {
+    "CI_run": "https://github.com/zuizui0223/EAzami/actions/runs/40160913962",
+    "result_artifact_id": 12586557465,
+    "source_original_artifact_digest": "sha256:1fde9a2124b03d44b0dd4c0bfa2aa89901e1c92a74a0006853b5d2376c9b1ca8",
+    "executable": "analysis/run_real_world52_corrected_EAzami_U_D_transitions_v1.py",
+    "tests": "tests/test_real_world52_corrected_EAzami_U_D_transitions_v1.py",
+    "workflow": ".github/workflows/run-real-world52-EAzami-corrected-transition-v1.yml",
+    "full_source_event_posterior_and_branch_results_csv": "world52_original_gene_source_event_expectation_vs_endpoint_probability.csv",
+    "expected_rate_and_phenotype_sensitivity_csv": "world52_directional_U_D_ER_ARD_source_Mk_fits.csv",
+    "original_study_block_permutation_audit": "world52_original_source_Mk_hidden_events_and_null_audit.json"
+  }
+}
