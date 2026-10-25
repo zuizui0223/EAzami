@@ -1,0 +1,70 @@
+name: Compare genuine world53 IQTREE vs FastTree S1 morphology origins
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_real_world53_ML_FastTree_S1_UD_sensitivity_v1.py"
+      - ".github/workflows/audit-real-world53-IQTREE-FastTree-S1-UD-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-molecular-topology-and-flower-head-reproducibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install immutable sequence and transition-likelihood analysis packages
+        run: |
+          python -m pip install --disable-pip-version-check biopython numpy scipy matplotlib
+          python -m py_compile analysis/audit_real_world53_ML_FastTree_S1_UD_sensitivity_v1.py
+      - name: Recover both original independently INFERRED 53-tip trees from same real 176-locus matrix and source 53 S1 traits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/ml .tmp/fast .tmp/flora
+          gh run download 40148735969 --repo zuizui0223/EAzami \
+            --name real-world53-176Comp1061-8QCpass-traitblind-ML-tree-v1 --dir .tmp/ml
+          gh run download 40149393831 --repo zuizui0223/EAzami \
+            --name world53-176Comp1061-QC8-independent-FastTree-approxML-source-v1 \
+            --dir .tmp/fast
+          gh run download 40149533186 --repo zuizui0223/EAzami \
+            --name world53-real-176nuclear-S1-original-nine-flowers-and-Mk-models-v1 \
+            --dir .tmp/flora
+      - name: Verify topology uncertainty, original continental sample region clades and ancestral U/D ER/ARD rate sensitivity
+        run: |
+          python analysis/audit_real_world53_ML_FastTree_S1_UD_sensitivity_v1.py \
+            --ml-tree .tmp/ml/world53_real_176Comp1061_ML.treefile \
+            --fasttree .tmp/fast/world53_176Comp1061_FastTree_GTRgamma.treefile \
+            --trait-table .tmp/flora/world53_original_S1_vouchers_head_nine_trait_rows.csv \
+            --outdir .tmp/sensitivity
+      - name: Enforce two real molecular algorithms, not two independent biological events
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path(".tmp/sensitivity/real_world53_two_nuclear_algorithms_U_D_topology_sensitivity.json")
+          j=json.loads(p.read_text(encoding="utf-8"))
+          assert j["source_real_nuclear_tips"]==53
+          assert len(j["per_tree"])==2
+          assert j["two_inference_algorithms_not_independent_evolutionary_replicates"] is True
+          assert j["source_trait_states_52_ingroup"]=={"U":19,"D":9,"?":24}
+          assert j["split_count_IQTREE"]==j["split_count_FastTree"]==50
+          assert j["topology_RF_unrooted_53tips"]==48
+          assert all(r["regional_MRCA"]["North_America_six"]["clade_exclusive"] for r in j["per_tree"])
+          assert not any(r["regional_MRCA"]["West_Palearctic_five"]["clade_exclusive"] for r in j["per_tree"])
+          assert sorted(r["source_head_fits"]["all_source_vouchers"]["Fitch_minimum_steps"] for r in j["per_tree"])==[8,9]
+          print("REAL 176 LOCUS MOLECULAR TOPOLOGY SENSITIVITY COMPLETE, NO CLAIM OF MULTIPLE DATED EVENTS")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-world53-176nuclear-IQTREE-FastTree-S1-U-D-topology-sensitivity-v1
+          path: .tmp/sensitivity/
+          retention-days: 90
+          if-no-files-found: error
