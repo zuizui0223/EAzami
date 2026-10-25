@@ -1,10 +1,9 @@
 name: Build authentic world53 176-locus tree from eight QC-pass source specimens
 
 on:
-  pull_request:
-    paths:
-      - "analysis/build_real_world53_176locus_QC8_v1.py"
-      - ".github/workflows/real-world53-176locus-QC8-v1.yml"
+  # Source-frozen original eight MOREYRA hard-QC specimens. The original
+  # primary results are archived on explicit run IDs; avoid re-running
+  # expensive 176-locus phylogenomic fitting after every PR edit.
   workflow_dispatch:
 
 permissions:
