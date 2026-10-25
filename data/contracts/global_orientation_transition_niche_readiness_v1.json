@@ -15,13 +15,17 @@
   "worldwide_branch_length_nuclear_ensemble_ready": false,
   "worldwide_tip_orientation_climate_join_ready": false,
   "historical_branch_climate_ready": false,
-  "current_allowed_verification": "original-dna 53tip crosscontinental preliminary 176/74 Comp1061 nuclear ML trees; source S1 U/D Mk ER/ARD and geography/taxon-blocked 20k placement signal, NOT accepted 294tip full-world phylogeny or historical climate transition",
+  "current_allowed_verification": "newly_reinferred_world52_real_source_Mk_U_D_176_75_73_loci_unique_biosamples_taxonblock20k_null_and_history_saturation;not_full_294",
   "no_global_effect_or_p_value_claim_allowed": true,
   "missing_inputs": [
     "audited globally inclusive nuclear tree ensemble with branch lengths and rooting provenance",
     "independent accepted-taxonomy molecular-tip/orientation/climate join with balanced world coverage",
     "world taxon and clade coverage/QC audit and evidence for both U and D",
-    "dated tree, palaeolocation and paleo climate for historic claims"
+    "dated tree, palaeolocation and paleo climate for historic claims",
+    "full 294 distinct BioSample nuclear orthology-aware phylogenomic tree accepted under 350 locus original Moreyra target selection",
+    "species-level U/D phenotype on sequenced vouchers rather than taxon concept only",
+    "original sample locality vs native-range and matched climate BIO1/BIO15 taxon tips",
+    "independently validated ancestral-event root prior and unsaturated transition rates"
   ],
   "fixed_external_hypothesis": {
     "u_to_d": {
@@ -148,5 +152,53 @@
     "material_source_test": "data/evidence/real_world53_EAzami_U_D_taxonblock_Mk_hidden_jumps_20261025.json",
     "reproduced_run": 40158714439,
     "original_execution_artifact_id": 12585643654
+  },
+  "independent_corrected_real_world52_nuclear_model": {
+    "source_study": "Moreyra et al. 2025 S1 source BioSample/runs; independent NMNS/FNA/European U-D taxon head states",
+    "unique_Cirsium_source_biosamples": 51,
+    "Carthamus_molecular_outgroups": 1,
+    "current_nuclear_molecular_tip_count": 52,
+    "eliminated_identical_SRR_sample_processing_duplication": "SAMN44017865 / SRR30887251 from original J38S038 and second pipeline GLB2_SRR30887251",
+    "correctly_deduplicated_gene_panels": [
+      176,
+      75,
+      73
+    ],
+    "technical_two_gene_same_SRR_processing_discrepancy_exclusion": "At1g02170, At3g04400 flagged not proven paralog/homeolog",
+    "source_head_state_tips": {
+      "U": 19,
+      "D": 8,
+      "unknown": 24
+    },
+    "unique_head_scored_taxon_concepts": 27,
+    "genetic_newick_3_source_SHA256": {
+      "full176": "ef4a93f8b39dfda19180903f5e39b57a8a34eda293060a57ab30fea46b377fb3",
+      "balanced75": "58296516b78f3b4200e015fa7503ef11035af7cd58940fe26e6be39c518b894b",
+      "technical73": "3830972a1b747684a69e90fa7bc1b1a22102e703b6db1f4d5411cee3260423b5"
+    },
+    "taxon_concept_blocked_original_study_cohort_permutation_tests": 20000,
+    "original_study_cohort_is_not_all_genetically_sampled_from_Japan": true,
+    "original_three_nuclear_tree_Fitch_minimum_changes": [
+      8,
+      7,
+      8
+    ],
+    "study_stratum_one_sided_UD_phylogenetic_concentration_p_values": [
+      1,
+      0.4458277086145693,
+      1
+    ],
+    "approximate_n27_ARD_minus_ER_AICc": [
+      -1.982530967033469,
+      -2.0444790597690954,
+      -1.6034106693717334
+    ],
+    "root_PU_source_inference_supported": false,
+    "conditional_hidden_CTMC_U_to_D_counts_not_historical_origins": true,
+    "original_botanical_head_data_observed_same_sequenced_voucher": false,
+    "complete_294_biosample_full_350gene_worldwide_tree_ready": false,
+    "original_current_CI_success_run_id": 40160913962,
+    "result_receipt": "data/evidence/real_world52_corrected_176_75_73_nuclear_EAzami_Mk_U_D_transition_20261025.json",
+    "source_retracted_53tip_note": "data/evidence/world53_same_SRR_pseudoreplication_retraction_and52_unique_20261025.json"
   }
 }
