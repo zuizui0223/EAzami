@@ -386,6 +386,41 @@ The root, internal ancestral-node posterior, and P(parent U, child D) are **fitt
 
 Original 40-tip source alignment was left identical. The original *Carthamus* sequence lacks adequate reference length for the exact two original loci `At1g26880` and `At5g62680`; the deployed successful five-readset workflow **masked those loci for the added samples**, rather than inventing replacement bases. **174/176 loci** have usable reference coordinates for the added samples; five-way stringent high-confidence intersection covers **87 loci**.
 
+## 2026-10-25: world53 ORIGINAL DNA + Moreyra S1 + 9 flower traits (new accepted pilot)
+
+**Genuine new result achieved:** The geographic expansion from 45 to 54 planned molecular samples was executed from original Moreyra S1 target-capture libraries. Eight of nine new SRRs passed the UNCHANGED source 70/176 nuclear-locus read-mapping gate. Chinese *Cirsium fargesii* SRR30887183 recovered 63 loci and 25,840 confident bases, therefore was rejected without changing locus thresholds or examining its phenotype. The eight passing samples recovered 86–102 loci each, totalling 355,179 confidently called bases. See `data/evidence/world54_source9_QC_failed_one_world53_acceptance_20261025.json`.
+
+**Correct consequence:** 45 original real molecular tips + eight independent QC-pass nuclear specimen tips = **53 real source specimens**, including the original *Carthamus* molecular outgroup. Total original Compositae1061 locus universe **176**, 161,654 alignment columns; the entire 45-tip source alignment is byte-for-byte unchanged, and added low-confidence positions are `N`-masked. No source taxon/tree topology was inferred from floral morphology.
+
+### Authentic newly inferred 53-tip IQ-TREE source topology
+
+- Run [40148735969](https://github.com/zuizui0223/EAzami/actions/runs/40148735969), artifact 12582202210 (ZIP SHA256 `539fe41b2bcd0250b3d9929740aec93121b1ab5360be7b6b97be3b689b1faa05`), **success**.
+- Original independently refitted ML tree, IQ-TREE ModelFinder BIC **TIM3+F+R3**, SH-aLRT 1000, UFBoot 1000; original outgroup fixed for root. Newick SHA256 **5828ccd9f4f0b083f804f87bfa7407a20ad5eb52647e92eb5a26e812bd6807a7**.
+- **IMPORTANT permanent file:** `data/evidence/real_world53_176Comp1061_IQTREE_ModelFinder_UFBoot_SHaLRT_20261025.nwk` is now versioned in the GitHub branch, not only temporarily stored in Actions.
+
+### Real floral morphology and the source S1 voucher contract
+
+Run [40150037475](https://github.com/zuizui0223/EAzami/actions/runs/40150037475) successfully joined 39 Japan original Moreyra S1 genetic vouchers, five original external Moreyra genetic tips and eight QC-pass trait-blind external Moreyra S1 vouchers into the **same real 53-tip tree**, then mapped every available original Siniscalchi 2023 nine-character source record. Separate Japanese NMNS and FNA/European taxonomic head data are retained by source URL.
+
+- Genuine Cirsium molecular ingroup: **52 individual tips** (39 original Japan38, 5 original external, 8 blind-recovered external).
+- Source-level U=**19**, D=**9**, unresolved=**24**; only **27 distinct species binomial concepts** provide resolved U/D because *C. kamtschaticum* has a Japan-original and a separately sampled continental molecule with the same taxon-level D evidence.
+- Six of the 53 molecular tips have complete **original Siniscalchi nine-variable categorical codes**; other missing categorical flower/leaf variables are **not imputed**. Moreyra S1 is DNA/voucher metadata, **not** a table of the same nine floral variables.
+- Independent IQ-TREE topology Fitch U/D minimum category changes **9**. Pruning the new same-species *C. kamtschaticum* molecular individual reduces the minimum to **8**.
+- ER/ARD source Mk AICc on the primary IQ-TREE (n≈27 phenotyped binomial concepts): **ER 40.659 / ARD 39.631**, Δ(ARD−ER)=**−1.029**. This is **weak**, not convincing support for faster D→U evolution. Ingroup root P(U) about **0.500**, ancestral direction unresolved.
+- Model output, 9-trait color key and 53-tip original S1 crosswalk stored in artifact **12582068446**. Source renderer `analysis/annotate_real_world53_original_S1_nine_traits_Mk_v1.py`. The figure now focuses on **52 Cirsium tips** by omitting the long outgroup branch ONLY from the graphic: the full 53-tip Newick and sequence model retain the true *Carthamus* outgroup.
+
+### Independent inference-algorithm sensitivity (same actual molecular reads)
+
+- FastTree GTR+gamma **independently refit** on the identical original 53-tip, 176-locus aligned sequences: [run 40149393831](https://github.com/zuizui0223/EAzami/actions/runs/40149393831), artifact 12582477149. FastTree local SH support is NOT an IQ-TREE bootstrap.
+- Original IQ-TREE vs FastTree: 50 nontrivial unrooted splits each, **26 shared; RF=48 of maximum 100**. High sensitivity in the global/japanese/internal phylogeny: no fixed global species tree accepted.
+- All **six North-American** original+new source nuclear specimens form an exclusive regional clade in both source trees; IQ-TREE SH-aLRT/UFBoot **100/100**, FastTree local SH-like **1.0**. This supports regional molecular membership under these two modelers, not any pollinator mechanism or origin-time claim.
+- All **five West-Palearctic** samples do **not** form one exclusive clade in either tree. *C. kamtschaticum* original Japan38 and added continental source tips are **not** an exclusive sister pair in either model; requires deeper sequencing/taxonomic/missingness audit, not an instantaneous hybridization/independent-origin assertion.
+- Morphology Fitch minimum changes: **IQ-TREE 9**, **FastTree 8**. Both have weak ΔAICc(ARD−ER) approximately **−1.03** and **−0.99**. Three trees across two molecular estimation algorithms are **not** independent biological replication.
+- A direct original 45-tip IQ-TREE vs new 53-tip IQ-TREE comparison after pruning eight added tips yields source-shared 45-tip unrooted RF **36/84** despite unchanged original DNA and unchanged preferred substitution model TIM3+F+R3. This is substantive source sampling sensitivity and prohibits interpreting unexpected Japanese root placements as one accepted global colonization history.
+- [run 40149950497](https://github.com/zuizui0223/EAzami/actions/runs/40149950497), artifact **12582073279** stores independently executed topology/clade and ER/ARD comparisons.
+
+**Persistent scientific receipt**: `data/evidence/world53_real_176Comp1061_ML_S1_nine_traits_topology_Mk_results_20261025.json` and permanently committed Newick. These are **pilot nuclear reference-projected** analyses with high missingness in the new specimens. The 294 independent biological samples / 350 published final nuclear loci of Moreyra et al. (2025) are still NOT jointly reconstructed as a complete global accepted topology. No U→D event age, distinct origin count, historic climate at origin, fitness or ecological adaptation has been inferred.
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
