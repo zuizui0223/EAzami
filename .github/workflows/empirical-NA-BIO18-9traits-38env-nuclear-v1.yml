@@ -1,0 +1,60 @@
+name: Empirical nuclear phylogeny BIO18 and all 9 head/colour/bract traits 38 environments
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_siniscalchi2023_NA_nuclear_BIO18_full9trait_envscreen_v1.py"
+      - ".github/workflows/empirical-NA-BIO18-9traits-38env-nuclear-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  real-nuclear-environment-full-morphology:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install phylogenetic comparative statistics
+        run: |
+          python -m pip install --disable-pip-version-check biopython numpy scipy matplotlib
+          python -m py_compile analysis/run_siniscalchi2023_NA_nuclear_BIO18_full9trait_envscreen_v1.py
+      - name: Independently recover authenticated published true molecular tree, nine morphological traits and all original BIO/environmental means
+        run: |
+          python analysis/run_siniscalchi2023_NA_nuclear_BIO18_full9trait_envscreen_v1.py \
+            --asset-dir .tmp/published-na-real-nuclear-source \
+            --outdir .tmp/real-NA-9morph-38environment-BIO18
+      - name: Verify real BIO18 and all 38 environment/nine original categorical traits with species-specific botanical ambiguity sensitivity
+        run: |
+          python - <<'PY'
+          import csv,json,math
+          from pathlib import Path
+          d=Path(".tmp/real-NA-9morph-38environment-BIO18")
+          j=json.loads((d/"NA62_nuclear_BIO18_nine_traits_38env_phylogenetic_screen.json").read_text())
+          assert j["original_NorthAmerican_ingroup_nuclear_taxa"]==62
+          assert j["original_source_morphological_character_count"]==9
+          assert j["original_environment_variable_count"]==38
+          assert j["n_planned_environment_x_trait_tests_per_covariance"]==342
+          assert j["source_BIO18_partial_head_association_while_adjusting_BIO15_BIO1"]["n_original_taxa"]==62
+          assert len(j["leave_each_of_five_original_D_species_out_BIO18"])==5
+          assert j["source_bio18_PGLS_primary"]["FNA_mixed_head_excluded_60"]["n_original_taxa"]==60
+          assert j["source_original_nine_traits_NA_complete"] if "source_original_nine_traits_NA_complete" in j else j["n_source_traits_NA_complete"]==9
+          with (d/"NorthAmerica_original63_nine_traits_38env_BrownianPGLS_and_iid.csv").open() as h:
+            rows=list(csv.DictReader(h))
+          assert len(rows)==684
+          assert {r["character"] for r in rows}=={"CorollaThroat","CorollaColor","Duration","GlutinousRidge","Habit","HeadPosition","InnerPhyllaryColor","OuterPhyllaryPosition","StyleBranchColor"}
+          assert all(0 <= float(r["BH_q_all_9traits_x_38environment_axes"]) <= 1 for r in rows)
+          assert all(math.isfinite(float(r["Fstat"])) for r in rows)
+          print("SUCCESS: 62 real original nuclear species, 9 source morphological traits, 38 environment axes, q across 342 tests")
+          PY
+      - name: Retain all independent original nuclear phylogenetic explanatory estimates and Bio18 guards
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Siniscalchi2023-NA62-nuclear-BIO18-all9traits-38env-PGLS-v1
+          path: .tmp/real-NA-9morph-38environment-BIO18/
+          retention-days: 90
+          if-no-files-found: error
