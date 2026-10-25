@@ -572,6 +572,43 @@ The new fit explicitly compares the four models **U→D only** (`qDU=0`), **D→
 
 **Artifact and reproducibility:** [run 40163448875](https://github.com/zuizui0223/EAzami/actions/runs/40163448875), artifact **12587437130**, SHA256 `454a35c56134bde308bd6e09894c5466c9ae445c924fe55360d33f7d360fe6d6`. Original inputs/authenticated implementation: `analysis/run_real_world52_irreversible_vs_reversible_U_D_Mk_v1.py`, `tests/test_real_world52_irreversible_vs_reversible_U_D_Mk_v1.py`; full machine-readable receipt `data/evidence/real_world52_irreversible_vs_reversible_EAzami_Mk_U_D_20261025.json`.
 
+## 2026-10-25 corrected-world52 **ARD–IID saturation diagnostic** and **gene-wise source biogeography**
+
+**Retain the critical sample correction:** Recovered real nuclear phylogenies are now **52-tip (51 unique original Cirsium BioSamples plus Carthamus molecular outgroup)**, using original 176 genes, 75 all-12-outside-gated genes, and 73 genes excluding two same-SRR technical pipeline-discrepant loci. Historical 53-tip trees contained one duplicate nuclear accession SAMN44017865/SRR30887251; they are retracted for biological origin comparison. Original head states on corrected trees are **U=19, D=8, unresolved=24**, corresponding to 27 botanically scored species or variety concepts. Moreyra S1 is source voucher/molecular sampling, not the Siniscalchi nine trait table.
+
+### Fitted Mk does **not** add detectable information beyond the observed U/D frequency
+
+The existing actual 60 reversible/irreversible Markov likelihood fits ([40163625099](https://github.com/zuizui0223/EAzami/actions/runs/40163625099)) were newly compared with an explicitly simpler **1-parameter phylogeny-independent state-frequency observation model**, with observed D frequency **8/27 (29.63%)**. This model is a descriptive *high transition-rate mixing limit* of reversible ARD, NOT an assertion that the 27 related source taxa evolved independently.
+
+| Original corrected52 nuclear genes | IID 1-parameter AICc | reversible ARD 2-parameter AICc | ΔAICc (ARD−IID) | Fitted ARD equilibrium D | Original ingroup branches with Markov state memory <10% |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 176 | **34.975** | 37.292 | +2.316 | 29.76% | 69% |
+| 75 all-12-source covered | **34.975** | 37.306 | +2.330 | 29.69% | 73% |
+| 73 technical suspect-site genes screened | **34.975** | 37.305 | +2.329 | 29.71% | 71% |
+
+Even with added Mk branch/rate parameters, the **ARD log-likelihood gains over the simple source-frequency model are only +0.0118, +0.0049 and +0.0054** on the three respective 51-Cirsium-tip phylograms. The high fitted q sum erases much ancestral state memory: `exp(-(qUD+qDU)*original_molecular_edge_length)` is under 0.1 for approximately 69–73% of the 100 ingroup edges. Thus earlier reversible > irreversible AICc comparisons mainly track the observed 19:8 head state ratio, not a measured repeated D→U regain or identified ancestors.
+
+**Execution and durable evidence:** [actual run 40166523396](https://github.com/zuizui0223/EAzami/actions/runs/40166523396) succeeded, artifact 12588218350 SHA256 `a924ff1fb24574c3472cbee75335285a11ee48255af13414d0bbe21b54523ba2`. Exact original-source 52-tip trees/S1 phenotype integrity enforced by scripts `analysis/audit_world52_EAzami_Mk_vs_IID_saturation_v1.py` and `tests/test_world52_EAzami_Mk_vs_IID_saturation_v1.py`, outputs 15 root/study-source holdout cases plus genome panel comparisons; frozen research interpretation `data/evidence/real_world52_corrected_EAzami_Mk_vs_IID_rate_saturation_20261025.json`. The IID Akaike comparison uses n=27 taxon labels as an **approximation** and is **not phylogenetically/spatially calibrated inferential proof** of zero evolution or an ecological selection test.
+
+### Actual 75-gene nuclear support for limited North America / western Palearctic split
+
+Independently, the original unique-SRR Compositae1061 **75 separate nuclear alignments** were inspected for source p-distance of original **six North American versus five western Palearctic** Moreyra S1 accession/vouchers. Every original gene had all 15 within-NA and 30 between-NA-West pairwise homology comparisons with **at least 150 unambiguous ACGT overlapping sites**; no loci were excluded by their observed phylogenetic signal, head state, or p-distance.
+
+| Exact original genetic comparison | All 75 source genes | 73 genes after preflagged `At1g02170` and `At3g04400` technical screen |
+| --- | ---: | ---: |
+| Genes with between-NA-West nucleotide divergence higher than within-NA divergence | **75/75** | **73/73** |
+| Mean within-NA nucleotide p-distance | 0.001676 | 0.001665 |
+| Mean NA-West nucleotide p-distance | 0.013375 | 0.013334 |
+| Per-gene mean difference | **+0.011699** | **+0.011669** |
+| Descriptive ratio between / within | 7.98 | 8.01 |
+| Exchange original 6 NA labels among eleven selected S1 specimens (C(11,6)) | 1/462 | 1/462 |
+
+This is **affirmative geographically coherent original molecular structure** across *all* relevant reference-projected genes: the six selected NA samples are substantially closer genetically to each other than to the five selected western samples. However, this does NOT mean western lineages must form one monophyletic clade (they do not on the original source trees), and the label-exchange calculation (p=1/462 within these originally selected eleven specimens) assumes exchangeability and is not a phylogeographically random/spatially autocorrelated null. The original 75 gene loci are reference-mapped and still await definitive copy-specific orthology/homeolog review before accepting any complete species tree. The two technically discrepant genes are **not proven paralogs**.
+
+**Reproduction:** [real execution run 40166913063](https://github.com/zuizui0223/EAzami/actions/runs/40166913063), artifact **12588693032** (SHA256 `93f763d4551bf3b2f7b72e9c26a37aba1834129014cce8823782d21b29f2e53e`). Source `analysis/audit_world52_75gene_original_NA_West_genetic_concordance_v1.py`, tests `tests/test_world52_75gene_original_NA_West_genetic_concordance_v1.py`, source-verified permanent receipt `data/evidence/real_world52_corrected_75_73_gene_NA_West_nuclear_concordance_20261025.json`.
+
+**Remaining main goal:** attain Moreyra's **294 unique BioSample worldwide 350-low-copy-nuclear-gene** source-complete orthology-aware phylogeny; add independently scored head U/D and true separate flower colour, and source-matched native-range-filtered **BIO15/BIO1** tip climates. Current short 52-tip reference-projected tree is a pilot. The two ecological outcomes above are source likelihood and molecular geography diagnostics, NOT the worldwide ancestral origin-count or climatic transition analysis originally desired.
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
