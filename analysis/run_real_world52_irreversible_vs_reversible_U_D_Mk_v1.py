@@ -87,7 +87,8 @@ def taxon_concept(name:str):
     m=re.match(r"^(Cirsium)\s+([a-z][a-z-]+)(?:\s+var\.\s+([a-z][a-z-]+))?",name)
     if not m:
         raise ValueError("cannot preserve original taxonomic varietal concept: "+name)
-    return " ".join(v for v in m.groups() if v)
+    genus, species, variety = m.groups()
+    return f"{genus} {species}" + (f" var. {variety}" if variety else "")
 
 
 def compile_real_tree(path:Path,expected:str,source:dict):
