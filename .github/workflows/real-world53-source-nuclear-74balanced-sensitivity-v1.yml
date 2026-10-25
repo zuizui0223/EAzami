@@ -59,8 +59,7 @@ jobs:
           d=Path(".tmp/realBalanced74")
           m=json.loads((d/"source74_nuclear_locus_occupancy_contract.json").read_text())
           assert m["retained_loci"]==74 and m["retained_aligned_bp"]==61240
-          assert m["NA_sample_count"]==6 and m["West_sample_count"]==5
-          assert m["continental_AS_sample_count"]==2
+          assert m["geographic_source_counts"]=={"North_America":6,"West_Palearctic":5,"Continental_East_Central_Asia":2}
           assert not m["trait_source_or_taxonomic_orientation_used_to_select_loci"]
           s=list(SeqIO.parse(d/"world53_74_all13ge40pct_nuclear_loci.fasta","fasta"))
           assert len(s)==53 and all(len(t.seq)==61240 for t in s)
