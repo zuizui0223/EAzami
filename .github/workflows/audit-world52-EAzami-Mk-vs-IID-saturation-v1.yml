@@ -1,11 +1,9 @@
 name: Test corrected world52 EAzami saturated Mk versus single-frequency IID
 
 on:
-  pull_request:
-    paths:
-      - "analysis/audit_world52_EAzami_Mk_vs_IID_saturation_v1.py"
-      - "tests/test_world52_EAzami_Mk_vs_IID_saturation_v1.py"
-      - ".github/workflows/audit-world52-EAzami-Mk-vs-IID-saturation-v1.yml"
+  # Source original corrected 52-tip results and their exact input hashes are
+  # archived in successful Actions runs; execute explicit scientific reruns only,
+  # not redundant source downloads on every unrelated PR edit.
   workflow_dispatch:
 
 permissions:
