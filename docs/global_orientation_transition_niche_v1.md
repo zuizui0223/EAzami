@@ -1,5 +1,28 @@
 # Global nuclear U→D × branchwise climate workflow v1
 
+## CURRENT — corrected nuclear source and EAzami U↔D transition model (2026-10-25)
+
+**Authoritative empirical status: 51 distinct *Cirsium* BioSamples + 1 *Carthamus* outgroup = 52 molecular tips.** The earlier 53-tip analyses repeated one actual sequence accession (SAMN44017865 / SRR30887251) as both `J38S038` and `GLB2_SRR30887251_Cirsium_kamtschaticum`. This is *technical reprocessing*, not two sampled populations. The old 53-tip topological splits, gene occupancy and evolutionary inference are retained only as historical audits and must **NOT** be cited as independent evidence. In the Moreyra Japan38 **paper taxonomic subset**, `J38S038` is in fact from **Chukotka/Kamchatka, Siberia**; the original 39 members were not all physically collected in Japan. The source naming is preserved without pretending otherwise.
+
+Corrected independently refitted real DNA trees (all using 51 unique ingroup individuals and the unchanged original *Carthamus* outgroup): 176 original Comp1061 loci, 75 high occupancy nuclear loci after ensuring all 12 distinct non-Japan38 source individuals have ≥40% ACGT/locus, and 73 genes after **two technically suspicious same-SRR pipeline-discordance loci** `At1g02170` and `At3g04400` are excluded. No exclusion is a proof of biological paralogy or homeology.
+
+**New REAL EAzami U/D Mk results** from [successful source CI 40160913962](https://github.com/zuizui0223/EAzami/actions/runs/40160913962), artifact **12586557465** (SHA256 `1fde9a2124b03d44b0dd4c0bfa2aa89901e1c92a74a0006853b5d2376c9b1ca8`). Original S1 sample identity plus independently sourced botanical head states: **19 U, 8 D, 24 unscored**, 27 distinct species/variety concepts. All 24 unscored are missing likelihood emissions, not silently U.
+
+| Corrected source real nuclear phylogram | All 176 original nuclear genes | 75-region-coverage nuclear genes | 73 screened genes |
+|---|---:|---:|---:|
+| Fixed-tree Fitch **minimum** U/D category changes | **8** | **7** | **8** |
+| Approximate AICc (ARD−ER, n=27 distinct botanical taxon concepts) | −1.983 | −2.044 | −1.603 |
+| Source-study-stratified, 20k taxon-block null **p for U/D phylogenetic concentration** | 1.000 | 0.446 | 1.000 |
+| ER estimated conditional U→D Markov history jumps | 101.61 | 95.18 | 26.19 |
+| ARD estimated conditional U→D Markov history jumps | 179.22 | 190.47 | 162.49 |
+| ER root posterior P(U) given prior=0.5 | 0.5002 | 0.5001 | 0.5138 |
+
+**Interpretation and fatal mechanistic boundaries:** This small source-panel label-permutation analysis does not detect U/D phylogenetic concentration beyond original sample-cohort taxon-block counts. ARD has only a weak AICc advantage and remains non-decisive. The very high fitted Mk rates and enormous 26–190 *expected conditional* U→D history jumps indicate hidden-rate saturation, NOT 26–190 independent historical U→D origins. The ER root posterior approximately reproduces the assumed root prior (e.g. IQ-TREE176 root prior 0.1→posterior 0.10007; prior 0.9→posterior 0.90007): ancestral upright versus nodding **is not resolved**. Branch lengths are substitutions per site, not geological time. No observed historical BIO15, BIO1, pollination efficiency or source-voucher photo phenotype was used to infer adaptive climatic causes.
+
+Original **Moreyra 294 distinct biological source samples / 295 public SRRs / final 350 low-copy nuclear loci worldwide topology remains UNEXECUTED and unavailable**. The updated 52-tip crosscontinental tree is useful as a technical/phylogeographic pilot only. New reproducible code `analysis/run_real_world52_corrected_EAzami_U_D_transitions_v1.py`, tests `tests/test_real_world52_corrected_EAzami_U_D_transitions_v1.py`, receipt `data/evidence/real_world52_corrected_176_75_73_nuclear_EAzami_Mk_U_D_transition_20261025.json`. Original `world53` sections below are superseded and must not be reused as biological conclusions.
+
+---
+
 > **SOURCE-ID ERRATUM / 2026-10-25 — THIS OVERRIDES EARLIER WORLD53 CLAIMS.**
 > The apparent two *Cirsium kamtschaticum* populations `J38S038` and
 > `GLB2_SRR30887251_Cirsium_kamtschaticum` are the **same original**
