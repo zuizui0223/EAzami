@@ -46,7 +46,7 @@ jobs:
             --source-traits .tmp/S1traits/world53_original_S1_vouchers_head_nine_trait_rows.csv \
             --partitions .tmp/originalJ38/tree_result/partitions.csv \
             --outdir .tmp/real-world52
-      - name: Validate all original Moreyra S1 molecular accession identities: 52 tips, 51 UNIQUE source BioSamples
+      - name: Validate all original Moreyra S1 molecular accession identities and 51 distinct BioSamples
         run: |
           python - <<'PY'
           import json,csv
