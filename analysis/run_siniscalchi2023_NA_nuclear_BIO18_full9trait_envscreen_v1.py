@@ -38,11 +38,13 @@ TRAITS=("CorollaThroat","CorollaColor","Duration","GlutinousRidge",
         "Habit","HeadPosition","InnerPhyllaryColor","OuterPhyllaryPosition",
         "StyleBranchColor")
 PREFLIGHT_AXES=("BIO18","BIO15","BIO1")
-CATALOG=["Aridity"]+[f"BIO{x}" for x in range(1,20)]+[
+ENVIRONMENT=["Aridity"]+[f"BIO{x}" for x in range(1,20)]+[
     "Aspect","Elevation","Slope","Bulk","Clay","Coarse","Nitrogen","pH",
     "Sand","Silt","Carbon","NeedleLeaf","Evergreen","Deciduous",
-    "Mixed","Shrubs","Herbaceous","DR"]
-EXPECTED_ENV=len(CATALOG)
+    "Mixed","Shrubs","Herbaceous"]
+DIVERSIFICATION_RATE=("DR",)  # molecular tree-derived rate, not environmental
+CATALOG=ENVIRONMENT+list(DIVERSIFICATION_RATE)
+EXPECTED_ENV=len(ENVIRONMENT)
 EPS=1e-12
 
 
@@ -66,8 +68,8 @@ def source(asset_dir):
         raise ValueError("original author's real North American molecular ingroup differs from original phenotype")
     if set(names)!=(set(environment)-{OUTGROUP}):
         raise ValueError("published environmental original source table does not join all 62 real nuclear ingroup tips")
-    if len(CATALOG)!=38:
-        raise ValueError("source environment catalog not 38 original explanatory variables")
+    if len(ENVIRONMENT)!=37 or len(CATALOG)!=38:
+        raise ValueError("original source table has 37 environmental variables plus tree-derived DR diversification")
     for name in names:
         for axis in CATALOG:
             n=float(environment[name][axis])
@@ -197,11 +199,17 @@ def run(asset_dir,outdir):
                     "source_original_trait_state_counts":json.dumps(dict(sorted(Counter(original_factor[char]).items()))),
                     "sparse_trait_state_under_3_taxa":result["smallest_level_n"]<3,
                     **result})
+    # Original DR column is estimated tip diversification RATE, from this
+    # same molecular tree. Keep its nine comparisons separate from abiotic,
+    # topographic, soil, climate and vegetation environmental hypotheses.
+    for row in rows:
+        row["BH_q_all_9traits_x_37environment_axes"]=float("nan")
     for kind in two_models:
-        family=[row for row in rows if row["covariance_model"]==kind]
-        BH(family,"p","BH_q_all_9traits_x_38environment_axes")
-        if len(family)!=len(TRAITS)*len(CATALOG):
-            raise ValueError("entire 342-hypothesis morphological environmental test family incomplete")
+        family=[row for row in rows if row["covariance_model"]==kind
+                and row["environment_axis"] in ENVIRONMENT]
+        BH(family,"p","BH_q_all_9traits_x_37environment_axes")
+        if len(family)!=len(TRAITS)*len(ENVIRONMENT):
+            raise ValueError("entire 333-test morphological/environmental hypothesis family incomplete")
 
     head=[traits[t]["HeadPosition"] for t in names]
     bio18=ey["BIO18"]
@@ -251,7 +259,7 @@ def run(asset_dir,outdir):
             "phylogenetic_PGLS_standardized_D_minus_U":
                   phylo["standardized_difference_level_1_minus_0"],
             "PGLS_p":phylo["p"],
-            "BH_q_all_traits_env":phylo["BH_q_all_9traits_x_38environment_axes"]})
+            "BH_q_all_traits_env":phylo["BH_q_all_9traits_x_37environment_axes"]})
     pairwise=[]
     for a_index,a in enumerate(TRAITS):
         for b in TRAITS[a_index+1:]:
@@ -268,7 +276,7 @@ def run(asset_dir,outdir):
                 "states_cross_tab":json.dumps(observed.astype(int).tolist())})
     outdir.mkdir(parents=True,exist_ok=True)
     cols=list(rows[0])
-    with (outdir/"NorthAmerica_original63_nine_traits_38env_BrownianPGLS_and_iid.csv").open(
+    with (outdir/"NorthAmerica_original63_nine_traits_37environment_plus_DR_BrownianPGLS_and_iid.csv").open(
         "w",encoding="utf-8",newline="") as h:
         writer=csv.DictWriter(h,fieldnames=cols)
         writer.writeheader();writer.writerows(rows)
@@ -276,20 +284,23 @@ def run(asset_dir,outdir):
         "w",encoding="utf-8",newline="") as h:
         writer=csv.DictWriter(h,fieldnames=list(pairwise[0]))
         writer.writeheader();writer.writerows(pairwise)
-    top=sorted((r for r in rows if r["covariance_model"]=="Brownian_phylogenetic"),
+    top=sorted((r for r in rows if r["covariance_model"]=="Brownian_phylogenetic"
+                and r["environment_axis"] in ENVIRONMENT),
         key=lambda x:x["p"])[:24]
     source_result={
-        "contract":"Siniscalchi2023_real_62species_nuclear_9traits_38env_BIO18_multipletest_v1",
+        "contract":"Siniscalchi2023_real_62species_nuclear_9traits_37env_plus_separate_DR_BIO18_v2",
         "original_source_author":"Siniscalchi, Ackerfield & Folk 2023",
         "source_article_DOI":"https://doi.org/10.1086/724310",
         "immutable_source_commit":"c925d4af86160064448f794a9715f70b917a2786",
         "original_nuclear_tree_tips_including_excluded_C_vulgare":63,
         "original_NorthAmerican_ingroup_nuclear_taxa":len(names),
         "original_source_morphological_character_count":len(TRAITS),
-        "original_environment_variable_count":len(CATALOG),
-        "environment_variables_original_source":CATALOG,
-        "n_planned_environment_x_trait_tests_per_covariance":len(TRAITS)*len(CATALOG),
-        "multitest":"BH correction over all 342 morphological x environmental tests per covariance; highly correlated environmental predictors and sparse character classes flag exploratory interpretation",
+        "original_environment_variable_count":len(ENVIRONMENT),
+        "environment_variables_original_source":ENVIRONMENT,
+        "separate_tip_diversification_rate_is_not_environment":"DR",
+        "n_separate_DR_morphology_tests_per_covariance":len(TRAITS),
+        "n_planned_environment_x_trait_tests_per_covariance":len(TRAITS)*len(ENVIRONMENT),
+        "multitest":"BH across exactly 333 morphology x environmental tests per covariance. The original tree-derived DR diversification rate is NOT an environmental variable and is excluded from this FDR family. Environmental axes are correlated and some floral colour classes contain singletons.",
         "source_head_states_by_original_authors":dict(Counter(head)),
         "head_D_taxa":[t for t in names if traits[t]["HeadPosition"]=="1"],
         "nuclear_covar_model":"Brownian lambda=1 phylogenetic GLS on original author's published calibrated North American molecular tree; outgroup C. vulgare excluded",
@@ -306,13 +317,13 @@ def run(asset_dir,outdir):
         "head_environment_focus":axes_focus,
         "top_24_exploratory_environment_morphology_PGLS_associations":[
             {"character":r["character"],"environment_axis":r["environment_axis"],
-             "p":r["p"],"BH_q":r["BH_q_all_9traits_x_38environment_axes"],
+             "p":r["p"],"BH_q":r["BH_q_all_9traits_x_37environment_axes"],
              "n_cat":r["n_levels"],"min_cat_n":r["smallest_level_n"]}
              for r in top
         ],
-        "n_PGLS_discoveries_FDR_q_under_0_05":sum(r["BH_q_all_9traits_x_38environment_axes"]<.05
+        "n_PGLS_discoveries_FDR_q_under_0_05":sum(r["BH_q_all_9traits_x_37environment_axes"]<.05
            for r in rows if r["covariance_model"]=="Brownian_phylogenetic"),
-        "n_iid_discoveries_FDR_q_under_0_05":sum(r["BH_q_all_9traits_x_38environment_axes"]<.05
+        "n_iid_discoveries_FDR_q_under_0_05":sum(r["BH_q_all_9traits_x_37environment_axes"]<.05
            for r in rows if r["covariance_model"]=="iid_nonphylogenetic"),
         "n_source_traits_NA_complete":len(TRAITS),
         "source_old_world53_nine_trait_match_limited_to_six_molecular_individuals":True,
@@ -326,8 +337,9 @@ def run(asset_dir,outdir):
         json.dumps(source_result,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     print(json.dumps({
         "real_ingroup_taxa":len(names),"morphological_traits":len(TRAITS),
-        "source_environment_axes":len(CATALOG),
-        "tests_per_model":len(TRAITS)*len(CATALOG),
+        "source_environment_axes":len(ENVIRONMENT),
+    "tree_derived_DR_outcome_separate_from_environment":True,
+        "tests_per_model":len(TRAITS)*len(ENVIRONMENT),
         "bio18_original_authors":head_predeclared["original_authors_all62"],
         "bio18_FNA_mixed_head_excluded":head_predeclared["FNA_mixed_head_excluded_60"],
         "bio18_conditioned_on_BIO15_BIO1":conditional,
