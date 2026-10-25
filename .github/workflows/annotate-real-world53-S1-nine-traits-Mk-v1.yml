@@ -1,0 +1,87 @@
+name: Join completed real world53 nuclear tree with original S1 and all nine flower traits
+
+on:
+  pull_request:
+    paths:
+      - "analysis/annotate_real_world53_original_S1_nine_traits_Mk_v1.py"
+      - ".github/workflows/annotate-real-world53-S1-nine-traits-Mk-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  source-verified-53-empirical-nuclear-ecology:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install morphology/phylogeny statistics and plotting tools
+        run: |
+          python -m pip install --disable-pip-version-check numpy scipy biopython matplotlib
+          python -m pip check
+          python -m py_compile analysis/annotate_real_world53_original_S1_nine_traits_Mk_v1.py
+      - name: Restore EXACT real molecular 53-tip tree, S1 voucher source and published nine flower variables
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/ml53 .tmp/traits45 .tmp/traits9 .tmp/J38
+          gh run download 40148735969 --repo zuizui0223/EAzami \
+            --name real-world53-176Comp1061-8QCpass-traitblind-ML-tree-v1 \
+            --dir .tmp/ml53
+          gh run download 40110754870 --repo zuizui0223/EAzami \
+            --name real-world45-176gene-nuclear-head-colour-multitrait-topology-audit-v1 \
+            --dir .tmp/traits45
+          gh run download 40116490593 --repo zuizui0223/EAzami \
+            --name world54-nine-original-S1-postfreeze-exact-nine-flower-traits-v1 \
+            --dir .tmp/traits9
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 \
+            --dir .tmp/J38
+          test -s .tmp/ml53/world53_real_176Comp1061_ML.treefile
+          test -s .tmp/traits45/real_nuclear45_source_traits_v1.csv
+          test -s .tmp/traits9/nine_blind_Moreyra_S1_postfreeze_head_nine_traits.csv
+          test -s .tmp/J38/japan38_bundle/sample_manifest.csv
+      - name: Join 53 nucleotide tips to original Moreyra specimen/voucher and original nine-category floral traits; fit ER/ARD with 24 missing tips
+        run: |
+          python analysis/annotate_real_world53_original_S1_nine_traits_Mk_v1.py \
+            --tree .tmp/ml53/world53_real_176Comp1061_ML.treefile \
+            --world53-receipt .tmp/ml53/real_world53_ML_tree_acceptance_receipt.json \
+            --old-traits .tmp/traits45/real_nuclear45_source_traits_v1.csv \
+            --new-postfreeze-traits .tmp/traits9/nine_blind_Moreyra_S1_postfreeze_head_nine_traits.csv \
+            --j38-manifest .tmp/J38/japan38_bundle/sample_manifest.csv \
+            --outdir .tmp/world53-original-S1-multi-trait
+      - name: Check no invented D origins, no imputation, and explicit duplicate-species sensitivity
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path(".tmp/world53-original-S1-multi-trait")
+          j=json.loads((root/"world53_actual_nuclear_ancestral_trait_result.json").read_text())
+          assert j["n_molecular_tips"]==53 and j["n_ingroup_molecular_tips"]==52
+          assert j["phenotype_source_counts"]=={"U":19,"D":9,"?":24}
+          assert j["n_unique_taxon_binomials_in_phenotyped_panel"]==27
+          assert j["has_same_species_molecular_replication_Cirsium_kamtschaticum"] is True
+          assert j["published_world_294tip_350locus_tree_not_finished"] is True
+          assert j["model_null_traits_marginalized"] is True
+          assert len(j["models_fitted"])==6
+          assert (root/"world53_real_176locus_nuclear_S1_9traits.png").stat().st_size>15000
+          assert (root/"world53_real_176locus_nuclear_S1_9traits.svg").stat().st_size>15000
+          with (root/"world53_original_S1_vouchers_head_nine_trait_rows.csv").open() as f:
+            rows=list(csv.DictReader(f))
+          assert len(rows)==53
+          assert len({x["tip_id"] for x in rows})==53
+          assert "SRR30887183" not in {x["source_run"] for x in rows}
+          assert sum(x["head_orientation"]=="D" for x in rows)==9
+          print("REAL 53-tip INDEPENDENT NUCLEAR S1/9-TRAIT JOIN/Mk INFERENCE COMPLETED; 294 GLOBAL STILL UNFINISHED")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: world53-real-176nuclear-S1-original-nine-flowers-and-Mk-models-v1
+          path: .tmp/world53-original-S1-multi-trait/
+          retention-days: 90
+          if-no-files-found: error
