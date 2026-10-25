@@ -484,6 +484,51 @@ Reproduction / durable original-source receipts:
 - `data/evidence/world53_176vs74_source_coverage_nuclear_S1_phylogeny_20261025.json`
 - `.github/workflows/validate-world53-74covered-nuclear-S1-v1.yml`
 
+## Real world53 U/D transitions: original molecular signal, taxon-block null, and exact hidden Mk event-count gate (2026-10-25)
+
+**Actual independently executed analysis:** [GitHub Actions run 40158714439](https://github.com/zuizui0223/EAzami/actions/runs/40158714439), green. Artifact [12585643654](https://github.com/zuizui0223/EAzami/actions/runs/40158714439/artifacts/12585643654) SHA256 `07ea547898c151c87eccd120a810e0b184980a4ffba9da5b6e0bbb83d9c8df00` contains source-state integrity records, **20,000** trait permutation tests, 18 original real-data ER/ARD Mk fits, exact hidden-jump CTMC calculations per molecular edge, and plots.
+
+**Data:** 53 original target-capture molecular specimens (52 Cirsium + real Carthamus outgroup) from the actual 176/74-locus IQ-TREE and 176-locus FastTree phylograms. EAzami's independent original botanical taxon-concept records resolve U=19 and D=9 molecular individuals, with **24 unresolved**. There are only **27 distinct resolved morphological species/variety concepts** because source C. kamtschaticum has a duplicate biological nuclear sample. Moreyra S1 is molecular specimen/BioSample/voucher provenance; nine Siniscalchi flower traits and independent Japanese NMNS/NA/EU botanical head character descriptions are separate sources, not the actual phenotype of the sequenced voucher.
+
+### Nuisance morphology errors explicitly prevented
+
+The new taxon-concept key distinguishes *C. nipponicum* from *C. nipponicum* var. *incomptum* and var. *yoshinoi*. Three molecular tips of these unphenotyped varieties retain **unknown U/D**, rather than inheriting source *C. nipponicum* species U. Retaining the 19U/9D/24-unknown source state totals is checked in unit tests and a full source-layout SHA test. The original genetic trees and sequence alignments are not modified.
+
+### Conditional null: no source U/D phylogenetic clustering detected
+
+The hypothesis test randomizes original observed **27 taxon-concept BLOCKS** across the source tree while preserving all 24 unknown tip positions, repeated molecular samples of the same botanical species, and the original head U/D counts *within each source geographic stratum*: Japan 14U/5D, North America 4U/2D, Western Palearctic 1U/1D. No East/Central Asian U/D binomial is counted as a new independent origin because the only resolved taxon is already represented in Japan. A separate all-27 pooled permutation is reported only as secondary sensitivity.
+
+| Real nuclear source topology | Observed minimum Fitch steps | Region-fixed random null mean | 20,000-label cluster p (one-sided) | Opposite dispersion p |
+|---|---:|---:|---:|---:|
+| IQ-TREE original 176 genes | **9** | **7.757** | **1.000** | 0.152 |
+| IQ-TREE 74 all-external-covered genes | **8** | **7.652** | **0.860** | 0.613 |
+| FastTree original 176 genes | **8** | **7.681** | **0.841** | 0.615 |
+
+**Result:** These original real-data trees provide **no evidence of unusually low Fitch costs / significant clustering of U or D states** under this fixed regional sampled-species null. Nor is overdispersion supported at p<=.05. This is **not** proof of zero phylogenetic signal in the full genus, because sampling, taxon-level phenotype coding, missing traits and tree composition strongly limit identifiability.
+
+### Mk event counts are *not* independent D origins
+
+Prior EAzami Mk fits used a symmetric two-state model ER and directional ARD on these real molecular branch lengths, which are in **substitutions/site**. We extended the model by computing exact per-edge **Markov reward expectations** using Van Loan block matrix exponentials. This integrates the number of **hidden as well as visible** U->D and D->U switches on each real tree branch, rather than equating P(parent U, child D) or Fitch lower bounds to the actual number of historical transitions.
+
+| Same original molecular phylogram | ER AICc | ARD AICc | ER expected U->D switches* | ARD expected U->D switches* |
+|---|---:|---:|---:|---:|
+| 176 genes IQ-TREE | 40.659 | 39.631 | **103.77** | **176.08** |
+| 74 genes IQ-TREE | 40.759 | 39.652 | **98.71** | **189.39** |
+| 176 genes FastTree | 40.622 | 39.629 | **95.63** | **168.63** |
+
+*The very large source-model conditional switch expectations reflect **rate saturation and hidden reversible oscillations**; they are **not biological evidence of ~100-190 independent adaptive U->D origins**. They are entirely conditional on a fitted q (hundreds/thousands per substitutions/site) and the original uncertain phylogram branch lengths. Rate asymmetry AICc advantage remains weak (~1), and is not a reliable directional evolutionary conclusion.
+
+The ingroup root state also contains almost no identifying information: holding ER fitted molecular q fixed on the 176-locus source tree, original equal prior P(root U)=0.5 yields posterior **0.50046**, but prior U=0.1 yields posterior **0.10017**, and prior U=0.9 yields posterior **0.90017**. This directly falsifies any confident statement that the ancestral Cirsium head was upright or pendent from this world53 panel.
+
+### Ecological frontier and reproducibility
+
+- **Not yet testable globally:** the original fixed EAzami ecology prediction of **(+BIO15, −BIO1)** linked to U->D changes on a globally accepted nuclear phylogeny, because native-range screened and georeferenced original modern BIO1/BIO15 tip-level means are **not complete for the 53 tips**. A geological historical environmental trigger would require dated ancestral geographic trajectories and actual palaeoclimate reconstructions.
+- **Priority:** increase genuinely independent world nuclear taxa, original-low-copy ortholog/paralog checks and source-confirmed head states before interpreting model-implied hidden switches as biological trait evolution. The full Moreyra original 294 BioSample / ~350 published nuclear gene global tree is not completed here.
+- Source `analysis/run_real_world53_EAzami_transition_signal_Mk_reward_v1.py`.
+- Synthetic and source-identity regression `tests/test_real_world53_EAzami_transition_signal_Mk_reward_v1.py`.
+- CI `.github/workflows/run-world53-EAzami-UD-Mk-transition-diagnostic-v1.yml`.
+- Durable committed source-backed summary `data/evidence/real_world53_EAzami_U_D_taxonblock_Mk_hidden_jumps_20261025.json`.
+
 ## Input contract
 
 A UTF-8 CSV with one row per *nuclear tree tip* (including explicitly excluded/unresolved ingroup tips); required columns:
