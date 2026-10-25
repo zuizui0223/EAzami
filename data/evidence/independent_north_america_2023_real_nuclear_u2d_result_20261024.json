@@ -1,0 +1,142 @@
+{
+  "contract_version": "independent_north_american_real_nuclear_u2d_modern_niche_receipt_v1",
+  "execution_date_utc": "2026-10-24",
+  "original_source": {
+    "paper": "Siniscalchi, Ackerfield & Folk (2023), International Journal of Plant Sciences",
+    "doi": "https://doi.org/10.1086/724310",
+    "repository": "https://github.com/carol-siniscalchi/cirsium",
+    "pinned_commit": "c925d4af86160064448f794a9715f70b917a2786",
+    "nuclear_tree": "environmental/cirsium.phyluce95p.ultrametric.tre",
+    "morphology": "traits/traits.csv",
+    "morphology_codebook": "traits/cirsium.trait.rec.R",
+    "modern_environment": "environmental/cirsium_environmental_allcombined_DR.csv",
+    "tree_tips_including_Cirsium_vulgare_outgroup": 63,
+    "head_state_coding": {
+      "U": "0 erect",
+      "D": "1 pendent"
+    },
+    "flower_colour_state_coding": {
+      "0": "red",
+      "1": "reddish-purple",
+      "2": "white/pink/purple combined",
+      "3": "yellow"
+    }
+  },
+  "verified_source_original_all63": {
+    "head_states": {
+      "U": 58,
+      "D": 5
+    },
+    "flower_colour_codes": {
+      "0": 5,
+      "1": 7,
+      "2": 50,
+      "3": 1
+    },
+    "head_position_fitch_minimum_changes": 4,
+    "corolla_color_fitch_minimum_changes": 12
+  },
+  "fixed_preplanned_test": {
+    "region": "North America",
+    "target": "+zBIO15 -zBIO1 divided by sqrt(2)",
+    "source": "EAzami East Asia earlier hypothesis; preselected before NA outcomes",
+    "discrete_model": "symmetric ER Mk CTMC with equal root-state prior; exact edge endpoint posteriors",
+    "continuous_model": "Brownian reconstruction of published contemporary taxon climate centroids",
+    "tree_length_units": "published dated nuclear chronogram (Ma), not a single dated transition",
+    "null": "999 fixed-D-count randomly reassigned tip states within North America; one-sided; not a fully phylogenetic or geographic null",
+    "primary_author_state_panel": {
+      "ingroup_taxa": 62,
+      "states": {
+        "U": 57,
+        "D": 5
+      },
+      "fitch_minimum_changes_full_published_tree": 4,
+      "raw_source_means": {
+        "BIO15": {
+          "U": 39.536185964912285,
+          "D": 55.19858000000001
+        },
+        "BIO1": {
+          "U": 76.40322070175439,
+          "D": 68.2219
+        }
+      },
+      "signed_reconstructed_modern_niche_components": {
+        "zBIO15": 0.6370187227738364,
+        "zBIO1": 0.06459404782191848
+      },
+      "signed_composite": 0.4047653693770064,
+      "CTMC_q_per_Myr_conditional_on_chronogram": 0.053613951237321926,
+      "null": {
+        "n_draws": 999,
+        "n_at_least_as_large": 15,
+        "p_one_sided": 0.016
+      }
+    },
+    "botanical_mixed_head_exclusion_sensitivity": {
+      "excluded": [
+        "Cirsium_eatonii",
+        "Cirsium_joannae"
+      ],
+      "cause": "Flora of North America states erect or nodding; original authors assigned fixed U; sensitivity removes both",
+      "ingroup_taxa": 60,
+      "states": {
+        "U": 55,
+        "D": 5
+      },
+      "raw_source_means": {
+        "BIO15": {
+          "U": 40.219494545454545,
+          "D": 55.19858000000001
+        },
+        "BIO1": {
+          "U": 77.76749418181818,
+          "D": 68.2219
+        }
+      },
+      "signed_reconstructed_modern_niche_components": {
+        "zBIO15": 0.6199260179179813,
+        "zBIO1": 0.0594394249198151
+      },
+      "signed_composite": 0.3963238706731478,
+      "CTMC_q_per_Myr_conditional_on_chronogram": 0.05544767809083612,
+      "null": {
+        "n_draws": 999,
+        "n_at_least_as_large": 21,
+        "p_one_sided": 0.022
+      }
+    }
+  },
+  "ecological_interpretation": {
+    "supported": "A positive prespecified combined BIO15/BIO1 directional statistic in an independent North American nuclear and botanical source panel; insensitive to removing two externally ambiguous head states.",
+    "axis_caveat": "The reconstructed signed BIO15 component is strongly positive, but the signed BIO1 component is weakly positive rather than the predeclared negative sign. The signal is therefore carried primarily by precipitation seasonality; the temperature-axis direction is not reproduced in branchwise reconstruction.",
+    "excluded_claims": [
+      "recovered Moreyra 2025 global 350-locus nuclear tree",
+      "a full-genus worldwide replicated estimate",
+      "historical paleoclimate measured on a true U→D transition event",
+      "posterior on number or calendar date of actual state changes",
+      "causation, pollinator mechanism, selection or adaptation",
+      "full phylogenetic and spatial null calibration",
+      "unique white flower loss/re-emergence, since colour class 2 pools white/pink/purple"
+    ]
+  },
+  "verification": {
+    "workflow_run_id": 40100026609,
+    "workflow_url": "https://github.com/zuizui0223/EAzami/actions/runs/40100026609",
+    "artifact_id": 12562755175,
+    "artifact_url": "https://github.com/zuizui0223/EAzami/actions/runs/40100026609/artifacts/12562755175",
+    "artifact_sha256": "86f3c9d329a8394a4f9080b3cf3f304eaba2d84c606fc39821a8306d8f39f8f4",
+    "archived_objects": [
+      "independent_north_america_nuclear_trait_map.png",
+      "independent_north_america_nuclear_trait_map.svg",
+      "siniscalchi_2023_north_american_nuclear_tree.nwk",
+      "original_published_trait_states.csv",
+      "na_full_author_trait_climate_join.csv",
+      "na_mixed_head_sensitivity_trait_climate_join.csv",
+      "author_coding/edge_joint_posteriors.csv",
+      "mixed_head_excluded/edge_joint_posteriors.csv",
+      "independent_na_u2d_ecology_result.json"
+    ],
+    "original_moreyra_worldwide_294_branch_length_tree_completed": false
+  }
+}

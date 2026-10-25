@@ -1,0 +1,52 @@
+name: Validate permanent real world53 full176 vs matched74 nuclear Newick
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/real_world53_74loci_all13ge40pct_IQTREE_TIM3_F_R3_ML_20261025.nwk"
+      - "data/evidence/world53_176vs74_source_coverage_nuclear_S1_phylogeny_20261025.json"
+      - ".github/workflows/validate-world53-74covered-nuclear-S1-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-permanent-sequence-source-history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check biopython
+      - name: Compare committed 74-gene real nuclear phylogram with original archived CI nucleotide-derived tree
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          from Bio import Phylo
+          d=Path("data/evidence")
+          p=d/"real_world53_74loci_all13ge40pct_IQTREE_TIM3_F_R3_ML_20261025.nwk"
+          j=json.loads((d/"world53_176vs74_source_coverage_nuclear_S1_phylogeny_20261025.json").read_text())
+          h=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert h=="57483eb8f1232631a8160e7dfe8e9427a1a85f20a8957e5d23ea65bca08e5e64"
+          assert h==j["executed_true_empirical_53_sample_phylogeny"]["new_newick_sha256"]
+          t=Phylo.read(p,"newick")
+          tips=[n.name for n in t.get_terminals()]
+          assert len(tips)==len(set(tips))==53
+          assert "OUTGROUP_saff" in tips
+          assert len([name for name in tips if name.startswith("GLB")])==13
+          assert "SRR30887183" not in "|".join(tips)
+          assert j["genetic_locus_selection_before_phylogeny_or_morphology"]["selected_locus_count"]==74
+          assert j["genetic_locus_selection_before_phylogeny_or_morphology"]["selected_aligned_bp"]==61240
+          assert len(j["genetic_locus_selection_before_phylogeny_or_morphology"]["selected_whole_original_gene_IDs"])==74
+          assert j["executed_true_empirical_53_sample_phylogeny"]["unrooted_RF_distance_53tip"]==48
+          assert j["head_evolution_model"]["high_occupancy_74_locus_tree"]["Fitch_minimum_U_D_categorical_changes"]==8
+          assert j["head_evolution_model"]["original_176_locus_tree"]["Fitch_minimum_U_D_categorical_changes"]==9
+          assert j["executed_true_empirical_53_sample_phylogeny"]["north_america_six_source_tips_exclusive_clade_both"] is True
+          assert j["executed_true_empirical_53_sample_phylogeny"]["WestPalearctic_five_molecular_tips_exclusive_clade_both"] is False
+          assert not j["head_evolution_model"]["directionality_or_exact_event_count_identified"]
+          print("REAL original genomic 53-tip 74-gene source Newick SHA VERIFIED:",h)
+          PY

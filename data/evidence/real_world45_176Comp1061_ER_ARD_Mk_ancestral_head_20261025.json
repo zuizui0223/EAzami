@@ -1,0 +1,112 @@
+{
+  "version": "real_global45_176locus_Mk_U_D_ER_ARD_topology_holdout_v1",
+  "source_date": "2026-10-25",
+  "molecular_panel": {
+    "original_Japan38_source_biological_individuals": 39,
+    "added_source_Moreyra_S1_North_America": 3,
+    "added_source_Moreyra_S1_West_Palearctic": 2,
+    "source_Carthamus_outgroup": 1,
+    "actual_nuclear_tree_tips": 45,
+    "ingroup_tips": 44,
+    "frozen_Comp1061_nuclear_loci": 176,
+    "alignment_length_bp": 161654,
+    "phenotype_tip_counts": {
+      "U": 17,
+      "D": 7,
+      "unknown": 20
+    },
+    "source_S1_role": "Moreyra S1 provides source BioSample/voucher/accession not 9 source flower-character variables",
+    "morphology_source": "independent taxonomic NMNS/FNA/European source descriptions, not same-voucher specimen photographs"
+  },
+  "true_empirical_tree_SHA256": {
+    "IQTREE_ModelFinder": "191e6a502e23685d95e767580d41a9e1eca82db0495c93d58d34bcc3abedf8f6",
+    "IQTREE_fixed_GTR": "b37f50b1422b016263a78c412c88a600d338bbd399a8255c1fc89b399cdd9a00",
+    "FastTree": "c1bd01900fff5c23825642a41ba0c2a24080ca5537422fcb241477a88ea6b9e2"
+  },
+  "model_contract": {
+    "Mk_models": [
+      "ER, equal forward/backward Q",
+      "ARD, unequal forward/backward Q"
+    ],
+    "fitted_on": "44 ingroup Cirsium source nuclear tips with 20 missing categorical head states marginalized",
+    "ingroup_root_prior_equal_U_D": true,
+    "branch_length_unit": "substitutions per site, NOT time in Ma",
+    "AICc_approx_sample_n": 24,
+    "AICc_caveat": "24 observed botanical species concepts approximate n; phylogenetic states are not independent",
+    "exact_events_or_dates_inferred": false
+  },
+  "actual_primary_results": {
+    "Fitch_lower_bounds_by_tree": {
+      "IQTREE_ModelFinder": 6,
+      "IQTREE_fixed_GTR": 5,
+      "FastTree": 6
+    },
+    "delta_AICc_ARD_minus_ER": {
+      "IQTREE_ModelFinder": -1.894484428739169,
+      "IQTREE_fixed_GTR": -1.8854989814232752,
+      "FastTree": -1.8928772707036075
+    },
+    "IQTREE_ModelFinder_ARD_q_UD_per_substitution": 1281.2,
+    "IQTREE_ModelFinder_ARD_q_DU_per_substitution": 3111.3,
+    "IQTREE_ModelFinder_ER_q_per_substitution": 1043.7,
+    "root_P_U_ER_range": [
+      0.5000001474083271,
+      0.5000026358195551
+    ],
+    "root_P_U_ARD_range": [
+      0.5,
+      0.500000000012
+    ],
+    "North_American_3taxa_MRCA_P_U_ER_range": [
+      0.65443,
+      0.68691
+    ],
+    "West_Palearctic_2taxa_MRCA_P_U_ER_range": [
+      0.50002,
+      0.50011
+    ],
+    "North_American_3taxa_MRCA_P_U_ARD_range": [
+      0.72487,
+      0.7359
+    ],
+    "West_Palearctic_2taxa_MRCA_P_U_ARD_range": [
+      0.7082,
+      0.70832
+    ],
+    "endpoint_joint_posterior_not_unique_event_posterior": true
+  },
+  "explicit_species_holds": {
+    "omit_West_Palearctic_cultivated_D_C_erisithales": {
+      "delta_AICc_ARD_minus_ER": {
+        "IQTREE_ModelFinder": -3.0604,
+        "IQTREE_fixed_GTR": -3.0513,
+        "FastTree": -3.0588
+      },
+      "conclusion": "weak ARD rate preference retained"
+    },
+    "omit_North_American_D_C_vinaceum": {
+      "delta_AICc_ARD_minus_ER": {
+        "IQTREE_ModelFinder": 1.1053,
+        "IQTREE_fixed_GTR": 1.899,
+        "FastTree": 0.60826
+      },
+      "conclusion": "model order REVERSES; ER preferred under all 3 ML topologies"
+    }
+  },
+  "scientific_interpretation": "Weak ARD AICc advantage (~1.9) in all 3 shared-matrix tree inferences is eliminated and reversed if one North American D source is unscored. Directional evolutionary rate asymmetry is NOT supported robustly. Ingroup U ancestral root remains at ~0.5; cannot identify root orientation. Parsimony min 5-6 state changes is a lower bound, not independent U->D gains.",
+  "unestimated": [
+    "actual count and age of U->D evolutionary transitions",
+    "paleo-climate at specific branch events",
+    "pollinator mechanism and adaptive selection",
+    "Moreyra completed worldwide 294-BioSample and original 350-nuclear-locus species tree"
+  ],
+  "execution": {
+    "succeeded_actions_run": "https://github.com/zuizui0223/EAzami/actions/runs/40114671471",
+    "result_artifact_id": 12567733628,
+    "result_artifact_sha256": "8dca04874e31e97a9b1c5d4da615802d5a1f49a222f79166be009abe68eed9e2",
+    "code": "analysis/fit_real_world45_multitopology_U_D_mk_v1.py",
+    "tests": "tests/test_real_world45_multitopology_U_D_mk_v1.py"
+  },
+  "phenotype_ascertainment_design_warning": "The five extra Moreyra molecular species added to the Japan38 nuclear tree were explicitly chosen partly to cover U/D contrasts across North America and West Palearctic. An Mk model fitted to this selected 45-tip phylogram cannot be interpreted as an unbiased worldwide character transition-rate estimate or population frequency estimate. The subsequent nine source specimens were selected by geography without inspecting head/colour traits, specifically to reduce this selection bias.",
+  "directional_rate_asymmetry_globally_established": false
+}

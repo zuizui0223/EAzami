@@ -1,0 +1,308 @@
+{
+  "contract_version": "global_orientation_transition_niche_readiness_v1",
+  "status_date": "2026-10-25",
+  "scope": "worldwide nuclear phylogeny U->D orientation endpoint posterior x branchwise reconstructed modern climate niche",
+  "independent_from_frozen_manuscripts": [
+    "EAzami Chapter 2 JEB V10",
+    "azami Chapter 1 GEB v3"
+  ],
+  "source_registry": {
+    "deduplicated_biological_samples": 294,
+    "public_SRRs": 295,
+    "source_taxon_labels": 270,
+    "source": "data/evidence/japan_origin_global_public_panel_contract_v2.json"
+  },
+  "worldwide_branch_length_nuclear_ensemble_ready": false,
+  "worldwide_tip_orientation_climate_join_ready": false,
+  "historical_branch_climate_ready": false,
+  "current_allowed_verification": "real_corrected_world52_51unique_Cirsium_176_75_73_original_nuclear_ER_ARD_oneway_and_IID_adequacy;75original_genes_NA_vs_West_source_geographic_consistency;294_BioSample_final350_tree_not_completed",
+  "no_global_effect_or_p_value_claim_allowed": true,
+  "missing_inputs": [
+    "audited globally inclusive nuclear tree ensemble with branch lengths and rooting provenance",
+    "independent accepted-taxonomy molecular-tip/orientation/climate join with balanced world coverage",
+    "world taxon and clade coverage/QC audit and evidence for both U and D",
+    "dated tree, palaeolocation and paleo climate for historic claims",
+    "full 294 distinct BioSample nuclear orthology-aware phylogenomic tree accepted under 350 locus original Moreyra target selection",
+    "species-level U/D phenotype on sequenced vouchers rather than taxon concept only",
+    "original sample locality vs native-range and matched climate BIO1/BIO15 taxon tips",
+    "independently validated ancestral-event root prior and unsaturated transition rates"
+  ],
+  "fixed_external_hypothesis": {
+    "u_to_d": {
+      "bio15": "increase",
+      "bio1": "decrease"
+    }
+  },
+  "note": "Never substitute Azami grafted trees or tip present climate differences for independent molecular branches or historical paleoclimate. The source metadata and GBIF gate are real and audited, but are not global molecular topology or climate effect results.",
+  "empirical_source_readiness": {
+    "public_nuclear_biosamples": 294,
+    "unique_public_SRRs": 295,
+    "source_taxon_labels": 270,
+    "source_name_clean_initial_taxa": 35,
+    "initial_taxon_orientation_states": {
+      "U": 24,
+      "D": 11
+    },
+    "initial_nuclear_biosamples": 46,
+    "trait_blind_geographic_anchor_biosamples": 48,
+    "priority_intake_biosamples": 94,
+    "priority_manifest_file": "analysis/build_global_orientation_nuclear_priority_intake_v1.py",
+    "priority_intake_run": 40095299391,
+    "priority_intake_artifact_id": 12560119979,
+    "frozen_name_state_sha256": "6ebc890a28c622509292ef6adaa528864504aae9383b694252bda7037696d4f1",
+    "gbif_gate": {
+      "verified_UTC": "2026-10-24",
+      "audit_run": 40095787620,
+      "audit_artifact_id": 12560318301,
+      "audit_artifact_digest": "sha256:800cca0bff1781ccacd0c53c62740a7d3ac10f730b6df49b0ca3b1795bdbb933",
+      "source_names_queried": 35,
+      "gbif_exact_name_matches": 33,
+      "coordinate_records_fetched": 9592,
+      "original_source_names_matched": 8550,
+      "spatially_thinned_qc_points": 1011,
+      "taxa_with_min5_cells": 26,
+      "taxa_with_min5_cells_and_complete_source_enumeration": 16,
+      "truncated_taxa": 11,
+      "native_range_filter_complete": false,
+      "climate_extracted": false
+    },
+    "western_prospective_extension": {
+      "sources": 3,
+      "source_name_clean": 2,
+      "states_source_name_clean": {
+        "U": 1,
+        "D": 1
+      },
+      "source_name_review_holds": 1,
+      "adds_to_frozen_35": false,
+      "source_audit_run": 40096368252
+    },
+    "taxon_name_review_and_same_voucher_gate_complete": false,
+    "public_full_294_nuclear_tree_completed": false
+  },
+  "independent_real_published_north_america_nuclear_case": {
+    "source_article": "https://doi.org/10.1086/724310",
+    "source_git_commit": "c925d4af86160064448f794a9715f70b917a2786",
+    "verified_nuclear_tree_tips": 63,
+    "all_nine_published_morphology_characters_joined": true,
+    "exact_tip_trait_coverage": 63,
+    "fixed_tree_Fitch_HeadPosition_minimum_changes": 4,
+    "fixed_tree_Fitch_CorollaColor_minimum_changes": 12,
+    "orientation_EastAsian_fixed_vector_test": {
+      "model_ingroup_tips": 62,
+      "U": 57,
+      "D": 5,
+      "composite": 0.4047653693770064,
+      "p_one_sided_fixed_count_mc999": 0.016,
+      "mixed_head_exclusion_ingroup_tips": 60,
+      "mixed_head_exclusion_U": 55,
+      "mixed_head_exclusion_D": 5,
+      "sensitivity_composite": 0.3963238706731478,
+      "sensitivity_p_one_sided_fixed_count_mc999": 0.022,
+      "signed_modern_branchwise_BIO15": 0.6370187227738364,
+      "signed_modern_branchwise_BIO1": 0.06459404782191848,
+      "temperature_component_matches_expected_negative_direction": false,
+      "caveat": "Source present-day environment means and simple fixed-tip-count null; not historical climate or full phylogenetic/spatial null."
+    },
+    "initial_model_workflow_run": 40100026609,
+    "initial_model_artifact_id": 12562755175,
+    "full_nine_trait_workflow_run": 40100757609,
+    "full_nine_trait_artifact_id": 12562219896,
+    "source_receipts": [
+      "data/evidence/independent_north_america_2023_real_nuclear_u2d_result_20261024.json",
+      "data/evidence/independent_na_nuclear_nine_trait_parsimony_20261024.json"
+    ],
+    "does_not_complete_worldwide_294_tip_moreyra_tree": true
+  },
+  "empirical_world53_nuclear_U_D_transition_20261025": {
+    "original_real_Moreyra_2025_S1_nuclear_molecular_tips": 53,
+    "Cirsium_ingroup_molecular_individuals": 52,
+    "original_comp1061_full_loci": 176,
+    "original_comp1061_geographically_balanced_loci": 74,
+    "source_Cirsium_U_phenotype_tips": 19,
+    "source_Cirsium_D_phenotype_tips": 9,
+    "source_Cirsium_unresolved_phenotype_tips": 24,
+    "original_distinct_source_taxon_concepts_with_U_D": 27,
+    "three_empirical_tree_source_SHA256": [
+      "5828ccd9f4f0b083f804f87bfa7407a20ad5eb52647e92eb5a26e812bd6807a7",
+      "57483eb8f1232631a8160e7dfe8e9427a1a85f20a8957e5d23ea65bca08e5e64",
+      "75f0b2087228c190d2d9ca928928eaf603cfe49cdd2a791ab1a72bcf82976cc5"
+    ],
+    "observed_Fitch_min_steps_by_tree": {
+      "IQTREE176": 9,
+      "IQTREE74": 8,
+      "FastTree176": 8
+    },
+    "original_source_state_taxon_block_geo_stratified_20000_permutation_clustering_p": {
+      "IQTREE176": 1,
+      "IQTREE74": 0.8598570071496425,
+      "FastTree176": 0.8408079596020199
+    },
+    "inferred_ancestral_U_root_U_probability_by_default_ER": {
+      "IQTREE176": 0.5004629990217996,
+      "IQTREE74": 0.5002657480735229,
+      "FastTree176": 0.5009797973221203
+    },
+    "root_prior_sensitivity_demonstrates_nonidentifiable_ancestral_state": true,
+    "rate_saturated_ER_and_ARD_Mk_hidden_jump_expectations_not_biological_origin_counts": true,
+    "original_declared_east_asia_plus_BIO15_minus_BIO1_hypothesis_globally_tested": false,
+    "source_exact_53tip_native_range_filtered_BIO1_BIO15_complete": false,
+    "full_294tip_original_Moreyra_350locus_tree_completed": false,
+    "source_technique": "reference-projected 176 nuclear loci for added samples, original Japan 40 tip matrix unchanged",
+    "material_source_test": "data/evidence/real_world53_EAzami_U_D_taxonblock_Mk_hidden_jumps_20261025.json",
+    "reproduced_run": 40158714439,
+    "original_execution_artifact_id": 12585643654
+  },
+  "independent_corrected_real_world52_nuclear_model": {
+    "source_study": "Moreyra et al. 2025 S1 source BioSample/runs; independent NMNS/FNA/European U-D taxon head states",
+    "unique_Cirsium_source_biosamples": 51,
+    "Carthamus_molecular_outgroups": 1,
+    "current_nuclear_molecular_tip_count": 52,
+    "eliminated_identical_SRR_sample_processing_duplication": "SAMN44017865 / SRR30887251 from original J38S038 and second pipeline GLB2_SRR30887251",
+    "correctly_deduplicated_gene_panels": [
+      176,
+      75,
+      73
+    ],
+    "technical_two_gene_same_SRR_processing_discrepancy_exclusion": "At1g02170, At3g04400 flagged not proven paralog/homeolog",
+    "source_head_state_tips": {
+      "U": 19,
+      "D": 8,
+      "unknown": 24
+    },
+    "unique_head_scored_taxon_concepts": 27,
+    "genetic_newick_3_source_SHA256": {
+      "full176": "ef4a93f8b39dfda19180903f5e39b57a8a34eda293060a57ab30fea46b377fb3",
+      "balanced75": "58296516b78f3b4200e015fa7503ef11035af7cd58940fe26e6be39c518b894b",
+      "technical73": "3830972a1b747684a69e90fa7bc1b1a22102e703b6db1f4d5411cee3260423b5"
+    },
+    "taxon_concept_blocked_original_study_cohort_permutation_tests": 20000,
+    "original_study_cohort_is_not_all_genetically_sampled_from_Japan": true,
+    "original_three_nuclear_tree_Fitch_minimum_changes": [
+      8,
+      7,
+      8
+    ],
+    "study_stratum_one_sided_UD_phylogenetic_concentration_p_values": [
+      1,
+      0.4458277086145693,
+      1
+    ],
+    "approximate_n27_ARD_minus_ER_AICc": [
+      -1.982530967033469,
+      -2.0444790597690954,
+      -1.6034106693717334
+    ],
+    "root_PU_source_inference_supported": false,
+    "conditional_hidden_CTMC_U_to_D_counts_not_historical_origins": true,
+    "original_botanical_head_data_observed_same_sequenced_voucher": false,
+    "complete_294_biosample_full_350gene_worldwide_tree_ready": false,
+    "original_current_CI_success_run_id": 40160913962,
+    "result_receipt": "data/evidence/real_world52_corrected_176_75_73_nuclear_EAzami_Mk_U_D_transition_20261025.json",
+    "source_retracted_53tip_note": "data/evidence/world53_same_SRR_pseudoreplication_retraction_and52_unique_20261025.json"
+  },
+  "empirical_world52_irreversible_vs_reversible_orientation_mk": {
+    "corrected_source_unique_Cirsium_BioSamples": 51,
+    "actual_nuclear_phylogram_tips_with_Carthamus_outgroup": 52,
+    "original_three_gene_panels": [
+      176,
+      75,
+      73
+    ],
+    "scored_original_source_U_D_unknown": {
+      "U": 19,
+      "D": 8,
+      "unknown": 24
+    },
+    "compared_homogeneous_Mk_processes": [
+      "U_to_D_only",
+      "D_to_U_only",
+      "symmetric_reversible_ER",
+      "asymmetric_reversible_ARD"
+    ],
+    "original_source_Moreyra_S1_accessions_are_not_observed_sequenced_voucher_flower_heads": true,
+    "original_source_root_prior_U_primary": 0.5,
+    "source_root_prior_U_sensitivity": [
+      0.1,
+      0.9
+    ],
+    "EAzami_actual_model_likelihood_fits": 60,
+    "original_ER_ARD_loglikelihood_reproduced": true,
+    "delta_AICc_best_irreversible_minus_best_reversible_primary": {
+      "full176": 5.954952885541481,
+      "high_occupancy75": 6.503661741330923,
+      "pipeline_qc73": 7.135006575655673
+    },
+    "source_NA_D_omission_weakens_AICc_difference": true,
+    "source_DU_actual_independent_events_observed": false,
+    "source_root_state_identified": false,
+    "source_saturated_transition_rates_not_calendar_date_events": true,
+    "original_user_world294_350genes_complete": false,
+    "real_CI_workflow": "https://github.com/zuizui0223/EAzami/actions/runs/40163448875",
+    "original_artifact_id": 12587437130,
+    "original_result_receipt": "data/evidence/real_world52_irreversible_vs_reversible_EAzami_Mk_U_D_20261025.json"
+  },
+  "independent_corrected_world52_Mk_saturation_IID_benchmark": {
+    "source_executed_20261025": true,
+    "unique_Cirsium_original_Moreyra_S1_BioSamples": 51,
+    "molecular_source_tips_with_Carthamus": 52,
+    "original_nuclear_loci": [
+      176,
+      75,
+      73
+    ],
+    "original_scored_source_taxon_concepts": 27,
+    "source_observed_U_D_unknown": {
+      "U": 19,
+      "D": 8,
+      "unknown": 24
+    },
+    "source_IID_frequency_D": 0.2962962962962963,
+    "one_parameter_IID_AICc": 34.97544488903165,
+    "reversible_ARD_AICc_by_gene_panel": {
+      "full176": 37.29178916200412,
+      "all12covered75": 37.30574447361086,
+      "technical73": 37.30458853474593
+    },
+    "ARD_minus_IID_AICc_by_gene_panel": [
+      2.316344272972472,
+      2.3302995845792083,
+      2.3291436457142822
+    ],
+    "ARD_fitted_stationary_D_frequency_range": [
+      0.2969486842563111,
+      0.29760149993286167
+    ],
+    "prop_original_ingroup_edges_with_lt10percent_state_memory_range": [
+      0.69,
+      0.73
+    ],
+    "saturation_not_independent_origin_count": true,
+    "phylogenetically_independent_IID_model_proved_true": false,
+    "phylogenetically_calibrated_P_value_available": false,
+    "original_source_run": 40166523396,
+    "original_source_artifact_id": 12588218350,
+    "durable_receipt": "data/evidence/real_world52_corrected_EAzami_Mk_vs_IID_rate_saturation_20261025.json"
+  },
+  "corrected_world52_all75_original_nuclear_gene_geographic_support": {
+    "molecular_source_6_NA_5_western_Moreyra_BioSamples": 11,
+    "original_nuclear_loci": 75,
+    "genes_with_NA_internal_distance_lower_than_NA_to_West": 75,
+    "two_original_technical_discrepancy_genes": [
+      "At1g02170",
+      "At3g04400"
+    ],
+    "technically_screened_loci": 73,
+    "technically_screened_same_effect_loci": 73,
+    "original75_mean_p_distance_within_NA": 0.0016762992881811252,
+    "original75_mean_p_distance_NA_West": 0.013375035962623105,
+    "original75_source_label_exchange_exact_rank": "1/462",
+    "original_source_gene_tree_concordance_inferred": false,
+    "geographic_tip_sampling_randomized": false,
+    "ecological_fitness_or_orientation_adaptation_tested": false,
+    "original_Moreyra_294_350_tree_completed": false,
+    "original_execution_run": 40166913063,
+    "original_artifact_id": 12588693032,
+    "durable_receipt": "data/evidence/real_world52_corrected_75_73_gene_NA_West_nuclear_concordance_20261025.json"
+  }
+}

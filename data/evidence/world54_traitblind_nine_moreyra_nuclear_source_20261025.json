@@ -1,0 +1,77 @@
+{
+  "version": "real_world54_traitblind_nine_moreyra_S1_fastq_20261025_v1",
+  "scope": "Source-preserving trait-blind expansion of 45-tip 176-locus real nuclear tree; does NOT select by U/D flower head or colour",
+  "prior_tip_count": 45,
+  "new_tip_target": 9,
+  "new_regions": {
+    "North_America": 3,
+    "West_Palearctic": 3,
+    "Continental_East_Central_Asia": 3
+  },
+  "sources": [
+    [
+      "Cirsium hesperium",
+      "SRR25265699",
+      "North_America",
+      713.63
+    ],
+    [
+      "Cirsium fontinale var. campylon",
+      "SRR25265707",
+      "North_America",
+      453.19
+    ],
+    [
+      "Cirsium mohavense",
+      "SRR25265683",
+      "North_America",
+      193.41
+    ],
+    [
+      "Cirsium leucocephalum",
+      "SRR30887242",
+      "West_Palearctic",
+      450.62
+    ],
+    [
+      "Cirsium arvense",
+      "SRR25265555",
+      "West_Palearctic",
+      336.94
+    ],
+    [
+      "Cirsium brachycephalum",
+      "SRR30887218",
+      "West_Palearctic",
+      507.35
+    ],
+    [
+      "Cirsium fargesii",
+      "SRR30887183",
+      "Continental_East_Central_Asia",
+      346.89
+    ],
+    [
+      "Cirsium fanjingshanense",
+      "SRR25265705",
+      "Continental_East_Central_Asia",
+      404.75
+    ],
+    [
+      "Cirsium kamtschaticum",
+      "SRR30887251",
+      "Continental_East_Central_Asia",
+      468.34
+    ]
+  ],
+  "source_fastq_total_MB": 3875.1,
+  "source_selection_run": 40115569358,
+  "source_ena_read_metadata_validation_run": 40115716054,
+  "source_real_reads_and_new54_inference_run": 40116044634,
+  "source_MD5_available_for_each_original_two_fastq": true,
+  "source_trait_states_not_consulted": true,
+  "species_name_reviews_removed_prior_selection": true,
+  "population_replicates_not_independent_trait_origins": true,
+  "full_294tip_world_nuclear_tree_complete": false,
+  "source_tree_completed_at_freeze": false
+}

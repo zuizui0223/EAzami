@@ -1,0 +1,62 @@
+name: Actual EAzami-style North American nuclear U-D BIO18 branchwise correspondence
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_siniscalchi2023_BIO18_nuclear_U_D_transition_concordance_v1.py"
+      - ".github/workflows/execute-NA62-nuclear-U-D-BIO18-transition-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  empirical-NA62-ancestral-endpoint-BIO18:
+    runs-on: ubuntu-latest
+    timeout-minutes: 37
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install exact botanical molecular and quantitative numerical dependencies
+        run: |
+          python -m pip install --disable-pip-version-check numpy scipy pandas biopython
+          python -m py_compile analysis/run_siniscalchi2023_BIO18_nuclear_U_D_transition_concordance_v1.py
+      - name: Fit original NA nuclear ER Mk root and edge posteriors against reconstructed BIO18, BIO15 and BIO1 with source-fixed null
+        run: |
+          python analysis/run_siniscalchi2023_BIO18_nuclear_U_D_transition_concordance_v1.py \
+            --asset-dir .tmp/original-Siniscalchi-real-nuclear \
+            --outdir .tmp/NA62-real-u2d-BIO18-branch-regime \
+            --permutations 999
+      - name: Validate all original U/D source states, both species review cases and no historical climate fabrication
+        run: |
+          python - <<'PY'
+          import csv,json,math
+          from pathlib import Path
+          d=Path(".tmp/NA62-real-u2d-BIO18-branch-regime")
+          j=json.loads((d/"NA62_BIO18_u2d_nuclear_EAzami_style_concordance.json").read_text())
+          a=j["original_author_62_taxon_panel"]
+          b=j["fna_60_taxon_mixed_head_veto_sensitivity"]
+          assert a["n_ingroup_molecular_source_taxa"]==62 and a["n_original_source_D"]==5
+          assert b["n_ingroup_molecular_source_taxa"]==60 and b["n_original_source_D"]==5
+          for t in (a,b):
+            assert set(t["signed_axis_scores"])=={"BIO18","BIO15","BIO1","Mixed"}
+            assert t["permutation_null"]["draws"]==999
+            assert len(t["permutation_null"]["three_user_hypotheses_Holm_adjusted_rank_fraction"])==3
+            assert all(0 < v <=1 for v in t["permutation_null"]["one_sided_rank_fraction_plus_one"].values())
+          with (d/"NA62_original_nuclear_BIO18_signed_endpoint_diagnostics.csv").open() as f:
+            rows=list(csv.DictReader(f))
+          assert len(rows)>100
+          assert all("not actual number" not in str(r) for r in [])
+          assert j["neither_model_is_historical_climate_at_actual_event"] is True
+          assert j["null_not_phylogenetic_stochastic_process_calibrated"] is True
+          assert j["full_world_294tip_350gene_tree_available"] is False
+          print("REAL 62 SOURCE-TIP NUCLEAR ER Mk×BIO18 SIGNED ENDPOINT CONCORDANCE: PASSED")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-NA62-nuclear-u2d-BIO18-BIO15-BIO1-999null-v1
+          path: .tmp/NA62-real-u2d-BIO18-branch-regime/
+          if-no-files-found: error
+          retention-days: 90

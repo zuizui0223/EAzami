@@ -1,0 +1,136 @@
+{
+  "version": "real_world53_176Comp1061_core_nuclear_phylogeny_original_S1_nine_trait_inference_20261025_v1",
+  "authorship": {
+    "genetic_source": "Moreyra et al 2025 PRJNA957074 original source BioSample/target capture accession and EAzami Japan38 frozen 176 homolog Compositae1061 locus matrix",
+    "floral_source": "Independent species-level Japan NMNS, Flora of North America and European botanical sources; original Siniscalchi et al 2023 nine categorical traits, only exact concept matches; not the original Moreyra S1 flower-morphology table",
+    "molecular_S1_means": "Voucher/BioSample/run/region record; molecular metadata not measured phenotype on same sequenced herbarium voucher"
+  },
+  "actual_dataset": {
+    "previous_Japan38_and_external_45_tip_unchanged": true,
+    "original_source_nuclear_tips": 45,
+    "source_traitblind_added_9_attempted": 9,
+    "passed_exact_original_70_locus_QC": 8,
+    "failed_source": {
+      "taxon": "Cirsium fargesii",
+      "SRR": "SRR30887183",
+      "QC_strict_loci": 63,
+      "minimum_accepted": 70,
+      "called_bp": 25840,
+      "source_rejection_not_based_on_U_D_or_colour": true
+    },
+    "source_8_confident_locus_counts": [
+      96,
+      92,
+      91,
+      93,
+      86,
+      102,
+      88,
+      101
+    ],
+    "source_8_confident_bp_total": 355179,
+    "new_region_counts": {
+      "North_America": 3,
+      "West_Palearctic": 3,
+      "Continental_East_Central_Asia": 2
+    },
+    "actual_molecular_tips": 53,
+    "ingroup_Cirsium_individuals": 52,
+    "Carthamus_outgroup": 1,
+    "original_Comp1061_nuclear_loci": 176,
+    "source_aligned_nt": 161654,
+    "original_old45_exact_sequences_preserved": true,
+    "reference_mapping_and_missingness": "174 of the original 176 loci used as reference, two short-saff loci masked for newer individuals; >=6 depth MAPQ>=30 baseQ>=25, >=80% major allele and >=40% locus span, sites without confident read calls explicitly N",
+    "final_tree_is_untimed_nuclear_phylogram": true
+  },
+  "actual_primary_ML": {
+    "source_run": "https://github.com/zuizui0223/EAzami/actions/runs/40148735969",
+    "source_artifact_id": 12582202210,
+    "source_artifact_sha256": "539fe41b2bcd0250b3d9929740aec93121b1ab5360be7b6b97be3b689b1faa05",
+    "inference": "IQ-TREE 2 ModelFinder BIC; 1000 ultrafast bootstrap, 1000 SH-aLRT; original fixed Carthamus outgroup",
+    "inferred_model": "TIM3+F+R3",
+    "empirical_53tip_Newick_sha256": "5828ccd9f4f0b083f804f87bfa7407a20ad5eb52647e92eb5a26e812bd6807a7",
+    "permanently_committed_newick": "data/evidence/real_world53_176Comp1061_IQTREE_ModelFinder_UFBoot_SHaLRT_20261025.nwk",
+    "inferred_ingroup_head_Fitch_minimum_changes": 9,
+    "root_P_U_ER_Mk": 0.500463,
+    "full_53tip_real_nuclear_9trait_figure": "world53_real_176locus_nuclear_S1_9traits.png"
+  },
+  "real_original_S1_flower_trait_models": {
+    "source_nuclear_and_botanical_join_run": "https://github.com/zuizui0223/EAzami/actions/runs/40150037475",
+    "source_nuclear_and_botanical_join_artifact_id": 12582068446,
+    "source_nuclear_and_botanical_join_artifact_digest": "sha256:739cd5056826d41ac2d1ccafcdc5c1736d1fde19f082152deb5fba28b509b935",
+    "head_morphological_codes_after_source_QC": {
+      "U": 19,
+      "D": 9,
+      "unresolved": 24
+    },
+    "source_unique_binomial_taxa_with_resolved_head": 27,
+    "n_source_53tips_with_all_Siniscalchi_original9_categorical_trait_codes": 6,
+    "source_species_cannot_count_same_evolutionary_transition_replicates": "Original Japanese C. kamtschaticum sample J38S038 and additional SRR30887251 are separate molecular tips of one species-level botanical head state.",
+    "primary_Q_AICc": {
+      "ER": 40.659,
+      "ARD": 39.631,
+      "ARD_minus_ER": -1.02875,
+      "caution": "Approximately 27 resolved species binomial concepts, not 28 independent tip states; ΔAICc of about 1 is weak evidence and does not establish directional asymmetry."
+    },
+    "omit_C_kamtschaticum_new_population": {
+      "head_state_tips": {
+        "U": 19,
+        "D": 8,
+        "unknown": 24
+      },
+      "Fitch_min_changes": 8,
+      "ER_AICc": 39.273,
+      "ARD_AICc": 37.291
+    },
+    "omit_North_American_C_vinaceum_D": {
+      "head_state_tips": {
+        "U": 19,
+        "D": 8,
+        "unknown": 25
+      },
+      "Fitch_min_changes": 8,
+      "ER_AICc": 37.674,
+      "ARD_AICc": 37.171
+    }
+  },
+  "independent_modeler_topology_sensitivity": {
+    "source_FastTree_run": "https://github.com/zuizui0223/EAzami/actions/runs/40149393831",
+    "FastTree_artifact_id": 12582477149,
+    "methodological_comparison_run": "https://github.com/zuizui0223/EAzami/actions/runs/40149950497",
+    "methodological_comparison_artifact_id": 12582073279,
+    "source_alignment_identical": true,
+    "unrooted_shared_53_tip_RF": 48,
+    "max_bifurcating_RF": 100,
+    "shared_nontrivial_53_tip_splits": 26,
+    "FastTree_Fitch_head_minimum_changes": 8,
+    "FastTree_delta_AICc_ARD_minus_ER": -0.993897089141484,
+    "primary_delta_AICc_ARD_minus_ER": -1.028753153562505,
+    "North_American_six_Moreyra_individuals_monophyletic_under_both": true,
+    "primary_NA_six_node_support": "IQ-TREE SH-aLRT/UFBoot 100/100",
+    "FastTree_NA_six_support": "local SH-like 1.0; not comparable numerical support scale",
+    "West_Palearctic_five_Moreyra_individuals_monophyletic_under_both": false,
+    "repeated_C_kamtschaticum_two_individuals_exclusive_sister_pair_under_both": false,
+    "original_preexisting_45tip_shared_taxon_RF_comparing_53_IQTREE_to_preexisting_45_IQTREE": 36,
+    "original_preexisting_45tip_shared_taxon_RF_max": 84,
+    "source_preexisting45_and_reinferred53_ModelFinder_BIC_same_model": "TIM3+F+R3",
+    "limitations": "Phylogenetic instability after adding eight individuals is observable. This does not by itself diagnose species identity, ancestral colonizations, introgression, adaptive states or any historical transition count."
+  },
+  "scientific_interpretation": {
+    "positive": "Real transcontinental independent 176-locus molecular tree including North American, European and continental East Asian lineages. Stable monophyly of all six original+new North American samples under two independently fitted algorithms. At least 8-9 U/D category steps on respective empirical trees.",
+    "uncertain": "West Palearctic placement, Japanese backbone and Kamchatkan two-source placements vary and depend on adding unsampled taxa/missing data. Root U posterior ~0.5, and ARD vs ER likelihood difference is weak.",
+    "unverified": "Those U/D states are botanical taxon-level, not head measured on sequenced molecular voucher; 24 tips unresolved, nine original categorical traits complete for six source matches only.",
+    "not_a_claim": [
+      "completed Moreyra full 294 BioSample, 350-locus worldwide phylogeny",
+      "8 or 9 independent U→D origins or gain/loss directions",
+      "historical climates measured on evolutionary transition events",
+      "adaptation to pollinators or fitness effect",
+      "white flower anthocyanin loss/regain from categorical source CorollaColor code 2 combining white/pink/purple"
+    ]
+  },
+  "reference_scripts": [
+    "analysis/build_real_world53_176locus_QC8_v1.py",
+    "analysis/annotate_real_world53_original_S1_nine_traits_Mk_v1.py",
+    "analysis/audit_real_world53_ML_FastTree_S1_UD_sensitivity_v1.py"
+  ]
+}

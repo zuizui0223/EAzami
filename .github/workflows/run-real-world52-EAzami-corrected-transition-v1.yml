@@ -1,0 +1,96 @@
+name: Corrected 52 unique nuclear BioSample EAzami U-D transitions and taxon-block null
+
+on:
+  # Full 20,000 original-study taxon-block label permutations and real-source
+  # Mk posterior histories were successfully executed and archived in
+  # run 40160913962, artifact 12586557465; the source and statistics are
+  # permanently frozen in data/evidence/. Explicit scientific reruns only:
+  # pull_request path filters match files anywhere in the entire PR diff and
+  # would otherwise repeat expensive numerical models on unrelated commits.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  genuine-source-52-unique-SRR-Markov-ancestry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install original BioSample phylogeny Markov reward and numerical package stack
+        run: |
+          python -m pip install --disable-pip-version-check biopython numpy scipy matplotlib
+          python -m pip check
+          python -m py_compile \
+            analysis/run_real_world52_corrected_EAzami_U_D_transitions_v1.py \
+            tests/test_real_world52_corrected_EAzami_U_D_transitions_v1.py
+      - name: Recover real sequence-inferred original 52-tip ML source trees and verified original Moreyra S1 unique-BioSample traits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/EAzami52/source .tmp/EAzami52/full .tmp/EAzami52/covered .tmp/EAzami52/technical
+          gh run download 40153095510 --repo zuizui0223/EAzami \
+            --name world52-real-unique-biosample-176and75-nuclear-inputs-v1 \
+            --dir .tmp/EAzami52/source
+          gh run download 40153095510 --repo zuizui0223/EAzami \
+            --name real-world52-51uniqueBioSamples-originalfull176-IQTREE-1000boot-v1 \
+            --dir .tmp/EAzami52/full
+          gh run download 40153095510 --repo zuizui0223/EAzami \
+            --name real-world52-51uniqueBioSamples-originalunique12_75-IQTREE-1000boot-v1 \
+            --dir .tmp/EAzami52/covered
+          gh run download 40153668286 --repo zuizui0223/EAzami \
+            --name real-world52-73-original-nuclear-loci-after-same-SRR-pipeline-disagreement-screen-v1 \
+            --dir .tmp/EAzami52/technical
+          test -s .tmp/EAzami52/source/world52_source_S1_unique_BioSample_9traits.csv
+      - name: Regression tests including correction of duplicate SRA sample and direction-specific Markov history
+        run: |
+          python -m unittest discover -s tests -p 'test_real_world52_corrected_EAzami_U_D_transitions_v1.py' -v
+      - name: Actually refit 51 unique Cirsium BioSamples EAzami Markov transition model on all 3 source nucleotide trees
+        run: |
+          python analysis/run_real_world52_corrected_EAzami_U_D_transitions_v1.py \
+            --full176 .tmp/EAzami52/full/world52_176Comp1061_full176_ML.treefile \
+            --balanced75 .tmp/EAzami52/covered/world52_176Comp1061_unique12_75_ML.treefile \
+            --technical73 .tmp/EAzami52/technical/real_world52_73_gene_QC_TM3_ML.treefile \
+            --traits .tmp/EAzami52/source/world52_source_S1_unique_BioSample_9traits.csv \
+            --permutations 20000 --seed 2317 \
+            --outdir .tmp/EAzami52/source-transitions
+      - name: Enforce actual source-corrected 52 and separate hidden Markov jumps from witnessed U-D transitions
+        run: |
+          python - <<'PY'
+          import json,csv,math
+          from pathlib import Path
+          root=Path('.tmp/EAzami52/source-transitions')
+          j=json.loads((root/'world52_original_source_Mk_hidden_events_and_null_audit.json').read_text())
+          assert j['unique_public_Cirsium_BioSamples']==51
+          assert j['full_source_molecular_tips']==52
+          assert j['technical_duplicate_BioSample_SRR30887251_removed_before_new_tree']
+          assert j['source_S1_U_D_missing']=={'U':19,'D':8,'unknown':24}
+          assert j['source_unique_phenotyped_taxon_concepts']==27
+          assert j['source_botanical_trait_observed_on_same_sequenced_voucher'] is False
+          perm=j['taxon_concept_blocked_permutation_null']['results']
+          assert set(perm)=={'full176','high_occupancy75','pipeline_qc73'}
+          assert all(x['permutations']==20000 for x in perm.values())
+          assert all(0<=x['regional_p_one_sided_clustered']<=1 for x in perm.values())
+          assert not j['world_nuclear_registry_294_BioSamples_350_locus_final_tree_available']
+          with (root/'world52_directional_U_D_ER_ARD_source_Mk_fits.csv').open() as h:
+            models=list(csv.DictReader(h))
+          assert len(models)==18
+          assert all(r['same_sequenced_molecular_voucher_phenotyped']=='False' for r in models)
+          assert all(r['conditional_jumps_not_real_independent_origins']=='True' for r in models)
+          with (root/'world52_original_gene_source_event_expectation_vs_endpoint_probability.csv').open() as h:
+            edges=list(csv.DictReader(h))
+          assert len(edges)>450
+          assert (root/'world52_real_176_75_73_UD_study_block_null.png').stat().st_size>15000
+          print('REAL CORRECTED 52 ORIGINAL NUCLIDE SOURCE, MARKOV REWARD EVENTS AND STUDY STRATUM NULL VALIDATED.')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-world52-176-75-73-nuclear-EAzami-corrected-UD-Markov-and-20k-null-v1
+          path: .tmp/EAzami52/source-transitions/
+          if-no-files-found: error
+          retention-days: 90

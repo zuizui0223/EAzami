@@ -1,0 +1,192 @@
+{
+  "version": "real_moreyra2025_5_public_samples_global45_comp1061_source_mapped_QC_v1",
+  "date_utc": "2026-10-25",
+  "source_alignment": {
+    "original_tree_run_id": 32806058893,
+    "original_nuclear_tips": 40,
+    "original_nuclear_loci": 176,
+    "original_alignment_total_bp": 161654,
+    "reference_loci_mappable_saff": 174,
+    "short_saff_reference_loci_masked": [
+      "At1g26880",
+      "At5g62680"
+    ],
+    "root_tip": "OUTGROUP_saff"
+  },
+  "method": {
+    "original_fastq_location": "ENA public paired run FASTQ matched by published source run accession, two MD5 checks per source",
+    "sequence_read_processing": "BWA MEM mapping against frozen original saff-root source locus coordinates, strict pysam consensus; >=6 independent bases, >=80% major allele, MAPQ>=30, baseQ>=25, >=40% confident bases and >=100 confident per locus",
+    "incomplete_bases": "N masked, never filled with saff or other taxon's allele",
+    "caveat": "Reference-projection from same frozen source scaffold, not full multi-sample per-gene HybPiper homeolog/orthology reassembly."
+  },
+  "specimens": [
+    {
+      "taxon": "Cirsium ownbeyi",
+      "region": "North America",
+      "state_source_only": "U",
+      "biosample": "SAMN44017895",
+      "SRR": "SRR30887153",
+      "qc_loci": 96,
+      "confident_bp": 46401,
+      "ci_artifact_id": 12565004449,
+      "ci_artifact_sha256": "d94a94bcf150e7f70bb5cb75790838974597faa02791942366c5bb06864994fb"
+    },
+    {
+      "taxon": "Cirsium flodmanii",
+      "region": "North America",
+      "state_source_only": "U",
+      "biosample": "SAMN44017849",
+      "SRR": "SRR30887180",
+      "qc_loci": 102,
+      "confident_bp": 51171,
+      "ci_artifact_id": 12565895436,
+      "ci_artifact_sha256": "fff2cef59d7b9bb7c7cd750532f786d7be0531de953a57a15b19a70c15d4c814"
+    },
+    {
+      "taxon": "Cirsium vinaceum",
+      "region": "North America",
+      "state_source_only": "D",
+      "biosample": "SAMN44017948",
+      "SRR": "SRR30887231",
+      "qc_loci": 88,
+      "confident_bp": 40994,
+      "ci_artifact_id": 12565682307,
+      "ci_artifact_sha256": "a2dda95e2ee462f3299f89683f0e81ac1f01fac761c36a5a46b383ff83727f42"
+    },
+    {
+      "taxon": "Cirsium erisithales",
+      "region": "Western Palearctic",
+      "state_source_only": "D",
+      "biosample": "SAMN44017845",
+      "SRR": "SRR30887186",
+      "qc_loci": 98,
+      "confident_bp": 47954,
+      "ci_artifact_id": 12565474129,
+      "ci_artifact_sha256": "647ddb7cb31bb7273c9a37201a89bc096e6b09c215b5d7ad8e99f38f96edd602"
+    },
+    {
+      "taxon": "Cirsium oleraceum",
+      "region": "Western Palearctic",
+      "state_source_only": "U",
+      "biosample": "SAMN44017893",
+      "SRR": "SRR30887156",
+      "qc_loci": 101,
+      "confident_bp": 49594,
+      "ci_artifact_id": 12565698347,
+      "ci_artifact_sha256": "8258dcab90b37c2e4931f49c7533ea15e91e7e8167df1220d8b5596100051b23"
+    }
+  ],
+  "source_successful_fastq_and_alignment_workflow_id": 40107628828,
+  "accepted_loci_intersection_all_five": 87,
+  "accepted_loci_union_all_five": 108,
+  "total_called_bp_across_five": 236114,
+  "original_matrix_modification_allowed": false,
+  "sample_level_head_status": "independent species treatments, not confirmed sequenced-voucher morphology",
+  "five_sample_pairwise_deletion_nuclear_p_distances": [
+    {
+      "taxa": [
+        "Cirsium erisithales",
+        "Cirsium flodmanii"
+      ],
+      "overlap_bp": 44857,
+      "diff_bp": 462,
+      "p": 0.010299396,
+      "group": "between_EU_NA"
+    },
+    {
+      "taxa": [
+        "Cirsium erisithales",
+        "Cirsium oleraceum"
+      ],
+      "overlap_bp": 45339,
+      "diff_bp": 302,
+      "p": 0.006660932,
+      "group": "within_EU"
+    },
+    {
+      "taxa": [
+        "Cirsium erisithales",
+        "Cirsium ownbeyi"
+      ],
+      "overlap_bp": 42586,
+      "diff_bp": 433,
+      "p": 0.010167661,
+      "group": "between_EU_NA"
+    },
+    {
+      "taxa": [
+        "Cirsium erisithales",
+        "Cirsium vinaceum"
+      ],
+      "overlap_bp": 39941,
+      "diff_bp": 429,
+      "p": 0.010740843,
+      "group": "between_EU_NA"
+    },
+    {
+      "taxa": [
+        "Cirsium flodmanii",
+        "Cirsium oleraceum"
+      ],
+      "overlap_bp": 45850,
+      "diff_bp": 436,
+      "p": 0.009509269,
+      "group": "between_EU_NA"
+    },
+    {
+      "taxa": [
+        "Cirsium flodmanii",
+        "Cirsium ownbeyi"
+      ],
+      "overlap_bp": 45062,
+      "diff_bp": 57,
+      "p": 0.001264924,
+      "group": "within_NA"
+    },
+    {
+      "taxa": [
+        "Cirsium flodmanii",
+        "Cirsium vinaceum"
+      ],
+      "overlap_bp": 40474,
+      "diff_bp": 74,
+      "p": 0.001828334,
+      "group": "within_NA"
+    },
+    {
+      "taxa": [
+        "Cirsium oleraceum",
+        "Cirsium ownbeyi"
+      ],
+      "overlap_bp": 43371,
+      "diff_bp": 411,
+      "p": 0.009476378,
+      "group": "between_EU_NA"
+    },
+    {
+      "taxa": [
+        "Cirsium oleraceum",
+        "Cirsium vinaceum"
+      ],
+      "overlap_bp": 39773,
+      "diff_bp": 409,
+      "p": 0.010283358,
+      "group": "between_EU_NA"
+    },
+    {
+      "taxa": [
+        "Cirsium ownbeyi",
+        "Cirsium vinaceum"
+      ],
+      "overlap_bp": 39626,
+      "diff_bp": 58,
+      "p": 0.001463685,
+      "group": "within_NA"
+    }
+  ],
+  "data_boundary": [
+    "Pairwise distance site sets are pair-specific missingness masks, so comparisons are descriptive only; do not treat differences as calibrated branch times or statistically independent replicates.",
+    "Five source molecular individuals represent five species-level trait code claims and not more independent transitions.",
+    "Run has not yet passed 45-tip tree acceptance; distinguish source mapped read QC from final phylogram."
+  ]
+}

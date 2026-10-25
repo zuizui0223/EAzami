@@ -1,0 +1,119 @@
+name: Matched-IQTREE version and model RF control for world45 versus source Japan38
+
+on:
+  # 2026-10-25 completed real source artefacts are immutable. Explicit reruns only.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  controlled-source40-refit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the very same IQTREE package and source tree reader as 45-tip inference
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq iqtree
+          python -m pip install --disable-pip-version-check biopython
+          iqtree2 --version
+      - name: Fetch frozen authentic original 40-tip alignment and newly inferred authentic 45-tip tree
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/original .tmp/pilot .tmp/control
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 --dir .tmp/original
+          gh run download 40107628828 --repo zuizui0223/EAzami \
+            --name real-crosscontinental-45tip-176Comp1061-nuclear-ML-phylogeny-v1 \
+            --dir .tmp/pilot
+          python - <<'PY'
+          from pathlib import Path
+          from Bio import SeqIO
+          a=Path('.tmp/original/tree_result/japan38_concat.fasta')
+          b=Path('.tmp/pilot/global45_original40_plus5real_Comp1061_176loci.fasta')
+          old={r.id:str(r.seq).upper() for r in SeqIO.parse(a,'fasta')}
+          new={r.id:str(r.seq).upper() for r in SeqIO.parse(b,'fasta')}
+          assert len(old)==40 and len(new)==45
+          assert all(new[k]==v for k,v in old.items())
+          assert all(len(x)==161654 for x in new.values())
+          print('SOURCE 40 MOLECULAR ALIGNMENT EXACT PRESERVATION VERIFIED')
+          PY
+      - name: Infer source original Japan38 ML tree with exactly the 45-tip winning model in same IQTREE binary
+        run: |
+          iqtree2 -s .tmp/original/tree_result/japan38_concat.fasta \
+            -m TIM3+F+R3 -T 2 -seed 20261024 \
+            --prefix .tmp/control/Japan40_matched_45model_TIM3_F_R3
+          test -s .tmp/control/Japan40_matched_45model_TIM3_F_R3.treefile
+      - name: Re-infer original Japan38 with previous accepted model but current IQTREE binary
+        run: |
+          iqtree2 -s .tmp/original/tree_result/japan38_concat.fasta \
+            -m TIM3+F+I+R4 -T 2 -seed 20261024 \
+            --prefix .tmp/control/Japan40_previous_model_TIM3_F_I_R4
+          test -s .tmp/control/Japan40_previous_model_TIM3_F_I_R4.treefile
+      - name: Separate taxon-addition topology shifts from IQTREE-model and version effects
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          from Bio import Phylo
+          paths={
+            'original40_old_IQTREE_2p4_modelFinder':Path('data/evidence/japan38_comp1061_primary_tree_v1.nwk'),
+            'refit40_same_IQTREE_2p0p7_as_pilot_same_TIM3_R3':Path('.tmp/control/Japan40_matched_45model_TIM3_F_R3.treefile'),
+            'refit40_IQTREE_2p0p7_previous_TIM3_I_R4':Path('.tmp/control/Japan40_previous_model_TIM3_F_I_R4.treefile'),
+            'new45_IQTREE_2p0p7_selected_TIM3_R3':Path('.tmp/pilot/world45_176loci_ML.treefile')
+          }
+          trees={k:Phylo.read(p,'newick') for k,p in paths.items()}
+          shared={x.name for x in trees['original40_old_IQTREE_2p4_modelFinder'].get_terminals()}
+          assert len(shared)==40 and 'OUTGROUP_saff' in shared
+          def unrooted_splits(tree):
+              # new read fresh, not mutated original
+              for tip in list(tree.get_terminals()):
+                  if tip.name not in shared:tree.prune(tip)
+              assert {tip.name for tip in tree.get_terminals()}==shared
+              result=set()
+              for node in tree.find_clades():
+                  a={t.name for t in node.get_terminals()}
+                  b=shared-a
+                  if min(len(a),len(b))<2:continue
+                  aa=tuple(sorted(a));bb=tuple(sorted(b))
+                  result.add(min(aa,bb,key=lambda s:(len(s),s)))
+              return result
+          clades={k:unrooted_splits(t) for k,t in trees.items()}
+          names=list(paths)
+          rows=[]
+          for i,x in enumerate(names):
+              for y in names[i+1:]:
+                  a,b=clades[x],clades[y]
+                  rows.append({'tree_A':x,'tree_B':y,
+                      'shared40_unrooted_RF':len(a-b)+len(b-a),
+                      'preserved_nontrivial_splits':len(a&b),
+                      'n_splits_A':len(a),'n_splits_B':len(b),
+                      'max_binary_RF':2*(40-3)})
+          summary={
+            'version':'real_global45_Comp1061_source40_model_version_control_v1',
+            'actual_source40_sequence_columns_unchanged':True,
+            'same_Tim3F_R3_pilot_and_40_IQTREE_2p0p7':True,
+            'old_full40_original_model':'TIM3+F+I+R4 IQTREE 2.4.0',
+            'new_full45_model':'TIM3+F+R3 IQTREE 2.0.7',
+            'source_files_SHA256':{k:hashlib.sha256(p.read_bytes()).hexdigest() for k,p in paths.items()},
+            'shared40_RF_pair_comparisons':rows,
+            'claim_boundary':'Only 5 samples added; model/software version and source-sampling sensitivity separated. Refits on original 40 require original molecular input, no trait-informed topology constraints. RF is not evolutionary event count.'
+          }
+          dest=Path('.tmp/control/matched_40_45_RF_model_version_report.json')
+          dest.write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps({'RF_rows':rows},indent=2))
+          PY
+      - name: Retain independent IQTREE 40-tip control trees and input-untouched RF comparison
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-global45-vs-Japan40-matched-IQTREE-model-RF-controls-v1
+          path: .tmp/control/
+          if-no-files-found: error
+          retention-days: 90

@@ -1,0 +1,313 @@
+{
+  "version": "global_u2d_gbif_35taxon_observation_gate_receipt_v1",
+  "observed_date_utc": "2026-10-24",
+  "source_repository": "zuizui0223/EAzami",
+  "workflow_run_id": 40095787620,
+  "workflow_run_url": "https://github.com/zuizui0223/EAzami/actions/runs/40095787620",
+  "result_artifact_id": 12560318301,
+  "result_artifact_name": "world-u2d-35taxon-source-exact-gbif-coverage-v1",
+  "result_artifact_digest": "sha256:800cca0bff1781ccacd0c53c62740a7d3ac10f730b6df49b0ca3b1795bdbb933",
+  "cohort_name_state_sha256": "6ebc890a28c622509292ef6adaa528864504aae9383b694252bda7037696d4f1",
+  "query_max_raw_records_per_taxon": 500,
+  "query_count": 35,
+  "true_GBIF_exact_taxon_matches": 33,
+  "observed_coordinate_records_fetched": 9592,
+  "observed_source_exact_name_records": 8550,
+  "qc_thinned_source_exact_points": 1011,
+  "n_geocell_min5": 26,
+  "n_geocell_min5_U": 19,
+  "n_geocell_min5_D": 7,
+  "n_full_enumeration_min5": 16,
+  "n_full_enumeration_min5_U": 11,
+  "n_full_enumeration_min5_D": 5,
+  "n_censored": 11,
+  "per_taxon": [
+    {
+      "taxon": "Cirsium aidzuense",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3112691,
+      "fetched_coordinate_records": 49,
+      "retained_0_1_degree_cells": 6,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium alpicola",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3113477,
+      "fetched_coordinate_records": 247,
+      "retained_0_1_degree_cells": 23,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium amplexifolium",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3113701,
+      "fetched_coordinate_records": 500,
+      "retained_0_1_degree_cells": 10,
+      "query_truncated": true
+    },
+    {
+      "taxon": "Cirsium aomorense",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3112963,
+      "fetched_coordinate_records": 304,
+      "retained_0_1_degree_cells": 13,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium argyracanthum",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3113806,
+      "fetched_coordinate_records": 45,
+      "retained_0_1_degree_cells": 1,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium brevicaule",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 8142437,
+      "fetched_coordinate_records": 373,
+      "retained_0_1_degree_cells": 43,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium buergeri",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3112944,
+      "fetched_coordinate_records": 289,
+      "retained_0_1_degree_cells": 18,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium dipsacolepis",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3113091,
+      "fetched_coordinate_records": 328,
+      "retained_0_1_degree_cells": 82,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium domonii",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 4223294,
+      "fetched_coordinate_records": 86,
+      "retained_0_1_degree_cells": 2,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium flodmanii",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3113498,
+      "fetched_coordinate_records": 500,
+      "retained_0_1_degree_cells": 195,
+      "query_truncated": true
+    },
+    {
+      "taxon": "Cirsium gyojanum",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3112982,
+      "fetched_coordinate_records": 136,
+      "retained_0_1_degree_cells": 6,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium helenioides",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3113777,
+      "fetched_coordinate_records": 500,
+      "retained_0_1_degree_cells": 0,
+      "query_truncated": true
+    },
+    {
+      "taxon": "Cirsium japonicum var. japonicum",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 7066654,
+      "fetched_coordinate_records": 0,
+      "retained_0_1_degree_cells": 0,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium kamtschaticum",
+      "source_orientation_state": "D",
+      "gbif_usage_key": 3113059,
+      "fetched_coordinate_records": 500,
+      "retained_0_1_degree_cells": 117,
+      "query_truncated": true
+    },
+    {
+      "taxon": "Cirsium kasaianum",
+      "source_orientation_state": "D",
+      "gbif_usage_key": 9242789,
+      "fetched_coordinate_records": 37,
+      "retained_0_1_degree_cells": 0,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium kawakamii",
+      "source_orientation_state": "D",
+      "gbif_usage_key": 3112754,
+      "fetched_coordinate_records": 136,
+      "retained_0_1_degree_cells": 10,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium kujuense",
+      "source_orientation_state": "D",
+      "gbif_usage_key": 9593122,
+      "fetched_coordinate_records": 25,
+      "retained_0_1_degree_cells": 0,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium lineare",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3113222,
+      "fetched_coordinate_records": 500,
+      "retained_0_1_degree_cells": 24,
+      "query_truncated": true
+    },
+    {
+      "taxon": "Cirsium longistylum",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 8362574,
+      "fetched_coordinate_records": 53,
+      "retained_0_1_degree_cells": 11,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium microspicatum",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3113080,
+      "fetched_coordinate_records": 500,
+      "retained_0_1_degree_cells": 11,
+      "query_truncated": true
+    },
+    {
+      "taxon": "Cirsium morii",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3113523,
+      "fetched_coordinate_records": 17,
+      "retained_0_1_degree_cells": 2,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium nipponicum",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3113139,
+      "fetched_coordinate_records": 500,
+      "retained_0_1_degree_cells": 43,
+      "query_truncated": true
+    },
+    {
+      "taxon": "Cirsium norikurense",
+      "source_orientation_state": "D",
+      "gbif_usage_key": 3113069,
+      "fetched_coordinate_records": 359,
+      "retained_0_1_degree_cells": 32,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium oligophyllum",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3112645,
+      "fetched_coordinate_records": 500,
+      "retained_0_1_degree_cells": 27,
+      "query_truncated": true
+    },
+    {
+      "taxon": "Cirsium ownbeyi",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3113149,
+      "fetched_coordinate_records": 34,
+      "retained_0_1_degree_cells": 12,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium pendulum",
+      "source_orientation_state": "D",
+      "gbif_usage_key": 3113714,
+      "fetched_coordinate_records": 500,
+      "retained_0_1_degree_cells": 68,
+      "query_truncated": true
+    },
+    {
+      "taxon": "Cirsium pengii",
+      "source_orientation_state": "D",
+      "gbif_usage_key": null,
+      "fetched_coordinate_records": 0,
+      "retained_0_1_degree_cells": 0,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium semenowii",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 4219241,
+      "fetched_coordinate_records": 26,
+      "retained_0_1_degree_cells": 16,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium serratuloides",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 8052083,
+      "fetched_coordinate_records": 500,
+      "retained_0_1_degree_cells": 112,
+      "query_truncated": true
+    },
+    {
+      "taxon": "Cirsium suffultum",
+      "source_orientation_state": "D",
+      "gbif_usage_key": 4218804,
+      "fetched_coordinate_records": 405,
+      "retained_0_1_degree_cells": 7,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium suzukaense",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3113730,
+      "fetched_coordinate_records": 359,
+      "retained_0_1_degree_cells": 36,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium tatakaense",
+      "source_orientation_state": "D",
+      "gbif_usage_key": 10330337,
+      "fetched_coordinate_records": 184,
+      "retained_0_1_degree_cells": 7,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium vinaceum",
+      "source_orientation_state": "D",
+      "gbif_usage_key": 3113117,
+      "fetched_coordinate_records": 242,
+      "retained_0_1_degree_cells": 4,
+      "query_truncated": false
+    },
+    {
+      "taxon": "Cirsium vlassovianum",
+      "source_orientation_state": "U",
+      "gbif_usage_key": 3113493,
+      "fetched_coordinate_records": 500,
+      "retained_0_1_degree_cells": 50,
+      "query_truncated": true
+    },
+    {
+      "taxon": "Cirsium yezoense",
+      "source_orientation_state": "D",
+      "gbif_usage_key": 3112564,
+      "fetched_coordinate_records": 358,
+      "retained_0_1_degree_cells": 23,
+      "query_truncated": false
+    }
+  ],
+  "claim_boundary": {
+    "accepted_name_reconciliation_complete": false,
+    "native_only_occurrence_filter_complete": false,
+    "present_BIO15_BIO1_extracted": false,
+    "global_nuclear_tree_inferred": false,
+    "historic_transition_climate_identified": false
+  }
+}

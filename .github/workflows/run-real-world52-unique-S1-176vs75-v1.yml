@@ -1,0 +1,158 @@
+name: Correct real worldwide Cirsium nuclear same-SRR duplication to 52 original individuals
+
+on:
+  push:
+    branches:
+      - feature/global-u2d-nuclear-climate-v1
+    paths:
+      - "analysis/rebuild_world52_unique_biosample_original176_and75_v1.py"
+      - ".github/workflows/run-real-world52-unique-S1-176vs75-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  freeze-unique-molecular-BioSamples:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install original nucleotide genome handling runtime
+        run: |
+          python -m pip install --disable-pip-version-check biopython
+          python -m py_compile analysis/rebuild_world52_unique_biosample_original176_and75_v1.py
+      - name: Retrieve ONLY real completed 53-tip primary FASTA, real S1 vouchers, and actual J38 original locus coordinate table
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/original53 .tmp/S1traits .tmp/originalJ38
+          gh run download 40148735969 --repo zuizui0223/EAzami \
+            --name real-world53-176Comp1061-8QCpass-traitblind-ML-tree-v1 --dir .tmp/original53
+          gh run download 40150037475 --repo zuizui0223/EAzami \
+            --name world53-real-176nuclear-S1-original-nine-flowers-and-Mk-models-v1 \
+            --dir .tmp/S1traits
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 \
+            --dir .tmp/originalJ38
+      - name: Reject duplicated original BioSample/SRR; use untouched higher-quality original alignment and independently select 75 nuclear genes across 12 UNIQUE external specimens
+        run: |
+          python analysis/rebuild_world52_unique_biosample_original176_and75_v1.py \
+            --source53 .tmp/original53/real_world53_176Comp1061_QC8_geography_first.fasta \
+            --source-traits .tmp/S1traits/world53_original_S1_vouchers_head_nine_trait_rows.csv \
+            --partitions .tmp/originalJ38/tree_result/partitions.csv \
+            --outdir .tmp/real-world52
+      - name: Validate all original Moreyra S1 molecular accession identities and 51 distinct BioSamples
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          from Bio import SeqIO
+          p=Path(".tmp/real-world52")
+          j=json.loads((p/"world52_unique_BioSamples_source_collision_QC.json").read_text())
+          assert j["duplicate_BioSample"]=="SAMN44017865"
+          assert j["duplicate_SRR"]=="SRR30887251"
+          assert j["result_true_molecular_tips_with_Carthamus_outgroup"]==52
+          assert j["unique_individual_BioSamples_after_de_dup"]==51
+          assert j["nuclear_corrected_ingroup_states"]=={"U":19,"D":8,"?":24}
+          assert j["external_12_sample_all_ge40pct_original_loci"]==75
+          assert j["external_12_sample_original_locus_subset_aligned_bp"]==62810
+          assert j["gene_selection_uses_no_flower_head_colour_or_phylogenetic_topology"] is True
+          a=list(SeqIO.parse(p/"world52_original176_uniqueBioSamples.fasta","fasta"))
+          b=list(SeqIO.parse(p/"world52_75loci_all12_external_uniqueBioSamples.fasta","fasta"))
+          assert len(a)==len(b)==52
+          assert len({x.id for x in a})==52
+          assert all(len(x.seq)==161654 for x in a)
+          assert all(len(x.seq)==62810 for x in b)
+          assert not any("GLB2_SRR30887251" in x.id for x in a)
+          with (p/"world52_source_S1_unique_BioSample_9traits.csv").open() as h:
+            rows=list(csv.DictReader(h))
+          bios=[r["source_biosample"] for r in rows if r["tip_id"]!="OUTGROUP_saff"]
+          assert len(bios)==len(set(bios))==51
+          print("REPAIRED SAME-SRR GENETIC PSEUDOREPLICATION; 52 MOLECULAR TIPS, 51 UNIQUE Cirsium BioSamples")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: world52-real-unique-biosample-176and75-nuclear-inputs-v1
+          path: .tmp/real-world52/
+          retention-days: 90
+          if-no-files-found: error
+
+  infer-corrected-real-world52-nuclear-ML:
+    needs: freeze-unique-molecular-BioSamples
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - panel: full176
+            alignment: world52_original176_uniqueBioSamples.fasta
+          - panel: unique12_75
+            alignment: world52_75loci_all12_external_uniqueBioSamples.fasta
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install source-compatible IQTREE 2 software
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq iqtree
+          python -m pip install --disable-pip-version-check biopython
+          iqtree2 --version
+      - uses: actions/download-artifact@v4
+        with:
+          name: world52-real-unique-biosample-176and75-nuclear-inputs-v1
+          path: .tmp/input52
+      - name: Genuine de-novo IQTREE maximum likelihood and 1000 UFBoot/SHaLRT on one exact deduplicated nuclear panel
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/results
+          iqtree2 \
+            -s .tmp/input52/${{ matrix.alignment }} \
+            -m 'TIM3+F+R3' -B 1000 --alrt 1000 -T 2 -seed 20261025 \
+            -o OUTGROUP_saff \
+            --prefix .tmp/results/world52_176Comp1061_${{ matrix.panel }}_ML
+          test -s .tmp/results/world52_176Comp1061_${{ matrix.panel }}_ML.treefile
+      - name: Verify 52 molecular-tip original DNA, one SRR per original source voucher, and preserve tree checksum
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          from Bio import Phylo
+          dir=Path(".tmp/results")
+          panel="${{ matrix.panel }}"
+          tfile=dir/f"world52_176Comp1061_{panel}_ML.treefile"
+          tree=Phylo.read(tfile,"newick")
+          tips=[t.name for t in tree.get_terminals()]
+          assert len(tips)==len(set(tips))==52 and "OUTGROUP_saff" in tips
+          assert "J38S038" in tips
+          assert not any("GLB2_SRR30887251" in t for t in tips)
+          receipt={
+            "contract":"real_world52_51_unique_Cirsium_BioSamples_176vs75_IQTREE_ML_v1",
+            "panel":panel,
+            "nuclear_tip_labels":52,
+            "biological_Cirsium_BioSamples":51,
+            "same_original_SRR_duplicated_as_two_tips":False,
+            "C_kamtschaticum_true_source_sample":"SAMN44017865/SRR30887251",
+            "model":"IQTREE2 TIM3+F+R3; 1000 UFBoot and SH-aLRT; outgroup Carthamus",
+            "newick_sha256":hashlib.sha256(tfile.read_bytes()).hexdigest(),
+            "original_loci_in_analysis":176 if panel=="full176" else 75,
+            "source_tree_final_294tip_Moreyra_finished":False,
+            "source_ancestral_U_D_direct_voucher_phenotyped":False,
+          }
+          (dir/"world52_genetic_sample_dedup_true_ML_tree.json").write_text(json.dumps(receipt,indent=2)+"\n")
+          print(json.dumps(receipt,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-world52-51uniqueBioSamples-original${{ matrix.panel }}-IQTREE-1000boot-v1
+          path: .tmp/results/
+          retention-days: 90
+          if-no-files-found: error

@@ -1,0 +1,90 @@
+name: Independent fast real world53 176-locus GTR tree with eight QC-pass sources
+
+on:
+  # Source-frozen original eight MOREYRA hard-QC specimens. The original
+  # primary results are archived on explicit run IDs; avoid re-running
+  # expensive 176-locus phylogenomic fitting after every PR edit.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-world53-source-alignment-fast-phylogram:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Prepare approximate ML sequence-analysis runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fasttree
+          python -m pip install --disable-pip-version-check biopython
+      - name: Reuse genuine source-pinned 40, 45 and eight QC-pass continental readsets (no FASTQ re-download)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/j38 .tmp/source45 .tmp/pass8
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 --dir .tmp/j38
+          gh run download 40107628828 --repo zuizui0223/EAzami \
+            --name real-crosscontinental-45tip-176Comp1061-nuclear-ML-phylogeny-v1 --dir .tmp/source45
+          gh run download 40116044634 --repo zuizui0223/EAzami \
+            --pattern 'real-world54-*-176locus-traitblind-consensus-v1' --dir .tmp/pass8
+          test "$(find .tmp/pass8 -mindepth 1 -maxdepth 1 -type d | wc -l)" -eq 8
+      - name: Build precisely source-checked 53-tip 176-locus real molecular matrix, 63-locus source excluded
+        run: |
+          python analysis/build_real_world53_176locus_QC8_v1.py \
+            --j38-source-dir .tmp/j38 --original45-dir .tmp/source45 \
+            --new-consensus-dirs .tmp/pass8/real-world54-*-176locus-traitblind-consensus-v1 \
+            --outdir .tmp/real53
+      - name: Approximate GTR+gamma ML topology directly inferred from 161654 real aligned DNA characters
+        run: |
+          set -euo pipefail
+          FastTree -nt -gtr -gamma \
+            .tmp/real53/real_world53_176Comp1061_QC8_geography_first.fasta \
+            > .tmp/real53/world53_176Comp1061_FastTree_GTRgamma.treefile \
+            2> .tmp/real53/world53_176Comp1061_FastTree_GTRgamma.log
+          test -s .tmp/real53/world53_176Comp1061_FastTree_GTRgamma.treefile
+      - name: Validate 53 real source tips, immutable 45 original sample sequences, and correct FastTree support semantics
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          from Bio import Phylo
+          d=Path(".tmp/real53")
+          source=json.loads((d/"real_world53_source_QC_receipt.json").read_text())
+          p=d/"world53_176Comp1061_FastTree_GTRgamma.treefile"
+          t=Phylo.read(p,"newick")
+          names=[r.name for r in t.get_terminals()]
+          assert len(names)==len(set(names))==53
+          assert "OUTGROUP_saff" in names
+          assert len(source["new_source_coverage"])==8
+          assert source["excluded_failed_source_specimen"]["observed_admitted_loci"]==63
+          assert source["excluded_failed_source_specimen"]["frozen_minimum_loci"]==70
+          assert source["source_original_45_tip_sequences_exactly_unchanged"] is True
+          result={
+            "contract":"world53_empirical_176nuclear_source_fasttree_approxML_v1",
+            "molecular_tips":53,"loci":176,"source_alignment_sha256":source["new_53_alignment_sha256"],
+            "approx_ML_tree_sha256":hashlib.sha256(p.read_bytes()).hexdigest(),
+            "model":"FastTree 2 nucleotide GTR + gamma approximation",
+            "support_metric":"FastTree local SH-like support, not IQ-TREE ultrafast-bootstrap",
+            "original_45_unchanged":True,
+            "failed_fargesii_63_loci_excluded":True,
+            "source_species_distribution_trait_blind_QC":True,
+            "IQTREE_ModelFinder_global53_tree_accepted":False,
+            "worldwide_294tip_Moreyra_tree_accepted":False,
+          }
+          (d/"real_world53_FastTree_phylogram_receipt.json").write_text(json.dumps(result,indent=2)+"\n")
+          print(json.dumps(result,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: world53-176Comp1061-QC8-independent-FastTree-approxML-source-v1
+          path: .tmp/real53/
+          retention-days: 90
+          if-no-files-found: error

@@ -1,0 +1,50 @@
+name: Validate frozen real world53 176-gene source phylogram and S1 ecological limits
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/real_world53_176Comp1061_IQTREE_ModelFinder_UFBoot_SHaLRT_20261025.nwk"
+      - "data/evidence/world53_real_176Comp1061_ML_S1_nine_traits_topology_Mk_results_20261025.json"
+      - ".github/workflows/validate-frozen-world53-nuclear-S1-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-empirical-source-tree:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check biopython
+      - name: Confirm permanent GitHub Newick equals SHA-pinned authenticated 53-tip real nuclear ML tree
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          from Bio import Phylo
+          root=Path("data/evidence")
+          p=root/"real_world53_176Comp1061_IQTREE_ModelFinder_UFBoot_SHaLRT_20261025.nwk"
+          j=json.loads((root/"world53_real_176Comp1061_ML_S1_nine_traits_topology_Mk_results_20261025.json").read_text())
+          digest=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert digest=="5828ccd9f4f0b083f804f87bfa7407a20ad5eb52647e92eb5a26e812bd6807a7"
+          assert digest==j["actual_primary_ML"]["empirical_53tip_Newick_sha256"]
+          t=Phylo.read(p,"newick")
+          tips=[x.name for x in t.get_terminals()]
+          assert len(tips)==len(set(tips))==53
+          assert "OUTGROUP_saff" in tips
+          assert len([x for x in tips if x.startswith("GLB2_")])==8
+          assert all("SRR30887183" not in x for x in tips)
+          assert j["actual_dataset"]["passed_exact_original_70_locus_QC"]==8
+          assert j["actual_dataset"]["failed_source"]["QC_strict_loci"]==63
+          assert j["actual_dataset"]["failed_source"]["minimum_accepted"]==70
+          assert j["real_original_S1_flower_trait_models"]["head_morphological_codes_after_source_QC"]=={"U":19,"D":9,"unresolved":24}
+          assert j["independent_modeler_topology_sensitivity"]["unrooted_shared_53_tip_RF"]==48
+          assert not j["independent_modeler_topology_sensitivity"]["West_Palearctic_five_Moreyra_individuals_monophyletic_under_both"]
+          assert not j["scientific_interpretation"].get("global294_is_complete",False)
+          print("AUTHENTIC 53-TIP SOURCE TREE AND ECOLOGICAL CLAIM LIMITS ARCHIVED FOR LONG-TERM REPRODUCIBILITY",digest)
+          PY

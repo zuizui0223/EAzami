@@ -1,0 +1,140 @@
+name: Test global nuclear U-to-D transition-niche workflow v1
+
+on:
+  pull_request:
+    paths:
+      - "analysis/run_global_nuclear_orientation_transition_niche_v1.py"
+      - "analysis/audit_global_nuclear_orientation_source_overlap_v1.py"
+      - "analysis/audit_global_nuclear_orientation_multisource_v2.py"
+      - "analysis/audit_global_nuclear_294_orientation_join_v3.py"
+      - "analysis/build_global_orientation_nuclear_priority_intake_v1.py"
+      - "analysis/audit_global_west_palearctic_orientation_extension_v2.py"
+      - "data/evidence/global_west_palearctic_head_orientation_external_v2.csv"
+      - "tests/test_global_west_palearctic_orientation_extension_v2.py"
+      - "tests/test_global_orientation_nuclear_priority_intake_v1.py"
+      - "tests/test_global_nuclear_294_orientation_join_v3.py"
+      - "data/evidence/global_fna_head_orientation_evidence_v1.csv"
+      - "tests/test_global_orientation_multisource_join_v2.py"
+      - "tests/test_global_orientation_transition_niche_v1.py"
+      - "docs/global_orientation_transition_niche_v1.md"
+      - "data/contracts/global_orientation_transition_niche_readiness_v1.json"
+      - ".github/workflows/test-global-orientation-transition-niche-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install existing CTMC/Brownian runtime
+        run: |
+          python -m pip install --disable-pip-version-check numpy scipy pandas biopython
+          python -m pip check
+      - name: Verify syntax
+        run: |
+          python -m py_compile \
+            analysis/run_chapter2_orientation_transition_regime_hypothesis_v1.py \
+            analysis/run_global_nuclear_orientation_transition_niche_v1.py \
+            analysis/audit_global_nuclear_orientation_source_overlap_v1.py \
+            analysis/audit_global_nuclear_orientation_multisource_v2.py \
+            analysis/audit_global_nuclear_294_orientation_join_v3.py \
+            analysis/build_global_orientation_nuclear_priority_intake_v1.py \
+            analysis/audit_global_west_palearctic_orientation_extension_v2.py \
+            tests/test_global_west_palearctic_orientation_extension_v2.py \
+            tests/test_global_orientation_nuclear_priority_intake_v1.py \
+            tests/test_global_nuclear_294_orientation_join_v3.py \
+            tests/test_global_orientation_multisource_join_v2.py \
+            tests/test_global_orientation_transition_niche_v1.py
+      - name: Run synthetic model and input-integrity tests
+        run: python -m unittest discover -s tests -p 'test_global_orientation_transition_niche_v1.py' -v
+      - name: Confirm no unsupported real-global finding is asserted
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path('data/contracts/global_orientation_transition_niche_readiness_v1.json').read_text())
+          assert j['worldwide_branch_length_nuclear_ensemble_ready'] is False
+          assert j['worldwide_tip_orientation_climate_join_ready'] is False
+          assert j['historical_branch_climate_ready'] is False
+          print("Only synthetic verification is authorized until independent global inputs pass the gates")
+          PY
+      - name: Execute real-source coverage gate (NOT global transition inference)
+        run: |
+          python analysis/audit_global_nuclear_orientation_source_overlap_v1.py \
+            --outdir .tmp/global-source-overlap
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('.tmp/global-source-overlap/report.json').read_text())
+          assert x['moreyra_linked_cirsium_rows']==257
+          assert x['moreyra_distinct_biosamples']==256
+          assert x['moreyra_distinct_tree_codes']==256
+          assert x['east_asia_orientation_crosswalk_rows']==20
+          assert x['exact_label_hits']==7
+          assert x['exact_source_label_resolved_U_D']==5
+          assert (x['resolved_U'], x['resolved_D'])==(3,2)
+          assert x['can_execute_global_nuclear_U_D_climate_analysis'] is False
+          print('Exact nuclear-tip/orientation evidence audit: source overlap only, real global test BLOCKED')
+          PY
+      - name: Retain observed source coverage evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-u2d-moreyra-source-overlap-v1
+          path: .tmp/global-source-overlap/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Audit independent botanical U/D sources against real global nuclear inventory
+        run: |
+          python analysis/audit_global_nuclear_orientation_multisource_v2.py \
+            --outdir .tmp/global-multisource-v2
+          python -m unittest discover -s tests -p 'test_global_orientation_multisource_join_v2.py' -v
+      - name: Preserve multisource U/D source audit (NOT phylogeny)
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-u2d-moreyra-multisource-v2
+          path: .tmp/global-multisource-v2/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Join source orientation states to all deduplicated nuclear BioSamples
+        run: |
+          python analysis/audit_global_nuclear_294_orientation_join_v3.py \
+            --outdir .tmp/global-nuclear-294-v3
+          python -m unittest discover -s tests -p 'test_global_nuclear_294_orientation_join_v3.py' -v
+      - name: Preserve real 294-sample nuclear ↔ U/D source join
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-nuclear-294-head-orientation-source-join-v3
+          path: .tmp/global-nuclear-294-v3/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Build real reduced nuclear intake wave and globally stable JOG IDs
+        run: |
+          python analysis/build_global_orientation_nuclear_priority_intake_v1.py \
+            --outdir .tmp/global-orientation-priority-intake-v1
+          python -m unittest discover -s tests -p 'test_global_orientation_nuclear_priority_intake_v1.py' -v
+      - name: Preserve read-intake manifest (not an inferred nuclear tree)
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-orientation-35-source-taxa-priority-intake-v1
+          path: .tmp/global-orientation-priority-intake-v1/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Audit prospective Western Palearctic U/D sources (outside frozen 35)
+        run: |
+          python analysis/audit_global_west_palearctic_orientation_extension_v2.py \
+            --outdir .tmp/global-west-palearctic-orientation-v2
+          python -m unittest discover -s tests -p 'test_global_west_palearctic_orientation_extension_v2.py' -v
+      - name: Preserve separate Western U/D discovery receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-u2d-western-independent-source-v2
+          path: .tmp/global-west-palearctic-orientation-v2/
+          if-no-files-found: error
+          retention-days: 90

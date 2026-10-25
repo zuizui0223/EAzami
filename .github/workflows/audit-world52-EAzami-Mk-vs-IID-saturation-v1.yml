@@ -1,0 +1,82 @@
+name: Test corrected world52 EAzami saturated Mk versus single-frequency IID
+
+on:
+  # Source original corrected 52-tip results and their exact input hashes are
+  # archived in successful Actions runs; execute explicit scientific reruns only,
+  # not redundant source downloads on every unrelated PR edit.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  empirical-52-BioSample-ancestral-character-adequacy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install source-phylogeny reader and numeric tests
+        run: |
+          python -m pip install --disable-pip-version-check biopython
+          python -m py_compile analysis/audit_world52_EAzami_Mk_vs_IID_saturation_v1.py
+          python -m unittest discover -s tests -p 'test_world52_EAzami_Mk_vs_IID_saturation_v1.py' -v
+      - name: Recover source-verified S1 Cirsium BioSamples, 3 correct original molecular trees and 60 fitted ER ARD irreversible likelihoods
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/source .tmp/full .tmp/covered .tmp/technical .tmp/models
+          gh run download 40153095510 --repo zuizui0223/EAzami \
+            --name world52-real-unique-biosample-176and75-nuclear-inputs-v1 --dir .tmp/source
+          gh run download 40153095510 --repo zuizui0223/EAzami \
+            --name real-world52-51uniqueBioSamples-originalfull176-IQTREE-1000boot-v1 --dir .tmp/full
+          gh run download 40153095510 --repo zuizui0223/EAzami \
+            --name real-world52-51uniqueBioSamples-originalunique12_75-IQTREE-1000boot-v1 --dir .tmp/covered
+          gh run download 40153668286 --repo zuizui0223/EAzami \
+            --name real-world52-73-original-nuclear-loci-after-same-SRR-pipeline-disagreement-screen-v1 \
+            --dir .tmp/technical
+          gh run download 40163625099 --repo zuizui0223/EAzami \
+            --name real-world52-176-75-73-nuclear-S1-irrev-vs-reversible-Mk-v1 \
+            --dir .tmp/models
+          test -s .tmp/source/world52_source_S1_unique_BioSample_9traits.csv
+          test -s .tmp/models/world52_four_directional_CTMC_real_model_fits.csv
+      - name: Re-evaluate every original source likelihood against a one-parameter observed U/D frequency model and branch memory
+        run: |
+          python analysis/audit_world52_EAzami_Mk_vs_IID_saturation_v1.py \
+            --traits .tmp/source/world52_source_S1_unique_BioSample_9traits.csv \
+            --fitted-Mk .tmp/models/world52_four_directional_CTMC_real_model_fits.csv \
+            --tree-full176 .tmp/full/world52_176Comp1061_full176_ML.treefile \
+            --tree-covered75 .tmp/covered/world52_176Comp1061_unique12_75_ML.treefile \
+            --tree-technical73 .tmp/technical/real_world52_73_gene_QC_TM3_ML.treefile \
+            --outdir .tmp/saturation-result
+      - name: Validate no hidden transition counts, duplicate original source accession or false ecological cause
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('.tmp/saturation-result/real_world52_Mk_phylogenetic_signal_saturation_vs_IID_result.json')
+          j=json.loads(p.read_text())
+          assert j["n_nuclear_ingroup_unique_BioSamples"]==51
+          assert j["n_source_taxon_concepts_observed"]==27
+          assert j["source_head_states"]=={"U":19,"D":8,"unknown":24}
+          assert abs(j["IID_stationary_one_parameter_baseline"]["IID_AICc_k1"]-34.97544488903165)<1e-8
+          assert len(j["source_AICc_model_comparison_and_branch_saturation"])==3
+          assert len(j["sensitivity_all_root_priors_and_D_holdouts"])==15
+          for x in j["source_AICc_model_comparison_and_branch_saturation"]:
+            assert x["delta_ARDminusIID_AICc"]>2.
+            assert x["ARD_over_IID_loglik_gain"] < 0.1
+            assert abs(x["ARD_stationary_pD"]-(8/27))<.01
+            assert x["proportion_edges_memory_below_0p1"]>.5
+          assert j["no_observed_U_to_D_or_D_to_U_event_count_inferred"]
+          assert j["no_phylogenetic_IID_evolution_proven"]
+          print("REAL SOURCE Mk SATURATION TEST PASSED; no independent D->U molecular reversals established.")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: corrected-world52-real-176-75-73-nuclear-Mk-vs-IID-saturation-v1
+          path: .tmp/saturation-result/
+          retention-days: 90
+          if-no-files-found: error

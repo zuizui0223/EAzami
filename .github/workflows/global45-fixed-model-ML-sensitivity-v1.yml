@@ -1,0 +1,75 @@
+name: Infer fast fixed-model real 45-tip 176-locus crosscontinent tree sensitivity
+
+on:
+  # 2026-10-25 completed real source artefacts are immutable. Explicit reruns only.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  source-unchanged-fixed-model-ML:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install IQ-TREE and Biopython for reproducible molecular source analysis
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq iqtree
+          python -m pip install --disable-pip-version-check biopython
+      - name: Reuse completed original source five specimen consensus artifacts only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/source-5 .tmp/j38
+          gh run download 40107628828 --repo zuizui0223/EAzami \
+            --pattern "real-global45-*-176locus-consensus-v1" \
+            --dir .tmp/source-5
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 \
+            --dir .tmp/j38
+          python analysis/build_real_global45_comp1061_frozenJ38_bridge_v1.py combine \
+            --j38-source-dir .tmp/j38 \
+            --new-tip-dirs .tmp/source-5/real-global45-*-176locus-consensus-v1 \
+            --outdir .tmp/output
+      - name: True 45-tip ML inference under independent fixed GTR plus site rate model
+        run: |
+          set -euo pipefail
+          EXE=$(command -v iqtree2 || command -v iqtree3 || command -v iqtree)
+          "$EXE" -s .tmp/output/global45_original40_plus5real_Comp1061_176loci.fasta \
+            -m GTR+F+G4 -B 1000 --alrt 1000 -T 2 -seed 20261025 \
+            -o OUTGROUP_saff \
+            --prefix .tmp/output/world45_fixed_GTR_F_G4
+          test -s .tmp/output/world45_fixed_GTR_F_G4.treefile
+      - name: Verify the fixed-model sensitivity is real 45-tip branch-length ML
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          from Bio import Phylo
+          root=Path(".tmp/output")
+          j=json.loads((root/"aligned_source_Acceptance.json").read_text())
+          path=root/"world45_fixed_GTR_F_G4.treefile"
+          tr=Phylo.read(path,"newick")
+          taxa={t.name for t in tr.get_terminals()}
+          assert len(taxa)==45 and "OUTGROUP_saff" in taxa
+          assert set(j["all_new_sample_tips"])<=taxa
+          j["sensitivity_model"]="fixed_GTR+F+G4_independent_of_MFP"
+          j["genuine_nuclear_tree_executed"]=True
+          j["newick_sha256"]=hashlib.sha256(path.read_bytes()).hexdigest()
+          j["not_full_Moreyra_world_tree"]=True
+          (root/"fixed_model_real_world45_sensitivity.json").write_text(json.dumps(j,indent=2)+"\n")
+          print(json.dumps({"real_tips":45,"source_nuclear_loci":176,
+            "newick_sha256":j["newick_sha256"]},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-global45-176loci-independent-fixed-GTR-ML-phylogram-v1
+          path: .tmp/output/
+          if-no-files-found: error
+          retention-days: 90

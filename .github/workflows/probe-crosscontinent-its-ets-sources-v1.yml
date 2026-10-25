@@ -1,0 +1,22 @@
+name: Probe empirical transcontinental Cirsium ITS ETS accession availability
+
+on:
+  pull_request:
+    paths:
+      - "analysis/probe_crosscontinent_ITS_ETS_public_sources_v1.py"
+      - ".github/workflows/probe-crosscontinent-its-ets-sources-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python analysis/probe_crosscontinent_ITS_ETS_public_sources_v1.py

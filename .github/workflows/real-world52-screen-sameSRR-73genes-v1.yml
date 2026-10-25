@@ -1,0 +1,82 @@
+name: Audit technical same-SRR processing loci in corrected world52 source nuclear phylogeny
+
+on:
+  push:
+    branches:
+      - feature/global-u2d-nuclear-climate-v1
+    paths:
+      - "analysis/filter_world52_same_SRR_processing_discordant_genes_v1.py"
+      - ".github/workflows/real-world52-screen-sameSRR-73genes-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  true52-unique-biosample-73gene-source-screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install matched molecular model on source genes and proper original BioSample registry
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq iqtree
+          python -m pip install --disable-pip-version-check biopython
+          python -m py_compile analysis/filter_world52_same_SRR_processing_discordant_genes_v1.py
+      - name: Retrieve 52 unique genetic samples and original technical discrepancy per locus, no remote FASTQ re-download
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/real52original
+          gh run download 40153095510 --repo zuizui0223/EAzami \
+            --name world52-real-unique-biosample-176and75-nuclear-inputs-v1 \
+            --dir .tmp/real52original
+      - name: Freeze two original gene exclusions above 5 percent disagreement in SAME SRA run, not flower phenotype
+        run: |
+          python analysis/filter_world52_same_SRR_processing_discordant_genes_v1.py \
+            --source75 .tmp/real52original/world52_75loci_all12_external_uniqueBioSamples.fasta \
+            --original75-ledger .tmp/real52original/world52_75frozen_gene_coordinate_ledger.csv \
+            --same-SRR-gene-disagreement .tmp/real52original/same_SRR_processed_twice_176_locus_discordance.csv \
+            --outdir .tmp/real52subset73
+      - name: Run unchanged source IQ-TREE TIM3+F+R3 maximum likelihood model on true 52-tip, 73 original nuclear genes
+        run: |
+          set -euo pipefail
+          iqtree2 -s .tmp/real52subset73/real_world52_73loci_after_sameSRR_disagreement_screen.fasta \
+            -m 'TIM3+F+R3' -B 1000 --alrt 1000 -T 2 -seed 20261025 \
+            -o OUTGROUP_saff \
+            --prefix .tmp/real52subset73/real_world52_73_gene_QC_TM3_ML
+          test -s .tmp/real52subset73/real_world52_73_gene_QC_TM3_ML.treefile
+      - name: Validate 52-tip actual nuclear molecule, 73 predeclared source screened genes and no claimed biological paralog proven
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          from Bio import Phylo
+          d=Path(".tmp/real52subset73")
+          j=json.loads((d/"world52_73gene_source_pipeline_screen_receipt.json").read_text())
+          assert j["technical_flagged_gene_IDs"]==["At1g02170","At3g04400"]
+          assert j["original_gene_name_count_retained"]==73 and j["aligned_bp_retained"]==61302
+          assert j["phenotype_taxon_clade_or_U_D_used_in_selection"] is False
+          assert j["paralog_or_homeolog_or_genomic_hybridization_proven"] is False
+          p=d/"real_world52_73_gene_QC_TM3_ML.treefile"
+          t=Phylo.read(p,"newick")
+          tips=[n.name for n in t.get_terminals()]
+          assert len(tips)==len(set(tips))==52 and "J38S038" in tips
+          assert all("GLB2_SRR30887251" not in x for x in tips)
+          assert "OUTGROUP_saff" in tips
+          j["real_source_NUCLEAR_ML_tree_estimated"]=True
+          j["empirical_newick_sha256"]=hashlib.sha256(p.read_bytes()).hexdigest()
+          (d/"world52_73gene_ML_source_validated.json").write_text(json.dumps(j,indent=2)+"\n")
+          print("GENUINE SOURCE 52-tip molecular tree inferred on 73 technical-screened nuclear loci",j["empirical_newick_sha256"])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-world52-73-original-nuclear-loci-after-same-SRR-pipeline-disagreement-screen-v1
+          path: .tmp/real52subset73/
+          retention-days: 90
+          if-no-files-found: error

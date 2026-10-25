@@ -1,0 +1,32 @@
+name: Verify real five-region Compositae1061 paired reads
+
+on:
+  pull_request:
+    paths:
+      - "data/evidence/global_5taxa_comp1061_real_target_capture_bridge_v1.csv"
+      - "analysis/probe_ena_global_comp1061_5tip_realreads_v1.py"
+      - ".github/workflows/probe-global-five-target-capture-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify original frozen five species and ENA paired FASTQ sizes and md5
+        run: |
+          python analysis/probe_ena_global_comp1061_5tip_realreads_v1.py \
+            --output .tmp/global-5tip-ena-realreads/metadata.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: source-ENA-five-global-Comp1061-target-capture-v1
+          path: .tmp/global-5tip-ena-realreads/
+          if-no-files-found: error
+          retention-days: 90

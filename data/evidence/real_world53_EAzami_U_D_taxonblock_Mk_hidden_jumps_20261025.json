@@ -1,0 +1,162 @@
+{
+  "version": "real_world53_EAzami_source_U_D_geography_blocked_Mk_hidden_event_diagnostic_v1",
+  "observed_date": "2026-10-25",
+  "execution": {
+    "run_id": 40158714439,
+    "url": "https://github.com/zuizui0223/EAzami/actions/runs/40158714439",
+    "artifact_id": 12585643654,
+    "artifact_sha256": "07ea547898c151c87eccd120a810e0b184980a4ffba9da5b6e0bbb83d9c8df00",
+    "execution_success": true
+  },
+  "source": {
+    "molecular_original_moreyra_BioSamples_ledger": 294,
+    "original_source_SRRs": 295,
+    "original_S1_taxon_labels": 270,
+    "maximum_completed_multi_locus_crosscontinental_phylogram_molecular_tips": 53,
+    "genuine_comp1061_alignments": {
+      "full": 176,
+      "external_13_high_occupancy": 74
+    },
+    "original_source_ingroup_individuals": 52,
+    "original_species_or_infraspecific_taxa_with_head_evidence": 27,
+    "observed_tip_states": {
+      "U": 19,
+      "D": 9,
+      "unknown": 24
+    },
+    "original_authority_levels": "Moreyra S1 = BioSample/voucher/SRR metadata; U/D = independent botanical species/variety concept, not directly observed sequenced specimens",
+    "trait_CSV_SHA256": "457059076a15d91be941d661a19b2590e25192a89399f22ed6f2299eeff5198a",
+    "molecular_tree_SHA256": {
+      "IQTREE_176": "5828ccd9f4f0b083f804f87bfa7407a20ad5eb52647e92eb5a26e812bd6807a7",
+      "IQTREE_74": "57483eb8f1232631a8160e7dfe8e9427a1a85f20a8957e5d23ea65bca08e5e64",
+      "FastTree_176": "75f0b2087228c190d2d9ca928928eaf603cfe49cdd2a791ab1a72bcf82976cc5"
+    }
+  },
+  "original_state_taxon_assignment_gate": {
+    "repeated_Cirsium_kamtschaticum_2_biological_molecular_samples_one_trait_block": true,
+    "Cirsium_nipponicum_species_level_U_does_not_promote_named_variety_incomptum_to_U": true,
+    "Cirsium_nipponicum_species_level_U_does_not_promote_named_variety_yoshinoi_to_U": true,
+    "number_unresolved_nuclear_tip_states_preserved": 24,
+    "source_taxon_concept_grouping": "Original binomial plus var. epithet when present; authorship omitted; never coerce named varieties to species."
+  },
+  "morphology_blind_null": {
+    "method": "20,000 exact-source U/D label permutations over 27 independent taxon-concept blocks (not 28 phenotyped specimen labels), group-level U/D counts maintained within Japan, North America and West Palearctic; unscored specimens/varieties stay missing; fixed molecular topology.",
+    "seed": 2317,
+    "n_permutations": 20000,
+    "fixed_counts": {
+      "Japan": {
+        "U": 14,
+        "D": 5
+      },
+      "North_America": {
+        "U": 4,
+        "D": 2
+      },
+      "West_Palearctic": {
+        "U": 1,
+        "D": 1
+      }
+    },
+    "results": {
+      "IQTREE_176": {
+        "Fitch_minimum_steps_observed": 9,
+        "null_mean": 7.75665,
+        "null_95pct_interval_steps": [
+          6,
+          9
+        ],
+        "one_sided_p_fewer_steps_phylogenetic_clustering": 1,
+        "one_sided_p_more_steps_dispersion": 0.151942402879856
+      },
+      "IQTREE_74": {
+        "Fitch_minimum_steps_observed": 8,
+        "null_mean": 7.6523,
+        "null_95pct_interval_steps": [
+          6,
+          9
+        ],
+        "one_sided_p_fewer_steps_phylogenetic_clustering": 0.8598570071496425,
+        "one_sided_p_more_steps_dispersion": 0.6134193290335483
+      },
+      "FastTree_176": {
+        "Fitch_minimum_steps_observed": 8,
+        "null_mean": 7.68115,
+        "null_95pct_interval_steps": [
+          6,
+          9
+        ],
+        "one_sided_p_fewer_steps_phylogenetic_clustering": 0.8408079596020199,
+        "one_sided_p_more_steps_dispersion": 0.6147192640367981
+      }
+    },
+    "inference": "Under this geographically conditioned and taxon-blocked exploratory fixed-tip null, no source nuclear topology supports clustering of reported U/D characters (small step count). Neither overdispersion nor adaptive repeated origins established."
+  },
+  "Mk_CTMC_history": {
+    "model": "ER symmetric versus ARD asymmetric reversible two-state continuous-time Mk with flat 0.5 U/D root prior and tip-trait missing-data integration",
+    "AICc_corrected_for_27_taxon_concepts": {
+      "IQTREE_176": {
+        "ER": 40.65926093629601,
+        "ARD": 39.630507782733574,
+        "delta_ARD_minus_ER": -1.028753153562434
+      },
+      "IQTREE_74": {
+        "ER": 40.75891473520752,
+        "ARD": 39.65209393647415,
+        "delta_ARD_minus_ER": -1.1068207987333665
+      },
+      "FastTree_176": {
+        "ER": 40.62249896329789,
+        "ARD": 39.628601874157134,
+        "delta_ARD_minus_ER": -0.993897089140755
+      }
+    },
+    "exact_Van_Loan_conditional_jumps": {
+      "IQTREE_176": {
+        "ER_expected_U_to_D": 103.7673193477678,
+        "ARD_expected_U_to_D": 176.07662892645334
+      },
+      "IQTREE_74": {
+        "ER_expected_U_to_D": 98.70665406214277,
+        "ARD_expected_U_to_D": 189.3926275271018
+      },
+      "FastTree_176": {
+        "ER_expected_U_to_D": 95.6327963448584,
+        "ARD_expected_U_to_D": 168.62975394598982
+      }
+    },
+    "interpretation": "These conditional jump expectations include potentially many hidden U<->D cycles and are hundreds or thousands of percent higher than minimum Fitch changes 8–9. This indicates rate/branch-length saturation and model nonidentifiability, not a real estimate of 96–189 independent adaptive U->D origins.",
+    "example_IQTREE_176_ER_root_P_U_if_source_equal_prior_0_5": 0.5004629990217996,
+    "example_IQTREE_176_ER_root_P_U_given_fixed_q_prior_U_0_1": 0.10016680321540879,
+    "example_IQTREE_176_ER_root_P_U_given_fixed_q_prior_U_0_9": 0.9001665562632288,
+    "infer_root_U_from_data": false,
+    "claim_directional_transition_rate_asymmetry": false,
+    "claim_historical_event_origin_count": false,
+    "expected_event_counts_conditional_on_fitted_q_and_source_tree_not_biological_origin_counts": true
+  },
+  "ecological_next_gate": {
+    "original_EAzami_hypothesis": "U->D associated with higher BIO15 and lower BIO1 along reconstructed present-day tip niche (not ancestral historical climate)",
+    "matched_worldwide_BIO1_BIO15_source_tip_centroids_complete": false,
+    "original_native_non_native_occurrence_gate_complete": false,
+    "phylogenetic_hypothesis_globally_testable": false,
+    "requirements": "Increase source-level head states per independent nuclear taxon; improve 53-tip region/genomic-coverage sensitivity and source morphology, build genuine accepted 294-sample nuclear tree and matched taxon present-niche BIO15/BIO1 inputs. Dated paleo branch model separately requires geological reconstructions."
+  },
+  "limitations": [
+    "Only 53 molecular tips/176 loci, 74-locus sensitivity, not Moreyra final 294 BioSample/350 nuclear locus complete worldwide accepted tree.",
+    "Three phylogenies reuse same original molecular individuals; not independent biological replication.",
+    "27 source taxon-level head traits only; 24 unscored Cirsium molecular samples; original S1 not voucher-photographed phenotype.",
+    "All Mk rates use molecular substitutions/site branch lengths, not calendar years; q for reversible model is very high and uncalibrated.",
+    "Region-stratified fixed-tip null is exploratory and does not reproduce full species-range spatial autocorrelation or genetic trait dynamics.",
+    "No branch-specific historical climate; no adaptive fitness or pollinator mechanism validated."
+  ],
+  "reproducibility": {
+    "source": "analysis/run_real_world53_EAzami_transition_signal_Mk_reward_v1.py",
+    "tests": "tests/test_real_world53_EAzami_transition_signal_Mk_reward_v1.py",
+    "ci": ".github/workflows/run-world53-EAzami-UD-Mk-transition-diagnostic-v1.yml",
+    "full_execution_artifact_includes": [
+      "EAzami_real_world53_transition_diagnostics_result.json",
+      "real_world53_U_D_Mk_transition_rate_and_event_sensitivity.csv",
+      "real_world53_Mk_edge_endpoint_vs_true_reward_expected_events.csv",
+      "real_world53_source_head_UD_phylogenetic_signal.png"
+    ]
+  }
+}

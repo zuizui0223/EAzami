@@ -1,0 +1,95 @@
+name: Build authentic world53 176-locus tree from eight QC-pass source specimens
+
+on:
+  # Source-frozen original eight MOREYRA hard-QC specimens. The original
+  # primary results are archived on explicit run IDs; avoid re-running
+  # expensive 176-locus phylogenomic fitting after every PR edit.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  infer-real-world53-phylogram:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install molecular maximum likelihood stack
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq iqtree
+          python -m pip install --disable-pip-version-check biopython
+          python -m py_compile analysis/build_real_world53_176locus_QC8_v1.py
+      - name: Download exact original frozen 40 and authentic 45-tip nuclear source matrices
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/j38 .tmp/world45 .tmp/real-new-eight
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 --dir .tmp/j38
+          gh run download 40107628828 --repo zuizui0223/EAzami \
+            --name real-crosscontinental-45tip-176Comp1061-nuclear-ML-phylogeny-v1 \
+            --dir .tmp/world45
+          gh run download 40116044634 --repo zuizui0223/EAzami \
+            --pattern 'real-world54-*-176locus-traitblind-consensus-v1' \
+            --dir .tmp/real-new-eight
+          test "$(find .tmp/real-new-eight -mindepth 1 -maxdepth 1 -type d | wc -l)" -eq 8
+      - name: Enforce original frozen 70-locus strict QC for 8 of the 9 predeclared samples
+        run: |
+          python analysis/build_real_world53_176locus_QC8_v1.py \
+            --j38-source-dir .tmp/j38 \
+            --original45-dir .tmp/world45 \
+            --new-consensus-dirs .tmp/real-new-eight/real-world54-*-176locus-traitblind-consensus-v1 \
+            --outdir .tmp/real-world53
+      - name: Newly infer 53-tip real 176-locus source nuclear tree without trait constraints
+        run: |
+          set -euo pipefail
+          iqtree2 \
+            -s .tmp/real-world53/real_world53_176Comp1061_QC8_geography_first.fasta \
+            -m MFP -B 1000 --alrt 1000 -T 2 -seed 20261025 \
+            -o OUTGROUP_saff --prefix .tmp/real-world53/world53_real_176Comp1061_ML
+          test -s .tmp/real-world53/world53_real_176Comp1061_ML.treefile
+      - name: Validate actual DNA inference, 8 admitted QC-pass specimens, explicit failed sample and unchanged 45-tip source
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          from Bio import Phylo
+          path=Path(".tmp/real-world53")
+          j=json.loads((path/"real_world53_source_QC_receipt.json").read_text(encoding="utf-8"))
+          treefile=path/"world53_real_176Comp1061_ML.treefile"
+          t=Phylo.read(treefile,"newick")
+          tips=[n.name for n in t.get_terminals()]
+          assert len(tips)==53 and len(set(tips))==53
+          assert "OUTGROUP_saff" in tips
+          assert j["n_newly_recovered_source_tips"]==8
+          assert j["source_original_45_tip_sequences_exactly_unchanged"] is True
+          assert j["excluded_failed_source_specimen"]["SRR"]=="SRR30887183"
+          assert j["excluded_failed_source_specimen"]["observed_admitted_loci"]==63
+          assert j["excluded_failed_source_specimen"]["frozen_minimum_loci"]==70
+          assert not any("SRR30887183" in x for x in tips)
+          assert j["source_original_full_spectrum_9_selected_before_observing_U_D_or_colour"] is True
+          assert j["orientation_colour_trait_consulted_for_tree_inference"] is False
+          j["nuclear_tree_estimated"]=True
+          j["source_ML_newick_SHA256"]=hashlib.sha256(treefile.read_bytes()).hexdigest()
+          j["rooted_with_actual_Carthamus_ancestral_reference"]=True
+          j["phylogeny_branch_lengths"]="substitutions/site; NOT geological time"
+          j["inference_status"]="REAL_source_regional_53_nuclear_phylogram_completed_preliminary"
+          (path/"real_world53_ML_tree_acceptance_receipt.json").write_text(
+              json.dumps(j,indent=2,ensure_ascii=False)+"\n",encoding="utf-8"
+          )
+          print(json.dumps({"REAL_NUCLEAR_TREE_TIPS":len(tips),"source_loci":176,
+              "new_passed_samples":8,"failed_source_not_imputed":"SRR30887183",
+              "tree_sha256":j["source_ML_newick_SHA256"]},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-world53-176Comp1061-8QCpass-traitblind-ML-tree-v1
+          path: .tmp/real-world53/
+          retention-days: 90
+          if-no-files-found: error

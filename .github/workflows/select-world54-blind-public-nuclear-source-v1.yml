@@ -1,0 +1,49 @@
+name: Freeze trait-blind next nine worldwide Compositae1061 specimens
+
+on:
+  pull_request:
+    paths:
+      - "analysis/select_real_world45_traitblind_moreyra_next9_v1.py"
+      - ".github/workflows/select-world54-blind-public-nuclear-source-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  select-source-before-opening-morphology:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Freeze nine real source BioSamples using geographical strata only
+        run: |
+          python analysis/select_real_world45_traitblind_moreyra_next9_v1.py \
+            --per-region 3 \
+            --outdir .tmp/world54-new9-traitblind-real-source
+      - name: Verify source selection did not use traits or duplicate sequences
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          d=Path('.tmp/world54-new9-traitblind-real-source')
+          j=json.loads((d/'traitblind_3region_moreyra_sample_freeze.json').read_text())
+          with (d/'prospective_world54_source_molecular_intake.csv').open() as h:
+            rows=list(csv.DictReader(h))
+          assert j['selection_used_head_colour_morphology_information'] is False
+          assert len(rows)==j['target_new_source_individuals']==9
+          assert len({r['SRR'] for r in rows})==9
+          assert len({r['biosample'] for r in rows})==9
+          assert len({r['taxon_source_label'] for r in rows})==9
+          assert all(r['source_phenotype_before_selection']=='NOT_OPENED' for r in rows)
+          print('BLIND ACTUAL SRA SOURCE-PANEL CONTRACT READY:',j['new_run_accessions'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: world54-traitblind-three-regions-source-nine-nuclear-inputs-v1
+          path: .tmp/world54-new9-traitblind-real-source/
+          if-no-files-found: error
+          retention-days: 90

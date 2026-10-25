@@ -1,0 +1,83 @@
+name: EAzami real world53 U-D taxon-blocked evolutionary transition analysis
+
+on:
+  # Original morphology-blind 20,000 permutations, three real nuclear
+  # topologies and full 18 fitted Mk model outcomes were completed at
+  # workflow run 40158714439. Do not recalculate unchanging source data
+  # for every unrelated PR documentation update.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-source-U-D-transitions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install exact empirical 2-state Mk, region-preserving permutation and figure packages
+        run: |
+          python -m pip install --disable-pip-version-check numpy scipy biopython matplotlib
+          python -m pip check
+          python -m py_compile analysis/run_real_world53_EAzami_transition_signal_Mk_reward_v1.py
+          python -m unittest discover -s tests -p 'test_real_world53_EAzami_transition_signal_Mk_reward_v1.py' -v
+      - name: Recover original source-vouchered 53-tip U/D/9 trait table and independently fitted FastTree
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/flora .tmp/fast
+          gh run download 40150037475 --repo zuizui0223/EAzami \
+            --name world53-real-176nuclear-S1-original-nine-flowers-and-Mk-models-v1 \
+            --dir .tmp/flora
+          gh run download 40149393831 --repo zuizui0223/EAzami \
+            --name world53-176Comp1061-QC8-independent-FastTree-approxML-source-v1 \
+            --dir .tmp/fast
+          test -s .tmp/flora/world53_original_S1_vouchers_head_nine_trait_rows.csv
+          test -s .tmp/fast/world53_176Comp1061_FastTree_GTRgamma.treefile
+      - name: Fit genuine 176/74/FastTree ancestral Mk ER/ARD and Markov jump expectations with strict original taxonomy; run 20000 geography-blocked taxon permutations
+        run: |
+          python analysis/run_real_world53_EAzami_transition_signal_Mk_reward_v1.py \
+            --tree-full data/evidence/real_world53_176Comp1061_IQTREE_ModelFinder_UFBoot_SHaLRT_20261025.nwk \
+            --tree-74 data/evidence/real_world53_74loci_all13ge40pct_IQTREE_TIM3_F_R3_ML_20261025.nwk \
+            --tree-fast .tmp/fast/world53_176Comp1061_FastTree_GTRgamma.treefile \
+            --traits .tmp/flora/world53_original_S1_vouchers_head_nine_trait_rows.csv \
+            --permutations 20000 --seed 2317 \
+            --outdir .tmp/real53-EAzami-UD-transition
+      - name: Assert original U19 D9 unknown24 retained, 27 unique source phenotypes, no 3 C. nipponicum variety imputation, true Markov jump vs endpoint count distinguished
+        run: |
+          python - <<'PY'
+          import json,csv,math
+          from pathlib import Path
+          d=Path(".tmp/real53-EAzami-UD-transition")
+          j=json.loads((d/"EAzami_real_world53_transition_diagnostics_result.json").read_text())
+          g=j["molecular_source_S1_scope"]
+          assert (g["original_phylogenetic_sample_tips"],g["Cirsium_ingroup_tips"])==(53,52)
+          assert (g["U"],g["D"],g["unknown"])==(19,9,24)
+          assert g["resolved_unique_taxon_concepts"]==27
+          assert j["morphology_blind_null"]["n_permutations"]==20000
+          assert j["morphology_blind_null"]["unscored_original_taxon_concepts_remain_missing"]
+          assert all(v["observed_minimum_Fitch_steps"] in (8,9) for v in j["morphology_blind_null"]["p_values"].values())
+          assert len(j["Mk"])==18
+          assert len([r for r in j["Mk"] if r["source_panel"]=="primary"])==6
+          a=[r for r in j["Mk"] if r["tree"]=="full176" and r["source_panel"]=="primary"]
+          assert len(a)==2
+          assert 40.60 < next(x for x in a if x["Mk_model"]=="ER")["approx_AICc"] < 40.71
+          assert 39.55 < next(x for x in a if x["Mk_model"]=="ARD")["approx_AICc"] < 39.72
+          assert all(r["expected_Mk_U_to_D_events_conditional_not_origin_count"]>r["observed_Fitch_minimum_steps"] for r in a)
+          assert (d/"real_world53_source_head_UD_phylogenetic_signal.png").stat().st_size>10000
+          with (d/"real_world53_Mk_edge_endpoint_vs_true_reward_expected_events.csv").open() as h:
+            edges=list(csv.DictReader(h))
+          assert len(edges)>=300
+          print("AUTHENTIC EAzami 53tip U/D HISTORY TEST PASSED; GEOGRAPHIC AND TAXON LABEL NULL, UNCERTAINTY AND MISSINGNESS RETAINED")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-world53-EAzami-source-UD-taxonomy-blocked-Mk-multijump-v1
+          path: .tmp/real53-EAzami-UD-transition/
+          retention-days: 90
+          if-no-files-found: error

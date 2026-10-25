@@ -1,0 +1,82 @@
+{
+  "version": "independent_north_america_published_nuclear_nine_trait_fitch_v1",
+  "date_utc": "2026-10-24",
+  "original_source": "Siniscalchi, Ackerfield & Folk 2023, doi:10.1086/724310",
+  "upstream_repository": "carol-siniscalchi/cirsium",
+  "pinned_commit": "c925d4af86160064448f794a9715f70b917a2786",
+  "original_nuclear_phylogram_tips": 63,
+  "source_morphology_traits": 9,
+  "source_join_complete_tips": 63,
+  "original_source_categories": {
+    "CorollaThroat": {
+      "0": "lobes less than twice throat",
+      "1": "lobes twice throat"
+    },
+    "CorollaColor": {
+      "0": "red",
+      "1": "reddish-purple",
+      "2": "white/pink/purple combined",
+      "3": "yellow"
+    },
+    "Duration": {
+      "0": "perennial",
+      "1": "biennial"
+    },
+    "GlutinousRidge": {
+      "0": "absent",
+      "1": "present"
+    },
+    "Habit": {
+      "0": "caulescent",
+      "1": "acaulescent"
+    },
+    "HeadPosition": {
+      "0": "U erect",
+      "1": "D pendent"
+    },
+    "InnerPhyllaryColor": {
+      "0": "green",
+      "1": "purple",
+      "2": "red",
+      "3": "pink"
+    },
+    "OuterPhyllaryPosition": {
+      "0": "ascending",
+      "1": "spreading",
+      "2": "reflexed"
+    },
+    "StyleBranchColor": {
+      "0": "red",
+      "1": "reddish-purple",
+      "2": "white/pink/purple combined",
+      "3": "yellow"
+    }
+  },
+  "minimum_Fitch_steps_on_published_nuclear_tree": {
+    "CorollaThroat": 4,
+    "CorollaColor": 12,
+    "Duration": 14,
+    "GlutinousRidge": 11,
+    "Habit": 3,
+    "HeadPosition": 4,
+    "InnerPhyllaryColor": 12,
+    "OuterPhyllaryPosition": 14,
+    "StyleBranchColor": 10
+  },
+  "special_cautions": [
+    "These are fixed-tree minimum discrete-state-change counts, not fitted true transition numbers, per-state direction or independent adaptive origins.",
+    "The four-level CorollaColor author code 2 combines white, pink and purple, so no white flower recurrence is inferred.",
+    "The source topology is North American, not the unrecovered Moreyra 2025 global nuclear final tree."
+  ],
+  "workflow_run_id": 40100757609,
+  "artifact_id": 12562219896,
+  "artifact_url": "https://github.com/zuizui0223/EAzami/actions/runs/40100757609/artifacts/12562219896",
+  "artifact_sha256": "0f62963e88543a030e6d6f11aeecff90233bf79724fbc1954016f7880e5fd89e",
+  "exported_files": [
+    "north_america_nuclear_ALL_NINE_traits.png",
+    "north_america_nuclear_ALL_NINE_traits.svg",
+    "nine_trait_original_legend_and_parsimony.md",
+    "nine_trait_phylogeny_parsimony_report.json"
+  ],
+  "worldwide_294_tip_nuclear_tree_executed": false
+}

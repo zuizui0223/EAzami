@@ -1,0 +1,30 @@
+name: Audit published transcontinental Cirsium nuclear ITS ETS vouchers
+
+on:
+  pull_request:
+    paths:
+      - "analysis/audit_slotta2012_nuclear_ITS_ETS_source_vouchers_v1.py"
+      - ".github/workflows/audit-slotta2012-its-ets-vouchers-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-specimen-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Parse primary accession/biological specimen source, no trait inference
+        run: |
+          python analysis/audit_slotta2012_nuclear_ITS_ETS_source_vouchers_v1.py --outdir .tmp/slotta-nuclear-paired-voucher-audit
+      - uses: actions/upload-artifact@v4
+        with:
+          name: slotta2012-primary-nuclear-ITS-ETS-paired-vouchers-v1
+          path: .tmp/slotta-nuclear-paired-voucher-audit
+          retention-days: 90
+          if-no-files-found: error

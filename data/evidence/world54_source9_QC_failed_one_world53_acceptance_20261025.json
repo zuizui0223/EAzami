@@ -1,0 +1,113 @@
+{
+  "version": "world54_original_nine_traitblind_Moreyra_real_nuclear_source_QC_disposition_v1",
+  "date": "2026-10-25",
+  "execution_workflow_run": 40116044634,
+  "source_selection_workflow_run": 40115569358,
+  "actual_source_fastq_verified": true,
+  "n_original_blind_selected": 9,
+  "frozen_requirements": {
+    "minimum_confident_loci": 70,
+    "minimum_confident_nucleotides": 20000,
+    "source_locus_mapping_panel": 176,
+    "min_allele_depth": 6,
+    "min_major_allele_fraction": 0.8,
+    "minimum_locus_nonmasked_fraction": 0.4
+  },
+  "accepted_8": [
+    {
+      "SRR": "SRR25265555",
+      "taxon": "Cirsium arvense",
+      "region": "West_Palearctic",
+      "loci": 96,
+      "called_bp": 46900
+    },
+    {
+      "SRR": "SRR25265683",
+      "taxon": "Cirsium mohavense",
+      "region": "North_America",
+      "loci": 92,
+      "called_bp": 42548
+    },
+    {
+      "SRR": "SRR25265699",
+      "taxon": "Cirsium hesperium",
+      "region": "North_America",
+      "loci": 91,
+      "called_bp": 43461
+    },
+    {
+      "SRR": "SRR25265705",
+      "taxon": "Cirsium fanjingshanense",
+      "region": "Continental_East_Central_Asia",
+      "loci": 93,
+      "called_bp": 42873
+    },
+    {
+      "SRR": "SRR25265707",
+      "taxon": "Cirsium fontinale var. campylon",
+      "region": "North_America",
+      "loci": 86,
+      "called_bp": 38729
+    },
+    {
+      "SRR": "SRR30887218",
+      "taxon": "Cirsium brachycephalum",
+      "region": "West_Palearctic",
+      "loci": 102,
+      "called_bp": 50887
+    },
+    {
+      "SRR": "SRR30887242",
+      "taxon": "Cirsium leucocephalum",
+      "region": "West_Palearctic",
+      "loci": 88,
+      "called_bp": 39608
+    },
+    {
+      "SRR": "SRR30887251",
+      "taxon": "Cirsium kamtschaticum",
+      "region": "Continental_East_Central_Asia",
+      "loci": 101,
+      "called_bp": 50173
+    }
+  ],
+  "unaccepted": [
+    {
+      "SRR": "SRR30887183",
+      "taxon": "Cirsium fargesii",
+      "BioSample": "SAMN44017847",
+      "source_region": "Continental_East_Central_Asia",
+      "frozen_required_loci": 70,
+      "observed_confident_loci": 63,
+      "observed_confident_bp": 25840,
+      "admission": false,
+      "reason": "failed minimum confident locus count only; raw reads were correctly verified and no thresholds reduced",
+      "source_job": 120937413776
+    }
+  ],
+  "summary": {
+    "n_QC_passing": 8,
+    "n_failed": 1,
+    "total_passed_confident_bp": 355179,
+    "QC_pass_locus_min": 86,
+    "QC_pass_locus_max": 102,
+    "regions_accepted": {
+      "North_America": 3,
+      "West_Palearctic": 3,
+      "Continental_East_Central_Asia": 2
+    },
+    "cannot_claim_original_9_completed": true,
+    "former_54tip_final_phylogram_status": "skipped because 1/9 failed prespecified locus QC",
+    "revised_real_QC_complete_nuclear_tip_goal": 53,
+    "original45_matrix_unchanged": true,
+    "phenotype_or_colour_used_in_admission": false,
+    "species_level_independent_QC_concern": "Cirsium kamtschaticum appears separately in Japanese original nuclear panel; do not treat two molecular samples as independent character origins"
+  },
+  "new_job": "https://github.com/zuizui0223/EAzami/actions/runs/40148735969",
+  "not_claimed": [
+    "53-tip tree is complete until new independent ML Newick passes SHA and tip count",
+    "global Moreyra full 294-tip/350-locus tree available",
+    "fargesii 'D' morphological source imputed or regained",
+    "historical U to D evolutionary event count from sample counts"
+  ]
+}

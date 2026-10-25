@@ -1,0 +1,6 @@
+source_taxon,biosample,SRR,region,head_state_source_only,source_locality,head_morphology_url,claim_boundary
+Cirsium vinaceum,SAMN44017948,SRR30887231,North_America,D,"USA New Mexico (ASU voucher, 2006)",https://www.efloras.org/florataxon.aspx?flora_id=1&taxon_id=250066404,botanical_taxon_state_not_sequenced_voucher
+Cirsium flodmanii,SAMN44017849,SRR30887180,North_America,U,"USA Colorado (CS voucher, 2012)",https://www.efloras.org/florataxon.aspx?flora_id=1&taxon_id=250066371,botanical_taxon_state_not_sequenced_voucher
+Cirsium ownbeyi,SAMN44017895,SRR30887153,North_America,U,"USA Colorado (CS voucher, 2018)",https://www.efloras.org/florataxon.aspx?flora_id=1&taxon_id=250066388,botanical_taxon_state_not_sequenced_voucher
+Cirsium erisithales,SAMN44017845,SRR30887186,West_Palearctic,D,"Austria Carinthia botanical garden (wild provenance unverified)",https://www.worldfloraonline.org/taxon/wfo-0000013488,botanical_taxon_state_not_sequenced_voucher_cultivation
+Cirsium oleraceum,SAMN44017893,SRR30887156,West_Palearctic,U,"Netherlands Glanerburg L.3431858",https://www.burgenlandflora.at/flora/detail/cirsium-oleraceum/,botanical_taxon_state_not_sequenced_voucher

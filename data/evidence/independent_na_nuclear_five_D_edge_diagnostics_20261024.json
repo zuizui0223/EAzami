@@ -1,0 +1,54 @@
+{
+  "version": "siniscalchi_2023_na_nuclear_terminal_D_edge_diagnostics_v1",
+  "source_workflow_run": 40100026609,
+  "source_artifact_id": 12562755175,
+  "source_phylogram_file": "siniscalchi_2023_north_american_nuclear_tree.nwk",
+  "source_edge_file": "author_coding/edge_joint_posteriors.csv",
+  "method": "Map each existing edge source child_clade_id = C{descendant_count}_sha256('|'.join(sorted(descendant_names))) to the original dated nuclear source tree; exact parent/child joint Mk posterior, not historical event probability.",
+  "n_mapped_edges_primary": 122,
+  "terminal_D_tips": [
+    {
+      "source_tip": "Cirsium_fontinale_campylon",
+      "p_parent_U_child_D": 0.99999,
+      "delta_reconstructed_z_BIO15": 1.518,
+      "delta_reconstructed_z_BIO1": 0.99
+    },
+    {
+      "source_tip": "Cirsium_funkiae",
+      "p_parent_U_child_D": 0.99984,
+      "delta_reconstructed_z_BIO15": -0.232,
+      "delta_reconstructed_z_BIO1": -0.623
+    },
+    {
+      "source_tip": "Cirsium_scopulorum",
+      "p_parent_U_child_D": 0.99654,
+      "delta_reconstructed_z_BIO15": -0.472,
+      "delta_reconstructed_z_BIO1": -0.661
+    },
+    {
+      "source_tip": "Cirsium_vinaceum",
+      "p_parent_U_child_D": 0.96514,
+      "delta_reconstructed_z_BIO15": 0.904,
+      "delta_reconstructed_z_BIO1": -0.301
+    },
+    {
+      "source_tip": "Cirsium_conspicuum",
+      "p_parent_U_child_D": 0.96514,
+      "delta_reconstructed_z_BIO15": 1.547,
+      "delta_reconstructed_z_BIO1": 0.938
+    }
+  ],
+  "directional_heterogeneity": {
+    "positive_reconstructed_BIO15_terminal_D_edges": 3,
+    "negative_reconstructed_BIO15_terminal_D_edges": 2,
+    "positive_reconstructed_BIO1_terminal_D_edges": 2,
+    "negative_reconstructed_BIO1_terminal_D_edges": 3,
+    "claim": "The positive aggregate +BIO15 composite is not a universal positive BIO15 shift in all five D taxa; D-tip transitions are heterogeneous."
+  },
+  "limitations": [
+    "Numbers rounded from real verified independent NA author-state branch posterior artifact.",
+    "High endpoint parent-U/child-D joint probability is not the posterior on a single actual CTMC transition along the historical branch.",
+    "Brownian climate deltas are reconstructed from present-day author source niche means, not measured palaeoclimate at a dated transition.",
+    "The alternative full9 character Fitch minimum four is a lower bound, not a contradiction to the fitted Mk endpoint posterior."
+  ]
+}

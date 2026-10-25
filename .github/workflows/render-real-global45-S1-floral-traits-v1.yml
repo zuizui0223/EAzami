@@ -1,0 +1,77 @@
+name: Map real 45-tip world nuclear tree to Moreyra S1 and floral traits
+
+on:
+  # 2026-10-25 completed real source artefacts are immutable. Explicit reruns only.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  annotate-real-worldwide45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install actual molecular tree renderer and scientific parsers
+        run: |
+          python -m pip install --disable-pip-version-check biopython matplotlib numpy
+      - name: Fetch accepted empirical 45-tip 176-locus IQTREE and original Moreyra S1 source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp/original .tmp/tree .tmp/nine
+          gh run download 32806058893 --repo zuizui0223/EAzami \
+            --name japan38-comp1061-tree-v1-32806058893 \
+            --dir .tmp/original
+          gh run download 40107628828 --repo zuizui0223/EAzami \
+            --name real-crosscontinental-45tip-176Comp1061-nuclear-ML-phylogeny-v1 \
+            --dir .tmp/tree
+          curl -fL --retry 3 \
+            "https://raw.githubusercontent.com/carol-siniscalchi/cirsium/c925d4af86160064448f794a9715f70b917a2786/traits/traits.csv" \
+            -o .tmp/nine/siniscalchi_published_original_traits.csv
+      - name: Render branch-length and topology views with S1 vouchers and strictly source-backed flower states
+        run: |
+          python analysis/annotate_real_world45_comp1061_S1_and_head_traits_v1.py \
+            --original .tmp/original \
+            --tree-dir .tmp/tree \
+            --na-traits .tmp/nine/siniscalchi_published_original_traits.csv \
+            --outdir .tmp/plots
+      - name: Audit global 45-tip placement sensitivity against original 40-tip J38 nuclear tree
+        run: |
+          python analysis/audit_real_world45_Comp1061_shared40_RF_v1.py \
+            --baseline data/evidence/japan38_comp1061_primary_tree_v1.nwk \
+            --pilot .tmp/tree/world45_176loci_ML.treefile \
+            --out .tmp/plots/real_global45_vs_frozen40_unrooted_RF_report.json
+      - name: Check source orientation and exact 45 molecular tip/voucher identity
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          base=Path('.tmp/plots')
+          r=json.loads((base/'world45_S1_head_flower_9traits_report.json').read_text())
+          with (base/'world45_molecular_tip_MoreyraS1_nmns_colour_nine_trait_join.csv').open(newline='') as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==44 and r['total_tree_tips']==45
+          assert r['head_orientation_n_tip_counts']=={'U':17,'D':7,'?':20}
+          assert r['Siniscalchi_nine_traits_attached']==3
+          assert r['molecular_tip_name_exact_join_passed']
+          assert r['the_350gene_294BioSample_world_tree_inferred'] is False
+          rf=json.loads((base/'real_global45_vs_frozen40_unrooted_RF_report.json').read_text())
+          assert rf['original_frozen_taxa']==40
+          assert rf['added_continental_molecular_tip_count']==5
+          for name in ('world45_real_nuclear_cladogram_source_traits.png','world45_real_nuclear_branch_lengths_source_traits.png'):
+              assert (base/name).stat().st_size>10000
+          print('SOURCE-SAFE REAL 45-TIP NUCL TREE AND S1 TRAITS',r['source_taxon_concept_Fitch_minimum_U_D_changes'],'FITCH MIN STEPS')
+          PY
+      - name: Archive genuine ML branch-length nuclear figures, Moreyra S1 specimen join, and 40-tip RF sensitivity
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-world45-176locus-nuclear-S1-head-colour-sticky-RF-v1
+          path: .tmp/plots/
+          if-no-files-found: error
+          retention-days: 90
