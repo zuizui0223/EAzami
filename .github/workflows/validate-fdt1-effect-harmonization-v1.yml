@@ -1,0 +1,40 @@
+name: Validate FDT1 effect harmonization
+
+on:
+  pull_request:
+    paths:
+      - "analysis/build_functional_trait_function_effect_ledger_v1.py"
+      - "tests/test_build_functional_trait_function_effect_ledger_v1.py"
+      - "data/evidence/experimental_pollinator_selection_gradients_v1.csv"
+      - "data/evidence/cirsium_floral_herbivory_lnrr_meta_v2.json"
+      - "data/evidence/orientation_mechanism_reduction_targets_v1.csv"
+      - "data/evidence/interaction_quantitative_pattern_ledger_v1.csv"
+      - "data/evidence/multiagent_floral_selection_mosaic_registry_v1.csv"
+      - "data/evidence/cirsium_pollinator_assurance_meta_v1.csv"
+      - "data/evidence/cirsium_demographic_transmission_meta_v1.csv"
+      - ".github/workflows/validate-fdt1-effect-harmonization-v1.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check pytest
+      - name: Build harmonized ledger
+        run: |
+          python analysis/build_functional_trait_function_effect_ledger_v1.py \
+            --csv-output /tmp/functional-trait-function-effect-ledger-v1.csv \
+            --json-output /tmp/functional-trait-function-effect-ledger-v1.json
+          cat /tmp/functional-trait-function-effect-ledger-v1.json
+      - name: Validate harmonization
+        run: python -m pytest -q tests/test_build_functional_trait_function_effect_ledger_v1.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fdt1-functional-effect-ledger-v1
+          path: |
+            /tmp/functional-trait-function-effect-ledger-v1.csv
+            /tmp/functional-trait-function-effect-ledger-v1.json
